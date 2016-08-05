@@ -27,8 +27,8 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
-import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
+import mods.railcraft.common.blocks.wayobjects.TileWayObject;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.IRailcraftObject;
@@ -190,7 +190,7 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileRitual.class, TESRFirestone::new);
 
-        bindTESR(TileSignalFoundation.class, TESRSignals::new);
+        bindTESR(TileWayObject.class, TESRSignals::new);
 
         //TODO: this needs a smart model or something
 //        if (RailcraftBlocks.track.block() != null)

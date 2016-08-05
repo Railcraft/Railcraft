@@ -26,8 +26,8 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
+import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
@@ -318,7 +318,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Finish initializing ItemRegistry
-                for (EnumSignal type : EnumSignal.values()) {
+                for (EnumWayObject type : EnumWayObject.values()) {
                     if (type.isEnabled())
                         RailcraftRegistry.register(type.getItem());
                 }

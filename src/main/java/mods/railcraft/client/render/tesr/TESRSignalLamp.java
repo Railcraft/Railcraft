@@ -1,16 +1,16 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.signals.TileSignalBase;
+import mods.railcraft.common.blocks.wayobjects.TileSignalBase;
 import net.minecraft.util.EnumFacing;
 
 public class TESRSignalLamp extends TESRSignals<TileSignalBase> {

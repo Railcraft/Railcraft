@@ -45,15 +45,15 @@ import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.ItemOre;
-import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
-import mods.railcraft.common.blocks.signals.EnumSignal;
-import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.flex.*;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerStrapIron;
+import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
+import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
+import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -102,7 +102,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     postMetal("post.metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
     postMetalPlatform("post.metal.platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
     ritual("ritual", BlockRitual::new, null),
-    signal("signal", BlockSignalRailcraft::new, ItemSignal::new, EnumSignal.class),
+    wayObject("wayobject", BlockWayObjectRailcraft::new, ItemWayObject::new, EnumWayObject.class),
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrack::new, ItemTrack::new),

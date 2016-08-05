@@ -88,7 +88,7 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(RailcraftBlocks.machine_gamma);
         add(RailcraftBlocks.trackElevator);
-        add(RailcraftBlocks.signal);
+        add(RailcraftBlocks.wayObject);
         add(RailcraftBlocks.detector);
     }
 

@@ -10,7 +10,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.gui.GuiRoutingTable;
-import mods.railcraft.common.blocks.signals.RoutingLogic;
+import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
