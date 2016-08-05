@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -250,6 +251,7 @@ public class ForestryPlugin {
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
             forestry.api.storage.BackpackManager.backpackInterface.registerBackpackDefinition(backpack.getId(), backpack);
             Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack.getId(), type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
+            item.setRegistryName(MiscTools.cleanTag(tag));
             RailcraftRegistry.register(item);
             return item;
         }
