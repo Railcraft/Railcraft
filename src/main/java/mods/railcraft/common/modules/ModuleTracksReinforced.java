@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 @RailcraftModule("railcraft:tracks|reinforced")
@@ -19,6 +20,9 @@ public class ModuleTracksReinforced extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                add(
+                        RailcraftBlocks.trackReinforced
+                );
 //                add(RailcraftBlocks.track);
             }
 

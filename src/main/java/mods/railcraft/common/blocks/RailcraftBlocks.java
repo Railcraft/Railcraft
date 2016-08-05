@@ -49,6 +49,7 @@ import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.*;
+import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerStrapIron;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
@@ -102,8 +103,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrack::new, ItemTrack::new),
-    trackHighSpeed("track.speedy", BlockTrackHighSpeed::new, ItemTrackFlex::new),
-    //    trackReinforced("track.reinforced", () -> new BlockTrackFlex(new SpeedControllerReinforced()).setResistance(80F), ItemTrackFlex::new),
+    trackHighSpeed("track.high.speed", BlockTrackHighSpeed::new, ItemTrackFlex::new),
+    trackReinforced("track.reinforced", () -> new BlockTrackFlex(new SpeedControllerReinforced()).setResistance(80F), ItemTrackFlex::new),
     trackStrapIron("track.strap.iron", () -> new BlockTrackFlex(new SpeedControllerStrapIron()), ItemTrackFlex::new),
     trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),

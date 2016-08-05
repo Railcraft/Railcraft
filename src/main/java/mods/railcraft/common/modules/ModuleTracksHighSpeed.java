@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 @RailcraftModule("railcraft:tracks|high_speed")
@@ -19,6 +20,9 @@ public class ModuleTracksHighSpeed extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                add(
+                        RailcraftBlocks.trackHighSpeed
+                );
 //                add(RailcraftBlocks.track);
             }
 
