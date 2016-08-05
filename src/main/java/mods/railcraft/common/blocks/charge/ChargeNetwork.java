@@ -359,7 +359,7 @@ public class ChargeNetwork {
         private int ticksToRecord;
         private int ticksRecorded;
         private BiConsumer<ChargeNode, Double> usageConsumer;
-        private Collection<Consumer<Double>> listeners = new LinkedHashSet<>();
+        private Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
         private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
             this.pos = pos;
@@ -391,11 +391,11 @@ public class ChargeNetwork {
             return chargeGraph;
         }
 
-        public void addListener(Consumer<Double> listener) {
+        public void addListener(BiConsumer<ChargeNode, Double> listener) {
             listeners.add(listener);
         }
 
-        public void removeListener(Consumer<Double> listener) {
+        public void removeListener(BiConsumer<ChargeNode, Double> listener) {
             listeners.remove(listener);
         }
 
@@ -425,7 +425,7 @@ public class ChargeNetwork {
         public boolean useCharge(double amount) {
             boolean removed = chargeGraph.useCharge(amount);
             if (removed) {
-                listeners.forEach(c -> c.accept(amount));
+                listeners.forEach(c -> c.accept(this, amount));
                 if (recording)
                     chargeUsedRecorded += amount;
             }
@@ -434,7 +434,7 @@ public class ChargeNetwork {
 
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
-            listeners.forEach(c -> c.accept(removed));
+            listeners.forEach(c -> c.accept(this, removed));
             if (recording)
                 chargeUsedRecorded += removed;
             return removed;
