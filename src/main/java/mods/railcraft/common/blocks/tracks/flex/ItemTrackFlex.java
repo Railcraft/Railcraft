@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.tracks;
+package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import net.minecraft.block.Block;

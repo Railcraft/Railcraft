@@ -8,11 +8,10 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.tracks;
+package mods.railcraft.common.blocks.tracks.flex;
 
+import mods.railcraft.common.blocks.tracks.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
-import net.minecraft.block.SoundType;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,14 +21,10 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockTrackHighSpeed extends BlockTrackFlex {
+public class BlockTrackHighSpeedElectric extends BlockTrackElectric {
 
-    public BlockTrackHighSpeed() {
+    public BlockTrackHighSpeedElectric() {
         super(new SpeedControllerHighSpeed());
-        setResistance(3.5F);
-        setHardness(0.7F);
-        setSoundType(SoundType.METAL);
-        setCreativeTab(CreativeTabs.TRANSPORTATION);
     }
 
     @Override

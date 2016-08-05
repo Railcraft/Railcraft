@@ -1,18 +1,22 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nullable;
 
 import static mods.railcraft.common.items.Metal.*;
 
@@ -27,6 +31,11 @@ public class ItemPlate extends ItemMetal {
         for (Metal m : getMetalBiMap().values()) {
             LootPlugin.addLoot(RailcraftItems.plate, m, 6, 18, LootPlugin.Type.WORKSHOP);
         }
+    }
+
+    @Override
+    public String getOreTag(@Nullable IVariantEnum variant) {
+        return null;
     }
 
     @Override

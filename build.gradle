@@ -120,10 +120,6 @@ runClient {
 }
 
 jar {
-    destinationDir = file(dirDest)
-
-    exclude '**/Thumbs.db'
-
     from(sourceSets.api.output) {
         include '**/mods/railcraft/api/**'
         include '**/cofh/api/**'
@@ -145,6 +141,8 @@ jar {
         }
     }
 
+    exclude '**/Thumbs.db'
+
     into('mods/railcraft/api') {
         from project.apiRailcraft + "/LICENSE.md"
     }
@@ -160,6 +158,10 @@ jar {
 //    into('buildcraft/api') {
 //        from "./src/api/java/buildcraft/api/LICENSE.API"
 //    }
+
+
+    destinationDir = file(dirDest)
+    includeEmptyDirs = false
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
@@ -188,10 +190,12 @@ task devJar(type: Jar, dependsOn: 'classes') {
         }
     }
 
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    destinationDir = file(dirDest)
-    extension = 'jar'
+    exclude '**/Thumbs.db'
 
+    destinationDir = file(dirDest)
+    includeEmptyDirs = false
+
+    extension = 'jar'
     classifier = 'dev'
 }
 

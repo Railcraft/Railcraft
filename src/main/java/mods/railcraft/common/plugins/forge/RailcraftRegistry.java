@@ -61,7 +61,7 @@ public final class RailcraftRegistry {
     @Nullable
     public static ItemStack getItem(String tag, int qty) {
         tag = MiscTools.cleanTag(tag);
-        return RailcraftItemStackRegistry.getStack(tag, qty).orNull();
+        return RailcraftItemStackRegistry.getStack(tag, qty).orElse(null);
 //        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
     }
 

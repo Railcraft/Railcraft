@@ -15,15 +15,16 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule(value = "railcraft:tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleElectricity.class})
-public class ModuleTracksElectric extends RailcraftModulePayload {
+@RailcraftModule(value = "railcraft:tracks|high_speed_electric",
+        dependencyClasses = {ModuleLocomotives.class, ModuleElectricity.class, ModuleTracksElectric.class, ModuleTracksHighSpeed.class})
+public class ModuleTracksHighSpeedElectric extends RailcraftModulePayload {
 
-    public ModuleTracksElectric() {
+    public ModuleTracksHighSpeedElectric() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.trackElectric
+                        RailcraftBlocks.trackHighSpeedElectric
                 );
             }
         });

@@ -1,0 +1,56 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {
+      "rail": "railcraft:blocks/tracks/flex/electric_flat"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "shape": {
+      "north_south": {
+        "model": "rail_flat"
+      },
+      "east_west": {
+        "model": "rail_flat", "y": 90
+      },
+      "ascending_east": {
+        "model": "rail_raised_ne", "y": 90
+      },
+      "ascending_west": {
+        "model": "rail_raised_sw", "y": 90
+      },
+      "ascending_north": {
+        "model": "rail_raised_ne"
+      },
+      "ascending_south": {
+        "model": "rail_raised_sw"
+      },
+      "south_east": {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/electric_curved"
+        },
+        "model": "rail_curved"
+      },
+      "south_west": {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/electric_curved"
+        },
+        "model": "rail_curved", "y": 90
+      },
+      "north_west": {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/electric_curved"
+        },
+        "model": "rail_curved", "y": 180
+      },
+      "north_east": {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/electric_curved"
+        },
+        "model": "rail_curved", "y": 270
+      }
+    }
+  }
+}
