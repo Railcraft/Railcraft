@@ -23,6 +23,7 @@ import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
 import net.minecraft.init.Blocks;
@@ -30,7 +31,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -53,8 +53,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     coke(ItemCoke::new, "fuel.coke"),
     crowbarIron(ItemCrowbarIron::new, "tool.crowbar.iron"),
     crowbarSteel(ItemCrowbarSteel::new, "tool.crowbar.steel"),
-    crowbarThaumium(ItemCrowbarThaumium::new, "tool.crowbar.thaumium", null, () -> Loader.isModLoaded("Thaumcraft")),
-    crowbarVoid(ItemCrowbarVoid::new, "tool.crowbar.void", null, () -> Loader.isModLoaded("Thaumcraft")),
+    crowbarThaumium(ItemCrowbarThaumium::new, "tool.crowbar.thaumium", null, Mod.THAUMCRAFT::isLoaded),
+    crowbarVoid(ItemCrowbarVoid::new, "tool.crowbar.void", null, Mod.THAUMCRAFT::isLoaded),
     dust(ItemDust::new, "dust"),
     gear(ItemGear::new, "part.gear"),
     goggles(ItemGoggles::new, "armor.goggles"),
@@ -64,6 +64,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     firestoneRefined(ItemFirestoneRefined::new, "firestone.refined"),
     hoeSteel(ItemSteelHoe::new, "tool.hoe.steel", Items.IRON_HOE),
     ingot(ItemIngot::new, "ingot"),
+    lapotronUpgrade(ItemIngot::new, "ic2.upgrade.lapotron", null, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)),
     magGlass(ItemMagnifyingGlass::new, "tool.magnifying.glass"),
     notepad(ItemNotepad::new, "tool.notepad"),
     nugget(ItemNugget::new, "nugget"),
