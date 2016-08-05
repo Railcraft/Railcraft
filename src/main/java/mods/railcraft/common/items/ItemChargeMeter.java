@@ -123,7 +123,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                 ChargeNetwork.ChargeGraph graph = n.getChargeGraph();
                 sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaintenanceCost());
                 if (n.getBattery() == null)
-                    sendChat(player, "railcraft.gui.charge.meter.node", avg, n.getChargeDef().getCost());
+                    sendChat(player, "railcraft.gui.charge.meter.node", avg, n.getChargeDef().getMaintenanceCost());
                 else {
                     boolean infiniteBat = n.getBattery().isInfinite();
                     sendChat(player, "railcraft.gui.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0);

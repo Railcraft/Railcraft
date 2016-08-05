@@ -178,7 +178,7 @@ public class ChargeNetwork {
         public boolean add(ChargeNode chargeNode) {
             boolean added = super.add(chargeNode);
             if (added) {
-                totalMaintenanceCost += chargeNode.chargeDef.getCost();
+                totalMaintenanceCost += chargeNode.chargeDef.getMaintenanceCost();
                 chargeNode.chargeGraph = this;
                 if (chargeNode.chargeBattery != null)
                     chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
@@ -254,6 +254,10 @@ public class ChargeNetwork {
 
         public double getCharge() {
             return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCharge).sum();
+        }
+
+        public double getCapacity() {
+            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCapacity).sum();
         }
 
         public double getMaintenanceCost() {
@@ -351,7 +355,8 @@ public class ChargeNetwork {
         private ChargeGraph chargeGraph = NULL_GRAPH;
         private boolean invalid;
         private boolean recording;
-        private double chargeUsed;
+        private double chargeUsedMonitoring;
+        private double chargeUsedRecorded;
         private int ticksToRecord;
         private int ticksRecorded;
         private BiConsumer<ChargeNode, Double> usageConsumer;
@@ -386,11 +391,26 @@ public class ChargeNetwork {
             return chargeGraph;
         }
 
+        /**
+         * Called every tick by anything that wishes to monitor usage of this node.
+         * If monitoring is disabled, it will
+         *
+         * @return usage since that last time monitor was called
+         */
+        public double monitor() {
+            if (chargeUsedMonitoring < 0F || Double.isInfinite(chargeUsedMonitoring)) {
+                chargeUsedMonitoring = 0.0;
+            }
+            double usage = chargeUsedMonitoring;
+            chargeUsedMonitoring = 0.0;
+            return usage;
+        }
+
         public void startRecordingUsage(int ticksToRecord, BiConsumer<ChargeNode, Double> usageConsumer) {
             recording = true;
             this.ticksToRecord = ticksToRecord;
             this.usageConsumer = usageConsumer;
-            chargeUsed = 0.0;
+            chargeUsedRecorded = 0.0;
             ticksRecorded = 0;
             tickingNodes.add(this);
         }
@@ -399,10 +419,10 @@ public class ChargeNetwork {
             ticksRecorded++;
             if (ticksRecorded > ticksToRecord) {
                 recording = false;
-                double averageUsage = chargeUsed / ticksToRecord;
+                double averageUsage = chargeUsedRecorded / ticksToRecord;
                 usageConsumer.accept(this, averageUsage);
                 usageConsumer = null;
-                chargeUsed = 0.0;
+                chargeUsedRecorded = 0.0;
                 ticksToRecord = 0;
                 ticksRecorded = 0;
             }
@@ -411,15 +431,19 @@ public class ChargeNetwork {
 
         public boolean useCharge(double amount) {
             boolean removed = chargeGraph.useCharge(amount);
-            if (removed && recording)
-                chargeUsed += amount;
+            if (removed) {
+                chargeUsedMonitoring += amount;
+                if (recording)
+                    chargeUsedRecorded += amount;
+            }
             return removed;
         }
 
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
+            chargeUsedMonitoring += removed;
             if (recording)
-                chargeUsed += removed;
+                chargeUsedRecorded += removed;
             return removed;
         }
 

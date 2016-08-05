@@ -143,7 +143,7 @@ public interface IChargeBlock {
             this.batterySupplier = batterySupplier;
         }
 
-        public double getCost() {
+        public double getMaintenanceCost() {
             return cost;
         }
 
