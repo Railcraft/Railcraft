@@ -23,7 +23,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-group = "com.covertjaguar.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.version_minecraft
 
 ext.apiRailcraft = "./api/railcraft"
@@ -234,6 +234,19 @@ build.dependsOn signMainJar, signDevJar, apiZip
 release.dependsOn releaseInit, build
 build.shouldRunAfter releaseInit
 release.shouldRunAfter uploadArchives
+
+uploadArchives {
+    repositories {
+        ivy {
+            url "sftp://ftp.railcraft.info:22/home2/railcraf/public_html/ivy"
+            credentials {
+                username project.ftpUsername
+                password project.ftpPassword
+            }
+            layout 'gradle'
+        }
+    }
+}
 
 artifacts {
     archives jar, devJar, apiZip
