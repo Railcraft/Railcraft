@@ -17,6 +17,7 @@ import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
 import ic2.api.recipe.*;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
@@ -27,7 +28,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -36,10 +36,8 @@ import java.util.Iterator;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, IC2Plugin::isModInstalled, IC2Items::getItem);
+    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC), IC2Items::getItem);
     public static final int[] POWER_TIERS = {1, 6, 32, 512, 2048, 8192};
-    private static Boolean modLoaded;
-    private static Boolean classic;
 
     @Nullable
     public static ItemStack getItem(String tag) {
@@ -194,21 +192,8 @@ public class IC2Plugin {
                 if (output != null)
                     if (output.getItem() == Items.COAL && output.stackSize == 20)
                         output.stackSize = 5;
-            } catch (Throwable error) {
+            } catch (Throwable ignored) {
             }
         }
     }
-
-    public static boolean isModInstalled() {
-        if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("IC2") || Loader.isModLoaded("IC2-Classic-Spmod");
-        return modLoaded;
-    }
-
-    public static boolean isClassic() {
-        if (classic == null)
-            classic = Loader.isModLoaded("IC2-Classic-Spmod");
-        return classic;
-    }
-
 }

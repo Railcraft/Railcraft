@@ -1,14 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -55,7 +57,7 @@ public final class EntityCartEnergyCESU extends CartBaseEnergy {
     @Override
     public ItemStack getIC2Item() {
         //IC2 Classic so no RenderCrash Happens
-        return IC2Plugin.getItem(IC2Plugin.isClassic() ? "mfsUnit" : "cesuUnit");
+        return IC2Plugin.getItem(Mod.IC2_CLASSIC.isLoaded() ? "mfsUnit" : "cesuUnit");
     }
 
 }

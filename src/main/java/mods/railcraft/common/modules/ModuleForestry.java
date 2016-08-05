@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,11 +6,12 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraftforge.fml.common.Optional;
 
 /**
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.common.Optional;
 public class ModuleForestry extends RailcraftModulePayload {
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
-        if (!ForestryPlugin.isForestryInstalled())
+        if (!Mod.FORESTRY.isLoaded())
             throw new MissingPrerequisiteException("Forestry not installed.");
     }
 

@@ -31,6 +31,7 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.block.Block;
@@ -344,7 +345,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
                         BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
 
-                        if (IC2Plugin.isModInstalled() && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.dust.isEnabled()) {
+                        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.dust.isEnabled()) {
                             IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
                             IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.dust.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }
@@ -465,8 +466,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.cokeOven.addRecipe(log, true, false, new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
                 }
 
-                if (IC2Plugin.isModInstalled()) {
-                    boolean classic = IC2Plugin.isClassic();
+                if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
+                    boolean classic = Mod.IC2_CLASSIC.isLoaded();
                     ItemStack crushedIron = IC2Plugin.getItem(classic ? "ironDust" : "crushedIronOre");
                     ItemStack crushedGold = IC2Plugin.getItem(classic ? "goldDust" : "crushedGoldOre");
                     ItemStack crushedCopper = IC2Plugin.getItem(classic ? "copperDust" : "crushedCopperOre");

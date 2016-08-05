@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 
 /**
@@ -21,7 +22,7 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
 
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
-        if (!ThaumcraftPlugin.isModInstalled())
+        if (!Mod.THAUMCRAFT.isLoaded())
             throw new MissingPrerequisiteException("Thaumcraft not detected");
     }
 

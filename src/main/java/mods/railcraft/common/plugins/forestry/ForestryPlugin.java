@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -25,7 +26,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -45,12 +45,11 @@ public class ForestryPlugin {
     public static Item icemanBackpackT2;
     public static Item apothecariesBackpackT1;
     public static Item apothecariesBackpackT2;
-    public static Boolean modLoaded;
     private static ForestryPlugin instance;
 
     public static ForestryPlugin instance() {
         if (instance == null) {
-            if (isForestryInstalled())
+            if (Mod.FORESTRY.isLoaded())
                 instance = new ForestryPluginInstalled();
             else
                 instance = new ForestryPlugin();
@@ -58,14 +57,8 @@ public class ForestryPlugin {
         return instance;
     }
 
-    public static boolean isForestryInstalled() {
-        if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("forestry");
-        return modLoaded;
-    }
-
     public static ItemStack getItem(String tag) {
-        if (!isForestryInstalled())
+        if (!Mod.FORESTRY.isLoaded())
             return null;
         Item item = GameRegistry.findItem("forestry", tag);
         if (item == null)

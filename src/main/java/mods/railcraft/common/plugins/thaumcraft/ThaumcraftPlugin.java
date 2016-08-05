@@ -30,6 +30,7 @@ import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.block.Block;
@@ -39,7 +40,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftMaterials;
@@ -60,7 +60,7 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ThaumcraftPlugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("Thaumcraft", ItemsTC.class, ThaumcraftPlugin::isModInstalled, tag -> {
+    public static final ItemStackCache ITEMS = new ItemStackCache("Thaumcraft", ItemsTC.class, Mod.THAUMCRAFT::isLoaded, tag -> {
         try {
             return new ItemStack((Item) ItemsTC.class.getField(tag).get(null));
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -69,7 +69,7 @@ public class ThaumcraftPlugin {
             return null;
         }
     });
-    public static final ItemStackCache BLOCKS = new ItemStackCache("Thaumcraft", BlocksTC.class, ThaumcraftPlugin::isModInstalled, tag -> {
+    public static final ItemStackCache BLOCKS = new ItemStackCache("Thaumcraft", BlocksTC.class, Mod.THAUMCRAFT::isLoaded, tag -> {
         try {
             return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -80,7 +80,6 @@ public class ThaumcraftPlugin {
     });
     public static final String RESEARCH_CATEGORY = "RAILCRAFT";
     private static Map<String, ResearchPage> researchPages = new HashMap<String, ResearchPage>();
-    private static Boolean modLoaded;
 
     public static void setupResearch() {
         ResearchCategories.registerCategory(RESEARCH_CATEGORY, null, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
@@ -338,11 +337,5 @@ public class ThaumcraftPlugin {
             Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
         }
         return ToolMaterial.IRON;
-    }
-
-    public static boolean isModInstalled() {
-        if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("Thaumcraft");
-        return modLoaded;
     }
 }

@@ -22,6 +22,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -36,11 +37,11 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
-        if (!IC2Plugin.isModInstalled())
+        if (!Mod.IC2.isLoaded() && !Mod.IC2_CLASSIC.isLoaded())
             throw new MissingPrerequisiteException("Reason: IC2 not detected");
     }
 
-    ModuleIC2() {
+    public ModuleIC2() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
@@ -62,7 +63,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 RailcraftCarts.ENERGY_BATBOX.setup();
                 RailcraftCarts.ENERGY_MFE.setup();
-                if (IC2Plugin.isClassic()) RailcraftCarts.ENERGY_MFSU.setup();
+                if (Mod.IC2_CLASSIC.isLoaded()) RailcraftCarts.ENERGY_MFSU.setup();
                 else RailcraftCarts.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
@@ -114,7 +115,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 }
 
-                if (!IC2Plugin.isClassic()) {
+                if (!Mod.IC2_CLASSIC.isLoaded()) {
                     ItemStack cesu = IC2Plugin.getItem("cesuUnit");
                     if (cesu != null) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
