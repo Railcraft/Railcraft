@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
@@ -31,20 +31,14 @@ public enum EnumOre implements IVariantEnumBlock {
     DARK_DIAMOND("dark.diamond"),
     DARK_EMERALD("dark.emerald"),
     DARK_LAPIS("dark.lapis"),
-    FIRESTONE("firestone"),
-    WATERSTONE("waterstone"),
     POOR_IRON("poor.iron"),
     POOR_GOLD("poor.gold"),
     POOR_COPPER("poor.copper"),
     POOR_TIN("poor.tin"),
-    POOR_LEAD("poor.lead"),;
+    POOR_LEAD("poor.lead"),
+    FIRESTONE("firestone"),;
     public static final EnumOre[] VALUES = values();
     private final String tag;
-    private boolean depreciated;
-
-    static {
-        WATERSTONE.depreciated = true;
-    }
 
     EnumOre(String tag) {
         this.tag = tag;
@@ -81,7 +75,7 @@ public enum EnumOre implements IVariantEnumBlock {
     }
 
     public boolean isDepreciated() {
-        return depreciated;
+        return false;
     }
 
     public static EnumOre fromOrdinal(int meta) {

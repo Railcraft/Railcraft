@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:ore"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "sulfur": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.sulfur"}},
+      "saltpeter": {"textures": {"stone": "blocks/sandstone_bottom", "ore": "railcraft:blocks/ore.saltpeter"}},
+      "dark_diamond": {"textures": {"stone": "railcraft:blocks/stone.abyssal", "ore": "railcraft:blocks/ore.dark.diamond"}},
+      "dark_emerald": {"textures": {"stone": "railcraft:blocks/stone.abyssal", "ore": "railcraft:blocks/ore.dark.emerald"}},
+      "dark_lapis": {"textures": {"stone": "railcraft:blocks/stone.abyssal", "ore": "railcraft:blocks/ore.dark.lapis"}},
+      "firestone": {"textures": {"stone": "blocks/netherrack", "ore": "railcraft:blocks/ore.firestone"}},
+      "poor_iron": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.poor.iron"}},
+      "poor_gold": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.poor.gold"}},
+      "poor_copper": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.poor.copper"}},
+      "poor_tin": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.poor.tin"}},
+      "poor_lead": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore.poor.lead"}}
+    }
+  }
+}

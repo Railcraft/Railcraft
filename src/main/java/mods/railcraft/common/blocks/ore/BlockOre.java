@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.RailcraftBlockSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.IVariantEnum;
@@ -17,10 +18,8 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -31,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -46,27 +46,17 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOre extends Block implements IRailcraftBlock {
+public class BlockOre extends RailcraftBlockSubtyped {
 
     public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
-    //    private static final ParticleHelperCallback callback = new ParticleCallback();
-    public static int renderPass;
     private final Random rand = new Random();
 
     public BlockOre() {
-        super(Material.ROCK);
+        super(Material.ROCK, EnumOre.class);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
-        setUnlocalizedName("railcraft.ore");
         setResistance(5);
         setHardness(3);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumOre.class;
     }
 
     @Nullable
@@ -74,12 +64,13 @@ public class BlockOre extends Block implements IRailcraftBlock {
         return (BlockOre) RailcraftBlocks.ore.block();
     }
 
-    @Nullable
-    public static IBlockState getState(EnumOre ore) {
-        Block block = getBlock();
-        if (block == null)
-            return null;
-        return block.getDefaultState().withProperty(VARIANT, ore);
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        if (variant != null) {
+            checkVariant(variant);
+            return getDefaultState().withProperty(VARIANT, (EnumOre) variant);
+        }
+        return getDefaultState();
     }
 
     @Override
@@ -223,19 +214,10 @@ public class BlockOre extends Block implements IRailcraftBlock {
         return true;
     }
 
-    //TODO: determine if the particle overrides are still necessary
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
-//        return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
-//    }
-//
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
-//        IBlockState state = WorldPlugin.getBlockState(world, pos);
-//        return ParticleHelper.addDestroyEffects(world, instance, pos, state, effectRenderer, callback);
-//    }
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -269,24 +251,4 @@ public class BlockOre extends Block implements IRailcraftBlock {
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
-
-//    private static class ParticleCallback implements ParticleHelperCallback {
-//        @Override
-//        @SideOnly(Side.CLIENT)
-//        public void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-//            setTexture(fx, world, pos, state);
-//        }
-//
-//        @Override
-//        @SideOnly(Side.CLIENT)
-//        public void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-//            setTexture(fx, world, pos, state);
-//        }
-//
-//        @SideOnly(Side.CLIENT)
-//        private void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-//            renderPass = 0;
-//            fx.setParticleTexture(instance.getIcon(0, meta));
-//        }
-//    }
 }

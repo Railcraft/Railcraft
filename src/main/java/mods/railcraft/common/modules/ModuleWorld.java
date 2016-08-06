@@ -43,7 +43,7 @@ public class ModuleWorld extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-//                        RailcraftBlocks.ore,
+                        RailcraftBlocks.ore,
                         RailcraftBlocks.worldLogic
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {

@@ -1,47 +1,25 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.EntityItemFireproof;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class ItemOre extends ItemBlockRailcraftSubtyped {
 
     public ItemOre(Block block) {
         super(block);
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        int damage = stack.getItemDamage();
-        if (damage < 0 || damage >= EnumOre.VALUES.length)
-            return "";
-        return EnumOre.VALUES[damage].getTag();
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
-        String tipTag = EnumOre.fromOrdinal(stack.getItemDamage()).getTag() + ".tip";
-        if (LocalizationPlugin.hasTag(tipTag)) {
-            ToolTip tip = ToolTip.buildToolTip(tipTag);
-            info.addAll(tip.convertToStrings());
-        }
     }
 
     /**
