@@ -27,6 +27,9 @@ public class SpeedControllerStrapIron extends SpeedController {
         return instance;
     }
 
+    private SpeedControllerStrapIron() {
+    }
+
     @Override
     public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         return MAX_SPEED;

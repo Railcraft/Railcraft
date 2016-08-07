@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.instances.TrackPriming;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitPriming;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -19,10 +20,10 @@ import net.minecraft.client.gui.GuiButton;
 
 public class GuiTrackPriming extends GuiBasic {
     protected short fuse = 80;
-    TrackPriming track;
+    TrackKitPriming track;
 
-    public GuiTrackPriming(TrackPriming t) {
-        super(((TileTrack) t.getTile()).getName());
+    public GuiTrackPriming(TrackKitPriming t) {
+        super(((TileTrackOutfitted) t.getTile()).getName());
         track = t;
         fuse = track.getFuse();
     }
@@ -54,10 +55,10 @@ public class GuiTrackPriming extends GuiBasic {
             f += 1;
         if (guibutton.id == 3)
             f += 10;
-        if (f < TrackPriming.MIN_FUSE)
-            f = TrackPriming.MIN_FUSE;
-        if (f > TrackPriming.MAX_FUSE)
-            f = TrackPriming.MAX_FUSE;
+        if (f < TrackKitPriming.MIN_FUSE)
+            f = TrackKitPriming.MIN_FUSE;
+        if (f > TrackKitPriming.MAX_FUSE)
+            f = TrackKitPriming.MAX_FUSE;
         fuse = f;
     }
 

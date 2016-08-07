@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
@@ -32,11 +32,7 @@ public class ItemStrengthGlass extends ItemBlockRailcraftSubtyped {
     @Override
     @SideOnly(Side.CLIENT)
     public IItemColor colorHandler() {
-        return (stack, tintIndex) -> {
-            if (BlockStrengthGlass.renderingHighlight)
-                return EnumColor.WHITE.getHexColor();
-            return EnumColor.fromOrdinal(stack.getItemDamage()).inverse().getHexColor();
-        };
+        return (stack, tintIndex) -> EnumColor.fromOrdinal(stack.getItemDamage()).inverse().getHexColor();
     }
 
 }

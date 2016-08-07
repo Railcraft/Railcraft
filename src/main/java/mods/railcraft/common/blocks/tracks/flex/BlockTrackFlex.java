@@ -11,7 +11,8 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
-import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedController;
+import mods.railcraft.common.blocks.tracks.TrackConstants;
+import mods.railcraft.common.blocks.tracks.TrackTypes;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,14 +31,14 @@ import java.util.List;
  */
 public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
 
-    public SpeedController speedController;
+    public TrackTypes trackType;
 
-    public BlockTrackFlex(SpeedController speedController) {
-        setResistance(3.5F);
-        setHardness(0.7F);
+    public BlockTrackFlex(TrackTypes trackType) {
+        setResistance(trackType.getResistance());
+        setHardness(TrackConstants.HARDNESS);
         setSoundType(SoundType.METAL);
         setCreativeTab(CreativeTabs.TRANSPORTATION);
-        this.speedController = speedController;
+        this.trackType = trackType;
     }
 
     @Override
@@ -46,7 +47,12 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
     }
 
     @Override
+    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
+        trackType.speedController.onMinecartPass(world, cart, pos, null);
+    }
+
+    @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return speedController.getMaxSpeed(world, cart, pos);
+        return trackType.speedController.getMaxSpeed(world, cart, pos);
     }
 }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.client.particles.ParticleDrip;
@@ -29,6 +30,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -337,6 +340,7 @@ public final class FluidHelper {
         return FluidRegistry.getFluidID(stack.getFluid().getName());
     }
 
+    @SideOnly(Side.CLIENT)
     public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {
         if (rand.nextInt(10) == 0 && world.isSideSolid(pos.down(), EnumFacing.UP) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
             double px = (double) ((float) pos.getX() + rand.nextFloat());

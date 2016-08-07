@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.api.tracks.ITrackLockdown;
-import mods.railcraft.common.blocks.tracks.TileTrack;
+import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackKitLockdown;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -267,11 +267,11 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             resetPipe();
             if (worldObj != null) {
                 TileEntity tile = worldObj.getTileEntity(getPos().down(2));
-                if (tile instanceof TileTrack) {
-                    TileTrack trackTile = (TileTrack) tile;
-                    ITrackInstance track = trackTile.getTrackInstance();
-                    if (track instanceof ITrackLockdown)
-                        ((ITrackLockdown) track).releaseCart();
+                if (tile instanceof TileTrackOutfitted) {
+                    TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
+                    ITrackKit track = trackTile.getTrackKit();
+                    if (track instanceof ITrackKitLockdown)
+                        ((ITrackKitLockdown) track).releaseCart();
                 }
             }
         }

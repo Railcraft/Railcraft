@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitRouting;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerTrackRouting;
@@ -27,13 +28,13 @@ public class GuiTrackRouting extends TileGui {
 
     private GuiMultiButton lockButton;
     private final EntityPlayer player;
-    private final TrackRouting track;
+    private final TrackKitRouting track;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
     private ToolTip notOwnedToolTips;
     private String ownerName = "[Unknown]";
 
-    public GuiTrackRouting(InventoryPlayer inv, TrackRouting track) {
+    public GuiTrackRouting(InventoryPlayer inv, TrackKitRouting track) {
         super((RailcraftTileEntity) track.getTile(), new ContainerTrackRouting(inv, track), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_routing.png");
         ySize = 140;
         this.track = track;

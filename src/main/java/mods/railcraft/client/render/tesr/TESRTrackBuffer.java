@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,14 +6,14 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
-import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.tracks.ModelBufferStop;
-import mods.railcraft.common.blocks.tracks.TileTrackTESR;
-import mods.railcraft.common.blocks.tracks.instances.TrackBufferStop;
+import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfittedTESR;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackBufferStop;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -22,15 +22,15 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRTrackBuffer extends TileEntitySpecialRenderer<TileTrackTESR> {
+public class TESRTrackBuffer extends TileEntitySpecialRenderer<TileTrackOutfittedTESR> {
 
     private static ModelSimple model = new ModelBufferStop();
     private static ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + "track_buffer_stop.png");
 
     @Override
-    public void renderTileEntityAt(TileTrackTESR tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (tile.getTrackInstance() instanceof TrackBufferStop) {
-            TrackBufferStop track = (TrackBufferStop) tile.getTrackInstance();
+    public void renderTileEntityAt(TileTrackOutfittedTESR tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (tile.getTrackKit() instanceof TrackBufferStop) {
+            TrackBufferStop track = (TrackBufferStop) tile.getTrackKit();
             OpenGL.glPushMatrix();
             OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
             OpenGL.glEnable(GL11.GL_LIGHTING);

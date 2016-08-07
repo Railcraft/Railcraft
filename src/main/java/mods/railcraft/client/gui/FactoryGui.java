@@ -19,11 +19,11 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.gamma.*;
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.instances.TrackEmbarking;
-import mods.railcraft.common.blocks.tracks.instances.TrackLauncher;
-import mods.railcraft.common.blocks.tracks.instances.TrackPriming;
-import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitEmbarking;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitLauncher;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitPriming;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitRouting;
 import mods.railcraft.common.blocks.wayobjects.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -118,7 +118,7 @@ public class FactoryGui {
                 case ROUTING:
                     return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) obj);
                 case TRACK_ROUTING:
-                    return new GuiTrackRouting(inv, (TrackRouting) ((TileTrack) obj).getTrackInstance());
+                    return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKit());
                 case SWITCH_MOTOR:
                     return new GuiSwitchMotor(inv.player, (TileSwitchMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
                 case BOX_RECEIVER:
@@ -132,11 +132,11 @@ public class FactoryGui {
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:
-                    return new GuiTrackLauncher((TrackLauncher) ((TileTrack) obj).getTrackInstance());
+                    return new GuiTrackLauncher((TrackKitLauncher) ((TileTrackOutfitted) obj).getTrackKit());
                 case TRACK_PRIMING:
-                    return new GuiTrackPriming((TrackPriming) ((TileTrack) obj).getTrackInstance());
+                    return new GuiTrackPriming((TrackKitPriming) ((TileTrackOutfitted) obj).getTrackKit());
                 case TRACK_EMBARKING:
-                    return new GuiTrackEmbarking((TrackEmbarking) ((TileTrack) obj).getTrackInstance());
+                    return new GuiTrackEmbarking((TrackKitEmbarking) ((TileTrackOutfitted) obj).getTrackKit());
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:

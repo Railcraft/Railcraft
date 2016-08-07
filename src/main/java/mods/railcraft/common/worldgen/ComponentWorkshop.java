@@ -1,25 +1,26 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.api.tracks.ITrackReversible;
+import mods.railcraft.api.tracks.ITrackKitReversible;
+import mods.railcraft.api.tracks.TrackKitSpec;
 import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.tracks.BlockTrack;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.TrackFactory;
+import mods.railcraft.common.blocks.tracks.kit.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
+import mods.railcraft.common.blocks.tracks.kit.TrackTileFactory;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -99,8 +100,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // track
         fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL.getDefaultState(), Blocks.RAIL.getDefaultState(), false);
-        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
-        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
+        placeTrack(TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
+        placeTrack(TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
 
 
         // hall walls
@@ -137,6 +138,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithBlocks(world, sbb, 10, 4, 0, 10, 4, 10, roofWest, roofWest, false);
         fillWithBlocks(world, sbb, 9, 5, 0, 9, 5, 10, roofWest, roofWest, false);
 
+        // TODO: This is reported as being broken
         // hall roof
         BlockSelector roofSelector = new BlockSelector() {
             @Override
@@ -233,17 +235,17 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
     }
 
-    private void placeTrack(EnumTrack track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
-        BlockTrack blockTrack = (BlockTrack) RailcraftBlocks.track.block();
+    private void placeTrack(TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
+        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.track.block();
         // TODO: place vanilla tracks?
         if (blockTrack == null)
             return;
 
-        TrackSpec trackSpec;
+        TrackKitSpec trackKitSpec;
         if (track.isEnabled()) {
-            trackSpec = track.getTrackSpec();
+            trackKitSpec = track.getTrackKitSpec();
         } else
-            trackSpec = TrackRegistry.getDefaultTrackSpec();
+            trackKitSpec = TrackRegistry.getDefaultTrackSpec();
 
         BlockPos pos = getPosWithOffset(x, y, z);
 
@@ -251,11 +253,11 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             return;
 
         setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape), x, y, z, sbb);
-        TileTrack tile = TrackFactory.makeTrackTile(trackSpec);
+        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackKitSpec);
         world.setTileEntity(pos, tile);
         EnumFacing facing = getCoordBaseMode();
         boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
-        ((ITrackReversible) tile.getTrackInstance()).setReversed(r != reversed);
+        ((ITrackKitReversible) tile.getTrackKit()).setReversed(r != reversed);
     }
 
     private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {

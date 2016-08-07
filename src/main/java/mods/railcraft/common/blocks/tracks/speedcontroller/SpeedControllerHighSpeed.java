@@ -9,13 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
+import mods.railcraft.common.blocks.tracks.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,6 +34,14 @@ public class SpeedControllerHighSpeed extends SpeedController {
         if (instance == null)
             instance = new SpeedControllerHighSpeed();
         return instance;
+    }
+
+    private SpeedControllerHighSpeed() {
+    }
+
+    @Override
+    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKits trackKit) {
+        HighSpeedTools.performHighSpeedChecks(world, pos, cart, trackKit);
     }
 
     @Override

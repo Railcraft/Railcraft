@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackSuspended;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackSuspended;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -83,7 +84,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
                 TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos.offset(side));
                 if (tile instanceof ITrackTile) {
                     ITrackTile track = (ITrackTile) tile;
-                    if (track.getTrackInstance() instanceof TrackSuspended) {
+                    if (track.getTrackKit() instanceof TrackSuspended) {
                         nextToSuspended = true;
                         break;
                     }

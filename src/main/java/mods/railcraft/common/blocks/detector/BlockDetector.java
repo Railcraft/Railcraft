@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.blocks.RailcraftBlockContainer;
@@ -88,6 +88,7 @@ public class BlockDetector extends RailcraftBlockContainer {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
 //        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(POWERED).build());

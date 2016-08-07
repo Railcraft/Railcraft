@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -68,7 +68,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
 
                 EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
                 if (epsilon.isAvailable()) {
-                    EnumTrack.FORCE.register();
+                    TrackKits.FORCE.register();
                     CraftingPlugin.addRecipe(epsilon.getItem(),
                             "PCP",
                             "CDC",

@@ -36,6 +36,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class BlockRitual extends BlockContainer implements IRailcraftBlock {
         GameRegistry.registerTileEntity(TileRitual.class, "RCRitualTile");
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(CRACKED).build());

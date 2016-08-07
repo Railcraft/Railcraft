@@ -11,7 +11,6 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 @RailcraftModule("railcraft:tracks|wood")
 public class ModuleTracksWood extends RailcraftModulePayload {
@@ -28,11 +27,11 @@ public class ModuleTracksWood extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.SLOW.register();
-                EnumTrack.SLOW_BOOSTER.register();
-                EnumTrack.SLOW_JUNCTION.register();
-                EnumTrack.SLOW_SWITCH.register();
-                EnumTrack.SLOW_WYE.register();
+//                TrackKits.SLOW.register();
+//                TrackKits.BOOSTER.register();
+//                TrackKits.SLOW_JUNCTION.register();
+//                TrackKits.SLOW_SWITCH.register();
+//                TrackKits.SLOW_WYE.register();
             }
         });
     }

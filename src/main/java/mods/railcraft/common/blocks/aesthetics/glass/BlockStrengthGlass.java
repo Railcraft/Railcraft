@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
@@ -43,6 +43,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -54,7 +56,6 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
-    public static boolean renderingHighlight;
 
     public BlockStrengthGlass() {
         super(Material.GLASS, false);
@@ -74,6 +75,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(COLOR).build());
@@ -228,11 +230,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
     @Override
     public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> {
-            if (renderingHighlight)
-                return EnumColor.WHITE.getHexColor();
-            return getColor(state).getHexColor();
-        };
+        return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
     }
 
     @Override

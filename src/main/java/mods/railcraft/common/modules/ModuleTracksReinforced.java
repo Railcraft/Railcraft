@@ -11,7 +11,6 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 @RailcraftModule("railcraft:tracks|reinforced")
 public class ModuleTracksReinforced extends RailcraftModulePayload {
@@ -28,11 +27,11 @@ public class ModuleTracksReinforced extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.REINFORCED.register();
-                EnumTrack.REINFORCED_BOOSTER.register();
-                EnumTrack.REINFORCED_JUNCTION.register();
-                EnumTrack.REINFORCED_SWITCH.register();
-                EnumTrack.REINFORCED_WYE.register();
+//                TrackKits.REINFORCED.register();
+//                TrackKits.REINFORCED_BOOSTER.register();
+//                TrackKits.REINFORCED_JUNCTION.register();
+//                TrackKits.REINFORCED_SWITCH.register();
+//                TrackKits.REINFORCED_WYE.register();
             }
         });
     }

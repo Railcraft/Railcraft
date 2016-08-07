@@ -14,7 +14,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 
@@ -37,7 +37,7 @@ public class ModuleTrain extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.COUPLER.register();
+                TrackKits.COUPLER.register();
 
                 if (RailcraftBlocks.detector.isLoaded()) {
                     CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),

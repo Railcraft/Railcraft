@@ -32,6 +32,9 @@ public class SpeedControllerReinforced extends SpeedController {
         return instance;
     }
 
+    private SpeedControllerReinforced() {
+    }
+
     @Override
     public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);

@@ -18,8 +18,8 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.gamma.*;
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitRouting;
 import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;
 import mods.railcraft.common.blocks.wayobjects.IRouter;
 import mods.railcraft.common.carts.*;
@@ -141,7 +141,7 @@ public class FactoryContainer {
                 case ROUTING:
                     return new ContainerRouting(inv, (IRouter) obj);
                 case TRACK_ROUTING:
-                    return new ContainerTrackRouting(inv, (TrackRouting) ((TileTrack) obj).getTrackInstance());
+                    return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKit());
                 default:
                     //TODO: fix this
 //                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);

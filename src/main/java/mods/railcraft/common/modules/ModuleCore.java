@@ -26,7 +26,7 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.tracks.BlockTrack;
+import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandAdmin;
@@ -218,7 +218,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
                 LootPlugin.addLoot(RailcraftCarts.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
 
-                float h = BlockTrack.HARDNESS;
+                float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
                 Blocks.GOLDEN_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
                 Blocks.DETECTOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);

@@ -10,9 +10,10 @@
 
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackInstance;
+import mods.railcraft.api.tracks.ITrackKit;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.instances.TrackBaseRailcraft;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitRailcraft;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -21,6 +22,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 8/2/2016 for Railcraft.
@@ -63,35 +66,34 @@ public class HighSpeedTools {
         return !world.isBlockLoaded(pos) || isHighSpeedTrackAt(world, pos);
     }
 
-    public static void performBasicHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart) {
-        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
-        if (highSpeed) {
-            checkSafetyAndExplode(world, pos, cart);
-        } else {
-            cart.motionX = Math.copySign(Math.min(SPEED_CUTOFF, Math.abs(cart.motionX)), cart.motionX);
-            cart.motionZ = Math.copySign(Math.min(SPEED_CUTOFF, Math.abs(cart.motionZ)), cart.motionZ);
-        }
+    private static void limitSpeed(EntityMinecart cart) {
+        cart.motionX = Math.copySign(Math.min(SPEED_CUTOFF, Math.abs(cart.motionX)), cart.motionX);
+        cart.motionZ = Math.copySign(Math.min(SPEED_CUTOFF, Math.abs(cart.motionZ)), cart.motionZ);
     }
 
-    public static void performBoosterHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart) {
+    public static void performHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart, @Nullable TrackKits trackKit) {
         boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             checkSafetyAndExplode(world, pos, cart);
-        } else if (isTrackSafeForHighSpeed(world, pos, cart)) {
-            if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
-                cart.motionX = Math.copySign(0.4f, cart.motionX);
-                CartTools.setTravellingHighSpeed(cart, true);
+        } else if (trackKit == TrackKits.BOOSTER || trackKit == TrackKits.HIGH_SPEED_TRANSITION) {
+            if (isTrackSafeForHighSpeed(world, pos, cart)) {
+                if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
+                    cart.motionX = Math.copySign(0.4f, cart.motionX);
+                    CartTools.setTravellingHighSpeed(cart, true);
+                }
+                if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
+                    cart.motionZ = Math.copySign(0.4f, cart.motionZ);
+                    CartTools.setTravellingHighSpeed(cart, true);
+                }
             }
-            if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
-                cart.motionZ = Math.copySign(0.4f, cart.motionZ);
-                CartTools.setTravellingHighSpeed(cart, true);
-            }
+        } else {
+            limitSpeed(cart);
         }
     }
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
         if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.trackHighSpeed.block())) return true;
-        ITrackInstance track = TrackTools.getTrackInstanceAt(world, pos);
-        return track instanceof TrackBaseRailcraft && ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
+        ITrackKit track = TrackTools.getTrackInstanceAt(world, pos);
+        return track instanceof TrackKitRailcraft && ((TrackKitRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
     }
 }

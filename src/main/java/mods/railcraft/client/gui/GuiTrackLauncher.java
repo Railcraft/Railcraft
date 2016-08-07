@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.instances.TrackLauncher;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitLauncher;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -19,10 +20,10 @@ import net.minecraft.client.gui.GuiButton;
 
 public class GuiTrackLauncher extends GuiBasic {
     protected int force = 25;
-    TrackLauncher track;
+    TrackKitLauncher track;
 
-    public GuiTrackLauncher(TrackLauncher t) {
-        super(((TileTrack) t.getTile()).getName());
+    public GuiTrackLauncher(TrackKitLauncher t) {
+        super(((TileTrackOutfitted) t.getTile()).getName());
         track = t;
         force = track.getLaunchForce();
     }
@@ -49,8 +50,8 @@ public class GuiTrackLauncher extends GuiBasic {
             f += 1;
         if (guibutton.id == 3)
             f += 10;
-        if (f < TrackLauncher.MIN_LAUNCH_FORCE)
-            f = TrackLauncher.MIN_LAUNCH_FORCE;
+        if (f < TrackKitLauncher.MIN_LAUNCH_FORCE)
+            f = TrackKitLauncher.MIN_LAUNCH_FORCE;
         if (f > RailcraftConfig.getLaunchRailMaxForce())
             f = RailcraftConfig.getLaunchRailMaxForce();
         force = f;

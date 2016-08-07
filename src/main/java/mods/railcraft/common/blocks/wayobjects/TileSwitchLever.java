@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.wayobjects;
 
-import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.api.tracks.ITrackKitSwitch;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,7 @@ public class TileSwitchLever extends TileSwitchBase {
     }
 
     @Override
-    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
         return isPowered();
     }
 }

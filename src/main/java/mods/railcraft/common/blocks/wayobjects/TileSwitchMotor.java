@@ -13,7 +13,7 @@ import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
-import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
@@ -185,7 +185,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
         return switchAspect || (shouldSwitchOnRedstone() && isPowered());
     }
 

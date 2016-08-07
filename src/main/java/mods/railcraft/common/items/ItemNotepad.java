@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.items;
 
@@ -21,7 +21,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -34,6 +33,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
@@ -47,7 +48,7 @@ import java.util.*;
  *
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
-public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
+public class ItemNotepad extends ItemRailcraft {
     public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".filled"), "inventory");
     public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".empty"), "inventory");
 
@@ -67,18 +68,16 @@ public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
                 'P', Items.PAPER);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
-        ModelManager.registerComplexItemModel(this, this, MODEL_EMPTY, MODEL_FILLED);
-    }
-
-    @Override
-    public ModelResourceLocation getModelLocation(ItemStack stack) {
-        NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
-        if (tag.hasKey("contents")) {
-            return MODEL_FILLED;
-        }
-        return MODEL_EMPTY;
+        ModelManager.registerComplexItemModel(this, stack -> {
+            NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
+            if (tag.hasKey("contents")) {
+                return MODEL_FILLED;
+            }
+            return MODEL_EMPTY;
+        }, MODEL_EMPTY, MODEL_FILLED);
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {

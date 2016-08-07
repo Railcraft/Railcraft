@@ -45,12 +45,13 @@ import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.ItemOre;
-import mods.railcraft.common.blocks.tracks.BlockTrack;
-import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
-import mods.railcraft.common.blocks.tracks.ItemTrack;
-import mods.railcraft.common.blocks.tracks.flex.*;
-import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
-import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerStrapIron;
+import mods.railcraft.common.blocks.tracks.TrackTypes;
+import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
+import mods.railcraft.common.blocks.tracks.flex.BlockTrackElectric;
+import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
+import mods.railcraft.common.blocks.tracks.flex.ItemTrackFlex;
+import mods.railcraft.common.blocks.tracks.kit.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
@@ -105,12 +106,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     wayObject("wayobject", BlockWayObjectRailcraft::new, ItemWayObject::new, EnumWayObject.class),
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
-    track("track", BlockTrack::new, ItemTrack::new),
-    trackElectric("track.electric", BlockTrackElectric::new, ItemTrackFlex::new),
-    trackHighSpeedElectric("track.high.speed.electric", BlockTrackHighSpeedElectric::new, ItemTrackFlex::new),
-    trackHighSpeed("track.high.speed", BlockTrackHighSpeed::new, ItemTrackFlex::new),
-    trackReinforced("track.reinforced", () -> new BlockTrackFlex(new SpeedControllerReinforced()).setResistance(80F), ItemTrackFlex::new),
-    trackStrapIron("track.strap.iron", () -> new BlockTrackFlex(new SpeedControllerStrapIron()), ItemTrackFlex::new),
+    track("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
+    trackElectric("track.electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC), ItemTrackFlex::new),
+    trackHighSpeedElectric("track.high.speed.electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC), ItemTrackFlex::new),
+    trackHighSpeed("track.high.speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED), ItemTrackFlex::new),
+    trackReinforced("track.reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED), ItemTrackFlex::new),
+    trackStrapIron("track.strap.iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON), ItemTrackFlex::new),
     trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
     wire("wire", BlockWire::new, ItemBlockRailcraft::new),

@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitRouting;
 import mods.railcraft.common.gui.slots.SlotSecure;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicketGold;
@@ -22,14 +23,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTrackRouting extends RailcraftContainer {
 
-    private final TrackRouting track;
+    private final TrackKitRouting track;
     private final InventoryPlayer playerInv;
     private int lastLockState;
     public String ownerName;
     public boolean canLock;
     private final SlotSecure slotTicket;
 
-    public ContainerTrackRouting(InventoryPlayer playerInv, TrackRouting track) {
+    public ContainerTrackRouting(InventoryPlayer playerInv, TrackKitRouting track) {
         super(track.getInventory());
         this.track = track;
         this.playerInv = playerInv;

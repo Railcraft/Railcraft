@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -31,9 +31,9 @@ public class ModuleExtras extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.PRIMING.register();
-                EnumTrack.LAUNCHER.register();
-                EnumTrack.SUSPENDED.register();
+                TrackKits.PRIMING.register();
+                TrackKits.LAUNCHER.register();
+                TrackKits.SUSPENDED.register();
 
                 // Define Wood TNT Cart
                 RailcraftCarts cart = RailcraftCarts.TNT_WOOD;

@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.api.tracks.ITrackLockdown;
+import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackForce;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackForce;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -75,11 +75,11 @@ public class TileForceTrackEmitter extends TileMachineBase {
                 }
                 case EXTENDED: {
                     TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
-                    if (tile instanceof TileTrack) {
-                        TileTrack trackTile = (TileTrack) tile;
-                        ITrackInstance track = trackTile.getTrackInstance();
-                        if (track instanceof ITrackLockdown)
-                            ((ITrackLockdown) track).releaseCart();
+                    if (tile instanceof TileTrackOutfitted) {
+                        TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
+                        ITrackKit track = trackTile.getTrackKit();
+                        if (track instanceof ITrackKitLockdown)
+                            ((ITrackKitLockdown) track).releaseCart();
                     }
                     break;
                 }
@@ -183,9 +183,9 @@ public class TileForceTrackEmitter extends TileMachineBase {
     private boolean placeTrack(BlockPos pos, IBlockState blockState, EnumRailDirection direction) {
         if (WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
             spawnParticles(pos);
-            Optional<TileTrack> tile = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), getWorld(), pos, direction);
+            Optional<TileTrackOutfitted> tile = TrackTools.placeTrack(TrackKits.FORCE.getTrackKitSpec(), getWorld(), pos, direction);
             if (tile.isPresent()) {
-                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackInstance()).setEmitter(this));
+                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackKit()).setEmitter(this));
                 numTracks++;
                 return true;
             }
@@ -201,9 +201,9 @@ public class TileForceTrackEmitter extends TileMachineBase {
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
         if (tile == null)
             return false;
-        if (!TrackTools.isTrackSpec(tile, EnumTrack.FORCE.getTrackSpec()))
+        if (!TrackTools.isTrackSpec(tile, TrackKits.FORCE.getTrackKitSpec()))
             return false;
-        TrackForce track = (TrackForce) ((TileTrack) tile).getTrackInstance();
+        TrackForce track = (TrackForce) ((TileTrackOutfitted) tile).getTrackKit();
         TileForceTrackEmitter emitter = track.getEmitter();
         if (emitter == null || emitter == this) {
             track.setEmitter(this);
@@ -228,7 +228,7 @@ public class TileForceTrackEmitter extends TileMachineBase {
     }
 
     private void removeTrack(BlockPos pos) {
-        if (WorldPlugin.isBlockLoaded(worldObj, pos) && TrackTools.isTrackAt(worldObj, pos, EnumTrack.FORCE)) {
+        if (WorldPlugin.isBlockLoaded(worldObj, pos) && TrackTools.isTrackAt(worldObj, pos, TrackKits.FORCE)) {
             spawnParticles(pos);
             WorldPlugin.setBlockToAir(worldObj, pos);
         }

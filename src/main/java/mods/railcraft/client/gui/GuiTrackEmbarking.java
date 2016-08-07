@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.instances.TrackEmbarking;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitEmbarking;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -18,10 +19,10 @@ import net.minecraft.client.gui.GuiButton;
 
 public class GuiTrackEmbarking extends GuiBasic {
     protected byte radius = 2;
-    TrackEmbarking track;
+    TrackKitEmbarking track;
 
-    public GuiTrackEmbarking(TrackEmbarking t) {
-        super(((TileTrack) t.getTile()).getName());
+    public GuiTrackEmbarking(TrackKitEmbarking t) {
+        super(((TileTrackOutfitted) t.getTile()).getName());
         track = t;
         radius = track.getArea();
     }
@@ -51,8 +52,8 @@ public class GuiTrackEmbarking extends GuiBasic {
             radius++;
         }
 
-        radius = (byte) Math.max(TrackEmbarking.MIN_AREA, radius);
-        radius = (byte) Math.min(TrackEmbarking.MAX_AREA, radius);
+        radius = (byte) Math.max(TrackKitEmbarking.MIN_AREA, radius);
+        radius = (byte) Math.min(TrackKitEmbarking.MAX_AREA, radius);
     }
 
     @Override

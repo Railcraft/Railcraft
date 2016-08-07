@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -42,7 +42,7 @@ public class ModuleRouting extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.ROUTING.register();
+                TrackKits.ROUTING.register();
 
                 if (RailcraftItems.routingTable.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());

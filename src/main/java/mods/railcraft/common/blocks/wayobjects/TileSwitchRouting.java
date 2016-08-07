@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.wayobjects;
 
-import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -133,7 +133,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
         RoutingLogic logic = getLogic();
         return logic != null && logic.isValid() && logic.matches(this, cart);
     }

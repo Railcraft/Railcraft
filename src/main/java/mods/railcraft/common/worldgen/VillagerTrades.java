@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
@@ -43,8 +44,8 @@ public class VillagerTrades {
         career.addTrade(2, new GenericTrade(offer(Blocks.GOLDEN_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
         career.addTrade(2, new GenericTrade(offer(Blocks.DETECTOR_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
 
-        for (EnumTrack track : EnumTrack.VALUES) {
-            if (track.isEnabled() && track != EnumTrack.FORCE)
+        for (TrackKits track : TrackKits.VALUES) {
+            if (track.isEnabled() && track != TrackKits.FORCE)
                 career.addTrade(2, new GenericTrade(offer(track.getStack(), track.recipeOutput - 2, track.recipeOutput + 2), offer(Items.EMERALD, 2, 3)));
         }
 

@@ -10,7 +10,6 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 @RailcraftModule("railcraft:tracks")
 public class ModuleTracks extends RailcraftModulePayload {
@@ -26,19 +25,19 @@ public class ModuleTracks extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.LOCKING.register();
-                EnumTrack.ONEWAY.register();
-                EnumTrack.CONTROL.register();
-                EnumTrack.JUNCTION.register();
-                EnumTrack.SWITCH.register();
-                EnumTrack.WYE.register();
-                EnumTrack.DISEMBARK.register();
-                EnumTrack.EMBARKING.register();
-                EnumTrack.BUFFER_STOP.register();
-                EnumTrack.GATED.register();
-                EnumTrack.GATED_ONEWAY.register();
-                EnumTrack.DISPOSAL.register();
-                EnumTrack.DETECTOR_DIRECTION.register();
+//                TrackKits.LOCKING.register();
+//                TrackKits.ONEWAY.register();
+//                TrackKits.CONTROL.register();
+//                TrackKits.JUNCTION.register();
+//                TrackKits.SWITCH.register();
+//                TrackKits.WYE.register();
+//                TrackKits.DISEMBARK.register();
+//                TrackKits.EMBARKING.register();
+//                TrackKits.BUFFER_STOP.register();
+//                TrackKits.GATED.register();
+//                TrackKits.GATED_ONEWAY.register();
+//                TrackKits.DISPOSAL.register();
+//                TrackKits.DETECTOR_DIRECTION.register();
             }
         });
     }

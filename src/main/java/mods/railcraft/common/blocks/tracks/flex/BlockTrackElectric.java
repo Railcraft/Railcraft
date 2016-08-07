@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedController;
+import mods.railcraft.common.blocks.tracks.TrackTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -24,19 +24,15 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockTrackElectric extends BlockTrackFlex implements IChargeBlock {
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
 
-    public BlockTrackElectric() {
-        this(new SpeedController());
-    }
-
-    protected BlockTrackElectric(SpeedController speedController) {
-        super(speedController);
+    public BlockTrackElectric(TrackTypes trackType) {
+        super(trackType);
     }
 
     @Nullable
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return chargeDef;
+        return CHARGE_DEF;
     }
 }

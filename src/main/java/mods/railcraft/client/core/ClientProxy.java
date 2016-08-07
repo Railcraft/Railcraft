@@ -27,7 +27,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
-import mods.railcraft.common.blocks.tracks.TileTrackTESR;
+import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfittedTESR;
 import mods.railcraft.common.blocks.wayobjects.TileWayObject;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
@@ -184,7 +184,7 @@ public class ClientProxy extends CommonProxy {
 
 //        bindTESR(EnumMachineDelta.CAGE, TESRCagedEntity::new);
 
-        bindTESR(TileTrackTESR.class, TESRTrackBuffer::new);
+        bindTESR(TileTrackOutfittedTESR.class, TESRTrackBuffer::new);
 
         bindTESR(TilePostEmblem.class, TESREmblemPost::new);
 

@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.carts.RailcraftCarts;
@@ -46,9 +46,9 @@ public class ModuleLocomotives extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumTrack.WHISTLE.register();
-                EnumTrack.LOCOMOTIVE.register();
-                EnumTrack.LIMITER.register();
+                TrackKits.WHISTLE.register();
+                TrackKits.LOCOMOTIVE.register();
+                TrackKits.LIMITER.register();
 
                 RailcraftCarts cart = RailcraftCarts.LOCO_STEAM_SOLID;
                 if (cart.setup()) {

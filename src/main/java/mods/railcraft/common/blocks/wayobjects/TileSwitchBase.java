@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
-import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackSwitchBase;
+import mods.railcraft.common.blocks.tracks.kit.instances.TrackSwitchBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -74,7 +74,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     @Override
-    public abstract boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
+    public abstract boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart);
 
     @Override
     public void update() {

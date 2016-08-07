@@ -11,7 +11,7 @@ package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.kit.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -463,7 +463,7 @@ public class RailcraftConfig {
         loadBlockProperty("fluid.creosote");
         loadBlockProperty("fluid.steam");
 
-        for (EnumTrack type : EnumTrack.VALUES) {
+        for (TrackKits type : TrackKits.VALUES) {
 //            if (type.isDepreciated())
 //                continue;
             loadBlockFeature(type.getTag());
