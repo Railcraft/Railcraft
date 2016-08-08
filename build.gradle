@@ -248,6 +248,7 @@ build.shouldRunAfter releaseInit
 uploadArchives.shouldRunAfter releaseInit, build
 release.shouldRunAfter uploadArchives
 
+if (project.hasProperty("ftpUsername"))
 uploadArchives {
     repositories {
         ivy {

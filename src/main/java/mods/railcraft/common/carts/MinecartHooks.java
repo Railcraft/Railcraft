@@ -81,7 +81,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (itemStack != null) {
             Item item = itemStack.getItem();
             if (item != null && CartTools.vanillaCartItemMap.containsKey(item)) {
-                event.setResult(Event.Result.DENY);
+                event.setUseItem(Event.Result.DENY);
                 EntityMinecart placedCart = CartTools.placeCart(
                         CartTools.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,

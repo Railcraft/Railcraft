@@ -42,6 +42,12 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
         return super.theWorld();
     }
 
+    @Nullable
+    @Override
+    public World theWorld() {
+        return super.theWorld();
+    }
+
     @Override
     public TrackKits getTrackKitContainer() {
         return TrackKits.LAUNCHER;
