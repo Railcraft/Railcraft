@@ -85,12 +85,6 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
         return false;
     }
 
-    @Nullable
-    @Override
-    public World theWorld() {
-        return super.theWorld();
-    }
-
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
