@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.tracks.TrackTypes;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;

@@ -13,7 +13,7 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.kit.instances.TrackGated;
+import mods.railcraft.common.blocks.tracks.kits.variants.TrackGated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.RenderBlocks;

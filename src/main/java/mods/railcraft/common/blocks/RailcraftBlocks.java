@@ -45,13 +45,13 @@ import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.ItemOre;
-import mods.railcraft.common.blocks.tracks.TrackTypes;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackElectric;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.flex.ItemTrackFlex;
-import mods.railcraft.common.blocks.tracks.kit.BlockTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kit.ItemTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kits.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
@@ -107,6 +107,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
+    trackAbandoned("track.abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED), ItemTrackFlex::new),
     trackElectric("track.electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC), ItemTrackFlex::new),
     trackHighSpeedElectric("track.high.speed.electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC), ItemTrackFlex::new),
     trackHighSpeed("track.high.speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED), ItemTrackFlex::new),

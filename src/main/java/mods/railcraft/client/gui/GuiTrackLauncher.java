@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.tracks.kit.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kit.instances.TrackKitLauncher;
+import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.kits.variants.TrackKitLauncher;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;

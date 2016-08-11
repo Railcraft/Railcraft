@@ -12,10 +12,13 @@ package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
-import mods.railcraft.common.blocks.tracks.TrackTypes;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,11 +51,19 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
 
     @Override
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
-        trackType.speedController.onMinecartPass(world, cart, pos, null);
+        trackType.getSpeedController().onMinecartPass(world, cart, pos, null);
+    }
+
+    @Override
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if (Game.isClient(world))
+            return;
+
+        trackType.getTrackSpec().onEntityCollidedWithBlock(world, pos, state, entity);
     }
 
     @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return trackType.speedController.getMaxSpeed(world, cart, pos);
+        return trackType.getSpeedController().getMaxSpeed(world, cart, pos);
     }
 }

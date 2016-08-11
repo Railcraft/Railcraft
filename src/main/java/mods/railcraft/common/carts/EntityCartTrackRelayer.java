@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kit.instances.TrackSuspended;
+import mods.railcraft.common.blocks.tracks.kits.variants.TrackSuspended;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
