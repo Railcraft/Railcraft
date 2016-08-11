@@ -33,7 +33,10 @@ import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.*;
+import mods.railcraft.common.fluids.FluidContainers;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.CrowbarHandler;
 import mods.railcraft.common.items.EntityItemFireproof;
@@ -100,7 +103,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
                 RailcraftFluids.preInitFluids();
-                MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+                // TODO: do we need a bucket handler still?
+//                MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
 
                 Helpers.structures = new MultiBlockHelper();

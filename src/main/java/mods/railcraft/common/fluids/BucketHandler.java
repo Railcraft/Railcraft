@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -20,6 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +45,10 @@ public class BucketHandler {
         event.setResult(Result.ALLOW);
     }
 
-    private ItemStack fillCustomBucket(World world, RayTraceResult mop, ItemStack stack) {
+    @Nullable
+    private ItemStack fillCustomBucket(World world, @Nullable RayTraceResult mop, ItemStack stack) {
+        if (mop == null)
+            return null;
         BlockPos blockPos = mop.getBlockPos();
         IBlockState state = WorldPlugin.getBlockState(world, blockPos);
         FluidStack fluidStack = FluidHelper.drainBlock(state, world, blockPos, false);
