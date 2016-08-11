@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:tracks|wood")
+@RailcraftModule("railcraft:train")
 public class ModuleTrain extends RailcraftModulePayload {
 
     public ModuleTrain() {
