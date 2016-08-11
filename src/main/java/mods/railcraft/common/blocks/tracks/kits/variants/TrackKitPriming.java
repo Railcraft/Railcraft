@@ -46,6 +46,12 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
         return TrackKits.PRIMING;
     }
 
+    @Nullable
+    @Override
+    public World theWorld() {
+        return super.theWorld();
+    }
+
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {

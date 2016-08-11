@@ -19,7 +19,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -221,7 +220,7 @@ public class BlockOre extends RailcraftBlockSubtyped {
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if (EnumOre.FIRESTONE == getVariant(WorldPlugin.getBlockState(world, pos)))
+        if (EnumOre.FIRESTONE == getVariant(state))
             return 15;
         return super.getLightValue(state, world, pos);
     }
