@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.RailcraftItems;

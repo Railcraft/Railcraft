@@ -40,7 +40,7 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
     private boolean powered;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.ROUTING;
     }
 

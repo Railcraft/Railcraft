@@ -10,6 +10,7 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
@@ -32,7 +33,6 @@ import mods.railcraft.common.blocks.wayobjects.TileWayObject;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.RailcraftItems;

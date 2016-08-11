@@ -29,7 +29,7 @@ public class TrackSpeedTransition extends TrackKitPowered implements ITrackKitRe
     private boolean reversed;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.HIGH_SPEED_TRANSITION;
     }
 

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

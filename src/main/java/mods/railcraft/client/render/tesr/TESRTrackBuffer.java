@@ -29,8 +29,8 @@ public class TESRTrackBuffer extends TileEntitySpecialRenderer<TileTrackOutfitte
 
     @Override
     public void renderTileEntityAt(TileTrackOutfittedTESR tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (tile.getTrackKit() instanceof TrackBufferStop) {
-            TrackBufferStop track = (TrackBufferStop) tile.getTrackKit();
+        if (tile.getTrackKitInstance() instanceof TrackBufferStop) {
+            TrackBufferStop track = (TrackBufferStop) tile.getTrackKitInstance();
             OpenGL.glPushMatrix();
             OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
             OpenGL.glEnable(GL11.GL_LIGHTING);

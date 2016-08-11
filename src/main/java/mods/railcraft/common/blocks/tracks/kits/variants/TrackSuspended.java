@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public class TrackSuspended extends TrackUnsupported implements ITrackKitCustomPlaced {
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.SUSPENDED;
     }
 

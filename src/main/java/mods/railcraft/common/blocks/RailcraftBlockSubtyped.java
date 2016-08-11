@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

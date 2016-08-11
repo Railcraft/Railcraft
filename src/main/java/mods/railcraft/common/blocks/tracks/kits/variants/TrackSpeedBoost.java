@@ -29,7 +29,7 @@ public class TrackSpeedBoost extends TrackKitBooster implements ITrackKitPowered
     private boolean powered;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.SPEED_BOOST;
     }
 

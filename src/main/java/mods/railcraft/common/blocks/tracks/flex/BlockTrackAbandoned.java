@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.tracks.flex;
 
+import mods.railcraft.api.tracks.ITrackType;
 import mods.railcraft.common.blocks.tracks.behaivor.AbandonedTrackTools;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -29,7 +29,7 @@ import net.minecraft.world.World;
  */
 public class BlockTrackAbandoned extends BlockTrackFlex {
 
-    public BlockTrackAbandoned(TrackTypes trackType) {
+    public BlockTrackAbandoned(ITrackType trackType) {
         super(trackType);
     }
 

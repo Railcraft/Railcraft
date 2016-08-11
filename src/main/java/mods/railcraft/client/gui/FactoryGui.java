@@ -118,7 +118,7 @@ public class FactoryGui {
                 case ROUTING:
                     return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) obj);
                 case TRACK_ROUTING:
-                    return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKit());
+                    return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
                     return new GuiSwitchMotor(inv.player, (TileSwitchMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
                 case BOX_RECEIVER:
@@ -132,11 +132,11 @@ public class FactoryGui {
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:
-                    return new GuiTrackLauncher((TrackKitLauncher) ((TileTrackOutfitted) obj).getTrackKit());
+                    return new GuiTrackLauncher((TrackKitLauncher) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case TRACK_PRIMING:
-                    return new GuiTrackPriming((TrackKitPriming) ((TileTrackOutfitted) obj).getTrackKit());
+                    return new GuiTrackPriming((TrackKitPriming) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case TRACK_EMBARKING:
-                    return new GuiTrackEmbarking((TrackKitEmbarking) ((TileTrackOutfitted) obj).getTrackKit());
+                    return new GuiTrackEmbarking((TrackKitEmbarking) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:

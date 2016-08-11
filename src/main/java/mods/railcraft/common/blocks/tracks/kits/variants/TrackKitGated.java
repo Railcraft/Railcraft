@@ -52,7 +52,7 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     }
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.GATED;
     }
 

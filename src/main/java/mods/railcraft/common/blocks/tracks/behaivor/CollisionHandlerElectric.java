@@ -30,17 +30,17 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackSpecElectric extends TrackSpec {
-    private static TrackSpec instance;
+public class CollisionHandlerElectric extends CollisionHandler {
+    private static CollisionHandler instance;
 
-    public static TrackSpec instance() {
+    public static CollisionHandler instance() {
         if (instance == null) {
-            instance = new TrackSpec();
+            instance = new CollisionHandler();
         }
         return instance;
     }
 
-    protected TrackSpecElectric() {
+    protected CollisionHandlerElectric() {
     }
 
     @Override

@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.behaivor.SpeedControllerReinforced;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -24,7 +23,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -35,12 +36,14 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
     private static final float LAUNCH_THRESHOLD = 0.01f;
     private byte launchForce = 5;
 
-    public TrackKitLauncher() {
-        speedController = SpeedControllerReinforced.instance();
+    @Nullable
+    @Override
+    public World theWorld() {
+        return super.theWorld();
     }
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.LAUNCHER;
     }
 

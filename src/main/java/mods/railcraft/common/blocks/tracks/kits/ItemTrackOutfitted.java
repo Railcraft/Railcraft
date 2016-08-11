@@ -13,11 +13,8 @@ import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -32,8 +29,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Function;
 
 public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem {
 
@@ -50,13 +45,13 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 //    }
 
     @Nonnull
-    public TrackKitSpec getTrackSpec(ItemStack stack) {
+    public TrackKit getTrackKitSpec(ItemStack stack) {
         if (stack != null && stack.getItem() == this) {
             NBTTagCompound nbt = InvTools.getItemData(stack);
-            if (nbt.hasKey("track"))
-                return TrackRegistry.getTrackSpec(nbt.getString("track"));
+            if (nbt.hasKey(TrackKit.NBT_TAG))
+                return TrackRegistry.getTrackKit(nbt.getString(TrackKit.NBT_TAG));
         }
-        return TrackRegistry.getTrackSpec("railcraft:default");
+        return TrackRegistry.getTrackKit("railcraft:default");
     }
 
     @Override
@@ -66,21 +61,7 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + getTrackSpec(stack).getTrackTag().replace(':', '.');
-    }
-
-    @Override
-    @Nullable
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        try {
-            TrackKitSpec spec = getTrackSpec(stack);
-            Function<ItemStack, List<String>> tooltipProvider = spec.getToolTipProvider();
-            if (tooltipProvider != null)
-                return ToolTip.buildToolTip(tooltipProvider.apply(stack));
-        } catch (Throwable error) {
-            Game.logErrorAPI(Railcraft.NAME, error, TrackKitSpec.class);
-        }
-        return null;
+        return "tile." + getTrackKitSpec(stack).getName().replace(':', '.');
     }
 
     @Override
@@ -92,7 +73,7 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
-            if (track.getTrackKit().getTrackKitSpec() == getTrackSpec(stack))
+            if (track.getTrackKitInstance().getTrackKit() == getTrackKitSpec(stack))
                 return true;
         }
         return false;
@@ -112,9 +93,9 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
         if (stack == null || !(stack.getItem() instanceof ItemTrackOutfitted))
             return false;
 
-        TrackKitSpec spec = getTrackSpec(stack);
+        TrackKit spec = getTrackKitSpec(stack);
         TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(spec);
-        ITrackKit track = tile.getTrackKit();
+        ITrackKitInstance track = tile.getTrackKitInstance();
 
         boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);
         if (track instanceof ITrackKitCustomPlaced)

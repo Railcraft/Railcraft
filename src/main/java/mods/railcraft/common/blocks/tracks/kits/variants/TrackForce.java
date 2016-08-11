@@ -32,7 +32,7 @@ public class TrackForce extends TrackUnsupported {
     public TileForceTrackEmitter emitter;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.FORCE;
     }
 

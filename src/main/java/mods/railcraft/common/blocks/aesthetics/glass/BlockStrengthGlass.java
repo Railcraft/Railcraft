@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;

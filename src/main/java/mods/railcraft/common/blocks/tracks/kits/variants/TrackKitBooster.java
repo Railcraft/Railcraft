@@ -32,7 +32,7 @@ public class TrackKitBooster extends TrackKitPowered {
     private boolean powered;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.BOOSTER;
     }
 

@@ -11,11 +11,13 @@ package mods.railcraft.common.blocks.tracks.kits;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.TrackKitSpec;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.kits.variants.*;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -26,7 +28,6 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -36,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public enum TrackKits {
+public enum TrackKits implements IRailcraftObjectContainer {
 
     ONEWAY(ModuleTracks.class, 4, 1, "oneway", 8, TrackKitOneWay.class),
     CONTROL(ModuleTracks.class, 2, 0, "control", 16, TrackControl.class),
@@ -66,14 +67,14 @@ public enum TrackKits {
     FORCE(ModuleElectricity.class, 1, 0, "force", 1, TrackForce.class);
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
-    private static final Set<TrackKitSpec> TRACK_KIT_SPECS = new HashSet<TrackKitSpec>(50);
+    private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);
     private static final Function<ItemStack, List<String>> tooltipProvider = stack -> {
         ToolTip toolTip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
         return toolTip != null ? toolTip.convertToStrings() : Collections.emptyList();
     };
 
     static {
-        TRACK_KIT_SPECS.add(TrackRegistry.getDefaultTrackSpec());
+        TRACK_KITS.add(TrackRegistry.getDefaultTrackKit());
 
         creativeList.add(SWITCH);
         creativeList.add(WYE);
@@ -115,7 +116,7 @@ public enum TrackKits {
     private final int numIcons;
     private final int itemIconIndex;
     private final Class<? extends TrackKitRailcraft> trackInstance;
-    private TrackKitSpec trackKitSpec;
+    private TrackKit trackKit;
     private boolean depreciated;
 
     TrackKits(Class<? extends IRailcraftModule> module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
@@ -137,56 +138,81 @@ public enum TrackKits {
         return creativeList;
     }
 
-    public static Collection<TrackKitSpec> getRailcraftTrackSpecs() {
-        return TRACK_KIT_SPECS;
+    public static Collection<TrackKit> getRailcraftTrackKits() {
+        return TRACK_KITS;
     }
 
+    @Override
     public void register() {
-        if (trackKitSpec == null && RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
-            trackKitSpec = new TrackKitSpec(getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tooltipProvider);
+        if (trackKit == null && RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
+            trackKit = new TrackKit(getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance);
             try {
-                TrackRegistry.registerTrackSpec(trackKitSpec);
-                TRACK_KIT_SPECS.add(trackKitSpec);
+                TrackRegistry.registerTrackKit(trackKit);
+                TRACK_KITS.add(trackKit);
                 registerRecipe();
             } catch (Error error) {
-                Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKitSpec.class);
+                Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
             }
-            ItemStack stack = getTrackKitSpec().getItem();
-
-            RailcraftRegistry.register(stack);
+            //TODO: Should we register outfitted track items?
+//            ItemStack stack = getTrackKitSpec().getItem();
+//            RailcraftRegistry.register(stack);
         }
     }
 
+    @Override
+    public boolean isEqual(ItemStack stack) {
+        return stack.getItem() instanceof ItemTrackKit && ((ItemTrackKit) stack.getItem()).getTrackKit(stack) == getTrackKit();
+    }
+
+    @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.track.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.trackOutfitted.isEnabled() && RailcraftItems.trackKit.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return trackKit != null && isEnabled() && RailcraftBlocks.trackOutfitted.isLoaded() && RailcraftItems.trackKit.isLoaded();
     }
 
     public boolean isDepreciated() {
         return depreciated;
     }
 
+    @Override
     @Nullable
     public ItemStack getStack() {
         return getStack(1);
     }
 
+    @Override
     @Nullable
     public ItemStack getStack(int qty) {
-        if (trackKitSpec != null)
-            return trackKitSpec.getItem(qty);
+        if (trackKit != null)
+            return RailcraftItems.trackKit.getStack(qty, getTrackKit());
         return null;
     }
 
-    public TrackKitSpec getTrackKitSpec() {
-        return trackKitSpec;
+    @Nullable
+    @Override
+    public IRailcraftObject getObject() {
+        return null;
+    }
+
+    public TrackKit getTrackKit() {
+        return trackKit;
     }
 
     public String getTextureTag() {
         return "railcraft:tracks/track." + tag;
     }
 
+    @Override
+    public String getBaseTag() {
+        return tag;
+    }
+
     public String getTag() {
-        return "railcraft:track." + tag;
+        return "railcraft:" + getBaseTag();
     }
 
     public int getNumIcons() {

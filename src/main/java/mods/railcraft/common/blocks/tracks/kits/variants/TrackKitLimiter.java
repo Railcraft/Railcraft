@@ -32,7 +32,7 @@ public class TrackKitLimiter extends TrackKitPowered {
     private LocoSpeed mode = LocoSpeed.MAX;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.LIMITER;
     }
 

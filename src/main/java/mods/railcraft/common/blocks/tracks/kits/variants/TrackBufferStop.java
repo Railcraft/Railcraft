@@ -32,7 +32,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     private boolean reversed;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.BUFFER_STOP;
     }
 

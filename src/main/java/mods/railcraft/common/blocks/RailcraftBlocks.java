@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
@@ -56,7 +57,6 @@ import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.firestone.BlockRitual;
@@ -114,6 +114,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     trackReinforced("track.reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED), ItemTrackFlex::new),
     trackStrapIron("track.strap.iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON), ItemTrackFlex::new),
     trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
+    trackOutfitted("track.outfitted", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
     wire("wire", BlockWire::new, ItemBlockRailcraft::new),
     worldLogic("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);
@@ -250,7 +251,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         if (block != null)
             obj = ((IRailcraftObject) block).getRecipeObject(variant);
         if (obj == null && variant != null)
-            obj = variant.getAlternate(this);
+            obj = variant.getAlternate(tag);
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

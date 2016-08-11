@@ -9,15 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.tracks.kits.ItemTrackKit;
 import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
@@ -86,6 +87,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     ticket(ItemTicket::new, "routing.ticket", Items.PAPER),
     ticketGold(ItemTicketGold::new, "routing.ticket.gold", Items.GOLD_NUGGET),
     tie(ItemTie::new, "part.tie"),
+    trackKit(ItemTrackKit::new, "track.kit"),
     turbineBlade(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel", EnumMachineAlpha.TURBINE::isAvailable),
     turbineDisk(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel", EnumMachineAlpha.TURBINE::isAvailable),
     turbineRotor(ItemTurbineRotor::new, "part.turbine.rotor", null, EnumMachineAlpha.TURBINE::isAvailable),
@@ -198,7 +200,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         if (railcraftObject != null)
             obj = railcraftObject.getRecipeObject(variant);
         if (obj == null && variant != null)
-            obj = variant.getAlternate(this);
+            obj = variant.getAlternate(tag);
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

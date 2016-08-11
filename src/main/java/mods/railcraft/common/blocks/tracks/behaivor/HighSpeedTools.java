@@ -10,12 +10,12 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackType;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.kits.variants.TrackKitRailcraft;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockRailBase;
@@ -72,11 +72,11 @@ public class HighSpeedTools {
         cart.motionZ = Math.copySign(Math.min(SPEED_CUTOFF, Math.abs(cart.motionZ)), cart.motionZ);
     }
 
-    public static void performHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart, @Nullable TrackKits trackKit) {
+    public static void performHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart, @Nullable TrackKit trackKit) {
         boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             checkSafetyAndExplode(world, pos, cart);
-        } else if (trackKit == TrackKits.BOOSTER || trackKit == TrackKits.HIGH_SPEED_TRANSITION) {
+        } else if (trackKit == TrackKits.BOOSTER.getTrackKit() || trackKit == TrackKits.HIGH_SPEED_TRANSITION.getTrackKit()) {
             if (isTrackSafeForHighSpeed(world, pos, cart)) {
                 if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
                     cart.motionX = Math.copySign(0.4f, cart.motionX);
@@ -94,7 +94,7 @@ public class HighSpeedTools {
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
         if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.trackHighSpeed.block())) return true;
-        ITrackKit track = TrackTools.getTrackInstanceAt(world, pos);
-        return track instanceof TrackKitRailcraft && ((TrackKitRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
+        ITrackType track = TrackTools.getTrackTypeAt(world, pos);
+        return track == TrackTypes.HIGH_SPEED || track == TrackTypes.HIGH_SPEED_ELECTRIC;
     }
 }

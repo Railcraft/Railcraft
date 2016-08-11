@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.tracks.ITrackTile;
+import mods.railcraft.api.tracks.IOutfittedTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.kits.variants.TrackSuspended;
 import mods.railcraft.common.gui.EnumGui;
@@ -82,9 +82,9 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
             boolean nextToSuspended = false;
             for (EnumFacing side : EnumSet.of(EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH)) {
                 TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos.offset(side));
-                if (tile instanceof ITrackTile) {
-                    ITrackTile track = (ITrackTile) tile;
-                    if (track.getTrackKit() instanceof TrackSuspended) {
+                if (tile instanceof IOutfittedTrackTile) {
+                    IOutfittedTrackTile track = (IOutfittedTrackTile) tile;
+                    if (track.getTrackKitInstance() instanceof TrackSuspended) {
                         nextToSuspended = true;
                         break;
                     }

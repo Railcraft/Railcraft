@@ -67,7 +67,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     private boolean justLoaded = true;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.LOCKING;
     }
 

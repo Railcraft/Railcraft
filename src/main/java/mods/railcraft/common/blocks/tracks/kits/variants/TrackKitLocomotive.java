@@ -37,7 +37,7 @@ public class TrackKitLocomotive extends TrackKitPowered {
     private LocoMode mode = LocoMode.RUNNING;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.LOCOMOTIVE;
     }
 

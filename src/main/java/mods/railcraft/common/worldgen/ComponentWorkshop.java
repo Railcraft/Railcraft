@@ -10,7 +10,7 @@
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.api.tracks.ITrackKitReversible;
-import mods.railcraft.api.tracks.TrackKitSpec;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -241,11 +241,11 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (blockTrack == null)
             return;
 
-        TrackKitSpec trackKitSpec;
+        TrackKit trackKit;
         if (track.isEnabled()) {
-            trackKitSpec = track.getTrackKitSpec();
+            trackKit = track.getTrackKit();
         } else
-            trackKitSpec = TrackRegistry.getDefaultTrackSpec();
+            trackKit = TrackRegistry.getDefaultTrackKit();
 
         BlockPos pos = getPosWithOffset(x, y, z);
 
@@ -253,11 +253,11 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             return;
 
         setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape), x, y, z, sbb);
-        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackKitSpec);
+        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackKit);
         world.setTileEntity(pos, tile);
         EnumFacing facing = getCoordBaseMode();
         boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
-        ((ITrackKitReversible) tile.getTrackKit()).setReversed(r != reversed);
+        ((ITrackKitReversible) tile.getTrackKitInstance()).setReversed(r != reversed);
     }
 
     private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {

@@ -10,9 +10,9 @@
 
 package mods.railcraft.common.blocks.tracks.flex;
 
+import mods.railcraft.api.tracks.ITrackType;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
@@ -34,9 +34,9 @@ import java.util.List;
  */
 public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
 
-    public TrackTypes trackType;
+    public ITrackType trackType;
 
-    public BlockTrackFlex(TrackTypes trackType) {
+    public BlockTrackFlex(ITrackType trackType) {
         setResistance(trackType.getResistance());
         setHardness(TrackConstants.HARDNESS);
         setSoundType(SoundType.METAL);
@@ -51,7 +51,7 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
 
     @Override
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
-        trackType.getSpeedController().onMinecartPass(world, cart, pos, null);
+        trackType.onMinecartPass(world, cart, pos, null);
     }
 
     @Override
@@ -59,11 +59,11 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
         if (Game.isClient(world))
             return;
 
-        trackType.getTrackSpec().onEntityCollidedWithBlock(world, pos, state, entity);
+        trackType.onEntityCollidedWithBlock(world, pos, state, entity);
     }
 
     @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return trackType.getSpeedController().getMaxSpeed(world, cart, pos);
+        return trackType.getMaxSpeed(world, cart, pos);
     }
 }

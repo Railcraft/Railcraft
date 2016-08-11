@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.item.crafting.IRecipe;

@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.items.RailcraftItems;
 
 @RailcraftModule("railcraft:tracks")
 public class ModuleTracks extends RailcraftModulePayload {
@@ -19,7 +20,7 @@ public class ModuleTracks extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-//                        RailcraftBlocks.track
+                        RailcraftItems.trackKit
                 );
             }
 

@@ -24,21 +24,26 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class TileTrackOutfitted extends RailcraftTileEntity implements ITrackTile, IGuiReturnHandler {
+public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
     @Nonnull
-    public ITrackKit track = new TrackKitDefault(false);
-    private TrackTypes trackType = TrackTypes.IRON;
+    public ITrackKitInstance track = new TrackKitDefault(false);
+    private ITrackType trackType = TrackTypes.IRON;
 
     public TileTrackOutfitted() {
     }
 
-    public TrackTypes getTrackType() {
+    public ITrackType getTrackType() {
         return trackType;
     }
 
     @Override
+    public ITrackKitInstance getTrackKitInstance() {
+        return track;
+    }
+
+    @Override
     public String getLocalizationTag() {
-        return "tile." + track.getTrackKitSpec().getTrackTag().replace(':', '.') + ".name";
+        return "tile." + track.getTrackKit().getName().replace(':', '.') + ".name";
     }
 
     @Nonnull
@@ -46,7 +51,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements ITrackTil
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setString("trackTag", getTrackKit().getTrackKitSpec().getTrackTag());
+        data.setString(TrackKit.NBT_TAG, getTrackKitInstance().getTrackKit().getName());
 
         track.writeToNBT(data);
         return data;
@@ -56,11 +61,11 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements ITrackTil
     public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (data.hasKey("trackTag")) {
-            TrackKitSpec spec = TrackRegistry.getTrackSpec(data.getString("trackTag"));
+        if (data.hasKey(TrackKit.NBT_TAG)) {
+            TrackKit spec = TrackRegistry.getTrackKit(data.getString(TrackKit.NBT_TAG));
             track = spec.createInstanceFromSpec();
         } else
-            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec();
+            track = TrackRegistry.getDefaultTrackKit().createInstanceFromSpec();
 
         track.setTile(this);
         track.readFromNBT(data);
@@ -81,11 +86,6 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements ITrackTil
     @Override
     public short getId() {
         return -1;
-    }
-
-    @Override
-    public ITrackKit getTrackKit() {
-        return track;
     }
 
     @Override

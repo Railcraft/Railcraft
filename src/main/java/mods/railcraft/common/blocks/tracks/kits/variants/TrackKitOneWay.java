@@ -27,7 +27,7 @@ public class TrackKitOneWay extends TrackKitPowered implements ITrackKitReversib
     private boolean reversed;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.ONEWAY;
     }
 

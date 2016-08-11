@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -62,8 +63,14 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     private byte area = 2;
 
+    @Nullable
     @Override
-    public TrackKits getTrackKit() {
+    public World theWorld() {
+        return super.theWorld();
+    }
+
+    @Override
+    public TrackKits getTrackKitContainer() {
         return TrackKits.EMBARKING;
     }
 

@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -36,7 +36,7 @@ public class TrackKitCoupler extends TrackKitPowered {
     private Mode mode = Mode.COUPLER;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.COUPLER;
     }
 
@@ -83,7 +83,7 @@ public class TrackKitCoupler extends TrackKitPowered {
     }
 
     @Override
-    public boolean canPropagatePowerTo(ITrackKit track) {
+    public boolean canPropagatePowerTo(ITrackKitInstance track) {
         if (track instanceof TrackKitCoupler) {
             TrackKitCoupler c = (TrackKitCoupler) track;
             return mode == c.mode;

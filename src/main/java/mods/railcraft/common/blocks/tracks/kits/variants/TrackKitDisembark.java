@@ -29,7 +29,7 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
     private boolean mirrored;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.DISEMBARK;
     }
 

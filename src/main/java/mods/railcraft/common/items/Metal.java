@@ -11,11 +11,11 @@ package mods.railcraft.common.items;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.init.Blocks;
@@ -101,8 +101,8 @@ public enum Metal implements IVariantEnum {
 
     @Nullable
     @Override
-    public Object getAlternate(IRailcraftObjectContainer container) {
-        return Form.containerMap.inverse().get(container).getOreDictTag(this);
+    public Object getAlternate(String objectTag) {
+        return Form.containerMap.inverse().get(objectTag).getOreDictTag(this);
     }
 
     @Override
@@ -164,7 +164,7 @@ public enum Metal implements IVariantEnum {
             }
         },
         POOR_ORE("poorOre", RailcraftBlocks.ore, poorOreMap);
-        private static final BiMap<Form, IRailcraftObjectContainer> containerMap = HashBiMap.create();
+        private static final BiMap<Form, String> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;
         private final IRailcraftObjectContainer container;
@@ -172,7 +172,7 @@ public enum Metal implements IVariantEnum {
 
         static {
             for (Form form : VALUES) {
-                containerMap.put(form, form.container);
+                containerMap.put(form, form.container.getBaseTag());
             }
         }
 

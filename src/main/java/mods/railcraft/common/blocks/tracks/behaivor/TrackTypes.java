@@ -10,22 +10,31 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
+import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 /**
  * Created by CovertJaguar on 8/6/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum TrackTypes {
+public enum TrackTypes implements mods.railcraft.api.tracks.ITrackType {
     ABANDONED,
     ELECTRIC,
     HIGH_SPEED,
     HIGH_SPEED_ELECTRIC,
     IRON,
     REINFORCED,
-    STRAP_IRON,
-    ;
+    STRAP_IRON,;
 
     static {
         STRAP_IRON.speedController = SpeedControllerStrapIron.instance();
@@ -33,26 +42,39 @@ public enum TrackTypes {
         REINFORCED.resistance = 80F;
         REINFORCED.speedController = SpeedControllerReinforced.instance();
 
-        ELECTRIC.trackSpec = TrackSpecElectric.instance();
-        HIGH_SPEED_ELECTRIC.trackSpec = TrackSpecElectric.instance();
+        ELECTRIC.collisionHandler = CollisionHandlerElectric.instance();
+        HIGH_SPEED_ELECTRIC.collisionHandler = CollisionHandlerElectric.instance();
 
         HIGH_SPEED.speedController = SpeedControllerHighSpeed.instance();
         HIGH_SPEED_ELECTRIC.speedController = SpeedControllerHighSpeed.instance();
     }
 
-    private TrackSpec trackSpec = TrackSpec.instance();
+    private CollisionHandler collisionHandler = CollisionHandler.instance();
     private SpeedController speedController = SpeedController.instance();
     private float resistance = TrackConstants.RESISTANCE;
 
+    @Override
+    public String getRegistryName() {
+        return RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
     public float getResistance() {
         return resistance;
     }
 
-    public TrackSpec getTrackSpec() {
-        return trackSpec;
+    @Override
+    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+        speedController.onMinecartPass(world, cart, pos, trackKit);
     }
 
-    public SpeedController getSpeedController() {
-        return speedController;
+    @Override
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        collisionHandler.onEntityCollidedWithBlock(world, pos, state, entity);
+    }
+
+    @Override
+    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        return speedController.getMaxSpeed(world, cart, pos);
     }
 }

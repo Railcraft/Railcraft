@@ -16,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
 public class TrackKitWhistle extends TrackKitPowered {
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.WHISTLE;
     }
 

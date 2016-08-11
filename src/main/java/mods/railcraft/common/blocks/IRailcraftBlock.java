@@ -10,9 +10,9 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

@@ -9,43 +9,28 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
-import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.TrackKit;
-import mods.railcraft.api.tracks.TrackKitSpec;
-import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.api.tracks.TrackKitInstance;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.behaivor.SpeedController;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TrackKitRailcraft extends TrackKit {
+public abstract class TrackKitRailcraft extends TrackKitInstance {
 
-    public SpeedController speedController;
-
-    public abstract TrackKits getTrackKit();
+    public abstract TrackKits getTrackKitContainer();
 
     @Override
-    public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        if (speedController == null) {
-            speedController = SpeedController.instance();
-        }
-        return speedController.getMaxSpeed(world, cart, pos);
-    }
-
-    @Override
-    public TrackKitSpec getTrackKitSpec() {
-        return TrackRegistry.getTrackSpec(getTrackKit().getTag());
+    public TrackKit getTrackKit() {
+        return getTrackKitContainer().getTrackKit();
     }
 
     public int getPowerPropagation() {
         return 0;
     }
 
-    public boolean canPropagatePowerTo(ITrackKit track) {
+    public boolean canPropagatePowerTo(ITrackKitInstance track) {
         return true;
     }
 }

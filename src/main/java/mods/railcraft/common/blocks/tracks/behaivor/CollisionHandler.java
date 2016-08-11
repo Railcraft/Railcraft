@@ -20,17 +20,17 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackSpec {
-    private static TrackSpec instance;
+public class CollisionHandler {
+    private static CollisionHandler instance;
 
-    public static TrackSpec instance() {
+    public static CollisionHandler instance() {
         if (instance == null) {
-            instance = new TrackSpec();
+            instance = new CollisionHandler();
         }
         return instance;
     }
 
-    protected TrackSpec() {
+    protected CollisionHandler() {
     }
 
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {

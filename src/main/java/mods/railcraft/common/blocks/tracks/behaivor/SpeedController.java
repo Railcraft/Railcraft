@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import mods.railcraft.api.tracks.TrackKit;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class SpeedController {
     protected SpeedController() {
     }
 
-    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKits trackKit) {
+    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
         HighSpeedTools.performHighSpeedChecks(world, pos, cart, trackKit);
     }
 

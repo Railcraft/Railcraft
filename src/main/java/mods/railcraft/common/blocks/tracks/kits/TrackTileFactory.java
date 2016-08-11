@@ -9,18 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits;
 
-import mods.railcraft.api.tracks.ITrackKit;
-import mods.railcraft.api.tracks.TrackKitSpec;
+import mods.railcraft.api.tracks.ITrackKitInstance;
+import mods.railcraft.api.tracks.TrackKit;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackTileFactory {
 
-    public static TileTrackOutfitted makeTrackTile(TrackKitSpec trackKitSpec) {
-        ITrackKit trackInstance = trackKitSpec.createInstanceFromSpec();
+    public static TileTrackOutfitted makeTrackTile(TrackKit trackKit) {
+        ITrackKitInstance trackInstance = trackKit.createInstanceFromSpec();
         TileTrackOutfitted tileTrack;
-        if (trackKitSpec == TrackKits.BUFFER_STOP.getTrackKitSpec())
+        if (trackKit == TrackKits.BUFFER_STOP.getTrackKit())
             tileTrack = new TileTrackOutfittedTESR();
         else if (trackInstance.canUpdate())
             tileTrack = new TileTrackOutfittedTicking();

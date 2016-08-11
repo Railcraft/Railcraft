@@ -10,11 +10,11 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlockContainerSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;

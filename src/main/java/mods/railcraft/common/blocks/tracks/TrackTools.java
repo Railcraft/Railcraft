@@ -10,10 +10,12 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.tracks.ITrackKit;
-import mods.railcraft.api.tracks.TrackKitSpec;
+import mods.railcraft.api.tracks.ITrackKitInstance;
+import mods.railcraft.api.tracks.ITrackType;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
@@ -117,20 +119,27 @@ public class TrackTools {
         return false;
     }
 
+    public static ITrackType getTrackTypeAt(IBlockAccess world, BlockPos pos) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() instanceof IRailcraftTrack) {
+            return ((IRailcraftTrack) state.getBlock()).getTrackType(world, pos);
+        }
+        return TrackTypes.IRON;
+    }
+
     @Nullable
-    public static ITrackKit getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
-        if (!WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.track.block()))
-            return null;
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrackOutfitted)
-            return ((TileTrackOutfitted) tile).getTrackKit();
+    public static TrackKit getTrackKitAt(IBlockAccess world, BlockPos pos) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() instanceof BlockTrackOutfitted) {
+            return ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos);
+        }
         return null;
     }
 
     @Nullable
-    public static <T extends ITrackKit> T getTrackInstance(@Nullable TileEntity tile, Class<T> instanceClass) {
+    public static <T extends ITrackKitInstance> T getTrackInstance(@Nullable TileEntity tile, Class<T> instanceClass) {
         if (tile instanceof TileTrackOutfitted) {
-            ITrackKit trackInstance = ((TileTrackOutfitted) tile).getTrackKit();
+            ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
             if (instanceClass.isAssignableFrom(trackInstance.getClass()))
                 return instanceClass.cast(trackInstance);
         }
@@ -138,44 +147,44 @@ public class TrackTools {
     }
 
     public static boolean isTrackAt(IBlockAccess world, BlockPos pos, TrackKits track, Block block) {
-        return isTrackSpecAt(world, pos, track.getTrackKitSpec(), block);
+        return isTrackSpecAt(world, pos, track.getTrackKit(), block);
     }
 
     public static boolean isTrackAt(IBlockAccess world, BlockPos pos, TrackKits track) {
-        return isTrackSpecAt(world, pos, track.getTrackKitSpec());
+        return isTrackSpecAt(world, pos, track.getTrackKit());
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackKitSpec trackKitSpec, Block block) {
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackKit trackKit, Block block) {
         if (!RailcraftBlocks.track.isEqual(block))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        return isTrackSpec(tile, trackKitSpec);
+        return isTrackSpec(tile, trackKit);
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackKitSpec trackKitSpec) {
-        return isTrackSpecAt(world, pos, trackKitSpec, WorldPlugin.getBlock(world, pos));
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackKit trackKit) {
+        return isTrackSpecAt(world, pos, trackKit, WorldPlugin.getBlock(world, pos));
     }
 
-    public static boolean isTrackSpec(TileEntity tile, TrackKitSpec trackKitSpec) {
-        return (tile instanceof TileTrackOutfitted) && ((TileTrackOutfitted) tile).getTrackKit().getTrackKitSpec() == trackKitSpec;
+    public static boolean isTrackSpec(TileEntity tile, TrackKit trackKit) {
+        return (tile instanceof TileTrackOutfitted) && ((TileTrackOutfitted) tile).getTrackKitInstance().getTrackKit() == trackKit;
     }
 
-    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, Class<? extends ITrackKit> trackClass, Block block) {
+    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, Class<? extends ITrackKitInstance> trackClass, Block block) {
         if (!RailcraftBlocks.track.isEqual(block))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackClass(tile, trackClass);
     }
 
-    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, Class<? extends ITrackKit> trackClass) {
+    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, Class<? extends ITrackKitInstance> trackClass) {
         return isTrackClassAt(world, pos, trackClass, WorldPlugin.getBlock(world, pos));
     }
 
-    public static boolean isTrackClass(TileEntity tile, Class<? extends ITrackKit> trackClass) {
-        return (tile instanceof TileTrackOutfitted) && trackClass.isAssignableFrom(((TileTrackOutfitted) tile).getTrackKit().getClass());
+    public static boolean isTrackClass(TileEntity tile, Class<? extends ITrackKitInstance> trackClass) {
+        return (tile instanceof TileTrackOutfitted) && trackClass.isAssignableFrom(((TileTrackOutfitted) tile).getTrackKitInstance().getClass());
     }
 
-    public static Optional<TileTrackOutfitted> placeTrack(TrackKitSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
+    public static Optional<TileTrackOutfitted> placeTrack(TrackKit track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
         BlockTrackOutfitted block = (BlockTrackOutfitted) RailcraftBlocks.track.block();
         TileTrackOutfitted tile = null;
         if (block != null) {

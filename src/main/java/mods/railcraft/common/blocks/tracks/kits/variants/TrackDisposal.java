@@ -30,7 +30,7 @@ public class TrackDisposal extends TrackSuspended implements ITrackKitPowered {
     private boolean powered;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.DISPOSAL;
     }
 

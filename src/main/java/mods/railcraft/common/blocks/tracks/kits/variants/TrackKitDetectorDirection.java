@@ -31,7 +31,7 @@ public class TrackKitDetectorDirection extends TrackKitRailcraft implements ITra
     private byte delay;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.DETECTOR_DIRECTION;
     }
 

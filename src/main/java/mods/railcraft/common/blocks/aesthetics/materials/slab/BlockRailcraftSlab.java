@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;

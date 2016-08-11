@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kits.variants.TrackForce;
+import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -74,7 +74,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
             tracksRemoved.add(track);
         else if (!TrackTools.isRailBlockAt(worldObj, track))
             tracksRemoved.add(track);
-        else if ((TrackTools.getTrackInstanceAt(worldObj, track) instanceof TrackForce))
+        else if (TrackTools.getTrackKitAt(worldObj, track) == TrackKits.FORCE.getTrackKit())
             tracksRemoved.add(track);
         else if (!CartToolsAPI.isMinecartAt(worldObj, track, -0.2f)) {
             Block block = WorldPlugin.getBlock(worldObj, track);

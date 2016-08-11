@@ -17,7 +17,7 @@ import net.minecraft.entity.item.EntityMinecart;
 public class TrackJunction extends TrackKitRailcraft {
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.JUNCTION;
     }
     @Override

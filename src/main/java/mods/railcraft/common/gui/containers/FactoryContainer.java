@@ -141,7 +141,7 @@ public class FactoryContainer {
                 case ROUTING:
                     return new ContainerRouting(inv, (IRouter) obj);
                 case TRACK_ROUTING:
-                    return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKit());
+                    return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 default:
                     //TODO: fix this
 //                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);

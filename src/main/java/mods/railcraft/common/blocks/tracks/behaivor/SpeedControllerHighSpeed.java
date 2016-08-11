@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.behaivor;
 
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -39,7 +39,7 @@ public class SpeedControllerHighSpeed extends SpeedController {
     }
 
     @Override
-    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKits trackKit) {
+    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
         HighSpeedTools.performHighSpeedChecks(world, pos, cart, trackKit);
     }
 

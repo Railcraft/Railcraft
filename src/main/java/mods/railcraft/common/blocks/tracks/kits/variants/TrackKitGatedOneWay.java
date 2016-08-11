@@ -17,7 +17,7 @@ public class TrackKitGatedOneWay extends TrackKitGated {
     private static final double MOTION_MIN = 0.2;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.GATED_ONEWAY;
     }
 

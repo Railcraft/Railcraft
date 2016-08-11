@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,13 +6,12 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -89,7 +88,7 @@ public enum EnumPost implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public Object getAlternate(IRailcraftObjectContainer container) {
+    public Object getAlternate(String objectTag) {
         return null;
     }
 

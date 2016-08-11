@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -91,7 +90,7 @@ public enum EnumOre implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public Object getAlternate(IRailcraftObjectContainer container) {
+    public Object getAlternate(String objectTag) {
         return null;
     }
 }

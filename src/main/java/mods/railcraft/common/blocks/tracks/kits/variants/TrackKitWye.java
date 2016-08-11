@@ -26,7 +26,7 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 public class TrackKitWye extends TrackSwitchBase {
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.WYE;
     }
 

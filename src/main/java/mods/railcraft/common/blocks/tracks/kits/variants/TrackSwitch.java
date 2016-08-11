@@ -33,7 +33,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackKitReversible 
     private boolean reversed;
 
     @Override
-    public TrackKits getTrackKit() {
+    public TrackKits getTrackKitContainer() {
         return TrackKits.SWITCH;
     }
 

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.api.tracks.ITrackKit;
+import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -77,7 +77,7 @@ public class TileForceTrackEmitter extends TileMachineBase {
                     TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
                     if (tile instanceof TileTrackOutfitted) {
                         TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
-                        ITrackKit track = trackTile.getTrackKit();
+                        ITrackKitInstance track = trackTile.getTrackKitInstance();
                         if (track instanceof ITrackKitLockdown)
                             ((ITrackKitLockdown) track).releaseCart();
                     }
@@ -183,9 +183,9 @@ public class TileForceTrackEmitter extends TileMachineBase {
     private boolean placeTrack(BlockPos pos, IBlockState blockState, EnumRailDirection direction) {
         if (WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
             spawnParticles(pos);
-            Optional<TileTrackOutfitted> tile = TrackTools.placeTrack(TrackKits.FORCE.getTrackKitSpec(), getWorld(), pos, direction);
+            Optional<TileTrackOutfitted> tile = TrackTools.placeTrack(TrackKits.FORCE.getTrackKit(), getWorld(), pos, direction);
             if (tile.isPresent()) {
-                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackKit()).setEmitter(this));
+                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackKitInstance()).setEmitter(this));
                 numTracks++;
                 return true;
             }
@@ -201,9 +201,9 @@ public class TileForceTrackEmitter extends TileMachineBase {
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
         if (tile == null)
             return false;
-        if (!TrackTools.isTrackSpec(tile, TrackKits.FORCE.getTrackKitSpec()))
+        if (!TrackTools.isTrackSpec(tile, TrackKits.FORCE.getTrackKit()))
             return false;
-        TrackForce track = (TrackForce) ((TileTrackOutfitted) tile).getTrackKit();
+        TrackForce track = (TrackForce) ((TileTrackOutfitted) tile).getTrackKitInstance();
         TileForceTrackEmitter emitter = track.getEmitter();
         if (emitter == null || emitter == this) {
             track.setEmitter(this);

@@ -22,7 +22,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,8 +35,14 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
     public static final short MIN_FUSE = 0;
     private short fuse = 80;
 
+    @Nullable
     @Override
-    public TrackKits getTrackKit() {
+    public World theWorld() {
+        return super.theWorld();
+    }
+
+    @Override
+    public TrackKits getTrackKitContainer() {
         return TrackKits.PRIMING;
     }
 

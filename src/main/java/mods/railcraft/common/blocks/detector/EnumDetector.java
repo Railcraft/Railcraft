@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.modules.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -112,7 +111,7 @@ public enum EnumDetector implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public Object getAlternate(IRailcraftObjectContainer container) {
+    public Object getAlternate(String objectTag) {
         return null;
     }
 
