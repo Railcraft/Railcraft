@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.ITrackType;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRail;
@@ -23,6 +23,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
+public class BlockTrackFlex extends BlockRail implements IRailcraftTrack {
 
     public ITrackType trackType;
 
@@ -65,5 +66,10 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftBlock {
     @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         return trackType.getMaxSpeed(world, cart, pos);
+    }
+
+    @Override
+    public ITrackType getTrackType(IBlockAccess world, BlockPos pos) {
+        return trackType;
     }
 }

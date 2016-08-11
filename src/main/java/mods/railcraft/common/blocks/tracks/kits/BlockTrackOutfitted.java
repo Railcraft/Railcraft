@@ -11,9 +11,10 @@ package mods.railcraft.common.blocks.tracks.kits;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.tracks.*;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BlockTrackOutfitted extends BlockRail implements IPostConnection, IRailcraftBlock {
+public class BlockTrackOutfitted extends BlockRail implements IPostConnection, IRailcraftTrack {
 
     public BlockTrackOutfitted() {
         setResistance(TrackConstants.RESISTANCE);
@@ -118,6 +119,15 @@ public class BlockTrackOutfitted extends BlockRail implements IPostConnection, I
             Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
         }
         return new ItemStack(this);
+    }
+
+    @Override
+    public ITrackType getTrackType(IBlockAccess world, BlockPos pos) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            return ((TileTrackOutfitted) tile).getTrackType();
+        }
+        return TrackTypes.IRON;
     }
 
     @Nullable
