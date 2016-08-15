@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.RailcraftItems;
@@ -23,14 +24,14 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source == null || RailcraftItems.routingTable.isEqual(source) || source.stackSize > 1) {
+        if (source == null || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
             return false;
         }
         int numCopies = 0;
         for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
             if (stack != null) {
-                if (RailcraftItems.routingTable.isEqual(stack)) {
+                if (RailcraftItems.ROUTING_TABLE.isEqual(stack)) {
                     numCopies++;
                 } else {
                     return false;
@@ -43,11 +44,11 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source != null && RailcraftItems.routingTable.isEqual(source) && source.stackSize == 1) {
+        if (source != null && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
             int copies = 0;
             for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
                 ItemStack stack = grid.getStackInSlot(slot);
-                if (stack != null && RailcraftItems.routingTable.isEqual(stack)) {
+                if (stack != null && RailcraftItems.ROUTING_TABLE.isEqual(stack)) {
                     copies++;
                 }
             }

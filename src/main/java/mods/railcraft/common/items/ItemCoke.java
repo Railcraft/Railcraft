@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.core.RailcraftConfig;
@@ -19,8 +19,8 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemCoke extends ItemRailcraft {
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.coke, 4, 16, LootPlugin.Type.TOOL);
-        LootPlugin.addLoot(RailcraftItems.coke, 4, 16, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.COKE, 4, 16, LootPlugin.Type.TOOL);
+        LootPlugin.addLoot(RailcraftItems.COKE, 4, 16, LootPlugin.Type.WORKSHOP);
 
         OreDictionary.registerOre("fuelCoke", new ItemStack(this));
     }

@@ -34,13 +34,13 @@ public class ItemRail extends ItemRailcraftSubtyped {
         for (EnumRail rail : EnumRail.VALUES) {
             ItemStack stack = new ItemStack(this, 1, rail.ordinal());
             RailcraftRegistry.register(stack);
-            LootPlugin.addLoot(RailcraftItems.rail, rail, 6, 18, LootPlugin.Type.RAILWAY);
+            LootPlugin.addLoot(RailcraftItems.RAIL, rail, 6, 18, LootPlugin.Type.RAILWAY);
         }
     }
 
     @Override
     public void defineRecipes() {
-        RailcraftItems item = RailcraftItems.rail;
+        RailcraftItems item = RailcraftItems.RAIL;
 
         // Standard
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.STANDARD),
@@ -73,7 +73,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'G', new ItemStack(Items.GOLD_INGOT));
 
         // Wooden
-        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.tie.getRecipeObject(EnumTie.WOOD));
+        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD));
 
         // Speed
         recipe = new ShapedOreRecipe(item.getStack(8, EnumRail.SPEED),

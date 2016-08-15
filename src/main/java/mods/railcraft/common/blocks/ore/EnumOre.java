@@ -45,7 +45,7 @@ public enum EnumOre implements IVariantEnumBlock {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.ore;
+        return RailcraftBlocks.ORE;
     }
 
     @Nullable

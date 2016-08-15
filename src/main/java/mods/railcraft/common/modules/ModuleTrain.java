@@ -29,7 +29,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.detector
+                        RailcraftBlocks.DETECTOR
 //                        RailcraftBlocks.track
 //                        RailcraftBlocks.machine_gamma
                 );
@@ -39,7 +39,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             public void preInit() {
                 TrackKits.COUPLER.register();
 
-                if (RailcraftBlocks.detector.isLoaded()) {
+                if (RailcraftBlocks.DETECTOR.isLoaded()) {
                     CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),
                             "XXX",
                             "XPX",

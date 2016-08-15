@@ -71,25 +71,25 @@ public class TrackmanBackpack extends BaseBackpack {
         add(EnumMachineAlpha.ANCHOR_PASSIVE.getItem());
         add(EnumMachineBeta.SENTINEL.getItem());
 
-        add(RailcraftItems.crowbarIron);
-        add(RailcraftItems.crowbarSteel);
-        add(RailcraftItems.signalBlockSurveyor);
-        add(RailcraftItems.signalTuner);
-        add(RailcraftItems.rail);
-        add(RailcraftItems.railbed);
-        add(RailcraftItems.tie);
-        add(RailcraftItems.signalLamp);
-        add(RailcraftItems.circuit);
-        add(RailcraftItems.signalLabel);
-        add(RailcraftItems.whistleTuner);
-        add(RailcraftItems.magGlass);
-        add(RailcraftItems.goggles);
-        add(RailcraftItems.overalls);
+        add(RailcraftItems.CROWBAR_IRON);
+        add(RailcraftItems.CROWBAR_STEEL);
+        add(RailcraftItems.SIGNAL_BLOCK_SURVEYOR);
+        add(RailcraftItems.SIGNAL_TUNER);
+        add(RailcraftItems.RAIL);
+        add(RailcraftItems.RAILBED);
+        add(RailcraftItems.TIE);
+        add(RailcraftItems.SIGNAL_LAMP);
+        add(RailcraftItems.CIRCUIT);
+        add(RailcraftItems.SIGNAL_LABEL);
+        add(RailcraftItems.WHISTLE_TUNER);
+        add(RailcraftItems.MAG_GLASS);
+        add(RailcraftItems.GOGGLES);
+        add(RailcraftItems.OVERALLS);
 
-        add(RailcraftBlocks.machine_gamma);
-        add(RailcraftBlocks.trackElevator);
-        add(RailcraftBlocks.wayObject);
-        add(RailcraftBlocks.detector);
+        add(RailcraftBlocks.MACHINE_GAMMA);
+        add(RailcraftBlocks.TRACK_ELEVATOR);
+        add(RailcraftBlocks.WAY_OBJECT);
+        add(RailcraftBlocks.DETECTOR);
     }
 
     @Override

@@ -155,7 +155,7 @@ public class TrackTools {
     }
 
     public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackKit trackKit, Block block) {
-        if (!RailcraftBlocks.track.isEqual(block))
+        if (!RailcraftBlocks.TRACK.isEqual(block))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackSpec(tile, trackKit);
@@ -170,7 +170,7 @@ public class TrackTools {
     }
 
     public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, Class<? extends ITrackKitInstance> trackClass, Block block) {
-        if (!RailcraftBlocks.track.isEqual(block))
+        if (!RailcraftBlocks.TRACK.isEqual(block))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackClass(tile, trackClass);
@@ -185,7 +185,7 @@ public class TrackTools {
     }
 
     public static Optional<TileTrackOutfitted> placeTrack(TrackKit track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
-        BlockTrackOutfitted block = (BlockTrackOutfitted) RailcraftBlocks.track.block();
+        BlockTrackOutfitted block = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
         TileTrackOutfitted tile = null;
         if (block != null) {
             WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(block, direction));

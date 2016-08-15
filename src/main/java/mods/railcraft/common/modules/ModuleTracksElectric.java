@@ -23,7 +23,7 @@ public class ModuleTracksElectric extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.trackElectric
+                        RailcraftBlocks.TRACK_ELECTRIC
                 );
             }
         });

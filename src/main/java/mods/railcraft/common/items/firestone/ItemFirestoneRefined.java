@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
@@ -55,12 +56,12 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Nullable
     public static ItemStack getItemCharged() {
-        return RailcraftItems.firestoneRefined.getStack();
+        return RailcraftItems.FIRESTONE_REFINED.getStack();
     }
 
     @Nullable
     public static ItemStack getItemEmpty() {
-        return RailcraftItems.firestoneRefined.getStack(CHARGES - 1);
+        return RailcraftItems.FIRESTONE_REFINED.getStack(CHARGES - 1);
     }
 
     public ItemFirestoneRefined() {
@@ -71,14 +72,14 @@ public class ItemFirestoneRefined extends ItemFirestone {
     @Override
     public void defineRecipes() {
         ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumOre.FIRESTONE.getItem(), true, false);
-        recipe.addOutput(RailcraftItems.firestoneRaw.getStack(), 1F);
+        recipe.addOutput(RailcraftItems.FIRESTONE_RAW.getStack(), 1F);
 
-        CraftingPlugin.addRecipe(RailcraftItems.firestoneCut.getStack(),
+        CraftingPlugin.addRecipe(RailcraftItems.FIRESTONE_CUT.getStack(),
                 " P ",
                 "PFP",
                 " P ",
                 'P', Items.DIAMOND_PICKAXE,
-                'F', RailcraftItems.firestoneRaw);
+                'F', RailcraftItems.FIRESTONE_RAW);
 
         for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
             CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
@@ -87,15 +88,15 @@ public class ItemFirestoneRefined extends ItemFirestone {
                     "LRL",
                     'R', "blockRedstone",
                     'L', stack,
-                    'F', RailcraftItems.firestoneCut);
+                    'F', RailcraftItems.FIRESTONE_CUT);
             CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
                     "LOL",
                     "RFR",
                     "LRL",
                     'R', "blockRedstone",
                     'L', stack,
-                    'O', RailcraftItems.firestoneRaw,
-                    'F', RailcraftItems.firestoneCracked.getWildcard());
+                    'O', RailcraftItems.FIRESTONE_RAW,
+                    'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
         }
     }
 

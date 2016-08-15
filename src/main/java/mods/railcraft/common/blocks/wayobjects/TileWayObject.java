@@ -115,7 +115,7 @@ public abstract class TileWayObject extends RailcraftTickingTileEntity {
 
     @Override
     public Block getBlockType() {
-        return RailcraftBlocks.wayObject.block();
+        return RailcraftBlocks.WAY_OBJECT.block();
     }
 
     @Override

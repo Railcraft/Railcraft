@@ -69,7 +69,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     public static ItemStack getSampleRotor() {
         if (sampleRotor == null)
-            sampleRotor = RailcraftItems.turbineRotor.getStack();
+            sampleRotor = RailcraftItems.TURBINE_ROTOR.getStack();
         return sampleRotor;
     }
 

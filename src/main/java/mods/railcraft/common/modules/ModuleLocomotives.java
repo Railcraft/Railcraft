@@ -39,7 +39,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.whistleTuner
+                        RailcraftItems.WHISTLE_TUNER
 //                        RailcraftBlocks.track
                 );
             }
@@ -61,8 +61,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
                     else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
                         tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
-                    else if (RailcraftItems.ingot.getStack(Metal.STEEL) != null)
-                        tank = RailcraftItems.ingot.getStack(Metal.STEEL);
+                    else if (RailcraftItems.INGOT.getStack(Metal.STEEL) != null)
+                        tank = RailcraftItems.INGOT.getStack(Metal.STEEL);
                     else
                         tank = new ItemStack(Items.IRON_INGOT);
 
@@ -87,8 +87,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                 cart = RailcraftCarts.LOCO_ELECTRIC;
                 if (cart.setup()) {
                     paintLocomotive(cart.getCartItem());
-                    RailcraftItems.gear.register();
-                    RailcraftItems.plate.register();
+                    RailcraftItems.GEAR.register();
+                    RailcraftItems.PLATE.register();
                 }
 
                 cart = RailcraftCarts.LOCO_CREATIVE;
@@ -100,7 +100,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftCarts.LOCO_ELECTRIC.isLoaded()) {
-                    Object feederUnit = RailcraftBlocks.chargeFeeder.getStack(BlockChargeFeeder.FeederVariant.IC2);
+                    Object feederUnit = RailcraftBlocks.CHARGE_FEEDER.getStack(BlockChargeFeeder.FeederVariant.IC2);
                     if (feederUnit == null) feederUnit = "blockCopper";
                     ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getCartItem();
                     ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
@@ -111,8 +111,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             'L', Blocks.REDSTONE_LAMP,
                             'U', feederUnit,
                             'M', Items.MINECART,
-                            'G', RailcraftItems.gear, EnumGear.STEEL,
-                            'T', RailcraftItems.plate, Metal.STEEL);
+                            'G', RailcraftItems.GEAR, EnumGear.STEEL,
+                            'T', RailcraftItems.PLATE, Metal.STEEL);
                 }
             }
 

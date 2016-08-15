@@ -133,7 +133,7 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
     @Nullable
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.wayObject.block();
+        return RailcraftBlocks.WAY_OBJECT.block();
     }
 
     @Override

@@ -56,7 +56,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.chargeMeter, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.CHARGE_METER, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

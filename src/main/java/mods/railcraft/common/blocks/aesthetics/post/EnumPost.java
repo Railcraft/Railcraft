@@ -94,7 +94,7 @@ public enum EnumPost implements IVariantEnumBlock {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.post;
+        return RailcraftBlocks.POST;
     }
 
 }

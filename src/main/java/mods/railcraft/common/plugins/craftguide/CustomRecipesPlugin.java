@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleRouting;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -42,12 +43,12 @@ public class CustomRecipesPlugin implements RecipeProvider {
         // Rotor Repair
         if (EnumMachineAlpha.TURBINE.isAvailable()) {
             ItemStack[] rotorRepair = new ItemStack[10];
-            rotorRepair[0] = RailcraftItems.turbineRotor.getStack();
+            rotorRepair[0] = RailcraftItems.TURBINE_ROTOR.getStack();
             rotorRepair[0].setItemDamage(1);
             for (int i = 0; i < 9; i++) {
-                rotorRepair[i + 1] = RailcraftItems.turbineBlade.getStack();
+                rotorRepair[i + 1] = RailcraftItems.TURBINE_BLADE.getStack();
             }
-            rotorRepair[5] = RailcraftItems.turbineRotor.getStack();
+            rotorRepair[5] = RailcraftItems.TURBINE_ROTOR.getStack();
             rotorRepair[5].setItemDamage(25000);
             generator.addRecipe(template, rotorRepair);
         }
@@ -55,8 +56,8 @@ public class CustomRecipesPlugin implements RecipeProvider {
         // Ticket
         if (RailcraftModuleManager.isModuleEnabled(ModuleRouting.class)) {
             ItemStack[] ticket = new ItemStack[10];
-            ticket[0] = RailcraftItems.ticket.getStack();
-            ticket[1] = RailcraftItems.ticketGold.getStack();
+            ticket[0] = RailcraftItems.TICKET.getStack();
+            ticket[1] = RailcraftItems.TICKET_GOLD.getStack();
             ticket[2] = new ItemStack(Items.PAPER);
             NBTTagCompound nbt = InvTools.getItemData(ticket[0]);
             nbt.setString("owner", "CovertJaguar");
@@ -67,13 +68,13 @@ public class CustomRecipesPlugin implements RecipeProvider {
 
             // Routing Table
             ItemStack[] routingTable = new ItemStack[10];
-            routingTable[0] = RailcraftItems.routingTable.getStack();
+            routingTable[0] = RailcraftItems.ROUTING_TABLE.getStack();
             if (routingTable[0] != null) {
                 routingTable[0].stackSize = 2;
                 InvTools.addItemToolTip(routingTable[0], "Edited");
-                routingTable[1] = RailcraftItems.routingTable.getStack();
+                routingTable[1] = RailcraftItems.ROUTING_TABLE.getStack();
                 InvTools.addItemToolTip(routingTable[1], "Edited");
-                routingTable[2] = RailcraftItems.routingTable.getStack();
+                routingTable[2] = RailcraftItems.ROUTING_TABLE.getStack();
                 InvTools.addItemToolTip(routingTable[2], "Blank");
                 generator.addRecipe(template, routingTable);
             }

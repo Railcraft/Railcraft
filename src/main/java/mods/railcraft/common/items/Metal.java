@@ -125,7 +125,7 @@ public enum Metal implements IVariantEnum {
     }
 
     public enum Form {
-        NUGGET("nugget", RailcraftItems.nugget) {
+        NUGGET("nugget", RailcraftItems.NUGGET) {
             @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
@@ -136,7 +136,7 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        INGOT("ingot", RailcraftItems.ingot) {
+        INGOT("ingot", RailcraftItems.INGOT) {
             @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
@@ -149,8 +149,8 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        PLATE("plate", RailcraftItems.plate),
-        BLOCK("block", RailcraftBlocks.generic, blockMap) {
+        PLATE("plate", RailcraftItems.PLATE),
+        BLOCK("block", RailcraftBlocks.GENERIC, blockMap) {
             @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
@@ -163,7 +163,7 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        POOR_ORE("poorOre", RailcraftBlocks.ore, poorOreMap);
+        POOR_ORE("poorOre", RailcraftBlocks.ORE, poorOreMap);
         private static final BiMap<Form, String> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;

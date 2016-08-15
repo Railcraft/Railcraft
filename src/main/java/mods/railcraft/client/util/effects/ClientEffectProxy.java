@@ -107,7 +107,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
-        if (RailcraftItems.goggles.item() != null) {
+        if (RailcraftItems.GOGGLES.item() != null) {
             ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }

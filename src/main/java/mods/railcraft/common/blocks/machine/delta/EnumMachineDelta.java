@@ -108,7 +108,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.machine_delta;
+        return RailcraftBlocks.MACHINE_DELTA;
     }
 
     @Override

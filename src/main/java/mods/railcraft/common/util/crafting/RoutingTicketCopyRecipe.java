@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.ItemTicket;
@@ -29,9 +30,9 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
             if (stack != null) {
-                if (RailcraftItems.ticketGold.isEqual(stack)) {
+                if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
                     numTickets++;
-                } else if (stack.getItem() == Items.PAPER || RailcraftItems.ticket.isEqual(stack)) {
+                } else if (stack.getItem() == Items.PAPER || RailcraftItems.TICKET.isEqual(stack)) {
                     numPaper++;
                 } else {
                     return false;
@@ -46,7 +47,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         ItemStack ticket = null;
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (RailcraftItems.ticketGold.isEqual(stack)) {
+            if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
                 ticket = stack;
                 break;
             }
@@ -64,7 +65,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return RailcraftItems.ticket.getStack();
+        return RailcraftItems.TICKET.getStack();
     }
 
     @Override

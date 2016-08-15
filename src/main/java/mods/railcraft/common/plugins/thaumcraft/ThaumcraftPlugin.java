@@ -105,7 +105,7 @@ public class ThaumcraftPlugin {
         }
 
         // Thaumium Crowbar
-        item = RailcraftItems.crowbarThaumium.item();
+        item = RailcraftItems.CROWBAR_THAUMIUM.item();
         if (item != null) {
             String researchTag = "RC_Crowbar_Thaumium";
             IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(researchTag, new ItemStack(item),
@@ -126,7 +126,7 @@ public class ThaumcraftPlugin {
         }
 
         // Void Crowbar
-        item = RailcraftItems.crowbarVoid.item();
+        item = RailcraftItems.CROWBAR_VOID.item();
         if (item != null) {
             String researchTag = "RC_Crowbar_Void";
             IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(researchTag, new ItemStack(item),
@@ -189,30 +189,30 @@ public class ThaumcraftPlugin {
             addItemAspect(EnumOre.SALTPETER.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.AIR, 3));
             addItemAspect(EnumOre.FIRESTONE.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 6).add(Aspect.ENTROPY, 1));
 
-            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
-            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));
-            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.CHARCOAL), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 2));
-            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
+            addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
+            addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));
+            addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 2));
+            addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
 
-            addItemAspect(RailcraftItems.rebar.getStack(), new AspectList().add(Aspect.METAL, 1));
-            addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.STANDARD), new AspectList().add(Aspect.METAL, 1));
-            addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.REINFORCED), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1));
-            addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.WOOD), new AspectList().add(Aspect.PLANT, 1));
-            addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.ADVANCED), new AspectList().add(Aspect.METAL, 1).add(Aspect.MECHANISM, 1));
-            addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.SPEED), new AspectList().add(Aspect.METAL, 1).add(Aspect.MOTION, 1));
-            addItemAspect(RailcraftItems.tie.getStack(1, EnumTie.WOOD), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
-            addItemAspect(RailcraftItems.tie.getStack(1, EnumTie.STONE), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
+            addItemAspect(RailcraftItems.REBAR.getStack(), new AspectList().add(Aspect.METAL, 1));
+            addItemAspect(RailcraftItems.RAIL.getStack(1, EnumRail.STANDARD), new AspectList().add(Aspect.METAL, 1));
+            addItemAspect(RailcraftItems.RAIL.getStack(1, EnumRail.REINFORCED), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1));
+            addItemAspect(RailcraftItems.RAIL.getStack(1, EnumRail.WOOD), new AspectList().add(Aspect.PLANT, 1));
+            addItemAspect(RailcraftItems.RAIL.getStack(1, EnumRail.ADVANCED), new AspectList().add(Aspect.METAL, 1).add(Aspect.MECHANISM, 1));
+            addItemAspect(RailcraftItems.RAIL.getStack(1, EnumRail.SPEED), new AspectList().add(Aspect.METAL, 1).add(Aspect.MOTION, 1));
+            addItemAspect(RailcraftItems.TIE.getStack(1, EnumTie.WOOD), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
+            addItemAspect(RailcraftItems.TIE.getStack(1, EnumTie.STONE), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
 
-            addItemAspect(RailcraftItems.coke.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.ENERGY, 4));
+            addItemAspect(RailcraftItems.COKE.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.ENERGY, 4));
 
-            addItemAspect(RailcraftItems.plate.getStack(1, Metal.IRON), new AspectList().add(Aspect.METAL, 4));
-            addItemAspect(RailcraftItems.plate.getStack(1, Metal.STEEL), new AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 1));
-            addItemAspect(RailcraftItems.plate.getStack(1, Metal.TIN), new AspectList().add(Aspect.METAL, 3));
+            addItemAspect(RailcraftItems.PLATE.getStack(1, Metal.IRON), new AspectList().add(Aspect.METAL, 4));
+            addItemAspect(RailcraftItems.PLATE.getStack(1, Metal.STEEL), new AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 1));
+            addItemAspect(RailcraftItems.PLATE.getStack(1, Metal.TIN), new AspectList().add(Aspect.METAL, 3));
 
-            addItemAspect(RailcraftItems.gear.getStack(EnumGear.GOLD_PLATE), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 2).add(Aspect.DESIRE, 2));
-            addItemAspect(RailcraftItems.gear.getStack(EnumGear.BUSHING), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 1));
-            addItemAspect(RailcraftItems.gear.getStack(EnumGear.IRON), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 4));
-            addItemAspect(RailcraftItems.gear.getStack(EnumGear.STEEL), new AspectList().add(Aspect.METAL, 8).add(Aspect.ORDER, 2).add(Aspect.MECHANISM, 4));
+            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.GOLD_PLATE), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 2).add(Aspect.DESIRE, 2));
+            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.BUSHING), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 1));
+            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.IRON), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 4));
+            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.STEEL), new AspectList().add(Aspect.METAL, 8).add(Aspect.ORDER, 2).add(Aspect.MECHANISM, 4));
 
             addItemAspect(EnumMachineAlpha.ROLLING_MACHINE.getItem(), new AspectList().add(Aspect.CRAFT, 6).add(Aspect.MECHANISM, 2));
             addItemAspect(EnumMachineAlpha.ROCK_CRUSHER.getItem(), new AspectList().add(Aspect.CRAFT, 2).add(Aspect.MECHANISM, 4).add(Aspect.EARTH, 4).add(Aspect.EARTH, 4));
@@ -255,10 +255,10 @@ public class ThaumcraftPlugin {
 
             AspectList glassAspects = new AspectList().add(Aspect.CRYSTAL, 4).add(Aspect.METAL, 1);
             for (EnumColor color : EnumColor.VALUES) {
-                addItemAspect(RailcraftBlocks.glass.getStack(color), glassAspects);
+                addItemAspect(RailcraftBlocks.GLASS.getStack(color), glassAspects);
             }
 
-            addItemAspect(RailcraftBlocks.anvilSteel.getStack(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.EXCHANGE, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));
+            addItemAspect(RailcraftBlocks.ANVIL_STEEL.getStack(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.EXCHANGE, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));
 
             addCartAspect(RailcraftCarts.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.MECHANISM, 4));
             addCartAspect(RailcraftCarts.LOCO_ELECTRIC, new AspectList().add(Aspect.FLUX, 6).add(Aspect.MECHANISM, 6).add(Aspect.MOTION, 2));
@@ -267,10 +267,10 @@ public class ThaumcraftPlugin {
             addCartAspect(RailcraftCarts.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2));
             addCartAspect(RailcraftCarts.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2));
 
-            addItemAspect(RailcraftItems.goggles.getStack(), new AspectList().add(Aspect.AURA, 4).add(Aspect.SENSES, 4));
+            addItemAspect(RailcraftItems.GOGGLES.getStack(), new AspectList().add(Aspect.AURA, 4).add(Aspect.SENSES, 4));
 
-            addItemAspect(RailcraftItems.firestoneRaw.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
-            addItemAspect(RailcraftItems.firestoneCut.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 2).add(Aspect.ORDER, 2));
+            addItemAspect(RailcraftItems.FIRESTONE_RAW.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
+            addItemAspect(RailcraftItems.FIRESTONE_CUT.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 2).add(Aspect.ORDER, 2));
             addItemAspect(ItemFirestoneRefined.getItemCharged(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ORDER, 4));
             addItemAspect(ItemFirestoneCracked.getItemCharged(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
         } catch (Throwable error) {

@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- * <p>
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import ic2.api.item.IBoxable;
@@ -39,7 +39,7 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.signalTuner, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.SIGNAL_TUNER, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
                 "BRB",
                 "   ",
                 'B', Blocks.STONE_BUTTON,
-                'R', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                 'T', Blocks.REDSTONE_TORCH);
     }
 

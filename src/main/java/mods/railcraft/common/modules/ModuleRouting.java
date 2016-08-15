@@ -31,10 +31,10 @@ public class ModuleRouting extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.routingTable,
-                        RailcraftItems.ticket,
-                        RailcraftItems.ticketGold,
-                        RailcraftBlocks.detector
+                        RailcraftItems.ROUTING_TABLE,
+                        RailcraftItems.TICKET,
+                        RailcraftItems.TICKET_GOLD,
+                        RailcraftBlocks.DETECTOR
 //                        RailcraftBlocks.track
 //                        RailcraftBlocks.signal
                 );
@@ -44,10 +44,10 @@ public class ModuleRouting extends RailcraftModulePayload {
             public void preInit() {
                 TrackKits.ROUTING.register();
 
-                if (RailcraftItems.routingTable.isEnabled())
+                if (RailcraftItems.ROUTING_TABLE.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
 
-                if (RailcraftItems.ticket.isEnabled() && RailcraftItems.ticketGold.isEnabled())
+                if (RailcraftItems.TICKET.isEnabled() && RailcraftItems.TICKET_GOLD.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
 
                 if (EnumDetector.ROUTING.isEnabled()) {
@@ -60,7 +60,7 @@ public class ModuleRouting extends RailcraftModulePayload {
 
                 }
 
-                if (RailcraftBlocks.wayObject.isEnabled()) {
+                if (RailcraftBlocks.WAY_OBJECT.isEnabled()) {
                     // Define Switch Motor
                     if (EnumWayObject.SWITCH_ROUTING.isEnabled() && EnumWayObject.SWITCH_MOTOR.isEnabled()) {
                         CraftingPlugin.addShapelessRecipe(EnumWayObject.SWITCH_ROUTING.getItem(), EnumWayObject.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());

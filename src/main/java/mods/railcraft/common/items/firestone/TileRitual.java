@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
@@ -75,7 +76,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
             return;
         }
 
-        Item firestone = RailcraftItems.firestoneRefined.item();
+        Item firestone = RailcraftItems.FIRESTONE_REFINED.item();
         if (firestone == null)
             return;
 

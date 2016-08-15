@@ -34,7 +34,7 @@ public class ModuleRF extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.detector
+                        RailcraftBlocks.DETECTOR
 //                        RailcraftBlocks.machine_gamma
                 );
             }
@@ -48,7 +48,7 @@ public class ModuleRF extends RailcraftModulePayload {
                             "RMR",
                             "LRL",
                             'R', new ItemStack(Blocks.REDSTONE_BLOCK),
-                            'L', RailcraftItems.ingot, Metal.LEAD,
+                            'L', RailcraftItems.INGOT, Metal.LEAD,
                             'M', Items.MINECART
                     );
                 }

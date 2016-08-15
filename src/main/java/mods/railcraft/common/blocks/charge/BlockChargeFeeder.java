@@ -93,7 +93,7 @@ public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implement
                 "PCP",
                 "CCC",
                 "PCP",
-                'P', RailcraftItems.plate, Metal.TIN,
+                'P', RailcraftItems.PLATE, Metal.TIN,
                 'C', "ingotCopper");
     }
 
@@ -225,7 +225,7 @@ public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implement
 
         @Override
         public IRailcraftBlockContainer getContainer() {
-            return RailcraftBlocks.chargeFeeder;
+            return RailcraftBlocks.CHARGE_FEEDER;
         }
 
         @Override

@@ -31,7 +31,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
             RailcraftRegistry.register(stack);
         }
 
-        OreDictionary.registerOre("gearIron", RailcraftItems.gear.getStack(1, EnumGear.IRON));
+        OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));
 
         ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
         LootPlugin.addLoot(itemStack, 1, 8, LootPlugin.Type.RAILWAY, "gear.bushing");
@@ -39,9 +39,9 @@ public class ItemGear extends ItemRailcraftSubtyped {
 
     @Override
     public void defineRecipes() {
-        ItemStack bushing = RailcraftItems.gear.getStack(EnumGear.BUSHING);
+        ItemStack bushing = RailcraftItems.GEAR.getStack(EnumGear.BUSHING);
 
-        RailcraftItems gear = RailcraftItems.gear;
+        RailcraftItems gear = RailcraftItems.GEAR;
 
         CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
                 "TT",

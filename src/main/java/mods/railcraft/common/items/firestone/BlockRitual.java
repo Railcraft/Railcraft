@@ -126,7 +126,7 @@ public class BlockRitual extends BlockContainer implements IRailcraftBlock {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileRitual) {
             TileRitual firestone = (TileRitual) tile;
-            Item item = state.getValue(CRACKED) ? RailcraftItems.firestoneRefined.item() : RailcraftItems.firestoneCracked.item();
+            Item item = state.getValue(CRACKED) ? RailcraftItems.FIRESTONE_REFINED.item() : RailcraftItems.FIRESTONE_CRACKED.item();
             if (item != null) {
                 ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.CHARGES - firestone.charge);
                 if (firestone.hasCustomName())

@@ -100,7 +100,7 @@ public class BlockGeneric extends Block implements IRailcraftBlock {
 
     @Nullable
     public static BlockGeneric getBlock() {
-        return (BlockGeneric) RailcraftBlocks.generic.block();
+        return (BlockGeneric) RailcraftBlocks.GENERIC.block();
     }
 
     /**

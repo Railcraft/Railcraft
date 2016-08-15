@@ -49,8 +49,8 @@ import java.util.*;
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
 public class ItemNotepad extends ItemRailcraft {
-    public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".filled"), "inventory");
-    public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".empty"), "inventory");
+    public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + ".filled"), "inventory");
+    public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + ".empty"), "inventory");
 
     public ItemNotepad() {
         setMaxStackSize(1);
@@ -64,7 +64,7 @@ public class ItemNotepad extends ItemRailcraft {
                 "XP",
                 'I', new ItemStack(Items.DYE, 1, 0),
                 'F', Items.FEATHER,
-                'X', RailcraftItems.magGlass,
+                'X', RailcraftItems.MAG_GLASS,
                 'P', Items.PAPER);
     }
 

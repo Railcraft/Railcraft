@@ -66,7 +66,7 @@ public class ItemTrackKit extends ItemRailcraft {
     public void initializeClient() {
         Map<String, TrackKit> trackKits = TrackRegistry.getTrackKits();
         for (TrackKit trackKit : trackKits.values()) {
-            ModelManager.registerItemModel(this, trackKit.ordinal(), getResourcePath() + "." + trackKit.getResourcePathSuffix());
+            ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getResourcePathSuffix());
         }
     }
 }

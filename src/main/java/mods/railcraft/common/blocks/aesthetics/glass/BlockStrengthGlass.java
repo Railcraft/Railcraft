@@ -109,7 +109,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
                     "GGG",
                     "GDG",
                     "GGG",
-                    'G', RailcraftBlocks.glass.getWildcard(),
+                    'G', RailcraftBlocks.GLASS.getWildcard(),
                     'D', color.getDyeOreDictTag());
         }
     }

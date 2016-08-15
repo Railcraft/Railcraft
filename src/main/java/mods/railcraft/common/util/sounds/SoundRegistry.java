@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.sounds;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -47,7 +47,7 @@ public class SoundRegistry {
     }
 
     public static void setupBlockSounds() {
-        Block block = RailcraftBlocks.post.block();
+        Block block = RailcraftBlocks.POST.block();
         if (block != null) {
             registerBlockSound(EnumPost.WOOD.getState(), SoundType.WOOD);
             registerBlockSound(EnumPost.STONE.getState(), SoundType.STONE);

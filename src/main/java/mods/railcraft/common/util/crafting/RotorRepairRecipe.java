@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.RailcraftItems;
@@ -22,8 +23,8 @@ import net.minecraft.world.World;
 public class RotorRepairRecipe implements IRecipe {
 
     private static final int REPAIR_PER_BLADE = 2500;
-    private final ItemStack ROTOR = RailcraftItems.turbineRotor.getStack();
-    private final ItemStack BLADE = RailcraftItems.turbineBlade.getStack();
+    private final ItemStack ROTOR = RailcraftItems.TURBINE_ROTOR.getStack();
+    private final ItemStack BLADE = RailcraftItems.TURBINE_BLADE.getStack();
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {

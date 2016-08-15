@@ -77,8 +77,8 @@ public class TrackKitDetectorDirection extends TrackKitRailcraft implements ITra
 
     private void notifyNeighbors() {
         World world = theWorldAsserted();
-        world.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.track.block());
-        world.notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.track.block());
+        world.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.TRACK.block());
+        world.notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.TRACK.block());
         sendUpdateToClient();
     }
 

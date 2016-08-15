@@ -43,8 +43,8 @@ public class ModuleWorld extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.ore,
-                        RailcraftBlocks.worldLogic
+                        RailcraftBlocks.ORE,
+                        RailcraftBlocks.WORLD_LOGIC
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {
                     WorkshopCreationHandler workshop = new WorkshopCreationHandler();
@@ -68,12 +68,12 @@ public class ModuleWorld extends RailcraftModulePayload {
             public void preInit() {
                 EnumGeneric cubeType = EnumGeneric.STONE_ABYSSAL;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.generic.register();
+                    RailcraftBlocks.GENERIC.register();
                 }
 
                 cubeType = EnumGeneric.STONE_QUARRIED;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.generic.register();
+                    RailcraftBlocks.GENERIC.register();
                 }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())

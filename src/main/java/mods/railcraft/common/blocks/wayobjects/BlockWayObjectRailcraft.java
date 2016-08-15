@@ -70,9 +70,9 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "LCI",
                     " BI",
                     "   ",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.SIGNAL,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL,
                     'I', "ingotIron",
-                    'L', RailcraftItems.signalLamp,
+                    'L', RailcraftItems.SIGNAL_LAMP,
                     'B', "dyeBlack");
         }
 
@@ -83,10 +83,10 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "LCI",
                     " BI",
                     "LRI",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.SIGNAL,
-                    'R', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL,
+                    'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'I', "ingotIron",
-                    'L', RailcraftItems.signalLamp,
+                    'L', RailcraftItems.SIGNAL_LAMP,
                     'B', "dyeBlack");
         }
 
@@ -97,9 +97,9 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "LCI",
                     " BI",
                     "   ",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'I', "ingotIron",
-                    'L', RailcraftItems.signalLamp,
+                    'L', RailcraftItems.SIGNAL_LAMP,
                     'B', "dyeBlack");
         }
 
@@ -110,9 +110,9 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "LRI",
                     " BI",
                     "LRI",
-                    'R', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                    'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'I', "ingotIron",
-                    'L', RailcraftItems.signalLamp,
+                    'L', RailcraftItems.SIGNAL_LAMP,
                     'B', "dyeBlack");
         }
 
@@ -150,7 +150,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     'W', "dyeWhite",
                     'I', "ingotIron",
                     'P', Blocks.PISTON,
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'B', "dyeBlack",
                     'R', "dyeRed");
             CraftingPlugin.addRecipe(stack,
@@ -159,7 +159,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     'W', "dyeWhite",
                     'I', "ingotIron",
                     'P', Blocks.PISTON,
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'B', "dyeBlack",
                     'R', "dyeRed");
         }
@@ -172,7 +172,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER);
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER);
         }
 
         // Define Controller Box
@@ -183,7 +183,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.CONTROLLER);
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
         }
 
         // Define Analog Controller Box
@@ -194,7 +194,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "IQI",
                     'I', "ingotIron",
                     'Q', Items.COMPARATOR,
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.CONTROLLER);
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
         }
 
         // Define Capacitor Box
@@ -217,7 +217,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.SIGNAL);
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL);
         }
 
         // Define Signal Sequencer Box
@@ -239,8 +239,8 @@ public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraf
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'L', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
-                    'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.CONTROLLER);
+                    'L', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
+                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
         }
     }
 

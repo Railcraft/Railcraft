@@ -194,7 +194,7 @@ public class TileForceTrackEmitter extends TileMachineBase {
     }
 
     private boolean claimTrack(BlockPos pos, IBlockState state, EnumRailDirection direction) {
-        if (!RailcraftBlocks.track.isEqual(state))
+        if (!RailcraftBlocks.TRACK.isEqual(state))
             return false;
         if (TrackTools.getTrackDirectionRaw(state) != direction)
             return false;

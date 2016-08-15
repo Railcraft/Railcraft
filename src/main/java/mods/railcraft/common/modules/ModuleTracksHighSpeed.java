@@ -20,7 +20,7 @@ public class ModuleTracksHighSpeed extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.trackHighSpeed
+                        RailcraftBlocks.TRACK_HIGH_SPEED
                 );
             }
         });

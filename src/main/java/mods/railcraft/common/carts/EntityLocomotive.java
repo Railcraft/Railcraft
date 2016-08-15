@@ -487,7 +487,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public int getDamageToRoadKill(EntityLivingBase entity) {
         if (entity instanceof EntityPlayer) {
             ItemStack pants = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-            if (pants != null && RailcraftItems.overalls.isInstance(pants)) {
+            if (pants != null && RailcraftItems.OVERALLS.isInstance(pants)) {
                 entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 5));
                 return 4;
             }

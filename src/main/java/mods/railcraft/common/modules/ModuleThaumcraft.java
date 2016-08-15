@@ -31,8 +31,8 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.crowbarThaumium,
-                        RailcraftItems.crowbarVoid
+                        RailcraftItems.CROWBAR_THAUMIUM,
+                        RailcraftItems.CROWBAR_VOID
                 );
             }
 

@@ -93,7 +93,7 @@ public class HighSpeedTools {
     }
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
-        if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.trackHighSpeed.block())) return true;
+        if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.TRACK_HIGH_SPEED.block())) return true;
         ITrackType track = TrackTools.getTrackTypeAt(world, pos);
         return track == TrackTypes.HIGH_SPEED || track == TrackTypes.HIGH_SPEED_ELECTRIC;
     }

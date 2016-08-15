@@ -26,7 +26,7 @@ public class ItemSteelSword extends ItemSword implements IRailcraftObject {
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.shearsSteel, 1, 1, LootPlugin.Type.WARRIOR);
+        LootPlugin.addLoot(RailcraftItems.SHEARS_STEEL, 1, 1, LootPlugin.Type.WARRIOR);
     }
 
     @Override

@@ -44,8 +44,8 @@ public class ModuleStructures extends RailcraftModulePayload {
                     add(brick.getContainer());
                 }
                 add(
-                        RailcraftItems.stoneCarver, // TODO: this can probably be removed once recipes are working right
-                        RailcraftBlocks.glass
+                        RailcraftItems.STONE_CARVER, // TODO: this can probably be removed once recipes are working right
+                        RailcraftBlocks.GLASS
 //                        RailcraftBlocks.post,
 //                        RailcraftBlocks.postMetal,
 //                        RailcraftBlocks.postMetalPlatform,
@@ -63,17 +63,17 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CONCRETE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.generic.register();
+                    RailcraftBlocks.GENERIC.register();
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.rebar.isEnabled()) {
+                        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
                                     "ISI",
                                     "SIS",
-                                    'I', RailcraftItems.rebar.getRecipeObject(),
+                                    'I', RailcraftItems.REBAR.getRecipeObject(),
                                     'S', "stone");
                         } else {
                             stack.stackSize = 4;
@@ -89,7 +89,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.generic.register();
+                    RailcraftBlocks.GENERIC.register();
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
@@ -130,25 +130,25 @@ public class ModuleStructures extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                Block blockPost = RailcraftBlocks.post.block();
+                Block blockPost = RailcraftBlocks.POST.block();
                 if (blockPost != null) {
-                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getStack(4), RailcraftItems.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
+                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getStack(4), RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.WOOD));
                     CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.slab, Materials.CREOSOTE,
+                            'T', RailcraftBlocks.SLAB, Materials.CREOSOTE,
                             'I', EnumPost.WOOD.getStack());
 
                     CraftingPlugin.addRecipe(EnumPost.STONE.getStack(8),
                             "SIS",
                             "SIS",
                             "SIS",
-                            'I', RailcraftItems.rebar.getRecipeObject(),
+                            'I', RailcraftItems.REBAR.getRecipeObject(),
                             'S', "stone");
                     CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.slab, Materials.CONCRETE,
+                            'T', RailcraftBlocks.SLAB, Materials.CONCRETE,
                             'I', EnumPost.STONE.getStack());
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
@@ -168,7 +168,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getStack(4),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.slab, Materials.IRON,
+                            'T', RailcraftBlocks.SLAB, Materials.IRON,
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);

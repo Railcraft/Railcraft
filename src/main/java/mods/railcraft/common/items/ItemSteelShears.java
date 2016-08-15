@@ -31,7 +31,7 @@ public class ItemSteelShears extends ItemShears implements IRailcraftObject {
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.shearsSteel, 1, 1, LootPlugin.Type.TOOL);
+        LootPlugin.addLoot(RailcraftItems.SHEARS_STEEL, 1, 1, LootPlugin.Type.TOOL);
     }
 
     @Override

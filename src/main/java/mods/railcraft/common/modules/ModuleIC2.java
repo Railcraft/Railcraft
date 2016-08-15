@@ -39,7 +39,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.detector
+                        RailcraftBlocks.DETECTOR
 //                        RailcraftBlocks.machine_gamma
                 );
             }
@@ -70,11 +70,11 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                Block blockDetector = RailcraftBlocks.detector.block();
+                Block blockDetector = RailcraftBlocks.DETECTOR.block();
 
                 if (blockDetector != null) {
                     ItemStack stack = EnumDetector.ENERGY.getItem();
-                    Object tin = RailcraftItems.plate.getRecipeObject(Metal.TIN);
+                    Object tin = RailcraftItems.PLATE.getRecipeObject(Metal.TIN);
                     if (tin == null)
                         tin = "ingotTin";
                     CraftingPlugin.addRecipe(stack, false,

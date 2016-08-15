@@ -37,7 +37,11 @@ public class ModelManager {
     }
 
     public static void registerItemModel(Item item, int meta, String json) {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, json), "inventory");
+        registerItemModel(item, meta, RailcraftConstants.RESOURCE_DOMAIN, json);
+    }
+
+    public static void registerItemModel(Item item, int meta, String domain, String json) {
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(domain, json), "inventory");
         registerItemModel(item, meta, location);
     }
 

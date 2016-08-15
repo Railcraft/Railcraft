@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -26,7 +27,7 @@ public class WorldGenSaltpeter extends WorldGenerator {
      * The block ID of the ore to be placed using this generator.
      */
     private final IBlockState mineableBlock = EnumOre.SALTPETER.getState();
-    private final IBlockState logicBlock = RailcraftBlocks.worldLogic.getDefaultState();
+    private final IBlockState logicBlock = RailcraftBlocks.WORLD_LOGIC.getDefaultState();
 
     public WorldGenSaltpeter() {
     }

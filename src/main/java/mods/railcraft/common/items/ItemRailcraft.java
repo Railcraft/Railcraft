@@ -41,7 +41,7 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
 
     public ItemRailcraft() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        this.addPropertyOverride(new ResourceLocation("held"), HELD_GETTER);
+        addPropertyOverride(new ResourceLocation("held"), HELD_GETTER);
     }
 
     public ItemRailcraft setRarity(int rarity) {

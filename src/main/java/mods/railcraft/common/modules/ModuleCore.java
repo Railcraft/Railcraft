@@ -123,26 +123,26 @@ public class ModuleCore extends RailcraftModulePayload {
                 OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
 
                 add(
-                        RailcraftItems.crowbarIron,
-                        RailcraftItems.crowbarSteel,
+                        RailcraftItems.CROWBAR_IRON,
+                        RailcraftItems.CROWBAR_STEEL,
 
-                        RailcraftItems.axeSteel,
-                        RailcraftItems.hoeSteel,
-                        RailcraftItems.pickaxeSteel,
-                        RailcraftItems.shearsSteel,
-                        RailcraftItems.shovelSteel,
-                        RailcraftItems.swordSteel,
+                        RailcraftItems.AXE_STEEL,
+                        RailcraftItems.HOE_STEEL,
+                        RailcraftItems.PICKAXE_STEEL,
+                        RailcraftItems.SHEARS_STEEL,
+                        RailcraftItems.SHOVEL_STEEL,
+                        RailcraftItems.SWORD_STEEL,
 
-                        RailcraftItems.armorHelmetSteel,
-                        RailcraftItems.armorChestplateSteel,
-                        RailcraftItems.armorLeggingsSteel,
-                        RailcraftItems.armorBootsSteel,
+                        RailcraftItems.ARMOR_HELMET_STEEL,
+                        RailcraftItems.ARMOR_CHESTPLATE_STEEL,
+                        RailcraftItems.ARMOR_LEGGINGS_STEEL,
+                        RailcraftItems.ARMOR_BOOTS_STEEL,
 
-                        RailcraftItems.magGlass,
-                        RailcraftItems.goggles,
-                        RailcraftItems.overalls,
-                        RailcraftItems.nugget,
-                        RailcraftItems.notepad
+                        RailcraftItems.MAG_GLASS,
+                        RailcraftItems.GOGGLES,
+                        RailcraftItems.OVERALLS,
+                        RailcraftItems.NUGGET,
+                        RailcraftItems.NOTEPAD
                 );
             }
 
@@ -252,25 +252,25 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
                     ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
-                    Object woodRailbed = RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
+                    Object woodRailbed = RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
                     CraftingPlugin.addRecipe(stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
-                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
                             '#', woodRailbed);
                     CraftingPlugin.addRecipe(stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED),
+                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
                     CraftingPlugin.addRecipe(stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
                             '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
@@ -278,11 +278,11 @@ public class ModuleCore extends RailcraftModulePayload {
                             "ItI",
                             "I#I",
                             "ItI",
-                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
                             '#', woodRailbed,
                             't', new ItemStack(Blocks.REDSTONE_TORCH));
 
-                    CraftingPlugin.addShapelessRecipe(RailcraftItems.rail.getStack(1, EnumRail.STANDARD),
+                    CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, EnumRail.STANDARD),
                             Blocks.RAIL,
                             Blocks.RAIL,
                             Blocks.RAIL,

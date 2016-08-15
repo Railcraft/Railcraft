@@ -60,7 +60,7 @@ public class BlockOre extends RailcraftBlockSubtyped {
 
     @Nullable
     public static BlockOre getBlock() {
-        return (BlockOre) RailcraftBlocks.ore.block();
+        return (BlockOre) RailcraftBlocks.ORE.block();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class BlockOre extends RailcraftBlockSubtyped {
             }
         }
 
-        RailcraftItems.dust.register();
+        RailcraftItems.DUST.register();
 
         registerOre("oreSulfur", EnumOre.SULFUR);
         registerOre("oreSaltpeter", EnumOre.SALTPETER);
@@ -166,12 +166,12 @@ public class BlockOre extends RailcraftBlockSubtyped {
         switch (getVariant(state)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);
-                drops.add(RailcraftItems.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
+                drops.add(RailcraftItems.DUST.getStack(qty, ItemDust.EnumDust.SULFUR));
                 return drops;
             }
             case SALTPETER: {
                 int qty = 1 + rand.nextInt(2) + rand.nextInt(fortune + 1);
-                drops.add(RailcraftItems.dust.getStack(qty, ItemDust.EnumDust.SALTPETER));
+                drops.add(RailcraftItems.DUST.getStack(qty, ItemDust.EnumDust.SALTPETER));
                 return drops;
             }
             case DARK_DIAMOND: {

@@ -214,7 +214,7 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null && InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.frame.block()))
+        if (heldItem != null && InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.FRAME.block()))
             if (setAddon(worldIn, pos, state, Addon.FRAME)) {
                 if (!playerIn.capabilities.isCreativeMode)
                     playerIn.setHeldItem(hand, InvTools.depleteItem(heldItem));
@@ -282,7 +282,7 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     public enum Addon implements IStringSerializable {
 
         NONE(1, 1, null, AABBFactory.start().box().grow(-0.25).build()),
-        FRAME(5, 10, RailcraftBlocks.frame, FULL_BLOCK_AABB),;
+        FRAME(5, 10, RailcraftBlocks.FRAME, FULL_BLOCK_AABB),;
         //        PYLON(null, FULL_BLOCK_AABB);
         public static final Addon[] VALUES = values();
         private final IRailcraftObjectContainer addonObject;

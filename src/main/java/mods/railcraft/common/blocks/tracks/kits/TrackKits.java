@@ -144,7 +144,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     @Override
     public void register() {
-        if (trackKit == null && RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
+        if (trackKit == null && RailcraftBlocks.TRACK.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
             trackKit = new TrackKit(getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance);
             try {
                 TrackRegistry.registerTrackKit(trackKit);
@@ -166,12 +166,12 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.trackOutfitted.isEnabled() && RailcraftItems.trackKit.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
     }
 
     @Override
     public boolean isLoaded() {
-        return trackKit != null && isEnabled() && RailcraftBlocks.trackOutfitted.isLoaded() && RailcraftItems.trackKit.isLoaded();
+        return trackKit != null && isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isLoaded() && RailcraftItems.TRACK_KIT.isLoaded();
     }
 
     public boolean isDepreciated() {
@@ -188,7 +188,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
     @Nullable
     public ItemStack getStack(int qty) {
         if (trackKit != null)
-            return RailcraftItems.trackKit.getStack(qty, getTrackKit());
+            return RailcraftItems.TRACK_KIT.getStack(qty, getTrackKit());
         return null;
     }
 
@@ -228,16 +228,16 @@ public enum TrackKits implements IRailcraftObjectContainer {
         if (getStack() == null)
             return null;
         ItemStack output = getStack(recipeOutput * 2);
-        Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.rail.getRecipeObject(EnumRail.WOOD);
-        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD);
-        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED);
-        Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.SPEED);
-        Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.REINFORCED);
-        Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.rail.getRecipeObject(EnumRail.ELECTRIC);
-        Object woodTie = RailcraftItems.tie.getRecipeObject(EnumTie.WOOD);
-        Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
-        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.railbed.getRecipeObject(EnumRailbed.STONE);
-        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
+        Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.RAIL.getRecipeObject(EnumRail.WOOD);
+        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD);
+        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.ADVANCED);
+        Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.SPEED);
+        Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.REINFORCED);
+        Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.RAIL.getRecipeObject(EnumRail.ELECTRIC);
+        Object woodTie = RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD);
+        Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
+        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.STONE);
+        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.RAIL.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
 
         Object crowbar = IToolCrowbar.ORE_TAG;
 
@@ -480,7 +480,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         "IPI",
                         "ItI",
                         'I', railStandard,
-                        'P', RailcraftItems.plate, Metal.STEEL,
+                        'P', RailcraftItems.PLATE, Metal.STEEL,
                         't', woodTie);
                 break;
             case BUFFER_STOP:
@@ -547,7 +547,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         "ILI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'L', RailcraftItems.signalLamp.getRecipeObject());
+                        'L', RailcraftItems.SIGNAL_LAMP.getRecipeObject());
                 break;
             case LIMITER:
                 CraftingPlugin.addRecipe(output,
@@ -566,7 +566,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         'I', railStandard,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        't', RailcraftItems.ticket);
+                        't', RailcraftItems.TICKET);
                 CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
@@ -574,7 +574,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         'I', railStandard,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        't', RailcraftItems.ticketGold);
+                        't', RailcraftItems.TICKET_GOLD);
                 break;
 //            case REINFORCED:
 //                CraftingPlugin.addRecipe(output,

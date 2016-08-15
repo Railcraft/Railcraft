@@ -103,7 +103,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.generic;
+        return RailcraftBlocks.GENERIC;
     }
 
     public float getHardness() {

@@ -34,12 +34,12 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(ChargeManager.getEventListener());
 
                 add(
-                        RailcraftItems.chargeMeter,
+                        RailcraftItems.CHARGE_METER,
 //                        RailcraftBlocks.track,
-                        RailcraftBlocks.chargeFeeder,
-                        RailcraftBlocks.chargeTrap,
-                        RailcraftBlocks.frame,
-                        RailcraftBlocks.wire
+                        RailcraftBlocks.CHARGE_FEEDER,
+                        RailcraftBlocks.CHARGE_TRAP,
+                        RailcraftBlocks.FRAME,
+                        RailcraftBlocks.WIRE
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_delta,
 //                        RailcraftBlocks.machine_epsilon
@@ -54,10 +54,10 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "BPB",
                             "P P",
                             "BPB",
-                            'P', RailcraftItems.plate.getRecipeObject(Metal.STEEL),
+                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
                             'B', "blockSteel");
 
-                    RailcraftItems.turbineRotor.register();
+                    RailcraftItems.TURBINE_ROTOR.register();
 
                     CraftingPlugin.addRecipe(new RotorRepairRecipe());
 
@@ -73,7 +73,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PCP",
                             "CDC",
                             "PCP",
-                            'P', RailcraftItems.plate.getRecipeObject(Metal.TIN),
+                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.TIN),
                             'D', "blockDiamond",
                             'C', "ingotCopper");
                 }
@@ -84,7 +84,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PGP",
                             "GRG",
                             "PGP",
-                            'P', RailcraftItems.plate.getRecipeObject(Metal.COPPER),
+                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.COPPER),
                             'G', "ingotGold",
                             'R', "blockRedstone");
             }

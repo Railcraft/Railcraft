@@ -146,7 +146,7 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
 
-        if (!RailcraftItems.goggles.isEnabled())
+        if (!RailcraftItems.GOGGLES.isEnabled())
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
 
         Game.log(Level.TRACE, "Init Start: Renderer");

@@ -24,7 +24,7 @@ public class ModuleTracksHighSpeedElectric extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.trackHighSpeedElectric
+                        RailcraftBlocks.TRACK_HIGH_SPEED_ELECTRIC
                 );
             }
         });

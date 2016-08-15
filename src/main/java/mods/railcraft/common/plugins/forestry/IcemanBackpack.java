@@ -46,9 +46,9 @@ public class IcemanBackpack extends BaseBackpack {
         add(Blocks.ICE);
         add(Blocks.PACKED_ICE);
         for (Materials mat : Materials.MAT_SET_FROZEN) {
-            add(RailcraftBlocks.wall.getStack(mat));
-            add(RailcraftBlocks.stair.getStack(mat));
-            add(RailcraftBlocks.slab.getStack(mat));
+            add(RailcraftBlocks.WALL.getStack(mat));
+            add(RailcraftBlocks.STAIR.getStack(mat));
+            add(RailcraftBlocks.SLAB.getStack(mat));
         }
         add(Items.SNOWBALL);
     }

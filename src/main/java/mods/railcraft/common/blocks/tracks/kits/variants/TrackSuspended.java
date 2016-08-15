@@ -45,7 +45,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackKitCustomP
         World world = theWorldAsserted();
         BlockPos pos = getTile().getPos();
         if (isSupported()) {
-            Block myBlock = RailcraftBlocks.track.block();
+            Block myBlock = RailcraftBlocks.TRACK.block();
             if (neighborBlock != myBlock) {
                 for (EnumFacing side : EnumFacing.HORIZONTALS) {
                     world.notifyBlockOfStateChange(pos.offset(side), myBlock);

@@ -13,8 +13,8 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -117,7 +117,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                 other.startRiding(cart);
         }
 
-        if (isLiving && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.trackElevator.block()))
+        if (isLiving && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
             return;
 
 //        System.out.println(cart.getClass().getSimpleName() + ": " + cart.entityId + " collided with " + other.getClass().getSimpleName() + ": " + other.entityId);
@@ -318,7 +318,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         testHighSpeedCollision(cart, other);
 
         if (EntityMinecart.getCollisionHandler() != this)
-            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.trackElevator.block()))
+            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
                 if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
                     other.moveEntity(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;

@@ -34,14 +34,14 @@ public class ModuleAutomation extends RailcraftModulePayload {
             public void construction() {
                 MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
-                        RailcraftBlocks.detector,
-                        RailcraftBlocks.generic,
+                        RailcraftBlocks.DETECTOR,
+                        RailcraftBlocks.GENERIC,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_gamma,
 
-                        RailcraftItems.boreHeadIron,
-                        RailcraftItems.boreHeadSteel,
-                        RailcraftItems.boreHeadDiamond
+                        RailcraftItems.BORE_HEAD_IRON,
+                        RailcraftItems.BORE_HEAD_STEEL,
+                        RailcraftItems.BORE_HEAD_DIAMOND
                 );
             }
 
@@ -62,7 +62,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "CSC",
                             "PCP",
                             'P', "plankWood",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(Metal.STEEL) : "blockIron",
+                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron",
                             'C', new ItemStack(Items.GOLDEN_CARROT));
 
                     MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
@@ -78,7 +78,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'D', new ItemStack(Blocks.DISPENSER),
                             'G', "paneGlass",
                             'E', "gemEmerald",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(Metal.STEEL) : "blockIron");
+                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron");
                 }
 
                 // Define Bore

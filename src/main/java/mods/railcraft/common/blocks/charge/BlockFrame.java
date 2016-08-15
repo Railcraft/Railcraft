@@ -54,8 +54,8 @@ public class BlockFrame extends RailcraftBlock implements IPostConnection {
                 "PPP",
                 "I I",
                 "III",
-                'P', RailcraftItems.plate, Metal.IRON,
-                'I', RailcraftItems.rebar);
+                'P', RailcraftItems.PLATE, Metal.IRON,
+                'I', RailcraftItems.REBAR);
     }
 
     @Override
@@ -93,9 +93,9 @@ public class BlockFrame extends RailcraftBlock implements IPostConnection {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (RailcraftBlocks.wire.isEqual(heldItem))
+        if (RailcraftBlocks.WIRE.isEqual(heldItem))
             //noinspection ConstantConditions
-            if (WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.wire.getDefaultState().withProperty(BlockWire.ADDON, BlockWire.Addon.FRAME), 2)) {
+            if (WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.WIRE.getDefaultState().withProperty(BlockWire.ADDON, BlockWire.Addon.FRAME), 2)) {
                 if (!playerIn.capabilities.isCreativeMode)
                     playerIn.setHeldItem(hand, InvTools.depleteItem(heldItem));
                 return true;

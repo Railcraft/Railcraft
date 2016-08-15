@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -129,7 +130,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.machine_gamma;
+        return RailcraftBlocks.MACHINE_GAMMA;
     }
 
     @Override

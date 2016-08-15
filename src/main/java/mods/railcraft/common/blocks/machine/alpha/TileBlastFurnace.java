@@ -157,12 +157,12 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O':
-                if (block != RailcraftBlocks.machine_alpha.block() || meta != getBlockMetadata())
+                if (block != RailcraftBlocks.MACHINE_ALPHA.block() || meta != getBlockMetadata())
                     return true;
                 break;
             case 'B':
             case 'W':
-                if (block == RailcraftBlocks.machine_alpha.block() && meta == getBlockMetadata())
+                if (block == RailcraftBlocks.MACHINE_ALPHA.block() && meta == getBlockMetadata())
                     return true;
                 break;
             case 'A':

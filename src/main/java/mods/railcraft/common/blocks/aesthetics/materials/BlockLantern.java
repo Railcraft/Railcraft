@@ -85,8 +85,8 @@ public class BlockLantern extends Block implements IMaterialBlock {
             ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
 
             Object slab;
-            if (RailcraftBlocks.slab.isEnabled())
-                slab = RailcraftBlocks.slab.getRecipeObject(mat);
+            if (RailcraftBlocks.SLAB.isEnabled())
+                slab = RailcraftBlocks.SLAB.getRecipeObject(mat);
             else
                 slab = mat.getCraftingEquivalent();
 //            if (mat == Materials.SANDSTONE)

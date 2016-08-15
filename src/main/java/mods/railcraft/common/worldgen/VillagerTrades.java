@@ -34,8 +34,8 @@ public class VillagerTrades {
         career.addTrade(1, new GenericTrade(offer(Items.COAL, 16, 24), offer(Items.EMERALD)));
         career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(Items.COAL, 24, 32)));
 
-        career.addTrade(1, new GenericTrade(offer(RailcraftItems.coke, 8, 12), offer(Items.EMERALD)));
-        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(RailcraftItems.coke, 12, 16)));
+        career.addTrade(1, new GenericTrade(offer(RailcraftItems.COKE, 8, 12), offer(Items.EMERALD)));
+        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(RailcraftItems.COKE, 12, 16)));
 
         career.addTrade(1, new GenericTrade(offer(Blocks.RAIL, 30, 34), offer(Items.EMERALD, 2, 3)));
 
@@ -54,15 +54,15 @@ public class VillagerTrades {
 
         career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getCartItem()), offer(Items.EMERALD, 32, 40)));
 
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.crowbarIron), offer(Items.EMERALD, 7, 9)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.crowbarSteel), offer(Items.EMERALD, 14, 18)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_IRON), offer(Items.EMERALD, 7, 9)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 14, 18)));
 
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.whistleTuner), offer(Items.EMERALD, 1, 2)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.magGlass), offer(Items.EMERALD, 1, 2)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.signalBlockSurveyor), offer(Items.EMERALD, 6, 8)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.signalTuner), offer(Items.EMERALD, 6, 8)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.goggles), offer(Items.EMERALD, 4, 8)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.overalls), offer(Items.EMERALD, 2, 4)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.WHISTLE_TUNER), offer(Items.EMERALD, 1, 2)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.MAG_GLASS), offer(Items.EMERALD, 1, 2)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.SIGNAL_BLOCK_SURVEYOR), offer(Items.EMERALD, 6, 8)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.SIGNAL_TUNER), offer(Items.EMERALD, 6, 8)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.GOGGLES), offer(Items.EMERALD, 4, 8)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.OVERALLS), offer(Items.EMERALD, 2, 4)));
     }
 
     //    private float baseChance;

@@ -53,7 +53,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     @Override
     public void initializeDefinintion() {
         MinecraftForge.EVENT_BUS.register(this);
-        LootPlugin.addLoot(RailcraftItems.magGlass, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.MAG_GLASS, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

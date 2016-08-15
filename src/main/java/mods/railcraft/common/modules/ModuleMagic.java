@@ -26,12 +26,12 @@ public class ModuleMagic extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.firestoneCracked,
-                        RailcraftItems.firestoneCut,
-                        RailcraftItems.firestoneRaw,
-                        RailcraftItems.firestoneRefined,
+                        RailcraftItems.FIRESTONE_CRACKED,
+                        RailcraftItems.FIRESTONE_CUT,
+                        RailcraftItems.FIRESTONE_RAW,
+                        RailcraftItems.FIRESTONE_REFINED,
 
-                        RailcraftBlocks.ritual
+                        RailcraftBlocks.RITUAL
 //                        RailcraftBlocks.ore
                 );
             }

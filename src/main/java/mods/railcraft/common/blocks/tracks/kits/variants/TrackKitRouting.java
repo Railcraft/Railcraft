@@ -121,7 +121,7 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
 
     @Override
     public boolean setTicket(String dest, String title, GameProfile owner) {
-        ItemStack ticket = RailcraftItems.ticket.getStack();
+        ItemStack ticket = RailcraftItems.TICKET.getStack();
         return ItemTicket.setTicketData(ticket, dest, title, owner);
     }
 

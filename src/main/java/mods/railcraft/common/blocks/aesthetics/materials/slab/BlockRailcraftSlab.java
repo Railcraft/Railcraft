@@ -108,14 +108,14 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
                     CraftingPlugin.addRecipe(getStack(3, mat),
                             " T ",
                             "SSS",
-                            'T', RailcraftItems.stoneCarver,
+                            'T', RailcraftItems.STONE_CARVER,
                             'S', Blocks.SNOW_LAYER);
                     break;
                 default:
                     CraftingPlugin.addRecipe(getStack(6, mat),
                             " T ",
                             "SSS",
-                            'T', RailcraftItems.stoneCarver,
+                            'T', RailcraftItems.STONE_CARVER,
                             'S', mat.getSourceItem());
 
                     CraftingPlugin.addRecipe(mat.getSourceItem(), "S", "S", 'S', getStack(1, mat));

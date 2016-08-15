@@ -47,7 +47,7 @@ public class ItemTicket extends ItemRailcraft {
         if (source == null)
             return null;
         if (source.getItem() instanceof ItemTicket) {
-            ItemStack ticket = RailcraftItems.ticket.getStack();
+            ItemStack ticket = RailcraftItems.TICKET.getStack();
             if(ticket == null)
                 return null;
             NBTTagCompound nbt = source.getTagCompound();

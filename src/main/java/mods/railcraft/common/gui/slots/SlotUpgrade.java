@@ -32,7 +32,7 @@ public class SlotUpgrade extends Slot {
         ItemStack storage = IC2Plugin.getItem("energyStorageUpgrade");
         ItemStack overclocker = IC2Plugin.getItem("overclockerUpgrade");
         ItemStack transformer = IC2Plugin.getItem("transformerUpgrade");
-        Item lapotron = RailcraftItems.lapotronUpgrade.item();
+        Item lapotron = RailcraftItems.LAPOTRON_UPGRADE.item();
 
         if (stack != null)
             if (storage != null && stack.isItemEqual(storage))

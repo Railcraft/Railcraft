@@ -78,6 +78,6 @@ public class ItemOveralls extends ItemArmor implements IRailcraftObject {
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.overalls, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.OVERALLS, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 }

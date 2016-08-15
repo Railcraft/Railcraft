@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.blocks.ore.BlockOre;
@@ -37,9 +38,9 @@ public class FirestoneTickHandler {
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean shouldSpawnFire(@Nullable ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
-        if (RailcraftItems.firestoneRaw.isEqual(stack)) return true;
-        if (RailcraftItems.firestoneCut.isEqual(stack)) return true;
-        if (RailcraftItems.firestoneCracked.isEqual(stack)) return true;
+        if (RailcraftItems.FIRESTONE_RAW.isEqual(stack)) return true;
+        if (RailcraftItems.FIRESTONE_CUT.isEqual(stack)) return true;
+        if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack)) return true;
         return InvTools.isStackEqualToBlock(stack, BlockOre.getBlock()) && stack.getItemDamage() == EnumOre.FIRESTONE.ordinal();
     }
 

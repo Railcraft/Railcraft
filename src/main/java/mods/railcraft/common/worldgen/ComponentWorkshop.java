@@ -236,7 +236,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     }
 
     private void placeTrack(TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
-        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.track.block();
+        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
         // TODO: place vanilla tracks?
         if (blockTrack == null)
             return;

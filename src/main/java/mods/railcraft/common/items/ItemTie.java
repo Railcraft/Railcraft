@@ -31,23 +31,23 @@ public class ItemTie extends ItemRailcraftSubtyped {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
         }
-        LootPlugin.addLoot(RailcraftItems.tie.getStack(1, EnumTie.WOOD), 4, 16, LootPlugin.Type.RAILWAY, "tie.wood");
-        LootPlugin.addLoot(RailcraftItems.tie.getStack(1, EnumTie.STONE), 4, 16, LootPlugin.Type.WORKSHOP, "tie.stone");
+        LootPlugin.addLoot(RailcraftItems.TIE.getStack(1, EnumTie.WOOD), 4, 16, LootPlugin.Type.RAILWAY, "tie.wood");
+        LootPlugin.addLoot(RailcraftItems.TIE.getStack(1, EnumTie.STONE), 4, 16, LootPlugin.Type.WORKSHOP, "tie.stone");
     }
 
     @Override
     public void defineRecipes() {
-        ItemStack tieStone = RailcraftItems.tie.getStack(1, EnumTie.STONE);
+        ItemStack tieStone = RailcraftItems.TIE.getStack(1, EnumTie.STONE);
         CraftingPlugin.addRecipe(tieStone,
                 " O ",
                 "###",
-                'O', RailcraftItems.rebar,
+                'O', RailcraftItems.REBAR,
                 '#', new ItemStack(Blocks.STONE_SLAB, 1, 0));
     }
 
     @Override
     public void finalizeDefinition() {
-        ItemStack tieWood = RailcraftItems.tie.getStack(1, EnumTie.WOOD);
+        ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
             CraftingPlugin.addRecipe(tieWood,
                     " O ",

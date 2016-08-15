@@ -21,9 +21,9 @@ public class ModuleSignals extends RailcraftModulePayload {
             public void construction() {
                 add(
 //                        RailcraftBlocks.signal,
-                        RailcraftItems.signalBlockSurveyor,
-                        RailcraftItems.signalTuner,
-                        RailcraftItems.signalLabel
+                        RailcraftItems.SIGNAL_BLOCK_SURVEYOR,
+                        RailcraftItems.SIGNAL_TUNER,
+                        RailcraftItems.SIGNAL_LABEL
                 );
             }
 

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.items.RailcraftItems;
@@ -24,12 +25,12 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
 
     @Nullable
     public static ItemStack getItemCharged() {
-        return RailcraftItems.firestoneCracked.getStack();
+        return RailcraftItems.FIRESTONE_CRACKED.getStack();
     }
 
     @Nullable
     public static ItemStack getItemEmpty() {
-        return RailcraftItems.firestoneCracked.getStack(CHARGES - 1);
+        return RailcraftItems.FIRESTONE_CRACKED.getStack(CHARGES - 1);
     }
 
     public ItemFirestoneCracked() {
@@ -41,7 +42,7 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
     public ItemStack getContainerItem(ItemStack stack) {
         double damageLevel = (double) stack.getItemDamage() / (double) stack.getMaxDamage();
         if (MiscTools.RANDOM.nextDouble() < damageLevel * 0.0001)
-            return RailcraftItems.firestoneRaw.getStack();
+            return RailcraftItems.FIRESTONE_RAW.getStack();
         ItemStack newStack = stack.copy();
         newStack.stackSize = 1;
         newStack = InvTools.damageItem(newStack, 1);

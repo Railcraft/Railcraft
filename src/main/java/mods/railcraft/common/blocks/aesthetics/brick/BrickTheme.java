@@ -35,7 +35,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.COBBLE;
  * Created by CovertJaguar on 3/12/2015.
  */
 public enum BrickTheme implements IRailcraftObjectContainer {
-    ABYSSAL(RailcraftBlocks.brickAbyssal, MapColor.BLACK) {
+    ABYSSAL(RailcraftBlocks.BRICK_ABYSSAL, MapColor.BLACK) {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
@@ -48,21 +48,21 @@ public enum BrickTheme implements IRailcraftObjectContainer {
             }
         }
     },
-    BLEACHEDBONE(RailcraftBlocks.brickBleachedBone, MapColor.ADOBE) {
+    BLEACHEDBONE(RailcraftBlocks.BRICK_BLEACHED_BONE, MapColor.ADOBE) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addShapelessRecipe(RailcraftItems.bleachedClay.getStack(), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15));
-            CraftingPlugin.addFurnaceRecipe(RailcraftItems.bleachedClay.getStack(), new ItemStack(block, 1, 2), 0.3F);
+            CraftingPlugin.addShapelessRecipe(RailcraftItems.BLEACHED_CLAY.getStack(), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15));
+            CraftingPlugin.addFurnaceRecipe(RailcraftItems.BLEACHED_CLAY.getStack(), new ItemStack(block, 1, 2), 0.3F);
         }
     },
-    BLOODSTAINED(RailcraftBlocks.brickBloodStained, MapColor.RED) {
+    BLOODSTAINED(RailcraftBlocks.BRICK_BLOOD_STAINED, MapColor.RED) {
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addShapelessRecipe(new ItemStack(block, 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.ROTTEN_FLESH));
             CraftingPlugin.addShapelessRecipe(new ItemStack(block, 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.BEEF));
         }
     },
-    FROSTBOUND(RailcraftBlocks.brickFrostBound, MapColor.BLUE) {
+    FROSTBOUND(RailcraftBlocks.BRICK_FROST_BOUND, MapColor.BLUE) {
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
@@ -73,7 +73,7 @@ public enum BrickTheme implements IRailcraftObjectContainer {
                     'L', "gemLapis");
         }
     },
-    INFERNAL(RailcraftBlocks.brickInfernal, MapColor.GRAY) {
+    INFERNAL(RailcraftBlocks.BRICK_INFERNAL, MapColor.GRAY) {
         @Override
         public void initRecipes(BlockBrick block) {
 //            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
@@ -84,7 +84,7 @@ public enum BrickTheme implements IRailcraftObjectContainer {
                     'M', new ItemStack(Blocks.SOUL_SAND));
         }
     },
-    QUARRIED(RailcraftBlocks.brickQuarried, MapColor.SNOW) {
+    QUARRIED(RailcraftBlocks.BRICK_QUARRIED, MapColor.SNOW) {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_QUARRIED.isEnabled()) {
@@ -97,7 +97,7 @@ public enum BrickTheme implements IRailcraftObjectContainer {
             }
         }
     },
-    SANDY(RailcraftBlocks.brickSandy, MapColor.SAND) {
+    SANDY(RailcraftBlocks.BRICK_SANDY, MapColor.SAND) {
         @Override
         public void initRecipes(BlockBrick block) {
 //            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
@@ -108,7 +108,7 @@ public enum BrickTheme implements IRailcraftObjectContainer {
                     'M', new ItemStack(Blocks.SAND));
         }
     },
-    NETHER(RailcraftBlocks.brickNether, MapColor.NETHERRACK) {
+    NETHER(RailcraftBlocks.BRICK_NETHER, MapColor.NETHERRACK) {
         @Override
         public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
             if (variant == BrickVariant.BRICK)

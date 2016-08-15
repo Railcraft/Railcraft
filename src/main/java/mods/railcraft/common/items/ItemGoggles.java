@@ -90,7 +90,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
 //        if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
 //            MinecraftForge.EVENT_BUS.register(new TrailTicker());
 
-        LootPlugin.addLoot(RailcraftItems.goggles, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.GOGGLES, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
                 "GCG",
                 "I I",
                 "LLL",
-                'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                 'I', "ingotSteel",
                 'L', Items.LEATHER,
                 'G', "paneGlassColorless");

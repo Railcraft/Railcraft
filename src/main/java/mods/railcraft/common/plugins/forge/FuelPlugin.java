@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -42,7 +42,7 @@ public class FuelPlugin {
     private static class FuelHandler implements IFuelHandler {
 
         private static final int COKE_HEAT = 3200;
-        private final ItemStack coke = RailcraftItems.coke.getStack();
+        private final ItemStack coke = RailcraftItems.COKE.getStack();
         private final ItemStack cokeBlock = EnumGeneric.BLOCK_COKE.getStack();
 
         private FuelHandler() {

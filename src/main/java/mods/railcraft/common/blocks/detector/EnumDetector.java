@@ -101,12 +101,12 @@ public enum EnumDetector implements IVariantEnumBlock {
 
     @Nullable
     public ItemStack getItem(int qty) {
-        return RailcraftBlocks.detector.getStack(qty, this);
+        return RailcraftBlocks.DETECTOR.getStack(qty, this);
     }
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.detector;
+        return RailcraftBlocks.DETECTOR;
     }
 
     @Nullable

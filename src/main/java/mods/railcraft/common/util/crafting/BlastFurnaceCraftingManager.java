@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
@@ -44,11 +44,11 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
             };
             fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-            fuel.add(RailcraftItems.coke.getStack());
+            fuel.add(RailcraftItems.COKE.getStack());
             fuel.add(EnumGeneric.BLOCK_COKE.getStack());
             fuel.add(new ItemStack(Items.COAL, 1, 1));
-            fuel.add(RailcraftItems.firestoneRefined.getWildcard());
-            fuel.add(RailcraftItems.firestoneCracked.getWildcard());
+            fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());
+            fuel.add(RailcraftItems.FIRESTONE_CRACKED.getWildcard());
             fuels = Collections.unmodifiableList(fuel);
         }
         return fuels;

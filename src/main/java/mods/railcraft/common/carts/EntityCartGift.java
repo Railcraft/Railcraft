@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
@@ -49,8 +50,8 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.FLOWER_POT, 25);
         gifts.add(Items.COMPASS, 25);
         gifts.add(Items.CLOCK, 25);
-        gifts.add(RailcraftItems.crowbarIron, 20);
-        gifts.add(RailcraftItems.crowbarSteel, 10);
+        gifts.add(RailcraftItems.CROWBAR_IRON, 20);
+        gifts.add(RailcraftItems.CROWBAR_STEEL, 10);
 
         gifts.add(Items.EXPERIENCE_BOTTLE, 32, 5);
         gifts.add(Items.EXPERIENCE_BOTTLE, 16, 10);
@@ -112,12 +113,12 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.IRON_SWORD, toolChance);
         gifts.add(Items.IRON_HOE, toolChance);
 
-        gifts.add(RailcraftItems.axeSteel, toolChance);
-        gifts.add(RailcraftItems.pickaxeSteel, toolChance);
-        gifts.add(RailcraftItems.swordSteel, toolChance);
-        gifts.add(RailcraftItems.shovelSteel, toolChance);
-        gifts.add(RailcraftItems.hoeSteel, toolChance);
-        gifts.add(RailcraftItems.shearsSteel, toolChance);
+        gifts.add(RailcraftItems.AXE_STEEL, toolChance);
+        gifts.add(RailcraftItems.PICKAXE_STEEL, toolChance);
+        gifts.add(RailcraftItems.SWORD_STEEL, toolChance);
+        gifts.add(RailcraftItems.SHOVEL_STEEL, toolChance);
+        gifts.add(RailcraftItems.HOE_STEEL, toolChance);
+        gifts.add(RailcraftItems.SHEARS_STEEL, toolChance);
 
         int armorChance = 5;
 
@@ -141,10 +142,10 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.LEATHER_LEGGINGS, armorChance);
         gifts.add(Items.LEATHER_BOOTS, armorChance);
 
-        gifts.add(RailcraftItems.armorHelmetSteel, armorChance);
-        gifts.add(RailcraftItems.armorChestplateSteel, armorChance);
-        gifts.add(RailcraftItems.armorLeggingsSteel, armorChance);
-        gifts.add(RailcraftItems.armorBootsSteel, armorChance);
+        gifts.add(RailcraftItems.ARMOR_HELMET_STEEL, armorChance);
+        gifts.add(RailcraftItems.ARMOR_CHESTPLATE_STEEL, armorChance);
+        gifts.add(RailcraftItems.ARMOR_LEGGINGS_STEEL, armorChance);
+        gifts.add(RailcraftItems.ARMOR_BOOTS_STEEL, armorChance);
     }
 
     private EntityCartGift(World world) {

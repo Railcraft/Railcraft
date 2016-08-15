@@ -33,13 +33,13 @@ public class ItemRailbed extends ItemRailcraftSubtyped {
 
     @Override
     public void defineRecipes() {
-        RailcraftItems item = RailcraftItems.railbed;
+        RailcraftItems item = RailcraftItems.RAILBED;
 
-        Object tieWood = RailcraftItems.tie.getRecipeObject(EnumTie.WOOD);
+        Object tieWood = RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.WOOD),
                 tieWood, tieWood, tieWood, tieWood);
 
-        Object tieStone = RailcraftItems.tie.getRecipeObject(EnumTie.STONE);
+        Object tieStone = RailcraftItems.TIE.getRecipeObject(EnumTie.STONE);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.STONE),
                 tieStone, tieStone, tieStone, tieStone);
     }

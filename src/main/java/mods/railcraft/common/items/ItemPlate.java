@@ -29,7 +29,7 @@ public class ItemPlate extends ItemMetal {
     @Override
     public void initializeDefinintion() {
         for (Metal m : getMetalBiMap().values()) {
-            LootPlugin.addLoot(RailcraftItems.plate, m, 6, 18, LootPlugin.Type.WORKSHOP);
+            LootPlugin.addLoot(RailcraftItems.PLATE, m, 6, 18, LootPlugin.Type.WORKSHOP);
         }
     }
 
@@ -40,7 +40,7 @@ public class ItemPlate extends ItemMetal {
 
     @Override
     public void defineRecipes() {
-        RailcraftItems plate = RailcraftItems.plate;
+        RailcraftItems plate = RailcraftItems.PLATE;
 
         // Iron Plate
         IRecipe recipe = new ShapedOreRecipe(plate.getStack(4, Metal.IRON),

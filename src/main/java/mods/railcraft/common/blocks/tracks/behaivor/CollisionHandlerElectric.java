@@ -56,7 +56,7 @@ public class CollisionHandlerElectric extends CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (pants != null && RailcraftItems.overalls.isInstance(pants)
+                if (pants != null && RailcraftItems.OVERALLS.isInstance(pants)
                         && !((EntityPlayer) entity).capabilities.isCreativeMode
                         && MiscTools.RANDOM.nextInt(150) == 0) {
                     player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));

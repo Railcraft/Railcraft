@@ -21,7 +21,7 @@ public class ModuleTracksWood extends RailcraftModulePayload {
             public void construction() {
                 add(
 //                        RailcraftBlocks.track,
-                        RailcraftBlocks.trackStrapIron
+                        RailcraftBlocks.TRACK_STRAP_IRON
                 );
             }
 

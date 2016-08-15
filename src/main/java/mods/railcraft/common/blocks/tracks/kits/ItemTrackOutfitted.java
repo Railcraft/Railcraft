@@ -66,7 +66,7 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 
     @Override
     public BlockTrackOutfitted getPlacedBlock() {
-        return (BlockTrackOutfitted) RailcraftBlocks.track.block();
+        return (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
     }
 
     @Override
