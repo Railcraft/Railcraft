@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 import mods.railcraft.api.tracks.ITrackKitCustomPlaced;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -26,12 +25,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class TrackSuspended extends TrackUnsupported implements ITrackKitCustomPlaced {
-
-    @Override
-    public TrackKits getTrackKitContainer() {
-        return TrackKits.SUSPENDED;
-    }
+public abstract class TrackSuspended extends TrackUnsupported implements ITrackKitCustomPlaced {
 
     @Override
     public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {

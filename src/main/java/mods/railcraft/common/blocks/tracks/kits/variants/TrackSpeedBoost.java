@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.tracks.ITrackKitPowered;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.state.IBlockState;
@@ -21,17 +20,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackSpeedBoost extends TrackKitBooster implements ITrackKitPowered {
+public abstract class TrackSpeedBoost extends TrackKitBooster implements ITrackKitPowered {
 
     private static final double BOOST_AMOUNT = 0.06;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
     private boolean powered;
-
-    @Override
-    public TrackKits getTrackKitContainer() {
-        return TrackKits.SPEED_BOOST;
-    }
 
     @Override
     public IBlockState getActualState(IBlockState state) {

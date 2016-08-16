@@ -25,14 +25,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackKitDetectorDirection extends TrackKitRailcraft implements ITrackKitReversible, ITrackKitEmitter {
+public class TrackKitDetectorTravel extends TrackKitRailcraft implements ITrackKitReversible, ITrackKitEmitter {
     private static final int POWER_DELAY = 10;
     private boolean reversed;
     private byte delay;
 
     @Override
     public TrackKits getTrackKitContainer() {
-        return TrackKits.DETECTOR_DIRECTION;
+        return TrackKits.DETECTOR_TRAVEL;
     }
 
     @Override

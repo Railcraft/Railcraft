@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
     @Nonnull
-    public ITrackKitInstance track = new TrackKitDefault(false);
+    public ITrackKitInstance track = new TrackKitMissing(false);
     private ITrackType trackType = TrackTypes.IRON;
 
     public TileTrackOutfitted() {
@@ -65,7 +65,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
             TrackKit spec = TrackRegistry.getTrackKit(data.getString(TrackKit.NBT_TAG));
             track = spec.createInstanceFromSpec();
         } else
-            track = TrackRegistry.getDefaultTrackKit().createInstanceFromSpec();
+            track = TrackRegistry.getMissingTrackKit().createInstanceFromSpec();
 
         track.setTile(this);
         track.readFromNBT(data);

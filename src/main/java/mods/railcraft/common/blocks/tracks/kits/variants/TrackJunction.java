@@ -9,17 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 
-public class TrackJunction extends TrackKitRailcraft {
+public abstract class TrackJunction extends TrackKitRailcraft {
 
-    @Override
-    public TrackKits getTrackKitContainer() {
-        return TrackKits.JUNCTION;
-    }
     @Override
     public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
         if (cart == null) {

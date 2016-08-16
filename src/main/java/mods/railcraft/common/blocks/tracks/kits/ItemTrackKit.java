@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks.kits;
 
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.client.render.tools.ModelManager;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +36,13 @@ public class ItemTrackKit extends ItemRailcraft {
     @Override
     public void initializeDefinintion() {
         TrackKit.itemKit = this;
+        setCreativeTab(CreativeTabs.TRANSPORTATION);
+    }
+
+    @Override
+    @Nullable
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return TrackKit.class;
     }
 
     public TrackKit getTrackKit(ItemStack stack) {
@@ -51,6 +60,16 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
+    @Nullable
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        if (variant != null) {
+            checkVariant(variant);
+            return ((TrackKit) variant).getTrackKitItem(qty);
+        }
+        return TrackRegistry.getMissingTrackKit().getTrackKitItem();
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName() + "." + getTrackKit(stack).getResourcePathSuffix();
     }
@@ -65,8 +84,8 @@ public class ItemTrackKit extends ItemRailcraft {
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
         Map<String, TrackKit> trackKits = TrackRegistry.getTrackKits();
-        for (TrackKit trackKit : trackKits.values()) {
-            ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getResourcePathSuffix());
-        }
+        trackKits.values().stream().filter(TrackKit::isVisible).forEach(trackKit -> {
+            ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath());
+        });
     }
 }

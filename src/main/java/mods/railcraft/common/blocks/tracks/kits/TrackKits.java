@@ -39,32 +39,32 @@ import java.util.function.Function;
 
 public enum TrackKits implements IRailcraftObjectContainer {
 
-    ONEWAY(ModuleTracks.class, 4, 1, "oneway", 8, TrackKitOneWay.class),
+    ACTIVATOR(ModuleTracks.class, 2, 1, "activator", 8, TrackKitBooster.class),
+    BOOSTER(ModuleTracksWood.class, 2, 1, "booster", 8, TrackKitBooster.class),
+    BUFFER_STOP(ModuleTracks.class, 2, 0, "buffer", 8, TrackBufferStop.class),
     CONTROL(ModuleTracks.class, 2, 0, "control", 16, TrackControl.class),
-    LAUNCHER(ModuleExtras.class, 2, 1, "launcher", 1, TrackKitLauncher.class),
-    PRIMING(ModuleExtras.class, 2, 1, "priming", 8, TrackKitPriming.class),
-    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
-    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
-    DISEMBARK(ModuleTracks.class, 4, 1, "disembarking", 8, TrackKitDisembark.class),
-    SUSPENDED(ModuleExtras.class, 1, 0, "suspended", 8, TrackSuspended.class),
-    GATED_ONEWAY(ModuleTracks.class, 2, 0, "gated.oneway", 4, TrackKitGatedOneWay.class),
-    GATED(ModuleTracks.class, 1, 0, "gated", 4, TrackKitGated.class),
-    BOOSTER(ModuleTracksWood.class, 2, 1, "slow.boost", 8, TrackKitBooster.class),
-    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
-    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, 1, "speed.transition", 8, TrackSpeedTransition.class),
     COUPLER(ModuleTracks.class, 6, 1, "coupler", 8, TrackKitCoupler.class),
-    DECOUPLER(ModuleTracks.class, 0, 0, "decoupler", 8, TrackKitCoupler.class),
-    BUFFER_STOP(ModuleTracks.class, 2, 0, "buffer.stop", 8, TrackBufferStop.class),
-    DISPOSAL(ModuleTracks.class, 2, 0, "disposal", 8, TrackDisposal.class),
-    DETECTOR_DIRECTION(ModuleTracks.class, 4, 0, "detector.direction", 8, TrackKitDetectorDirection.class),
+    DETECTOR(ModuleTracks.class, 4, 0, "detector", 8, TrackKitDetectorTravel.class),
+    DETECTOR_TRAVEL(ModuleTracks.class, 4, 0, "detector_travel", 8, TrackKitDetectorTravel.class),
+    DISEMBARK(ModuleTracks.class, 4, 1, "disembarking", 8, TrackKitDisembark.class),
+    DUMPING(ModuleTracks.class, 2, 0, "dumping", 8, TrackKitDumping.class),
     EMBARKING(ModuleTracks.class, 2, 1, "embarking", 8, TrackKitEmbarking.class),
-    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackKitWye.class),
-    WHISTLE(ModuleLocomotives.class, 2, 1, "whistle", 8, TrackKitWhistle.class),
-    LOCOMOTIVE(ModuleLocomotives.class, 6, 3, "locomotive", 8, TrackKitLocomotive.class),
+    GATED(ModuleTracks.class, 1, 0, "gated", 4, TrackKitGated.class),
+    GATED_ONE_WAY(ModuleTracks.class, 2, 0, "gated_one_way", 4, TrackKitGatedOneWay.class),
+    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, 1, "transition", 8, TrackSpeedTransition.class),
+    LAUNCHER(ModuleExtras.class, 2, 1, "launcher", 1, TrackKitLauncher.class),
     LIMITER(ModuleLocomotives.class, 6, 5, "limiter", 8, TrackKitLimiter.class),
-    ROUTING(ModuleRouting.class, 2, 1, "routing", 8, TrackKitRouting.class),
     LOCKING(ModuleTracks.class, 16, 1, "locking", 8, TrackKitLocking.class),
-    FORCE(ModuleElectricity.class, 1, 0, "force", 1, TrackForce.class);
+    LOCOMOTIVE(ModuleLocomotives.class, 6, 3, "locomotive", 8, TrackKitLocomotive.class),
+    ONE_WAY(ModuleTracks.class, 4, 1, "one_way", 8, TrackKitOneWay.class),
+    PRIMING(ModuleExtras.class, 2, 1, "priming", 8, TrackKitPriming.class),
+    ROUTING(ModuleRouting.class, 2, 1, "routing", 8, TrackKitRouting.class),
+    WHISTLE(ModuleLocomotives.class, 2, 1, "whistle", 8, TrackKitWhistle.class),
+//    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
+//    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
+//    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
+//    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackKitWye.class),
+    ;
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
     private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);
@@ -74,11 +74,11 @@ public enum TrackKits implements IRailcraftObjectContainer {
     };
 
     static {
-        TRACK_KITS.add(TrackRegistry.getDefaultTrackKit());
+        TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
 
-        creativeList.add(SWITCH);
-        creativeList.add(WYE);
-        creativeList.add(JUNCTION);
+//        creativeList.add(SWITCH);
+//        creativeList.add(WYE);
+//        creativeList.add(JUNCTION);
         creativeList.add(CONTROL);
         creativeList.add(LOCKING);
         creativeList.add(DISEMBARK);
@@ -89,25 +89,15 @@ public enum TrackKits implements IRailcraftObjectContainer {
         creativeList.add(LIMITER);
         creativeList.add(ROUTING);
         creativeList.add(BUFFER_STOP);
-        creativeList.add(ONEWAY);
-        creativeList.add(DETECTOR_DIRECTION);
-        creativeList.add(GATED_ONEWAY);
+        creativeList.add(ONE_WAY);
+        creativeList.add(DETECTOR_TRAVEL);
+        creativeList.add(GATED_ONE_WAY);
         creativeList.add(GATED);
-        creativeList.add(SUSPENDED);
-        creativeList.add(DISPOSAL);
+        creativeList.add(DUMPING);
         creativeList.add(BOOSTER);
-        creativeList.add(SPEED_BOOST);
         creativeList.add(HIGH_SPEED_TRANSITION);
         creativeList.add(PRIMING);
         creativeList.add(LAUNCHER);
-
-        DECOUPLER.depreciated = true;
-//        LOCKDOWN.depreciated = true;
-//        LOCKDOWN_TRAIN.depreciated = true;
-//        BOARDING.depreciated = true;
-//        BOARDING_TRAIN.depreciated = true;
-//        HOLDING.depreciated = true;
-//        HOLDING_TRAIN.depreciated = true;
     }
 
     public final int recipeOutput;
@@ -144,12 +134,13 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     @Override
     public void register() {
-        if (trackKit == null && RailcraftBlocks.TRACK.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
+        //TODO: Add way to disable track kits
+        if (trackKit == null) {
             trackKit = new TrackKit(getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance);
             try {
                 TrackRegistry.registerTrackKit(trackKit);
                 TRACK_KITS.add(trackKit);
-                registerRecipe();
+//                registerRecipe();
             } catch (Error error) {
                 Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
             }
@@ -252,7 +243,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         'r', "dustRedstone",
                         'b', Blocks.STONE_PRESSURE_PLATE);
                 break;
-            case ONEWAY:
+            case ONE_WAY:
                 CraftingPlugin.addRecipe(output,
                         "IbI",
                         "IsI",
@@ -280,15 +271,15 @@ public enum TrackKits implements IRailcraftObjectContainer {
 //                        'I', railSpeed,
 //                        's', stoneRailbed);
 //                break;
-            case SPEED_BOOST:
-                CraftingPlugin.addRecipe(output,
-                        "IrI",
-                        "IsI",
-                        "IrI",
-                        'I', railSpeed,
-                        's', stoneRailbed,
-                        'r', "dustRedstone");
-                break;
+//            case SPEED_BOOST:
+//                CraftingPlugin.addRecipe(output,
+//                        "IrI",
+//                        "IsI",
+//                        "IrI",
+//                        'I', railSpeed,
+//                        's', stoneRailbed,
+//                        'r', "dustRedstone");
+//                break;
             case HIGH_SPEED_TRANSITION:
                 CraftingPlugin.addRecipe(output,
                         "IrI",
@@ -333,14 +324,14 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         'p', Blocks.STONE_PRESSURE_PLATE,
                         'f', Items.FLINT_AND_STEEL);
                 break;
-            case JUNCTION:
-                CraftingPlugin.addRecipe(output,
-                        "III",
-                        "I#I",
-                        "III",
-                        'I', railStandard,
-                        '#', woodRailbed);
-                break;
+//            case JUNCTION:
+//                CraftingPlugin.addRecipe(output,
+//                        "III",
+//                        "I#I",
+//                        "III",
+//                        'I', railStandard,
+//                        '#', woodRailbed);
+//                break;
 //            case SLOW:
 //                CraftingPlugin.addRecipe(output,
 //                        "I I",
@@ -407,22 +398,22 @@ public enum TrackKits implements IRailcraftObjectContainer {
 //                        'I', railElectric,
 //                        '#', stoneRailbed);
 //                break;
-            case SWITCH:
-                CraftingPlugin.addRecipe(output,
-                        "I#I",
-                        "III",
-                        "III",
-                        'I', railStandard,
-                        '#', woodRailbed);
-                break;
-            case WYE:
-                CraftingPlugin.addRecipe(output,
-                        "III",
-                        "II#",
-                        "III",
-                        'I', railStandard,
-                        '#', woodRailbed);
-                break;
+//            case SWITCH:
+//                CraftingPlugin.addRecipe(output,
+//                        "I#I",
+//                        "III",
+//                        "III",
+//                        'I', railStandard,
+//                        '#', woodRailbed);
+//                break;
+//            case WYE:
+//                CraftingPlugin.addRecipe(output,
+//                        "III",
+//                        "II#",
+//                        "III",
+//                        'I', railStandard,
+//                        '#', woodRailbed);
+//                break;
 //            case SLOW_WYE:
 //                CraftingPlugin.addRecipe(output,
 //                        "III",
@@ -466,15 +457,15 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         '#', woodRailbed,
                         'p', Items.ENDER_PEARL);
                 break;
-            case SUSPENDED:
-                CraftingPlugin.addRecipe(output,
-                        "ItI",
-                        "ItI",
-                        "ItI",
-                        'I', railStandard,
-                        't', woodTie);
-                break;
-            case DISPOSAL:
+//            case SUSPENDED:
+//                CraftingPlugin.addRecipe(output,
+//                        "ItI",
+//                        "ItI",
+//                        "ItI",
+//                        'I', railStandard,
+//                        't', woodTie);
+//                break;
+            case DUMPING:
                 CraftingPlugin.addRecipe(output,
                         "ItI",
                         "IPI",
@@ -492,7 +483,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         '#', woodRailbed,
                         'b', "blockIron");
                 break;
-            case DETECTOR_DIRECTION:
+            case DETECTOR_TRAVEL:
                 CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
@@ -511,7 +502,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
                         '#', woodRailbed,
                         'g', Blocks.OAK_FENCE_GATE);
                 break;
-            case GATED_ONEWAY:
+            case GATED_ONE_WAY:
                 CraftingPlugin.addRecipe(output,
                         "IgI",
                         "G#G",

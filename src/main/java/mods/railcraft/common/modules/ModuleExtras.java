@@ -24,6 +24,8 @@ public class ModuleExtras extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        TrackKits.PRIMING,
+                        TrackKits.LAUNCHER
 //                        RailcraftBlocks.track
 //                        RailcraftBlocks.trackElevator
                 );
@@ -31,9 +33,6 @@ public class ModuleExtras extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                TrackKits.PRIMING.register();
-                TrackKits.LAUNCHER.register();
-                TrackKits.SUSPENDED.register();
 
                 // Define Wood TNT Cart
                 RailcraftCarts cart = RailcraftCarts.TNT_WOOD;

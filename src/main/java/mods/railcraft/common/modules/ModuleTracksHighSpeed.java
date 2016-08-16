@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 
 @RailcraftModule("railcraft:tracks|high_speed")
 public class ModuleTracksHighSpeed extends RailcraftModulePayload {
@@ -20,7 +21,8 @@ public class ModuleTracksHighSpeed extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_HIGH_SPEED
+                        RailcraftBlocks.TRACK_HIGH_SPEED,
+                        TrackKits.HIGH_SPEED_TRANSITION
                 );
             }
         });

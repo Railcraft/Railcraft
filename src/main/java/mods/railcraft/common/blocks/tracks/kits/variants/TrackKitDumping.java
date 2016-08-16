@@ -24,14 +24,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackDisposal extends TrackSuspended implements ITrackKitPowered {
+public class TrackKitDumping extends TrackSuspended implements ITrackKitPowered {
 
     private static final int TIME_TILL_NEXT_MOUNT = 40;
     private boolean powered;
 
     @Override
     public TrackKits getTrackKitContainer() {
-        return TrackKits.DISPOSAL;
+        return TrackKits.DUMPING;
     }
 
     @Override

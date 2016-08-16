@@ -322,6 +322,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Finish initializing ItemRegistry
+                //TODO: this is obsolete?
                 for (EnumWayObject type : EnumWayObject.values()) {
                     if (type.isEnabled())
                         RailcraftRegistry.register(type.getItem());

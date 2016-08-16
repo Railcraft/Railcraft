@@ -20,13 +20,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 /**
  * Created by CovertJaguar on 8/2/2016 for Railcraft.
@@ -43,11 +39,6 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftTrack {
         setSoundType(SoundType.METAL);
         setCreativeTab(CreativeTabs.TRANSPORTATION);
         this.trackType = trackType;
-    }
-
-    @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        super.getSubBlocks(itemIn, tab, list);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class VillagerTrades {
         career.addTrade(2, new GenericTrade(offer(Blocks.DETECTOR_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
 
         for (TrackKits track : TrackKits.VALUES) {
-            if (track.isEnabled() && track != TrackKits.FORCE)
+            if (track.isEnabled())
                 career.addTrade(2, new GenericTrade(offer(track.getStack(), track.recipeOutput - 2, track.recipeOutput + 2), offer(Items.EMERALD, 2, 3)));
         }
 

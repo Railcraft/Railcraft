@@ -46,11 +46,12 @@ import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.ItemOre;
+import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackElectric;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
-import mods.railcraft.common.blocks.tracks.flex.ItemTrackFlex;
+import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
@@ -106,15 +107,17 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WAY_OBJECT("wayobject", BlockWayObjectRailcraft::new, ItemWayObject::new, EnumWayObject.class),
     SLAB("slab", BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs::new, ItemMaterial::new),
+    @Deprecated
     TRACK("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_ABANDONED("track.abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED), ItemTrackFlex::new),
-    TRACK_ELECTRIC("track.electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC), ItemTrackFlex::new),
-    TRACK_HIGH_SPEED_ELECTRIC("track.high.speed.electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC), ItemTrackFlex::new),
-    TRACK_HIGH_SPEED("track.high.speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED), ItemTrackFlex::new),
-    TRACK_REINFORCED("track.reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED), ItemTrackFlex::new),
-    TRACK_STRAP_IRON("track.strap.iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON), ItemTrackFlex::new),
+    TRACK_ABANDONED("track.abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED), ItemTrack::new),
+    TRACK_ELECTRIC("track.electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC), ItemTrack::new),
     TRACK_ELEVATOR("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
+    TRACK_FORCE("track.force", BlockTrackForce::new, ItemTrack::new),
+    TRACK_HIGH_SPEED("track.high.speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED), ItemTrack::new),
+    TRACK_HIGH_SPEED_ELECTRIC("track.high.speed.electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC), ItemTrack::new),
     TRACK_OUTFITTED("track.outfitted", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
+    TRACK_REINFORCED("track.reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED), ItemTrack::new),
+    TRACK_STRAP_IRON("track.strap.iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON), ItemTrack::new),
     WALL("wall", BlockRailcraftWall::new, ItemMaterial::new),
     WIRE("wire", BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);

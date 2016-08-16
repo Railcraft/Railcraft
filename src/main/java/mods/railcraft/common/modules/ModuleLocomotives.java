@@ -39,16 +39,16 @@ public class ModuleLocomotives extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.WHISTLE_TUNER
+                        RailcraftItems.WHISTLE_TUNER,
+                        TrackKits.WHISTLE,
+                        TrackKits.LOCOMOTIVE,
+                        TrackKits.LIMITER
 //                        RailcraftBlocks.track
                 );
             }
 
             @Override
             public void preInit() {
-                TrackKits.WHISTLE.register();
-                TrackKits.LOCOMOTIVE.register();
-                TrackKits.LIMITER.register();
 
                 RailcraftCarts cart = RailcraftCarts.LOCO_STEAM_SOLID;
                 if (cart.setup()) {

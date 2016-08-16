@@ -87,10 +87,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     TICKET(ItemTicket::new, "routing.ticket", Items.PAPER),
     TICKET_GOLD(ItemTicketGold::new, "routing.ticket.gold", Items.GOLD_NUGGET),
     TIE(ItemTie::new, "part.tie"),
-    TRACK_KIT(ItemTrackKit::new, "track.kit"),
-    TURBINE_BLADE(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel", EnumMachineAlpha.TURBINE::isAvailable),
-    TURBINE_DISK(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel", EnumMachineAlpha.TURBINE::isAvailable),
-    TURBINE_ROTOR(ItemTurbineRotor::new, "part.turbine.rotor", null, EnumMachineAlpha.TURBINE::isAvailable),
+    TRACK_KIT(ItemTrackKit::new, "track.kit", null, () -> true/*FIXME:RailcraftBlocks.TRACK_OUTFITTED::isEnabled*/),
+    TURBINE_BLADE(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel", EnumMachineAlpha.TURBINE::isEnabled),
+    TURBINE_DISK(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel", EnumMachineAlpha.TURBINE::isEnabled),
+    TURBINE_ROTOR(ItemTurbineRotor::new, "part.turbine.rotor", null, EnumMachineAlpha.TURBINE::isEnabled),
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool.whistle.tuner");
     public static final RailcraftItems[] VALUES = values();
     private final Supplier<Item> itemSupplier;

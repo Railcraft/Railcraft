@@ -34,7 +34,8 @@ public class ModuleRouting extends RailcraftModulePayload {
                         RailcraftItems.ROUTING_TABLE,
                         RailcraftItems.TICKET,
                         RailcraftItems.TICKET_GOLD,
-                        RailcraftBlocks.DETECTOR
+                        RailcraftBlocks.DETECTOR,
+                        TrackKits.ROUTING
 //                        RailcraftBlocks.track
 //                        RailcraftBlocks.signal
                 );
@@ -42,7 +43,6 @@ public class ModuleRouting extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                TrackKits.ROUTING.register();
 
                 if (RailcraftItems.ROUTING_TABLE.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());

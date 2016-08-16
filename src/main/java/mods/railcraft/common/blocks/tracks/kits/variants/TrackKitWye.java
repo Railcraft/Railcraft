@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
@@ -24,11 +23,7 @@ import java.util.UUID;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
-public class TrackKitWye extends TrackSwitchBase {
-    @Override
-    public TrackKits getTrackKitContainer() {
-        return TrackKits.WYE;
-    }
+public abstract class TrackKitWye extends TrackSwitchBase {
 
     @Override
     public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {

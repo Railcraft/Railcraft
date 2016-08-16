@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitReversible;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.properties.PropertyBool;
@@ -28,14 +27,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public class TrackSwitch extends TrackSwitchBase implements ITrackKitReversible {
+public abstract class TrackSwitch extends TrackSwitchBase implements ITrackKitReversible {
     private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
     private boolean reversed;
-
-    @Override
-    public TrackKits getTrackKitContainer() {
-        return TrackKits.SWITCH;
-    }
 
     @Override
     public IBlockState getActualState(IBlockState state) {

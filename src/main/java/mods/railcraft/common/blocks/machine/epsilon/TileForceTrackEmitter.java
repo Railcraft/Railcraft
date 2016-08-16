@@ -11,12 +11,13 @@ package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
+import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
 import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.kits.variants.TrackForce;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -35,7 +36,6 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -180,12 +180,15 @@ public class TileForceTrackEmitter extends TileMachineBase {
         }
     }
 
+    // TODO: Test this
     private boolean placeTrack(BlockPos pos, IBlockState blockState, EnumRailDirection direction) {
-        if (WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
+        BlockTrackForce trackForce = (BlockTrackForce) RailcraftBlocks.TRACK_FORCE.block();
+        if (trackForce != null && WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
             spawnParticles(pos);
-            Optional<TileTrackOutfitted> tile = TrackTools.placeTrack(TrackKits.FORCE.getTrackKit(), getWorld(), pos, direction);
-            if (tile.isPresent()) {
-                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackKitInstance()).setEmitter(this));
+            WorldPlugin.setBlockState(worldObj, pos, TrackToolsAPI.makeTrackState(trackForce, direction));
+            TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
+            if (tile instanceof TileTrackForce) {
+                ((TileTrackForce) tile).setEmitter(this);
                 numTracks++;
                 return true;
             }
@@ -194,21 +197,19 @@ public class TileForceTrackEmitter extends TileMachineBase {
     }
 
     private boolean claimTrack(BlockPos pos, IBlockState state, EnumRailDirection direction) {
-        if (!RailcraftBlocks.TRACK.isEqual(state))
+        if (!RailcraftBlocks.TRACK_FORCE.isEqual(state))
             return false;
         if (TrackTools.getTrackDirectionRaw(state) != direction)
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
-        if (tile == null)
-            return false;
-        if (!TrackTools.isTrackSpec(tile, TrackKits.FORCE.getTrackKit()))
-            return false;
-        TrackForce track = (TrackForce) ((TileTrackOutfitted) tile).getTrackKitInstance();
-        TileForceTrackEmitter emitter = track.getEmitter();
-        if (emitter == null || emitter == this) {
-            track.setEmitter(this);
-            numTracks++;
-            return true;
+        if (tile instanceof TileTrackForce) {
+            TileTrackForce track = (TileTrackForce) tile;
+            TileForceTrackEmitter emitter = track.getEmitter();
+            if (emitter == null || emitter == this) {
+                track.setEmitter(this);
+                numTracks++;
+                return true;
+            }
         }
         return false;
     }
@@ -228,7 +229,7 @@ public class TileForceTrackEmitter extends TileMachineBase {
     }
 
     private void removeTrack(BlockPos pos) {
-        if (WorldPlugin.isBlockLoaded(worldObj, pos) && TrackTools.isTrackAt(worldObj, pos, TrackKits.FORCE)) {
+        if (WorldPlugin.isBlockLoaded(worldObj, pos) && WorldPlugin.isBlockAt(worldObj, pos, RailcraftBlocks.TRACK_FORCE.block())) {
             spawnParticles(pos);
             WorldPlugin.setBlockToAir(worldObj, pos);
         }

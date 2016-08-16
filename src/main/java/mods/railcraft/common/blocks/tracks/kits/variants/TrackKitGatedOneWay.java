@@ -18,7 +18,7 @@ public class TrackKitGatedOneWay extends TrackKitGated {
 
     @Override
     public TrackKits getTrackKitContainer() {
-        return TrackKits.GATED_ONEWAY;
+        return TrackKits.GATED_ONE_WAY;
     }
 
     @Override

@@ -245,7 +245,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (track.isEnabled()) {
             trackKit = track.getTrackKit();
         } else
-            trackKit = TrackRegistry.getDefaultTrackKit();
+            trackKit = TrackRegistry.getMissingTrackKit();
 
         BlockPos pos = getPosWithOffset(x, y, z);
 

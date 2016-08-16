@@ -110,9 +110,6 @@ public class TrackKitCoupler extends TrackKitPowered {
 
         if (data.getBoolean("decouple"))
             mode = Mode.DECOUPLER;
-
-        if (data.getInteger("trackId") == TrackKits.DECOUPLER.ordinal())
-            mode = Mode.DECOUPLER;
     }
 
     @Override
