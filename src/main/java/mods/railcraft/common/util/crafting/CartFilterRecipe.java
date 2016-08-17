@@ -77,6 +77,7 @@ public class CartFilterRecipe implements IRecipe {
                 cartSlot = slot.getIndex();
                 filterType = type;
                 cartItem = stack.copy();
+                cartItem.stackSize = 1;
             }
         }
         if (filterType == null || itemCount > 2)
