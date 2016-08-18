@@ -11,7 +11,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.client.render.tools.ModelManager;
+import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;

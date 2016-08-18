@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.client.render.tools.ModelManager;
+import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;

@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
-import mods.railcraft.client.render.models.ModelSimple;
-import mods.railcraft.client.render.models.locomotives.ModelLocomotiveElectric;
+import mods.railcraft.client.render.models.programmatic.ModelSimple;
+import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveElectric;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.core.RailcraftConstants;

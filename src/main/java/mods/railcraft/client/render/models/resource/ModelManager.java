@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.client.render.tools;
+package mods.railcraft.client.render.models.resource;
 
 import mods.railcraft.common.blocks.IRailcraftItemBlock;
 import mods.railcraft.common.core.RailcraftConstants;

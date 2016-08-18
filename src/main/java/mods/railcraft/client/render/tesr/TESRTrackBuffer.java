@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
-import mods.railcraft.client.render.models.ModelSimple;
-import mods.railcraft.client.render.models.tracks.ModelBufferStop;
+import mods.railcraft.client.render.models.programmatic.ModelSimple;
+import mods.railcraft.client.render.models.programmatic.tracks.ModelBufferStop;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfittedTESR;
 import mods.railcraft.common.blocks.tracks.kits.variants.TrackBufferStop;

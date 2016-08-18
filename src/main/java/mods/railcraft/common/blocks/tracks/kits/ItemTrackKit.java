@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.tracks.kits;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.client.render.tools.ModelManager;
+import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.creativetab.CreativeTabs;

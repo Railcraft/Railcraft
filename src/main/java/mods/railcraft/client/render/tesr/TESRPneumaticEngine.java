@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,14 +6,14 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
+import mods.railcraft.client.render.models.programmatic.engine.ModelEngineBase;
+import mods.railcraft.client.render.models.programmatic.engine.ModelEngineFrame;
+import mods.railcraft.client.render.models.programmatic.engine.ModelEnginePiston;
+import mods.railcraft.client.render.models.programmatic.engine.ModelEngineTrunk;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.models.engine.ModelEngineBase;
-import mods.railcraft.client.render.models.engine.ModelEngineFrame;
-import mods.railcraft.client.render.models.engine.ModelEnginePiston;
-import mods.railcraft.client.render.models.engine.ModelEngineTrunk;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.TileEngine;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;

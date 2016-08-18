@@ -49,6 +49,7 @@ import org.apache.logging.log4j.Level;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IRailcraftTrack {
@@ -76,12 +77,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-        if (tile instanceof TileTrackOutfitted) {
-            ITrackKitInstance track = ((TileTrackOutfitted) tile).getTrackKitInstance();
-            return track.getActualState(state);
-        }
-        return state;
+        Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(worldIn, pos, TileTrackOutfitted.class);
+        return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getActualState(state)).orElse(state);
     }
 
     @Override

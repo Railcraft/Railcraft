@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.models.carts.ModelMaintanceLampOff;
+import mods.railcraft.client.render.models.programmatic.carts.ModelMaintanceLampOff;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.CartBaseMaintenance;
 import mods.railcraft.common.core.RailcraftConstants;
