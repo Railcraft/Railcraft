@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackKitInstance;
-import mods.railcraft.api.tracks.ITrackType;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
@@ -119,12 +119,12 @@ public class TrackTools {
         return false;
     }
 
-    public static ITrackType getTrackTypeAt(IBlockAccess world, BlockPos pos) {
+    public static TrackType getTrackTypeAt(IBlockAccess world, BlockPos pos) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (state.getBlock() instanceof IRailcraftTrack) {
             return ((IRailcraftTrack) state.getBlock()).getTrackType(world, pos);
         }
-        return TrackTypes.IRON;
+        return TrackTypes.IRON.getTrackType();
     }
 
     @Nullable

@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackType;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -21,5 +21,5 @@ import net.minecraft.world.IBlockAccess;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IRailcraftTrack extends IRailcraftBlock {
-    ITrackType getTrackType(IBlockAccess world, BlockPos pos);
+    TrackType getTrackType(IBlockAccess world, BlockPos pos);
 }

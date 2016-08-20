@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.api.tracks.ITrackType;
 import mods.railcraft.api.tracks.TrackKit;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -94,7 +94,7 @@ public class HighSpeedTools {
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
         if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.TRACK_HIGH_SPEED.block())) return true;
-        ITrackType track = TrackTools.getTrackTypeAt(world, pos);
-        return track == TrackTypes.HIGH_SPEED || track == TrackTypes.HIGH_SPEED_ELECTRIC;
+        TrackType track = TrackTools.getTrackTypeAt(world, pos);
+        return track == TrackTypes.HIGH_SPEED.getTrackType() || track == TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType();
     }
 }

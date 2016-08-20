@@ -27,12 +27,12 @@ import java.io.IOException;
 public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
     @Nonnull
     public ITrackKitInstance track = new TrackKitMissing(false);
-    private ITrackType trackType = TrackTypes.IRON;
+    private TrackType trackType = TrackTypes.IRON.getTrackType();
 
     public TileTrackOutfitted() {
     }
 
-    public ITrackType getTrackType() {
+    public TrackType getTrackType() {
         return trackType;
     }
 

@@ -11,14 +11,16 @@
 package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.api.tracks.TrackKit;
-import mods.railcraft.common.blocks.tracks.TrackConstants;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
@@ -27,7 +29,7 @@ import java.util.Locale;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum TrackTypes implements mods.railcraft.api.tracks.ITrackType {
+public enum TrackTypes {
     ABANDONED,
     ELECTRIC,
     HIGH_SPEED,
@@ -37,44 +39,51 @@ public enum TrackTypes implements mods.railcraft.api.tracks.ITrackType {
     STRAP_IRON,;
 
     static {
-        STRAP_IRON.speedController = SpeedControllerStrapIron.instance();
+        STRAP_IRON.trackType.speedController = SpeedControllerStrapIron.instance();
 
-        REINFORCED.resistance = 80F;
-        REINFORCED.speedController = SpeedControllerReinforced.instance();
+        REINFORCED.trackType.setResistance(80F);
+        REINFORCED.trackType.speedController = SpeedControllerReinforced.instance();
 
-        ELECTRIC.collisionHandler = CollisionHandlerElectric.instance();
-        HIGH_SPEED_ELECTRIC.collisionHandler = CollisionHandlerElectric.instance();
+        ELECTRIC.trackType.collisionHandler = CollisionHandlerElectric.instance();
+        HIGH_SPEED_ELECTRIC.trackType.collisionHandler = CollisionHandlerElectric.instance();
 
-        HIGH_SPEED.speedController = SpeedControllerHighSpeed.instance();
-        HIGH_SPEED_ELECTRIC.speedController = SpeedControllerHighSpeed.instance();
+        HIGH_SPEED.trackType.speedController = SpeedControllerHighSpeed.instance();
+        HIGH_SPEED_ELECTRIC.trackType.speedController = SpeedControllerHighSpeed.instance();
     }
 
-    private CollisionHandler collisionHandler = CollisionHandler.instance();
-    private SpeedController speedController = SpeedController.instance();
-    private float resistance = TrackConstants.RESISTANCE;
+    @Nonnull
+    private final RailcraftTrackType trackType;
 
-    @Override
-    public String getRegistryName() {
-        return RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT);
+    TrackTypes() {
+        trackType = new RailcraftTrackType();
     }
 
-    @Override
-    public float getResistance() {
-        return resistance;
+    public TrackType getTrackType() {
+        return trackType;
     }
 
-    @Override
-    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
-        speedController.onMinecartPass(world, cart, pos, trackKit);
-    }
+    public class RailcraftTrackType extends TrackType {
+        private CollisionHandler collisionHandler = CollisionHandler.instance();
+        private SpeedController speedController = SpeedController.instance();
 
-    @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        collisionHandler.onEntityCollidedWithBlock(world, pos, state, entity);
-    }
+        public RailcraftTrackType() {
+            super(RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT),
+                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT)));
+        }
 
-    @Override
-    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return speedController.getMaxSpeed(world, cart, pos);
+        @Override
+        public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+            speedController.onMinecartPass(world, cart, pos, trackKit);
+        }
+
+        @Override
+        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+            collisionHandler.onEntityCollidedWithBlock(world, pos, state, entity);
+        }
+
+        @Override
+        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+            return speedController.getMaxSpeed(world, cart, pos);
+        }
     }
 }

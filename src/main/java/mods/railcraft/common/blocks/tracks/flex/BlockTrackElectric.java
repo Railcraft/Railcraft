@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks.flex;
 
-import mods.railcraft.api.tracks.ITrackType;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 public class BlockTrackElectric extends BlockTrackFlex implements IChargeBlock {
     public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
 
-    public BlockTrackElectric(ITrackType trackType) {
+    public BlockTrackElectric(TrackType trackType) {
         super(trackType);
     }
 

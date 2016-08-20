@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks.flex;
 
-import mods.railcraft.api.tracks.ITrackType;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.util.misc.Game;
@@ -31,9 +31,9 @@ import net.minecraft.world.World;
  */
 public class BlockTrackFlex extends BlockRail implements IRailcraftTrack {
 
-    public ITrackType trackType;
+    public TrackType trackType;
 
-    public BlockTrackFlex(ITrackType trackType) {
+    public BlockTrackFlex(TrackType trackType) {
         setResistance(trackType.getResistance());
         setHardness(TrackConstants.HARDNESS);
         setSoundType(SoundType.METAL);
@@ -60,7 +60,7 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftTrack {
     }
 
     @Override
-    public ITrackType getTrackType(IBlockAccess world, BlockPos pos) {
+    public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
         return trackType;
     }
 }
