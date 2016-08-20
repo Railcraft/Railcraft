@@ -227,7 +227,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     }
 
     private void removeAndDrop(World world, int x, int y, int z, Block block, EntityLivingBase entity, ItemStack stack, int meta) {
-        if (ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) entity).theItemInWorldManager.getGameType(), (EntityPlayerMP) entity, x, y, z).isCanceled()) {
+        if (!ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) entity).theItemInWorldManager.getGameType(), (EntityPlayerMP) entity, x, y, z).isCanceled()) {
             InvTools.dropItems(block.getDrops(world, x, y, z, meta, EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, stack)), world, x, y, z);
             world.setBlockToAir(x, y, z);
         }
