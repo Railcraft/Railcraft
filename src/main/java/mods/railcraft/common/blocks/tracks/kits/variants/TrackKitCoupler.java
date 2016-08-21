@@ -17,21 +17,20 @@ import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackKitCoupler extends TrackKitPowered {
-    public static final PropertyEnum<Mode> MODE = PropertyEnum.create("mode", Mode.class);
+    //    public static final PropertyEnum<Mode> MODE = PropertyEnum.create("mode", Mode.class);
     private EntityMinecart taggedCart;
     private Mode mode = Mode.COUPLER;
 
@@ -41,9 +40,9 @@ public class TrackKitCoupler extends TrackKitPowered {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(MODE, mode);
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(MODE, mode);
         return state;
     }
 

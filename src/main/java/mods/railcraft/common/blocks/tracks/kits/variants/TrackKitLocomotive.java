@@ -17,13 +17,12 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -32,7 +31,7 @@ import java.io.IOException;
 
 public class TrackKitLocomotive extends TrackKitPowered {
 
-    public static final PropertyEnum<LocoMode> LOCO_MODE = PropertyEnum.create("locoMode", LocoMode.class);
+//    public static final PropertyEnum<LocoMode> LOCO_MODE = PropertyEnum.create("locoMode", LocoMode.class);
 
     private LocoMode mode = LocoMode.RUNNING;
 
@@ -42,9 +41,9 @@ public class TrackKitLocomotive extends TrackKitPowered {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(LOCO_MODE, mode);
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(LOCO_MODE, mode);
         return state;
     }
 

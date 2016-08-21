@@ -13,9 +13,9 @@ import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,10 +34,10 @@ public class TrackSpeedTransition extends TrackKitPowered implements ITrackKitRe
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(POWERED, isPowered());
-        state = state.withProperty(REVERSED, isReversed());
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(POWERED, isPowered());
+//        state = state.withProperty(REVERSED, isReversed());
         return state;
     }
 

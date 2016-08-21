@@ -26,8 +26,6 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -48,7 +47,7 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockdown, ITrackKitPowered {
-    public static final PropertyEnum<LockingProfileType> PROFILE = PropertyEnum.create("profile", LockingProfileType.class);
+//    public static final PropertyEnum<LockingProfileType> PROFILE = PropertyEnum.create("profile", LockingProfileType.class);
 
     public static double START_BOOST = 0.04;
     public static double BOOST_FACTOR = 0.06;
@@ -72,10 +71,10 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state.withProperty(PROFILE, profile);
-        state.withProperty(ITrackKitPowered.POWERED, !locked);
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state.withProperty(PROFILE, profile);
+//        state.withProperty(ITrackKitPowered.POWERED, !locked);
         return state;
     }
 

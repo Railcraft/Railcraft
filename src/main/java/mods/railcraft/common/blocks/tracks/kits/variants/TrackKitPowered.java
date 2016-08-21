@@ -11,8 +11,8 @@
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.tracks.ITrackKitPowered;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,9 +27,9 @@ public abstract class TrackKitPowered extends TrackKitRailcraft implements ITrac
     private boolean powered;
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(POWERED, isPowered());
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(POWERED, isPowered());
         return state;
     }
 

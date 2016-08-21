@@ -20,7 +20,9 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
@@ -69,5 +71,16 @@ public class ModelManager {
         for (ModelResourceLocation location : locations) {
             ModelBakery.registerItemVariants(item, location);
         }
+    }
+
+    public static IModel getModel(ResourceLocation location) {
+        IModel model;
+        try {
+            model = ModelLoaderRegistry.getModel(location);
+        } catch (Exception e) {
+            model = ModelLoaderRegistry.getMissingModel();
+            Game.log(Level.ERROR, "Missing model: " + location);
+        }
+        return model;
     }
 }

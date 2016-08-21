@@ -27,6 +27,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+// TODO: add this logic to the TrackType
 public class BlockTrackAbandoned extends BlockTrackFlex {
 
     public BlockTrackAbandoned(TrackType trackType) {

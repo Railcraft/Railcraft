@@ -15,6 +15,7 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -28,7 +29,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
@@ -46,9 +46,9 @@ import java.util.stream.Collectors;
  */
 public class DynamicTrackModel implements IModel {
     public static final DynamicTrackModel INSTANCE = new DynamicTrackModel();
-    private static final ResourceLocation MODEL_FLAT = new ResourceLocation("railcraft:models/block/outfitted_rail_flat");
-    private static final ResourceLocation MODEL_RAISED_NE = new ResourceLocation("railcraft:models/block/outfitted_rail_raised_ne");
-    private static final ResourceLocation MODEL_RAISED_SW = new ResourceLocation("railcraft:models/block/outfitted_rail_raised_sw");
+    private static final ResourceLocation MODEL_FLAT = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_flat");
+    private static final ResourceLocation MODEL_RAISED_NE = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_raised_ne");
+    private static final ResourceLocation MODEL_RAISED_SW = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_raised_sw");
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
@@ -62,28 +62,10 @@ public class DynamicTrackModel implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        IModel modelFlat;
-        try {
-            modelFlat = ModelLoaderRegistry.getModel(MODEL_FLAT);
-        } catch (Exception e) {
-            modelFlat = ModelLoaderRegistry.getMissingModel();
-        }
-        IModel modelRaisedNE;
-        try {
-            modelRaisedNE = ModelLoaderRegistry.getModel(MODEL_RAISED_NE);
-        } catch (Exception e) {
-            modelRaisedNE = ModelLoaderRegistry.getMissingModel();
-        }
-        IModel modelRaisedSW;
-        try {
-            modelRaisedSW = ModelLoaderRegistry.getModel(MODEL_RAISED_SW);
-        } catch (Exception e) {
-            modelRaisedSW = ModelLoaderRegistry.getMissingModel();
-        }
         return new ModelWrapper(
-                modelFlat.bake(state, format, bakedTextureGetter),
-                modelRaisedNE.bake(state, format, bakedTextureGetter),
-                modelRaisedSW.bake(state, format, bakedTextureGetter)
+                ModelManager.getModel(MODEL_FLAT).bake(state, format, bakedTextureGetter),
+                ModelManager.getModel(MODEL_RAISED_NE).bake(state, format, bakedTextureGetter),
+                ModelManager.getModel(MODEL_RAISED_SW).bake(state, format, bakedTextureGetter)
         );
     }
 
@@ -100,10 +82,10 @@ public class DynamicTrackModel implements IModel {
 
             @Override
             public boolean accepts(ResourceLocation modelLocation) {
-                return modelLocation.getResourceDomain().equals("railcraft") && (
-                        modelLocation.getResourcePath().equals("outfitted_rail") ||
-                                modelLocation.getResourcePath().equals("models/block/outfitted_rail") ||
-                                modelLocation.getResourcePath().equals("models/item/outfitted_rail"));
+                return modelLocation.getResourceDomain().equals("railcraft")
+                        && (modelLocation.getResourcePath().equals("outfitted_rail")
+                        || modelLocation.getResourcePath().equals("models/block/outfitted_rail")
+                        || modelLocation.getResourcePath().equals("models/item/outfitted_rail"));
             }
 
             @Override

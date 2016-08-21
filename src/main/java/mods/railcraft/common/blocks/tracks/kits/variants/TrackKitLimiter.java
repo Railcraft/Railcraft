@@ -14,13 +14,12 @@ import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -28,7 +27,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackKitLimiter extends TrackKitPowered {
-    public static final PropertyEnum<LocoSpeed> MODE = PropertyEnum.create("mode", LocoSpeed.class);
+    //    public static final PropertyEnum<LocoSpeed> MODE = PropertyEnum.create("mode", LocoSpeed.class);
     private LocoSpeed mode = LocoSpeed.MAX;
 
     @Override
@@ -37,9 +36,9 @@ public class TrackKitLimiter extends TrackKitPowered {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(MODE, getMode());
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(MODE, getMode());
         return state;
     }
 

@@ -13,12 +13,12 @@ import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class TrackSwitch extends TrackSwitchBase implements ITrackKitReversible {
-    private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
+    //    private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
     private boolean reversed;
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(MIRRORED, mirrored);
-        state = state.withProperty(REVERSED, reversed);
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(MIRRORED, mirrored);
+//        state = state.withProperty(REVERSED, reversed);
         return state;
     }
 

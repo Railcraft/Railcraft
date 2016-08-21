@@ -25,6 +25,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -48,6 +49,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 
@@ -60,6 +62,7 @@ import java.util.Random;
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IRailcraftTrack {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
+    public static final IUnlistedProperty<Integer> TEXTURE_INDEX = Properties.toUnlisted(PropertyInteger.create("texture_index", 0, 15));
 
     public BlockTrackOutfitted() {
         setCreativeTab(CreativeTabs.TRANSPORTATION);
@@ -74,12 +77,14 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         state = super.getExtendedState(state, world, pos);
         state = ((IExtendedBlockState) state).withProperty(TRACK_TYPE, getTrackType(world, pos));
-        return state;
+        Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(world, pos, TileTrackOutfitted.class);
+        IExtendedBlockState exState = (IExtendedBlockState) state;
+        return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getExtendedState(exState)).orElse(exState);
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty()}, new IUnlistedProperty[]{TRACK_TYPE});
+        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty()}, new IUnlistedProperty[]{TRACK_TYPE, TEXTURE_INDEX});
     }
 
     @Override
@@ -90,12 +95,6 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public void initializeDefinintion() {
         TrackKit.blockTrackOutfitted = this;
-    }
-
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(worldIn, pos, TileTrackOutfitted.class);
-        return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getActualState(state)).orElse(state);
     }
 
     @Override

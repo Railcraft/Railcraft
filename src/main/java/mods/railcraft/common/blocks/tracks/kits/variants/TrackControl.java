@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,9 +30,9 @@ public class TrackControl extends TrackKitPowered implements ITrackKitReversible
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-        state = state.withProperty(REVERSED, isPowered() ^ reversed);
+    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+        state = super.getExtendedState(state);
+//        state = state.withProperty(REVERSED, isPowered() ^ reversed);
         return state;
     }
 
