@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
 import com.google.common.base.Splitter;
@@ -26,6 +27,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +43,7 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 @Mod(modid = Railcraft.MOD_ID, name = Railcraft.NAME,
@@ -208,29 +211,32 @@ public final class Railcraft {
     @Mod.EventHandler
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
-            if (mapping.type == GameRegistry.Type.BLOCK) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
-                if (block != null)
-                    remap(block, mapping);
-            } else if (mapping.type == GameRegistry.Type.ITEM) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
-                if (block != null)
-                    remap(Item.getItemFromBlock(block), mapping);
-            }
+            if (mapping.type == GameRegistry.Type.BLOCK)
+                findBlock(mapping.name).ifPresent(block -> remap(block, mapping));
+            else if (mapping.type == GameRegistry.Type.ITEM)
+                findBlock(mapping.name).ifPresent(block -> remap(Item.getItemFromBlock(block), mapping));
         }
+    }
+
+    private Optional<Block> findBlock(String oldName) {
+        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
+        Block block = GameRegistry.findBlock(MOD_ID, newName);
+        if (block != null && block != Blocks.AIR)
+            return Optional.of(block);
+        return Optional.empty();
     }
 
     private void remap(@Nullable Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
         if (block != null) {
             mapping.remap(block);
-            Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+            Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + block.getRegistryName());
         }
     }
 
     private void remap(@Nullable Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
         if (item != null) {
             mapping.remap(item);
-            Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+            Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + item.getRegistryName());
         }
     }
 }

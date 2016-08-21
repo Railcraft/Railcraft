@@ -21,7 +21,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChargeFeeder extends RailcraftTickingTileEntity implements ISinkDelegate {
+public class TileChargeFeederIC2 extends RailcraftTickingTileEntity implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
     public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery();

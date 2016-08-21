@@ -47,6 +47,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -204,34 +205,29 @@ public abstract class InvTools {
         return nbt;
     }
 
-    @Nonnull
-    public static NBTTagCompound getItemDataRailcraft(ItemStack stack) {
-        NBTTagCompound nbt = getItemData(stack);
-        NBTTagCompound railcraftTag;
-        if (nbt.hasKey(Railcraft.MOD_ID))
-            railcraftTag = nbt.getCompoundTag(Railcraft.MOD_ID);
-        else {
-            railcraftTag = new NBTTagCompound();
-            nbt.setTag(Railcraft.MOD_ID, railcraftTag);
-        }
-        return railcraftTag;
+    @Contract("null, _ -> null; !null, true -> !null; !null, false -> _")
+    @Nullable
+    public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, boolean create) {
+        if (stack == null)
+            return null;
+        return stack.getSubCompound(Railcraft.MOD_ID, create);
     }
 
     public static void clearItemDataRailcraft(ItemStack stack, String tag) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack);
-        if (nbt.hasKey(tag))
+        NBTTagCompound nbt = getItemDataRailcraft(stack, false);
+        if (nbt != null && nbt.hasKey(tag))
             nbt.removeTag(tag);
     }
 
     public static void setItemDataRailcraft(ItemStack stack, String tag, NBTTagCompound data) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack);
+        NBTTagCompound nbt = getItemDataRailcraft(stack, true);
         nbt.setTag(tag, data);
     }
 
     @Nullable
     public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack);
-        if (nbt.hasKey(tag))
+        NBTTagCompound nbt = getItemDataRailcraft(stack, false);
+        if (nbt != null && nbt.hasKey(tag))
             return nbt.getCompoundTag(tag);
         return null;
     }

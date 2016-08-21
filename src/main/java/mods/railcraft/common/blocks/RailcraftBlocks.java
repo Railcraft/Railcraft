@@ -59,6 +59,7 @@ import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -67,6 +68,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
@@ -79,45 +81,45 @@ import java.util.function.Supplier;
  */
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ANVIL_STEEL("anvil", BlockRCAnvil::new, ItemAnvil::new),
-    BRICK_ABYSSAL("brick.abyssal", () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
-    BRICK_BLEACHED_BONE("brick.bleachedbone", () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
-    BRICK_BLOOD_STAINED("brick.bloodstained", () -> new BlockBrick(BrickTheme.BLOODSTAINED), ItemBrick::new),
-    BRICK_FROST_BOUND("brick.frostbound", () -> new BlockBrick(BrickTheme.FROSTBOUND), ItemBrick::new),
-    BRICK_INFERNAL("brick.infernal", () -> new BlockBrick(BrickTheme.INFERNAL), ItemBrick::new),
-    BRICK_NETHER("brick.nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
-    BRICK_QUARRIED("brick.quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
-    BRICK_SANDY("brick.sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    CHARGE_FEEDER("charge.feeder", BlockChargeFeeder::new, ItemBlockRailcraftSubtyped::new, BlockChargeFeeder.FeederVariant.class),
-    CHARGE_TRAP("charge.trap", BlockChargeTrap::new, ItemBlockRailcraft::new),
+    BRICK_ABYSSAL("brick_abyssal", () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
+    BRICK_BLEACHED_BONE("brick_bleachedbone", () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
+    BRICK_BLOOD_STAINED("brick_bloodstained", () -> new BlockBrick(BrickTheme.BLOODSTAINED), ItemBrick::new),
+    BRICK_FROST_BOUND("brick_frostbound", () -> new BlockBrick(BrickTheme.FROSTBOUND), ItemBrick::new),
+    BRICK_INFERNAL("brick_infernal", () -> new BlockBrick(BrickTheme.INFERNAL), ItemBrick::new),
+    BRICK_NETHER("brick_nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
+    BRICK_QUARRIED("brick_quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
+    BRICK_SANDY("brick_sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
+    CHARGE_FEEDER("charge_feeder", BlockChargeFeeder::new, ItemBlockRailcraftSubtyped::new, BlockChargeFeeder.FeederVariant.class),
+    CHARGE_TRAP("charge_trap", BlockChargeTrap::new, ItemBlockRailcraft::new),
     GENERIC("generic", BlockGeneric::new, ItemBlockGeneric::new, EnumGeneric.class),
     DETECTOR("detector", BlockDetector::new, ItemDetector::new, EnumDetector.class),
     FRAME("frame", BlockFrame::new, ItemBlockRailcraft::new),
     GLASS("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern::new, ItemMaterial::new),
-    MACHINE_ALPHA("machine.alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new, EnumMachineAlpha.class),
-    MACHINE_BETA("machine.beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
-    MACHINE_GAMMA("machine.gamma", () -> new BlockMachine<EnumMachineGamma>(EnumMachineGamma.PROXY, false), ItemMachine::new, EnumMachineGamma.class),
-    MACHINE_DELTA("machine.delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new, EnumMachineDelta.class),
-    MACHINE_EPSILON("machine.epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),
+    MACHINE_ALPHA("machine_alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new, EnumMachineAlpha.class),
+    MACHINE_BETA("machine_beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
+    MACHINE_GAMMA("machine_gamma", () -> new BlockMachine<EnumMachineGamma>(EnumMachineGamma.PROXY, false), ItemMachine::new, EnumMachineGamma.class),
+    MACHINE_DELTA("machine_delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new, EnumMachineDelta.class),
+    MACHINE_EPSILON("machine_epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),
     ORE("ore", BlockOre::new, ItemOre::new, EnumOre.class),
     POST("post", BlockPost::new, ItemPost::new, EnumPost.class),
-    POST_METAL("post.metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
-    POST_METAL_PLATFORM("post.metal.platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
+    POST_METAL("post_metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
+    POST_METAL_PLATFORM("post_metal_platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
     RITUAL("ritual", BlockRitual::new, null),
     WAY_OBJECT("wayobject", BlockWayObjectRailcraft::new, ItemWayObject::new, EnumWayObject.class),
     SLAB("slab", BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     @Deprecated
     TRACK("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_ABANDONED("track.abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
-    TRACK_ELECTRIC("track.electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_ELEVATOR("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
-    TRACK_FORCE("track.force", BlockTrackForce::new, ItemTrack::new),
-    TRACK_HIGH_SPEED("track.high.speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-    TRACK_HIGH_SPEED_ELECTRIC("track.high.speed.electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_OUTFITTED("track.outfitted", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_REINFORCED("track.reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-    TRACK_STRAP_IRON("track.strap.iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
+    TRACK_ABANDONED("track_abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
+    TRACK_ELECTRIC("track_electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_ELEVATOR("track_elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
+    TRACK_FORCE("track_force", BlockTrackForce::new, ItemTrack::new),
+    TRACK_HIGH_SPEED("track_high_speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
+    TRACK_HIGH_SPEED_ELECTRIC("track_high_speed_electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
+    TRACK_REINFORCED("track_reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
+    TRACK_STRAP_IRON("track_strap_iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     WALL("wall", BlockRailcraftWall::new, ItemMaterial::new),
     WIRE("wire", BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);
@@ -126,6 +128,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     private final Function<Block, ItemBlock> itemSupplier;
     private final Class<? extends IVariantEnum> variantClass;
     private final String tag;
+    private final ResourceLocation registryName;
     protected Object altRecipeObject;
     private Block block;
     private ItemBlock item;
@@ -138,6 +141,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         this.blockSupplier = blockSupplier;
         this.itemSupplier = itemSupplier;
         this.tag = tag;
+        this.registryName = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag());
         this.variantClass = variantClass;
     }
 
@@ -157,12 +161,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
         if (isEnabled()) {
             block = blockSupplier.get();
-            block.setRegistryName(tag);
-            block.setUnlocalizedName("railcraft." + tag);
+            block.setRegistryName(registryName);
+            block.setUnlocalizedName("railcraft." + tag.replace("_", "."));
 
             if (itemSupplier != null) {
                 item = itemSupplier.apply(block);
-                item.setRegistryName(tag);
+                item.setRegistryName(registryName);
             }
 
             RailcraftRegistry.register(block, item);
@@ -233,6 +237,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     @Override
     public String getBaseTag() {
         return tag;
+    }
+
+    public ResourceLocation getRegistryName() {
+        return registryName;
     }
 
     @Nullable

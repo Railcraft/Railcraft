@@ -20,6 +20,6 @@ import net.minecraft.util.ITickable;
 public class TileTrackOutfittedTicking extends TileTrackOutfitted implements ITickable {
     @Override
     public void update() {
-        track.update();
+        getTrackKitInstance().update();
     }
 }

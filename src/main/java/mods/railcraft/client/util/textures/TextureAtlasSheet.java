@@ -61,7 +61,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     }
 
     private TextureAtlasSheet(String name, int index, int rows, int columns) {
-        super(name + "." + index);
+        super(name + "_" + index);
         this.index = index;
         this.rows = rows;
         this.columns = columns;
@@ -75,7 +75,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     @Override
     public boolean load(IResourceManager manager, ResourceLocation location) {
         // Remove the index from the resource path so we can find the original texture.
-        location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().replace("." + index, ""));
+        location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().replace("_" + index, ""));
 
         BufferedImage image;
         IResource resource = null;

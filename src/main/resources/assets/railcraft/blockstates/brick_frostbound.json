@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "variant": {
+      "brick": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_0"}
+      },
+      "fitted": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_1"}
+      },
+      "block": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_2"}
+      },
+      "ornate": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_3"}
+      },
+      "etched": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_4"}
+      },
+      "cobble": {
+        "textures": {"all": "railcraft:blocks/brick_frostbound_5"}
+      }
+    }
+  }
+}

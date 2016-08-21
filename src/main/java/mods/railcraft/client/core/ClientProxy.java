@@ -15,6 +15,7 @@ import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
+import mods.railcraft.client.render.models.resource.DynamicTrackModel;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
@@ -50,6 +51,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -97,7 +99,7 @@ public class ClientProxy extends CommonProxy {
                         if (variants != null) {
                             for (IVariantEnum variant : variants) {
                                 if (variant instanceof IVariantEnumBlock)
-                                    TextureAtlasSheet.unstitchIcons(event.getMap(), new ResourceLocation(block.getRegistryName() + "." + variant.getResourcePathSuffix()), ((IVariantEnumBlock) variant).getTextureDimensions());
+                                    TextureAtlasSheet.unstitchIcons(event.getMap(), new ResourceLocation(block.getRegistryName() + "_" + variant.getResourcePathSuffix()), ((IVariantEnumBlock) variant).getTextureDimensions());
                             }
                         }
                     }
@@ -136,6 +138,8 @@ public class ClientProxy extends CommonProxy {
                 }
             }
         }
+
+        ModelLoaderRegistry.registerLoader(DynamicTrackModel.Loader.INSTANCE);
     }
 
     @Override

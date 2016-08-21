@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
     @Nonnull
-    public ITrackKitInstance track = new TrackKitMissing(false);
+    private ITrackKitInstance trackKitInstance = new TrackKitMissing(false);
     private TrackType trackType = TrackTypes.IRON.getTrackType();
 
     public TileTrackOutfitted() {
@@ -36,14 +36,22 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         return trackType;
     }
 
+    public void setTrackType(TrackType trackType) {
+        this.trackType = trackType;
+    }
+
     @Override
     public ITrackKitInstance getTrackKitInstance() {
-        return track;
+        return trackKitInstance;
+    }
+
+    public void setTrackKitInstance(@Nonnull ITrackKitInstance trackKit) {
+        this.trackKitInstance = trackKit;
     }
 
     @Override
     public String getLocalizationTag() {
-        return "tile." + track.getTrackKit().getName().replace(':', '.') + ".name";
+        return "tile." + trackKitInstance.getTrackKit().getName().replace(':', '.') + ".name";
     }
 
     @Nonnull
@@ -53,7 +61,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
         data.setString(TrackKit.NBT_TAG, getTrackKitInstance().getTrackKit().getName());
 
-        track.writeToNBT(data);
+        trackKitInstance.writeToNBT(data);
         return data;
     }
 
@@ -63,24 +71,24 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
         if (data.hasKey(TrackKit.NBT_TAG)) {
             TrackKit spec = TrackRegistry.getTrackKit(data.getString(TrackKit.NBT_TAG));
-            track = spec.createInstanceFromSpec();
+            trackKitInstance = spec.createInstanceFromSpec();
         } else
-            track = TrackRegistry.getMissingTrackKit().createInstanceFromSpec();
+            trackKitInstance = TrackRegistry.getMissingTrackKit().createInstanceFromSpec();
 
-        track.setTile(this);
-        track.readFromNBT(data);
+        trackKitInstance.setTile(this);
+        trackKitInstance.readFromNBT(data);
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        track.writePacketData(data);
+        trackKitInstance.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        track.readPacketData(data);
+        trackKitInstance.readPacketData(data);
     }
 
     @Override
@@ -90,14 +98,14 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
     @Override
     public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
-        if (track instanceof IGuiReturnHandler)
-            ((IGuiReturnHandler) track).writeGuiData(data);
+        if (trackKitInstance instanceof IGuiReturnHandler)
+            ((IGuiReturnHandler) trackKitInstance).writeGuiData(data);
     }
 
     @Override
     public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        if (track instanceof IGuiReturnHandler)
-            ((IGuiReturnHandler) track).readGuiData(data, sender);
+        if (trackKitInstance instanceof IGuiReturnHandler)
+            ((IGuiReturnHandler) trackKitInstance).readGuiData(data, sender);
     }
 
     @Override

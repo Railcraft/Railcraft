@@ -11,22 +11,24 @@ package mods.railcraft.common.blocks.tracks.kits;
 
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.TrackKit;
+import mods.railcraft.api.tracks.TrackType;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackTileFactory {
 
-    public static TileTrackOutfitted makeTrackTile(TrackKit trackKit) {
+    public static TileTrackOutfitted makeTrackTile(TrackType trackType, TrackKit trackKit) {
         ITrackKitInstance trackInstance = trackKit.createInstanceFromSpec();
         TileTrackOutfitted tileTrack;
-        if (trackKit == TrackKits.BUFFER_STOP.getTrackKit())
-            tileTrack = new TileTrackOutfittedTESR();
-        else if (trackInstance.canUpdate())
+//        if (trackKit == TrackKits.BUFFER_STOP.getTrackKit())
+//            tileTrack = new TileTrackOutfittedTESR();
+        if (trackInstance.canUpdate())
             tileTrack = new TileTrackOutfittedTicking();
         else
             tileTrack = new TileTrackOutfitted();
-        tileTrack.track = trackInstance;
+        tileTrack.setTrackType(trackType);
+        tileTrack.setTrackKitInstance(trackInstance);
         trackInstance.setTile(tileTrack);
         return tileTrack;
     }

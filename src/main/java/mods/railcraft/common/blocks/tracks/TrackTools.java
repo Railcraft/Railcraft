@@ -12,14 +12,12 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.TrackKit;
-import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.kits.TrackTileFactory;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -38,7 +36,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -184,16 +181,16 @@ public class TrackTools {
         return (tile instanceof TileTrackOutfitted) && trackClass.isAssignableFrom(((TileTrackOutfitted) tile).getTrackKitInstance().getClass());
     }
 
-    public static Optional<TileTrackOutfitted> placeTrack(TrackKit track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
-        BlockTrackOutfitted block = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
-        TileTrackOutfitted tile = null;
-        if (block != null) {
-            WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(block, direction));
-            tile = TrackTileFactory.makeTrackTile(track);
-            world.setTileEntity(pos, tile);
-        }
-        //noinspection ConstantConditions
-        return Optional.ofNullable(tile);
-    }
+//    public static Optional<TileTrackOutfitted> placeTrack(TrackKit track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
+//        BlockTrackOutfitted block = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
+//        TileTrackOutfitted tile = null;
+//        if (block != null) {
+//            WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(block, direction));
+//            tile = TrackTileFactory.makeTrackTile(track);
+//            world.setTileEntity(pos, tile);
+//        }
+//        //noinspection ConstantConditions
+//        return Optional.ofNullable(tile);
+//    }
 
 }

@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks.kits;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -27,7 +27,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem {
@@ -44,14 +43,22 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 //        return getTrackSpec(stack).getItemModel();
 //    }
 
-    @Nonnull
-    public TrackKit getTrackKitSpec(ItemStack stack) {
-        if (stack != null && stack.getItem() == this) {
-            NBTTagCompound nbt = InvTools.getItemData(stack);
-            if (nbt.hasKey(TrackKit.NBT_TAG))
+    public TrackKit getTrackKit(ItemStack stack) {
+        if (stack.getItem() == this) {
+            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+            if (nbt != null && nbt.hasKey(TrackKit.NBT_TAG))
                 return TrackRegistry.getTrackKit(nbt.getString(TrackKit.NBT_TAG));
         }
         return TrackRegistry.getTrackKit("railcraft:default");
+    }
+
+    public TrackType getTrackType(ItemStack stack) {
+        if (stack.getItem() == this) {
+            NBTTagCompound nbt = InvTools.getItemData(stack);
+            if (nbt.hasKey(TrackType.NBT_TAG))
+                return TrackRegistry.getTrackType(nbt.getString(TrackType.NBT_TAG));
+        }
+        return TrackTypes.IRON.getTrackType();
     }
 
     @Override
@@ -61,19 +68,19 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + getTrackKitSpec(stack).getName().replace(':', '.');
+        return "tile.railcraft." + getTrackType(stack).getName() + "." + getTrackKit(stack).getName();
     }
 
     @Override
     public BlockTrackOutfitted getPlacedBlock() {
-        return (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
+        return (BlockTrackOutfitted) getBlock();
     }
 
     @Override
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
-            if (track.getTrackKitInstance().getTrackKit() == getTrackKitSpec(stack))
+            if (track.getTrackKitInstance().getTrackKit() == getTrackKit(stack))
                 return true;
         }
         return false;
@@ -86,15 +93,14 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 
     private boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable EnumRailDirection trackShape, EnumFacing face) {
         BlockTrackOutfitted blockTrack = getPlacedBlock();
-        if (blockTrack == null)
-            return false;
         if (pos.getY() >= world.getHeight() - 1)
             return false;
         if (stack == null || !(stack.getItem() instanceof ItemTrackOutfitted))
             return false;
 
-        TrackKit spec = getTrackKitSpec(stack);
-        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(spec);
+        TrackType trackType = getTrackType(stack);
+        TrackKit trackKit = getTrackKit(stack);
+        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackType, trackKit);
         ITrackKitInstance track = tile.getTrackKitInstance();
 
         boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);

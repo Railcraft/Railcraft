@@ -12,22 +12,22 @@
     ],
     "variant": {
       "brick": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.0"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_0"}
       },
       "fitted": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.1"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_1"}
       },
       "block": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.2"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_2"}
       },
       "ornate": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.3"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_3"}
       },
       "etched": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.4"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_4"}
       },
       "cobble": {
-        "textures": {"all": "railcraft:blocks/brick.sandy.5"}
+        "textures": {"all": "railcraft:blocks/brick_sandy_5"}
       }
     }
   }

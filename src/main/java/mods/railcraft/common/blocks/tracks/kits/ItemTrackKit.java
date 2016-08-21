@@ -19,6 +19,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,7 +47,10 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     public TrackKit getTrackKit(ItemStack stack) {
-        return TrackRegistry.getTrackKit(InvTools.getItemDataRailcraft(stack));
+        NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+        if (nbt == null)
+            return TrackRegistry.getMissingTrackKit();
+        return TrackRegistry.getTrackKit(nbt);
     }
 
     @Override

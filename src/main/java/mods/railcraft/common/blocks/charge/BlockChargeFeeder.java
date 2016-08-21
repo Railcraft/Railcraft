@@ -76,7 +76,7 @@ public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implement
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
 
-        RailcraftRegistry.register(TileChargeFeeder.class, "charge.feeder.ic2");
+        RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
     }
 
     @Override
@@ -150,7 +150,7 @@ public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implement
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         if (state.getValue(VARIANT) == FeederVariant.IC2)
-            return new TileChargeFeeder();
+            return new TileChargeFeederIC2();
         return null;
     }
 
@@ -207,8 +207,8 @@ public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implement
 
         IC2(new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
             TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
-            if (tileEntity instanceof TileChargeFeeder) {
-                return ((TileChargeFeeder) tileEntity).chargeBattery;
+            if (tileEntity instanceof TileChargeFeederIC2) {
+                return ((TileChargeFeederIC2) tileEntity).chargeBattery;
             }
             //noinspection ConstantConditions
             return null;

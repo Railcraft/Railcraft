@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "outfitted_rail_flat",
+    "model": "railcraft:outfitted_rail",
     "textures": {
       "rail": "railcraft:blocks/tracks/kit/iron",
       "kit": "railcraft:blocks/tracks/kit/iron"
@@ -11,22 +11,22 @@
   "variants": {
     "shape": {
       "north_south": {
-        "model": "outfitted_rail_flat"
+        "model": "railcraft:outfitted_rail"
       },
       "east_west": {
-        "model": "outfitted_rail_flat", "y": 90
+        "model": "railcraft:outfitted_rail", "y": 90
       },
       "ascending_east": {
-        "model": "outfitted_rail_raised_ne", "y": 90
+        "model": "railcraft:outfitted_rail", "y": 90
       },
       "ascending_west": {
-        "model": "outfitted_rail_raised_sw", "y": 90
+        "model": "railcraft:outfitted_rail", "y": 90
       },
       "ascending_north": {
-        "model": "outfitted_rail_raised_ne"
+        "model": "railcraft:outfitted_rail"
       },
       "ascending_south": {
-        "model": "outfitted_rail_raised_sw"
+        "model": "railcraft:outfitted_rail"
       }
     }
   }

@@ -8,22 +8,22 @@
     "inventory": [{"transform": "forge:default-block"}],
     "redstone=false,variant=admin": [
       {
-        "textures": {"all": "railcraft:blocks/charge.feeder.admin.0"}
+        "textures": {"all": "railcraft:blocks/charge_feeder_admin_0"}
       }
     ],
     "redstone=true,variant=admin": [
       {
-        "textures": {"all": "railcraft:blocks/charge.feeder.admin.1"}
+        "textures": {"all": "railcraft:blocks/charge_feeder_admin_1"}
       }
     ],
     "redstone=false,variant=ic2": [
       {
-        "textures": {"all": "railcraft:blocks/charge.feeder.ic2.0"}
+        "textures": {"all": "railcraft:blocks/charge_feeder_ic2_0"}
       }
     ],
     "redstone=true,variant=ic2": [
       {
-        "textures": {"all": "railcraft:blocks/charge.feeder.ic2.1"}
+        "textures": {"all": "railcraft:blocks/charge_feeder_ic2_1"}
       }
     ]
   }

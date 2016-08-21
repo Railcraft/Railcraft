@@ -11,11 +11,14 @@
 package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.api.tracks.TrackKit;
+import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,13 +33,13 @@ import java.util.Locale;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum TrackTypes {
-    ABANDONED,
-    ELECTRIC,
-    HIGH_SPEED,
-    HIGH_SPEED_ELECTRIC,
-    IRON,
-    REINFORCED,
-    STRAP_IRON,;
+    ABANDONED(RailcraftBlocks.TRACK_ABANDONED.getRegistryName()),
+    ELECTRIC(RailcraftBlocks.TRACK_ELECTRIC.getRegistryName()),
+    HIGH_SPEED(RailcraftBlocks.TRACK_HIGH_SPEED.getRegistryName()),
+    HIGH_SPEED_ELECTRIC(RailcraftBlocks.TRACK_HIGH_SPEED_ELECTRIC.getRegistryName()),
+    IRON(Blocks.RAIL.getRegistryName()),
+    REINFORCED(RailcraftBlocks.TRACK_REINFORCED.getRegistryName()),
+    STRAP_IRON(RailcraftBlocks.TRACK_STRAP_IRON.getRegistryName()),;
 
     static {
         STRAP_IRON.trackType.speedController = SpeedControllerStrapIron.instance();
@@ -53,9 +56,12 @@ public enum TrackTypes {
 
     @Nonnull
     private final RailcraftTrackType trackType;
+    private final ResourceLocation baseBlock;
 
-    TrackTypes() {
+    TrackTypes(ResourceLocation baseBlock) {
+        this.baseBlock = baseBlock;
         trackType = new RailcraftTrackType();
+        TrackRegistry.registerTrackKit(trackType);
     }
 
     public TrackType getTrackType() {
@@ -67,8 +73,11 @@ public enum TrackTypes {
         private SpeedController speedController = SpeedController.instance();
 
         public RailcraftTrackType() {
-            super(RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT),
-                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT)));
+            super(
+                    RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT),
+                    baseBlock,
+                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT))
+            );
         }
 
         @Override

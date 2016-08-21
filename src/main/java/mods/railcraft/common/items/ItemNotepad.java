@@ -72,8 +72,8 @@ public class ItemNotepad extends ItemRailcraft {
     @Override
     public void initializeClient() {
         ModelManager.registerComplexItemModel(this, stack -> {
-            NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
-            if (tag.hasKey("contents")) {
+            NBTTagCompound tag = InvTools.getItemDataRailcraft(stack, false);
+            if (tag != null && tag.hasKey("contents")) {
                 return MODEL_FILLED;
             }
             return MODEL_EMPTY;
@@ -82,15 +82,15 @@ public class ItemNotepad extends ItemRailcraft {
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
         if (stack != null && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
+            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, true);
             nbt.setByte("pasteMode", (byte) mode.ordinal());
         }
     }
 
     private static PasteMode getPasteMode(ItemStack stack) {
         if (stack != null && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
-            return PasteMode.fromOrdinal(nbt.getByte("pasteMode"));
+            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+            return PasteMode.fromOrdinal(nbt != null ? nbt.getByte("pasteMode") : 0);
         }
         return PasteMode.ALL;
     }
@@ -113,7 +113,7 @@ public class ItemNotepad extends ItemRailcraft {
                 contentTag.setTag(entry.getKey().nbtTag, entry.getValue());
             }
 
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
+            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, true);
             nbt.setTag("contents", contentTag);
         }
     }
@@ -122,8 +122,8 @@ public class ItemNotepad extends ItemRailcraft {
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
         if (stack != null && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
-            if (nbt.hasKey("contents")) {
+            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+            if (nbt != null && nbt.hasKey("contents")) {
                 nbt = nbt.getCompoundTag("contents");
                 for (Contents content : Contents.VALUES) {
                     if (nbt.hasKey(content.nbtTag)) {
@@ -158,10 +158,8 @@ public class ItemNotepad extends ItemRailcraft {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
-
         if (player.isSneaking()) {
-            nbt.removeTag("contents");
+            InvTools.clearItemDataRailcraft(stack, "contents");
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
             if (Game.isClient(world))

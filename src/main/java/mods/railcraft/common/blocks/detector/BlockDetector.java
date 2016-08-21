@@ -41,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,7 +67,7 @@ public class BlockDetector extends RailcraftBlockContainer {
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
-        GameRegistry.registerTileEntity(TileDetector.class, "RCDetectorTile");
+        RailcraftRegistry.register(TileDetector.class, "detector", "RCDetectorTile");
     }
 
     @Nullable

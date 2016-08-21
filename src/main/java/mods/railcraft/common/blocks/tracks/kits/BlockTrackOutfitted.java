@@ -100,25 +100,11 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-//        list.addAll(
-//                TrackKits.getCreativeList().stream()
-//                        .filter(TrackKits::isEnabled)
-//                        .map(TrackKits::getStack)
-//                        .collect(Collectors.toList())
-//        );
-//
-//        try {
-//            Collection<TrackKit> railcraftSpecs = TrackKits.getRailcraftTrackKits();
-//            Map<String, TrackKit> registeredSpecs = TrackRegistry.getTrackKits();
-//            Set<TrackKit> otherSpecs = new HashSet<TrackKit>(registeredSpecs.values());
-//            otherSpecs.removeAll(railcraftSpecs);
-//            //TODO: replace .values()
-//            for (TrackTypes trackType : TrackTypes.values()) {
-//                list.addAll(otherSpecs.stream().map(s -> s.getStack(trackType)).collect(Collectors.toList()));
-//            }
-//        } catch (Error error) {
-//            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
-//        }
+        for (TrackType trackType : TrackRegistry.getTrackTypes().values()) {
+            for (TrackKit trackKit : TrackRegistry.getTrackKits().values()) {
+                list.add(trackKit.getOutfittedTrack(trackType));
+            }
+        }
     }
 
     @Override

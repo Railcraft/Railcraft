@@ -2,7 +2,7 @@
   "forge_marker": 1,
   "defaults": {
     "model": "cube_all",
-    "textures": {"all": "railcraft:blocks/charge.trap"}
+    "textures": {"all": "railcraft:blocks/charge_trap"}
   },
   "variants": {
     "normal": [{}],

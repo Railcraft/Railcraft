@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
@@ -100,8 +101,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // track
         fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL.getDefaultState(), Blocks.RAIL.getDefaultState(), false);
-        placeTrack(TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
-        placeTrack(TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
+        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
+        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
 
 
         // hall walls
@@ -235,7 +236,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
     }
 
-    private void placeTrack(TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
+    private void placeTrack(TrackTypes trackType, TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
         BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
         // TODO: place vanilla tracks?
         if (blockTrack == null)
@@ -253,7 +254,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             return;
 
         setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape), x, y, z, sbb);
-        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackKit);
+        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackType.getTrackType(), trackKit);
         world.setTileEntity(pos, tile);
         EnumFacing facing = getCoordBaseMode();
         boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
