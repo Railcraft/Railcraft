@@ -49,6 +49,7 @@ import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
+import mods.railcraft.common.blocks.tracks.flex.BlockTrackAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackElectric;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
@@ -111,7 +112,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     STAIR("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     @Deprecated
     TRACK("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_ABANDONED("track_abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
+    TRACK_ABANDONED("track_abandoned", () -> new BlockTrackAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
     TRACK_ELECTRIC("track_electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     TRACK_FORCE("track_force", BlockTrackForce::new, ItemTrack::new),

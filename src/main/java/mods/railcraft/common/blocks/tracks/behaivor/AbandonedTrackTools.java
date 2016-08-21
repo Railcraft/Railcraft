@@ -12,11 +12,13 @@ package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by CovertJaguar on 8/7/2016 for Railcraft.
@@ -25,41 +27,30 @@ import net.minecraft.world.World;
  */
 public class AbandonedTrackTools {
 
-    @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isSupportedBelow(World world, BlockPos pos) {
+    public static boolean isSupportedDirectly(IBlockAccess world, BlockPos pos) {
+        return world.isSideSolid(pos.down(), EnumFacing.UP, false);
+    }
+
+    public static boolean isSupported(World world, BlockPos pos) {
+        return isSupported(world, pos, false, 0, new HashSet<>());
+    }
+
+    private static boolean isSupported(World world, BlockPos pos, boolean checkSelf, int distance, Set<BlockPos> checked) {
+        if (checked.contains(pos))
+            return false;
+        checked.add(pos);
         if (!WorldPlugin.isBlockLoaded(world, pos))
             return true;
-        if (TrackTools.isRailBlockAt(world, pos))
-            return world.isSideSolid(pos.down(), EnumFacing.UP);
-        return false;
-    }
-
-    public static boolean isSupported(IBlockState state, World world, BlockPos pos) {
-        return isSupported(world, pos, TrackTools.getTrackDirectionRaw(state));
-    }
-
-    public static boolean isSupported(World world, BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        if (isSupportedRail(world, pos, dir))
-            return true;
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-            return isSupportedRail(world, pos.north(), dir) || isSupportedRail(world, pos.south(), dir);
-        else if (dir == BlockRailBase.EnumRailDirection.EAST_WEST)
-            return isSupportedRail(world, pos.east(), dir) || isSupportedRail(world, pos.west(), dir);
-        return false;
-    }
-
-    @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isSupportedRail(World world, BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        if (!TrackTools.isRailBlockAt(world, pos))
+        if (checkSelf && !TrackTools.isRailBlockAt(world, pos))
             return false;
-        if (isSupportedBelow(world, pos))
+        if (world.isSideSolid(pos.down(), EnumFacing.UP, false))
             return true;
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
-            return isSupportedBelow(world, pos.north()) || isSupportedBelow(world, pos.south());
-        } else if (dir == BlockRailBase.EnumRailDirection.EAST_WEST) {
-            if (isSupportedBelow(world, pos.east()))
+        if (distance >= 2)
+            return false;
+        distance++;
+        for (BlockPos connectedTrack : TrackTools.getConnectedTracks(world, pos)) {
+            if (isSupported(world, connectedTrack, true, distance, checked))
                 return true;
-            return isSupportedBelow(world, pos.west());
         }
         return false;
     }

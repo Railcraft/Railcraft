@@ -30,12 +30,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -179,6 +182,36 @@ public class TrackTools {
 
     public static boolean isTrackClass(TileEntity tile, Class<? extends ITrackKitInstance> trackClass) {
         return (tile instanceof TileTrackOutfitted) && trackClass.isAssignableFrom(((TileTrackOutfitted) tile).getTrackKitInstance().getClass());
+    }
+
+    public static Set<BlockPos> getConnectedTracks(IBlockAccess world, BlockPos pos) {
+        Set<BlockPos> connectedTracks = new HashSet<>();
+        EnumRailDirection shape;
+        if (isRailBlockAt(world, pos))
+            shape = getTrackDirectionRaw(world, pos);
+        else
+            shape = EnumRailDirection.NORTH_SOUTH;
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            BlockPos trackPos = getTrackConnectedTrackAt(world, pos.offset(side), shape);
+            if (trackPos != null)
+                connectedTracks.add(trackPos);
+        }
+        return connectedTracks;
+    }
+
+    @Nullable
+    public static BlockPos getTrackConnectedTrackAt(IBlockAccess world, BlockPos pos, EnumRailDirection shape) {
+        if (isRailBlockAt(world, pos))
+            return pos;
+        BlockPos up = pos.up();
+        if (shape.isAscending() && isRailBlockAt(world, up))
+            return up;
+        BlockPos down = pos.down();
+        if (isRailBlockAt(world, down)) {
+            if (getTrackDirectionRaw(world, down).isAscending())
+                return down;
+        }
+        return null;
     }
 
 //    public static Optional<TileTrackOutfitted> placeTrack(TrackKit track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {

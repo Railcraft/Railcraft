@@ -3,7 +3,7 @@
   "defaults": {
     "model": "rail_flat",
     "textures": {
-      "rail": "railcraft:blocks/tracks/flex/electric_flat"
+      "rail": "railcraft:blocks/tracks/flex/abandoned_flat"
     },
     "transform": "forge:default-block"
   },
@@ -29,25 +29,25 @@
       },
       "south_east": {
         "textures": {
-          "rail": "railcraft:blocks/tracks/flex/electric_turned"
+          "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
         "model": "rail_curved"
       },
       "south_west": {
         "textures": {
-          "rail": "railcraft:blocks/tracks/flex/electric_turned"
+          "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
         "model": "rail_curved", "y": 90
       },
       "north_west": {
         "textures": {
-          "rail": "railcraft:blocks/tracks/flex/electric_turned"
+          "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
         "model": "rail_curved", "y": 180
       },
       "north_east": {
         "textures": {
-          "rail": "railcraft:blocks/tracks/flex/electric_turned"
+          "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
         "model": "rail_curved", "y": 270
       }

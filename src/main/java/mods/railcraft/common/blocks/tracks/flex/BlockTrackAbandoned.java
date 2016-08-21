@@ -11,15 +11,15 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.AbandonedTrackTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -36,16 +36,16 @@ public class BlockTrackAbandoned extends BlockTrackFlex {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        if (!AbandonedTrackTools.isSupported(state, worldIn, pos))
+        if (!AbandonedTrackTools.isSupported(worldIn, pos))
             breakRail(worldIn, pos);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        if (AbandonedTrackTools.isSupported(state, worldIn, pos)) {
+        if (AbandonedTrackTools.isSupported(worldIn, pos)) {
             if (neighborBlock != this) {
-                for (EnumFacing side : EnumFacing.HORIZONTALS) {
-                    worldIn.notifyBlockOfStateChange(pos.offset(side), this);
+                for (BlockPos connectedTrack : TrackTools.getConnectedTracks(worldIn, pos)) {
+                    worldIn.notifyBlockOfStateChange(connectedTrack, this);
                 }
             }
         } else
@@ -59,15 +59,13 @@ public class BlockTrackAbandoned extends BlockTrackFlex {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-//        if(BlockRail.isRailBlockAt(world, i, j - 1, k)) {
-//            return false;
-//        }
-//        if(BlockRail.isRailBlockAt(world, i, j + 1, k)) {
-//            return false;
-//        }
-        return super.canPlaceBlockAt(worldIn, pos)
-                || AbandonedTrackTools.isSupported(worldIn, pos, BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-                || AbandonedTrackTools.isSupported(worldIn, pos, BlockRailBase.EnumRailDirection.EAST_WEST)
-                || worldIn.isSideSolid(pos.down(), EnumFacing.UP);
+        return !TrackTools.isRailBlockAt(worldIn, pos.up())
+                && !TrackTools.isRailBlockAt(worldIn, pos.down())
+                && (super.canPlaceBlockAt(worldIn, pos) || AbandonedTrackTools.isSupported(worldIn, pos));
+    }
+
+    @Override
+    public boolean canMakeSlopes(IBlockAccess world, BlockPos pos) {
+        return AbandonedTrackTools.isSupportedDirectly(world, pos);
     }
 }

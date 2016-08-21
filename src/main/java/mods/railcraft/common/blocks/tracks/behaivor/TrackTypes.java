@@ -42,6 +42,8 @@ public enum TrackTypes {
     STRAP_IRON(RailcraftBlocks.TRACK_STRAP_IRON.getRegistryName()),;
 
     static {
+        ABANDONED.trackType.speedController = SpeedControllerAbandoned.instance();
+
         STRAP_IRON.trackType.speedController = SpeedControllerStrapIron.instance();
 
         REINFORCED.trackType.setResistance(80F);

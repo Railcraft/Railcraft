@@ -12,15 +12,15 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 
-@RailcraftModule("railcraft:tracks|wood")
-public class ModuleTracksWood extends RailcraftModulePayload {
+@RailcraftModule("railcraft:tracks|abandoned")
+public class ModuleTracksAbandoned extends RailcraftModulePayload {
 
-    public ModuleTracksWood() {
+    public ModuleTracksAbandoned() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_STRAP_IRON
+                        RailcraftBlocks.TRACK_ABANDONED
                 );
             }
         });
