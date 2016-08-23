@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -24,10 +25,12 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,6 +49,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -61,12 +65,15 @@ import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IRailcraftTrack {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
+    public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
+    public static final IUnlistedProperty<TrackKit> TRACK_KIT = UnlistedProperty.create("track_kit", TrackKit.class);
     public static final IUnlistedProperty<Integer> TEXTURE_INDEX = Properties.toUnlisted(PropertyInteger.create("texture_index", 0, 15));
 
     public BlockTrackOutfitted() {
         setCreativeTab(CreativeTabs.TRANSPORTATION);
         setHarvestLevel("crowbar", 0);
+        setDefaultState(getDefaultState().withProperty(TICKING, false));
 
         GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
         GameRegistry.registerTileEntity(TileTrackOutfittedTESR.class, "railcraft:track.outfitted.tesr");
@@ -77,14 +84,36 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         state = super.getExtendedState(state, world, pos);
         state = ((IExtendedBlockState) state).withProperty(TRACK_TYPE, getTrackType(world, pos));
+        state = ((IExtendedBlockState) state).withProperty(TRACK_KIT, getTrackKit(world, pos));
         Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(world, pos, TileTrackOutfitted.class);
         IExtendedBlockState exState = (IExtendedBlockState) state;
         return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getExtendedState(exState)).orElse(exState);
     }
 
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.byMetadata(meta & 7)).withProperty(TICKING, (meta & 8) > 0);
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int i = 0;
+        i = i | state.getValue(getShapeProperty()).getMetadata();
+        if (state.getValue(TICKING)) {
+            i |= 8;
+        }
+        return i;
+    }
+
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty()}, new IUnlistedProperty[]{TRACK_TYPE, TEXTURE_INDEX});
+        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty(), TICKING}, new IUnlistedProperty[]{TRACK_TYPE, TRACK_KIT, TEXTURE_INDEX});
     }
 
     @Override
@@ -93,15 +122,28 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        if (state.getValue(TICKING))
+            return new TileTrackOutfittedTicking();
+        return new TileTrackOutfitted();
+    }
+
+    @Override
     public void initializeDefinintion() {
         TrackKit.blockTrackOutfitted = this;
     }
 
     @Override
+    public void initializeClient() {
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(TICKING).build());
+    }
+
+    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (TrackType trackType : TrackRegistry.getTrackTypes().values()) {
-            for (TrackKit trackKit : TrackRegistry.getTrackKits().values()) {
-                list.add(trackKit.getOutfittedTrack(trackType));
+        for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
+            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
+                if (trackKit.isVisible())
+                    list.add(trackKit.getOutfittedTrack(trackType));
             }
         }
     }
@@ -217,11 +259,6 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        return !TrackTools.isRailBlockAt(world, pos.up());
-    }
-
-    @Override
     public boolean canProvidePower(IBlockState state) {
         return true;
     }
@@ -302,21 +339,40 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public int quantityDropped(IBlockState state, int fortune, Random random) {
         return 1;
     }
-//
-//    @Override
-//    public int idDropped(int i, Random random, int j) {
-//        Game.log(Level.WARN, "Wrong function called when harvesting rail");
-//        return Blocks.RAIL.idDropped(i, random, j);
-//    }
-//
+
+    @Override
+    public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
+        if (TrackTools.isRailBlockAt(worldIn, pos.up()) || TrackTools.isRailBlockAt(worldIn, pos.down()))
+            return false;
+        if (super.canPlaceBlockAt(worldIn, pos))
+            return true;
+        if (stack != null) {
+            TrackType trackType = TrackRegistry.TRACK_TYPE.get(stack);
+            if (trackType.getMaxSupportDistance() > 0 && TrackSupportTools.isSupported(worldIn, pos, trackType.getMaxSupportDistance()))
+                return true;
+            TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
+            if (trackKit.getMaxSupportDistance() > 0 && TrackSupportTools.isSupported(worldIn, pos, trackKit.getMaxSupportDistance()))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return getDefaultState();
+    }
 
     // Determine direction here
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
         if (tile instanceof TileTrackOutfitted) {
+            TrackType trackType = TrackRegistry.TRACK_TYPE.get(stack);
+            TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
+            TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, trackType, trackKit);
             ((TileTrackOutfitted) tile).onBlockPlacedBy(state, placer, stack);
             ((TileTrackOutfitted) tile).getTrackKitInstance().onBlockPlacedBy(state, placer, stack);
+            worldIn.notifyBlockUpdate(pos, state, state, 3);
         }
     }
 

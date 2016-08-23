@@ -1,0 +1,6 @@
+{
+  "parent": "block/rail_flat",
+  "textures": {
+    "rail": "railcraft:blocks/tracks/outfitted/type/high_speed"
+  }
+}

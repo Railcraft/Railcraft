@@ -1,0 +1,6 @@
+{
+  "parent": "block/rail_raised_ne",
+  "textures": {
+    "rail": "railcraft:blocks/tracks/outfitted/type/reinforced"
+  }
+}

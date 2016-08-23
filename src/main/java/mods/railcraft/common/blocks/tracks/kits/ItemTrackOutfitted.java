@@ -10,55 +10,24 @@
 package mods.railcraft.common.blocks.tracks.kits;
 
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.tracks.*;
-import mods.railcraft.common.blocks.ItemBlockRailcraft;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.api.tracks.TrackKit;
+import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.common.blocks.tracks.ItemTrack;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
-public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem {
+public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
 
     public ItemTrackOutfitted(Block block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
-        setUnlocalizedName("railcraft.track");
-    }
-
-//    @Override
-//    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-//        return getTrackSpec(stack).getItemModel();
-//    }
-
-    public TrackKit getTrackKit(ItemStack stack) {
-        if (stack.getItem() == this) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
-            if (nbt != null && nbt.hasKey(TrackKit.NBT_TAG))
-                return TrackRegistry.getTrackKit(nbt.getString(TrackKit.NBT_TAG));
-        }
-        return TrackRegistry.getTrackKit("railcraft:default");
-    }
-
-    public TrackType getTrackType(ItemStack stack) {
-        if (stack.getItem() == this) {
-            NBTTagCompound nbt = InvTools.getItemData(stack);
-            if (nbt.hasKey(TrackType.NBT_TAG))
-                return TrackRegistry.getTrackType(nbt.getString(TrackType.NBT_TAG));
-        }
-        return TrackTypes.IRON.getTrackType();
     }
 
     @Override
@@ -68,7 +37,7 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile.railcraft." + getTrackType(stack).getName() + "." + getTrackKit(stack).getName();
+        return "tile.railcraft." + TrackRegistry.TRACK_TYPE.get(stack).getName() + "." + TrackRegistry.TRACK_KIT.get(stack).getName();
     }
 
     @Override
@@ -80,63 +49,16 @@ public class ItemTrackOutfitted extends ItemBlockRailcraft implements ITrackItem
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
-            if (track.getTrackKitInstance().getTrackKit() == getTrackKit(stack))
+            if (track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack))
                 return true;
         }
         return false;
     }
 
     @Override
-    public boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable EnumRailDirection trackShape) {
-        return placeTrack(stack, player, world, pos, trackShape, EnumFacing.UP);
-    }
-
-    private boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable EnumRailDirection trackShape, EnumFacing face) {
-        BlockTrackOutfitted blockTrack = getPlacedBlock();
-        if (pos.getY() >= world.getHeight() - 1)
-            return false;
-        if (stack == null || !(stack.getItem() instanceof ItemTrackOutfitted))
-            return false;
-
-        TrackType trackType = getTrackType(stack);
-        TrackKit trackKit = getTrackKit(stack);
-        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackType, trackKit);
-        ITrackKitInstance track = tile.getTrackKitInstance();
-
-        boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);
-        if (track instanceof ITrackKitCustomPlaced)
-            canPlace &= ((ITrackKitCustomPlaced) track).canPlaceRailAt(world, pos);
-        else
-            canPlace &= world.isSideSolid(pos.down(), EnumFacing.UP);
-
-        if (canPlace) {
-            IBlockState wantedState = TrackToolsAPI.makeTrackState(blockTrack, trackShape);
-            boolean placed = WorldPlugin.setBlockState(world, pos, wantedState);
-            // System.out.println("Block placement attempted");
-            if (placed) {
-                if (world.getBlockState(pos).getBlock() == blockTrack) {
-                    world.setTileEntity(pos, tile);
-                    blockTrack.onBlockPlacedBy(world, pos, wantedState, player, stack);
-                    world.notifyBlockUpdate(pos, wantedState, wantedState, 3);
-                }
-                double x = pos.getX() + 0.5;
-                double y = pos.getY() + 0.5;
-                double z = pos.getZ() + 0.5;
-                world.playSound(x, y, z,
-                        blockTrack.getSoundType().getPlaceSound(),
-                        SoundCategory.PLAYERS,
-                        (blockTrack.getSoundType().getVolume() + 1.0F) / 2.0F,
-                        blockTrack.getSoundType().getPitch() * 0.8F,
-                        false);
-            }
-            return true;
-        } else
-            return false;
-    }
-
-    //TODO: Test placement at player feet
-    @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        return placeTrack(stack, player, world, pos, null, side);
+        TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
+        newState = newState.withProperty(BlockTrackOutfitted.TICKING, trackKit.requiresTicks());
+        return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
     }
 }

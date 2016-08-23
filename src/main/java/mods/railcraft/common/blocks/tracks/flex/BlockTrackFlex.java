@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.tracks.flex;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
@@ -62,5 +63,10 @@ public class BlockTrackFlex extends BlockRail implements IRailcraftTrack {
     @Override
     public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
         return trackType;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        return !TrackTools.isRailBlockAt(world, pos.up()) && super.canPlaceBlockAt(world, pos);
     }
 }

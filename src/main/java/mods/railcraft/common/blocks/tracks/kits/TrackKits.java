@@ -20,7 +20,6 @@ import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.ItemTie.EnumTie;
@@ -35,7 +34,6 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
 public enum TrackKits implements IRailcraftObjectContainer {
 
@@ -68,13 +66,18 @@ public enum TrackKits implements IRailcraftObjectContainer {
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
     private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);
-    private static final Function<ItemStack, List<String>> tooltipProvider = stack -> {
-        ToolTip toolTip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
-        return toolTip != null ? toolTip.convertToStrings() : Collections.emptyList();
-    };
 
     static {
         TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
+
+        BUFFER_STOP.allowedOnSlopes = false;
+        DISEMBARK.allowedOnSlopes = false;
+        DUMPING.allowedOnSlopes = false;
+        EMBARKING.allowedOnSlopes = false;
+        GATED.allowedOnSlopes = false;
+        GATED_ONE_WAY.allowedOnSlopes = false;
+        LAUNCHER.allowedOnSlopes = false;
+        LOCKING.allowedOnSlopes = false;
 
 //        creativeList.add(SWITCH);
 //        creativeList.add(WYE);
@@ -108,6 +111,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private TrackKit trackKit;
     private boolean depreciated;
+    private boolean allowedOnSlopes = true;
 
     TrackKits(Class<? extends IRailcraftModule> module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
         this.module = module;
@@ -136,9 +140,10 @@ public enum TrackKits implements IRailcraftObjectContainer {
     public void register() {
         //TODO: Add way to disable track kits
         if (trackKit == null) {
-            trackKit = new TrackKit(getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance);
+            trackKit = new TrackKit(getTag(), trackInstance);
+            trackKit.setAllowedOnSlopes(allowedOnSlopes);
             try {
-                TrackRegistry.registerTrackKit(trackKit);
+                TrackRegistry.TRACK_KIT.register(trackKit);
                 TRACK_KITS.add(trackKit);
 //                registerRecipe();
             } catch (Error error) {
@@ -152,7 +157,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     @Override
     public boolean isEqual(ItemStack stack) {
-        return stack.getItem() instanceof ItemTrackKit && ((ItemTrackKit) stack.getItem()).getTrackKit(stack) == getTrackKit();
+        return stack.getItem() instanceof ItemTrackKit && TrackRegistry.TRACK_KIT.get(stack) == getTrackKit();
     }
 
     @Override
@@ -191,10 +196,6 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     public TrackKit getTrackKit() {
         return trackKit;
-    }
-
-    public String getTextureTag() {
-        return "railcraft:tracks/track." + tag;
     }
 
     @Override

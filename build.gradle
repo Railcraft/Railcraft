@@ -90,6 +90,7 @@ dependencies {
     api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     // runtime "net.sengir.forestry:forestry_${project.version_minecraft}::${project.version_forestry}:dev"
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
+    compile "org.jetbrains:annotations:15.0"
 }
 
 processResources {

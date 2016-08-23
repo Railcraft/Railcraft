@@ -25,14 +25,18 @@ import java.util.Set;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class AbandonedTrackTools {
+public class TrackSupportTools {
 
     public static boolean isSupportedDirectly(IBlockAccess world, BlockPos pos) {
         return world.isSideSolid(pos.down(), EnumFacing.UP, false);
     }
 
     public static boolean isSupported(World world, BlockPos pos) {
-        return isSupported(world, pos, false, 0, new HashSet<>());
+        return isSupported(world, pos, 2);
+    }
+
+    public static boolean isSupported(World world, BlockPos pos, int maxDistance) {
+        return isSupported(world, pos, false, maxDistance, new HashSet<>());
     }
 
     private static boolean isSupported(World world, BlockPos pos, boolean checkSelf, int distance, Set<BlockPos> checked) {
@@ -45,9 +49,9 @@ public class AbandonedTrackTools {
             return false;
         if (world.isSideSolid(pos.down(), EnumFacing.UP, false))
             return true;
-        if (distance >= 2)
+        if (distance <= 0)
             return false;
-        distance++;
+        distance--;
         for (BlockPos connectedTrack : TrackTools.getConnectedTracks(world, pos)) {
             if (isSupported(world, connectedTrack, true, distance, checked))
                 return true;

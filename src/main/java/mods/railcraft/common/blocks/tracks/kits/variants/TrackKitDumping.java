@@ -16,8 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
@@ -43,11 +41,6 @@ public class TrackKitDumping extends TrackSuspended implements ITrackKitPowered 
             }
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
-    }
-
-    @Override
-    public boolean canPlaceRailAt(World world, BlockPos pos) {
-        return world.isAirBlock(pos.down()) && super.canPlaceRailAt(world, pos);
     }
 
     @Override

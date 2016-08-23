@@ -15,6 +15,7 @@ import com.google.common.primitives.Ints;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -187,6 +188,9 @@ public final class Railcraft {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        TrackRegistry.TRACK_TYPE.finalizeRegistry();
+        TrackRegistry.TRACK_KIT.finalizeRegistry();
+
 //        Game.log(Level.FINE, "Post-Init Phase");
         RailcraftModuleManager.postInit();
 

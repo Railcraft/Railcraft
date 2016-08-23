@@ -43,6 +43,7 @@ public enum TrackTypes {
 
     static {
         ABANDONED.trackType.speedController = SpeedControllerAbandoned.instance();
+        ABANDONED.trackType.setMaxSupportDistance(2);
 
         STRAP_IRON.trackType.speedController = SpeedControllerStrapIron.instance();
 
@@ -63,7 +64,7 @@ public enum TrackTypes {
     TrackTypes(ResourceLocation baseBlock) {
         this.baseBlock = baseBlock;
         trackType = new RailcraftTrackType();
-        TrackRegistry.registerTrackKit(trackType);
+        TrackRegistry.TRACK_TYPE.register(trackType);
     }
 
     public TrackType getTrackType() {
@@ -76,9 +77,9 @@ public enum TrackTypes {
 
         public RailcraftTrackType() {
             super(
-                    RailcraftConstants.RESOURCE_DOMAIN + ":" + name().toLowerCase(Locale.ROOT),
+                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)),
                     baseBlock,
-                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT))
+                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT))
             );
         }
 

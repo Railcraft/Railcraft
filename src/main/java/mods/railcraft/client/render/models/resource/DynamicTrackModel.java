@@ -11,13 +11,13 @@
 package mods.railcraft.client.render.models.resource;
 
 import com.google.common.base.Function;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
-import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -34,10 +34,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Created by CovertJaguar on 8/18/2016 for Railcraft.
@@ -46,32 +43,55 @@ import java.util.stream.Collectors;
  */
 public class DynamicTrackModel implements IModel {
     public static final DynamicTrackModel INSTANCE = new DynamicTrackModel();
-    private static final ResourceLocation MODEL_FLAT = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_flat");
-    private static final ResourceLocation MODEL_RAISED_NE = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_raised_ne");
-    private static final ResourceLocation MODEL_RAISED_SW = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/outfitted_rail_raised_sw");
+    private static final String TRACK_TYPE_MODEL_FOLDER = "block/tracks/outfitted/type/";
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
-        return Arrays.asList(MODEL_FLAT, MODEL_RAISED_NE, MODEL_RAISED_SW);
+        Set<ResourceLocation> models = new HashSet<>();
+        for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
+            for (ShapeVariants variant : ShapeVariants.values()) {
+                models.add(variant.getModelLocation(TRACK_TYPE_MODEL_FOLDER, trackType.getRegistryName()));
+            }
+        }
+        return models;
     }
 
     @Override
     public Collection<ResourceLocation> getTextures() {
-        return TrackRegistry.getTrackTypes().values().stream().map(TrackType::getTexture).collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new ModelWrapper(
-                ModelManager.getModel(MODEL_FLAT).bake(state, format, bakedTextureGetter),
-                ModelManager.getModel(MODEL_RAISED_NE).bake(state, format, bakedTextureGetter),
-                ModelManager.getModel(MODEL_RAISED_SW).bake(state, format, bakedTextureGetter)
-        );
+        Map<ResourceLocation, IBakedModel> trackTypeModels = new HashMap<>();
+        for (ResourceLocation modelLocation : getDependencies()) {
+            trackTypeModels.put(modelLocation, ModelManager.getModel(modelLocation).bake(state, format, bakedTextureGetter));
+        }
+        return new ModelWrapper(trackTypeModels);
     }
 
     @Override
     public IModelState getDefaultState() {
         return null;
+    }
+
+    enum ShapeVariants {
+        FLAT("_rail_flat"),
+        RAISED_NE("_rail_raised_ne"),
+        RAISED_SW("_rail_raised_sw");
+
+        private final String modelSuffix;
+
+        ShapeVariants(String modelSuffix) {
+            this.modelSuffix = modelSuffix;
+        }
+
+        public ResourceLocation getModelLocation(String modelPrefix, ResourceLocation registryName) {
+            return new ResourceLocation(
+                    registryName.getResourceDomain(),
+                    modelPrefix + registryName.getResourcePath() + modelSuffix
+            );
+        }
     }
 
     public enum Loader implements ICustomModelLoader {
@@ -97,67 +117,78 @@ public class DynamicTrackModel implements IModel {
     }
 
     public class ModelWrapper implements IBakedModel {
-        private final IBakedModel modelFlat;
-        private final IBakedModel modelRaisedNE;
-        private final IBakedModel modelRaisedSW;
+        private final Map<ResourceLocation, IBakedModel> trackTypeModels;
+        private final IBakedModel baseModel;
 
-        public ModelWrapper(IBakedModel modelFlat, IBakedModel modelRaisedNE, IBakedModel modelRaisedSW) {
-            this.modelFlat = modelFlat;
-            this.modelRaisedNE = modelRaisedNE;
-            this.modelRaisedSW = modelRaisedSW;
+        public ModelWrapper(Map<ResourceLocation, IBakedModel> trackTypeModels) {
+            this.trackTypeModels = trackTypeModels;
+            baseModel = trackTypeModels.get(ShapeVariants.FLAT.getModelLocation(TRACK_TYPE_MODEL_FOLDER, TrackTypes.IRON.getTrackType().getRegistryName()));
         }
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-            IBakedModel base = modelFlat;
-            TrackType trackType = TrackTypes.IRON.getTrackType();
+            TrackType trackType;
+            TrackKit trackKit;
+            BlockRailBase.EnumRailDirection shape;
             if (state != null) {
-                switch (state.getValue(BlockTrackOutfitted.SHAPE)) {
-                    case ASCENDING_EAST:
-                    case ASCENDING_NORTH:
-                        base = modelRaisedNE;
-                        break;
-                    case ASCENDING_SOUTH:
-                    case ASCENDING_WEST:
-                        base = modelRaisedSW;
-                        break;
-                }
+                shape = state.getValue(BlockTrackOutfitted.SHAPE);
                 trackType = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.TRACK_TYPE);
+                trackKit = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.TRACK_KIT);
+            } else {
+                shape = BlockRailBase.EnumRailDirection.NORTH_SOUTH;
+                trackType = TrackTypes.IRON.getTrackType();
+                trackKit = TrackRegistry.getMissingTrackKit();
             }
-            List<BakedQuad> originalQuads = base.getQuads(state, side, rand);
-            TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(trackType.getTexture().toString());
-            return originalQuads.stream().map(quad -> new BakedQuad(quad.getVertexData(), quad.getTintIndex(), quad.getFace(), texture, quad.shouldApplyDiffuseLighting(), quad.getFormat())).collect(Collectors.toList());
+            IBakedModel trackTypeModel;
+            switch (shape) {
+                case ASCENDING_EAST:
+                case ASCENDING_NORTH:
+                    trackTypeModel = trackTypeModels.get(ShapeVariants.RAISED_NE.getModelLocation(TRACK_TYPE_MODEL_FOLDER, trackType.getRegistryName()));
+                    break;
+                case ASCENDING_SOUTH:
+                case ASCENDING_WEST:
+                    trackTypeModel = trackTypeModels.get(ShapeVariants.RAISED_SW.getModelLocation(TRACK_TYPE_MODEL_FOLDER, trackType.getRegistryName()));
+                    break;
+                default:
+                    trackTypeModel = trackTypeModels.get(ShapeVariants.FLAT.getModelLocation(TRACK_TYPE_MODEL_FOLDER, trackType.getRegistryName()));
+            }
+            List<BakedQuad> quads = trackTypeModel.getQuads(state, side, rand);
+//            TextureAtlasSprite trackTypeTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(trackType.getTexture().toString());
+//            TextureAtlasSprite trackKitTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(trackKit.getTexture().toString());
+//            quads.set(0, new BakedQuadRetextured(quads.get(0), trackTypeTexture));
+//            quads.set(1, new BakedQuadRetextured(quads.get(1), trackKitTexture));
+            return quads;
         }
 
         @Override
         public boolean isAmbientOcclusion() {
-            return modelFlat.isAmbientOcclusion();
+            return baseModel.isAmbientOcclusion();
         }
 
         @Override
         public boolean isGui3d() {
-            return modelFlat.isGui3d();
+            return baseModel.isGui3d();
         }
 
         @Override
         public boolean isBuiltInRenderer() {
-            return modelFlat.isBuiltInRenderer();
+            return baseModel.isBuiltInRenderer();
         }
 
         @Override
         public TextureAtlasSprite getParticleTexture() {
-            return modelFlat.getParticleTexture();
+            return baseModel.getParticleTexture();
         }
 
         @Override
         @Deprecated
         public ItemCameraTransforms getItemCameraTransforms() {
-            return modelFlat.getItemCameraTransforms();
+            return baseModel.getItemCameraTransforms();
         }
 
         @Override
         public ItemOverrideList getOverrides() {
-            return modelFlat.getOverrides();
+            return baseModel.getOverrides();
         }
     }
 

@@ -253,12 +253,14 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (!sbb.isVecInside(pos))
             return;
 
-        setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape), x, y, z, sbb);
-        TileTrackOutfitted tile = TrackTileFactory.makeTrackTile(trackType.getTrackType(), trackKit);
-        world.setTileEntity(pos, tile);
-        EnumFacing facing = getCoordBaseMode();
-        boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
-        ((ITrackKitReversible) tile.getTrackKitInstance()).setReversed(r != reversed);
+        setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape).withProperty(BlockTrackOutfitted.TICKING, trackKit.requiresTicks()), x, y, z, sbb);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, trackType.getTrackType(), trackKit);
+            EnumFacing facing = getCoordBaseMode();
+            boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
+            ((ITrackKitReversible) ((TileTrackOutfitted) tile).getTrackKitInstance()).setReversed(r != reversed);
+        }
     }
 
     private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {

@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.behaivor.AbandonedTrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -37,13 +37,13 @@ public class BlockTrackAbandoned extends BlockTrackFlex {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        if (!AbandonedTrackTools.isSupported(worldIn, pos))
+        if (!TrackSupportTools.isSupported(worldIn, pos))
             breakRail(worldIn, pos);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        if (AbandonedTrackTools.isSupported(worldIn, pos)) {
+        if (TrackSupportTools.isSupported(worldIn, pos)) {
             if (neighborBlock != this) {
                 for (BlockPos connectedTrack : TrackTools.getConnectedTracks(worldIn, pos)) {
                     worldIn.notifyBlockOfStateChange(connectedTrack, this);
@@ -62,11 +62,11 @@ public class BlockTrackAbandoned extends BlockTrackFlex {
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return !TrackTools.isRailBlockAt(worldIn, pos.up())
                 && !TrackTools.isRailBlockAt(worldIn, pos.down())
-                && (super.canPlaceBlockAt(worldIn, pos) || AbandonedTrackTools.isSupported(worldIn, pos));
+                && (super.canPlaceBlockAt(worldIn, pos) || TrackSupportTools.isSupported(worldIn, pos));
     }
 
     @Override
     public boolean canMakeSlopes(IBlockAccess world, BlockPos pos) {
-        return AbandonedTrackTools.isSupportedDirectly(world, pos);
+        return TrackSupportTools.isSupportedDirectly(world, pos);
     }
 }

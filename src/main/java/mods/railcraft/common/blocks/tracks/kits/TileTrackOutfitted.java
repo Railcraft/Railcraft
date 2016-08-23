@@ -32,6 +32,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     public TileTrackOutfitted() {
     }
 
+    @Override
     public TrackType getTrackType() {
         return trackType;
     }
@@ -59,6 +60,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
+        data.setString(TrackType.NBT_TAG, getTrackType().getName());
         data.setString(TrackKit.NBT_TAG, getTrackKitInstance().getTrackKit().getName());
 
         trackKitInstance.writeToNBT(data);
@@ -69,11 +71,16 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (data.hasKey(TrackKit.NBT_TAG)) {
-            TrackKit spec = TrackRegistry.getTrackKit(data.getString(TrackKit.NBT_TAG));
-            trackKitInstance = spec.createInstanceFromSpec();
+        if (data.hasKey(TrackType.NBT_TAG)) {
+            trackType = TrackRegistry.TRACK_TYPE.get(data);
         } else
-            trackKitInstance = TrackRegistry.getMissingTrackKit().createInstanceFromSpec();
+            trackType = TrackTypes.IRON.getTrackType();
+
+        if (data.hasKey(TrackKit.NBT_TAG)) {
+            TrackKit trackKit = TrackRegistry.TRACK_KIT.get(data);
+            trackKitInstance = trackKit.createInstance();
+        } else
+            trackKitInstance = TrackRegistry.getMissingTrackKit().createInstance();
 
         trackKitInstance.setTile(this);
         trackKitInstance.readFromNBT(data);
@@ -82,12 +89,27 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
+        data.writeInt(TrackRegistry.TRACK_TYPE.getId(getTrackType()));
+        data.writeInt(TrackRegistry.TRACK_KIT.getId(getTrackKitInstance().getTrackKit()));
         trackKitInstance.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
+        boolean needsUpdate = false;
+        TrackType type = TrackRegistry.TRACK_TYPE.get(data.readInt());
+        if (trackType != type) {
+            trackType = type;
+            needsUpdate = true;
+        }
+        TrackKit kit = TrackRegistry.TRACK_KIT.get(data.readInt());
+        if (getTrackKitInstance().getTrackKit() != kit) {
+            setTrackKitInstance(kit.createInstance());
+            needsUpdate = true;
+        }
+        if (needsUpdate)
+            markBlockForUpdate();
         trackKitInstance.readPacketData(data);
     }
 

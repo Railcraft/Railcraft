@@ -18,19 +18,11 @@ import mods.railcraft.api.tracks.TrackType;
  */
 public class TrackTileFactory {
 
-    public static TileTrackOutfitted makeTrackTile(TrackType trackType, TrackKit trackKit) {
-        ITrackKitInstance trackInstance = trackKit.createInstanceFromSpec();
-        TileTrackOutfitted tileTrack;
-//        if (trackKit == TrackKits.BUFFER_STOP.getTrackKit())
-//            tileTrack = new TileTrackOutfittedTESR();
-        if (trackInstance.canUpdate())
-            tileTrack = new TileTrackOutfittedTicking();
-        else
-            tileTrack = new TileTrackOutfitted();
-        tileTrack.setTrackType(trackType);
-        tileTrack.setTrackKitInstance(trackInstance);
-        trackInstance.setTile(tileTrack);
-        return tileTrack;
+    public static void initTrackTile(TileTrackOutfitted tile, TrackType trackType, TrackKit trackKit) {
+        ITrackKitInstance trackInstance = trackKit.createInstance();
+        tile.setTrackType(trackType);
+        tile.setTrackKitInstance(trackInstance);
+        trackInstance.setTile(tile);
     }
 
 }
