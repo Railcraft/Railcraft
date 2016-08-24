@@ -12,6 +12,7 @@ package mods.railcraft.common.modules;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.api.core.RailcraftCore;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.misc.Game;
@@ -27,40 +28,6 @@ public class RailcraftModuleManager {
 
     private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
     private static final String CATEGORY_MODULES = "modules";
-
-    public enum Stage {
-        LOADING,
-        DEPENDENCY_CHECKING,
-        CONSTRUCTION {
-            @Override
-            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
-                eventHandler.construction();
-            }
-        },
-        PRE_INIT {
-            @Override
-            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
-                eventHandler.preInit();
-            }
-        },
-        INIT {
-            @Override
-            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
-                eventHandler.init();
-            }
-        },
-        POST_INIT {
-            @Override
-            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
-                eventHandler.postInit();
-            }
-        },
-        FINISHED;
-
-        public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
-        }
-    }
-
     private static final Map<Class<? extends IRailcraftModule>, IRailcraftModule> classToInstanceMapping = new HashMap<>();
     private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<>();
     private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
@@ -71,7 +38,7 @@ public class RailcraftModuleManager {
     }
 
     public static void loadModules(ASMDataTable asmDataTable) {
-        stage = Stage.LOADING;
+        setStage(Stage.LOADING);
         Game.log(Level.TRACE, "Loading Modules.");
         String annotationName = RailcraftModule.class.getCanonicalName();
         for (ASMDataTable.ASMData asmData : asmDataTable.getAll(annotationName)) {
@@ -102,8 +69,13 @@ public class RailcraftModuleManager {
         return stage;
     }
 
+    private static void setStage(Stage stage) {
+        RailcraftModuleManager.stage = stage;
+        RailcraftCore.setInitStage(stage.name());
+    }
+
     public static void preInit() {
-        stage = Stage.DEPENDENCY_CHECKING;
+        setStage(Stage.DEPENDENCY_CHECKING);
         Game.log(Level.TRACE, "Checking Module dependencies and config.");
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
@@ -200,11 +172,11 @@ public class RailcraftModuleManager {
 
     public static void postInit() {
         processStage(Stage.POST_INIT);
-        stage = Stage.FINISHED;
+        setStage(Stage.FINISHED);
     }
 
     private static void processStage(Stage s) {
-        stage = s;
+        setStage(s);
         Game.log(Level.TRACE, "Performing {0} on Modules.", stage.name());
         for (Class<? extends IRailcraftModule> moduleClass : loadOrder) {
             IRailcraftModule module = classToInstanceMapping.get(moduleClass);
@@ -231,6 +203,39 @@ public class RailcraftModuleManager {
 
     public static boolean isModuleEnabled(String moduleName) {
         return enabledModules.contains(nameToClassMapping.get(moduleName));
+    }
+
+    public enum Stage {
+        LOADING,
+        DEPENDENCY_CHECKING,
+        CONSTRUCTION {
+            @Override
+            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
+                eventHandler.construction();
+            }
+        },
+        PRE_INIT {
+            @Override
+            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
+                eventHandler.preInit();
+            }
+        },
+        INIT {
+            @Override
+            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
+                eventHandler.init();
+            }
+        },
+        POST_INIT {
+            @Override
+            public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
+                eventHandler.postInit();
+            }
+        },
+        FINISHED;
+
+        public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
+        }
     }
 
 //    @SideOnly(Side.CLIENT)

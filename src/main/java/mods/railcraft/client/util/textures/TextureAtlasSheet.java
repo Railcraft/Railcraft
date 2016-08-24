@@ -35,29 +35,33 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     private final int rows;
     private final int columns;
 
-    public static void unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, Tuple<Integer, Integer> textureDimensions) {
+    public static ResourceLocation[] unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, Tuple<Integer, Integer> textureDimensions) {
+        return unstitchIcons(textureMap, textureResource, textureDimensions, "blocks/");
+    }
+
+    public static ResourceLocation[] unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, Tuple<Integer, Integer> textureDimensions, String textureFolder) {
         int columns = textureDimensions.getFirst();
         int rows = textureDimensions.getSecond();
         if (columns <= 1 && rows <= 1)
-            return;
+            return new ResourceLocation[]{new ResourceLocation(textureResource.getResourceDomain(), textureFolder + textureResource.getResourcePath())};
 
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
 
         int numIcons = rows * columns;
-//        TextureAtlasSprite[] icons = new TextureAtlasSprite[numIcons];
+        ResourceLocation[] locations = new ResourceLocation[numIcons];
         String domain = textureResource.getResourceDomain();
         String name = textureResource.getResourcePath();
 
         Map<String, TextureAtlasSprite> mapRegisteredSprites = ObfuscationReflectionHelper.getPrivateValue(TextureMap.class, textureMap, 5);
 
         for (int i = 0; i < numIcons; i++) {
-            String texName = domain + ":blocks/" + name;
+            String texName = domain + ":" + textureFolder + name;
             TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
             mapRegisteredSprites.put(texture.getIconName(), texture);
-//            icons[i] = texture;
+            locations[i] = new ResourceLocation(texture.getIconName());
         }
-//        return icons;
+        return locations;
     }
 
     private TextureAtlasSheet(String name, int index, int rows, int columns) {

@@ -68,7 +68,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
     public static final IUnlistedProperty<TrackKit> TRACK_KIT = UnlistedProperty.create("track_kit", TrackKit.class);
-    public static final IUnlistedProperty<Integer> TEXTURE_INDEX = Properties.toUnlisted(PropertyInteger.create("texture_index", 0, 15));
+    public static final IUnlistedProperty<Integer> STATE = Properties.toUnlisted(PropertyInteger.create("state", 0, 15));
 
     public BlockTrackOutfitted() {
         setCreativeTab(CreativeTabs.TRANSPORTATION);
@@ -85,6 +85,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         state = super.getExtendedState(state, world, pos);
         state = ((IExtendedBlockState) state).withProperty(TRACK_TYPE, getTrackType(world, pos));
         state = ((IExtendedBlockState) state).withProperty(TRACK_KIT, getTrackKit(world, pos));
+        state = ((IExtendedBlockState) state).withProperty(STATE, 0);
         Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(world, pos, TileTrackOutfitted.class);
         IExtendedBlockState exState = (IExtendedBlockState) state;
         return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getExtendedState(exState)).orElse(exState);
@@ -113,7 +114,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty(), TICKING}, new IUnlistedProperty[]{TRACK_TYPE, TRACK_KIT, TEXTURE_INDEX});
+        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty(), TICKING}, new IUnlistedProperty[]{TRACK_TYPE, TRACK_KIT, STATE});
     }
 
     @Override

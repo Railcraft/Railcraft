@@ -464,6 +464,7 @@ public class RailcraftConfig {
         loadBlockProperty("fluid.creosote");
         loadBlockProperty("fluid.steam");
 
+        // TODO: Move to own file?
         for (TrackKits type : TrackKits.VALUES) {
 //            if (type.isDepreciated())
 //                continue;

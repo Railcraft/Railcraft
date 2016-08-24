@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat"
+  },
+  "variants": {
+    "normal": [{}],
+    "state": {
+      "0": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_0"}
+      },
+      "1": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_1"}
+      }
+    }
+  }
+}

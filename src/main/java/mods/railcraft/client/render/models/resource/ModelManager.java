@@ -77,9 +77,9 @@ public class ModelManager {
         IModel model;
         try {
             model = ModelLoaderRegistry.getModel(location);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             model = ModelLoaderRegistry.getMissingModel();
-            Game.log(Level.ERROR, "Missing model: " + location);
+            Game.logThrowable("Missing model: " + location, ex);
         }
         return model;
     }

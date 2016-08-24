@@ -16,10 +16,7 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.kits.variants.*;
-import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.*;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.ItemTie.EnumTie;
@@ -31,33 +28,34 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public enum TrackKits implements IRailcraftObjectContainer {
 
-    ACTIVATOR(ModuleTracks.class, 2, 1, "activator", 8, TrackKitBooster.class),
-    BOOSTER(ModuleTracksWood.class, 2, 1, "booster", 8, TrackKitBooster.class),
-    BUFFER_STOP(ModuleTracks.class, 2, 0, "buffer", 8, TrackBufferStop.class),
-    CONTROL(ModuleTracks.class, 2, 0, "control", 16, TrackControl.class),
-    COUPLER(ModuleTracks.class, 6, 1, "coupler", 8, TrackKitCoupler.class),
-    DETECTOR(ModuleTracks.class, 4, 0, "detector", 8, TrackKitDetectorTravel.class),
-    DETECTOR_TRAVEL(ModuleTracks.class, 4, 0, "detector_travel", 8, TrackKitDetectorTravel.class),
-    DISEMBARK(ModuleTracks.class, 4, 1, "disembarking", 8, TrackKitDisembark.class),
-    DUMPING(ModuleTracks.class, 2, 0, "dumping", 8, TrackKitDumping.class),
-    EMBARKING(ModuleTracks.class, 2, 1, "embarking", 8, TrackKitEmbarking.class),
-    GATED(ModuleTracks.class, 1, 0, "gated", 4, TrackKitGated.class),
-    GATED_ONE_WAY(ModuleTracks.class, 2, 0, "gated_one_way", 4, TrackKitGatedOneWay.class),
-    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, 1, "transition", 8, TrackSpeedTransition.class),
-    LAUNCHER(ModuleExtras.class, 2, 1, "launcher", 1, TrackKitLauncher.class),
-    LIMITER(ModuleLocomotives.class, 6, 5, "limiter", 8, TrackKitLimiter.class),
-    LOCKING(ModuleTracks.class, 16, 1, "locking", 8, TrackKitLocking.class),
-    LOCOMOTIVE(ModuleLocomotives.class, 6, 3, "locomotive", 8, TrackKitLocomotive.class),
-    ONE_WAY(ModuleTracks.class, 4, 1, "one_way", 8, TrackKitOneWay.class),
-    PRIMING(ModuleExtras.class, 2, 1, "priming", 8, TrackKitPriming.class),
-    ROUTING(ModuleRouting.class, 2, 1, "routing", 8, TrackKitRouting.class),
-    WHISTLE(ModuleLocomotives.class, 2, 1, "whistle", 8, TrackKitWhistle.class),
+    ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitBooster.class),
+    BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class),
+    BUFFER_STOP(ModuleTracks.class, 2, "buffer", 8, TrackBufferStop.class),
+    CONTROL(ModuleTracks.class, 2, "control", 16, TrackControl.class),
+    COUPLER(ModuleTracks.class, 6, "coupler", 8, TrackKitCoupler.class),
+    DETECTOR(ModuleTracks.class, 4, "detector", 8, TrackKitDetectorTravel.class),
+    DETECTOR_TRAVEL(ModuleTracks.class, 4, "detector_travel", 8, TrackKitDetectorTravel.class),
+    DISEMBARK(ModuleTracks.class, 4, "disembarking", 8, TrackKitDisembark.class),
+    DUMPING(ModuleTracks.class, 2, "dumping", 8, TrackKitDumping.class),
+    EMBARKING(ModuleTracks.class, 2, "embarking", 8, TrackKitEmbarking.class),
+    GATED(ModuleTracks.class, 1, "gated", 4, TrackKitGated.class),
+    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
+    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, "transition", 8, TrackSpeedTransition.class),
+    LAUNCHER(ModuleExtras.class, 2, "launcher", 1, TrackKitLauncher.class),
+    LIMITER(ModuleLocomotives.class, 6, "limiter", 8, TrackKitLimiter.class),
+    LOCKING(ModuleTracks.class, 16, "locking", 8, TrackKitLocking.class),
+    LOCOMOTIVE(ModuleLocomotives.class, 6, "locomotive", 8, TrackKitLocomotive.class),
+    ONE_WAY(ModuleTracks.class, 4, "one_way", 8, TrackKitOneWay.class),
+    PRIMING(ModuleExtras.class, 2, "priming", 8, TrackKitPriming.class),
+    ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class),
+    WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class),
 //    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
 //    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
 //    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
@@ -107,16 +105,16 @@ public enum TrackKits implements IRailcraftObjectContainer {
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final int numIcons;
-    private final int itemIconIndex;
+    private final int states;
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private TrackKit trackKit;
     private boolean depreciated;
     private boolean allowedOnSlopes = true;
 
-    TrackKits(Class<? extends IRailcraftModule> module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
+    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
         this.module = module;
-        this.numIcons = numIcons;
-        this.itemIconIndex = itemIconIndex;
+        this.numIcons = states;
+        this.states = states;
         this.tag = tag;
         this.recipeOutput = recipeOutput;
         this.trackInstance = trackInstance;
@@ -140,8 +138,10 @@ public enum TrackKits implements IRailcraftObjectContainer {
     public void register() {
         //TODO: Add way to disable track kits
         if (trackKit == null) {
-            trackKit = new TrackKit(getTag(), trackInstance);
-            trackKit.setAllowedOnSlopes(allowedOnSlopes);
+            TrackKit.TrackKitBuilder builder = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
+            builder.setStates(states);
+            builder.setAllowedOnSlopes(allowedOnSlopes);
+            trackKit = builder.build();
             try {
                 TrackRegistry.TRACK_KIT.register(trackKit);
                 TRACK_KITS.add(trackKit);
@@ -204,15 +204,11 @@ public enum TrackKits implements IRailcraftObjectContainer {
     }
 
     public String getTag() {
-        return "railcraft:" + getBaseTag();
+        return RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag();
     }
 
     public int getNumIcons() {
         return numIcons;
-    }
-
-    public int getItemIconIndex() {
-        return itemIconIndex;
     }
 
     @Nullable

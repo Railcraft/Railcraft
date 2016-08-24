@@ -99,11 +99,19 @@ public class ClientProxy extends CommonProxy {
                         if (variants != null) {
                             for (IVariantEnum variant : variants) {
                                 if (variant instanceof IVariantEnumBlock)
-                                    TextureAtlasSheet.unstitchIcons(event.getMap(), new ResourceLocation(block.getRegistryName() + "_" + variant.getResourcePathSuffix()), ((IVariantEnumBlock) variant).getTextureDimensions());
+                                    TextureAtlasSheet.unstitchIcons(event.getMap(),
+                                            new ResourceLocation(block.getRegistryName() + "_" + variant.getResourcePathSuffix()),
+                                            ((IVariantEnumBlock) variant).getTextureDimensions());
                             }
                         }
                     }
                 }
+
+//                for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
+//                    TextureAtlasSheet.unstitchIcons(event.getMap(),
+//                            trackKit.getRegistryName(),
+//                            ((IVariantEnumBlock) variant).getTextureDimensions());
+//                }
             }
         });
 

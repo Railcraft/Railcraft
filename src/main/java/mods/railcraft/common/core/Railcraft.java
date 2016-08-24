@@ -172,6 +172,9 @@ public final class Railcraft {
 
         RailcraftModuleManager.preInit();
 
+        TrackRegistry.TRACK_TYPE.finalizeRegistry();
+        TrackRegistry.TRACK_KIT.finalizeRegistry();
+
         proxy.initializeClient();
 
         FMLInterModComms.sendMessage("OpenBlocks", "donateUrl", "http://www.railcraft.info/donate/");
@@ -188,9 +191,6 @@ public final class Railcraft {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        TrackRegistry.TRACK_TYPE.finalizeRegistry();
-        TrackRegistry.TRACK_KIT.finalizeRegistry();
-
 //        Game.log(Level.FINE, "Post-Init Phase");
         RailcraftModuleManager.postInit();
 
