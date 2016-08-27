@@ -82,7 +82,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
 
     @Override
     public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-        Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 0);
+        Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
         if (fuel <= 0) {
             if (stack != null) {
                 int burnTime = FuelPlugin.getBurnTime(stack);

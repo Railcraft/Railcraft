@@ -49,7 +49,7 @@ public class CrowbarHandler {
         Entity entity = event.getTarget();
         EnumHand hand = event.getHand();
 
-        ItemStack stack = thePlayer.getActiveItemStack();
+        ItemStack stack = thePlayer.getHeldItem(hand);
         if (stack != null && stack.getItem() instanceof IToolCrowbar)
             thePlayer.swingArm(event.getHand());
 
@@ -111,6 +111,7 @@ public class CrowbarHandler {
                                 cart.motionZ += SMACK_VELOCITY;
                         }
                     crowbar.onBoost(thePlayer, hand, stack, cart);
+                    used = true;
                 }
             }
         }
