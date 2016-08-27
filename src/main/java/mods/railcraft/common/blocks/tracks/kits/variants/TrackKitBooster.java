@@ -15,7 +15,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -36,12 +35,12 @@ public class TrackKitBooster extends TrackKitPowered {
         return TrackKits.BOOSTER;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(POWERED, isPowered());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(POWERED, isPowered());
+//        return state;
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {

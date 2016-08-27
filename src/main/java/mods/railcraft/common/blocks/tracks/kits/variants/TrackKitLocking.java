@@ -33,7 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -70,13 +69,13 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         return TrackKits.LOCKING;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state.withProperty(PROFILE, profile);
-//        state.withProperty(ITrackKitPowered.POWERED, !locked);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state.withProperty(PROFILE, profile);
+////        state.withProperty(ITrackKitPowered.POWERED, !locked);
+//        return state;
+//    }
 
     public LockingProfileType getProfileType() {
         return profile;

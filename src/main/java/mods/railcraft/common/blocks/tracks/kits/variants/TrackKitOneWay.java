@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,12 +30,12 @@ public class TrackKitOneWay extends TrackKitPowered implements ITrackKitReversib
         return TrackKits.ONE_WAY;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(REVERSED, reversed);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(REVERSED, reversed);
+//        return state;
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {

@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -35,12 +34,12 @@ public class TrackKitLimiter extends TrackKitPowered {
         return TrackKits.LIMITER;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(MODE, getMode());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(MODE, getMode());
+//        return state;
+//    }
 
     public LocoSpeed getMode() {
         return mode;

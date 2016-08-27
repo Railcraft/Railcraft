@@ -22,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -40,12 +39,12 @@ public class TrackKitLocomotive extends TrackKitPowered {
         return TrackKits.LOCOMOTIVE;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(LOCO_MODE, mode);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(LOCO_MODE, mode);
+//        return state;
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {

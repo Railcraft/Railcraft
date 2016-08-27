@@ -16,7 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -49,12 +48,12 @@ public class TrackKitDumping extends TrackSuspended implements ITrackKitPowered 
         testPower(state);
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(POWERED, isPowered());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(POWERED, isPowered());
+//        return state;
+//    }
 
     @Override
     public boolean isPowered() {

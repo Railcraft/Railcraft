@@ -18,7 +18,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -31,13 +30,13 @@ public abstract class TrackSwitch extends TrackSwitchBase implements ITrackKitRe
     //    private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
     private boolean reversed;
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(MIRRORED, mirrored);
-//        state = state.withProperty(REVERSED, reversed);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(MIRRORED, mirrored);
+////        state = state.withProperty(REVERSED, reversed);
+//        return state;
+//    }
 
     @Override
     public EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {

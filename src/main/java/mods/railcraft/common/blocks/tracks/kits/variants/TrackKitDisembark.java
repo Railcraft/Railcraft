@@ -18,7 +18,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,12 +33,12 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
         return TrackKits.DISEMBARK;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(REVERSED, mirrored);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(REVERSED, mirrored);
+//        return state;
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {

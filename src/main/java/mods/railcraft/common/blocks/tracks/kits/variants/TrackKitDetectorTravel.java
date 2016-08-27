@@ -18,7 +18,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,13 +33,13 @@ public class TrackKitDetectorTravel extends TrackKitRailcraft implements ITrackK
         return TrackKits.DETECTOR_TRAVEL;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(ITrackKitPowered.POWERED, getPowerOutput() > 0);
-//        state = state.withProperty(REVERSED, reversed);
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(ITrackKitPowered.POWERED, getPowerOutput() > 0);
+////        state = state.withProperty(REVERSED, reversed);
+//        return state;
+//    }
 
     @Override
     public boolean canUpdate() {

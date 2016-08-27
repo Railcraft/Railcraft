@@ -30,7 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -53,12 +52,12 @@ public abstract class TrackSwitchBase extends TrackKitRailcraft implements ITrac
     private ISwitchDevice switchDevice;
     private boolean clientSwitched;
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(SWITCHED, isVisuallySwitched());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(SWITCHED, isVisuallySwitched());
+//        return state;
+//    }
 
     @Override
     public boolean canUpdate() {

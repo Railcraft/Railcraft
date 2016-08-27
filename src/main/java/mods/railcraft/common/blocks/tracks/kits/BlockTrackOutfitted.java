@@ -85,10 +85,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         state = super.getExtendedState(state, world, pos);
         state = ((IExtendedBlockState) state).withProperty(TRACK_TYPE, getTrackType(world, pos));
         state = ((IExtendedBlockState) state).withProperty(TRACK_KIT, getTrackKit(world, pos));
-        state = ((IExtendedBlockState) state).withProperty(STATE, 0);
         Optional<TileTrackOutfitted> tile = WorldPlugin.getTileEntity(world, pos, TileTrackOutfitted.class);
-        IExtendedBlockState exState = (IExtendedBlockState) state;
-        return tile.map(TileTrackOutfitted::getTrackKitInstance).map(t -> t.getExtendedState(exState)).orElse(exState);
+        state = ((IExtendedBlockState) state).withProperty(STATE, tile.map(TileTrackOutfitted::getTrackKitInstance).map(ITrackKitInstance::getRenderState).orElse(0));
+        return state;
     }
 
     /**

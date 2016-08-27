@@ -15,7 +15,6 @@ import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -33,13 +32,13 @@ public class TrackSpeedTransition extends TrackKitPowered implements ITrackKitRe
         return TrackKits.HIGH_SPEED_TRANSITION;
     }
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(POWERED, isPowered());
-//        state = state.withProperty(REVERSED, isReversed());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(POWERED, isPowered());
+////        state = state.withProperty(REVERSED, isReversed());
+//        return state;
+//    }
 
     @Override
     public int getPowerPropagation() {

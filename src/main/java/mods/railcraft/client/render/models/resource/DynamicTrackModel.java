@@ -73,7 +73,7 @@ public class DynamicTrackModel implements IModel {
                     shapes.add(ShapeVariant.RAISED_SW);
                 }
                 for (ShapeVariant shape : shapes) {
-                    for (int state = 0; state < trackKit.getStates(); state++)
+                    for (int state = 0; state < trackKit.getRenderStates(); state++)
                         trackKitModelsLocations.add(getTrackKitModelLocation(trackKit, shape, state));
                 }
             }

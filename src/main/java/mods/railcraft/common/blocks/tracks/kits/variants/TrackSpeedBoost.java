@@ -14,7 +14,6 @@ import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,12 +26,12 @@ public abstract class TrackSpeedBoost extends TrackKitBooster implements ITrackK
     private static final double BOOST_THRESHOLD = 0.01;
     private boolean powered;
 
-    @Override
-    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        state = super.getExtendedState(state);
-//        state = state.withProperty(POWERED, isPowered());
-        return state;
-    }
+//    @Override
+//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
+//        state = super.getExtendedState(state);
+////        state = state.withProperty(POWERED, isPowered());
+//        return state;
+//    }
 
     @Override
     public int getPowerPropagation() {

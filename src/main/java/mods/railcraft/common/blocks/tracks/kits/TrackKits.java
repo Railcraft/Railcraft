@@ -139,7 +139,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
         //TODO: Add way to disable track kits
         if (trackKit == null) {
             TrackKit.TrackKitBuilder builder = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
-            builder.setStates(states);
+            builder.setRenderStates(states);
             builder.setAllowedOnSlopes(allowedOnSlopes);
             trackKit = builder.build();
             try {
