@@ -60,7 +60,7 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
                 double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerZ;
                 OpenGL.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
-                RenderGlobal.func_189694_a(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth, 255, 255, 255, 255);
+                RenderGlobal.drawBoundingBox(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth, 255, 255, 255, 255);
                 OpenGL.glPopMatrix();
             }
 //            OpenGL.glDepthMask(true);
