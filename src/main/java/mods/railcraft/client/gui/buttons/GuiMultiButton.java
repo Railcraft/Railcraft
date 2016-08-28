@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
 import mods.railcraft.client.render.tools.OpenGL;
@@ -26,7 +27,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://railcraft.info/wiki/info:license>
  */
 @SideOnly(Side.CLIENT)
-public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton {
+public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton<GuiMultiButton<T>> {
 
     private final MultiButtonController<T> control;
     public boolean canChange = true;
@@ -38,6 +39,11 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
 
     public static <T extends IMultiButtonState> GuiMultiButton<T> create(int id, int x, int y, int width, MultiButtonController<T> control) {
         return new GuiMultiButton<T>(id, x, y, width, control);
+    }
+
+    @Override
+    public GuiMultiButton<T> getThis() {
+        return this;
     }
 
     @Override

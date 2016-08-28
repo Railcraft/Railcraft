@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
@@ -33,6 +34,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import java.util.EnumSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -70,6 +73,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @Override
     protected void entityInit() {
         super.entityInit();
+        setAllowedSpeeds(EnumSet.of(LocoSpeed.MAX, LocoSpeed.NORMAL, LocoSpeed.SLOWER, LocoSpeed.SLOWEST, LocoSpeed.REVERSE_SLOWEST));
+
         tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 6, Fluids.WATER.get());
         tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 16, Fluids.STEAM.get());
 

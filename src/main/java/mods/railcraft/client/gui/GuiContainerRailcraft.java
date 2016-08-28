@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,17 +6,19 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import mods.railcraft.common.gui.widgets.Widget;
+import mods.railcraft.common.util.collections.Streams;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -73,9 +75,9 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 }
             }
             for (Object button : buttonList) {
-                if (!(button instanceof GuiBetterButton))
+                if (!(button instanceof GuiSimpleButton))
                     continue;
-                GuiBetterButton betterButton = (GuiBetterButton) button;
+                GuiSimpleButton betterButton = (GuiSimpleButton) button;
                 if (!betterButton.visible)
                     continue;
                 ToolTip tips = betterButton.getToolTip();
@@ -179,6 +181,14 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         if (mouseButton == 1 && slot instanceof SlotRailcraft && ((SlotRailcraft) slot).isPhantom())
             return;
         super.mouseClickMove(x, y, mouseButton, time);
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
+        if (button instanceof GuiSimpleButton)
+            ((GuiSimpleButton) button).consumeClick();
+        buttonList.stream().flatMap(Streams.toType(GuiSimpleButton.class)).forEach(GuiSimpleButton::updateStatus);
     }
 
     private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {

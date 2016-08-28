@@ -30,8 +30,6 @@ import java.io.IOException;
 
 public class TrackKitLocomotive extends TrackKitPowered {
 
-//    public static final PropertyEnum<LocoMode> LOCO_MODE = PropertyEnum.create("locoMode", LocoMode.class);
-
     private LocoMode mode = LocoMode.RUNNING;
 
     @Override
@@ -39,12 +37,13 @@ public class TrackKitLocomotive extends TrackKitPowered {
         return TrackKits.LOCOMOTIVE;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(LOCO_MODE, mode);
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        int state = mode.ordinal();
+        if (isPowered())
+            state += LocoMode.VALUES.length;
+        return state;
+    }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {

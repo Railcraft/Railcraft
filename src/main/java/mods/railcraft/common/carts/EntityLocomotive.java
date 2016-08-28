@@ -66,6 +66,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,6 +101,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
 
+    private EnumSet<LocoMode> allowedModes = EnumSet.allOf(LocoMode.class);
+    private EnumSet<LocoSpeed> allowedSpeeds = EnumSet.allOf(LocoSpeed.class);
+
     protected EntityLocomotive(World world) {
         super(world);
         setPrimaryColor(EnumColor.SILVER.getDye());
@@ -122,7 +126,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         dataManager.register(PRIMARY_COLOR, EnumColor.WHITE);
         dataManager.register(SECONDARY_COLOR, EnumColor.WHITE);
         dataManager.register(LOCOMOTIVE_MODE, (byte) LocoMode.SHUTDOWN.ordinal());
-        dataManager.register(LOCOMOTIVE_SPEED, (byte) LocoSpeed.MAX.ordinal());
+        dataManager.register(LOCOMOTIVE_SPEED, (byte) LocoSpeed.NORMAL.ordinal());
         dataManager.register(EMBLEM, "");
         dataManager.register(DEST, "");
     }
@@ -262,8 +266,18 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     public void setMode(LocoMode mode) {
+        if (!allowedModes.contains(mode))
+            mode = LocoMode.SHUTDOWN;
         if (getMode() != mode)
             DataManagerPlugin.writeEnum(dataManager, LOCOMOTIVE_MODE, mode);
+    }
+
+    public EnumSet<LocoMode> getAllowedModes() {
+        return allowedModes;
+    }
+
+    protected final void setAllowedModes(EnumSet<LocoMode> allowedModes) {
+        this.allowedModes = allowedModes;
     }
 
     public LocoSpeed getSpeed() {
@@ -271,20 +285,33 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     public void setSpeed(LocoSpeed speed) {
+        while (!getAllowedSpeeds().contains(speed)) {
+            if (speed.shiftDown == 0)
+                return;
+            speed = speed.shiftDown();
+        }
         if (getSpeed() != speed)
             DataManagerPlugin.writeEnum(dataManager, LOCOMOTIVE_SPEED, speed);
     }
 
+    public EnumSet<LocoSpeed> getAllowedSpeeds() {
+        return allowedSpeeds;
+    }
+
+    protected final void setAllowedSpeeds(EnumSet<LocoSpeed> allowedSpeeds) {
+        this.allowedSpeeds = allowedSpeeds;
+    }
+
     public void increaseSpeed() {
         LocoSpeed speed = getSpeed();
-        if (speed != LocoSpeed.MAX)
-            dataManager.set(LOCOMOTIVE_SPEED, (byte) (speed.ordinal() - 1));
+        speed.shiftUp();
+        setSpeed(speed);
     }
 
     public void decreaseSpeed() {
         LocoSpeed speed = getSpeed();
-        if (speed != LocoSpeed.REVERSE)
-            dataManager.set(LOCOMOTIVE_SPEED, (byte) (speed.ordinal() + 1));
+        speed.shiftDown();
+        setSpeed(speed);
     }
 
     public boolean hasFuel() {
@@ -409,7 +436,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (isRunning()) {
             float force = RailcraftConfig.locomotiveHorsepower() * 0.006F;
             switch (speed) {
-                case REVERSE:
+                case REVERSE_SLOWEST:
+                case REVERSE_SLOWER:
+                case REVERSE_MAX:
                     force = -force;
                     break;
                 case MAX:
@@ -427,13 +456,15 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             float limit = 0.4f;
             switch (speed) {
                 case SLOWEST:
-                case REVERSE:
+                case REVERSE_SLOWEST:
                     limit = 0.1f;
                     break;
                 case SLOWER:
+                case REVERSE_SLOWER:
                     limit = 0.2f;
                     break;
-                case SLOW:
+                case NORMAL:
+                case REVERSE_MAX:
                     limit = 0.3f;
                     break;
             }
@@ -447,11 +478,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             LocoSpeed speed = getSpeed();
             switch (speed) {
                 case SLOWEST:
-                case REVERSE:
+                case REVERSE_SLOWEST:
                     return 2;
                 case SLOWER:
+                case REVERSE_SLOWER:
                     return 4;
-                case SLOW:
+                case NORMAL:
+                case REVERSE_MAX:
                     return 6;
                 default:
                     return 8;
@@ -747,12 +780,22 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public enum LocoSpeed implements IStringSerializable {
 
-        MAX, SLOW, SLOWER, SLOWEST, REVERSE;
+        MAX(4, 0, 1),
+        NORMAL(3, -1, 1),
+        SLOWER(2, -1, 1),
+        SLOWEST(1, -1, 0),
+        REVERSE_SLOWEST(-1, 1, 0),
+        REVERSE_SLOWER(-2, 1, -1),
+        REVERSE_MAX(-3, 0, -1);
         public static final LocoSpeed[] VALUES = values();
+        private final int shiftUp;
+        private final int shiftDown;
+        private final int level;
 
-        @Override
-        public String getName() {
-            return name().toLowerCase(Locale.ROOT);
+        LocoSpeed(int level, int shiftUp, int shiftDown) {
+            this.level = level;
+            this.shiftUp = shiftUp;
+            this.shiftDown = shiftDown;
         }
 
         public static LocoSpeed fromName(String name) {
@@ -761,6 +804,27 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                     return speed;
             }
             return MAX;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public int getLevelAbs() {
+            return Math.abs(level);
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+
+        public LocoSpeed shiftUp() {
+            return LocoSpeed.VALUES[ordinal() + shiftUp];
+        }
+
+        public LocoSpeed shiftDown() {
+            return LocoSpeed.VALUES[ordinal() + shiftDown];
         }
     }
 

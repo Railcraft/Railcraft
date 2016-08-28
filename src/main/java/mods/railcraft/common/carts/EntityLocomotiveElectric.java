@@ -30,6 +30,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -52,6 +54,10 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         super(world, x, y, z);
     }
 
+    {
+        setAllowedModes(EnumSet.of(LocoMode.RUNNING, LocoMode.SHUTDOWN));
+    }
+
     @Override
     public ICartType getCartType() {
         return RailcraftCarts.LOCO_ELECTRIC;
@@ -70,13 +76,6 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     protected void openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.LOCO_ELECTRIC, player, worldObj, this);
-    }
-
-    @Override
-    public void setMode(LocoMode mode) {
-        if (mode == LocoMode.IDLE)
-            mode = LocoMode.SHUTDOWN;
-        super.setMode(mode);
     }
 
     @Override

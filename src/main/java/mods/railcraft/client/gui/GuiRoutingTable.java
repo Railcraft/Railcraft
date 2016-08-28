@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiButtonRoutingTableNextPage;
+import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -69,9 +70,9 @@ public class GuiRoutingTable extends GuiScreen {
     private String bookTitle = "";
     private GuiButtonRoutingTableNextPage buttonNextPage;
     private GuiButtonRoutingTableNextPage buttonPreviousPage;
-    private GuiBetterButton buttonDone;
-    private GuiBetterButton buttonSign;
-    private GuiBetterButton buttonHelp;
+    private GuiSimpleButton buttonDone;
+    private GuiSimpleButton buttonSign;
+    private GuiSimpleButton buttonHelp;
 
     public GuiRoutingTable(EntityPlayer player, ItemStack stack) {
         this.player = player;
@@ -128,13 +129,13 @@ public class GuiRoutingTable extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         if (editable) {
-            List<GuiBetterButton> buttons = new ArrayList<GuiBetterButton>();
-            buttons.add(buttonSign = new GuiBetterButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(TABLE_LOC_TAG + "name")));
-            buttons.add(buttonHelp = new GuiBetterButton(4, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate("railcraft.gui.help")));
-            buttons.add(buttonDone = new GuiBetterButton(0, 0, 4 + bookImageHeight, 65, I18n.translateToLocal("gui.done")));
+            List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
+            buttons.add(buttonSign = new GuiSimpleButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(TABLE_LOC_TAG + "name")));
+            buttons.add(buttonHelp = new GuiSimpleButton(4, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate("railcraft.gui.help")));
+            buttons.add(buttonDone = new GuiSimpleButton(0, 0, 4 + bookImageHeight, 65, I18n.translateToLocal("gui.done")));
             GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
         } else
-            buttonList.add(buttonDone = new GuiBetterButton(0, width / 2 - 100, 4 + bookImageHeight, 200, I18n.translateToLocal("gui.done")));
+            buttonList.add(buttonDone = new GuiSimpleButton(0, width / 2 - 100, 4 + bookImageHeight, 200, I18n.translateToLocal("gui.done")));
 
         int xOffset = (width - bookImageWidth) / 2;
         byte yOffset = 2;

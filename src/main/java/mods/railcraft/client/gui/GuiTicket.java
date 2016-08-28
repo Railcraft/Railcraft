@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -53,9 +54,9 @@ public class GuiTicket extends GuiScreen {
      */
     private int updateCount;
     private String dest = "";
-    private GuiBetterButton buttonCancel;
-    private GuiBetterButton buttonDone;
-    private GuiBetterButton buttonHelp;
+    private GuiSimpleButton buttonCancel;
+    private GuiSimpleButton buttonDone;
+    private GuiSimpleButton buttonHelp;
 
     public GuiTicket(EntityPlayer player, ItemStack stack) {
         this.player = player;
@@ -80,10 +81,10 @@ public class GuiTicket extends GuiScreen {
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
 
-        List<GuiBetterButton> buttons = new ArrayList<GuiBetterButton>();
-        buttons.add(buttonDone = new GuiBetterButton(0, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.done")));
-        buttons.add(buttonHelp = new GuiBetterButton(1, 0, IMAGE_HEIGHT + 25, 65, LocalizationPlugin.translate("railcraft.gui.help")));
-        buttons.add(buttonCancel = new GuiBetterButton(2, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.cancel")));
+        List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
+        buttons.add(buttonDone = new GuiSimpleButton(0, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.done")));
+        buttons.add(buttonHelp = new GuiSimpleButton(1, 0, IMAGE_HEIGHT + 25, 65, LocalizationPlugin.translate("railcraft.gui.help")));
+        buttons.add(buttonCancel = new GuiSimpleButton(2, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.cancel")));
         GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
         updateButtons();
     }

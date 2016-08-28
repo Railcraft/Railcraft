@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.common.blocks.machine.alpha.TileTradeStation;
 import mods.railcraft.common.blocks.machine.alpha.TileTradeStation.GuiPacketType;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -61,17 +62,17 @@ public class GuiTradeStation extends TileGui {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(new GuiBetterButton(0, w + 118, h + 64, 10, StandardButtonTextureSets.LEFT_BUTTON, ""));
-        buttonList.add(new GuiBetterButton(1, w + 156, h + 64, 10, StandardButtonTextureSets.RIGHT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(0, w + 118, h + 64, 10, StandardButtonTextureSets.LEFT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(1, w + 156, h + 64, 10, StandardButtonTextureSets.RIGHT_BUTTON, ""));
 
-        GuiBetterButton[] dice = new GuiBetterButton[3];
+        GuiSimpleButton[] dice = new GuiSimpleButton[3];
 
         ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tip");
         if (tip != null)
             tip.get(0).format = TextFormatting.YELLOW;
 
         for (int b = 0; b < 3; b++) {
-            dice[b] = new GuiBetterButton(2 + b, w + 93, h + 24 + 21 * b, 16, StandardButtonTextureSets.DICE_BUTTON, "");
+            dice[b] = new GuiSimpleButton(2 + b, w + 93, h + 24 + 21 * b, 16, StandardButtonTextureSets.DICE_BUTTON, "");
             dice[b].setToolTip(tip);
             buttonList.add(dice[b]);
         }

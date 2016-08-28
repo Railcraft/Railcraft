@@ -1,0 +1,111 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:layered_rail_flat",
+    "textures": {
+      "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_0",
+      "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_inactive"
+    }
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_0"
+        }
+      },
+      "1": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_1"
+        }
+      },
+      "2": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_2"
+        }
+      },
+      "3": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_3"
+        }
+      },
+      "4": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_4"
+        }
+      },
+      "5": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_5"
+        }
+      },
+      "6": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_6"
+        }
+      },
+      "7": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_0",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "8": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_1",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "9": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_2",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "10": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_3",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "11": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_4",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "12": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_5",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      },
+      "13": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_6",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/limiter_overlay_active"
+        }
+      }
+    },
+    "shape": {
+      "north_south": {
+        "model": "railcraft:layered_rail_flat"
+      },
+      "east_west": {
+        "model": "railcraft:layered_rail_flat", "y": 90
+      },
+      "ascending_east": {
+        "model": "railcraft:layered_rail_raised_ne", "y": 90
+      },
+      "ascending_west": {
+        "model": "railcraft:layered_rail_raised_sw", "y": 90
+      },
+      "ascending_north": {
+        "model": "railcraft:layered_rail_raised_ne"
+      },
+      "ascending_south": {
+        "model": "railcraft:layered_rail_raised_sw"
+      }
+    }
+  }
+}

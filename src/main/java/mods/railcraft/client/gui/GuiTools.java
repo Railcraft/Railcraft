@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
@@ -19,6 +20,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.util.Collection;
 import java.util.List;
 
 public class GuiTools {
@@ -46,15 +48,15 @@ public class GuiTools {
         fr.drawString(s, x - sWidth / 2, y, color, shadow);
     }
 
-    public static void newButtonRowAuto(List<GuiButton> buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRowAuto(List<GuiButton> buttonList, int xStart, int xSize, Collection<? extends GuiBetterButton<?>> buttons) {
         int buttonWidth = 0;
-        for (GuiBetterButton b : buttons) {
+        for (GuiBetterButton<?> b : buttons) {
             buttonWidth += b.getWidth();
         }
         int remaining = xSize - buttonWidth;
         int spacing = remaining / (buttons.size() + 1);
         int pointer = 0;
-        for (GuiBetterButton b : buttons) {
+        for (GuiBetterButton<?> b : buttons) {
             pointer += spacing;
             b.xPosition = xStart + pointer;
             pointer += b.getWidth();
@@ -62,15 +64,15 @@ public class GuiTools {
         }
     }
 
-    public static void newButtonRowBookended(List<GuiButton> buttonList, int xStart, int xEnd, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRowBookended(List<GuiButton> buttonList, int xStart, int xEnd, Collection<? extends GuiBetterButton<?>> buttons) {
         int buttonWidth = 0;
-        for (GuiBetterButton b : buttons) {
+        for (GuiBetterButton<?> b : buttons) {
             buttonWidth += b.getWidth();
         }
         int remaining = (xEnd - xStart) - buttonWidth;
         int spacing = remaining / (buttons.size() + 1);
         int pointer = 0;
-        for (GuiBetterButton b : buttons) {
+        for (GuiBetterButton<?> b : buttons) {
             pointer += spacing;
             b.xPosition = xStart + pointer;
             pointer += b.getWidth();
@@ -78,9 +80,9 @@ public class GuiTools {
         }
     }
 
-    public static void newButtonRow(List<GuiButton> buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRow(List<GuiButton> buttonList, int xStart, int spacing, Collection<? extends GuiBetterButton<?>> buttons) {
         int pointer = 0;
-        for (GuiBetterButton b : buttons) {
+        for (GuiBetterButton<?> b : buttons) {
             b.xPosition = xStart + pointer;
             pointer += b.getWidth() + spacing;
             buttonList.add(b);

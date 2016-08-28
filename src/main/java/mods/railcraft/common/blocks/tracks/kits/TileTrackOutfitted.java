@@ -30,6 +30,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     private TrackType trackType = TrackTypes.IRON.getTrackType();
 
     public TileTrackOutfitted() {
+        trackKitInstance.setTile(this);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
     public void setTrackKitInstance(@Nonnull ITrackKitInstance trackKit) {
         this.trackKitInstance = trackKit;
+        trackKitInstance.setTile(this);
     }
 
     @Override
@@ -78,9 +80,9 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
         if (data.hasKey(TrackKit.NBT_TAG)) {
             TrackKit trackKit = TrackRegistry.TRACK_KIT.get(data);
-            trackKitInstance = trackKit.createInstance();
+            setTrackKitInstance(trackKit.createInstance());
         } else
-            trackKitInstance = TrackRegistry.getMissingTrackKit().createInstance();
+            setTrackKitInstance(TrackRegistry.getMissingTrackKit().createInstance());
 
         trackKitInstance.setTile(this);
         trackKitInstance.readFromNBT(data);

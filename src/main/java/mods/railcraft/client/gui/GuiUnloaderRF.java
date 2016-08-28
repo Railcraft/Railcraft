@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.machine.gamma.TileRFUnloader;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -42,7 +42,7 @@ public class GuiUnloaderRF extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        List<GuiBetterButton> buttons = new ArrayList<GuiBetterButton>();
+        List<GuiToggleButton> buttons = new ArrayList<>();
         buttons.add(new GuiToggleButton(0, w + 75, h + 60, 90, button1Label, tile.waitTillEmpty()));
         GuiTools.newButtonRowBookended(buttonList, w + 5, w + xSize - 5, buttons);
     }

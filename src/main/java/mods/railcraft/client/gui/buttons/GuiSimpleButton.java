@@ -9,19 +9,28 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
+import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiToggleButtonSmall extends GuiToggleButton {
+public class GuiSimpleButton extends GuiBetterButton<GuiSimpleButton> {
 
-    public GuiToggleButtonSmall(int i, int x, int y, String label, boolean active) {
-        this(i, x, y, 200, label, active);
+    public GuiSimpleButton(int id, int x, int y, String label) {
+        this(id, x, y, 200, StandardButtonTextureSets.LARGE_BUTTON, label);
     }
 
-    public GuiToggleButtonSmall(int i, int x, int y, int w, String label, boolean active) {
-        super(i, x, y, w, StandardButtonTextureSets.SMALL_BUTTON, label, active);
+    public GuiSimpleButton(int id, int x, int y, int width, String label) {
+        this(id, x, y, width, StandardButtonTextureSets.LARGE_BUTTON, label);
     }
 
+    public GuiSimpleButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
+        super(id, x, y, width, texture, label);
+    }
+
+    @Override
+    public GuiSimpleButton getThis() {
+        return this;
+    }
 }

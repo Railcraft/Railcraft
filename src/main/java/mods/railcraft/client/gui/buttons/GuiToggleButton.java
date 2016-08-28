@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 
-public class GuiToggleButton extends GuiBetterButton {
+public class GuiToggleButton extends GuiBetterButton<GuiToggleButton> {
 
     public boolean active;
 
@@ -27,6 +28,11 @@ public class GuiToggleButton extends GuiBetterButton {
     public GuiToggleButton(int id, int x, int y, int width, IButtonTextureSet texture, String s, boolean active) {
         super(id, x, y, width, texture, s);
         this.active = active;
+    }
+
+    @Override
+    public GuiToggleButton getThis() {
+        return this;
     }
 
     public void toggle() {

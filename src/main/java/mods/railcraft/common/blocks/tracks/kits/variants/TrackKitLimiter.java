@@ -14,6 +14,10 @@ import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.misc.EnumTools;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,26 +31,31 @@ import java.io.IOException;
 
 public class TrackKitLimiter extends TrackKitPowered {
     //    public static final PropertyEnum<LocoSpeed> MODE = PropertyEnum.create("mode", LocoSpeed.class);
-    private LocoSpeed mode = LocoSpeed.MAX;
+    private LocoSpeed speed = LocoSpeed.MAX;
 
     @Override
     public TrackKits getTrackKitContainer() {
         return TrackKits.LIMITER;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(MODE, getMode());
-//        return state;
-//    }
-
-    public LocoSpeed getMode() {
-        return mode;
+    @Override
+    public int getRenderState() {
+        int state = speed.ordinal();
+        if (isPowered())
+            state += LocoSpeed.VALUES.length;
+        return state;
     }
 
-    public void setMode(int i) {
-        mode = LocoSpeed.VALUES[i % LocoSpeed.VALUES.length];
+    public LocoSpeed getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(LocoSpeed speed) {
+        if (this.speed != speed) {
+            this.speed = speed;
+            if (Game.isClient(theWorldAsserted()))
+                markBlockNeedsUpdate();
+        }
     }
 
     @Override
@@ -54,7 +63,7 @@ public class TrackKitLimiter extends TrackKitPowered {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                setMode(mode.ordinal() + 1);
+                setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
                 crowbar.onWhack(player, hand, heldItem, getPos());
                 sendUpdateToClient();
                 return true;
@@ -67,7 +76,7 @@ public class TrackKitLimiter extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
-                ((EntityLocomotive) cart).setSpeed(getMode());
+                ((EntityLocomotive) cart).setSpeed(getSpeed());
             }
         }
     }
@@ -80,36 +89,27 @@ public class TrackKitLimiter extends TrackKitPowered {
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setString("locoSpeed", mode.getName());
-        NBTPlugin.writeEnumName(data, "locoSpeed", mode);
+        data.setString("locoSpeed", speed.getName());
+        NBTPlugin.writeEnumName(data, "locoSpeed", speed);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (data.hasKey("locoSpeed")) {
-            mode = NBTPlugin.readEnumName(data, "locoSpeed", LocoSpeed.MAX);
-        } else if (data.hasKey("mode")) {
-            setMode(data.getByte("mode") % 4);
-        } else {
-            setMode(data.getByte("mode5"));
-        }
+        if (data.hasKey("locoSpeed"))
+            speed = NBTPlugin.readEnumName(data, "locoSpeed", LocoSpeed.MAX);
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte((byte) mode.ordinal());
+        ((RailcraftOutputStream) data).writeEnum(speed);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        int m = data.readByte();
-        if (mode.ordinal() != m) {
-            setMode(m);
-            markBlockNeedsUpdate();
-        }
+        setSpeed(((RailcraftInputStream) data).readEnum(LocoSpeed.VALUES));
     }
 }
