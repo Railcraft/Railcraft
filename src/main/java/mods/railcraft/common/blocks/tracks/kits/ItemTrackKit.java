@@ -10,11 +10,13 @@
 
 package mods.railcraft.common.blocks.tracks.kits;
 
+import mods.railcraft.api.core.ILocalizedObject;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,6 +70,21 @@ public class ItemTrackKit extends ItemRailcraft {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String locTag = getUnlocalizedName(stack) + ".name";
+        if (LocalizationPlugin.hasTag(locTag))
+            return LocalizationPlugin.translateFast(locTag);
+        Map<String, ILocalizedObject> args = new HashMap<>();
+        args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
+        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+    }
+
+    @Override
+    public String getTooltipTag(ItemStack stack) {
+        return TrackRegistry.TRACK_KIT.get(stack).getLocalizationTag().replace(".name", ".tip");
     }
 
     @Override

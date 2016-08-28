@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -74,13 +75,23 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
         return false;
     }
 
+    public String getTooltipTag(ItemStack stack) {
+        return stack.getUnlocalizedName() + ".tip";
+    }
+
+    @Nullable
+    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
+        String tipTag = getTooltipTag(stack);
+        if (LocalizationPlugin.hasTag(tipTag))
+            return ToolTip.buildToolTip(tipTag);
+        return null;
+    }
+
     @Override
-    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
-        ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
-        if (tip != null)
-            info.addAll(tip.convertToStrings());
+        ToolTip toolTip = getToolTip(stack, player, adv);
+        if (toolTip != null)
+            info.addAll(toolTip.convertToStrings());
     }
 
     @Override

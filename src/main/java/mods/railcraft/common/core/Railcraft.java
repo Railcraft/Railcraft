@@ -217,8 +217,11 @@ public final class Railcraft {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK)
                 findBlock(mapping.name).ifPresent(block -> remap(block, mapping));
-            else if (mapping.type == GameRegistry.Type.ITEM)
+            else if (mapping.type == GameRegistry.Type.ITEM) {
                 findBlock(mapping.name).ifPresent(block -> remap(Item.getItemFromBlock(block), mapping));
+                if (mapping.getAction() == FMLMissingMappingsEvent.Action.DEFAULT)
+                    findItem(mapping.name).ifPresent(item -> remap(item, mapping));
+            }
         }
     }
 
@@ -227,6 +230,14 @@ public final class Railcraft {
         Block block = GameRegistry.findBlock(MOD_ID, newName);
         if (block != null && block != Blocks.AIR)
             return Optional.of(block);
+        return Optional.empty();
+    }
+
+    private Optional<Item> findItem(String oldName) {
+        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
+        Item item = GameRegistry.findItem(MOD_ID, newName);
+        if (item != null)
+            return Optional.of(item);
         return Optional.empty();
     }
 

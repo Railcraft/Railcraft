@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits;
 
+import mods.railcraft.api.core.ILocalizedObject;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
@@ -16,6 +17,7 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -30,6 +32,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     public static final String MODEL_PREFIX = "track_outfitted_item.";
@@ -66,8 +70,29 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return "tile.railcraft.track_outfitted";
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile.railcraft." + getSuffix(stack);
+        return getUnlocalizedName() + "." + getSuffix(stack);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String locTag = getUnlocalizedName(stack) + ".name";
+        if (LocalizationPlugin.hasTag(locTag))
+            return LocalizationPlugin.translateFast(locTag);
+        Map<String, ILocalizedObject> args = new HashMap<>();
+        args.put("track_type", TrackRegistry.TRACK_TYPE.get(stack));
+        args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
+        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+    }
+
+    @Override
+    public String getTooltipTag(ItemStack stack) {
+        return TrackRegistry.TRACK_KIT.get(stack).getLocalizationTag().replace(".name", ".tip");
     }
 
     @Override
