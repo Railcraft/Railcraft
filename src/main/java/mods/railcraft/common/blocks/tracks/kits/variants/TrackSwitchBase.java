@@ -60,11 +60,6 @@ public abstract class TrackSwitchBase extends TrackKitRailcraft implements ITrac
 //    }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public boolean isMirrored() {
         return mirrored;
     }

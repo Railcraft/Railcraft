@@ -35,12 +35,12 @@ import java.util.*;
 
 public enum TrackKits implements IRailcraftObjectContainer {
 
-    ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitBooster.class),
+    ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitActivator.class),
     BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class),
     BUFFER_STOP(ModuleTracks.class, 2, "buffer", 8, TrackBufferStop.class),
-    CONTROL(ModuleTracks.class, 2, "control", 16, TrackControl.class),
+    CONTROL(ModuleTracks.class, 2, "control", 16, TrackKitControl.class),
     COUPLER(ModuleTracks.class, 6, "coupler", 8, TrackKitCoupler.class),
-    DETECTOR(ModuleTracks.class, 4, "detector", 8, TrackKitDetectorTravel.class),
+    DETECTOR(ModuleTracks.class, 4, "detector", 8, TrackKitDetector.class),
     DETECTOR_TRAVEL(ModuleTracks.class, 4, "detector_travel", 8, TrackKitDetectorTravel.class),
     DISEMBARK(ModuleTracks.class, 4, "disembarking", 8, TrackKitDisembark.class),
     DUMPING(ModuleTracks.class, 2, "dumping", 8, TrackKitDumping.class),
@@ -67,6 +67,10 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     static {
         TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
+
+        DETECTOR.requiresTicks = true;
+        DETECTOR_TRAVEL.requiresTicks = true;
+        LOCKING.requiresTicks = true;
 
         BUFFER_STOP.allowedOnSlopes = false;
         DISEMBARK.allowedOnSlopes = false;
@@ -110,6 +114,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
     private TrackKit trackKit;
     private boolean depreciated;
     private boolean allowedOnSlopes = true;
+    private boolean requiresTicks;
 
     TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
         this.module = module;
@@ -139,6 +144,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
         //TODO: Add way to disable track kits
         if (trackKit == null) {
             TrackKit.TrackKitBuilder builder = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
+            builder.setRequiresTicks(requiresTicks);
             builder.setRenderStates(states);
             builder.setAllowedOnSlopes(allowedOnSlopes);
             trackKit = builder.build();

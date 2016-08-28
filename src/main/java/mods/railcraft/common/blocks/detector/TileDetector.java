@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -32,7 +33,6 @@ import java.util.List;
 public class TileDetector extends RailcraftTickingTileEntity implements IGuiReturnHandler {
 
     public static final float SENSITIVITY = 0.2f;
-    private static final int POWER_DELAY = 10;
     public int powerState;
     @Nonnull
     public Detector detector = Detector.DUMMY;
@@ -135,7 +135,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
             if (newPowerState != powerState) {
                 powerState = newPowerState;
                 if (powerState > PowerPlugin.NO_POWER)
-                    powerDelay = POWER_DELAY;
+                    powerDelay = CartConstants.DETECTED_POWER_OUTPUT_FADE;
                 sendUpdateToClient();
                 worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
                 WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));

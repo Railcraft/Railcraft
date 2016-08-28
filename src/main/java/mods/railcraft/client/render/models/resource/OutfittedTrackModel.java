@@ -102,11 +102,13 @@ public class OutfittedTrackModel implements IModel {
         getDependencies();
         Map<ModelResourceLocation, IBakedModel> trackTypeModels = new HashMap<>();
         for (ModelResourceLocation modelLocation : trackTypeModelsLocations) {
-            trackTypeModels.put(modelLocation, ModelManager.getModel(modelLocation).bake(state, format, bakedTextureGetter));
+            IModel model = ModelManager.getModel(modelLocation);
+            trackTypeModels.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
         Map<ModelResourceLocation, IBakedModel> trackKitModels = new HashMap<>();
         for (ModelResourceLocation modelLocation : trackKitModelsLocations) {
-            trackKitModels.put(modelLocation, ModelManager.getModel(modelLocation).bake(state, format, bakedTextureGetter));
+            IModel model = ModelManager.getModel(modelLocation);
+            trackKitModels.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
         return new CompositeModel(trackTypeModels, trackKitModels);
     }

@@ -47,12 +47,10 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
         return inv;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(POWERED, isPowered());
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        return powered ? 1 : 0;
+    }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {

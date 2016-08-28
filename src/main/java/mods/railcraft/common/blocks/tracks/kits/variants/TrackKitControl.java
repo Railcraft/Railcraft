@@ -18,7 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackControl extends TrackKitPowered implements ITrackKitReversible {
+public class TrackKitControl extends TrackKitPowered implements ITrackKitReversible {
     private static final double BOOST_AMOUNT = 0.02;
     private static final double SLOW_AMOUNT = 0.02;
     private boolean reversed;

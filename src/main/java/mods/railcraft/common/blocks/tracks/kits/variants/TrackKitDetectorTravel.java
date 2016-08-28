@@ -9,88 +9,45 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
-import mods.railcraft.api.tracks.ITrackKitEmitter;
 import mods.railcraft.api.tracks.ITrackKitReversible;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackKitDetectorTravel extends TrackKitRailcraft implements ITrackKitReversible, ITrackKitEmitter {
-    private static final int POWER_DELAY = 10;
+public class TrackKitDetectorTravel extends TrackKitDetector implements ITrackKitReversible {
     private boolean reversed;
-    private byte delay;
 
     @Override
     public TrackKits getTrackKitContainer() {
         return TrackKits.DETECTOR_TRAVEL;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(ITrackKitPowered.POWERED, getPowerOutput() > 0);
-////        state = state.withProperty(REVERSED, reversed);
-//        return state;
-//    }
-
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void update() {
-        if (Game.isClient(theWorldAsserted())) {
-            return;
-        }
-        if (delay > 0) {
-            delay--;
-            if (delay == 0) {
-                notifyNeighbors();
-            }
-        }
+    public int getRenderState() {
+        int state = getPowerOutput() > 0 ? 1 : 0;
+        if (isReversed())
+            state += 2;
+        return state;
     }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        int meta = getTile().getBlockMetadata();
-        if (meta == 1 || meta == 2 || meta == 3) {
+        BlockRailBase.EnumRailDirection shape = getRailDirection();
+        if (TrackShapeHelper.isEastWest(shape)) {
             if (isReversed() ? cart.motionX < 0.0D : cart.motionX > 0.0D) {
                 setTrackPowering();
             }
-        } else if (meta == 0 || meta == 4 || meta == 5) {
+        } else if (TrackShapeHelper.isNorthSouth(shape)) {
             if (isReversed() ? cart.motionZ > 0.0D : cart.motionZ < 0.0D) {
                 setTrackPowering();
             }
         }
-    }
-
-    private void notifyNeighbors() {
-        World world = theWorldAsserted();
-        world.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.TRACK.block());
-        world.notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.TRACK.block());
-        sendUpdateToClient();
-    }
-
-    private void setTrackPowering() {
-        boolean notify = delay == 0;
-        delay = POWER_DELAY;
-        if (notify) {
-            notifyNeighbors();
-        }
-    }
-
-    @Override
-    public int getPowerOutput() {
-        return delay > 0 ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
     }
 
     @Override
@@ -107,31 +64,27 @@ public class TrackKitDetectorTravel extends TrackKitRailcraft implements ITrackK
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("direction", reversed);
-        nbttagcompound.setByte("delay", delay);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         reversed = nbttagcompound.getBoolean("direction");
-        delay = nbttagcompound.getByte("delay");
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeByte(delay);
         data.writeBoolean(reversed);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        delay = data.readByte();
-        reversed = data.readBoolean();
-
-        markBlockNeedsUpdate();
+        boolean r = data.readBoolean();
+        if (reversed != r) {
+            reversed = r;
+            markBlockNeedsUpdate();
+        }
     }
 }

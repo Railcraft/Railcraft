@@ -65,7 +65,7 @@ public class BlockDetector extends RailcraftBlockContainer {
         setSoundType(SoundType.STONE);
         setDefaultState(blockState.getBaseState().withProperty(FRONT, NORTH).withProperty(POWERED, false).withProperty(VARIANT, EnumDetector.ANY));
 
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativeTabs.TRANSPORTATION);
 
         RailcraftRegistry.register(TileDetector.class, "detector", "RCDetectorTile");
     }
@@ -250,6 +250,7 @@ public class BlockDetector extends RailcraftBlockContainer {
         return false;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;

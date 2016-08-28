@@ -30,22 +30,23 @@ public class TrackKitOneWay extends TrackKitPowered implements ITrackKitReversib
         return TrackKits.ONE_WAY;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(REVERSED, reversed);
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        int state = isPowered() ? 1 : 0;
+        if (isReversed())
+            state += 2;
+        return state;
+    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         EnumRailDirection dir = getRailDirection();
         if (isPowered()) {
             if (TrackShapeHelper.isEastWest(dir)) {
-                if ((isReversed() && cart.motionX > 0.0D) || (!isReversed() && cart.motionX < 0.0D)) {
+                if (isReversed() ? cart.motionX > 0.0D : cart.motionX < 0.0D) {
                     double distX = cart.posX - (getPos().getX() + 0.5D);
 //                    System.out.println("cartX=" + cart.posX + ", railX=" + (i + 0.5D) + ", railDir=" + isReversed());
-                    if (!isReversed() && distX < -0.01 || isReversed() && distX > 0.01) {
+                    if (isReversed() ? distX > 0.01 : distX < -0.01) {
 //                        System.out.println("Setting Position");
                         cart.setPosition(getPos().getX() + 0.5D, cart.posY, cart.posZ);
                     }
@@ -57,10 +58,10 @@ public class TrackKitOneWay extends TrackKitPowered implements ITrackKitReversib
                     }
                 }
             } else if (TrackShapeHelper.isNorthSouth(dir)) {
-                if ((isReversed() && cart.motionZ < 0.0D) || (!isReversed() && cart.motionZ > 0.0D)) {
+                if (isReversed() ? cart.motionZ < 0.0D : cart.motionZ > 0.0D) {
                     double distZ = cart.posZ - (getPos().getZ() + 0.5D);
 //                    System.out.println("cartZ=" + cart.posZ + ", railZ=" + (k + 0.5D) + ", railDir=" + isReversed());
-                    if (isReversed() && distZ < -0.01 || !isReversed() && distZ > 0.01) {
+                    if (isReversed() ? distZ < -0.01 : distZ > 0.01) {
 //                        System.out.println("Setting Position");
                         cart.setPosition(cart.posX, cart.posY, getPos().getZ() + 0.5D);
                     }

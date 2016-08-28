@@ -90,11 +90,6 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             sendUpdateToClient();
     }
 
-    @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
     /**
      * We try to calculate all the logic here so we can isolate it on the server side.
      * Its a bit tricky to determine whether a cart or train is on top of us, but we can do it

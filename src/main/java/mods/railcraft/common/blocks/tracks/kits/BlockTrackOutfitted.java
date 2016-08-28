@@ -290,6 +290,20 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        return WorldPlugin.getTileEntity(worldIn, pos, TileTrackOutfitted.class)
+                .filter(t -> t.getTrackKitInstance() instanceof ITrackKitEmitter)
+                .map(t -> (ITrackKitEmitter) t.getTrackKitInstance())
+                .map(ITrackKitEmitter::getComparatorInputOverride)
+                .orElse(0);
+    }
+
+    @Override
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted)
