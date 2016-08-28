@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -20,27 +20,25 @@ import net.minecraft.item.ItemStack;
  */
 public class CreativePlugin {
 
-    public static final CreativeTabs RAILCRAFT_TAB = new RailcraftTab("railcraft");
+    public static final CreativeTabs RAILCRAFT_TAB = new RailcraftTab("railcraft.general", RailcraftItems.CROWBAR_STEEL.getStack());
+    public static final CreativeTabs TRACK_TAB = new RailcraftTab("railcraft.track", new ItemStack(Blocks.DETECTOR_RAIL));
 
     private static class RailcraftTab extends CreativeTabs {
+        private final ItemStack stack;
 
-        public RailcraftTab(String label) {
+        public RailcraftTab(String label, ItemStack stack) {
             super(label);
+            this.stack = stack;
         }
 
         @Override
         public ItemStack getIconItemStack() {
-            return RailcraftItems.CROWBAR_STEEL.getStack();
-        }
-
-        @Override
-        public String getTranslatedTabLabel() {
-            return Railcraft.NAME;
+            return stack;
         }
 
         @Override
         public Item getTabIconItem() {
-            return RailcraftItems.CROWBAR_STEEL.item();
+            return stack.getItem();
         }
 
     }

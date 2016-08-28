@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -72,7 +73,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public static final IUnlistedProperty<Integer> STATE = Properties.toUnlisted(PropertyInteger.create("state", 0, 15));
 
     public BlockTrackOutfitted() {
-        setCreativeTab(CreativeTabs.TRANSPORTATION);
+        setCreativeTab(CreativePlugin.TRACK_TAB);
         setHarvestLevel("crowbar", 0);
         setDefaultState(getDefaultState().withProperty(TICKING, false));
 

@@ -17,6 +17,7 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -42,6 +43,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
+        setCreativeTab(CreativePlugin.TRACK_TAB);
     }
 
     @SideOnly(Side.CLIENT)
