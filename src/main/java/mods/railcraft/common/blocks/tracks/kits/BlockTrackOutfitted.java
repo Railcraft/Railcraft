@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.tracks.kits;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
@@ -135,7 +136,11 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void initializeClient() {
-        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(TICKING).build());
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(getShapeProperty()).ignore(TICKING).build());
+    }
+
+    @Override
+    public void registerItemModel(ItemStack stack, @Nullable IVariantEnum variant) {
     }
 
     @Override

@@ -1,6 +1,0 @@
-{
-  "parent": "block/rail_raised_sw",
-  "textures": {
-    "rail": "railcraft:blocks/tracks/outfitted/type/high_speed"
-  }
-}

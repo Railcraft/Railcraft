@@ -12,13 +12,8 @@ package mods.railcraft.common.blocks.tracks.kits.variants;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class TrackKitBooster extends TrackKitPowered {
 
@@ -28,25 +23,17 @@ public class TrackKitBooster extends TrackKitPowered {
     private static final double START_BOOST = 0.02;
     private static final double STALL_THRESHOLD = 0.03;
     private static final double BOOST_THRESHOLD = 0.01;
-    private boolean powered;
 
     @Override
     public TrackKits getTrackKitContainer() {
         return TrackKits.BOOSTER;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(POWERED, isPowered());
-//        return state;
-//    }
-
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         EnumRailDirection dir = getRailDirection();
         double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
-        if (powered) {
+        if (isPowered()) {
             World world = theWorldAsserted();
             if (speed > BOOST_THRESHOLD) {
                 cart.motionX += (cart.motionX / speed) * BOOST_FACTOR;
@@ -80,45 +67,5 @@ public class TrackKitBooster extends TrackKitPowered {
     @Override
     public int getPowerPropagation() {
         return POWER_PROPAGATION;
-    }
-
-    @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-
-        data.setBoolean("powered", powered);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-
-        powered = data.getBoolean("powered");
-    }
-
-    @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
-        super.writePacketData(data);
-
-        data.writeBoolean(powered);
-    }
-
-    @Override
-    public void readPacketData(DataInputStream data) throws IOException {
-        super.readPacketData(data);
-
-        powered = data.readBoolean();
-
-        markBlockNeedsUpdate();
     }
 }

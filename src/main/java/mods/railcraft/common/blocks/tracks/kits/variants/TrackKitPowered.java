@@ -26,6 +26,11 @@ public abstract class TrackKitPowered extends TrackKitRailcraft implements ITrac
     private boolean powered;
 
     @Override
+    public int getRenderState() {
+        return powered ? 1 : 0;
+    }
+
+    @Override
     public boolean isPowered() {
         return powered;
     }

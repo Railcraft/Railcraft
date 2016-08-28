@@ -15,8 +15,9 @@ import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
-import mods.railcraft.client.render.models.resource.DynamicTrackModel;
 import mods.railcraft.client.render.models.resource.ModelManager;
+import mods.railcraft.client.render.models.resource.OutfittedTrackItemModel;
+import mods.railcraft.client.render.models.resource.OutfittedTrackModel;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
@@ -147,7 +148,8 @@ public class ClientProxy extends CommonProxy {
             }
         }
 
-        ModelLoaderRegistry.registerLoader(DynamicTrackModel.Loader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(OutfittedTrackModel.Loader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(OutfittedTrackItemModel.Loader.INSTANCE);
     }
 
     @Override
