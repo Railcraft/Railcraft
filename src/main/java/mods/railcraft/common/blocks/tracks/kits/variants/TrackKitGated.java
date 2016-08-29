@@ -44,12 +44,13 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     protected boolean open;
     protected boolean reversed;
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(REVERSED, reversed);
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        int state = reversed ? 1 : 0;
+        if (isGateOpen())
+            state += 2;
+        return state;
+    }
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -75,10 +76,10 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
-        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (isGateOpen())
             return null;
-        AABBFactory factory = AABBFactory.start().createBoxForTileAt(getPos()).raiseCeiling(0.5);
+        AABBFactory factory = AABBFactory.start().box().raiseCeiling(0.5);
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (dir == EnumRailDirection.NORTH_SOUTH)
             return factory.expandZAxis(AABB_SHRINK).build();
         else
@@ -150,7 +151,7 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
 
     private void playSound() {
         if (Game.isHost(theWorldAsserted()))
-            SoundHelper.playFX(theWorldAsserted(), null, 1003, getTile().getPos(), 0);
+            SoundHelper.playFX(theWorldAsserted(), null, isGateOpen() ? 1008 : 1014, getTile().getPos(), 0);
     }
 
     public boolean isGateOpen() {

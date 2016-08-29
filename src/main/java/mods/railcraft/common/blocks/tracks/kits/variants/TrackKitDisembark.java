@@ -33,12 +33,19 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
         return TrackKits.DISEMBARK;
     }
 
-//    @Override
+    //    @Override
 //    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
 //        state = super.getExtendedState(state);
 ////        state = state.withProperty(REVERSED, mirrored);
 //        return state;
 //    }
+    @Override
+    public int getRenderState() {
+        int state = mirrored ? 1 : 0;
+        if (isPowered())
+            state += 2;
+        return state;
+    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {

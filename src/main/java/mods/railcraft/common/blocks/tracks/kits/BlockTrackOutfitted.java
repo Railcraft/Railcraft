@@ -44,6 +44,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -146,11 +147,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
-            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
-                if (trackKit.isVisible())
-                    list.add(trackKit.getOutfittedTrack(trackType));
-            }
+        for (Tuple<TrackType, TrackKit> combination : TrackRegistry.getCombinations()) {
+            list.add(combination.getSecond().getOutfittedTrack(combination.getFirst()));
         }
     }
 

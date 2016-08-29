@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "model": "oak_fence_gate_closed",
+        "uvlock": true
+      },
+      "1": {
+        "model": "oak_fence_gate_closed", "y": 180,
+        "uvlock": true
+      },
+      "2": {
+        "model": "oak_fence_gate_open",
+        "uvlock": true
+      },
+      "3": {
+        "model": "oak_fence_gate_open", "y": 180,
+        "uvlock": true
+      }
+    },
+    "shape": {
+      "north_south": {},
+      "east_west": {"y": 90}
+    }
+  }
+}

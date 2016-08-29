@@ -1,0 +1,49 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_0"}
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_0"}
+      },
+      "1": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_1"}
+      },
+      "2": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_2"}
+      },
+      "3": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_3"}
+      },
+      "4": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_4"}
+      },
+      "5": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/coupler_5"}
+      }
+    },
+    "shape": {
+      "north_south": {
+        "model": "rail_flat"
+      },
+      "east_west": {
+        "model": "rail_flat", "y": 90
+      },
+      "ascending_east": {
+        "model": "rail_raised_ne", "y": 90
+      },
+      "ascending_west": {
+        "model": "rail_raised_sw", "y": 90
+      },
+      "ascending_north": {
+        "model": "rail_raised_ne"
+      },
+      "ascending_south": {
+        "model": "rail_raised_sw"
+      }
+    }
+  }
+}

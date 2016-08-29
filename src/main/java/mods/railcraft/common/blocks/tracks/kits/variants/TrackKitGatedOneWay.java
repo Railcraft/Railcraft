@@ -9,7 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.kits.variants;
 
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 
 public class TrackKitGatedOneWay extends TrackKitGated {
@@ -24,19 +26,13 @@ public class TrackKitGatedOneWay extends TrackKitGated {
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (isGateOpen()) {
-            int meta = getTile().getBlockMetadata();
-            if (meta == 0) {
-                if (isReversed()) {
-                    cart.motionZ = Math.max(Math.abs(cart.motionZ), MOTION_MIN);
-                } else {
-                    cart.motionZ = -Math.max(Math.abs(cart.motionZ), MOTION_MIN);
-                }
-            } else if (meta == 1) {
-                if (isReversed()) {
-                    cart.motionX = -Math.max(Math.abs(cart.motionX), MOTION_MIN);
-                } else {
-                    cart.motionX = Math.max(Math.abs(cart.motionX), MOTION_MIN);
-                }
+            BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(theWorldAsserted(), getPos());
+            if (shape == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+                double motion = Math.max(Math.abs(cart.motionZ), MOTION_MIN);
+                cart.motionZ = motion * (isReversed() ? 1 : -1);
+            } else {
+                double motion = Math.max(Math.abs(cart.motionX), MOTION_MIN);
+                cart.motionX = motion * (isReversed() ? -1 : 1);
             }
         }
     }

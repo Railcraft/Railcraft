@@ -29,7 +29,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackKitCoupler extends TrackKitPowered {
-    //    public static final PropertyEnum<Mode> MODE = PropertyEnum.create("mode", Mode.class);
     private EntityMinecart taggedCart;
     private Mode mode = Mode.COUPLER;
 
@@ -38,12 +37,13 @@ public class TrackKitCoupler extends TrackKitPowered {
         return TrackKits.COUPLER;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(MODE, mode);
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        int state = mode.ordinal();
+        if (isPowered())
+            state += Mode.VALUES.length;
+        return state;
+    }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {

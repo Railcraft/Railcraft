@@ -77,6 +77,14 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 //        return state;
 //    }
 
+    @Override
+    public int getRenderState() {
+        int state = profile.ordinal();
+        if (!locked)
+            state += LockingProfileType.VALUES.length;
+        return state;
+    }
+
     public LockingProfileType getProfileType() {
         return profile;
     }

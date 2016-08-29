@@ -45,7 +45,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
     DISEMBARK(ModuleTracks.class, 4, "disembarking", 8, TrackKitDisembark.class),
     DUMPING(ModuleTracks.class, 2, "dumping", 8, TrackKitDumping.class),
     EMBARKING(ModuleTracks.class, 2, "embarking", 8, TrackKitEmbarking.class),
-    GATED(ModuleTracks.class, 1, "gated", 4, TrackKitGated.class),
+    GATED(ModuleTracks.class, 4, "gated", 4, TrackKitGated.class),
     GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
     HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, "transition", 8, TrackSpeedTransition.class),
     LAUNCHER(ModuleExtras.class, 2, "launcher", 1, TrackKitLauncher.class),
