@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -29,7 +29,7 @@ public class PopulatorQuarry extends Populator {
     public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_QUARRY", new Class[0]);
     public static final int GEN_HEIGHT = 50;
     private static PopulatorQuarry instance;
-    private final WorldGenQuarry quarry = new WorldGenQuarry(EnumGeneric.STONE_QUARRIED.getState());
+    private final WorldGenQuarry quarry = new WorldGenQuarry(EnumGeneric.STONE_QUARRIED.getDefaultState());
 
     public static PopulatorQuarry instance() {
         if (instance == null) {

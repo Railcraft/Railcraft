@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -18,7 +19,6 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
-public class BlockLantern extends Block implements IMaterialBlock {
+public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     private static final float SELECT = 2 * 0.0625f;
 
     public BlockLantern() {

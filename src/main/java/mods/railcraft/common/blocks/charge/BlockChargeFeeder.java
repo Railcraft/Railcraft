@@ -11,9 +11,9 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
-import mods.railcraft.common.blocks.RailcraftBlockContainerSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -46,7 +46,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implements IChargeBlock {
+public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implements IChargeBlock {
 
     public static final PropertyEnum<FeederVariant> VARIANT = PropertyEnum.create("variant", FeederVariant.class);
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");

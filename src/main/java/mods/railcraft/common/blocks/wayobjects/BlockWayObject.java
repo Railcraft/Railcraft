@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.RailcraftBlockContainer;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -38,7 +38,7 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
-public abstract class BlockWayObject extends RailcraftBlockContainer implements IPostConnection {
+public abstract class BlockWayObject extends BlockContainerRailcraft implements IPostConnection {
 
     protected BlockWayObject() {
         super(Material.IRON);
@@ -47,7 +47,6 @@ public abstract class BlockWayObject extends RailcraftBlockContainer implements 
         setCreativeTab(CreativeTabs.TRANSPORTATION);
 //        setStateHarvestLevel("pickaxe", 2);
         setHarvestLevel("crowbar", 0);
-
     }
 
     public abstract IWayObjectDefinition getSignalType(IBlockState state);

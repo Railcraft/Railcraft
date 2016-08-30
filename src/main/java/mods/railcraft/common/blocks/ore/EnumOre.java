@@ -50,10 +50,10 @@ public enum EnumOre implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public IBlockState getState() {
-        if (getBlock() == null)
+    public IBlockState getDefaultState() {
+        if (block() == null)
             return null;
-        return getBlock().getDefaultState().withProperty(BlockOre.VARIANT, this);
+        return block().getDefaultState().withProperty(BlockOre.VARIANT, this);
     }
 
     public ItemStack getItem() {

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
@@ -125,7 +126,7 @@ public class TileTankWater extends TileTank {
     public static void placeWaterTank(World world, BlockPos pos, int water) {
         MultiBlockPattern pattern = TileTankWater.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getState());
+        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankWater) {
             TileTankWater master = (TileTankWater) tile;

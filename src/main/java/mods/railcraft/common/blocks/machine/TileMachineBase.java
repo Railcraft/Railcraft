@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
@@ -124,9 +125,9 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
                 return;
             }
 
-            if (getBlockType() != getMachineType().getBlock()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), getPos());
-                worldObj.setBlockState(getPos(), getMachineType().getState(), 3);
+            if (getBlockType() != getMachineType().block()) {
+                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
+                worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
@@ -135,7 +136,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             IBlockState state = worldObj.getBlockState(getPos());
             int meta = state.getBlock().getMetaFromState(state);
             if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMetaMap().get(meta).getTileClass()) {
-                worldObj.setBlockState(getPos(), getMachineType().getState(), 3);
+                worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), meta, getId(), getPos());

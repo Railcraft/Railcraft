@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.wayobjects;
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kits.variants.TrackSwitchBase;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackSwitchBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;

@@ -297,7 +297,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_WORLD.getState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
+        return EnumMachineAlpha.ANCHOR_WORLD.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
     }
 
     @Override

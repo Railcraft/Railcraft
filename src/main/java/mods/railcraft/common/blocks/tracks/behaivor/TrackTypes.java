@@ -33,59 +33,98 @@ import java.util.Locale;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum TrackTypes {
-    ABANDONED(RailcraftBlocks.TRACK_ABANDONED.getRegistryName()),
-    ELECTRIC(RailcraftBlocks.TRACK_ELECTRIC.getRegistryName()),
-    HIGH_SPEED(RailcraftBlocks.TRACK_HIGH_SPEED.getRegistryName()),
-    HIGH_SPEED_ELECTRIC(RailcraftBlocks.TRACK_HIGH_SPEED_ELECTRIC.getRegistryName()),
-    IRON(Blocks.RAIL.getRegistryName()),
-    REINFORCED(RailcraftBlocks.TRACK_REINFORCED.getRegistryName()),
-    STRAP_IRON(RailcraftBlocks.TRACK_STRAP_IRON.getRegistryName()),;
-
-    static {
-        ABANDONED.trackType.speedController = SpeedControllerAbandoned.instance();
-        ABANDONED.trackType.setMaxSupportDistance(2);
-
-        STRAP_IRON.trackType.speedController = SpeedControllerStrapIron.instance();
-
-        REINFORCED.trackType.setResistance(80F);
-        REINFORCED.trackType.speedController = SpeedControllerReinforced.instance();
-
-        ELECTRIC.trackType.collisionHandler = CollisionHandlerElectric.instance();
-        HIGH_SPEED_ELECTRIC.trackType.collisionHandler = CollisionHandlerElectric.instance();
-
-        HIGH_SPEED.trackType.speedController = SpeedControllerHighSpeed.instance();
-        HIGH_SPEED_ELECTRIC.trackType.speedController = SpeedControllerHighSpeed.instance();
-    }
+    ABANDONED(RailcraftBlocks.TRACK_FLEX_ABANDONED.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.NULL, SpeedController.ABANDONED))
+                    .setMaxSupportDistance(2)
+                    .build();
+        }
+    },
+    ELECTRIC(RailcraftBlocks.TRACK_FLEX_ELECTRIC.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.ELECTRIC, SpeedController.IRON))
+                    .setElectric(true)
+                    .build();
+        }
+    },
+    HIGH_SPEED(RailcraftBlocks.TRACK_FLEX_HIGH_SPEED.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.NULL, SpeedController.HIGH_SPEED))
+                    .setHighSpeed(true)
+                    .build();
+        }
+    },
+    HIGH_SPEED_ELECTRIC(RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.ELECTRIC, SpeedController.HIGH_SPEED))
+                    .setElectric(true)
+                    .setHighSpeed(true)
+                    .build();
+        }
+    },
+    IRON(Blocks.RAIL.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.NULL, SpeedController.IRON))
+                    .build();
+        }
+    },
+    REINFORCED(RailcraftBlocks.TRACK_FLEX_REINFORCED.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.NULL, SpeedController.REINFORCED))
+                    .setResistance(80F)
+                    .build();
+        }
+    },
+    STRAP_IRON(RailcraftBlocks.TRACK_FLEX_STRAP_IRON.getRegistryName()) {
+        @Override
+        protected TrackType make(TrackType.Builder builder) {
+            return builder
+                    .setEventHandler(new Handler(CollisionHandler.NULL, SpeedController.STRAP_IRON))
+                    .build();
+        }
+    },;
 
     @Nonnull
-    private final RailcraftTrackType trackType;
-    private final ResourceLocation baseBlock;
+    private final TrackType trackType;
 
     TrackTypes(ResourceLocation baseBlock) {
-        this.baseBlock = baseBlock;
-        trackType = new RailcraftTrackType();
+        TrackType.Builder builder = new TrackType.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)), baseBlock);
+        trackType = make(builder);
         TrackRegistry.TRACK_TYPE.register(trackType);
+    }
+
+    protected TrackType make(TrackType.Builder builder) {
+        return builder.build();
     }
 
     public TrackType getTrackType() {
         return trackType;
     }
 
-    public class RailcraftTrackType extends TrackType {
-        private CollisionHandler collisionHandler = CollisionHandler.instance();
-        private SpeedController speedController = SpeedController.instance();
+    private class Handler extends TrackType.EventHandler {
+        private final CollisionHandler collisionHandler;
+        private final SpeedController speedController;
 
-        public RailcraftTrackType() {
-            super(
-                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)),
-                    baseBlock,
-                    new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "blocks/tracks/kit/" + name().toLowerCase(Locale.ROOT))
-            );
+        public Handler(CollisionHandler collisionHandler, SpeedController speedController) {
+            this.collisionHandler = collisionHandler;
+            this.speedController = speedController;
         }
 
         @Override
-        public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
-            speedController.onMinecartPass(world, cart, pos, trackKit);
+        public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+            speedController.onMinecartPass(worldIn, cart, pos, trackKit);
         }
 
         @Override

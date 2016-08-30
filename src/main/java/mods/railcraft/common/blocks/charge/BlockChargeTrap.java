@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.blocks.RailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -44,7 +44,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockChargeTrap extends RailcraftBlock implements IChargeBlock {
+public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     private static final double ZAP_COST = 10000.0;
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");

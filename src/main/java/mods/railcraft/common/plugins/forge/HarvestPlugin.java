@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.blocks.IBlockContainer;
-import mods.railcraft.common.blocks.IStateContainer;
+import mods.railcraft.common.core.IContainerBlock;
+import mods.railcraft.common.core.IContainerState;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -43,8 +44,8 @@ public class HarvestPlugin {
         item.setHarvestLevel(toolClass, level);
     }
 
-    public static void setBlockHarvestLevel(String toolClass, int level, IBlockContainer blockContainer) {
-        Block block = blockContainer.getBlock();
+    public static void setBlockHarvestLevel(String toolClass, int level, IContainerBlock blockContainer) {
+        Block block = blockContainer.block();
         if (block != null)
             setBlockHarvestLevel(toolClass, level, block);
     }
@@ -53,7 +54,7 @@ public class HarvestPlugin {
         block.setHarvestLevel(toolClass, level);
     }
 
-    public static void setStateHarvestLevel(String toolClassLevel, IStateContainer stateContainer) {
+    public static void setStateHarvestLevel(String toolClassLevel, IContainerState stateContainer) {
         String[] tokens = toolClassLevel.split(":");
         if (tokens.length != 2)
             throw new IllegalArgumentException("Tool class string must be of the format: <toolClass>:<level>");
@@ -62,8 +63,8 @@ public class HarvestPlugin {
         setStateHarvestLevel(toolClass, level, stateContainer);
     }
 
-    public static void setStateHarvestLevel(String toolClass, int level, IStateContainer stateContainer) {
-        IBlockState state = stateContainer.getState();
+    public static void setStateHarvestLevel(String toolClass, int level, IContainerState stateContainer) {
+        IBlockState state = stateContainer.getDefaultState();
         if (state != null)
             setStateHarvestLevel(toolClass, level, state);
     }

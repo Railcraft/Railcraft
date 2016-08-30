@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.charge;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -54,7 +54,7 @@ import java.util.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockWire extends RailcraftBlock implements IPostConnection, IChargeBlock {
+public class BlockWire extends BlockRailcraft implements IPostConnection, IChargeBlock {
 
     public static final PropertyEnum<Addon> ADDON = PropertyEnum.create("addon", Addon.class);
     public static final PropertyEnum<Connection> DOWN = PropertyEnum.create("down", Connection.class);

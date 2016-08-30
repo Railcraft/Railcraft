@@ -54,6 +54,11 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
+    @Override
+    public Block getObject() {
+        return this;
+    }
+
     @Nullable
     @Override
     public Class<? extends IVariantEnum> getVariantEnum() {

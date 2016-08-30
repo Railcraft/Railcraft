@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.carts.RailcraftCarts;

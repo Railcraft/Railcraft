@@ -16,7 +16,6 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -29,6 +28,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
@@ -49,7 +49,7 @@ import java.util.Set;
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
         @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 })
-public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftObject {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItem {
 
     private static final byte BOOST_DAMAGE = 3;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
@@ -77,6 +77,11 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         bannedRotations.add(BlockRailBase.class);
 
         setHarvestLevel("crowbar", 2);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Override

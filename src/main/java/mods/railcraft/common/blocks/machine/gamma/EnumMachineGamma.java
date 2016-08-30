@@ -140,7 +140,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public boolean isAvailable() {
-        return getBlock() != null && isEnabled();
+        return block() != null && isEnabled();
     }
 
     @Override

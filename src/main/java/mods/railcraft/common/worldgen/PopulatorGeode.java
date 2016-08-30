@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -34,7 +34,7 @@ public class PopulatorGeode extends Populator {
     public static final int MIN_FLOOR = 24;
     public static final int GEN_HEIGHT = 60;
     private static PopulatorGeode instance;
-    private final WorldGenerator geode = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getState());
+    private final WorldGenerator geode = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState());
 
     private PopulatorGeode() {
         super(EVENT_TYPE, GEN_HEIGHT);

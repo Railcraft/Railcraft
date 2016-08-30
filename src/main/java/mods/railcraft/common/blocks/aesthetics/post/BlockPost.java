@@ -75,13 +75,13 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         }
 
 //            HarvestPlugin.setStateHarvestLevel(block, "crowbar", 0);
-        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD.getState());
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE.getState());
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_UNPAINTED.getState());
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.EMBLEM.getState());
-        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD_PLATFORM.getState());
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE_PLATFORM.getState());
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_PLATFORM_UNPAINTED.getState());
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_UNPAINTED.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.EMBLEM.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD_PLATFORM.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE_PLATFORM.getDefaultState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_PLATFORM_UNPAINTED.getDefaultState());
 
         ForestryPlugin.addBackpackItem("builder", this);
     }

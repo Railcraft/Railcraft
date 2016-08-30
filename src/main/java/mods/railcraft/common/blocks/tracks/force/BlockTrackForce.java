@@ -10,7 +10,9 @@
 
 package mods.railcraft.common.blocks.tracks.force;
 
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -25,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -42,6 +45,11 @@ public class BlockTrackForce extends BlockTrackTile {
     public BlockTrackForce() {
         setHardness(-1);
         setSoundType(SoundType.METAL);
+    }
+
+    @Override
+    public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
+        return TrackTypes.IRON.getTrackType();
     }
 
     @Override

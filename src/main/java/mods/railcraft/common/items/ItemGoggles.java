@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
@@ -19,7 +18,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -33,7 +31,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemGoggles extends ItemArmor implements IRailcraftObject {
+public class ItemGoggles extends ItemRailcraftArmor {
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
 
     public ItemGoggles() {
@@ -138,10 +136,6 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     @Override
     public Object getRecipeObject(@Nullable IVariantEnum meta) {
         return this;
-    }
-
-    @Override
-    public void finalizeDefinition() {
     }
 
     public enum GoggleAura {

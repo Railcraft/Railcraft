@@ -9,16 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftObject {
+public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItem {
 
     public ItemSteelPickaxe() {
         super(ItemMaterials.STEEL_TOOL);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Override

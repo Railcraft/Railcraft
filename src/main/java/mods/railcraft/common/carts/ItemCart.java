@@ -12,9 +12,9 @@ package mods.railcraft.common.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockDispenser;
@@ -22,6 +22,7 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -36,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftObject {
+public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItem {
 
     private final ICartType type;
     private int rarity = 0;
@@ -49,6 +50,11 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftO
         setMaxDamage(0);
         setHasSubtypes(true);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaviorDefaultDispenseItem());
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     public ItemCart setRarity(int rarity) {

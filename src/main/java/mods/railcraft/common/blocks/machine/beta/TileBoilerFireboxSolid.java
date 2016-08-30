@@ -73,8 +73,8 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getState());
-                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getState());
+                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
+                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
                 TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
                 if (tile instanceof TileBoilerFireboxSolid) {
                     TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;

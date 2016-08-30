@@ -118,7 +118,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     @Override
     public boolean isAvailable() {
-        return getBlock() != null && isEnabled();
+        return block() != null && isEnabled();
     }
 
     @Override

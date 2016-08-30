@@ -20,7 +20,8 @@ public class ModuleTracksWood extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_STRAP_IRON
+                        RailcraftBlocks.TRACK_FLEX_STRAP_IRON,
+                        RailcraftBlocks.TRACK_JUNCTION_STRAP_IRON
                 );
             }
         });

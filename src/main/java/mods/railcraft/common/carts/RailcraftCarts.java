@@ -14,10 +14,10 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
@@ -37,7 +37,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Locale;
 
-public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
+public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRailcraftItem> {
 
     BASIC(0, EntityCartBasic.class),
     CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.CHEST)),
@@ -224,7 +224,7 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
     }
 
     @Override
-    public IRailcraftObject getObject() {
+    public IRailcraftItem getObject() {
         return item;
     }
 

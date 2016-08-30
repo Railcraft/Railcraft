@@ -11,6 +11,8 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.core.IContainerBlock;
+import mods.railcraft.common.core.IContainerState;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
@@ -22,19 +24,19 @@ import javax.annotation.Nullable;
  * <p>
  * Created by CovertJaguar on 3/24/2016.
  */
-public interface IVariantEnumBlock extends IVariantEnum, IStateContainer, IBlockContainer {
+public interface IVariantEnumBlock extends IVariantEnum, IContainerState, IContainerBlock {
 
     IRailcraftBlockContainer getContainer();
 
     @Nullable
     @Override
-    default Block getBlock() {
+    default Block block() {
         return getContainer().block();
     }
 
     @Nullable
     @Override
-    default IBlockState getState() {
+    default IBlockState getDefaultState() {
         return getContainer().getState(this);
     }
 

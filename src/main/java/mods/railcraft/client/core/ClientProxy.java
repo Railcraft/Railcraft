@@ -30,7 +30,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
-import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfittedTESR;
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfittedTESR;
 import mods.railcraft.common.blocks.wayobjects.TileWayObject;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;

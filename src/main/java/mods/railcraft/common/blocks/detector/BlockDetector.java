@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.RailcraftBlockContainer;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -51,7 +51,7 @@ import java.util.List;
 
 import static net.minecraft.util.EnumFacing.*;
 
-public class BlockDetector extends RailcraftBlockContainer {
+public class BlockDetector extends BlockContainerRailcraft {
 
     public static final PropertyEnum<EnumDetector> VARIANT = PropertyEnum.create("variant", EnumDetector.class);
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.machine.TileMachineItem;
@@ -37,7 +38,6 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
@@ -110,8 +110,8 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     private void modifyNearbyAI() {
         for (EntityVillager villager : findNearbyVillagers(20)) {
-            AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, getMachineType().getState(), 4, 0.08F));
-            AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, getMachineType().getState(), 16, 0.002F));
+            AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, getMachineType().getDefaultState(), 4, 0.08F));
+            AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, getMachineType().getDefaultState(), 16, 0.002F));
         }
     }
 

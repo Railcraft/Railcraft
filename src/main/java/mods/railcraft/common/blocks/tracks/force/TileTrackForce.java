@@ -82,7 +82,7 @@ public class TileTrackForce extends RailcraftTileEntity {
     private boolean isValidEmitter(BlockPos pos, EnumFacing facing) {
         World world = theWorld();
         assert world != null;
-        if (!WorldPlugin.isBlockAt(world, pos, EnumMachineEpsilon.FORCE_TRACK_EMITTER.getBlock()))
+        if (!WorldPlugin.isBlockAt(world, pos, EnumMachineEpsilon.FORCE_TRACK_EMITTER.block()))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {

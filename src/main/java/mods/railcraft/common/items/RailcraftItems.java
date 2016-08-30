@@ -12,7 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.tracks.kits.ItemTrackKit;
+import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackKit;
 import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum RailcraftItems implements IRailcraftObjectContainer {
+public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> {
     ARMOR_BOOTS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.FEET), "armor.boots.steel", Items.IRON_BOOTS),
     ARMOR_HELMET_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.HEAD), "armor.helmet.steel", Items.IRON_HELMET),
     ARMOR_LEGGINGS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor.leggings.steel", Items.IRON_LEGGINGS),
@@ -99,7 +99,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     private final Object altRecipeObject;
     private final Supplier<Boolean> prerequisites;
     private Item item;
-    private IRailcraftObject railcraftObject;
+    private IRailcraftItem railcraftObject;
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
@@ -130,9 +130,9 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
 
         if (isEnabled()) {
             item = itemSupplier.get();
-            if (!(item instanceof IRailcraftObject))
-                throw new RuntimeException("Railcraft Items must implement IRailcraftObject");
-            railcraftObject = (IRailcraftObject) item;
+            if (!(item instanceof IRailcraftItem))
+                throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
+            railcraftObject = (IRailcraftItem) item;
             item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
             RailcraftRegistry.register(item);
@@ -209,7 +209,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     }
 
     @Override
-    public IRailcraftObject getObject() {
+    public IRailcraftItem getObject() {
         return railcraftObject;
     }
 

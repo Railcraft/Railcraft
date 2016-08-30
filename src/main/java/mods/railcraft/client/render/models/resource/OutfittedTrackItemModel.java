@@ -30,7 +30,7 @@ import net.minecraftforge.common.model.IModelState;
 import java.io.IOException;
 import java.util.Collection;
 
-import static mods.railcraft.common.blocks.tracks.kits.ItemTrackOutfitted.MODEL_PREFIX;
+import static mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted.MODEL_PREFIX;
 
 /**
  * Created by CovertJaguar on 8/18/2016 for Railcraft.

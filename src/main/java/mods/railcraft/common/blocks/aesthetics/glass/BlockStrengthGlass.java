@@ -21,6 +21,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -64,6 +65,11 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE).withProperty(POSITION, Position.SINGLE));
+    }
+
+    @Override
+    public Block getObject() {
+        return this;
     }
 
     @Override

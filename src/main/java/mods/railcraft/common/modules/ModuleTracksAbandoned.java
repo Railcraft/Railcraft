@@ -20,7 +20,7 @@ public class ModuleTracksAbandoned extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_ABANDONED
+                        RailcraftBlocks.TRACK_FLEX_ABANDONED
                 );
             }
         });

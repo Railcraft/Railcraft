@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  *
  * Created by CovertJaguar on 4/13/2016.
  */
-public interface IRailcraftObjectContainer {
+public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
     default void register() {
     }
 
@@ -66,7 +66,7 @@ public interface IRailcraftObjectContainer {
     }
 
     @Nullable
-    IRailcraftObject getObject();
+    T getObject();
 
     @Nullable
     default Object getRecipeObject() {
@@ -76,7 +76,7 @@ public interface IRailcraftObjectContainer {
     @Nullable
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         Object obj = null;
-        IRailcraftObject railcraftObject = getObject();
+        T railcraftObject = getObject();
         if (railcraftObject != null) {
             railcraftObject.checkVariant(variant);
             obj = railcraftObject.getRecipeObject(variant);

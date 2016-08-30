@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftBlock extends IRailcraftObject {
+public interface IRailcraftBlock extends IRailcraftObject<Block> {
 
     default IBlockState getState(@Nullable IVariantEnum variant) {
         return ((Block) this).getDefaultState();

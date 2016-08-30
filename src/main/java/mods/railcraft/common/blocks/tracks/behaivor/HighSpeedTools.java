@@ -11,15 +11,14 @@
 package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.api.tracks.TrackKit;
-import mods.railcraft.api.tracks.TrackType;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -33,6 +32,8 @@ import javax.annotation.Nullable;
  */
 public class HighSpeedTools {
     public static final float SPEED_CUTOFF = 0.39f;
+    public static final int LOOK_AHEAD_DIST = 2;
+    public static final float SPEED_SLOPE = 0.45f;
 
     public static void checkSafetyAndExplode(World world, BlockPos pos, EntityMinecart cart) {
         if (!isTrackSafeForHighSpeed(world, pos, cart)) {
@@ -93,8 +94,34 @@ public class HighSpeedTools {
     }
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
-        if (WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.TRACK_HIGH_SPEED.block())) return true;
-        TrackType track = TrackTools.getTrackTypeAt(world, pos);
-        return track == TrackTypes.HIGH_SPEED.getTrackType() || track == TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType();
+        return TrackTools.getTrackTypeAt(world, pos).isHighSpeed();
+    }
+
+    public static float speedForNextTrack(World world, BlockPos pos, int dist, EntityMinecart cart) {
+        float maxSpeed = RailcraftConfig.getMaxHighSpeed();
+        if (dist < LOOK_AHEAD_DIST)
+            for (EnumFacing side : EnumFacing.HORIZONTALS) {
+                BlockPos nextPos = pos.offset(side);
+                boolean foundTrack = TrackTools.isRailBlockAt(world, nextPos);
+                if (!foundTrack) {
+                    if (TrackTools.isRailBlockAt(world, nextPos.up())) {
+                        foundTrack = true;
+                        nextPos = nextPos.up();
+                    } else if (TrackTools.isRailBlockAt(world, nextPos.down())) {
+                        foundTrack = true;
+                        nextPos = nextPos.down();
+                    }
+                }
+                if (foundTrack) {
+                    BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, nextPos, cart);
+                    if (dir.isAscending())
+                        return SPEED_SLOPE;
+                    maxSpeed = speedForNextTrack(world, nextPos, dist + 1, cart);
+                    if (maxSpeed == SPEED_SLOPE)
+                        return SPEED_SLOPE;
+                }
+            }
+
+        return maxSpeed;
     }
 }

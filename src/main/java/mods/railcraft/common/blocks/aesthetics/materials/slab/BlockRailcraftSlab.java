@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleHelper;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.items.RailcraftItems;
@@ -22,7 +23,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -62,7 +62,7 @@ import java.util.stream.Collectors;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock {
+public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMaterialBlock {
 
     public static final IUnlistedProperty<Materials> TOP_MATERIAL = Properties.toUnlisted(PropertyEnum.create("top_material", Materials.class));
     public static final IUnlistedProperty<Materials> BOTTOM_MATERIAL = Properties.toUnlisted(PropertyEnum.create("bottom_material", Materials.class));

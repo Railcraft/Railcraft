@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
@@ -32,7 +31,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockWayObjectRailcraft extends BlockWayObject implements IRailcraftBlock {
+public class BlockWayObjectRailcraft extends BlockWayObject {
 
     public static final PropertyEnum<EnumWayObject> TYPE = PropertyEnum.create("type", EnumWayObject.class);
 

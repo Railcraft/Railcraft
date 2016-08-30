@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -49,7 +49,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    default IBlockState getState() {
+    default IBlockState getDefaultState() {
         IBlockState state = getContainer().getDefaultState();
         if (state != null)
             return state.withProperty(getVariantProperty(), (M) this);
@@ -63,14 +63,14 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     @Nullable
     default ItemStack getItem(int qty) {
-        Block block = getBlock();
+        Block block = block();
         if (block == null)
             return null;
         return new ItemStack(block, qty, ordinal());
     }
 
     @Override
-    default Block getBlock() {
+    default Block block() {
         return getContainer().block();
     }
 

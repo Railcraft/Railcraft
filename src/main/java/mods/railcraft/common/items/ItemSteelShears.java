@@ -9,12 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IShearable;
@@ -22,11 +22,16 @@ import net.minecraftforge.common.IShearable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemSteelShears extends ItemShears implements IRailcraftObject {
+public class ItemSteelShears extends ItemShears implements IRailcraftItem {
 
     public ItemSteelShears() {
         setMaxDamage(500);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Override

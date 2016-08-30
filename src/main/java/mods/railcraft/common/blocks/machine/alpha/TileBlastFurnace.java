@@ -134,8 +134,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getState());
-        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getState());
+        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
+        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileBlastFurnace) {
             TileBlastFurnace master = (TileBlastFurnace) tile;

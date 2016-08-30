@@ -49,12 +49,12 @@ import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
-import mods.railcraft.common.blocks.tracks.flex.BlockTrackAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackElectric;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
-import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kits.ItemTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.junction.BlockTrackJunction;
+import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
@@ -110,17 +110,21 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WAY_OBJECT("wayobject", BlockWayObjectRailcraft::new, ItemWayObject::new, EnumWayObject.class),
     SLAB("slab", BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs::new, ItemMaterial::new),
-    @Deprecated
-    TRACK("track", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_ABANDONED("track_abandoned", () -> new BlockTrackAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
-    TRACK_ELECTRIC("track_electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
+    TRACK_FLEX_ABANDONED("track_flex_abandoned", () -> new BlockTrackFlex(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_ELECTRIC("track_flex_electric", () -> new BlockTrackElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_REINFORCED("track_flex_reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     TRACK_FORCE("track_force", BlockTrackForce::new, ItemTrack::new),
-    TRACK_HIGH_SPEED("track_high_speed", () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-    TRACK_HIGH_SPEED_ELECTRIC("track_high_speed_electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_ELECTRIC("track_junction_electric", () -> new BlockTrackJunction(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_HIGH_SPEED("track_junction_high_speed", () -> new BlockTrackJunction(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_HS_ELECTRIC("track_junction_hs_electric", () -> new BlockTrackElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_IRON("track_junction_iron", () -> new BlockTrackJunction(TrackTypes.IRON.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_REINFORCED("track_junction_reinforced", () -> new BlockTrackJunction(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
+    TRACK_JUNCTION_STRAP_IRON("track_junction_strap_iron", () -> new BlockTrackJunction(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted::new, ItemTrackOutfitted::new),
-    TRACK_REINFORCED("track_reinforced", () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-    TRACK_STRAP_IRON("track_strap_iron", () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     WALL("wall", BlockRailcraftWall::new, ItemMaterial::new),
     WIRE("wire", BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);

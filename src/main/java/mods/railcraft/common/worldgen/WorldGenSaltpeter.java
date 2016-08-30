@@ -26,7 +26,7 @@ public class WorldGenSaltpeter extends WorldGenerator {
     /**
      * The block ID of the ore to be placed using this generator.
      */
-    private final IBlockState mineableBlock = EnumOre.SALTPETER.getState();
+    private final IBlockState mineableBlock = EnumOre.SALTPETER.getDefaultState();
     private final IBlockState logicBlock = RailcraftBlocks.WORLD_LOGIC.getDefaultState();
 
     public WorldGenSaltpeter() {

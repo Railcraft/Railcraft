@@ -61,7 +61,7 @@ public enum Materials implements IVariantEnum {
     PURPUR("purpur", Blocks.PURPUR_BLOCK::getDefaultState),
 
     OBSIDIAN(39, "obsidian", Blocks.OBSIDIAN::getDefaultState),
-    OBSIDIAN_CRUSHED("crushed_obsidian", EnumGeneric.CRUSHED_OBSIDIAN::getState),
+    OBSIDIAN_CRUSHED("crushed_obsidian", EnumGeneric.CRUSHED_OBSIDIAN::getDefaultState),
 
     ABYSSAL_BLOCK(28, "abyssal_block", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK)),
     ABYSSAL_BRICK(13, "abyssal_brick", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BRICK)),
@@ -108,16 +108,16 @@ public enum Materials implements IVariantEnum {
     PACKED_ICE(5, "packed_ice", Blocks.PACKED_ICE::getDefaultState),
 
     IRON(6, "iron", Blocks.IRON_BLOCK::getDefaultState),
-    STEEL(43, "steel", EnumGeneric.BLOCK_STEEL::getState),
-    COPPER(40, "copper", EnumGeneric.BLOCK_COPPER::getState),
-    TIN(41, "tin", EnumGeneric.BLOCK_TIN::getState),
-    LEAD(42, "lead", EnumGeneric.BLOCK_LEAD::getState),
+    STEEL(43, "steel", EnumGeneric.BLOCK_STEEL::getDefaultState),
+    COPPER(40, "copper", EnumGeneric.BLOCK_COPPER::getDefaultState),
+    TIN(41, "tin", EnumGeneric.BLOCK_TIN::getDefaultState),
+    LEAD(42, "lead", EnumGeneric.BLOCK_LEAD::getDefaultState),
     GOLD(7, "gold", Blocks.GOLD_BLOCK::getDefaultState),
 
     DIAMOND(8, "diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
-    CONCRETE(2, "concrete", EnumGeneric.BLOCK_CONCRETE::getState),
-    CREOSOTE(38, "creosote", EnumGeneric.BLOCK_CREOSOTE::getState),
+    CONCRETE(2, "concrete", EnumGeneric.BLOCK_CONCRETE::getDefaultState),
+    CREOSOTE(38, "creosote", EnumGeneric.BLOCK_CREOSOTE::getDefaultState),
 
     NO_MAT("no_mat", () -> null);
     public static final String MATERIAL_KEY = "mat";

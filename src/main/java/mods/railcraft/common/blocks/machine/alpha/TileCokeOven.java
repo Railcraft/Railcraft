@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
@@ -31,9 +32,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -113,8 +114,8 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getState());
-        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getState());
+        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getDefaultState());
+        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileCokeOven) {
             TileCokeOven master = (TileCokeOven) tile;

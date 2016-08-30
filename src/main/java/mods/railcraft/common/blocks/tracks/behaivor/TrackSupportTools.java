@@ -36,6 +36,8 @@ public class TrackSupportTools {
     }
 
     public static boolean isSupported(World world, BlockPos pos, int maxDistance) {
+        if (maxDistance == 0)
+            return isSupportedDirectly(world, pos);
         return isSupported(world, pos, false, maxDistance, new HashSet<>());
     }
 
@@ -47,7 +49,7 @@ public class TrackSupportTools {
             return true;
         if (checkSelf && !TrackTools.isRailBlockAt(world, pos))
             return false;
-        if (world.isSideSolid(pos.down(), EnumFacing.UP, false))
+        if (isSupportedDirectly(world, pos))
             return true;
         if (distance <= 0)
             return false;

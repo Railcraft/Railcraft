@@ -132,7 +132,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
      */
     @Override
     public boolean isAvailable() {
-        return getBlock() != null && isEnabled();
+        return block() != null && isEnabled();
     }
 
     @Override

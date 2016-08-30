@@ -18,10 +18,10 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
-import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kits.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
-import mods.railcraft.common.blocks.tracks.kits.TrackTileFactory;
+import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackTileFactory;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -205,7 +205,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // machines
         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable()) {
-            setBlockState(world, EnumMachineAlpha.ROLLING_MACHINE.getState(), 9, 1, 5, sbb);
+            setBlockState(world, EnumMachineAlpha.ROLLING_MACHINE.getDefaultState(), 9, 1, 5, sbb);
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
@@ -237,7 +237,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     }
 
     private void placeTrack(TrackTypes trackType, TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
-        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK.block();
+        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK_OUTFITTED.block();
         // TODO: place vanilla tracks?
         if (blockTrack == null)
             return;
@@ -269,7 +269,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (!sbb.isVecInside(pos))
             return;
 
-        setBlockState(world, EnumMachineBeta.ENGINE_STEAM_HOBBY.getState(), x, y, z, sbb);
+        setBlockState(world, EnumMachineBeta.ENGINE_STEAM_HOBBY.getDefaultState(), x, y, z, sbb);
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileEngineSteamHobby) {
             TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;

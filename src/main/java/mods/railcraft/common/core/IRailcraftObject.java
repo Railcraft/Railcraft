@@ -25,7 +25,9 @@ import javax.annotation.Nullable;
  *
  * Created by CovertJaguar on 3/14/2016.
  */
-public interface IRailcraftObject {
+public interface IRailcraftObject<T> extends IForgeRegistryEntry<T> {
+    T getObject();
+
     @Nullable
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         return getStack(1, variant);

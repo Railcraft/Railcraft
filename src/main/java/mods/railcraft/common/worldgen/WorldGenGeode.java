@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.ore.BlockOre;
@@ -89,11 +90,11 @@ public class WorldGenGeode extends WorldGenerator {
             double chance = rand.nextDouble();
             IBlockState oreState = null;
             if (chance <= 0.002 && EnumOre.DARK_DIAMOND.isEnabled())
-                oreState = EnumOre.DARK_DIAMOND.getState();
+                oreState = EnumOre.DARK_DIAMOND.getDefaultState();
             else if (chance <= 0.004 && EnumOre.DARK_EMERALD.isEnabled())
-                oreState = EnumOre.DARK_EMERALD.getState();
+                oreState = EnumOre.DARK_EMERALD.getDefaultState();
             else if (chance <= 0.01 && EnumOre.DARK_LAPIS.isEnabled())
-                oreState = EnumOre.DARK_LAPIS.getState();
+                oreState = EnumOre.DARK_LAPIS.getDefaultState();
             if (oreState != null)
                 world.setBlockState(pos, oreState, 2);
         }

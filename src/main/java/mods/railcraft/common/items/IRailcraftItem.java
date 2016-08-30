@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftItem extends IRailcraftObject {
+public interface IRailcraftItem extends IRailcraftObject<Item> {
 
     @Override
     @SideOnly(Side.CLIENT)

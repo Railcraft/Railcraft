@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.ITankTile;
@@ -20,10 +21,10 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -88,8 +89,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getState());
-        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getState());
+        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getDefaultState());
+        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
@@ -100,8 +101,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.getState());
-        blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.getState());
+        blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.getDefaultState());
+        blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;

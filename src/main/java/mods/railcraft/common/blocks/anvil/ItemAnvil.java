@@ -14,6 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftItemBlock;
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAnvilBlock;
 
 import javax.annotation.Nullable;
@@ -26,6 +27,11 @@ import javax.annotation.Nullable;
 public class ItemAnvil extends ItemAnvilBlock implements IRailcraftItemBlock {
     public ItemAnvil(Block block) {
         super(block);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Nullable

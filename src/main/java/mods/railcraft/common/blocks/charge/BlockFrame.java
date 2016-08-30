@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.blocks.RailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -39,7 +39,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockFrame extends RailcraftBlock implements IPostConnection {
+public class BlockFrame extends BlockRailcraft implements IPostConnection {
 
     public BlockFrame() {
         super(Material.IRON);

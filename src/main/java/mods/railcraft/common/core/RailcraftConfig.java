@@ -12,7 +12,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidHelper;

@@ -14,6 +14,7 @@ import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftItemBlock extends IRailcraftObject {
+public interface IRailcraftItemBlock extends IRailcraftObject<Item> {
 
     @SideOnly(Side.CLIENT)
     default String getPropertyString(IBlockState state) {

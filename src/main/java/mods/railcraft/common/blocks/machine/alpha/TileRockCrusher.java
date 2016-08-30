@@ -154,7 +154,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        IBlockState state = EnumMachineAlpha.ROCK_CRUSHER.getState();
+        IBlockState state = EnumMachineAlpha.ROCK_CRUSHER.getDefaultState();
         blockMapping.put('B', state);
         blockMapping.put('D', state);
         blockMapping.put('a', state);

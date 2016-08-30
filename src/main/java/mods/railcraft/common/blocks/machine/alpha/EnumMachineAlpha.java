@@ -170,7 +170,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
      */
     @Override
     public boolean isAvailable() {
-        return getBlock() != null && isEnabled();
+        return block() != null && isEnabled();
     }
 
     @Override

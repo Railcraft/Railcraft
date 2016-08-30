@@ -57,7 +57,7 @@ public enum EnumPost implements IVariantEnumBlock {
 
     @Nullable
     public ItemStack getStack(int qty) {
-        Block block = getBlock();
+        Block block = block();
         if (!isEnabled() || block == null)
             return null;
         return new ItemStack(block, qty, ordinal());

@@ -16,7 +16,7 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
-import mods.railcraft.common.blocks.tracks.kits.BlockTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.*;

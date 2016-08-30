@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import com.google.common.collect.MapMaker;
@@ -49,12 +50,12 @@ public abstract class GeneratorPoorOre {
         this.yLevel = yLevel;
         this.yRange = yRange;
         this.noiseSeed = noiseSeed;
-        if (ore.getState() == null)
+        if (ore.getDefaultState() == null)
             oreGen = null;
         else if (density >= 4)
-            oreGen = new WorldGenMinable(ore.getState(), density, GenTools.STONE::test);
+            oreGen = new WorldGenMinable(ore.getDefaultState(), density, GenTools.STONE::test);
         else
-            oreGen = new WorldGenSmallDeposits(ore.getState(), density, GenTools.STONE);
+            oreGen = new WorldGenSmallDeposits(ore.getDefaultState(), density, GenTools.STONE);
     }
 
     @SubscribeEvent

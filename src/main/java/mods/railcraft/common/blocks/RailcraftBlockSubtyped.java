@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class RailcraftBlockSubtyped extends RailcraftBlock implements IRailcraftBlock {
+public abstract class RailcraftBlockSubtyped extends BlockRailcraft implements IRailcraftBlock {
     private final Class<? extends IVariantEnum> variantClass;
     private final IVariantEnum[] variantValues;
 

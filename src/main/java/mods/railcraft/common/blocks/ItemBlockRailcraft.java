@@ -40,6 +40,11 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
     }
 
     @Override
+    public ItemBlockRailcraft getObject() {
+        return this;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public IItemColor colorHandler() {
         return (stack, tintIndex) -> EnumColor.fromItemStack(stack).getHexColor();

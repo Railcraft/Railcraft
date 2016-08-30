@@ -67,7 +67,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IEnergyReceiv
     public static void placeFluxTransformer(World world, BlockPos pos) {
         MultiBlockPattern pattern = TileFluxTransformer.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getState());
+        blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getDefaultState());
         pattern.placeStructure(world, pos, blockMapping);
     }
 

@@ -9,19 +9,24 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelAxe extends ItemAxe implements IRailcraftObject {
+public class ItemSteelAxe extends ItemAxe implements IRailcraftItem {
 
     public ItemSteelAxe() {
         super(ItemMaterials.STEEL_TOOL, 8F, -3F);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Override

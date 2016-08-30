@@ -117,7 +117,7 @@ public enum EnumDetector implements IVariantEnumBlock {
 
     @Override
     public boolean isEnabled() {
-        return getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
+        return block() != null && RailcraftModuleManager.isModuleEnabled(module);
     }
 
     @Override
@@ -130,8 +130,8 @@ public enum EnumDetector implements IVariantEnumBlock {
      */
     @Nullable
     @Override
-    public IBlockState getState() {
-        if (getBlock() == null) return null;
-        return getBlock().getDefaultState();
+    public IBlockState getDefaultState() {
+        if (block() == null) return null;
+        return block().getDefaultState();
     }
 }

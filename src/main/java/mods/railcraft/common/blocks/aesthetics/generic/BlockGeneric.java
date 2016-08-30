@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockGeneric extends Block implements IRailcraftBlock {
+public class BlockGeneric extends BlockRailcraft {
 
     public static final PropertyEnum<EnumGeneric> VARIANT = PropertyEnum.create("variant", EnumGeneric.class);
 

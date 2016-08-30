@@ -11,10 +11,11 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.core.IContainerBlock;
+import mods.railcraft.common.core.IContainerItem;
+import mods.railcraft.common.core.IContainerState;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemBlock;
 
 import javax.annotation.Nullable;
 
@@ -23,16 +24,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftBlockContainer extends IRailcraftObjectContainer {
-    @Nullable
-    Block block();
-
-    @Nullable
-    IBlockState getDefaultState();
-
+public interface IRailcraftBlockContainer extends IRailcraftObjectContainer<IRailcraftBlock>, IContainerBlock, IContainerItem, IContainerState {
     @Nullable
     IBlockState getState(@Nullable IVariantEnum variant);
-
-    @Nullable
-    ItemBlock item();
 }

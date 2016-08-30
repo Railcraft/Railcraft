@@ -128,7 +128,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
     public ItemStack getStack(int qty) {
         if (!isEnabled())
             return null;
-        Block block = getBlock();
+        Block block = block();
         if (block != null)
             return new ItemStack(block, qty, ordinal());
         return null;

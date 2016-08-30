@@ -159,7 +159,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     @Override
     public boolean isAvailable() {
-        return getBlock() != null && isEnabled();
+        return block() != null && isEnabled();
     }
 
     @Override

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.tracks.elevator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
  *
  * @author DizzyDragon
  */
-public class BlockTrackElevator extends Block implements IRailcraftBlock {
+public class BlockTrackElevator extends BlockRailcraft {
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
     public static final PropertyBool POWERED = PropertyBool.create("powered");

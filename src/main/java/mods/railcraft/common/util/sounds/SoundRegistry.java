@@ -49,24 +49,24 @@ public class SoundRegistry {
     public static void setupBlockSounds() {
         Block block = RailcraftBlocks.POST.block();
         if (block != null) {
-            registerBlockSound(EnumPost.WOOD.getState(), SoundType.WOOD);
-            registerBlockSound(EnumPost.STONE.getState(), SoundType.STONE);
-            registerBlockSound(EnumPost.METAL_UNPAINTED.getState(), SoundType.METAL);
-            registerBlockSound(EnumPost.WOOD_PLATFORM.getState(), SoundType.WOOD);
-            registerBlockSound(EnumPost.STONE_PLATFORM.getState(), SoundType.STONE);
-            registerBlockSound(EnumPost.METAL_PLATFORM_UNPAINTED.getState(), SoundType.METAL);
+            registerBlockSound(EnumPost.WOOD.getDefaultState(), SoundType.WOOD);
+            registerBlockSound(EnumPost.STONE.getDefaultState(), SoundType.STONE);
+            registerBlockSound(EnumPost.METAL_UNPAINTED.getDefaultState(), SoundType.METAL);
+            registerBlockSound(EnumPost.WOOD_PLATFORM.getDefaultState(), SoundType.WOOD);
+            registerBlockSound(EnumPost.STONE_PLATFORM.getDefaultState(), SoundType.STONE);
+            registerBlockSound(EnumPost.METAL_PLATFORM_UNPAINTED.getDefaultState(), SoundType.METAL);
         }
 
         block = BlockGeneric.getBlock();
         if (block != null) {
 
             for (EnumGeneric cube : EnumGeneric.VALUES) {
-                registerBlockSound(cube.getState(), SoundType.STONE);
+                registerBlockSound(cube.getDefaultState(), SoundType.STONE);
             }
 
-            registerBlockSound(EnumGeneric.BLOCK_STEEL.getState(), SoundType.METAL);
-            registerBlockSound(EnumGeneric.CRUSHED_OBSIDIAN.getState(), SoundType.GROUND);
-            registerBlockSound(EnumGeneric.BLOCK_CREOSOTE.getState(), SoundType.WOOD);
+            registerBlockSound(EnumGeneric.BLOCK_STEEL.getDefaultState(), SoundType.METAL);
+            registerBlockSound(EnumGeneric.CRUSHED_OBSIDIAN.getDefaultState(), SoundType.GROUND);
+            registerBlockSound(EnumGeneric.BLOCK_CREOSOTE.getDefaultState(), SoundType.WOOD);
         }
     }
 

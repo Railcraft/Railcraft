@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.ILinkableCart;
+import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.modules.ModuleLocomotives;
@@ -26,7 +27,7 @@ public class LinkageHandler {
     public static final String LINK_A_TIMER = "linkA_timer";
     public static final String LINK_B_TIMER = "linkB_timer";
     public static final double LINK_DRAG = 0.95;
-    public static final float MAX_DISTANCE_SQ = 8F * 8F;
+    public static final float MAX_DISTANCE = 8F;
     private static final float STIFFNESS = 0.7F;
     private static final float HS_STIFFNESS = 0.7F;
     //    private static final float TRANSFER = 0.15f;
@@ -59,11 +60,11 @@ public class LinkageHandler {
         if (cart1 instanceof ILinkableCart)
             dist += ((ILinkableCart) cart1).getOptimalDistance(cart2);
         else
-            dist += LinkageManager.OPTIMAL_DISTANCE;
+            dist += ILinkageManager.OPTIMAL_DISTANCE;
         if (cart2 instanceof ILinkableCart)
             dist += ((ILinkableCart) cart2).getOptimalDistance(cart1);
         else
-            dist += LinkageManager.OPTIMAL_DISTANCE;
+            dist += ILinkageManager.OPTIMAL_DISTANCE;
         return dist;
     }
 
@@ -100,8 +101,8 @@ public class LinkageHandler {
         }
         cart1.getEntityData().setShort(timer, (short) 0);
 
-        double distSq = cart1.getDistanceSqToEntity(cart2);
-        if (distSq > MAX_DISTANCE_SQ) {
+        double dist = cart1.getDistanceToEntity(cart2);
+        if (dist > MAX_DISTANCE) {
             LinkageManager.instance().breakLink(cart1, cart2);
             LinkageManager.printDebug("Reason For Broken Link: Max distance exceeded.");
             return;
@@ -137,7 +138,7 @@ public class LinkageHandler {
         // Spring force
 
         float optDist = getOptimalDistance(cart1, cart2);
-        double stretch = distSq - optDist;
+        double stretch = dist - optDist;
 //        if(Math.abs(stretch) > 0.5) {
 //            stretch *= 2;
 //        }

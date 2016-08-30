@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -40,6 +41,11 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftBlock {
         setHardness(5.0F);
         setSoundType(SoundType.ANVIL);
         setResistance(2000.0F);
+    }
+
+    @Override
+    public Block getObject() {
+        return this;
     }
 
     @Nullable

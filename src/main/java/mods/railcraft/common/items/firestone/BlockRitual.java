@@ -10,13 +10,12 @@
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -47,7 +46,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockRitual extends BlockContainer implements IRailcraftBlock {
+public class BlockRitual extends BlockContainerRailcraft {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseFloor(0.4).raiseCeiling(-0.1).build();
 

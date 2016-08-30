@@ -18,6 +18,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -55,6 +56,11 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
         isBlockContainer = true;
+    }
+
+    @Override
+    public Block getObject() {
+        return this;
     }
 
     @Nullable

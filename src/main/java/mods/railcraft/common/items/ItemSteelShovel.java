@@ -9,19 +9,24 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelShovel extends ItemSpade implements IRailcraftObject {
+public class ItemSteelShovel extends ItemSpade implements IRailcraftItem {
 
     public ItemSteelShovel() {
         super(ItemMaterials.STEEL_TOOL);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public Item getObject() {
+        return this;
     }
 
     @Override

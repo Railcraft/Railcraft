@@ -12,11 +12,10 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -36,7 +35,7 @@ import java.util.List;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
-public class BlockBrick extends Block implements IRailcraftBlock {
+public class BlockBrick extends BlockRailcraft {
     public static final PropertyEnum<BrickVariant> VARIANT = PropertyEnum.create("variant", BrickVariant.class);
     private final BrickTheme theme;
 

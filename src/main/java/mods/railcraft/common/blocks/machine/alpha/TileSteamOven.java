@@ -117,7 +117,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getState());
+        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;

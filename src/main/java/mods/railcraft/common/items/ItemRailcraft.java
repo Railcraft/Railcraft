@@ -45,6 +45,11 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
         addPropertyOverride(new ResourceLocation("held"), HELD_GETTER);
     }
 
+    @Override
+    public Item getObject() {
+        return this;
+    }
+
     public ItemRailcraft setRarity(int rarity) {
         this.rarity = rarity;
         return this;

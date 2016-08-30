@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.kits.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.items.RailcraftItems;
 
 @RailcraftModule("railcraft:tracks")
@@ -24,6 +24,7 @@ public class ModuleTracks extends RailcraftModulePayload {
                 add(
                         RailcraftItems.TRACK_KIT,
                         RailcraftBlocks.TRACK_OUTFITTED,
+                        RailcraftBlocks.TRACK_JUNCTION_IRON,
                         TrackKits.ACTIVATOR,
                         TrackKits.BOOSTER,
                         TrackKits.BUFFER_STOP,
