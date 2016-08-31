@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 /**
@@ -20,18 +21,18 @@ public class EntityIDs {
     public static final int CART_TNT_WOOD = 4;
     public static final int CART_TANK = 5;
     public static final int CART_CARGO = 6;
-    public static final int CART_ANCHOR = 7;
+    public static final int CART_ANCHOR_WORLD = 7;
     public static final int CART_WORK = 8;
-    public static final int CART_TRACK_RELAYER = 9;
-    public static final int CART_UNDERCUTTER = 10;
+    public static final int CART_MOW_TRACK_RELAYER = 9;
+    public static final int CART_MOW_UNDERCUTTER = 10;
     public static final int CART_PUMPKIN = 11;
     public static final int CART_GIFT = 12;
     public static final int CART_ANCHOR_PERSONAL = 13;
     public static final int CART_ANCHOR_ADMIN = 14;
     public static final int CART_TNT = 15;
     public static final int CART_HOPPER = 16;
-    public static final int CART_TRACK_LAYER = 17;
-    public static final int CART_TRACK_REMOVER = 18;
+    public static final int CART_MOW_TRACK_LAYER = 17;
+    public static final int CART_MOW_TRACK_REMOVER = 18;
     public static final int CART_REDSTONE_FLUX = 19;
     public static final int CART_LOCO_STEAM_SOLID = 30;
     public static final int CART_LOCO_STEAM_MAGIC = 31;

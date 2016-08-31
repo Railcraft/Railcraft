@@ -23,6 +23,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
-            if (TrackToolsAPI.placeRailAt(trackStock, getEntityWorld(), pos)) {
+            if (TrackToolsAPI.placeRailAt(trackStock, (WorldServer) getEntityWorld(), pos)) {
                 decrStackSize(slotStock, 1);
                 blink();
                 return true;

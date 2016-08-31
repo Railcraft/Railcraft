@@ -1,14 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.sounds;
 
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -96,6 +99,13 @@ public class SoundHelper {
             incrementLimiter(sound);
             entity.worldObj.playSound(null, entity.posX, entity.posY, entity.posZ, sound, category, volume, pitch);
         }
+    }
+
+    public static void playPlaceSoundForBlock(World world, BlockPos pos) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        Block block = state.getBlock();
+        SoundType soundType = block.getSoundType(state, world, pos, null);
+        playSound(world, null, pos, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
     }
 
     //TODO: test

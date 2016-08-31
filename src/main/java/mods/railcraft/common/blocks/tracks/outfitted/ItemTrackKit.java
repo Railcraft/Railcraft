@@ -14,12 +14,29 @@ import mods.railcraft.api.core.ILocalizedObject;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.client.render.models.resource.ModelManager;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
+import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -100,5 +117,33 @@ public class ItemTrackKit extends ItemRailcraft {
         trackKits.values().stream().filter(TrackKit::isVisible).forEach(trackKit -> {
             ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath());
         });
+    }
+
+    @Override
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (Game.isClient(worldIn))
+            return EnumActionResult.PASS;
+        IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
+        TrackType trackType = null;
+        if (oldState.getBlock() instanceof BlockTrackFlex) {
+            BlockTrackFlex track = (BlockTrackFlex) oldState.getBlock();
+            trackType = track.getTrackType(worldIn, pos);
+        } else if (oldState.getBlock() == Blocks.RAIL) {
+            trackType = TrackTypes.IRON.getTrackType();
+        }
+        if (trackType != null) {
+            BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(worldIn, pos);
+            if (TrackShapeHelper.isStraight(shape)) {
+                TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
+                if (!shape.isAscending() || trackKit.isAllowedOnSlopes()) {
+                    if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
+                        SoundHelper.playPlaceSoundForBlock(worldIn, pos);
+                        stack.stackSize--;
+                        return EnumActionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+        return EnumActionResult.PASS;
     }
 }

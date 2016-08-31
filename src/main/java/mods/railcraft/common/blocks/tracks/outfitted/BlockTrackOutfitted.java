@@ -12,9 +12,9 @@ package mods.railcraft.common.blocks.tracks.outfitted;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
-import mods.railcraft.common.blocks.tracks.IRailcraftTrack;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
@@ -66,7 +66,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IRailcraftTrack {
+//TODO: Add charge interface
+//FIXME: abandoned track breaks when track kit placed on it
+public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -81,6 +83,20 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
         GameRegistry.registerTileEntity(TileTrackOutfittedTESR.class, "railcraft:track.outfitted.tesr");
         GameRegistry.registerTileEntity(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
+    }
+
+    public static boolean placeTrack(World world, BlockPos pos, EntityLivingBase placer, EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {
+        Block block = RailcraftBlocks.TRACK_OUTFITTED.block();
+        if (block != null) {
+            IBlockState state = TrackToolsAPI.makeTrackState((BlockTrackOutfitted) block, shape);
+            state = state.withProperty(TICKING, trackKit.requiresTicks());
+            boolean placed = WorldPlugin.setBlockState(world, pos, state);
+            if (placed) {
+                block.onBlockPlacedBy(world, pos, state, placer, trackKit.getOutfittedTrack(trackType));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -356,6 +372,13 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
         return 1;
+    }
+
+    @Override
+    public boolean clearBlock(IBlockState state, World world, BlockPos pos) {
+        TrackType trackType = getTrackType(world, pos);
+        IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
+        return WorldPlugin.setBlockState(world, pos, newState);
     }
 
     @Override

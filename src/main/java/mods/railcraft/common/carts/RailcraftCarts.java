@@ -282,7 +282,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 //    }
 
     @SuppressWarnings("unchecked")
-    public void registerEntity() {
+    private void registerEntity() {
         if (id < 0)
             return;
         EntityRegistry.registerModEntity(type, MiscTools.cleanTag(getTag()), id, Railcraft.getMod(), 256, 3, true);
@@ -318,6 +318,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
     @Override
     public boolean isEnabled() {
+        if (isVanillaCart())
+            return true;
         for (Class<? extends IRailcraftModule> module : modules) {
             if (!RailcraftModuleManager.isModuleEnabled(module))
                 return false;

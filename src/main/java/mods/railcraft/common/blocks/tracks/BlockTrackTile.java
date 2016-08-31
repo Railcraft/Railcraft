@@ -49,10 +49,11 @@ public abstract class BlockTrackTile extends BlockTrack {
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
             dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
-        return world.setBlockToAir(pos);
+        return clearBlock(state, world, pos);
     }
 
-
-
+    public boolean clearBlock(IBlockState state, World world, BlockPos pos) {
+        return world.setBlockToAir(pos);
+    }
 
 }

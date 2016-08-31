@@ -682,7 +682,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
                 ItemStack stack = invRails.getStackInSlot(inv);
                 if (stack != null) {
-                    boolean placed = TrackToolsAPI.placeRailAt(stack, worldObj, targetPos, shape);
+                    boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) worldObj, targetPos, shape);
                     if (placed) {
                         invRails.decrStackSize(inv, 1);
                     }

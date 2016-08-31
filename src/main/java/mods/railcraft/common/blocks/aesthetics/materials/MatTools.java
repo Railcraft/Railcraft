@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks.aesthetics.materials;
 
@@ -29,7 +29,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,11 +114,10 @@ public class MatTools {
         return Blocks.STONEBRICK.getExplosionResistance(world, pos, exploder, explosion);
     }
 
-    @Nullable
     public static SoundType getSound(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMaterial)
             return ((TileMaterial) tile).getMaterial().getSound();
-        return null;
+        return SoundType.STONE;
     }
 }

@@ -271,15 +271,14 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return ParticleHelper.addDestroyEffects(world, block, pos, state, manager, null);
     }
 
-    @Nullable
     @Override
-    public SoundType getSound(World world, BlockPos pos) {
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
             Materials slab = ((TileSlab) tile).getUpmostSlab();
             return slab.getSound();
         }
-        return null;
+        return SoundType.STONE;
     }
 
     @Override

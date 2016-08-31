@@ -38,12 +38,11 @@ public class SoundRegistry {
 
     @Nullable
     public static SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
-        Block block = blockState.getBlock();
-        if (block instanceof IBlockSoundProvider)
-            return ((IBlockSoundProvider) block).getSound(world, pos);
-        else {
-            return customSounds.get(blockState);
+        SoundType soundType = customSounds.get(blockState);
+        if (soundType == null) {
+            return blockState.getBlock().getSoundType(blockState, world, pos, null);
         }
+        return soundType;
     }
 
     public static void setupBlockSounds() {

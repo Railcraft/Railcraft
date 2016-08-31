@@ -20,6 +20,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -186,6 +187,10 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
 
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        return MatTools.getSound(world, pos);
+    }
     //TODO: fix particles
 //    @SideOnly(Side.CLIENT)
 //    @Override

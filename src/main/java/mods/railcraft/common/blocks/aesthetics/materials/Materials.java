@@ -320,7 +320,9 @@ public enum Materials implements IVariantEnum {
                 sound = state.getBlock().getSoundType();
             }
         }
-        return sound;
+        if (sound != null)
+            return sound;
+        return SoundType.STONE;
     }
 
     @Nullable

@@ -297,7 +297,7 @@ public class ModuleCore extends RailcraftModulePayload {
             }
 
             private void replaceVanillaCart(RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
-                cartType.registerEntity();
+                cartType.register();
 
                 Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 

@@ -244,4 +244,9 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
         return actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
     }
+
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        return MatTools.getSound(world, pos);
+    }
 }
