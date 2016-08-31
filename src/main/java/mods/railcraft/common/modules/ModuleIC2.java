@@ -16,9 +16,9 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -39,18 +39,17 @@ public class ModuleIC2 extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.DETECTOR
+                        RailcraftBlocks.DETECTOR,
+                        RailcraftCarts.ENERGY_BATBOX,
+                        RailcraftCarts.ENERGY_MFE,
+                        RailcraftCarts.ENERGY_CESU
 //                        RailcraftBlocks.machine_gamma
                 );
+                if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
             }
 
             @Override
             public void preInit() {
-                RailcraftCarts.ENERGY_BATBOX.setup();
-                RailcraftCarts.ENERGY_MFE.setup();
-                if (Mod.IC2_CLASSIC.isLoaded()) RailcraftCarts.ENERGY_MFSU.setup();
-                else RailcraftCarts.ENERGY_CESU.setup();
-
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
 //            creosoteWood = new ItemRailcraft(id).setItemName("creosoteWood").setIconIndex(184);
@@ -85,11 +84,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                             'P', Blocks.STONE_PRESSURE_PLATE);
                 }
 
-                ItemStack batbox = IC2Plugin.getItem("batBox");
+                ItemStack batbox = ModItems.BAT_BOX.get();
                 if (batbox != null) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_BATBOX;
-                    cart.setContents(batbox);
-                    ItemStack stack = cart.getCartItem();
+                    ItemStack stack = cart.getStack();
                     if (stack != null) {
                         CraftingPlugin.addRecipe(stack,
                                 "E",
@@ -101,11 +99,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 }
 
                 if (!Mod.IC2_CLASSIC.isLoaded()) {
-                    ItemStack cesu = IC2Plugin.getItem("cesuUnit");
+                    ItemStack cesu = ModItems.CESU.get();
                     if (cesu != null) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
-                        cart.setContents(cesu);
-                        ItemStack stack = cart.getCartItem();
+                        ItemStack stack = cart.getStack();
                         if (stack != null) {
                             CraftingPlugin.addRecipe(stack,
                                     "E",
@@ -116,11 +113,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         }
                     }
                 } else {
-                    ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
+                    ItemStack mfsu = ModItems.MFSU.get();
                     if (mfsu != null) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_MFSU;
-                        cart.setContents(mfsu);
-                        ItemStack stack = cart.getCartItem();
+                        ItemStack stack = cart.getStack();
                         if (stack != null) {
                             CraftingPlugin.addRecipe(stack,
                                     "E",
@@ -132,11 +128,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 }
 
-                ItemStack mfe = IC2Plugin.getItem("mfeUnit");
+                ItemStack mfe = ModItems.MFE.get();
                 if (mfe != null) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_MFE;
-                    cart.setContents(mfe);
-                    ItemStack stack = cart.getCartItem();
+                    ItemStack stack = cart.getStack();
                     if (stack != null) {
 
                         CraftingPlugin.addRecipe(stack,
@@ -148,8 +143,8 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 }
 
-                ItemStack battery = IC2Plugin.getItem("reBattery");
-                ItemStack machine = IC2Plugin.getItem("machine");
+                ItemStack battery = ModItems.BATTERY.get();
+                ItemStack machine = ModItems.IC2_MACHINE.get();
 
                 ItemStack detector;
                 if (blockDetector != null)

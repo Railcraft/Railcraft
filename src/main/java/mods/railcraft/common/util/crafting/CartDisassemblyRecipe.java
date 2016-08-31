@@ -1,12 +1,12 @@
-/******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016                                      *
- * http://railcraft.info                                                      *
- * *
- * This code is the property of CovertJaguar                                  *
- * and may only be used with explicit written                                 *
- * permission unless otherwise specified on the                               *
- * license page at http://railcraft.info/wiki/info:license.                   *
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.util.crafting;
 
@@ -25,10 +25,10 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartUncraftingRecipe implements IRecipe {
+public class CartDisassemblyRecipe implements IRecipe {
     private final ItemStack contents, fullCart, emptyCart;
 
-    public CartUncraftingRecipe(ItemStack contents, ItemStack fullCart, ItemStack emptyCart) {
+    public CartDisassemblyRecipe(ItemStack contents, ItemStack fullCart, ItemStack emptyCart) {
         this.contents = contents;
         this.fullCart = fullCart;
         this.emptyCart = emptyCart;
@@ -74,11 +74,11 @@ public class CartUncraftingRecipe implements IRecipe {
         return grid;
     }
 
-    public static class RailcraftCartUncraftingRecipe extends CartUncraftingRecipe {
+    public static class RailcraftVariant extends CartDisassemblyRecipe {
         private final RailcraftCarts cart;
 
-        public RailcraftCartUncraftingRecipe(RailcraftCarts cart) {
-            super(cart.getContents(), cart.getCartItem(), new ItemStack(Items.MINECART));
+        public RailcraftVariant(RailcraftCarts cart) {
+            super(cart.getContents(), cart.getStack(), new ItemStack(Items.MINECART));
             this.cart = cart;
         }
 

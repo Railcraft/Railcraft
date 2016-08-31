@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.items.ModItems;
@@ -31,17 +31,17 @@ public class ForestryFluidRegistrar extends FluidRegistrar {
     public void registerContainer(FluidContainerData container) {
         ItemStack recycle;
         int chance;
-        if (InvTools.isItemEqual(container.emptyContainer, ModItems.cellEmpty.get())) {
-            recycle = ModItems.ingotTin.get();
+        if (InvTools.isItemEqual(container.emptyContainer, ModItems.CELL_EMPTY.get())) {
+            recycle = ModItems.INGOT_TIN.get();
             chance = 5;
-        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.canEmpty.get())) {
-            recycle = ModItems.ingotTin.get();
+        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.CAN_EMPTY.get())) {
+            recycle = ModItems.INGOT_TIN.get();
             chance = 5;
-        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.waxCapsule.get())) {
-            recycle = ModItems.beeswax.get();
+        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.WAX_CAPSULE.get())) {
+            recycle = ModItems.BEESWAX.get();
             chance = 10;
-        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.refractoryEmpty.get())) {
-            recycle = ModItems.refractoryWax.get();
+        } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.REFRACTORY_EMPTY.get())) {
+            recycle = ModItems.REFRACTORY_WAX.get();
             chance = 10;
         } else if (container.emptyContainer.getItem() == Items.GLASS_BOTTLE) {
             recycle = new ItemStack(Blocks.GLASS);

@@ -116,8 +116,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
                 RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
                 RecipeSorter.register("railcraft:cart.filter", CartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:cart.uncrafting", CartUncraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartUncraftingRecipe.RailcraftCartUncraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+                RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+                RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictionary.registerOre("chestWood", Blocks.CHEST);
                 OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
@@ -216,11 +216,11 @@ public class ModuleCore extends RailcraftModulePayload {
                 replaceVanillaCart(RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
                 replaceVanillaCart(RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
 
-                LootPlugin.addLoot(RailcraftCarts.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
-                LootPlugin.addLoot(RailcraftCarts.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
-                LootPlugin.addLoot(RailcraftCarts.TNT.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
+                LootPlugin.addLoot(RailcraftCarts.BASIC.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
+                LootPlugin.addLoot(RailcraftCarts.CHEST.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
+                LootPlugin.addLoot(RailcraftCarts.TNT.getStack(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
                 LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
-                LootPlugin.addLoot(RailcraftCarts.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
+                LootPlugin.addLoot(RailcraftCarts.HOPPER.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
@@ -311,7 +311,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
                 original.setCreativeTab(CreativeTabs.TRANSPORTATION);
-                cartType.setCartItem(new ItemStack(original));
             }
 
             @Override

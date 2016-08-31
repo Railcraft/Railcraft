@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.CartBaseFiltered;
+import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -35,9 +36,9 @@ public class CartFilterRecipe implements IRecipe {
             }
         };
         public static FilterType[] VALUES = values();
-        public final ICartType cartType;
+        public final IRailcraftCartContainer cartType;
 
-        FilterType(ICartType cartType) {
+        FilterType(IRailcraftCartContainer cartType) {
             this.cartType = cartType;
         }
 
@@ -46,7 +47,7 @@ public class CartFilterRecipe implements IRecipe {
         }
 
         @Nullable
-        public static FilterType fromCartType(ICartType cartType) {
+        public static FilterType fromCartType(IRailcraftCartContainer cartType) {
             if (cartType == null)
                 return null;
             for (FilterType t : VALUES) {

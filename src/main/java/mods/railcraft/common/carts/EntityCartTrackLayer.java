@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
@@ -11,9 +21,9 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
@@ -42,8 +52,8 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public ICartType getCartType() {
-        return RailcraftCarts.TRACK_LAYER;
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.MOW_TRACK_LAYER;
     }
 
     @Override

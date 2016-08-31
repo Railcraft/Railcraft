@@ -16,22 +16,29 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum ModItems {
 
-    cellEmpty(Mod.IC2, "cell"),
-    canEmpty(Mod.FORESTRY, "canEmpty"),
-    waxCapsule(Mod.FORESTRY, "waxCapsule"),
-    refractoryEmpty(Mod.FORESTRY, "refractoryEmpty"),
-    refractoryWax(Mod.FORESTRY, "refractoryWax"),
-    ingotTin(Mod.FORESTRY, "ingotTin"),
-    beeswax(Mod.FORESTRY, "beeswax");
+    CELL_EMPTY(Mod.IC2, "cell"),
+    BAT_BOX(Mod.IC2, "batBox"),
+    MFE(Mod.IC2, "mfeUnit"),
+    CESU(Mod.IC2, "cesuUnit"),
+    MFSU(Mod.IC2, "mfsUnit"),
+    BATTERY(Mod.IC2, "reBattery"),
+    IC2_MACHINE(Mod.IC2, "machine"),
+    CAN_EMPTY(Mod.FORESTRY, "canEmpty"),
+    WAX_CAPSULE(Mod.FORESTRY, "waxCapsule"),
+    REFRACTORY_EMPTY(Mod.FORESTRY, "refractoryEmpty"),
+    REFRACTORY_WAX(Mod.FORESTRY, "refractoryWax"),
+    INGOT_TIN(Mod.FORESTRY, "ingotTin"),
+    BEESWAX(Mod.FORESTRY, "beeswax");
     private final Mod mod;
     public final String itemTag;
-    private boolean needsInit = true;
+    private boolean init;
     private ItemStack stack;
 
     ModItems(Mod mod, String itemTag) {
@@ -39,10 +46,17 @@ public enum ModItems {
         this.itemTag = itemTag;
     }
 
+    @Nullable
     public ItemStack get() {
-        if (needsInit) needsInit = false;
-        init();
-        return stack;
+        if (!mod.isLoaded())
+            return null;
+        if (init) {
+            init = true;
+            init();
+        }
+        if (stack != null)
+            return stack.copy();
+        return null;
     }
 
     protected void init() {
@@ -50,7 +64,7 @@ public enum ModItems {
             stack = IC2Plugin.getItem(itemTag);
         else if (mod == Mod.FORESTRY)
             stack = ForestryPlugin.getItem(itemTag);
-        if(stack == null)
-           Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
+        if (stack == null)
+            Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
     }
 }

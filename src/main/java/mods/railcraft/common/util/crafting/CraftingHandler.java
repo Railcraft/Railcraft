@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.carts.ICartType;
+import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +34,7 @@ public class CraftingHandler {
                 count++;
                 if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack))
                     craftMatrix.setInventorySlotContents(i, null);
-                ICartType cartType = RailcraftCarts.getCartType(stack);
+                IRailcraftCartContainer cartType = RailcraftCarts.getCartType(stack);
                 if (cartType != null && cartType != RailcraftCarts.BASIC)
                     cartItem = stack;
             }

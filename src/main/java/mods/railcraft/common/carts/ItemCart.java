@@ -39,10 +39,10 @@ import java.util.List;
 
 public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItem {
 
-    private final ICartType type;
+    private final IRailcraftCartContainer type;
     private int rarity = 0;
 
-    public ItemCart(ICartType cart) {
+    public ItemCart(IRailcraftCartContainer cart) {
         super(EntityMinecart.Type.RIDEABLE);
         maxStackSize = RailcraftConfig.getMinecartStackSize();
         this.type = cart;
@@ -81,7 +81,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         return EnumActionResult.SUCCESS;
     }
 
-    public ICartType getCartType() {
+    public IRailcraftCartContainer getCartType() {
         return type;
     }
 

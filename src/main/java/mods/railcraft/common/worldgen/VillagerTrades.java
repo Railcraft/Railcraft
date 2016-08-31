@@ -52,7 +52,7 @@ public class VillagerTrades {
         career.addTrade(2, new GenericTrade(offer(Items.MINECART), offer(Items.EMERALD, 8, 10)));
         career.addTrade(2, new GenericTrade(offer(Items.EMERALD, 6, 8), offer(Items.MINECART)));
 
-        career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getCartItem()), offer(Items.EMERALD, 32, 40)));
+        career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getStack()), offer(Items.EMERALD, 32, 40)));
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_IRON), offer(Items.EMERALD, 7, 9)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 14, 18)));

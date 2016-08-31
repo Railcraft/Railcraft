@@ -11,9 +11,9 @@ package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -21,6 +21,8 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -30,11 +32,23 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ItemTunnelBore extends ItemCart implements IMinecartItem {
+public class ItemTunnelBore extends ItemCart {
 
-    public ItemTunnelBore() {
-        super(RailcraftCarts.BORE);
+    public ItemTunnelBore(IRailcraftCartContainer cart) {
+        super(cart);
         maxStackSize = 1;
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(getStack(),
+                "ICI",
+                "FCF",
+                " S ",
+                'I', "blockSteel",
+                'S', Items.CHEST_MINECART,
+                'F', Blocks.FURNACE,
+                'C', Items.MINECART);
     }
 
     @Override

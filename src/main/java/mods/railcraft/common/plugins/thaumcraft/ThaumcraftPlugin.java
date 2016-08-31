@@ -17,7 +17,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.carts.ICartType;
+import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear.EnumGear;
@@ -263,7 +263,7 @@ public class ThaumcraftPlugin {
             addCartAspect(RailcraftCarts.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.MECHANISM, 4));
             addCartAspect(RailcraftCarts.LOCO_ELECTRIC, new AspectList().add(Aspect.FLUX, 6).add(Aspect.MECHANISM, 6).add(Aspect.MOTION, 2));
             addCartAspect(RailcraftCarts.PUMPKIN, new AspectList(new ItemStack(Blocks.PUMPKIN)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
-            addCartAspect(RailcraftCarts.ANCHOR, anchorAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.ANCHOR_WORLD, anchorAspects.copy().add(Aspect.MOTION, 2));
             addCartAspect(RailcraftCarts.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2));
             addCartAspect(RailcraftCarts.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2));
 
@@ -298,8 +298,8 @@ public class ThaumcraftPlugin {
         ThaumcraftApi.registerComplexObjectTag(stack, aspects);
     }
 
-    private static void addCartAspect(ICartType cart, AspectList aspects) {
-        addItemAspect(cart.getCartItem(), aspects);
+    private static void addCartAspect(IRailcraftCartContainer cart, AspectList aspects) {
+        addItemAspect(cart.getStack(), aspects);
         ThaumcraftApi.registerEntityTag(cart.getTag(), aspects);
     }
 

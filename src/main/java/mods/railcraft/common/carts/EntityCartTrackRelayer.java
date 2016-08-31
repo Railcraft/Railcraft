@@ -53,8 +53,8 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public ICartType getCartType() {
-        return RailcraftCarts.TRACK_RELAYER;
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.MOW_TRACK_RELAYER;
     }
 
     @Override

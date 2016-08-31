@@ -44,8 +44,8 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     @Override
-    public ICartType getCartType() {
-        return RailcraftCarts.TRACK_REMOVER;
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.MOW_TRACK_REMOVER;
     }
 
     @Override

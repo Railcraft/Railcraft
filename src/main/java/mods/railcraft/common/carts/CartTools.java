@@ -41,8 +41,8 @@ import java.util.stream.Collectors;
  */
 public class CartTools {
 
-    public static Map<Item, ICartType> vanillaCartItemMap = new HashMap<Item, ICartType>();
-    public static Map<Class<? extends Entity>, ICartType> classReplacements = new HashMap<Class<? extends Entity>, ICartType>();
+    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<Item, IRailcraftCartContainer>();
+    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<Class<? extends Entity>, IRailcraftCartContainer>();
     public static String HIGH_SPEED_TAG = "HighSpeed";
 
     /**
@@ -66,7 +66,7 @@ public class CartTools {
             return null;
         cart = cart.copy();
 
-        ICartType vanillaType = vanillaCartItemMap.get(cart.getItem());
+        IRailcraftCartContainer vanillaType = vanillaCartItemMap.get(cart.getItem());
         if (vanillaType != null)
             return placeCart(vanillaType, owner, cart, world, pos);
 
@@ -74,7 +74,7 @@ public class CartTools {
     }
 
     @Nullable
-    public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+    public static EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
             if (!CartToolsAPI.isMinecartAt(world, pos, 0)) {

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
@@ -14,16 +15,18 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.plugins.color.ColorPlugin;
+import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +43,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     private final EnumColor defaultPrimary;
     private final EnumColor defaultSecondary;
 
-    public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType, EnumColor primary, EnumColor secondary) {
+    public ItemLocomotive(IRailcraftCartContainer cart, LocomotiveRenderType renderType, EnumColor primary, EnumColor secondary) {
         super(cart);
         this.renderType = renderType;
         setMaxStackSize(1);
@@ -51,6 +54,12 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     @Override
     public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
+    }
+
+    @Override
+    public void defineRecipes() {
+        IRecipe recipe = new LocomotivePaintingRecipe(new ItemStack(this));
+        CraftingPlugin.addRecipe(recipe);
     }
 
     @SideOnly(Side.CLIENT)

@@ -165,7 +165,7 @@ public class EntityCartGift extends CartBaseSurprise {
     }
 
     @Override
-    public ICartType getCartType() {
+    public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.GIFT;
     }
 

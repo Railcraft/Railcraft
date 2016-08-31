@@ -67,8 +67,8 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     @Override
-    public ICartType getCartType() {
-        return RailcraftCarts.ANCHOR;
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.ANCHOR_WORLD;
     }
 
     @Override
@@ -282,7 +282,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_WORLD;
     }
 
     @Override

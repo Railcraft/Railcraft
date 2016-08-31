@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -33,7 +34,7 @@ public final class EntityCartEnergyBatBox extends CartBaseEnergy {
     }
 
     @Override
-    public ICartType getCartType() {
+    public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.ENERGY_BATBOX;
     }
 

@@ -34,6 +34,11 @@ public interface IRailcraftObject<T> extends IForgeRegistryEntry<T> {
     }
 
     @Nullable
+    default ItemStack getStack() {
+        return getStack(1, null);
+    }
+
+    @Nullable
     default ItemStack getStack(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }

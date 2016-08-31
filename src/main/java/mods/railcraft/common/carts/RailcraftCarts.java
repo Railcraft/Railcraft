@@ -13,21 +13,27 @@ import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
+import mods.railcraft.common.util.crafting.CartDisassemblyRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -36,94 +42,104 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRailcraftItem> {
+public enum RailcraftCarts implements IRailcraftCartContainer {
 
-    BASIC(0, EntityCartBasic.class),
-    CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.CHEST)),
-    FURNACE(0, EntityCartFurnace.class, true, new ItemStack(Blocks.FURNACE)),
-    TNT_WOOD(0, EntityCartTNTWood.class, false, new ItemStack(Blocks.TNT)),
-    TANK(0, EntityCartTank.class, true),
-    CARGO(0, EntityCartCargo.class, true, new ItemStack(Blocks.TRAPPED_CHEST)),
-    ANCHOR(0, EntityCartAnchor.class, true),
-    WORK(0, EntityCartWork.class, true, new ItemStack(Blocks.CRAFTING_TABLE)),
-    TRACK_RELAYER(1, EntityCartTrackRelayer.class),
-    UNDERCUTTER(1, EntityCartUndercutter.class),
-    PUMPKIN(3, EntityCartPumpkin.class, false, new ItemStack(Blocks.PUMPKIN)),
-    GIFT(3, EntityCartGift.class),
-    ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, true),
-    ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class),
-    TNT(0, EntityCartTNT.class, true, new ItemStack(Blocks.TNT)),
-    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class) {
+    // Vanilla Carts
+    // TODO: listing vanilla classes here causes weird error messages
+    BASIC(0, EntityCartBasic.class, (c) -> Items.MINECART),
+    CHEST(0, EntityCartChest.class, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
+    COMMAND_BLOCK(3, EntityCartCommand.class, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),
+    FURNACE(0, EntityCartFurnace.class, (c) -> Items.FURNACE_MINECART, from(Blocks.FURNACE)),
+    HOPPER(0, EntityMinecartHopper.class, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
+    TNT(0, EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
+
+    // Railcraft Carts
+    ANCHOR_WORLD(0, EntityCartAnchor.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem),
+    ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class, ItemCartAnchor::new),
+    ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getItem),
+    BORE(1, EntityTunnelBore.class, ItemTunnelBore::new),
+    CARGO(0, EntityCartCargo.class, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
+    ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
+    ENERGY_CESU(0, EntityCartEnergyCESU.class, ItemCart::new, ModItems.CESU::get),
+    ENERGY_MFE(0, EntityCartEnergyMFE.class, ItemCart::new, ModItems.MFE::get),
+    ENERGY_MFSU(1, EntityCartEnergyMFSU.class, ItemCart::new, ModItems.MFSU::get),
+    GIFT(3, EntityCartGift.class, ItemCart::new),
+    MOW_TRACK_LAYER(1, EntityCartTrackLayer.class, ItemCartMOWTrackLayer::new),
+    MOW_TRACK_RELAYER(1, EntityCartTrackRelayer.class, ItemCartMOWTrackRelayer::new),
+    MOW_TRACK_REMOVER(1, EntityCartTrackRemover.class, ItemCartMOWTrackRemover::new),
+    MOW_UNDERCUTTER(1, EntityCartUndercutter.class, ItemCartMOWUndercutter::new),
+    PUMPKIN(3, EntityCartPumpkin.class, ItemCart::new),
+    REDSTONE_FLUX(0, EntityCartRF.class, ItemCartRF::new),
+    TANK(0, EntityCartTank.class, ItemCart::new, () -> {
+        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getItem();
+        return stack != null ? stack : new ItemStack(Blocks.GLASS, 8);
+    }),
+    TNT_WOOD(0, EntityCartTNTWood.class, ItemCart::new),
+    WORK(0, EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
+
+    // Railcraft Locomotives
+    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class, ItemLocoSteamSolid::new) {
         {
             addModule(ModuleLocomotives.class);
             addModule(ModuleSteam.class);
         }
     },
-    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class) {
+    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
         {
             addModule(ModuleLocomotives.class);
             addModule(ModuleThaumcraft.class);
         }
     },
-    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class) {
+    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class, ItemLocoElectric::new) {
         {
             addModule(ModuleLocomotives.class);
             addModule(ModuleElectricity.class);
         }
     },
-    LOCO_CREATIVE(3, EntityLocomotiveCreative.class) {
+    LOCO_CREATIVE(3, EntityLocomotiveCreative.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA)) {
         {
             addModule(ModuleLocomotives.class);
         }
-    },
-    BORE(1, EntityTunnelBore.class),
-    ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, true),
-    ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
-    ENERGY_MFE(0, EntityCartEnergyMFE.class, true),
-    ENERGY_MFSU(1, EntityCartEnergyMFSU.class, true),
-    // TODO: listing vanilla classes here causes weird error messages
-    HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.HOPPER)),
-    TRACK_LAYER(1, EntityCartTrackLayer.class),
-    TRACK_REMOVER(1, EntityCartTrackRemover.class),
-    COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.COMMAND_BLOCK)),
-    REDSTONE_FLUX(0, EntityCartRF.class);
+    },;
     @SuppressWarnings("WeakerAccess")
     public static final RailcraftCarts[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;
     private final byte rarity;
-    private final boolean canBeUncrafted;
+    private final Function<RailcraftCarts, Item> itemSupplier;
+    @Nullable
+    private final Supplier<ItemStack> contentsSupplier;
     private final List<Class<? extends IRailcraftModule>> modules = Lists.newArrayList();
-    private ItemCart item;
-    private ItemStack contents;
-    private ItemStack cartItem;
+    private Item item;
     private boolean isSetup;
 
-    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type) {
-        this(rarity, type, false, null);
+    private static Supplier<ItemStack> from(Block block) {
+        return () -> new ItemStack(block);
     }
 
-    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted) {
-        this(rarity, type, canBeUncrafted, null);
+    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, Function<RailcraftCarts, Item> itemSupplier) {
+        this(rarity, type, itemSupplier, null);
     }
 
-    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted, ItemStack contents) {
+    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, Function<RailcraftCarts, Item> itemSupplier, @Nullable Supplier<ItemStack> contentsSupplier) {
         int entityId;
         try {
             entityId = (byte) EntityIDs.class.getField("CART_" + name()).getInt(null);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+        this.itemSupplier = itemSupplier;
+        this.contentsSupplier = contentsSupplier;
         this.id = (byte) entityId;
         this.rarity = (byte) rarity;
         this.type = type;
-        this.canBeUncrafted = canBeUncrafted;
-        this.contents = contents;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static ICartType fromClass(Class<? extends EntityMinecart> cls) {
+    public static IRailcraftCartContainer fromClass(Class<? extends EntityMinecart> cls) {
         for (RailcraftCarts cart : VALUES) {
             if (cls.equals(cart.type))
                 return cart;
@@ -131,11 +147,11 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
         return BASIC;
     }
 
-    public static ICartType fromCart(EntityMinecart cart) {
+    public static IRailcraftCartContainer fromCart(EntityMinecart cart) {
         return fromClass(cart.getClass());
     }
 
-    public static ICartType getCartType(ItemStack cart) {
+    public static IRailcraftCartContainer getCartType(ItemStack cart) {
         if (cart == null)
             return null;
         if (cart.getItem() == Items.MINECART)
@@ -155,24 +171,15 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
 
     public static void finalizeDefinitions() {
         for (RailcraftCarts type : VALUES) {
-            if (type.item != null)
-                type.item.finalizeDefinition();
+            IRailcraftItem object = type.getObject();
+            if (object != null)
+                object.finalizeDefinition();
         }
     }
 
     @SuppressWarnings("WeakerAccess")
     protected final void addModule(Class<? extends IRailcraftModule> module) {
         modules.add(module);
-    }
-
-    @Override
-    public byte getId() {
-        return id;
-    }
-
-    @Override
-    public void register() {
-
     }
 
     @Override
@@ -185,47 +192,27 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
         return name().toLowerCase(Locale.ROOT).replace('_', '.');
     }
 
-    @Nullable
     @Override
-    public ItemStack getWildcard() {
-        return null;
-    }
-
     @Nullable
-    @Override
-    public ItemStack getStack() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty) {
-        return null;
-    }
-
-    @Nullable
-    @Override
     public ItemStack getStack(int qty, int meta) {
+        if (item != null)
+            return new ItemStack(item, qty, meta);
         return null;
     }
 
-    @Nullable
     @Override
-    public ItemStack getStack(IVariantEnum variant) {
-        return null;
-    }
-
     @Nullable
-    @Override
-    public ItemStack getStack(int qty, IVariantEnum variant) {
-        if (cartItem != null)
-            return cartItem.copy();
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        if (item != null)
+            return new ItemStack(item, qty);
         return null;
     }
 
     @Override
     public IRailcraftItem getObject() {
-        return item;
+        if (item instanceof ItemCart)
+            return (ItemCart) item;
+        return null;
     }
 
     @Nullable
@@ -251,21 +238,18 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
     }
 
     @Override
+    @Nullable
     public ItemStack getContents() {
         switch (this) {
             case TANK:
                 if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable())
                     return EnumMachineBeta.TANK_IRON_GAUGE.getItem();
             default: {
-                if (contents == null)
+                if (contentsSupplier == null)
                     return null;
-                return contents.copy();
+                return contentsSupplier.get();
             }
         }
-    }
-
-    public void setContents(ItemStack stack) {
-        contents = stack.copy();
     }
 
     @Override
@@ -282,43 +266,20 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
         return new EntityCartBasic(world, i, j, k);
     }
 
-    /**
-     * @return the cartItem
-     */
-    @Override
-    public ItemStack getCartItem() {
-        if (cartItem == null)
-            return null;
-        return cartItem.copy();
-    }
-
-    /**
-     * @param cartItem the cartItem to set
-     */
-    public void setCartItem(ItemStack cartItem) {
-        this.cartItem = cartItem.copy();
-    }
-
-    private ItemCart defineItem() {
-        switch (this) {
-            case BORE:
-                return new ItemTunnelBore();
-            case LOCO_STEAM_SOLID:
-                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_SOLID, EnumColor.SILVER, EnumColor.GRAY);
-            case LOCO_STEAM_MAGIC:
-                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_MAGIC, EnumColor.SILVER, EnumColor.GRAY);
-            case LOCO_ELECTRIC:
-                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.YELLOW, EnumColor.BLACK);
-            case LOCO_CREATIVE:
-                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA);
-            case ANCHOR:
-            case ANCHOR_ADMIN:
-            case ANCHOR_PERSONAL:
-                return new ItemCartAnchor(this);
-            default:
-                return new ItemCart(this);
-        }
-    }
+//    private ItemCart defineItem() {
+//        switch (this) {
+//            case LOCO_STEAM_SOLID:
+//                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_SOLID, EnumColor.SILVER, EnumColor.GRAY);
+//            case LOCO_STEAM_MAGIC:
+//                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_MAGIC, EnumColor.SILVER, EnumColor.GRAY);
+//            case LOCO_ELECTRIC:
+//                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.YELLOW, EnumColor.BLACK);
+//            case LOCO_CREATIVE:
+//                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA);
+//            default:
+//                return new ItemCart(this);
+//        }
+//    }
 
     @SuppressWarnings("unchecked")
     public void registerEntity() {
@@ -332,28 +293,27 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
 //            EntityList.NAME_TO_CLASS.put("Railcraft.railcraft.cart.loco.steam", type);
     }
 
-    public boolean setup() {
+    @Override
+    public void register() {
         String tag = getTag();
         if (!isSetup && isEnabled()) {
-            //TODO: uncomment this to restore carts
-//            isSetup = true;
-//            registerEntity();
-//            item = defineItem();
-//            item.setRegistryName("cart." + getBaseTag());
-//            item.setUnlocalizedName(tag);
-//            item.setRarity(rarity);
-//            RailcraftRegistry.register(item);
-//
-//            item.initializeDefinintion();
-//            item.defineRecipes();
-//
-//            ItemStack cartItem = new ItemStack(item);
-//            setCartItem(cartItem);
-//            if (canBeUncrafted)
-//                CraftingPlugin.addRecipe(new CartUncraftingRecipe.RailcraftCartUncraftingRecipe(this));
-//            return true;
+            isSetup = true;
+            registerEntity();
+            item = itemSupplier.apply(this);
+            if (item instanceof ItemCart) {
+                ItemCart itemCart = (ItemCart) item;
+                itemCart.setRegistryName("cart." + getBaseTag());
+                itemCart.setUnlocalizedName(tag);
+                itemCart.setRarity(rarity);
+                RailcraftRegistry.register(itemCart);
+
+                itemCart.initializeDefinintion();
+                itemCart.defineRecipes();
+            }
+
+            if (contentsSupplier != null)
+                CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
         }
-        return isSetup;
     }
 
     @Override
@@ -367,7 +327,7 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer<IRail
 
     @Override
     public boolean isLoaded() {
-        return false;
+        return isSetup;
     }
 
     public boolean isVanillaCart() {

@@ -35,6 +35,8 @@ public class ModuleTransport extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftCarts.CARGO,
+                        RailcraftCarts.TANK
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
 //                        RailcraftBlocks.machine_gamma
@@ -157,37 +159,23 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                'P', ItemPlate.getPlate(ItemPlate.EnumPlate.STEEL));
                 RailcraftCarts cart = RailcraftCarts.TANK;
 
-                if (cart.setup()) {
+                if (cart.isLoaded()) {
                     if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
-                        CraftingPlugin.addRecipe(cart.getCartItem(),
+                        CraftingPlugin.addRecipe(cart.getStack(),
                                 "T",
                                 "M",
                                 'T', EnumMachineBeta.TANK_IRON_GAUGE.getItem(),
                                 'M', Items.MINECART);
-                        cart.setContents(getColorTank(EnumMachineBeta.TANK_IRON_GAUGE, EnumColor.WHITE, 1));
                     } else {
-                        CraftingPlugin.addRecipe(cart.getCartItem(),
+                        CraftingPlugin.addRecipe(cart.getStack(),
                                 "GGG",
                                 "GMG",
                                 "GGG",
                                 'G', "blockGlassColorless",
                                 'M', Items.MINECART);
-                        cart.setContents(new ItemStack(Blocks.GLASS, 8));
                     }
                     CraftingPlugin.addRecipe(new CartFilterRecipe());
                 }
-
-                cart = RailcraftCarts.CARGO;
-
-                if (cart.setup()) {
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "B",
-                            "M",
-                            'B', Blocks.TRAPPED_CHEST,
-                            'M', Items.MINECART);
-                    CraftingPlugin.addRecipe(new CartFilterRecipe());
-                }
-
             }
 
             private void addColorRecipes(EnumMachineBeta type) {

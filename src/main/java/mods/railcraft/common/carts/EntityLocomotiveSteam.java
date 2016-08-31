@@ -96,7 +96,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     @Override
     protected ItemStack getCartItemBase() {
-        return RailcraftCarts.LOCO_STEAM_SOLID.getCartItem();
+        return RailcraftCarts.LOCO_STEAM_SOLID.getStack();
     }
 
     public TankManager getTankManager() {

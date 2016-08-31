@@ -34,6 +34,9 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftCarts.ANCHOR_WORLD,
+                        RailcraftCarts.ANCHOR_ADMIN,
+                        RailcraftCarts.ANCHOR_PERSONAL
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta
                 );
@@ -92,43 +95,6 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                                 'p', Items.ENDER_PEARL,
                                 'o', new ItemStack(Blocks.OBSIDIAN));
                     }
-                }
-
-                // Define Anchor Cart
-                RailcraftCarts cart = RailcraftCarts.ANCHOR;
-                if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
-                    if (anchor != null) {
-                        if (RailcraftConfig.canCraftAnchors()) {
-                            CraftingPlugin.addRecipe(cart.getCartItem(),
-                                    "A",
-                                    "M",
-                                    'A', anchor,
-                                    'M', Items.MINECART);
-                        }
-                        cart.setContents(anchor);
-                    }
-                }
-
-                // Define Personal Anchor Cart
-                cart = RailcraftCarts.ANCHOR_PERSONAL;
-                if (EnumMachineAlpha.ANCHOR_PERSONAL.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.ANCHOR_PERSONAL.getItem();
-                    if (RailcraftConfig.canCraftPersonalAnchors()) {
-                        CraftingPlugin.addRecipe(cart.getCartItem(),
-                                "A",
-                                "M",
-                                'A', anchor,
-                                'M', Items.MINECART);
-                    }
-                    cart.setContents(anchor);
-                }
-
-                // Define Admin Anchor Cart
-                cart = RailcraftCarts.ANCHOR_ADMIN;
-                if (EnumMachineAlpha.ANCHOR_ADMIN.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.ANCHOR_ADMIN.getItem();
-                    cart.setContents(anchor);
                 }
             }
         });

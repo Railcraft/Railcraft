@@ -15,11 +15,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -34,24 +31,14 @@ public class ModuleRF extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.DETECTOR
+                        RailcraftBlocks.DETECTOR,
+                        RailcraftCarts.REDSTONE_FLUX
 //                        RailcraftBlocks.machine_gamma
                 );
             }
 
             @Override
             public void preInit() {
-                RailcraftCarts cart = RailcraftCarts.REDSTONE_FLUX;
-                if (cart.setup()) {
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "LRL",
-                            "RMR",
-                            "LRL",
-                            'R', new ItemStack(Blocks.REDSTONE_BLOCK),
-                            'L', RailcraftItems.INGOT, Metal.LEAD,
-                            'M', Items.MINECART
-                    );
-                }
 
                 EnumMachineGamma gamma = EnumMachineGamma.RF_LOADER;
                 if (gamma.isAvailable()) {

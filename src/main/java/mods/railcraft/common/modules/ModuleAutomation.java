@@ -10,7 +10,6 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
@@ -39,9 +38,14 @@ public class ModuleAutomation extends RailcraftModulePayload {
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_gamma,
 
+                        RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,
                         RailcraftItems.BORE_HEAD_STEEL,
-                        RailcraftItems.BORE_HEAD_DIAMOND
+                        RailcraftItems.BORE_HEAD_DIAMOND,
+                        RailcraftCarts.MOW_TRACK_LAYER,
+                        RailcraftCarts.MOW_TRACK_RELAYER,
+                        RailcraftCarts.MOW_TRACK_REMOVER,
+                        RailcraftCarts.MOW_TRACK_LAYER
                 );
             }
 
@@ -80,73 +84,6 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'E', "gemEmerald",
                             'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron");
                 }
-
-                // Define Bore
-                RailcraftCarts cart = RailcraftCarts.BORE;
-                if (cart.setup()) {
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "ICI",
-                            "FCF",
-                            " S ",
-                            'I', "blockSteel",
-                            'S', Items.CHEST_MINECART,
-                            'F', Blocks.FURNACE,
-                            'C', Items.MINECART);
-                }
-
-                // Define Track Relayer Cart
-                cart = RailcraftCarts.TRACK_RELAYER;
-                if (cart.setup())
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "YLY",
-                            "RSR",
-                            "DMD",
-                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
-                            'Y', "dyeYellow",
-                            'R', new ItemStack(Items.BLAZE_ROD),
-                            'D', new ItemStack(Items.DIAMOND_PICKAXE),
-                            'S', "blockSteel",
-                            'M', new ItemStack(Items.MINECART));
-
-                // Define Undercutter Cart
-                cart = RailcraftCarts.UNDERCUTTER;
-                if (cart.setup())
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "YLY",
-                            "RSR",
-                            "DMD",
-                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
-                            'Y', "dyeYellow",
-                            'R', new ItemStack(Blocks.PISTON),
-                            'D', new ItemStack(Items.DIAMOND_SHOVEL),
-                            'S', "blockSteel",
-                            'M', new ItemStack(Items.MINECART));
-
-                cart = RailcraftCarts.TRACK_LAYER;
-                if (cart.setup())
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "YLY",
-                            "ESE",
-                            "DMD",
-                            'Y', "dyeYellow",
-                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
-                            'E', new ItemStack(Blocks.ANVIL),
-                            'S', "blockSteel",
-                            'D', new ItemStack(Blocks.DISPENSER),
-                            'M', new ItemStack(Items.MINECART));
-
-                cart = RailcraftCarts.TRACK_REMOVER;
-                if (cart.setup())
-                    CraftingPlugin.addRecipe(cart.getCartItem(),
-                            "YLY",
-                            "PSP",
-                            "CMC",
-                            'Y', "dyeYellow",
-                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
-                            'P', new ItemStack(Blocks.STICKY_PISTON),
-                            'S', "blockSteel",
-                            'C', IToolCrowbar.ORE_TAG,
-                            'M', new ItemStack(Items.MINECART));
             }
         });
     }

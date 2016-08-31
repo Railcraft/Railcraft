@@ -35,7 +35,7 @@ public final class EntityCartEnergyCESU extends CartBaseEnergy {
     }
 
     @Override
-    public ICartType getCartType() {
+    public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.ENERGY_CESU;
     }
 

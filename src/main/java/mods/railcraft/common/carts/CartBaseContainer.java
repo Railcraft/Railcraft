@@ -54,7 +54,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         super(world, x, y, z);
     }
 
-    public abstract ICartType getCartType();
+    public abstract IRailcraftCartContainer getCartType();
 
     @Nonnull
     @Override
@@ -78,7 +78,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public ItemStack getCartItem() {
-        ItemStack stack = RailcraftCarts.fromCart(this).getCartItem();
+        ItemStack stack = RailcraftCarts.fromCart(this).getStack();
         if (hasCustomName())
             stack.setStackDisplayName(getCustomNameTag());
         return stack;
