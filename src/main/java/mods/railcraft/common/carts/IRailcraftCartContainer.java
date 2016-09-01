@@ -23,7 +23,9 @@ import javax.annotation.Nullable;
  * Created by CovertJaguar on 9/19/2015.
  */
 public interface IRailcraftCartContainer extends IRailcraftObjectContainer<IRailcraftItem> {
-    String getTag();
+    String getEntityLocalizationTag();
+
+    String getEntityTag();
 
     Class<? extends EntityMinecart> getCartClass();
 

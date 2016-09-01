@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public enum TrackKits implements IRailcraftObjectContainer {
+public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<TrackKit>> {
 
     ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitActivator.class),
     BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class),
@@ -211,7 +211,7 @@ public enum TrackKits implements IRailcraftObjectContainer {
 
     @Nullable
     @Override
-    public IRailcraftObject getObject() {
+    public Optional<IRailcraftObject<TrackKit>> getObject() {
         return null;
     }
 

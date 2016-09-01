@@ -12,9 +12,9 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.BLOCK;
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.COBBLE;
@@ -34,7 +35,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.COBBLE;
  * The Brick Themes (clever, I know)
  * Created by CovertJaguar on 3/12/2015.
  */
-public enum BrickTheme implements IRailcraftObjectContainer {
+public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     ABYSSAL(RailcraftBlocks.BRICK_ABYSSAL, MapColor.BLACK) {
         @Override
         public void initRecipes(BlockBrick block) {
@@ -208,7 +209,7 @@ public enum BrickTheme implements IRailcraftObjectContainer {
     }
 
     @Override
-    public IRailcraftObject getObject() {
+    public Optional<IRailcraftBlock> getObject() {
         return container.getObject();
     }
 

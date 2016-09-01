@@ -36,6 +36,6 @@ public class ItemCartTNTWood extends ItemCart {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(getStack(), 1, 3, LootPlugin.Type.RAILWAY, getCartType().getTag());
+        LootPlugin.addLoot(getCartType(), 1, 3, LootPlugin.Type.RAILWAY);
     }
 }

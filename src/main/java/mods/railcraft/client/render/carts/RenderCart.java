@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IAlternateCartTexture;
@@ -61,17 +62,15 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         double mx = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * (double) partialTicks;
         double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
-        double d6 = 0.3;
         Vec3d vec3d = cart.getPos(mx, my, mz);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
         //noinspection ConstantConditions
         if (vec3d != null) {
-            Vec3d vec3d1 = cart.getPosOffset(mx, my, mz, d6);
-            Vec3d vec3d2 = cart.getPosOffset(mx, my, mz, -d6);
-            //noinspection ConstantConditions
+            double offset = 0.3;
+            Vec3d vec3d1 = cart.getPosOffset(mx, my, mz, offset);
+            Vec3d vec3d2 = cart.getPosOffset(mx, my, mz, -offset);
             if (vec3d1 == null)
                 vec3d1 = vec3d;
-            //noinspection ConstantConditions
             if (vec3d2 == null)
                 vec3d2 = vec3d;
             x += vec3d.xCoord - mx;
@@ -104,7 +103,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
 
             ((IDirectionalCart) cart).setRenderYaw(yaw);
         }
-        OpenGL.glTranslatef((float) x, (float) y, (float) z);
+        OpenGL.glTranslatef((float) x, (float) y + 0.375F, (float) z);
 
         boolean name = false;
         if (cart.hasCustomName()) {
@@ -121,12 +120,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         OpenGL.glRotatef(180F - yaw, 0.0F, 1.0F, 0.0F);
         OpenGL.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
 
-        float f3 = (float) cart.getRollingAmplitude() - partialTicks;
-        float f4 = cart.getDamage() - partialTicks;
-        if (f4 < 0.0F)
-            f4 = 0.0F;
-        if (f3 > 0.0F) {
-            float angle = (MathHelper.sin(f3) * f3 * f4) / 10F;
+        float roll = (float) cart.getRollingAmplitude() - partialTicks;
+        float damage = cart.getDamage() - partialTicks;
+        if (damage < 0.0F)
+            damage = 0.0F;
+        if (roll > 0.0F) {
+            float angle = (MathHelper.sin(roll) * roll * damage) / 10F;
             angle = Math.min(angle, 0.8f);
             angle = Math.copySign(angle, cart.getRollingDirection());
             OpenGL.glRotatef(angle, 1.0F, 0.0F, 0.0F);

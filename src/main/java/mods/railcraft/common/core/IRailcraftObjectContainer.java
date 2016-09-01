@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * This interface is mainly to ensure that RailcraftBlocks and RailcraftItems have similar syntax.
@@ -46,10 +47,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
 
     @Nullable
     default ItemStack getStack(int qty, int meta) {
-        IRailcraftObject object = getObject();
-        if (object != null)
-            return object.getStack(qty, meta);
-        return null;
+        return getObject().map(o -> o.getStack(qty, meta)).orElse(null);
     }
 
     @Nullable
@@ -59,14 +57,10 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
 
     @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        IRailcraftObject object = getObject();
-        if (object != null)
-            return object.getStack(qty, variant);
-        return null;
+        return getObject().map(o -> o.getStack(qty, variant)).orElse(null);
     }
 
-    @Nullable
-    T getObject();
+    Optional<T> getObject();
 
     @Nullable
     default Object getRecipeObject() {
@@ -75,12 +69,10 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
 
     @Nullable
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
-        Object obj = null;
-        T railcraftObject = getObject();
-        if (railcraftObject != null) {
-            railcraftObject.checkVariant(variant);
-            obj = railcraftObject.getRecipeObject(variant);
-        }
+        Object obj = getObject().map(o -> {
+            o.checkVariant(variant);
+            return o.getRecipeObject(variant);
+        }).orElse(null);
         if (obj == null && variant != null)
             obj = variant.getAlternate(getBaseTag());
         if (obj instanceof ItemStack)

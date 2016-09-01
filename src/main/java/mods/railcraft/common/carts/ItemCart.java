@@ -46,7 +46,6 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         super(EntityMinecart.Type.RIDEABLE);
         maxStackSize = RailcraftConfig.getMinecartStackSize();
         this.type = cart;
-        setUnlocalizedName(cart.getTag());
         setMaxDamage(0);
         setHasSubtypes(true);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaviorDefaultDispenseItem());

@@ -36,6 +36,6 @@ public class ItemCartWork extends ItemCart {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(getStack(), 1, 1, LootPlugin.Type.RAILWAY, getCartType().getTag());
+        LootPlugin.addLoot(getCartType(), 1, 1, LootPlugin.Type.RAILWAY);
     }
 }

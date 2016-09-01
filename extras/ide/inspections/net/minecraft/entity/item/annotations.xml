@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.entity.item.EntityMinecart net.minecraft.util.math.Vec3d getPosOffset(double, double, double, double)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

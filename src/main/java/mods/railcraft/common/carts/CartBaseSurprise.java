@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.HashMultimap;
@@ -41,8 +41,8 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         super(world);
     }
 
-    protected CartBaseSurprise(World world, double d, double d1, double d2) {
-        super(world);
+    protected CartBaseSurprise(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     protected static SurpriseCategory createSurpriseCategory(Class<? extends CartBaseSurprise> clazz, int chance) {

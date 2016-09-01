@@ -34,6 +34,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -99,7 +101,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     private final Object altRecipeObject;
     private final Supplier<Boolean> prerequisites;
     private Item item;
-    private IRailcraftItem railcraftObject;
+    private Optional<IRailcraftItem> railcraftObject = Optional.empty();
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
@@ -117,10 +119,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     }
 
     public static void finalizeDefinitions() {
-        for (RailcraftItems type : VALUES) {
-            if (type.railcraftObject != null)
-                type.railcraftObject.finalizeDefinition();
-        }
+        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItem::finalizeDefinition));
     }
 
     @Override
@@ -132,12 +131,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
             item = itemSupplier.get();
             if (!(item instanceof IRailcraftItem))
                 throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
-            railcraftObject = (IRailcraftItem) item;
+            IRailcraftItem railcraftItem = (IRailcraftItem) item;
+            railcraftObject = Optional.of(railcraftItem);
             item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
             RailcraftRegistry.register(item);
-            railcraftObject.initializeDefinintion();
-            railcraftObject.defineRecipes();
+            railcraftItem.initializeDefinintion();
+            railcraftItem.defineRecipes();
         }
     }
 
@@ -187,18 +187,14 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     public ItemStack getStack(int qty, IVariantEnum variant) {
         checkVariantObject(variant);
         register();
-        if (railcraftObject != null)
-            return railcraftObject.getStack(qty, variant);
-        return null;
+        return getObject().map(i -> i.getStack(qty, variant)).orElse(null);
     }
 
     @Override
     public Object getRecipeObject(@Nullable IVariantEnum variant) {
         checkVariantObject(variant);
         register();
-        Object obj = null;
-        if (railcraftObject != null)
-            obj = railcraftObject.getRecipeObject(variant);
+        Object obj = getObject().map(i -> i.getRecipeObject(variant)).orElse(null);
         if (obj == null && variant != null)
             obj = variant.getAlternate(tag);
         if (obj == null)
@@ -209,7 +205,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     }
 
     @Override
-    public IRailcraftItem getObject() {
+    public Optional<IRailcraftItem> getObject() {
         return railcraftObject;
     }
 

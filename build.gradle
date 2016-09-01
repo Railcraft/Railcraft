@@ -110,6 +110,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude '**/*.md'
+        exclude '**/Thumbs.db'
     }
 }
 

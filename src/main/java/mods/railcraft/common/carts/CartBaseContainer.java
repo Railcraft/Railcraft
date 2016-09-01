@@ -59,7 +59,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public String getName() {
-        return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
+        return hasCustomName() ? getCustomNameTag() : getCartType().getEntityLocalizationTag();
     }
 
     @Override

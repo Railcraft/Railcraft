@@ -48,7 +48,7 @@ public class RailcraftConfig {
     private static final String CAT_WORLD_GEN = "worldgen";
     private static final String CAT_FLUIDS = "fluids";
     private static final String CAT_RECIPES = "recipes";
-    private static final String CAT_CARTS = "carts";
+    private static final String CAT_ENTITIES = "entities";
     private static final String CAT_ITEMS = "items";
     private static final String CAT_BLOCKS = "blocks";
     private static final String CAT_SUB_BLOCKS = "subblocks";
@@ -61,7 +61,7 @@ public class RailcraftConfig {
     private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<String>();
     private static final Map<String, Boolean> enabledItems = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> enabledBlocks = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> carts = new HashMap<String, Boolean>();
+    private static final Map<String, Boolean> entities = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> enabledSubBlocks = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> worldGen = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> fluids = new HashMap<String, Boolean>();
@@ -117,6 +117,7 @@ public class RailcraftConfig {
     private static Configuration configMain;
     private static Configuration configBlock;
     private static Configuration configItems;
+    private static Configuration configEntity;
 
     public static void preInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing pre-init parsing");
@@ -132,6 +133,9 @@ public class RailcraftConfig {
 
         configItems = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "items.cfg"));
         configItems.load();
+
+        configEntity = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "entities.cfg"));
+        configEntity.load();
 
         doUpdateCheck = get("check.version.online", true, "change to '{t}=false' to disable latest version checking");
 
@@ -163,6 +167,9 @@ public class RailcraftConfig {
 
         if (configItems.hasChanged())
             configItems.save();
+
+        if (configEntity.hasChanged())
+            configEntity.save();
 
         Locale.setDefault(locale);
     }
@@ -375,16 +382,16 @@ public class RailcraftConfig {
         loadLootProperty("tie.stone", 10);
         loadLootProperty("part.rail", 20);
         loadLootProperty("part.plate", 20);
-        loadLootProperty("cart.basic", 10);
-        loadLootProperty("cart.chest", 10);
-        loadLootProperty("cart.tnt", 5);
-        loadLootProperty("cart.tnt.wood", 5);
-        loadLootProperty("cart.work", 8);
-        loadLootProperty("cart.hopper", 5);
+        loadLootProperty("cart_basic", 10);
+        loadLootProperty("cart_chest", 10);
+        loadLootProperty("cart_tnt", 5);
+        loadLootProperty("cart_tnt_wood", 5);
+        loadLootProperty("cart_work", 8);
+        loadLootProperty("cart_hopper", 5);
         loadLootProperty("fuel.coke", 20);
         loadLootProperty("fuel.coal", 20);
         loadLootProperty("fluid.creosote.bottle", 20);
-        loadLootProperty("track.basic", 30);
+        loadLootProperty("track_flex_iron", 30);
 
         loadLootProperty("ingot.copper", 10);
         loadLootProperty("ingot.lead", 10);
@@ -413,34 +420,17 @@ public class RailcraftConfig {
     }
 
     private static void loadCarts() {
-        configMain.addCustomCategoryComment(CAT_CARTS, "Disable individual carts here.");
+        configEntity.addCustomCategoryComment(CAT_ENTITIES, "Disable individual entities here.");
 
         for (RailcraftCarts cart : RailcraftCarts.VALUES) {
             if (!cart.isVanillaCart())
-                loadCartProperty("cart." + cart.getBaseTag());
+                loadEntityProperty(cart.getEntityTag());
         }
+    }
 
-//        loadCartProperty("cart.tnt");
-//        loadCartProperty("cart.tnt.wood");
-//        loadCartProperty("cart.pumpkin");
-//        loadCartProperty("cart.gift");
-//        loadCartProperty("cart.tank");
-//        loadCartProperty("cart.cargo");
-//        loadCartProperty("cart.bore");
-//        loadCartProperty("cart.energy.batbox");
-//        loadCartProperty("cart.energy.mfe");
-//        loadCartProperty("cart.energy.cesu");
-//        loadCartProperty("cart.energy.mfsu");
-//        loadCartProperty("cart.anchor");
-//        loadCartProperty("cart.anchor.personal");
-//        loadCartProperty("cart.anchor.admin");
-//        loadCartProperty("cart.work");
-//        loadCartProperty("cart.track.relayer");
-//        loadCartProperty("cart.undercutter");
-//        loadCartProperty("cart.loco.steam.solid");
-//        loadCartProperty("cart.loco.electric");
-//        loadCartProperty("cart.track.layer");
-//        loadCartProperty("cart.track.remover");
+    private static void loadEntityProperty(String tag) {
+        Property prop = configEntity.get(CAT_ENTITIES, tag, true);
+        entities.put(tag, prop.getBoolean(true));
     }
 
     private static void loadBlocks() {
@@ -857,11 +847,11 @@ public class RailcraftConfig {
         return b;
     }
 
-    public static boolean isCartEnabled(String tag) {
+    public static boolean isEntityEnabled(String tag) {
         tag = MiscTools.cleanTag(tag);
-        Boolean enabled = carts.get(tag);
+        Boolean enabled = entities.get(tag);
         if (enabled == null)
-            throw new IllegalArgumentException("RailcraftConfig: cart tag not found: " + tag);
+            throw new IllegalArgumentException("RailcraftConfig: entity tag not found: " + tag);
         return enabled;
     }
 
@@ -1039,8 +1029,4 @@ public class RailcraftConfig {
         property.setComment(comment);
     }
 
-    private static void loadCartProperty(String tag) {
-        Property prop = configMain.get(CAT_CARTS, tag, true);
-        carts.put(tag, prop.getBoolean(true));
-    }
 }

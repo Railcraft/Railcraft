@@ -10,9 +10,10 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.loot.WeightedRandomChestContent;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -71,17 +72,17 @@ public class LootPlugin {
         addLoot(loot, minStack, maxStack, loot.getUnlocalizedName(), type.locations);
     }
 
-    public static void addLoot(RailcraftItems item, IVariantEnum meta, int minStack, int maxStack, Type type) {
-        addLoot(item.getStack(meta), minStack, maxStack, item.getBaseTag(), type.locations);
+    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum meta, int minStack, int maxStack, Type type) {
+        addLoot(itemContainer.getStack(meta), minStack, maxStack, itemContainer.getBaseTag(), type.locations);
     }
 
-    public static void addLootUnique(RailcraftItems item, IVariantEnum variant, int minStack, int maxStack, Type type) {
+    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItem> item, IVariantEnum variant, int minStack, int maxStack, Type type) {
         ItemStack stack = item.getStack(variant);
         if (stack != null)
             addLoot(stack, minStack, maxStack, stack.getUnlocalizedName(), type.locations);
     }
 
-    public static void addLoot(RailcraftItems item, int minStack, int maxStack, Type type) {
+    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> item, int minStack, int maxStack, Type type) {
         addLoot(item.getStack(), minStack, maxStack, item.getBaseTag(), type.locations);
     }
 

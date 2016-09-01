@@ -72,6 +72,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -276,8 +277,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    public IRailcraftBlock getObject() {
-        return ((IRailcraftBlock) block);
+    public Optional<IRailcraftBlock> getObject() {
+        return Optional.ofNullable((IRailcraftBlock) block);
     }
 
     @Override

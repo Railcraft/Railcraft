@@ -148,19 +148,15 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(RailcraftItems.ARMOR_BOOTS_STEEL, armorChance);
     }
 
-    private EntityCartGift(World world) {
+    public EntityCartGift(World world) {
         super(world);
     }
 
-    public EntityCartGift(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartGift(World world, double x, double y, double z) {
+        super(world, x, y, z);
+    }
+
+    {
         setBlastRadius(1.5f);
     }
 

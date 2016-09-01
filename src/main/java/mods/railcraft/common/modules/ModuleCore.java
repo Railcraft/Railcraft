@@ -216,11 +216,11 @@ public class ModuleCore extends RailcraftModulePayload {
                 replaceVanillaCart(RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
                 replaceVanillaCart(RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
 
-                LootPlugin.addLoot(RailcraftCarts.BASIC.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
-                LootPlugin.addLoot(RailcraftCarts.CHEST.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
-                LootPlugin.addLoot(RailcraftCarts.TNT.getStack(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
-                LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
-                LootPlugin.addLoot(RailcraftCarts.HOPPER.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
+                LootPlugin.addLoot(RailcraftCarts.BASIC.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_basic");
+                LootPlugin.addLoot(RailcraftCarts.CHEST.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_chest");
+                LootPlugin.addLoot(RailcraftCarts.TNT.getStack(), 1, 3, LootPlugin.Type.RAILWAY, "cart_tnt");
+                LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track_flex_iron");
+                LootPlugin.addLoot(RailcraftCarts.HOPPER.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_hopper");
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);

@@ -45,7 +45,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Nonnull
     @Override
     public String getName() {
-        return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
+        return hasCustomName() ? getCustomNameTag() : getCartType().getEntityLocalizationTag();
     }
 
     @Override

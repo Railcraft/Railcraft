@@ -15,7 +15,6 @@ import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
-import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.client.render.models.resource.OutfittedTrackItemModel;
 import mods.railcraft.client.render.models.resource.OutfittedTrackModel;
 import mods.railcraft.client.render.tesr.*;
@@ -33,8 +32,10 @@ import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfittedTESR;
 import mods.railcraft.common.blocks.wayobjects.TileWayObject;
 import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.RailcraftItems;
@@ -45,7 +46,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -60,6 +60,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -107,28 +110,19 @@ public class ClientProxy extends CommonProxy {
                         }
                     }
                 }
-
-//                for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
-//                    TextureAtlasSheet.unstitchIcons(event.getMap(),
-//                            trackKit.getRegistryName(),
-//                            ((IVariantEnumBlock) variant).getTextureDimensions());
-//                }
             }
         });
 
-        for (RailcraftItems itemContainer : RailcraftItems.VALUES) {
-            Item item = itemContainer.item();
-            if (item instanceof IRailcraftItem) {
-                ((IRailcraftItem) item).initializeClient();
-            } else if (item != null) {
-                ModelManager.registerItemModel(item, 0);
-            }
+        Set<IRailcraftObjectContainer<IRailcraftItem>> items = new HashSet<>();
+        items.addAll(Arrays.asList(RailcraftItems.VALUES));
+        items.addAll(Arrays.asList(RailcraftCarts.VALUES));
+        for (IRailcraftObjectContainer<IRailcraftItem> itemContainer : items) {
+            itemContainer.getObject().ifPresent(IRailcraftItem::initializeClient);
         }
 
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
             ItemBlock item = blockContainer.item();
-            IRailcraftBlock block = blockContainer.getObject();
-            if (block != null) {
+            blockContainer.getObject().ifPresent(block -> {
                 block.initializeClient();
                 if (item != null) {
                     ((IRailcraftObject) item).initializeClient();
@@ -145,11 +139,14 @@ public class ClientProxy extends CommonProxy {
                             block.registerItemModel(stack, null);
                     }
                 }
-            }
+            });
         }
 
         ModelLoaderRegistry.registerLoader(OutfittedTrackModel.Loader.INSTANCE);
         ModelLoaderRegistry.registerLoader(OutfittedTrackItemModel.Loader.INSTANCE);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
     }
 
     @Override
@@ -228,9 +225,6 @@ public class ClientProxy extends CommonProxy {
 //        registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockBeta()));
 //        registerBlockRenderer(new RenderStair());
 //        registerBlockRenderer(new RenderSlab());
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
 
 //        stack = EnumCart.TANK.getCartItem();
 //        if (stack != null)

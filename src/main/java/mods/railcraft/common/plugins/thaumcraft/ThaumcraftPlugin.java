@@ -300,7 +300,7 @@ public class ThaumcraftPlugin {
 
     private static void addCartAspect(IRailcraftCartContainer cart, AspectList aspects) {
         addItemAspect(cart.getStack(), aspects);
-        ThaumcraftApi.registerEntityTag(cart.getTag(), aspects);
+        ThaumcraftApi.registerEntityTag(cart.getEntityLocalizationTag(), aspects);
     }
 
     private static void addBrickAspects(BrickTheme brick, Aspect baseAspect) {
