@@ -1,19 +1,21 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.tools.CubeRenderer;
+import mods.railcraft.client.render.models.resource.JSONModelRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartRF;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -21,6 +23,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityCartRF> {
     private static final CartContentRendererRedstoneFlux instance = new CartContentRendererRedstoneFlux();
+    public static final ResourceLocation CORE_MODEL = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "entity/cart_redstone_flux_core");
+    public static final ResourceLocation FRAME_MODEL = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "entity/cart_redstone_flux_frame");
     private final RenderInfo redBlock = new RenderInfo();
     private final RenderInfo leadFrame = new RenderInfo();
 
@@ -31,13 +35,13 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityC
         return instance;
     }
 
-    public void setRedstoneIcon(TextureAtlasSprite icon) {
-        redBlock.setTextureToAllSides(icon);
-    }
+//    public void setRedstoneIcon(TextureAtlasSprite icon) {
+//        redBlock.setTextureToAllSides(icon);
+//    }
 
-    public void setFrameIcon(TextureAtlasSprite icon) {
-        leadFrame.setTextureToAllSides(icon);
-    }
+//    public void setFrameIcon(TextureAtlasSprite icon) {
+//        leadFrame.setTextureToAllSides(icon);
+//    }
 
     @Override
     public void render(RenderCart renderer, EntityCartRF cart, float light, float partialTicks) {
@@ -54,16 +58,16 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityC
 
         OpenGL.glTranslatef(0, 0.0625f, 0);
 
-        OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        CubeRenderer.render(leadFrame);
-
-        float scale = 0.99F;
-        OpenGL.glScalef(scale, scale, scale);
-
         float bright = 0.5F + 0.5F * (float) ((double) cart.getRF() / (double) cart.getMaxRF());
         OpenGL.glColor4f(bright, bright, bright, 1.0f);
 
-        CubeRenderer.render(redBlock);
+//        CubeRenderer.render(redBlock);
+        JSONModelRenderer.INSTANCE.renderModel(CORE_MODEL);
+
+
+        OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+//        CubeRenderer.render(leadFrame);
+        JSONModelRenderer.INSTANCE.renderModel(FRAME_MODEL);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

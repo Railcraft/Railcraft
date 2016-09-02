@@ -15,6 +15,7 @@ import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
+import mods.railcraft.client.render.models.resource.JSONModelRenderer;
 import mods.railcraft.client.render.models.resource.OutfittedTrackItemModel;
 import mods.railcraft.client.render.models.resource.OutfittedTrackModel;
 import mods.railcraft.client.render.tesr.*;
@@ -85,12 +86,16 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void initializeClient() {
+        ModelLoaderRegistry.registerLoader(OutfittedTrackModel.Loader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(OutfittedTrackItemModel.Loader.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(JSONModelRenderer.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new Object() {
             @SubscribeEvent
             public void textureStitch(TextureStitchEvent.Pre event) {
-                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux")));
-                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux_frame")));
+//                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux")));
+//                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux_frame")));
 
                 ParticleSpark.sprite = event.getMap().registerSprite(new ResourceLocation("railcraft:particle/spark"));
 
@@ -142,8 +147,8 @@ public class ClientProxy extends CommonProxy {
             });
         }
 
-        ModelLoaderRegistry.registerLoader(OutfittedTrackModel.Loader.INSTANCE);
-        ModelLoaderRegistry.registerLoader(OutfittedTrackItemModel.Loader.INSTANCE);
+        JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
+        JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);

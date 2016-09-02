@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "railcraft:entities/carts/cart_redstone_flux_frame"
+  }
+}

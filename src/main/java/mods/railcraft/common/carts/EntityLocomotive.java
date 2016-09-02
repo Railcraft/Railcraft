@@ -89,6 +89,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private static final int WHISTLE_INTERVAL = 256;
     private static final int WHISTLE_DELAY = 160;
     private static final int WHISTLE_CHANCE = 4;
+    private static final int IS_REVERSED_INDEX = 6;
     private final MultiButtonController<LocoLockButtonState> lockController = MultiButtonController.create(0, LocoLockButtonState.VALUES);
     public LocoMode clientMode = LocoMode.SHUTDOWN;
     public LocoSpeed clientSpeed = LocoSpeed.MAX;
@@ -590,7 +591,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, 6);
+        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
 
         data.setBoolean("isInReverse", isInReverse);
 
@@ -617,7 +618,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
-        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), 0);
+        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), IS_REVERSED_INDEX);
 
         model = data.getString("model");
 

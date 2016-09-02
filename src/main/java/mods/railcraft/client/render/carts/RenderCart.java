@@ -14,6 +14,7 @@ import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityMinecart;
@@ -130,6 +131,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             angle = Math.copySign(angle, cart.getRollingDirection());
             OpenGL.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
+
+        if (renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(getTeamColor(cart));
+        }
+
         float light = cart.getBrightness(partialTicks);
 //        light = light + ((1.0f - light) * 0.4f);
 
@@ -142,6 +149,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             renderContents(cart, light, partialTicks);
             OpenGL.glPopAttrib();
         }
+
+        if (renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+
         OpenGL.glPopMatrix();
     }
 
