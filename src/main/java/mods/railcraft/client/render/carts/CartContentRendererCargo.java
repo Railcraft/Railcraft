@@ -11,6 +11,8 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartCargo;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.MathHelper;
@@ -37,58 +39,47 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
         item.getEntityItem().stackSize = 1;
         item.hoverStart = 0.0F;
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.worldObj, null);
 
-        // TODO: fix cargo cart rendering
-        boolean renderIn3D = false;
-//        boolean renderIn3D = RenderBlocks.renderItemIn3d(Block.getBlockFromItem(item.getEntityItem().getItem()).getRenderType());
+        boolean renderIn3D = model.isGui3d();
 
-//        RenderItem.renderInFrame = true;
-
-        if (!renderIn3D) {
-            if (!renderer.getRenderManager().options.fancyGraphics)
-                OpenGL.glDisable(GL11.GL_CULL_FACE);
-            OpenGL.glTranslatef(0.0F, -0.44F, 0.0F);
-            float scale = 1.5F;
-            OpenGL.glScalef(scale, scale, scale);
-            OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
-            int numIterations = cart.getSlotsFilled();
-            rand.setSeed(738);
-            for (int i = 0; i < numIterations; i++) {
-                OpenGL.glPushMatrix();
-                float tx = (float) rand.nextGaussian() * 0.1F;
-                float ty = (float) rand.nextGaussian() * 0.01F;
-                float tz = (float) rand.nextGaussian() * 0.2F;
-                OpenGL.glTranslatef(tx, ty, tz);
-                renderEntityItem(renderer.getRenderManager(), item);
-                OpenGL.glPopMatrix();
-            }
-        } else {
-            OpenGL.glTranslatef(-0.08F, -0.44F, -0.18F);
-            float scale = 1.8F;
-            OpenGL.glScalef(scale, scale, scale);
-            OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+        int numIterations;
+        float yOffset;
+        float scale;
+        float xScale;
+        float zScale;
+        if (renderIn3D) {
+            xScale = 0.3f;
+            zScale = 0.2F;
+            scale = 2.5F;
             int slotsFilled = cart.getSlotsFilled();
-            int numIterations;
             if (slotsFilled <= 0) {
                 numIterations = 0;
             } else {
-                numIterations = (int) Math.ceil(slotsFilled / 3.2);
-                numIterations = MathHelper.clamp_int(numIterations, 1, 5);
+                numIterations = (int) Math.ceil(slotsFilled / 2);
+                numIterations = MathHelper.clamp_int(numIterations, 1, 6);
             }
-            rand.setSeed(1983);
-            for (int i = 0; i < numIterations; i++) {
-                OpenGL.glPushMatrix();
-                float tx = (float) rand.nextGaussian() * 0.2F;
-                float ty = (float) rand.nextGaussian() * 0.06F;
-                float tz = (float) rand.nextGaussian() * 0.15F;
-                OpenGL.glTranslatef(tx, ty, tz);
-                renderEntityItem(renderer.getRenderManager(), item);
-                OpenGL.glPopMatrix();
-            }
+            yOffset = -1.1F;
+        } else {
+            xScale = 0.5f;
+            zScale = 0.6F;
+            scale = 1.6F;
+            numIterations = cart.getSlotsFilled();
+            yOffset = -0.8F;
         }
-
-//        RenderItem.renderInFrame = false;
-
+        OpenGL.glTranslatef(0.0F, yOffset, 0.0F);
+        OpenGL.glScalef(scale, scale, scale);
+        OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+        rand.setSeed(cart.getEntityId());
+        for (int i = 0; i < numIterations; i++) {
+            OpenGL.glPushMatrix();
+            float tx = (float) (rand.nextDouble() - 0.5F) * xScale;
+            float ty = (float) (rand.nextDouble() - 0.5F) * 0.15F;
+            float tz = (float) (rand.nextDouble() - 0.5F) * zScale;
+            OpenGL.glTranslatef(tx, ty, tz);
+            renderEntityItem(renderer.getRenderManager(), item);
+            OpenGL.glPopMatrix();
+        }
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

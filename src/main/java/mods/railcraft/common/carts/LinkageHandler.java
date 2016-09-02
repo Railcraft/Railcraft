@@ -11,15 +11,12 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -341,13 +338,6 @@ public class LinkageHandler {
         adjustCart(cart, lm);
 
 //        savePosition(cart);
-    }
-
-    @SubscribeEvent
-    public void onMinecartInteract(MinecartInteractEvent event) {
-        EntityPlayer player = event.getPlayer();
-        if (player.getActiveItemStack() != null && player.getActiveItemStack().getItem() instanceof IToolCrowbar)
-            event.setCanceled(true);
     }
 
     private boolean isOnElevator(EntityMinecart cart) {

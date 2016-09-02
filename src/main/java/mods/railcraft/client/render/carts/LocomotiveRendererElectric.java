@@ -44,8 +44,8 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
         super.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-        OpenGL.glEnable(GL11.GL_BLEND);
-        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        OpenGL.glEnable(GL11.GL_BLEND);
+//        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         OpenGL.glScalef(-1F, -1F, 1.0F);
         OpenGL.glTranslatef(0.05F, 0.0F, 0.0F);
 

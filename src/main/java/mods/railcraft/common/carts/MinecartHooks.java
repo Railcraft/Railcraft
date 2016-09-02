@@ -360,7 +360,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         cart.getEntityData().setBoolean("explode", true);
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMinecartInteract(MinecartInteractEvent event) {
         EntityMinecart cart = event.getMinecart();

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import com.google.common.collect.MapMaker;
@@ -23,7 +24,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Map;
@@ -44,78 +45,78 @@ public class CrowbarHandler {
     }
 
     @SubscribeEvent
-    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        EntityPlayer thePlayer = event.getEntityPlayer();
-        Entity entity = event.getTarget();
+    public void onEntityInteract(MinecartInteractEvent event) {
+        EntityPlayer thePlayer = event.getPlayer();
+        Entity entity = event.getEntity();
         EnumHand hand = event.getHand();
 
-        ItemStack stack = thePlayer.getHeldItem(hand);
-        if (stack != null && stack.getItem() instanceof IToolCrowbar)
+        if (event.getItem() != null && event.getItem().getItem() instanceof IToolCrowbar)
+            event.setCanceled(true);
+
+        ItemStack stack = event.getItem();
+        if (stack != null && stack.getItem() instanceof IToolCrowbar) {
             thePlayer.swingArm(event.getHand());
+            event.setCanceled(true);
+        } else
+            return;
 
         if (Game.isClient(thePlayer.worldObj))
             return;
-        if (!RailcraftModuleManager.isModuleEnabled(ModuleTrain.class))
-            return;
 
         boolean used = false;
-        if (stack != null && stack.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) stack.getItem();
-            if (entity instanceof EntityMinecart) {
-                EntityMinecart cart = (EntityMinecart) entity;
+        IToolCrowbar crowbar = (IToolCrowbar) stack.getItem();
+        if (entity instanceof EntityMinecart) {
+            EntityMinecart cart = (EntityMinecart) entity;
 
-                if (crowbar.canLink(thePlayer, hand, stack, cart)) {
-                    boolean linkable = cart instanceof ILinkableCart;
-                    if (!linkable || ((ILinkableCart) cart).isLinkable()) {
-                        EntityMinecart last = linkMap.remove(thePlayer);
-                        if (last != null && !last.isDead) {
-                            LinkageManager lm = LinkageManager.instance();
-                            if (lm.areLinked(cart, last, false)) {
-                                lm.breakLink(cart, last);
-                                used = true;
-                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.broken");
-                                LinkageManager.printDebug("Reason For Broken Link: User removed link.");
-                            } else {
-                                used = lm.createLink(last, (EntityMinecart) entity);
-                                if (used)
-                                    ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.created");
-                            }
-                            if (!used)
-                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.failed");
+            if (RailcraftModuleManager.isModuleEnabled(ModuleTrain.class)
+                    && crowbar.canLink(thePlayer, hand, stack, cart)) {
+                boolean linkable = cart instanceof ILinkableCart;
+                if (!linkable || ((ILinkableCart) cart).isLinkable()) {
+                    EntityMinecart last = linkMap.remove(thePlayer);
+                    if (last != null && !last.isDead) {
+                        LinkageManager lm = LinkageManager.instance();
+                        if (lm.areLinked(cart, last, false)) {
+                            lm.breakLink(cart, last);
+                            used = true;
+                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.broken");
+                            LinkageManager.printDebug("Reason For Broken Link: User removed link.");
                         } else {
-                            linkMap.put(thePlayer, (EntityMinecart) entity);
-                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.started");
+                            used = lm.createLink(last, (EntityMinecart) entity);
+                            if (used)
+                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.created");
                         }
+                        if (!used)
+                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.failed");
+                    } else {
+                        linkMap.put(thePlayer, (EntityMinecart) entity);
+                        ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.started");
                     }
-                    if (used)
-                        crowbar.onLink(thePlayer, hand, stack, cart);
-                } else if (crowbar.canBoost(thePlayer, hand, stack, cart)) {
-                    thePlayer.addExhaustion(1F);
-
-                    //noinspection StatementWithEmptyBody
-                    if (thePlayer.getRidingEntity() != null) {
-                        // NOOP
-                    } else //noinspection StatementWithEmptyBody
-                        if (cart instanceof EntityTunnelBore) {
-                            // NOOP
-                        } else if (cart instanceof IDirectionalCart)
-                            ((IDirectionalCart) cart).reverse();
-                        else {
-                            if (cart.posX < thePlayer.posX)
-                                cart.motionX -= SMACK_VELOCITY;
-                            else
-                                cart.motionX += SMACK_VELOCITY;
-                            if (cart.posZ < thePlayer.posZ)
-                                cart.motionZ -= SMACK_VELOCITY;
-                            else
-                                cart.motionZ += SMACK_VELOCITY;
-                        }
-                    crowbar.onBoost(thePlayer, hand, stack, cart);
-                    used = true;
                 }
+                if (used)
+                    crowbar.onLink(thePlayer, hand, stack, cart);
+            } else if (crowbar.canBoost(thePlayer, hand, stack, cart)) {
+                thePlayer.addExhaustion(1F);
+
+                //noinspection StatementWithEmptyBody
+                if (thePlayer.getRidingEntity() != null) {
+                    // NOOP
+                } else //noinspection StatementWithEmptyBody
+                    if (cart instanceof EntityTunnelBore) {
+                        // NOOP
+                    } else if (cart instanceof IDirectionalCart)
+                        ((IDirectionalCart) cart).reverse();
+                    else {
+                        if (cart.posX < thePlayer.posX)
+                            cart.motionX -= SMACK_VELOCITY;
+                        else
+                            cart.motionX += SMACK_VELOCITY;
+                        if (cart.posZ < thePlayer.posZ)
+                            cart.motionZ -= SMACK_VELOCITY;
+                        else
+                            cart.motionZ += SMACK_VELOCITY;
+                    }
+                crowbar.onBoost(thePlayer, hand, stack, cart);
             }
         }
-        if (used)
-            event.setCanceled(true);
     }
 }

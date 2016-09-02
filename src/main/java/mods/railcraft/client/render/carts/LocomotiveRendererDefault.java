@@ -84,8 +84,8 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     public void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-        OpenGL.glEnable(GL11.GL_BLEND);
-        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        OpenGL.glEnable(GL11.GL_BLEND);
+//        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         OpenGL.glScalef(-1F, -1F, 1.0F);
 
         color[0] = primaryColor;
@@ -127,7 +127,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ).tex(1, 0).endVertex();
             tess.draw();
         }
-        OpenGL.glDisable(GL11.GL_BLEND);
+//        OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glPopMatrix();
     }
 
