@@ -590,7 +590,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, 0);
+        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, 6);
 
         data.setBoolean("isInReverse", isInReverse);
 

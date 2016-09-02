@@ -12,33 +12,41 @@ package mods.railcraft.common.plugins.forge;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CreativePlugin {
 
-    public static final CreativeTabs RAILCRAFT_TAB = new RailcraftTab("railcraft.general", RailcraftItems.CROWBAR_STEEL.getStack());
-    public static final CreativeTabs TRACK_TAB = new RailcraftTab("railcraft.track", new ItemStack(Blocks.DETECTOR_RAIL));
+    public static final CreativeTabs RAILCRAFT_TAB = new RailcraftTab("railcraft.general", () -> {
+        ItemStack stack = RailcraftItems.CROWBAR_STEEL.getStack();
+        if (stack == null)
+            stack = new ItemStack(Items.MINECART);
+        return stack;
+    });
+    public static final CreativeTabs TRACK_TAB = new RailcraftTab("railcraft.track", () -> new ItemStack(Blocks.DETECTOR_RAIL));
 
     private static class RailcraftTab extends CreativeTabs {
-        private final ItemStack stack;
+        private final Supplier<ItemStack> tabItem;
 
-        public RailcraftTab(String label, ItemStack stack) {
+        public RailcraftTab(String label, Supplier<ItemStack> tabItem) {
             super(label);
-            this.stack = stack;
+            this.tabItem = tabItem;
         }
 
         @Override
         public ItemStack getIconItemStack() {
-            return stack;
+            return tabItem.get();
         }
 
         @Override
         public Item getTabIconItem() {
-            return stack.getItem();
+            return tabItem.get().getItem();
         }
 
     }
