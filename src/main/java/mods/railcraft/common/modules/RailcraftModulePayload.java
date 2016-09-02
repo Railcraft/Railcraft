@@ -33,10 +33,14 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         this.disabledEventHandler = disabledEventHandler;
     }
 
-    public final void add(IRailcraftObjectContainer... objects) {
+    public final void add(IRailcraftObjectContainer<?>... objects) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION)
             throw new RuntimeException("You can only associate Railcraft Objects with a Module during the Construction phase!");
         objectContainers.addAll(Arrays.asList(objects));
+    }
+
+    public final boolean isDefiningObject(IRailcraftObjectContainer<?> object) {
+        return objectContainers.contains(object);
     }
 
     @Nonnull

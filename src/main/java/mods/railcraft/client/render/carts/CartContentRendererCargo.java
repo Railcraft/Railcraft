@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.tools.OpenGL;
@@ -93,7 +94,6 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         OpenGL.glPopMatrix();
     }
 
-    //TODO: this is probably wrong now
     private void renderEntityItem(RenderManager renderManager, EntityItem item) {
         try {
             renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);

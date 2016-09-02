@@ -33,7 +33,6 @@ public class ItemCartTNTWood extends ItemCart {
                 'W', "slabWood");
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(getCartType(), 1, 3, LootPlugin.Type.RAILWAY);

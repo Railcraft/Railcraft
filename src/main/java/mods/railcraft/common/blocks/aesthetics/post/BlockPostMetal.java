@@ -60,7 +60,7 @@ public class BlockPostMetal extends BlockPostBase {
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack stack = getStack(1, color);
             if (stack != null)
-                RailcraftRegistry.register(stack);
+                RailcraftRegistry.register(this, color, stack);
         }
     }
 

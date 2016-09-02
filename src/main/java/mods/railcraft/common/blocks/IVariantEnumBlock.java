@@ -40,10 +40,6 @@ public interface IVariantEnumBlock extends IVariantEnum, IContainerState, IConta
         return getContainer().getState(this);
     }
 
-    default boolean isEnabled() {
-        return true;
-    }
-
     default Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(1, 1);
     }

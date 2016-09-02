@@ -10,7 +10,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -36,7 +35,7 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements ISidedInventory, IItemCart {
+public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements ISidedInventory {
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;
     private static final int SLOT_FUEL_B = 4;
@@ -68,9 +67,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         return LocomotiveRenderType.STEAM_SOLID;
     }
 
-    @Override
-    protected void entityInit() {
-        super.entityInit();
+    {
         boiler.setFuelProvider(new SolidFuelProvider(this, SLOT_BURN) {
             @Override
             public double getMoreFuel() {

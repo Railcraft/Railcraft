@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 import static mods.railcraft.common.items.Metal.Form;
 
@@ -55,9 +56,9 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
 
     @Override
     public void initializeDefinintion() {
-        for (Integer meta : getMetalBiMap().keySet()) {
-            ItemStack stack = new ItemStack(this, 1, meta);
-            RailcraftRegistry.register(stack);
+        for (Map.Entry<Integer, Metal> entry : getMetalBiMap().entrySet()) {
+            ItemStack stack = new ItemStack(this, 1, entry.getKey());
+            RailcraftRegistry.register(this, entry.getValue(), stack);
         }
         if (registerOreDict)
             for (Metal m : getMetalBiMap().values()) {

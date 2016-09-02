@@ -10,10 +10,12 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IRailcraftRegistryEntry;
 import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +27,7 @@ import javax.annotation.Nullable;
  *
  * Created by CovertJaguar on 3/14/2016.
  */
-public interface IRailcraftObject<T> extends IForgeRegistryEntry<T> {
+public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     T getObject();
 
     @Nullable
@@ -101,5 +103,11 @@ public interface IRailcraftObject<T> extends IForgeRegistryEntry<T> {
 
     default String getResourcePath() {
         return ((IForgeRegistryEntry) this).getRegistryName().getResourcePath();
+    }
+
+    @Override
+    default ResourceLocation getRegistryName(IVariantEnum variant) {
+        checkVariant(variant);
+        return IRailcraftRegistryEntry.super.getRegistryName(variant);
     }
 }

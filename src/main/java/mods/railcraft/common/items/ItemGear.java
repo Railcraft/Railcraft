@@ -28,7 +28,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
     public void initializeDefinintion() {
         for (EnumGear gear : EnumGear.values()) {
             ItemStack stack = new ItemStack(this, 1, gear.ordinal());
-            RailcraftRegistry.register(stack);
+            RailcraftRegistry.register(this, gear, stack);
         }
 
         OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));

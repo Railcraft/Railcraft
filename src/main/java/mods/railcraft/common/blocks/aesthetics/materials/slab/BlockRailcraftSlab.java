@@ -92,7 +92,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     @Override
     public void finalizeDefinition() {
         for (Materials mat : Materials.getValidMats()) {
-            RailcraftRegistry.register(getStack(1, mat));
+            RailcraftRegistry.register(this, mat, getStack(1, mat));
 
             switch (mat) {
                 case SNOW:

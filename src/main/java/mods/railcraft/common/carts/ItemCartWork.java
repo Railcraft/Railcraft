@@ -33,7 +33,6 @@ public class ItemCartWork extends ItemCart {
                 'M', Items.MINECART);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(getCartType(), 1, 1, LootPlugin.Type.RAILWAY);

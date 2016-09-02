@@ -40,7 +40,7 @@ import java.util.List;
 public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItem {
 
     private final IRailcraftCartContainer type;
-    private int rarity = 0;
+    private int rarity;
 
     public ItemCart(IRailcraftCartContainer cart) {
         super(EntityMinecart.Type.RIDEABLE);

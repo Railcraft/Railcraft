@@ -290,4 +290,9 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public boolean isLoaded() {
         return block != null;
     }
+
+    @Override
+    public String toString() {
+        return "Block{" + tag + "}";
+    }
 }

@@ -73,7 +73,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         for (Materials mat : mats) {
             ItemStack stack = getStack(mat);
             if (stack != null) {
-                RailcraftRegistry.register(stack);
+                RailcraftRegistry.register(this, mat, stack);
                 if (!Materials.MAT_SET_FROZEN.contains(mat))
                     ForestryPlugin.addBackpackItem("forestry.builder", stack);
             }

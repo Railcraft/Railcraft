@@ -81,7 +81,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
             if (Materials.MAT_SET_FROZEN.contains(mat))
                 continue;
 
-            RailcraftRegistry.register(getStack(mat));
+            RailcraftRegistry.register(this, mat, getStack(mat));
             ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
 
             Object slab;

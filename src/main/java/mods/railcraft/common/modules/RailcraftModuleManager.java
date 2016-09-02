@@ -14,7 +14,9 @@ import com.google.common.collect.Sets;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftCore;
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -203,6 +205,16 @@ public class RailcraftModuleManager {
 
     public static boolean isModuleEnabled(String moduleName) {
         return enabledModules.contains(nameToClassMapping.get(moduleName));
+    }
+
+    public static boolean isObjectDefined(IRailcraftObjectContainer<?> objectContainer) {
+        switch (stage) {
+            case LOADING:
+            case DEPENDENCY_CHECKING:
+            case CONSTRUCTION:
+                throw new RuntimeException("Cannot check object status before PRE-INIT");
+        }
+        return classToInstanceMapping.values().stream().flatMap(Streams.toType(RailcraftModulePayload.class)).anyMatch(m -> m.isDefiningObject(objectContainer));
     }
 
     public enum Stage {

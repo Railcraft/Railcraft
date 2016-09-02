@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
@@ -126,6 +127,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ).tex(1, 0).endVertex();
             tess.draw();
         }
+        OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glPopMatrix();
     }
 

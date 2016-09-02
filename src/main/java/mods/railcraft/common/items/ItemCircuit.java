@@ -32,7 +32,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             ItemStack stack = getStack(circuit);
             assert stack != null;
-            RailcraftRegistry.register(stack);
+            RailcraftRegistry.register(this, circuit, stack);
         }
     }
 

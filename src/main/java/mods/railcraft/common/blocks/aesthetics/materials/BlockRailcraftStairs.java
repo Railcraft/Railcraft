@@ -78,7 +78,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     @Override
     public void finalizeDefinition() {
         for (Materials mat : Materials.getValidMats()) {
-            RailcraftRegistry.register(getStack(mat));
+            RailcraftRegistry.register(this, mat, getStack(mat));
 
             switch (mat) {
                 case SNOW:

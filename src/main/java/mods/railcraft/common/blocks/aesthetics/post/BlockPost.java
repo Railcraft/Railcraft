@@ -71,7 +71,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         for (EnumPost post : EnumPost.VALUES) {
             ItemStack stack = post.getStack();
             if (stack != null)
-                RailcraftRegistry.register(stack);
+                RailcraftRegistry.register(this, post, stack);
         }
 
 //            HarvestPlugin.setStateHarvestLevel(block, "crowbar", 0);

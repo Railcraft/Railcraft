@@ -135,7 +135,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
             railcraftObject = Optional.of(railcraftItem);
             item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
-            RailcraftRegistry.register(item);
+            RailcraftRegistry.register(railcraftItem);
             railcraftItem.initializeDefinintion();
             railcraftItem.defineRecipes();
         }
@@ -217,5 +217,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     @Override
     public boolean isLoaded() {
         return item != null;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" + tag + "}";
     }
 }

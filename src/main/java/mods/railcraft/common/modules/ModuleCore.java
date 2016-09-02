@@ -17,17 +17,10 @@ import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineTileRegistery;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
-import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
@@ -48,7 +41,6 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -77,7 +69,6 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -322,27 +313,27 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 // Finish initializing ItemRegistry
                 //TODO: this is obsolete?
-                for (EnumWayObject type : EnumWayObject.values()) {
-                    if (type.isEnabled())
-                        RailcraftRegistry.register(type.getItem());
-                }
-
-                for (EnumGeneric type : EnumGeneric.values()) {
-                    if (type.isEnabled())
-                        RailcraftRegistry.register(type.getStack());
-                }
-
-                Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
-                machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
-                machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
-                machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
-                machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
-                machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
-
-                for (IEnumMachine machine : machines) {
-                    if (machine.isAvailable())
-                        RailcraftRegistry.register(machine.getItem());
-                }
+//                for (EnumWayObject type : EnumWayObject.values()) {
+//                    if (type.isEnabled())
+//                        RailcraftRegistry.register(type.getItem());
+//                }
+//
+//                for (EnumGeneric type : EnumGeneric.values()) {
+//                    if (type.isEnabled())
+//                        RailcraftRegistry.register(type.getStack());
+//                }
+//
+//                Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
+//                machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
+//                machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
+//                machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
+//                machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
+//                machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
+//
+//                for (IEnumMachine machine : machines) {
+//                    if (machine.isAvailable())
+//                        RailcraftRegistry.register(machine.getItem());
+//                }
             }
 
             @Override

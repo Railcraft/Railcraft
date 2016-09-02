@@ -72,14 +72,12 @@ public class LootPlugin {
         addLoot(loot, minStack, maxStack, loot.getUnlocalizedName(), type.locations);
     }
 
-    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum meta, int minStack, int maxStack, Type type) {
-        addLoot(itemContainer.getStack(meta), minStack, maxStack, itemContainer.getBaseTag(), type.locations);
+    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
+        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag(), type.locations);
     }
 
-    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItem> item, IVariantEnum variant, int minStack, int maxStack, Type type) {
-        ItemStack stack = item.getStack(variant);
-        if (stack != null)
-            addLoot(stack, minStack, maxStack, stack.getUnlocalizedName(), type.locations);
+    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
+        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag() + "." + variant.getResourcePathSuffix(), type.locations);
     }
 
     public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> item, int minStack, int maxStack, Type type) {

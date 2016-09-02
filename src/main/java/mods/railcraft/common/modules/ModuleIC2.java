@@ -31,7 +31,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
         if (!Mod.IC2.isLoaded() && !Mod.IC2_CLASSIC.isLoaded())
-            throw new MissingPrerequisiteException("Reason: IC2 not detected");
+            throw new MissingPrerequisiteException("IC2 not detected");
     }
 
     public ModuleIC2() {

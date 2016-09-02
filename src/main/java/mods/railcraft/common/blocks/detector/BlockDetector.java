@@ -83,7 +83,7 @@ public class BlockDetector extends BlockContainerRailcraft {
 
         for (EnumDetector d : EnumDetector.VALUES) {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
-            RailcraftRegistry.register(stack);
+            RailcraftRegistry.register(this, d, stack);
         }
     }
 

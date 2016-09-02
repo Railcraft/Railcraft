@@ -22,7 +22,7 @@ public class ModuleForestry extends RailcraftModulePayload {
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
         if (!Mod.FORESTRY.isLoaded())
-            throw new MissingPrerequisiteException("Forestry not installed.");
+            throw new MissingPrerequisiteException("Forestry not detected");
     }
 
     public ModuleForestry() {

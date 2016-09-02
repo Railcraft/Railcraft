@@ -9,18 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.core.InitializationConditional;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.ModItems;
-import mods.railcraft.common.modules.*;
+import mods.railcraft.common.modules.ModuleElectricity;
+import mods.railcraft.common.modules.ModuleLocomotives;
+import mods.railcraft.common.modules.ModuleSteam;
+import mods.railcraft.common.modules.ModuleThaumcraft;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -41,7 +44,6 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
@@ -59,9 +61,24 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
-    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchor.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem),
-    ANCHOR_ADMIN(3, "cart_anchor_admin", EntityCartAnchorAdmin.class, ItemCartAnchor::new),
-    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getItem),
+    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchor.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem) {
+        {
+            conditions.add(RailcraftBlocks.MACHINE_ALPHA);
+            conditions.add(EnumMachineAlpha.ANCHOR_WORLD);
+        }
+    },
+    ANCHOR_ADMIN(3, "cart_anchor_admin", EntityCartAnchorAdmin.class, ItemCartAnchor::new) {
+        {
+            conditions.add(RailcraftBlocks.MACHINE_ALPHA);
+            conditions.add(EnumMachineAlpha.ANCHOR_ADMIN);
+        }
+    },
+    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getItem) {
+        {
+            conditions.add(RailcraftBlocks.MACHINE_ALPHA);
+            conditions.add(EnumMachineAlpha.ANCHOR_PERSONAL);
+        }
+    },
     BORE(1, "bore", EntityTunnelBore.class, ItemTunnelBore::new),
     CARGO(0, "cart_cargo", EntityCartCargo.class, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
     ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
@@ -85,25 +102,25 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     // Railcraft Locomotives
     LOCO_STEAM_SOLID(1, "locomotive_steam_solid", EntityLocomotiveSteamSolid.class, ItemLocoSteamSolid::new) {
         {
-            addModule(ModuleLocomotives.class);
-            addModule(ModuleSteam.class);
+            conditions.add(ModuleLocomotives.class);
+            conditions.add(ModuleSteam.class);
         }
     },
     LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
         {
-            addModule(ModuleLocomotives.class);
-            addModule(ModuleThaumcraft.class);
+            conditions.add(ModuleLocomotives.class);
+            conditions.add(ModuleThaumcraft.class);
         }
     },
     LOCO_ELECTRIC(1, "locomotive_electric", EntityLocomotiveElectric.class, ItemLocoElectric::new) {
         {
-            addModule(ModuleLocomotives.class);
-            addModule(ModuleElectricity.class);
+            conditions.add(ModuleLocomotives.class);
+            conditions.add(ModuleElectricity.class);
         }
     },
     LOCO_CREATIVE(3, "locomotive_creative", EntityLocomotiveCreative.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA)) {
         {
-            addModule(ModuleLocomotives.class);
+            conditions.add(ModuleLocomotives.class);
         }
     },;
     @SuppressWarnings("WeakerAccess")
@@ -115,7 +132,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private final Function<RailcraftCarts, Item> itemSupplier;
     @Nullable
     private final Supplier<ItemStack> contentsSupplier;
-    private final List<Class<? extends IRailcraftModule>> modules = Lists.newArrayList();
+    protected InitializationConditional<RailcraftCarts> conditions = new InitializationConditional<>();
     private Item item;
     private boolean isSetup;
 
@@ -140,6 +157,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         this.id = (byte) entityId;
         this.rarity = (byte) rarity;
         this.type = type;
+        conditions.add(RailcraftConfig::isCartEnabled, () -> "disabled via config");
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -178,12 +196,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItem::finalizeDefinition));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    // TODO: replace with generic predicate
-    protected final void addModule(Class<? extends IRailcraftModule> module) {
-        modules.add(module);
-    }
-
     @Override
     public boolean isEqual(ItemStack stack) {
         return false;
@@ -196,7 +208,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
     @Override
     public String getEntityLocalizationTag() {
-        return "entity.railcraft." + tag.replace("_", ".");
+        return "entity.railcraft." + tag.replace("_", ".") + ".name";
     }
 
     @Override
@@ -260,6 +272,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     @Override
     public EntityMinecart makeCart(ItemStack stack, World world, double i, double j, double k) {
         try {
+            new EntityLocomotiveSteamSolid(world, 0, 0, 0);
             Constructor<? extends EntityMinecart> con = type.getConstructor(World.class, double.class, double.class, double.class);
             EntityMinecart entity = con.newInstance(world, i, j, k);
             if (entity instanceof IRailcraftCart)
@@ -300,23 +313,27 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
     @Override
     public void register() {
-        if (!isSetup && isEnabled()) {
+        if (!isSetup) {
             isSetup = true;
-            registerEntity();
-            item = itemSupplier.apply(this);
-            if (item instanceof ItemCart) {
-                ItemCart itemCart = (ItemCart) item;
-                itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + getEntityTag());
-                itemCart.setUnlocalizedName("railcraft.entity." + tag.replace("_", "."));
-                itemCart.setRarity(rarity);
-                RailcraftRegistry.register(itemCart);
+            if (isEnabled()) {
+                registerEntity();
+                item = itemSupplier.apply(this);
+                if (item instanceof ItemCart) {
+                    ItemCart itemCart = (ItemCart) item;
+                    itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + getEntityTag());
+                    itemCart.setUnlocalizedName("railcraft.entity." + tag.replace("_", "."));
+                    itemCart.setRarity(rarity);
+                    RailcraftRegistry.register((IRailcraftItem) itemCart);
 
-                itemCart.initializeDefinintion();
-                itemCart.defineRecipes();
+                    itemCart.initializeDefinintion();
+                    itemCart.defineRecipes();
+                }
+
+                if (contentsSupplier != null)
+                    CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
+            } else {
+                conditions.printFailureReason(this);
             }
-
-            if (contentsSupplier != null)
-                CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
         }
     }
 
@@ -324,9 +341,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     public boolean isEnabled() {
         if (isVanillaCart())
             return true;
-        if (modules.stream().anyMatch(m -> !RailcraftModuleManager.isModuleEnabled(m)))
-            return false;
-        return RailcraftConfig.isEntityEnabled(getEntityTag());
+        return conditions.test(this);
     }
 
     @Override
@@ -347,4 +362,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Entity{" + tag + "}";
+    }
 }

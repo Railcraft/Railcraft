@@ -33,7 +33,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
     public void initializeDefinintion() {
         for (EnumRail rail : EnumRail.VALUES) {
             ItemStack stack = new ItemStack(this, 1, rail.ordinal());
-            RailcraftRegistry.register(stack);
+            RailcraftRegistry.register(this, rail, stack);
             LootPlugin.addLoot(RailcraftItems.RAIL, rail, 6, 18, LootPlugin.Type.RAILWAY);
         }
     }

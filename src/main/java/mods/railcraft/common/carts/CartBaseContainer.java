@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
@@ -59,7 +60,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public String getName() {
-        return hasCustomName() ? getCustomNameTag() : getCartType().getEntityLocalizationTag();
+        return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
     }
 
     @Override

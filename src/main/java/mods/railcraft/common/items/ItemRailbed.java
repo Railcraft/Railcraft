@@ -27,7 +27,7 @@ public class ItemRailbed extends ItemRailcraftSubtyped {
     @Override
     public void initializeDefinintion() {
         for (EnumRailbed railbed : EnumRailbed.VALUES) {
-            RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
+            RailcraftRegistry.register(this, railbed, new ItemStack(this, 1, railbed.ordinal()));
         }
     }
 

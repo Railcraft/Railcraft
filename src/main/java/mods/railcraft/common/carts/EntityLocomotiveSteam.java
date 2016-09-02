@@ -70,9 +70,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         super(world, x, y, z);
     }
 
-    @Override
-    protected void entityInit() {
-        super.entityInit();
+    {
         setAllowedSpeeds(EnumSet.of(LocoSpeed.MAX, LocoSpeed.NORMAL, LocoSpeed.SLOWER, LocoSpeed.SLOWEST, LocoSpeed.REVERSE_SLOWEST));
 
         tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 6, Fluids.WATER.get());

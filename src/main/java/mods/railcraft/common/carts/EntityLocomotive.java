@@ -111,11 +111,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     protected EntityLocomotive(World world, double x, double y, double z) {
-        this(world);
-        setPosition(x, y + getYOffset(), z);
-        prevPosX = x;
-        prevPosY = y;
-        prevPosZ = z;
+        super(world, x, y, z);
     }
 
     @Override

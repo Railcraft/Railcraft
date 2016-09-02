@@ -35,7 +35,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
     public void initializeDefinintion() {
         for (EnumDust d : EnumDust.VALUES) {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
-            RailcraftRegistry.register(stack);
+            RailcraftRegistry.register(this, d, stack);
             ForestryPlugin.addBackpackItem("forestry.miner", stack);
             OreDictionary.registerOre(d.oreTag, stack.copy());
         }

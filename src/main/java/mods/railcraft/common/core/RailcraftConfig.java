@@ -14,6 +14,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.items.RailcraftItems;
@@ -378,8 +379,8 @@ public class RailcraftConfig {
                 + "   Record = 5\n"
                 + "   Golden Apple = 1");
 
-        loadLootProperty("tie.wood", 20);
-        loadLootProperty("tie.stone", 10);
+        loadLootProperty("part.tie.wood", 20);
+        loadLootProperty("part.tie.stone", 10);
         loadLootProperty("part.rail", 20);
         loadLootProperty("part.plate", 20);
         loadLootProperty("cart_basic", 10);
@@ -847,7 +848,8 @@ public class RailcraftConfig {
         return b;
     }
 
-    public static boolean isEntityEnabled(String tag) {
+    public static boolean isCartEnabled(IRailcraftCartContainer cart) {
+        String tag = cart.getEntityTag();
         tag = MiscTools.cleanTag(tag);
         Boolean enabled = entities.get(tag);
         if (enabled == null)
