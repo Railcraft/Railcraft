@@ -130,7 +130,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private boolean requiresTicks;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;
 
-    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
+    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Object... recipe) {
         this.module = module;
         this.numIcons = states;
         this.states = states;
@@ -247,7 +247,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
         Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.STONE);
         Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.RAIL.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
-
         Object crowbar = IToolCrowbar.ORE_TAG;
 
         switch (this) {

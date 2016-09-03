@@ -11,7 +11,7 @@ package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -57,13 +57,13 @@ public class CraftingPlugin {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);
-            if (obj instanceof IRailcraftObjectContainer) {
+            if (obj instanceof IRailcraftRecipeIngredient<?>) {
                 Object obj2 = i + 1 < recipeList.size() ? recipeList.get(i + 1) : null;
                 if (obj2 instanceof IVariantEnum) {
-                    recipeList.set(i, ((IRailcraftObjectContainer) obj).getRecipeObject((IVariantEnum) obj2));
+                    recipeList.set(i, ((IRailcraftRecipeIngredient<?>) obj).getRecipeObject((IVariantEnum) obj2));
                     recipeList.remove(i + 1);
                 } else {
-                    recipeList.set(i, ((IRailcraftObjectContainer) obj).getRecipeObject());
+                    recipeList.set(i, ((IRailcraftRecipeIngredient<?>) obj).getRecipeObject());
                 }
                 if (recipeList.get(i) == null)
                     throw new MissingIngredientException(recipeType, result);
