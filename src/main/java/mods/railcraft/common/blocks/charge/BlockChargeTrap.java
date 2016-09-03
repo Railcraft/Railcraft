@@ -117,6 +117,24 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
             EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
     }
 
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+    }
+
     /**
      * Called When an Entity Collided with the Block
      */

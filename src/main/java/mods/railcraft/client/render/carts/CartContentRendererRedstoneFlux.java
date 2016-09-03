@@ -14,7 +14,7 @@ import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -48,26 +48,17 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityC
         super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-        OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
         OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glDisable(GL11.GL_LIGHTING);
-        OpenGL.glEnable(GL11.GL_BLEND);
-        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
 
-        renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        OpenGL.glTranslatef(-0.5F, 6F / 16.0F - 0.5F, -0.5F);
 
-        OpenGL.glTranslatef(0, 0.0625f, 0);
+        JSONModelRenderer.INSTANCE.renderModel(FRAME_MODEL);
 
         float bright = 0.5F + 0.5F * (float) ((double) cart.getRF() / (double) cart.getMaxRF());
-        OpenGL.glColor4f(bright, bright, bright, 1.0f);
-
-//        CubeRenderer.render(redBlock);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255F * bright, 255F * bright);
         JSONModelRenderer.INSTANCE.renderModel(CORE_MODEL);
-
-
-        OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-//        CubeRenderer.render(leadFrame);
-        JSONModelRenderer.INSTANCE.renderModel(FRAME_MODEL);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.models.resource;
 
-import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -76,17 +75,17 @@ public class JSONModelRenderer {
         if (bakedModel == null) return;
         Minecraft mc = Minecraft.getMinecraft();
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         Tessellator tess = Tessellator.getInstance();
         VertexBuffer buffer = tess.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
         putQuads(buffer, bakedModel.getQuads(null, null, 1234));
         for (EnumFacing side : EnumFacing.VALUES) {
             putQuads(buffer, bakedModel.getQuads(null, side, 1234));
         }
 
-        OpenGL.glDisable(GL11.GL_LIGHTING);
         tess.draw();
-        OpenGL.glEnable(GL11.GL_LIGHTING);
+        mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
     }
 
     private void putQuads(VertexBuffer buffer, List<BakedQuad> quads) {
