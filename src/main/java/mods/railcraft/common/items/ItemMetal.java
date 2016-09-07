@@ -71,7 +71,6 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
             }
     }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariant(variant);

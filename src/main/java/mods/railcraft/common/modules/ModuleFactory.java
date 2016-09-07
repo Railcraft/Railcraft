@@ -302,7 +302,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             "IPI",
                             'I', "ingotIron",
                             'P', Blocks.PISTON,
-                            'C', "craftingTableWood");
+                            'C', "workbench");
                 } else
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
 

@@ -116,8 +116,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithBlocks(world, sbb, 9, 0, 10, 9, 4, 10, blockBrick, blockBrick, false);
 
         // hall molding
-        IBlockState roofSupportWest = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM);
-        IBlockState roofSupportEast = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM);
+        IBlockState roofSupportWest = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
+        IBlockState roofSupportEast = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
         fillWithBlocks(world, sbb, 5, 4, 1, 5, 4, 9, roofSupportWest, roofSupportWest, false);
         fillWithBlocks(world, sbb, 9, 4, 1, 9, 4, 9, roofSupportEast, roofSupportEast, false);
 
@@ -183,8 +183,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         // hut roof
         fillWithRandomizedBlocks(world, sbb, 1, 4, 2, 4, 4, 4, true, random, roofSelector);
         fillWithBlocks(world, sbb, 0, 4, 1, 0, 4, 5, roofEast, roofEast, false);
-        fillWithBlocks(world, sbb, 4, 1, 1, 4, 1, 3, roofNorth, roofNorth, false);
-        fillWithBlocks(world, sbb, 4, 5, 1, 4, 5, 3, roofSouth, roofSouth, false);
+        fillWithBlocks(world, sbb, 1, 4, 1, 3, 4, 1, roofNorth, roofNorth, false);
+        fillWithBlocks(world, sbb, 1, 4, 5, 3, 4, 5, roofSouth, roofSouth, false);
 
         // hut door
         fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);

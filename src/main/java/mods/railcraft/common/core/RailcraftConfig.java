@@ -379,10 +379,10 @@ public class RailcraftConfig {
                 + "   Record = 5\n"
                 + "   Golden Apple = 1");
 
-        loadLootProperty("part.tie.wood", 20);
-        loadLootProperty("part.tie.stone", 10);
-        loadLootProperty("part.rail", 20);
-        loadLootProperty("part.plate", 20);
+        loadLootProperty("tie.wood", 20);
+        loadLootProperty("tie.stone", 10);
+        loadLootProperty("rail", 20);
+        loadLootProperty("plate", 20);
         loadLootProperty("cart_basic", 10);
         loadLootProperty("cart_chest", 10);
         loadLootProperty("cart_tnt", 5);
@@ -635,7 +635,7 @@ public class RailcraftConfig {
         return recipe;
     }
 
-    public static boolean useOldRecipes() {
+    public static boolean vanillaTrackRecipes() {
         return getRecipeConfig("railcraft.track.useAltRecipes");
     }
 

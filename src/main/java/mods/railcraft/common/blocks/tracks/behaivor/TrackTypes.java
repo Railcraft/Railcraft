@@ -10,10 +10,12 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -33,7 +35,7 @@ import java.util.Locale;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum TrackTypes {
-    ABANDONED(RailcraftBlocks.TRACK_FLEX_ABANDONED.getRegistryName()) {
+    ABANDONED(RailcraftBlocks.TRACK_FLEX_ABANDONED.getRegistryName(), TrackIngredients.RAIL_STANDARD, TrackIngredients.TIE_WOOD) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -42,7 +44,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    ELECTRIC(RailcraftBlocks.TRACK_FLEX_ELECTRIC.getRegistryName()) {
+    ELECTRIC(RailcraftBlocks.TRACK_FLEX_ELECTRIC.getRegistryName(), TrackIngredients.RAIL_STANDARD, TrackIngredients.RAILBED_WOOD) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -51,7 +53,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    HIGH_SPEED(RailcraftBlocks.TRACK_FLEX_HIGH_SPEED.getRegistryName()) {
+    HIGH_SPEED(RailcraftBlocks.TRACK_FLEX_HIGH_SPEED.getRegistryName(), TrackIngredients.RAIL_SPEED, TrackIngredients.RAILBED_STONE) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -60,7 +62,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    HIGH_SPEED_ELECTRIC(RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC.getRegistryName()) {
+    HIGH_SPEED_ELECTRIC(RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC.getRegistryName(), TrackIngredients.RAIL_SPEED, TrackIngredients.RAILBED_STONE) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -70,7 +72,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    IRON(Blocks.RAIL.getRegistryName()) {
+    IRON(Blocks.RAIL.getRegistryName(), TrackIngredients.RAIL_STANDARD, TrackIngredients.RAILBED_WOOD) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -78,7 +80,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    REINFORCED(RailcraftBlocks.TRACK_FLEX_REINFORCED.getRegistryName()) {
+    REINFORCED(RailcraftBlocks.TRACK_FLEX_REINFORCED.getRegistryName(), TrackIngredients.RAIL_REINFORCED, TrackIngredients.RAILBED_STONE) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -87,7 +89,7 @@ public enum TrackTypes {
                     .build();
         }
     },
-    STRAP_IRON(RailcraftBlocks.TRACK_FLEX_STRAP_IRON.getRegistryName()) {
+    STRAP_IRON(RailcraftBlocks.TRACK_FLEX_STRAP_IRON.getRegistryName(), TrackIngredients.RAIL_STRAP_IRON, TrackIngredients.RAILBED_WOOD) {
         @Override
         protected TrackType make(TrackType.Builder builder) {
             return builder
@@ -99,8 +101,8 @@ public enum TrackTypes {
     @Nonnull
     private final TrackType trackType;
 
-    TrackTypes(ResourceLocation baseBlock) {
-        TrackType.Builder builder = new TrackType.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)), baseBlock);
+    TrackTypes(ResourceLocation baseBlock, IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed) {
+        TrackType.Builder builder = new TrackType.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)), baseBlock, rail, railbed);
         trackType = make(builder);
         TrackRegistry.TRACK_TYPE.register(trackType);
     }

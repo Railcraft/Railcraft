@@ -95,7 +95,7 @@ public class RailcraftModuleManager {
 
         // Add enabled modules to list
         List<Class<? extends IRailcraftModule>> toEnable = Lists.newArrayList();
-        List<Class<? extends IRailcraftModule>> toDisable = Lists.newArrayList();
+        TreeSet<Class<? extends IRailcraftModule>> toDisable = new TreeSet<>(Comparator.comparing(RailcraftModuleManager::getModuleName));
         for (Map.Entry<Class<? extends IRailcraftModule>, IRailcraftModule> entry : classToInstanceMapping.entrySet()) {
             if (ModuleCore.class.equals(entry.getKey()))
                 continue;
@@ -115,18 +115,18 @@ public class RailcraftModuleManager {
             toEnable.add(module.getClass());
         }
 
-        // Add modules to the load order as their dependencies become available
-        Collections.sort(toEnable, (o1, o2) -> getModuleName(o1).compareTo(getModuleName(o2)));
-        loadOrder.add(ModuleCore.class);
+        // Determine which modules are lacking dependencies
+        TreeSet<Class<? extends IRailcraftModule>> toLoad = new TreeSet<>(Comparator.comparing(RailcraftModuleManager::getModuleName));
+        toLoad.add(ModuleCore.class);
         boolean changed;
         do {
             changed = false;
             Iterator<Class<? extends IRailcraftModule>> it = toEnable.iterator();
             while (it.hasNext()) {
                 Class<? extends IRailcraftModule> moduleClass = it.next();
-                if (loadOrder.containsAll(getDependencies(moduleClass))) {
+                if (toLoad.containsAll(getDependencies(moduleClass))) {
                     it.remove();
-                    loadOrder.add(moduleClass);
+                    toLoad.add(moduleClass);
                     changed = true;
                     break;
                 }
@@ -140,7 +140,23 @@ public class RailcraftModuleManager {
 
         // Add modules missing dependencies to the disabled list
         toDisable.addAll(toEnable);
-        Collections.sort(toDisable, (o1, o2) -> getModuleName(o1).compareTo(getModuleName(o2)));
+
+        // Build and sort loadOrder
+        toLoad.remove(ModuleCore.class);
+        loadOrder.add(ModuleCore.class);
+        do {
+            changed = false;
+            Iterator<Class<? extends IRailcraftModule>> it = toLoad.iterator();
+            while (it.hasNext()) {
+                Class<? extends IRailcraftModule> moduleClass = it.next();
+                if (loadOrder.containsAll(getAllDependencies(moduleClass))) {
+                    it.remove();
+                    loadOrder.add(moduleClass);
+                    changed = true;
+                    break;
+                }
+            }
+        } while (changed);
 
         // Add the valid modules to the enabled list in the load order
         enabledModules.addAll(loadOrder);
@@ -165,6 +181,24 @@ public class RailcraftModuleManager {
         for (String dependency : dependencies) {
             dependencyClasses.add(nameToClassMapping.get(dependency));
         }
+        return dependencyClasses;
+    }
+
+    private static Set<Class<? extends IRailcraftModule>> getSoftDependencies(Class<? extends IRailcraftModule> moduleClass) {
+        RailcraftModule annotation = moduleClass.getAnnotation(RailcraftModule.class);
+        String[] dependencies = annotation.softDependencies();
+        Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
+        dependencyClasses.addAll(Arrays.asList(annotation.softDependencyClasses()));
+        for (String dependency : dependencies) {
+            dependencyClasses.add(nameToClassMapping.get(dependency));
+        }
+        return dependencyClasses;
+    }
+
+    private static Set<Class<? extends IRailcraftModule>> getAllDependencies(Class<? extends IRailcraftModule> moduleClass) {
+        Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
+        dependencyClasses.addAll(getDependencies(moduleClass));
+        dependencyClasses.addAll(getSoftDependencies(moduleClass));
         return dependencyClasses;
     }
 

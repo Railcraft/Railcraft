@@ -24,18 +24,16 @@ public class ModuleTracks extends RailcraftModulePayload {
                 add(
                         RailcraftItems.TRACK_KIT,
                         RailcraftBlocks.TRACK_OUTFITTED,
-                        RailcraftBlocks.TRACK_JUNCTION_IRON,
+//                        RailcraftBlocks.TRACK_JUNCTION_IRON,
                         TrackKits.ACTIVATOR,
                         TrackKits.BOOSTER,
                         TrackKits.BUFFER_STOP,
                         TrackKits.CONTROL,
                         TrackKits.DETECTOR,
-                        TrackKits.DETECTOR_TRAVEL,
                         TrackKits.DISEMBARK,
                         TrackKits.DUMPING,
                         TrackKits.EMBARKING,
                         TrackKits.GATED,
-                        TrackKits.GATED_ONE_WAY,
                         TrackKits.LOCKING,
                         TrackKits.ONE_WAY
                 );

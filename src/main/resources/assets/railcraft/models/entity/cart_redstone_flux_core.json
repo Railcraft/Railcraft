@@ -1,7 +1,7 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "#all",
+    "particle": "railcraft:entities/carts/cart_redstone_flux_core",
     "all": "railcraft:entities/carts/cart_redstone_flux_core"
   },
   "elements": [

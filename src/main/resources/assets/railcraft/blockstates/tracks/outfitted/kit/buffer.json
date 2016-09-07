@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:buffer_stop"
+  },
+  "variants": {
+    "shape=east_west,state=1": [{"y": 270}],
+    "state": {
+      "0": {},
+      "1": {"y": 180}
+    },
+    "shape": {
+      "north_south": {},
+      "east_west": {"y": 90},
+      "ascending_east": {},
+      "ascending_west": {},
+      "ascending_north": {},
+      "ascending_south": {}
+    }
+  }
+}

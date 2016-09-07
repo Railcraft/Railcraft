@@ -45,7 +45,8 @@ public class ModuleStructures extends RailcraftModulePayload {
                 }
                 add(
                         RailcraftItems.STONE_CARVER, // TODO: this can probably be removed once recipes are working right
-                        RailcraftBlocks.GLASS
+                        RailcraftBlocks.GLASS,
+                        RailcraftBlocks.GENERIC
 //                        RailcraftBlocks.post,
 //                        RailcraftBlocks.postMetal,
 //                        RailcraftBlocks.postMetalPlatform,
@@ -63,7 +64,6 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CONCRETE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.GENERIC.register();
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
@@ -71,10 +71,11 @@ public class ModuleStructures extends RailcraftModulePayload {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
-                                    "ISI",
+                                    "IWI",
                                     "SIS",
-                                    'I', RailcraftItems.REBAR.getRecipeObject(),
-                                    'S', "stone");
+                                    'W', Items.WATER_BUCKET,
+                                    'I', RailcraftItems.REBAR,
+                                    'S', RailcraftItems.CONCRETE);
                         } else {
                             stack.stackSize = 4;
                             CraftingPlugin.addRecipe(stack,
@@ -82,14 +83,13 @@ public class ModuleStructures extends RailcraftModulePayload {
                                     "SIS",
                                     " S ",
                                     'I', "ingotIron",
-                                    'S', "stone");
+                                    'S', RailcraftItems.CONCRETE);
                         }
                     }
                 }
 
                 cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.GENERIC.register();
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();

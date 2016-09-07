@@ -10,26 +10,37 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.ITrackKitEmitter;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartCommandBlock;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmitter {
     private byte delay;
+    private Mode mode = Mode.BI_DIRECTIONAL;
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -38,7 +49,20 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
 
     @Override
     public int getRenderState() {
-        return delay > 0 ? 1 : 0;
+        int state = mode.ordinal();
+        if (delay > 0)
+            state += Mode.VALUES.length;
+        return state;
+    }
+
+    @Override
+    public boolean onCrowbarWhack(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (player.isSneaking())
+            mode = EnumTools.previous(mode, Mode.VALUES);
+        else
+            mode = EnumTools.next(mode, Mode.VALUES);
+        markBlockNeedsUpdate();
+        return true;
     }
 
     @Override
@@ -47,7 +71,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
             return;
         }
         if (delay > 0) {
-            updatePowerState();
+            mode.updatePowerState(this);
             delay--;
             if (delay == 0)
                 notifyNeighbors();
@@ -56,7 +80,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        updatePowerState();
+        mode.updatePowerState(this);
     }
 
     protected void notifyNeighbors() {
@@ -64,12 +88,6 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
         world.notifyNeighborsOfStateChange(getPos(), getTile().getBlockType());
         world.notifyNeighborsOfStateChange(getPos().down(), getTile().getBlockType());
         sendUpdateToClient();
-    }
-
-    protected void updatePowerState() {
-        List<EntityMinecart> carts = findCarts();
-        if (!carts.isEmpty())
-            setTrackPowering();
     }
 
     protected List<EntityMinecart> findCarts() {
@@ -131,15 +149,68 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(delay);
+        ((RailcraftOutputStream) data).writeEnum(mode);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         byte delayData = data.readByte();
+        boolean update = false;
         if ((delay == 0) != (delayData == 0)) {
             delay = delayData;
+            update = true;
+        }
+        Mode m = ((RailcraftInputStream) data).readEnum(Mode.VALUES);
+        if (mode != m) {
+            mode = m;
+            update = true;
+        }
+        if (update)
             markBlockNeedsUpdate();
+    }
+
+    private enum Mode {
+        BI_DIRECTIONAL {
+            @Override
+            protected void updatePowerState(TrackKitDetector detector) {
+                List<EntityMinecart> carts = detector.findCarts();
+                if (!carts.isEmpty())
+                    detector.setTrackPowering();
+            }
+        },
+        TRAVEL {
+            @Override
+            protected void updatePowerState(TrackKitDetector detector) {
+                updatePowerState(detector, false);
+            }
+        },
+        TRAVEL_REVERSED {
+            @Override
+            protected void updatePowerState(TrackKitDetector detector) {
+                updatePowerState(detector, true);
+            }
+        };
+        private static final Mode[] VALUES = values();
+
+        protected abstract void updatePowerState(TrackKitDetector detector);
+
+        protected void updatePowerState(TrackKitDetector detector, boolean reversed) {
+            List<EntityMinecart> carts = detector.findCarts();
+            if (!carts.isEmpty()) {
+                BlockRailBase.EnumRailDirection shape = detector.getRailDirection();
+                Predicate<EntityMinecart> isTravelling;
+                if (TrackShapeHelper.isEastWest(shape))
+                    isTravelling = cart -> reversed ? cart.motionX < 0.0D : cart.motionX > 0.0D;
+                else
+                    isTravelling = cart -> reversed ? cart.motionZ > 0.0D : cart.motionZ < 0.0D;
+                for (EntityMinecart cart : carts) {
+                    if (isTravelling.test(cart)) {
+                        detector.setTrackPowering();
+                        return;
+                    }
+                }
+            }
         }
     }
 }

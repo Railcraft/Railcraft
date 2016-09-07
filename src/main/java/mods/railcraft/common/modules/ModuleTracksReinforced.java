@@ -20,8 +20,8 @@ public class ModuleTracksReinforced extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_FLEX_REINFORCED,
-                        RailcraftBlocks.TRACK_JUNCTION_REINFORCED
+                        RailcraftBlocks.TRACK_FLEX_REINFORCED
+//                        RailcraftBlocks.TRACK_JUNCTION_REINFORCED
                 );
 //                add(RailcraftBlocks.track);
             }

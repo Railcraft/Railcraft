@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:train")
+@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class)
 public class ModuleTrain extends RailcraftModulePayload {
 
     public ModuleTrain() {

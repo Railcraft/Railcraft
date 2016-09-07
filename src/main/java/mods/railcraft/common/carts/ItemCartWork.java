@@ -29,7 +29,7 @@ public class ItemCartWork extends ItemCart {
         CraftingPlugin.addRecipe(getStack(),
                 "B",
                 "M",
-                'B', "craftingTableWood",
+                'B', "workbench",
                 'M', Items.MINECART);
     }
 

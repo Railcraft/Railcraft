@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -182,6 +183,17 @@ public class TrackTools {
 //        return (tile instanceof TileTrackOutfitted) && trackClass.isAssignableFrom(((TileTrackOutfitted) tile).getTrackKitInstance().getClass());
 //    }
 
+    public static void traverseConnectedTracks(World world, BlockPos pos, BiFunction<World, BlockPos, Boolean> action) {
+        _traverseConnectedTracks(world, pos, action, new HashSet<>());
+    }
+
+    private static void _traverseConnectedTracks(World world, BlockPos pos, BiFunction<World, BlockPos, Boolean> action, Set<BlockPos> visited) {
+        visited.add(pos);
+        if (!action.apply(world, pos))
+            return;
+        getConnectedTracks(world, pos).stream().filter(p -> !visited.contains(p)).forEach(p -> _traverseConnectedTracks(world, p, action, visited));
+    }
+
     public static Set<BlockPos> getConnectedTracks(IBlockAccess world, BlockPos pos) {
         Set<BlockPos> connectedTracks = new HashSet<>();
         EnumRailDirection shape;
@@ -205,10 +217,8 @@ public class TrackTools {
         if (shape.isAscending() && isRailBlockAt(world, up))
             return up;
         BlockPos down = pos.down();
-        if (isRailBlockAt(world, down)) {
-            if (getTrackDirectionRaw(world, down).isAscending())
-                return down;
-        }
+        if (isRailBlockAt(world, down) && getTrackDirectionRaw(world, down).isAscending())
+            return down;
         return null;
     }
 

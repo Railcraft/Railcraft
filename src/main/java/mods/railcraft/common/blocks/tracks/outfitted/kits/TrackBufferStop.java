@@ -29,6 +29,8 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     private static final float CBOX = -0.0625f;
     private static final float SBOX = -0.0625f * 3;
     private static final float SBOXY = -0.0625f * 5;
+    private static final AxisAlignedBB SELECTION_BOX = AABBFactory.start().box().expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
+    private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(CBOX).build();
     private boolean reversed;
 
     @Override
@@ -36,16 +38,14 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
         return TrackKits.BUFFER_STOP;
     }
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(REVERSED, reversed);
-//        return state;
-//    }
+    @Override
+    public int getRenderState() {
+        return reversed ? 1 : 0;
+    }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AABBFactory.start().createBoxForTileAt(getPos()).expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
+        return SELECTION_BOX;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
-        return AABBFactory.start().createBoxForTileAt(getPos()).expandHorizontally(CBOX).build();
+        return COLLISION_BOX;
     }
 
     @Override

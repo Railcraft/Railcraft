@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted;
 
+import com.google.common.collect.ObjectArrays;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackKit;
@@ -30,34 +31,35 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<TrackKit>> {
 
-    ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitActivator.class),
-    BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class),
-    BUFFER_STOP(ModuleTracks.class, 2, "buffer", 8, TrackBufferStop.class),
-    CONTROL(ModuleTracks.class, 2, "control", 16, TrackKitControl.class),
-    COUPLER(ModuleTracks.class, 6, "coupler", 8, TrackKitCoupler.class),
-    DETECTOR(ModuleTracks.class, 2, "detector", 8, TrackKitDetector.class),
-    DETECTOR_TRAVEL(ModuleTracks.class, 4, "detector_travel", 8, TrackKitDetectorTravel.class),
-    DISEMBARK(ModuleTracks.class, 4, "disembarking", 8, TrackKitDisembark.class),
-    DUMPING(ModuleTracks.class, 2, "dumping", 8, TrackKitDumping.class),
-    EMBARKING(ModuleTracks.class, 2, "embarking", 8, TrackKitEmbarking.class),
-    GATED(ModuleTracks.class, 4, "gated", 4, TrackKitGated.class),
-    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
-    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, "transition", 8, TrackKitSpeedTransition.class),
-    LAUNCHER(ModuleExtras.class, 2, "launcher", 1, TrackKitLauncher.class),
-    LIMITER(ModuleLocomotives.class, 14, "limiter", 8, TrackKitLimiter.class),
-    LOCKING(ModuleTracks.class, 16, "locking", 8, TrackKitLocking.class),
-    LOCOMOTIVE(ModuleLocomotives.class, 6, "locomotive", 8, TrackKitLocomotive.class),
-    ONE_WAY(ModuleTracks.class, 4, "one_way", 8, TrackKitOneWay.class),
-    PRIMING(ModuleExtras.class, 2, "priming", 8, TrackKitPriming.class),
-    ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class),
-    WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class),
+    ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitActivator.class, () -> recipe(Items.REDSTONE, Items.REDSTONE)),
+    BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
+    BUFFER_STOP(ModuleTracks.class, 2, "buffer", 8, TrackBufferStop.class, () -> recipe("ingotIron", "ingotIron")),
+    CONTROL(ModuleTracks.class, 2, "control", 16, TrackKitControl.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
+    COUPLER(ModuleTracks.class, 6, "coupler", 8, TrackKitCoupler.class, () -> recipe(Items.LEAD, Items.REDSTONE)),
+    DETECTOR(ModuleTracks.class, 6, "detector", 8, TrackKitDetector.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Items.REDSTONE)),
+    DISEMBARK(ModuleTracks.class, 4, "disembarking", 8, TrackKitDisembark.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Items.LEAD, Items.REDSTONE)),
+    DUMPING(ModuleTracks.class, 2, "dumping", 8, TrackKitDumping.class, () -> recipe(RailcraftItems.PLATE, Metal.STEEL, Items.REDSTONE)),
+    EMBARKING(ModuleTracks.class, 2, "embarking", 8, TrackKitEmbarking.class, () -> recipe(Items.ENDER_PEARL, Items.LEAD, Items.REDSTONE)),
+    GATED(ModuleTracks.class, 4, "gated", 4, TrackKitGated.class, () -> recipe("gateWood", RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
+    //    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
+    HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, "transition", 8, TrackKitSpeedTransition.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE, Items.REDSTONE)),
+    LAUNCHER(ModuleExtras.class, 2, "launcher", 1, TrackKitLauncher.class, () -> recipe(Blocks.PISTON, "blockSteel", "blockSteel", Items.REDSTONE)),
+    LIMITER(ModuleLocomotives.class, 14, "limiter", 8, TrackKitLimiter.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
+    LOCKING(ModuleTracks.class, 16, "locking", 8, TrackKitLocking.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.STICKY_PISTON, Items.REDSTONE)),
+    LOCOMOTIVE(ModuleLocomotives.class, 6, "locomotive", 8, TrackKitLocomotive.class, () -> recipe(RailcraftItems.SIGNAL_LAMP, Items.REDSTONE)),
+    ONE_WAY(ModuleTracks.class, 4, "one_way", 8, TrackKitOneWay.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.PISTON, Items.REDSTONE)),
+    PRIMING(ModuleExtras.class, 2, "priming", 8, TrackKitPriming.class, () -> recipe(Items.FLINT_AND_STEEL, Items.REDSTONE)),
+    ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
+    WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
 //    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
 //    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
 //    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
@@ -73,7 +75,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
 
         DETECTOR.requiresTicks = true;
-        DETECTOR_TRAVEL.requiresTicks = true;
         LOCKING.requiresTicks = true;
 
         BUFFER_STOP.allowedOnSlopes = false;
@@ -81,7 +82,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         DUMPING.allowedOnSlopes = false;
         EMBARKING.allowedOnSlopes = false;
         GATED.allowedOnSlopes = false;
-        GATED_ONE_WAY.allowedOnSlopes = false;
+//        GATED_ONE_WAY.allowedOnSlopes = false;
         LAUNCHER.allowedOnSlopes = false;
         LOCKING.allowedOnSlopes = false;
 
@@ -94,28 +95,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         BUFFER_STOP.trackTypeFilter = NOT_HIGH_SPEED;
         HIGH_SPEED_TRANSITION.trackTypeFilter = IS_HIGH_SPEED;
 
-//        creativeList.add(SWITCH);
-//        creativeList.add(WYE);
-//        creativeList.add(JUNCTION);
-        creativeList.add(CONTROL);
-        creativeList.add(LOCKING);
-        creativeList.add(DISEMBARK);
-        creativeList.add(EMBARKING);
-        creativeList.add(COUPLER);
-        creativeList.add(WHISTLE);
-        creativeList.add(LOCOMOTIVE);
-        creativeList.add(LIMITER);
-        creativeList.add(ROUTING);
-        creativeList.add(BUFFER_STOP);
-        creativeList.add(ONE_WAY);
-        creativeList.add(DETECTOR_TRAVEL);
-        creativeList.add(GATED_ONE_WAY);
-        creativeList.add(GATED);
-        creativeList.add(DUMPING);
-        creativeList.add(BOOSTER);
-        creativeList.add(HIGH_SPEED_TRANSITION);
-        creativeList.add(PRIMING);
-        creativeList.add(LAUNCHER);
+        DUMPING.maxSupportDistance = 2;
     }
 
     public final int recipeOutput;
@@ -124,19 +104,26 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private final int numIcons;
     private final int states;
     private final Class<? extends TrackKitRailcraft> trackInstance;
+    private final Supplier<List<Object[]>> recipeSupplier;
     private TrackKit trackKit;
     private boolean depreciated;
     private boolean allowedOnSlopes = true;
     private boolean requiresTicks;
+    private int maxSupportDistance;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;
 
-    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Object... recipe) {
+    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
+        this(module, states, tag, recipeOutput, trackInstance, Collections::emptyList);
+    }
+
+    TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Supplier<List<Object[]>> recipeSupplier) {
         this.module = module;
         this.numIcons = states;
         this.states = states;
         this.tag = tag;
         this.recipeOutput = recipeOutput;
         this.trackInstance = trackInstance;
+        this.recipeSupplier = recipeSupplier;
     }
 
     public static TrackKits fromId(int id) {
@@ -145,8 +132,18 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         return TrackKits.values()[id];
     }
 
-    public static List<TrackKits> getCreativeList() {
-        return creativeList;
+    public static Object[] craft(Object... recipe) {
+        return recipe;
+    }
+
+    public static List<Object[]> recipes(Object[]... recipes) {
+        return Arrays.asList(recipes);
+    }
+
+    public static List<Object[]> recipe(Object... recipe) {
+        List<Object[]> list = new ArrayList<>();
+        list.add(recipe);
+        return list;
     }
 
     public static Collection<TrackKit> getRailcraftTrackKits() {
@@ -155,6 +152,8 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     @Override
     public void register() {
+        if (!RailcraftItems.TRACK_KIT.isLoaded() || !RailcraftModuleManager.isModuleEnabled(ModuleTracks.class))
+            return;
         //TODO: Add way to disable track kits
         if (trackKit == null) {
             TrackKit.Builder builder = new TrackKit.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
@@ -162,6 +161,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
             builder.setRenderStates(states);
             builder.setAllowedOnSlopes(allowedOnSlopes);
             builder.setTrackTypeFilter(trackTypeFilter);
+            builder.setMaxSupportDistance(maxSupportDistance);
             trackKit = builder.build();
             try {
                 TrackRegistry.TRACK_KIT.register(trackKit);
@@ -169,6 +169,15 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 //                registerRecipe();
             } catch (Error error) {
                 Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
+                return;
+            }
+            List<Object[]> recipes = recipeSupplier.get();
+            if (recipes != null) {
+                recipes.stream().filter(ArrayUtils::isNotEmpty).forEach(recipe -> {
+                    Object[] commonIngredients = {"plankWood", RailcraftItems.TRACK_PARTS};
+                    Object[] finalRecipe = ObjectArrays.concat(commonIngredients, recipe, Object.class);
+                    CraftingPlugin.addShapelessRecipe(trackKit.getTrackKitItem(), finalRecipe);
+                });
             }
             //TODO: Should we register outfitted track items?
 //            ItemStack stack = getTrackKitSpec().getItem();
@@ -237,16 +246,16 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         if (getStack() == null)
             return null;
         ItemStack output = getStack(recipeOutput * 2);
-        Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.RAIL.getRecipeObject(EnumRail.WOOD);
-        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD);
-        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.ADVANCED);
-        Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.SPEED);
-        Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.REINFORCED);
-        Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.RAIL.getRecipeObject(EnumRail.ELECTRIC);
+        Object railWood = RailcraftConfig.vanillaTrackRecipes() ? "slabWood" : RailcraftItems.RAIL.getRecipeObject(EnumRail.WOOD);
+        Object railStandard = RailcraftConfig.vanillaTrackRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD);
+        Object railAdvanced = RailcraftConfig.vanillaTrackRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.RAIL.getRecipeObject(EnumRail.ADVANCED);
+        Object railSpeed = RailcraftConfig.vanillaTrackRecipes() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.SPEED);
+        Object railReinforced = RailcraftConfig.vanillaTrackRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(EnumRail.REINFORCED);
+        Object railElectric = RailcraftConfig.vanillaTrackRecipes() ? "ingotCopper" : RailcraftItems.RAIL.getRecipeObject(EnumRail.ELECTRIC);
         Object woodTie = RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD);
-        Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
-        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.STONE);
-        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.RAIL.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
+        Object woodRailbed = RailcraftConfig.vanillaTrackRecipes() ? "stickWood" : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
+        Object stoneRailbed = RailcraftConfig.vanillaTrackRecipes() ? Blocks.STONE_SLAB : RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.STONE);
+        Object reinforcedRailbed = RailcraftConfig.vanillaTrackRecipes() || !RailcraftItems.RAIL.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
         Object crowbar = IToolCrowbar.ORE_TAG;
 
         switch (this) {
@@ -500,16 +509,16 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
                         '#', woodRailbed,
                         'b', "blockIron");
                 break;
-            case DETECTOR_TRAVEL:
-                CraftingPlugin.addRecipe(output,
-                        "IrI",
-                        "I#I",
-                        "IsI",
-                        'I', railStandard,
-                        '#', woodRailbed,
-                        'r', "dustRedstone",
-                        's', Blocks.STONE_PRESSURE_PLATE);
-                break;
+//            case DETECTOR_TRAVEL:
+//                CraftingPlugin.addRecipe(output,
+//                        "IrI",
+//                        "I#I",
+//                        "IsI",
+//                        'I', railStandard,
+//                        '#', woodRailbed,
+//                        'r', "dustRedstone",
+//                        's', Blocks.STONE_PRESSURE_PLATE);
+//                break;
             case GATED:
                 CraftingPlugin.addRecipe(output,
                         "IgI",
@@ -519,16 +528,16 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
                         '#', woodRailbed,
                         'g', Blocks.OAK_FENCE_GATE);
                 break;
-            case GATED_ONE_WAY:
-                CraftingPlugin.addRecipe(output,
-                        "IgI",
-                        "G#G",
-                        "IgI",
-                        'I', railStandard,
-                        '#', woodRailbed,
-                        'g', Blocks.OAK_FENCE_GATE,
-                        'G', railAdvanced);
-                break;
+//            case GATED_ONE_WAY:
+//                CraftingPlugin.addRecipe(output,
+//                        "IgI",
+//                        "G#G",
+//                        "IgI",
+//                        'I', railStandard,
+//                        '#', woodRailbed,
+//                        'g', Blocks.OAK_FENCE_GATE,
+//                        'G', railAdvanced);
+//                break;
             case COUPLER:
                 CraftingPlugin.addRecipe(output,
                         "IcI",

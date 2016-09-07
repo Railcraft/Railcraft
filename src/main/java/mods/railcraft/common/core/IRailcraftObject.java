@@ -41,6 +41,11 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     @Nullable
+    default ItemStack getStack(int qty) {
+        return getStack(qty, null);
+    }
+
+    @Nullable
     default ItemStack getStack(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }
@@ -57,7 +62,7 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
             return new ItemStack((Item) this, qty, meta);
         if (this instanceof Block)
             return new ItemStack((Block) this, qty, meta);
-        return null;
+        throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
     @Nullable

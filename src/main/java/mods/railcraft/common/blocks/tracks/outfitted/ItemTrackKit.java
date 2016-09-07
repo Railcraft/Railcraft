@@ -56,6 +56,7 @@ public class ItemTrackKit extends ItemRailcraft {
     public void initializeDefinintion() {
         TrackKit.itemKit = this;
         setCreativeTab(CreativeTabs.TRANSPORTATION);
+        setHasSubtypes(true);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class ItemTrackKit extends ItemRailcraft {
         return getMetadata(stack);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    @Nullable
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         if (variant != null) {
             checkVariant(variant);
@@ -121,6 +122,7 @@ public class ItemTrackKit extends ItemRailcraft {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        playerIn.swingArm(hand);
         if (Game.isClient(worldIn))
             return EnumActionResult.PASS;
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);

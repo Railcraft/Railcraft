@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import java.util.Locale;
@@ -40,9 +41,10 @@ public class ItemTie extends ItemRailcraftSubtyped {
         ItemStack tieStone = RailcraftItems.TIE.getStack(1, EnumTie.STONE);
         CraftingPlugin.addRecipe(tieStone,
                 " O ",
-                "###",
-                'O', RailcraftItems.REBAR,
-                '#', new ItemStack(Blocks.STONE_SLAB, 1, 0));
+                "#r#",
+                'O', Items.WATER_BUCKET,
+                'r', RailcraftItems.REBAR,
+                '#', RailcraftItems.CONCRETE);
     }
 
     @Override

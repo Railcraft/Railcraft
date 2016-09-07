@@ -2,12 +2,81 @@
   "forge_marker": 1,
   "defaults": {
     "model": "rail_flat",
-    "textures": {
-      "rail": "railcraft:blocks/tracks/flex/abandoned_flat"
-    },
     "transform": "forge:default-block"
   },
   "variants": {
+    "shape=north_south": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
+    "shape=east_west": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
+    "shape=ascending_east": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
+    "shape=ascending_west": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
+    "shape=ascending_north": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
+    "shape=ascending_south": [
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_0"
+        }
+      },
+      {
+        "textures": {
+          "rail": "railcraft:blocks/tracks/flex/abandoned_flat_1"
+        }
+      }
+    ],
     "shape": {
       "north_south": {
         "model": "rail_flat"

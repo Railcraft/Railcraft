@@ -106,8 +106,8 @@ public class BlockTrackElevator extends BlockRailcraft {
                 "IRI",
                 "ISI",
                 "IRI",
-                'I', RailcraftConfig.useOldRecipes() ? "ingotGold" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
-                'S', RailcraftConfig.useOldRecipes() ? "ingotIron" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
+                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
                 'R', "dustRedstone");
     }
 

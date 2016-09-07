@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -31,6 +32,8 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 /**
  * Created by CovertJaguar on 8/29/2016 for Railcraft.
@@ -91,21 +94,52 @@ public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrac
             breakRail(world, pos);
     }
 
+    public int getMaxSupportedDistance(World worldIn, BlockPos pos) {
+        return getTrackType(worldIn, pos).getMaxSupportDistance();
+    }
+
+    protected boolean isRailValid(IBlockState state, World world, BlockPos pos, int maxSupportedDistance) {
+        boolean valid = true;
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
+        if (!TrackSupportTools.isSupported(world, pos, maxSupportedDistance))
+            valid = false;
+        if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
+            valid = false;
+        else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
+            valid = false;
+        else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
+            valid = false;
+        else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
+            valid = false;
+        return valid;
+    }
+
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        TrackType trackType = getTrackType(worldIn, pos);
-        if (trackType.getMaxSupportDistance() > 0) {
-            if (TrackSupportTools.isSupported(worldIn, pos, trackType.getMaxSupportDistance())) {
-                if (neighborBlock != this) {
-                    for (BlockPos connectedTrack : TrackTools.getConnectedTracks(worldIn, pos)) {
-                        worldIn.notifyBlockOfStateChange(connectedTrack, this);
-                    }
-                }
-            } else
-                breakRail(worldIn, pos);
-        } else {
-            super.neighborChanged(state, worldIn, pos, neighborBlock);
+        if (Game.isClient(worldIn))
+            return;
+        if (!isRailValid(state, worldIn, pos, getMaxSupportedDistance(worldIn, pos))) {
+            breakRail(worldIn, pos);
+            return;
         }
+        updateState(state, worldIn, pos, neighborBlock);
+        TrackTools.traverseConnectedTracks(worldIn, pos, (w, p) -> {
+            IBlockState s = WorldPlugin.getBlockState(w, p);
+            Block b = s.getBlock();
+            if (!TrackTools.isRailBlock(s))
+                return false;
+            if (b instanceof BlockTrack) {
+                BlockTrack track = (BlockTrack) b;
+                int maxSupportedDistance = track.getMaxSupportedDistance(w, p);
+                if (maxSupportedDistance <= 0 || TrackSupportTools.isSupportedDirectly(w, p))
+                    return false;
+                if (!track.isRailValid(s, w, p, maxSupportedDistance)) {
+                    breakRail(w, p);
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     @Override

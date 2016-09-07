@@ -57,7 +57,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     @Override
     public String toString() {
-        return "Railcraft Module: " + getClass().getAnnotation(RailcraftModule.class).value();
+        return "RailcraftModule{" + getClass().getAnnotation(RailcraftModule.class).value() + "}";
     }
 
     private final class BaseModuleEventHandler extends ModuleEventHandler {

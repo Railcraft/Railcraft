@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -65,10 +66,9 @@ public class ItemRail extends ItemRailcraftSubtyped {
 
         // Advanced
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.ADVANCED),
-                "IRG",
-                "IRG",
-                "IRG",
-                'I', item.getRecipeObject(EnumRail.STANDARD),
+                "R G",
+                "R G",
+                "R G",
                 'R', new ItemStack(Items.REDSTONE),
                 'G', new ItemStack(Items.GOLD_INGOT));
 
@@ -96,17 +96,16 @@ public class ItemRail extends ItemRailcraftSubtyped {
 
         // Electric
         recipe = new ShapedOreRecipe(item.getStack(6, EnumRail.ELECTRIC),
-                "ICI",
-                "ICI",
-                "ICI",
-                'I', item.getRecipeObject(EnumRail.STANDARD),
-                'C', "ingotCopper");
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotCopper");
         RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
     }
 
     public enum EnumRail implements IVariantEnum {
 
-        STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED("ingotSteel"), ELECTRIC("ingotCopper");
+        STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED(Blocks.OBSIDIAN), ELECTRIC("ingotCopper");
         public static final EnumRail[] VALUES = values();
         private Object alternate;
 

@@ -27,6 +27,10 @@ public abstract class BlockTrackStateless extends BlockTrack {
         setResistance(trackType.getResistance());
     }
 
+    public TrackType getTrackType() {
+        return trackType;
+    }
+
     @Override
     public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
         return trackType;

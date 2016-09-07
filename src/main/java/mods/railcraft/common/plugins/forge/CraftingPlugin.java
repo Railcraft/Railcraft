@@ -10,8 +10,8 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.Lists;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -57,13 +57,13 @@ public class CraftingPlugin {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);
-            if (obj instanceof IRailcraftRecipeIngredient<?>) {
+            if (obj instanceof IRailcraftRecipeIngredient) {
                 Object obj2 = i + 1 < recipeList.size() ? recipeList.get(i + 1) : null;
                 if (obj2 instanceof IVariantEnum) {
-                    recipeList.set(i, ((IRailcraftRecipeIngredient<?>) obj).getRecipeObject((IVariantEnum) obj2));
+                    recipeList.set(i, ((IRailcraftRecipeIngredient) obj).getRecipeObject((IVariantEnum) obj2));
                     recipeList.remove(i + 1);
                 } else {
-                    recipeList.set(i, ((IRailcraftRecipeIngredient<?>) obj).getRecipeObject());
+                    recipeList.set(i, ((IRailcraftRecipeIngredient) obj).getRecipeObject());
                 }
                 if (recipeList.get(i) == null)
                     throw new MissingIngredientException(recipeType, result);
@@ -92,8 +92,8 @@ public class CraftingPlugin {
         if (result == null || result.stackSize <= 0) {
             throw new InvalidRecipeException("Tried to define invalid {0} recipe, the result was null or zero. Skipping", recipeType);
         }
-        recipeArray = cleanRecipeArray(RecipeType.SHAPED, result, recipeArray);
-        boolean isOreRecipe = isOreRecipe(RecipeType.SHAPED, result, recipeArray);
+        recipeArray = cleanRecipeArray(recipeType, result, recipeArray);
+        boolean isOreRecipe = isOreRecipe(recipeType, result, recipeArray);
         return new ProcessedRecipe(isOreRecipe, result, recipeArray);
     }
 
@@ -206,6 +206,23 @@ public class CraftingPlugin {
         }
 
         return grid;
+    }
+
+    @Nullable
+    public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
+        Object object = ingredient.getRecipeObject();
+        if (object instanceof ItemStack) {
+            ItemStack stack = ((ItemStack) object).copy();
+            stack.stackSize = qty;
+            return stack;
+        }
+        if (object instanceof Item)
+            return new ItemStack((Item) object, qty);
+        if (object instanceof Block)
+            return new ItemStack((Block) object, qty);
+        if (object instanceof String)
+            return OreDictPlugin.getOre((String) object, qty);
+        throw new RuntimeException("Unknown ingredient object");
     }
 
     public enum RecipeType {

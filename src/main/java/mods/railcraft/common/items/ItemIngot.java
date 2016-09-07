@@ -26,6 +26,7 @@ public class ItemIngot extends ItemMetal {
 
     @Override
     public void initializeDefinintion() {
+        super.initializeDefinintion();
         for (Metal m : getMetalBiMap().values()) {
             LootPlugin.addLootUnique(RailcraftItems.INGOT, m, 5, 9, LootPlugin.Type.TOOL);
         }

@@ -12,8 +12,14 @@ package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.BlockTrackStateless;
+import mods.railcraft.common.blocks.tracks.TrackConstants;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 8/2/2016 for Railcraft.
@@ -31,4 +37,27 @@ public class BlockTrackFlex extends BlockTrackStateless {
         return BlockRail.SHAPE;
     }
 
+    @Override
+    public final void defineRecipes() {
+        defineTrackRecipe();
+        if (!RailcraftConfig.vanillaTrackRecipes()) {
+            Object[] tracks = new Object[Math.round((float) Math.ceil(((float) TrackConstants.FLEX_RECIPE_OUTPUT) / 6F))];
+            Arrays.fill(tracks, getStack());
+            CraftingPlugin.addShapelessRecipe(CraftingPlugin.getIngredientStack(getTrackType().getRail(), 1), tracks);
+        }
+    }
+
+    protected void defineTrackRecipe() {
+        CraftingPlugin.addRecipe(getRecipeOutput(),
+                "I I",
+                "I#I",
+                "I I",
+                'I', getTrackType().getRail(),
+                '#', getTrackType().getRailbed());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public ItemStack getRecipeOutput() {
+        return getStack(TrackConstants.FLEX_RECIPE_OUTPUT);
+    }
 }

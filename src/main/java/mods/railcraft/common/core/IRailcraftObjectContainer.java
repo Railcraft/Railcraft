@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -22,7 +23,7 @@ import java.util.Optional;
  *
  * Created by CovertJaguar on 4/13/2016.
  */
-public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
+public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IRailcraftRecipeIngredient {
     default void register() {
     }
 
@@ -62,11 +63,13 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> {
 
     Optional<T> getObject();
 
+    @Override
     @Nullable
     default Object getRecipeObject() {
         return getRecipeObject(null);
     }
 
+    @Override
     @Nullable
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         Object obj = getObject().map(o -> {

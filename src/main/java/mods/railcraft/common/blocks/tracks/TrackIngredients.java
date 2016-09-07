@@ -10,16 +10,13 @@
 
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -30,25 +27,32 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum TrackIngredients implements IRailcraftRecipeIngredient {
-    RAIL_WOOD(() -> RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.WOOD)),
-    RAIL_STANDARD(() -> RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD)),
-    RAIL_ADVANCED(() -> RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED)),
-    RAIL_SPEED(() -> RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.SPEED)),
-    RAIL_REINFORCED(() -> RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.REINFORCED)),
-    RAIL_ELECTRIC(() -> RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ELECTRIC)),
+    RAIL_STRAP_IRON(() -> "slabWood", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.WOOD)),
+    RAIL_STANDARD(() -> "ingotIron", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD)),
+    RAIL_ADVANCED(() -> "ingotGold", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED)),
+    RAIL_SPEED(() -> "ingotSteel", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.SPEED)),
+    RAIL_REINFORCED(() -> Blocks.OBSIDIAN, () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.REINFORCED)),
+    RAIL_ELECTRIC(() -> "ingotCopper", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ELECTRIC)),
     TIE_WOOD(() -> RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.WOOD)),
-    RAILBED_WOOD(() -> RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD)),
-    RAILBED_STONE(() -> RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.STONE)),
-    RAILBED_REINFORCED(() -> RailcraftConfig.useOldRecipes() || !RailcraftItems.RAIL.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : RAILBED_STONE);
+    TIE_STONE(() -> RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.STONE)),
+    RAILBED_WOOD(() -> "stickWood", () -> RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD)),
+    RAILBED_STONE(() -> Blocks.STONE_SLAB, () -> RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.STONE));
     private final Supplier<Object> ingredientSupplier;
+    private final Supplier<Object> ingredientSupplierVanilla;
 
     TrackIngredients(Supplier<Object> ingredientSupplier) {
         this.ingredientSupplier = ingredientSupplier;
+        this.ingredientSupplierVanilla = ingredientSupplier;
+    }
+
+    TrackIngredients(Supplier<Object> ingredientSupplierVanilla, Supplier<Object> ingredientSupplier) {
+        this.ingredientSupplier = ingredientSupplier;
+        this.ingredientSupplierVanilla = ingredientSupplierVanilla;
     }
 
     @Nullable
     @Override
     public Object getRecipeObject() {
-        return ingredientSupplier.get();
+        return RailcraftConfig.vanillaTrackRecipes() ? ingredientSupplierVanilla.get() : ingredientSupplier.get();
     }
 }

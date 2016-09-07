@@ -17,7 +17,7 @@ import mods.railcraft.common.items.RailcraftItems;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:locomotives")
+@RailcraftModule(value = "railcraft:locomotives", softDependencyClasses = ModuleTracks.class)
 public class ModuleLocomotives extends RailcraftModulePayload {
     public ModuleLocomotives() {
         setEnabledEventHandler(new ModuleEventHandler() {

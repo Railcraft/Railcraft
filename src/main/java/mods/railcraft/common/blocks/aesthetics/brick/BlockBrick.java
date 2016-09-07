@@ -94,7 +94,6 @@ public class BlockBrick extends BlockRailcraft {
         return state;
     }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         if (variant != null) {

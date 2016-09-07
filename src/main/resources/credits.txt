@@ -10,5 +10,6 @@ Art:
 Sounds:
 	Steam Locomotive Whistles: Purchased from SoundDogs.com
 	Electric Locomotive Whistles: Purchased from SoundDogs.com
+	Electric Zaps: Purchased from SoundDogs.com
 	Steam Oven: pengo_au -> http://www.freesound.org/people/pengo_au/sounds/90143/
 	Steam Trap: jesabat -> http://www.freesound.org/people/jesabat/sounds/119741/

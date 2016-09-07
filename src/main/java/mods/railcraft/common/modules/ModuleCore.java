@@ -41,6 +41,7 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -64,7 +65,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
@@ -110,8 +110,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
-                OreDictionary.registerOre("chestWood", Blocks.CHEST);
-                OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
+                OreDictPlugin.registerNewTags();
 
                 add(
                         RailcraftItems.CROWBAR_IRON,
@@ -175,7 +174,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 Set<Item> testSet = new HashSet<Item>();
-                if (!RailcraftConfig.useOldRecipes()) {
+                if (!RailcraftConfig.vanillaTrackRecipes()) {
                     testSet.add(Item.getItemFromBlock(Blocks.RAIL));
                     testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
                     testSet.add(Item.getItemFromBlock(Blocks.DETECTOR_RAIL));
@@ -237,7 +236,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Old rails
-                if (!RailcraftConfig.useOldRecipes()) {
+                if (!RailcraftConfig.vanillaTrackRecipes()) {
                     ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
                     ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
                     ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
@@ -274,8 +273,6 @@ public class ModuleCore extends RailcraftModulePayload {
                             't', new ItemStack(Blocks.REDSTONE_TORCH));
 
                     CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, EnumRail.STANDARD),
-                            Blocks.RAIL,
-                            Blocks.RAIL,
                             Blocks.RAIL,
                             Blocks.RAIL,
                             Blocks.RAIL,

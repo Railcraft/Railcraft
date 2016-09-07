@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -81,11 +82,21 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         setDefaultState(getDefaultState().withProperty(TICKING, false));
 
         GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
-        GameRegistry.registerTileEntity(TileTrackOutfittedTESR.class, "railcraft:track.outfitted.tesr");
         GameRegistry.registerTileEntity(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
     }
 
+    @Override
+    public void finalizeDefinition() {
+        for (Tuple<TrackType, TrackKit> combo : TrackRegistry.getCombinations()) {
+            TrackType trackType = combo.getFirst();
+            TrackKit trackKit = combo.getSecond();
+            CraftingPlugin.addShapelessRecipe(trackKit.getOutfittedTrack(trackType), trackKit.getTrackKitItem(), trackType.getBaseBlock());
+        }
+    }
+
     public static boolean placeTrack(World world, BlockPos pos, EntityLivingBase placer, EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {
+        if (trackKit == TrackRegistry.getMissingTrackKit())
+            return false;
         Block block = RailcraftBlocks.TRACK_OUTFITTED.block();
         if (block != null) {
             IBlockState state = TrackToolsAPI.makeTrackState((BlockTrackOutfitted) block, shape);
@@ -194,7 +205,6 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return TrackTypes.IRON.getTrackType();
     }
 
-    @Nullable
     public TrackKit getTrackKit(IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
@@ -204,7 +214,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
-        return null;
+        return TrackRegistry.getMissingTrackKit();
     }
 
     @Override
@@ -375,7 +385,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public boolean clearBlock(IBlockState state, World world, BlockPos pos) {
+    public boolean clearBlock(IBlockState state, World world, BlockPos pos, EntityPlayer player) {
+//        if (player.capabilities.isCreativeMode)
+//            return super.clearBlock(state, world, pos, player);
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
         return WorldPlugin.setBlockState(world, pos, newState);
@@ -413,7 +425,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, trackType, trackKit);
             ((TileTrackOutfitted) tile).onBlockPlacedBy(state, placer, stack);
             ((TileTrackOutfitted) tile).getTrackKitInstance().onBlockPlacedBy(state, placer, stack);
-            world.notifyBlockUpdate(pos, state, state, 3);
+            WorldPlugin.markBlockForUpdate(world, pos, state);
         }
     }
 
@@ -441,11 +453,17 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
                 tile.onNeighborBlockChange(state, neighborBlock);
                 tile.getTrackKitInstance().onNeighborBlockChange(state, neighborBlock);
             }
+            super.neighborChanged(state, world, pos, neighborBlock);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
             if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw error;
         }
+    }
+
+    @Override
+    public int getMaxSupportedDistance(World worldIn, BlockPos pos) {
+        return Math.max(super.getMaxSupportedDistance(worldIn, pos), getTrackKit(worldIn, pos).getMaxSupportDistance());
     }
 
     @Override

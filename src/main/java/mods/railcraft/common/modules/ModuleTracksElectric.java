@@ -23,8 +23,8 @@ public class ModuleTracksElectric extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.TRACK_FLEX_ELECTRIC,
-                        RailcraftBlocks.TRACK_JUNCTION_ELECTRIC
+                        RailcraftBlocks.TRACK_FLEX_ELECTRIC
+//                        RailcraftBlocks.TRACK_JUNCTION_ELECTRIC
                 );
             }
         });
