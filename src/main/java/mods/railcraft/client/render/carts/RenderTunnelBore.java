@@ -15,6 +15,7 @@ import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -22,7 +23,6 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
 
 public class RenderTunnelBore extends Render<EntityTunnelBore> {
 
@@ -47,12 +47,11 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
 
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         if (renderManager.isDebugBoundingBox()) {
-            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-//            OpenGL.glDepthMask(false);
-            OpenGL.glDisable(GL11.GL_TEXTURE_2D);
-            OpenGL.glDisable(GL11.GL_LIGHTING);
-            OpenGL.glDisable(GL11.GL_CULL_FACE);
-            OpenGL.glDisable(GL11.GL_BLEND);
+//            GlStateManager.depthMask(false);
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableLighting();
+            GlStateManager.disableCull();
+            GlStateManager.disableBlend();
             for (Entity part : bore.getParts()) {
                 OpenGL.glPushMatrix();
                 double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerX;
@@ -60,29 +59,34 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
                 double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerZ;
                 OpenGL.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
-                RenderGlobal.drawBoundingBox(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth, 255, 255, 255, 255);
+                RenderGlobal.drawBoundingBox(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth, 1, 0, 0, 1);
                 OpenGL.glPopMatrix();
             }
-//            OpenGL.glDepthMask(true);
-            OpenGL.glPopAttrib();
+            GlStateManager.enableTexture2D();
+            GlStateManager.enableLighting();
+            GlStateManager.enableCull();
+            GlStateManager.disableBlend();
+//            GlStateManager.depthMask(true);
         }
+        OpenGL.glTranslatef(0F, 0.375F, 0F);
 
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
         switch (bore.getFacing()) {
             case NORTH:
-                entityYaw = 90;
+//                entityYaw = 90;
                 break;
             case EAST:
-                entityYaw = 0;
+//                entityYaw = 0;
                 break;
             case SOUTH:
-                entityYaw = 270;
+//                entityYaw = 270;
                 break;
             case WEST:
-                entityYaw = 180;
+//                entityYaw = 180;
                 break;
         }
-        OpenGL.glRotatef(entityYaw, 0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(180F - entityYaw, 0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(90, 0.0F, 1.0F, 0.0F);
         float f3 = (float) bore.getRollingAmplitude() - partialTicks;
         float f4 = bore.getDamage() - partialTicks;
         if (f4 < 0.0F) {

@@ -1,9 +1,19 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 
 /**
  * Pseudo-Entity used to refine the Tunnel Bore collision boxes.
@@ -35,7 +45,12 @@ public class EntityTunnelBorePart extends Entity {
 
         double x = parent.getOffsetX(parent.posX, forwardOffset, sideOffset);
         double z = parent.getOffsetZ(parent.posZ, forwardOffset, sideOffset);
-        setLocationAndAngles(x, parent.posY, z, 0.0F, 0.0F);
+        setLocationAndAngles(x, parent.posY + 0.3F, z, 0.0F, 0.0F);
+    }
+
+    @Override
+    public AxisAlignedBB getEntityBoundingBox() {
+        return super.getEntityBoundingBox();
     }
 
     @Override

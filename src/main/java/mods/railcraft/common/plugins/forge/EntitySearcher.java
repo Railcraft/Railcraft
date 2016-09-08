@@ -37,9 +37,14 @@ public class EntitySearcher {
         return new SearchParameters<T>(entityClass);
     }
 
+    public static SearchParameters<Entity> find() {
+        return new SearchParameters<Entity>(Entity.class);
+    }
+
     public static class SearchParameters<T extends Entity> {
         private final Class<T> entityClass;
         private AxisAlignedBB searchBox;
+        private Entity searcher;
         private Predicate<Entity> filter = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE);
 
         public SearchParameters(Class<T> entityClass) {
@@ -48,6 +53,16 @@ public class EntitySearcher {
 
         public List<T> at(World world) {
             return world.getEntitiesWithinAABB(entityClass, searchBox, filter);
+        }
+
+        public SearchParameters<T> except(Entity entity) {
+            this.filter = Predicates.and(filter, e -> e != entity);
+            return this;
+        }
+
+        public SearchParameters<T> inArea(AxisAlignedBB area) {
+            searchBox = area;
+            return this;
         }
 
         /**

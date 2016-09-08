@@ -74,8 +74,8 @@ public abstract class InvTools {
     }
 
     @Nullable
-    public static ItemStack makeSafe(ItemStack stack) {
-        if (stack.stackSize <= 0)
+    public static ItemStack makeSafe(@Nullable ItemStack stack) {
+        if (stack == null || stack.stackSize <= 0)
             return null;
         return stack;
     }

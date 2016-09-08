@@ -21,10 +21,7 @@ import mods.railcraft.common.carts.Train.TrainState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
@@ -64,8 +61,8 @@ import java.util.function.BiFunction;
 public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart {
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6.2f;
-    public static final float WIDTH = 2.7f;
-    public static final float HEIGHT = 4f;
+    public static final float WIDTH = 3f;
+    public static final float HEIGHT = 3f;
     public static final int MAX_FILL_DEPTH = 10;
     public static final int FAIL_DELAY = 200;
     public static final int STANDARD_DELAY = 5;
@@ -79,9 +76,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.FACING);
     private static final DataParameter<com.google.common.base.Optional<ItemStack>> BORE_HEAD = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
-    protected static final int WATCHER_ID_FUEL = 16;
-    protected static final int WATCHER_ID_MOVING = 25;
-    protected static final int WATCHER_ID_BORE_HEAD = 26;
     private static final Block[] mineable = {
             Blocks.CLAY,
             Blocks.SNOW_LAYER,
@@ -178,10 +172,15 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     public EntityTunnelBore(World world, double i, double j, double k, EnumFacing f) {
         super(world);
+        float headW = 1.5F;
+        float headH = 2.6F;
+        float headSO = 0.7F;
         partArray = new EntityTunnelBorePart[]{
                 // ------------------------------------- name, width, height, forwardOffset, sideOffset
-                new EntityTunnelBorePart(this, "head1", 1.9F, 2.6F, 2F, -0.6F),
-                new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
+                new EntityTunnelBorePart(this, "head1", headW, headH, 1.85F, -headSO),
+                new EntityTunnelBorePart(this, "head2", headW, headH, 1.85F, headSO),
+                new EntityTunnelBorePart(this, "head3", headW, headH, 2.3F, -headSO),
+                new EntityTunnelBorePart(this, "head4", headW, headH, 2.3F, headSO),
                 new EntityTunnelBorePart(this, "body", 2.0F, 1.9F, 0.6F),
                 new EntityTunnelBorePart(this, "tail1", 1.6F, 1.4F, -1F),
                 new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
@@ -211,7 +210,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         mineableBlocks.add(blockState);
     }
 
-    public static boolean canHeadHarvestBlock(ItemStack head, IBlockState targetState) {
+    public static boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
         if (head == null)
             return false;
 
@@ -306,16 +305,16 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         float yaw = 0;
         switch (getFacing()) {
             case NORTH:
-                yaw = 90;
+                yaw = 180;
                 break;
             case EAST:
-                yaw = 0;
-                break;
-            case SOUTH:
                 yaw = 270;
                 break;
+            case SOUTH:
+                yaw = 0;
+                break;
             case WEST:
-                yaw = 180;
+                yaw = 90;
                 break;
         }
         setRotation(yaw, rotationPitch);
@@ -475,13 +474,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 Vec3d headPos = getPositionAhead(3.3);
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
-                List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, entitySearchBox);
-                for (Object e : entities) {
-                    if (e instanceof EntityLivingBase) {
-                        EntityLivingBase ent = (EntityLivingBase) e;
-                        ent.attackEntityFrom(RailcraftDamageSource.BORE, 2);
-                    }
-                }
+                List<EntityLivingBase> entities = EntitySearcher.find(EntityLivingBase.class)
+                        .except(this).andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(worldObj);
+                entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
             }
 
             setMoving(hasFuel() && getDelay() == 0);
@@ -572,8 +567,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             double randomFactor = 0.125;
 
             double forwardOffset = -0.35;
-            double smokeYOffset = 2.4;
-            double flameYOffset = 0.7;
+            double smokeYOffset = 2.8;
+            double flameYOffset = 1.1;
             double smokeSideOffset = 0.92;
             double flameSideOffset = 1.14;
             double smokeX1 = posX;
@@ -656,8 +651,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                         searchPos = searchPos.down();
                         if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
                             invBallast.decrStackSize(inv, 1);
-                            WorldPlugin.setBlockState(worldObj, targetPos, InvTools.getBlockStateFromStack(stack, (WorldServer) worldObj, targetPos));
-                            return true;
+                            IBlockState state = InvTools.getBlockStateFromStack(stack, (WorldServer) worldObj, targetPos);
+                            if (state != null) {
+                                WorldPlugin.setBlockState(worldObj, targetPos, state);
+                                return true;
+                            }
                         }
                     }
                     return false;
@@ -1040,7 +1038,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.CART_BORE, player, worldObj, this);
         return true;
