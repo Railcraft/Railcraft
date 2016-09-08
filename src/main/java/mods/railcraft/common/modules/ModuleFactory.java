@@ -24,7 +24,6 @@ import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear;
-import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -521,10 +520,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                     if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
                         IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
                 }
-
-                ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.CREOSOTE.get(750), null, RailcraftItems.TIE.getStack(1, EnumTie.WOOD),
-                        "###",
-                        '#', "slabWood");
             }
 
             private void addOutput(ICrusherCraftingManager.ICrusherRecipe recipe, @Nullable ItemStack output, float chance) {

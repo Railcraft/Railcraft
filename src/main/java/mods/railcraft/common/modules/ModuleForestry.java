@@ -10,8 +10,12 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.items.ItemTie;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
 
 /**
@@ -38,6 +42,17 @@ public class ModuleForestry extends RailcraftModulePayload {
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
             public void postInit() {
                 ForestryPlugin.instance().setupBackpackContents();
+
+                ItemStack stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.WOOD);
+                ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.CREOSOTE.get(750), null, stack,
+                        "###",
+                        '#', "slabWood");
+
+                stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.STONE);
+                ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.WATER.get(750), null, stack,
+                        "#r#",
+                        '#', RailcraftItems.CONCRETE,
+                        'r', RailcraftItems.REBAR);
             }
         });
     }

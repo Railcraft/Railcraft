@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
@@ -102,7 +103,12 @@ public class ForestryPlugin {
     public void setupBackpackContents() {
     }
 
-    public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+    public void addCarpenterRecipe(String recipeTag,
+                                   int packagingTime,
+                                   FluidStack liquid,
+                                   @Nullable ItemStack box,
+                                   @Nullable ItemStack product,
+                                   Object... materials) {
     }
 
     private static class ForestryPluginInstalled extends ForestryPlugin {
@@ -277,10 +283,13 @@ public class ForestryPlugin {
 
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-        public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+        public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, @Nullable ItemStack box, @Nullable ItemStack product, Object... materials) {
+            if (product == null) {
+                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", the result was null or zero. Skipping", recipeTag);
+            }
             try {
                 if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
-                    forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, null, product, materials);
+                    forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, box, product, materials);
             } catch (Throwable error) {
                 Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
             }
