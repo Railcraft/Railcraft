@@ -1,0 +1,20 @@
+{
+  "textures": {
+    "particle": "#texture",
+    "texture": "railcraft:blocks/tracks/outfitted/kit/door"
+  },
+  "elements": [
+    {
+      "from": [-16, 0, 6],
+      "to": [32, 32, 8],
+      "faces": {
+        "down": {"uv": [16, 8, 0, 6], "texture": "#texture", "cullface": "down"},
+        "up": {"uv": [0, 6, 16, 8], "texture": "#texture"},
+        "north": {"uv": [0, 0, 16, 16], "texture": "#texture"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#texture"},
+        "west": {"uv": [6, 0, 8, 16], "texture": "#texture"},
+        "east": {"uv": [8, 0, 10, 16], "texture": "#texture"}
+      }
+    }
+  ]
+}
