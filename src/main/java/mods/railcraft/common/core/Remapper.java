@@ -42,6 +42,13 @@ public enum Remapper {
             names.put("track_high_speed_electric", RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC);
             names.put("track_reinforced", RailcraftBlocks.TRACK_FLEX_REINFORCED);
             names.put("track_strap_iron", RailcraftBlocks.TRACK_FLEX_STRAP_IRON);
+
+            names.put("track.abandoned", RailcraftBlocks.TRACK_FLEX_ABANDONED);
+            names.put("track.electric", RailcraftBlocks.TRACK_FLEX_ELECTRIC);
+            names.put("track.high.speed", RailcraftBlocks.TRACK_FLEX_HIGH_SPEED);
+            names.put("track.high.speed.electric", RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC);
+            names.put("track.reinforced", RailcraftBlocks.TRACK_FLEX_REINFORCED);
+            names.put("track.strap.iron", RailcraftBlocks.TRACK_FLEX_STRAP_IRON);
         }
 
         @Override

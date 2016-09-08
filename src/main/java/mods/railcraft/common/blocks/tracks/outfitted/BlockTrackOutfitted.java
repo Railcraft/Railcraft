@@ -59,6 +59,8 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -164,6 +166,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void initializeClient() {
         ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(getShapeProperty()).ignore(TICKING).build());
     }
