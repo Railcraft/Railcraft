@@ -49,11 +49,6 @@ public class EntityTunnelBorePart extends Entity {
     }
 
     @Override
-    public AxisAlignedBB getEntityBoundingBox() {
-        return super.getEntityBoundingBox();
-    }
-
-    @Override
     public AxisAlignedBB getCollisionBoundingBox() {
         return getEntityBoundingBox();
     }

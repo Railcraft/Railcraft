@@ -75,7 +75,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     public float output;
-    private final FluidStack waterFilter = Fluids.WATER.get(3);
+    private final FluidStack waterFilter = Fluids.WATER.get(2);
     protected final FilteredTank tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.STEAM.get(), this);
     protected final FilteredTank tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.WATER.get(), this);
     protected final TankManager tankManager = new TankManager();
@@ -201,9 +201,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
                             addedEnergy = true;
                             energy += BC_OUTPUT;
                             tankManager.drain(TANK_STEAM, STEAM_USAGE, true);
-
-                            if (worldObj.rand.nextInt(4) != 0)
-                                tankWater.fill(waterFilter, true);
+                            tankWater.fill(waterFilter, true);
 
                             inv.setInventorySlotContents(0, ((ItemTurbineRotor) rotor.getItem()).useRotor(rotor));
                         }

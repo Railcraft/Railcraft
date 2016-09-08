@@ -71,20 +71,6 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
         OpenGL.glTranslatef(0F, 0.375F, 0F);
 
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
-        switch (bore.getFacing()) {
-            case NORTH:
-//                entityYaw = 90;
-                break;
-            case EAST:
-//                entityYaw = 0;
-                break;
-            case SOUTH:
-//                entityYaw = 270;
-                break;
-            case WEST:
-//                entityYaw = 180;
-                break;
-        }
         OpenGL.glRotatef(180F - entityYaw, 0.0F, 1.0F, 0.0F);
         OpenGL.glRotatef(90, 0.0F, 1.0F, 0.0F);
         float f3 = (float) bore.getRollingAmplitude() - partialTicks;
