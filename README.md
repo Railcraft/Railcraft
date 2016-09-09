@@ -41,7 +41,7 @@ Signing the CLA is simple, just follow the link, and hit the "I Agree" button an
 
 Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 
-Also, as a bonus. If submit a Pull Request that ends up being 'merged into dev' you are eligible to receive beta access. To redeem, contact CovertJaguar on IRC.
+Also, as a bonus. If you submit a Pull Request that ends up being merged you are eligible to receive beta access. To redeem, contact CovertJaguar on IRC.
 
 ## Building
 
