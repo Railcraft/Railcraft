@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderEnergyBase;
+import mods.railcraft.common.blocks.machine.manipulator.TileIC2Manipulator;
 import mods.railcraft.common.gui.slots.SlotEnergy;
 import mods.railcraft.common.gui.slots.SlotUpgrade;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -20,11 +21,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerEnergyLoader extends RailcraftContainer {
 
-    private final TileLoaderEnergyBase device;
+    private final TileIC2Manipulator device;
     private int lastEnergy, lastTransferRate;
     private short lastStorage, lastLapotron;
 
-    public ContainerEnergyLoader(InventoryPlayer inventoryplayer, TileLoaderEnergyBase device) {
+    public ContainerEnergyLoader(InventoryPlayer inventoryplayer, TileIC2Manipulator device) {
         super(device);
         this.device = device;
         addSlot(new SlotEnergy(device, 0, 8, 17));

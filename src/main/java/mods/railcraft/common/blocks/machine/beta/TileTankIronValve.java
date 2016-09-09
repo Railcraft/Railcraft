@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IComparatorValueProvider;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -17,8 +18,6 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -30,7 +29,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorValueProvider {
+public class TileTankIronValve extends TileTankBase implements IFluidHandler, ITileCompare {
 
     private static final Predicate<TileEntity> FLUID_OUTPUT_FILTER = tile -> {
         if (tile instanceof TileTankBase)
@@ -219,7 +218,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     }
 
     @Override
-    public int getComparatorInputOverride(World world, BlockPos pos) {
+    public int getComparatorInputOverride() {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase)
             return ((TileTankBase) masterBlock).getComparatorValue();

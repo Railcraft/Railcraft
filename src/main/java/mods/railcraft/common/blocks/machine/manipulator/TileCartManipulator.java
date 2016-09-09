@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
@@ -29,7 +29,7 @@ import net.minecraft.util.EnumFacing;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileLoaderBase extends TileMachineItem implements IHasCart, IHasWork {
+public abstract class TileCartManipulator extends TileMachineItem implements IHasCart, IHasWork {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);

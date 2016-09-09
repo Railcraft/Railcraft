@@ -13,6 +13,7 @@ import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -48,7 +49,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ import java.util.*;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
+public class TileSteamOven extends TileMultiBlockInventory implements ISidedInventory, ISteamUser, IHasWork, ITileRotate {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;

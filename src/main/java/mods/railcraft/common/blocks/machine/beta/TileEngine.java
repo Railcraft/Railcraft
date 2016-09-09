@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import cofh.api.energy.IEnergyConnection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -30,7 +31,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
+public abstract class TileEngine extends TileMachineBase implements IEnergyConnection, ITileRotate {
 
     public float currentOutput;
     public int energy;

@@ -10,7 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.machine.gamma.TileRFLoader;
+import mods.railcraft.common.blocks.machine.manipulator.TileRFLoader;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerLoaderRF;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;

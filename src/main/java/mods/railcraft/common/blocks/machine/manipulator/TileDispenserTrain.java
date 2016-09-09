@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
@@ -47,8 +47,8 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public EnumMachineGamma getMachineType() {
-        return EnumMachineGamma.DISPENSER_TRAIN;
+    public ManipulatorVariant getMachineType() {
+        return ManipulatorVariant.DISPENSER_TRAIN;
     }
 
     public PhantomInventory getPattern() {

@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.CubeRenderer;
@@ -14,8 +14,8 @@ import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
+import mods.railcraft.common.blocks.machine.manipulator.TileFluidLoader;
+import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBase> {
+public class TESRFluidLoader extends TileEntitySpecialRenderer<TileFluidManipulator> {
 
     private static final float PIPE_OFFSET = 5 * RenderTools.PIXEL;
     private static final RenderInfo backDrop = new CubeRenderer.RenderInfo();
@@ -53,7 +53,7 @@ public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBa
     }
 
     @Override
-    public void renderTileEntityAt(TileLoaderFluidBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTileEntityAt(TileFluidManipulator tile, double x, double y, double z, float partialTicks, int destroyStage) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
         OpenGL.glDisable(GL11.GL_LIGHTING);

@@ -11,6 +11,9 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -38,7 +41,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -115,6 +117,10 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         return state.getValue(proxy.getVariantProperty());
     }
 
+    public Class<? extends TileMachineBase> getTileClass(IBlockState state) {
+        return getMachineType(state).getTileClass();
+    }
+
     @Override
     public IBlockColor colorHandler() {
         return (state, worldIn, pos, tintIndex) -> {
@@ -138,22 +144,20 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ)).orElse(false);
     }
 
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-        TileEntity tile = world.getTileEntity(pos);
-        return tile instanceof TileMachineBase && ((TileMachineBase) tile).rotateBlock(axis);
+        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
+                .retrieve(ITileRotate.class, t -> t.rotateBlock(axis)).orElse(false);
     }
 
     @Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).getValidRotations();
-        return super.getValidRotations(world, pos);
+        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
+                .retrieve(ITileRotate.class, ITileRotate::getValidRotations).orElse(null);
     }
 
     @SideOnly(Side.CLIENT)
@@ -327,8 +331,8 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         list.addAll(
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 proxy.getCreativeList().stream()
-                        .filter((m) -> m.isAvailable())
-                        .map((m1) -> m1.getItem())
+                        .filter(m -> m.isAvailable())
+                        .map(m -> m.getItem())
                         .collect(Collectors.toList())
         );
     }
@@ -375,7 +379,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
 
     @Override
     public boolean hasComparatorInputOverride(IBlockState state) {
-        return proxy instanceof IComparatorOverride;
+        return TileManager.isInstance(this::getTileClass, ITileCompare.class, state);
     }
 
     /**
@@ -383,10 +387,8 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
      */
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof IComparatorValueProvider)
-            return ((IComparatorValueProvider) tile).getComparatorInputOverride(worldIn, pos);
-        return 0;
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileCompare.class, ITileCompare::getComparatorInputOverride).orElse(0);
     }
 
     @Override
@@ -395,15 +397,5 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).connectsToPost(face);
         return ConnectStyle.NONE;
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return BoundingBoxManager.getCollisionBox(world, pos, getMachineType(world.getBlockState(pos)));
-    }
-
-    @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return BoundingBoxManager.getSelectionBox(world, pos, getMachineType(world.getBlockState(pos)));
     }
 }

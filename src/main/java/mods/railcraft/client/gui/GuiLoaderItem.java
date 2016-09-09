@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
+import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerItemLoader;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -24,9 +25,9 @@ public class GuiLoaderItem extends TileGui {
     private final String BUFFER_LABEL = LocalizationPlugin.translate("railcraft.gui.item.loader.buffer");
     private GuiMultiButton transferMode;
     private GuiMultiButton redstoneMode;
-    private final TileLoaderItemBase tile;
+    private final TileItemManipulator tile;
 
-    public GuiLoaderItem(InventoryPlayer inv, TileLoaderItemBase tile) {
+    public GuiLoaderItem(InventoryPlayer inv, TileItemManipulator tile) {
         super(tile, new ContainerItemLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
         this.tile = tile;
     }

@@ -14,7 +14,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -39,7 +39,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                         RailcraftCarts.TANK
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
-//                        RailcraftBlocks.machine_gamma
+//                        RailcraftBlocks.manipulator
                 );
             }
 
@@ -67,7 +67,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'O', new ItemStack(Blocks.OBSIDIAN),
                             'P', new ItemStack(Items.ENDER_PEARL));
 
-                EnumMachineGamma itemLoader = EnumMachineGamma.ITEM_LOADER;
+                ManipulatorVariant itemLoader = ManipulatorVariant.ITEM_LOADER;
                 if (itemLoader.isAvailable()) {
                     ItemStack stack = itemLoader.getItem();
                     ItemStack detector = EnumDetector.ITEM.getItem();
@@ -81,7 +81,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'D', detector,
                             'L', new ItemStack(Blocks.HOPPER));
 
-                    itemLoader = EnumMachineGamma.ITEM_LOADER_ADVANCED;
+                    itemLoader = ManipulatorVariant.ITEM_LOADER_ADVANCED;
                     if (itemLoader.isAvailable())
                         CraftingPlugin.addRecipe(itemLoader.getItem(),
                                 "IRI",
@@ -93,7 +93,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 'L', stack);
                 }
 
-                EnumMachineGamma itemUnloader = EnumMachineGamma.ITEM_UNLOADER;
+                ManipulatorVariant itemUnloader = ManipulatorVariant.ITEM_UNLOADER;
                 if (itemUnloader.isAvailable()) {
                     ItemStack stack = itemUnloader.getItem();
                     ItemStack detector = EnumDetector.ITEM.getItem();
@@ -107,7 +107,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'D', detector,
                             'L', new ItemStack(Blocks.HOPPER));
 
-                    itemUnloader = EnumMachineGamma.ITEM_UNLOADER_ADVANCED;
+                    itemUnloader = ManipulatorVariant.ITEM_UNLOADER_ADVANCED;
                     if (itemUnloader.isAvailable())
                         CraftingPlugin.addRecipe(itemUnloader.getItem(),
                                 "IRI",
@@ -119,7 +119,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 'L', stack);
                 }
 
-                EnumMachineGamma liquidLoader = EnumMachineGamma.FLUID_LOADER;
+                ManipulatorVariant liquidLoader = ManipulatorVariant.FLUID_LOADER;
 
                 if (liquidLoader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getItem();
@@ -134,7 +134,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'L', Blocks.HOPPER);
                 }
 
-                EnumMachineGamma liquidUnloader = EnumMachineGamma.FLUID_UNLOADER;
+                ManipulatorVariant liquidUnloader = ManipulatorVariant.FLUID_UNLOADER;
                 if (liquidUnloader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getItem();
                     if (detector == null)

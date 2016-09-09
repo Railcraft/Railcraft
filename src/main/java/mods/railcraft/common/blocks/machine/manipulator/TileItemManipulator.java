@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiReturnHandler, ISidedInventory {
+public abstract class TileItemManipulator extends TileCartManipulator implements IGuiReturnHandler, ISidedInventory {
 
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);

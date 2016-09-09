@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMoveToBlock;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIWatchBlock;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
@@ -22,7 +23,6 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
@@ -46,9 +46,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 @SuppressWarnings("PointlessArithmeticExpression")
-public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory {
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
-
+public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory, ITileRotate {
     public enum GuiPacketType {
 
         NEXT_TRADE, SET_PROFESSION
@@ -77,7 +75,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     @Override
     public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
-        state = state.withProperty(FACING, direction);
+//        state = state.withProperty(FACING, direction);
         return state;
     }
 
@@ -214,14 +212,14 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void writePacketData( RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeUTF(profession.getRegistryName().toString());
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData( RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         EnumFacing f = EnumFacing.getFront(data.readByte());
@@ -232,11 +230,11 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void writeGuiData( RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
     }
 
     @Override
-    public void readGuiData( RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case NEXT_TRADE:

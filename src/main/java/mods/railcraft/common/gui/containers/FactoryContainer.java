@@ -17,7 +17,7 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.machine.gamma.*;
+import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;
@@ -47,19 +47,19 @@ public class FactoryContainer {
         try {
             switch (gui) {
                 case LOADER_ITEM:
-                    return new ContainerItemLoader(inv, (TileLoaderItemBase) obj);
+                    return new ContainerItemLoader(inv, (TileItemManipulator) obj);
                 case LOADER_FLUID:
                     return new ContainerFluidLoader(inv, (TileFluidLoader) obj);
                 case UNLOADER_FLUID:
                     return new ContainerFluidUnloader(inv, (TileFluidUnloader) obj);
                 case LOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileEnergyLoader) obj);
+                    return new ContainerEnergyLoader(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileEnergyUnloader) obj);
+                    return new ContainerEnergyLoader(inv, (TileIC2Unloader) obj);
                 case LOADER_RF:
-                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
+                    return new ContainerLoaderRF((TileRFManipulator) obj);
                 case UNLOADER_RF:
-                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
+                    return new ContainerLoaderRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:
                     return new ContainerDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:

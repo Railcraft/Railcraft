@@ -13,7 +13,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
@@ -33,14 +33,14 @@ public class ModuleRF extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.DETECTOR,
                         RailcraftCarts.REDSTONE_FLUX
-//                        RailcraftBlocks.machine_gamma
+//                        RailcraftBlocks.manipulator
                 );
             }
 
             @Override
             public void preInit() {
 
-                EnumMachineGamma gamma = EnumMachineGamma.RF_LOADER;
+                ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getItem();
                     if (detector == null)
@@ -54,7 +54,7 @@ public class ModuleRF extends RailcraftModulePayload {
                             'L', "blockLead");
                 }
 
-                gamma = EnumMachineGamma.RF_UNLOADER;
+                gamma = ManipulatorVariant.RF_UNLOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getItem();
                     if (detector == null)

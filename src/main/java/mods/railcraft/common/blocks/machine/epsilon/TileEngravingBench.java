@@ -13,6 +13,7 @@ import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
@@ -44,7 +45,7 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
+public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
 
     public enum GuiPacketType {
 

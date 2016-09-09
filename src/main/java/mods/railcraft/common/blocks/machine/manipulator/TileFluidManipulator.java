@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.carts.CartTools;
@@ -36,7 +36,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInventory, IFluidHandler, ISidedInventory {
+public abstract class TileFluidManipulator extends TileCartManipulator implements IFluidHandler, ISidedInventory {
 
     protected static final int SLOT_INPUT = 0;
     protected static final int SLOT_OUTPUT = 1;
@@ -48,7 +48,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
     protected int flow;
 
-    protected TileLoaderFluidBase() {
+    protected TileFluidManipulator() {
         setInventorySize(2);
         tankManager.add(loaderTank);
     }

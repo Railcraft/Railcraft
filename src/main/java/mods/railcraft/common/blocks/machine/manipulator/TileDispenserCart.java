@@ -7,11 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
@@ -39,7 +40,7 @@ import net.minecraft.world.WorldServer;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileDispenserCart extends TileMachineItem {
+public class TileDispenserCart extends TileMachineItem implements ITileRotate {
 
     protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;
@@ -50,8 +51,8 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public EnumMachineGamma getMachineType() {
-        return EnumMachineGamma.DISPENSER_CART;
+    public ManipulatorVariant getMachineType() {
+        return ManipulatorVariant.DISPENSER_CART;
     }
 
     @Override

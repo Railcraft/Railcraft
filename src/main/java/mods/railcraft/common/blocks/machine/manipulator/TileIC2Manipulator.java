@@ -7,9 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.IEnergyTransfer;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -29,7 +30,7 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISidedInventory {
+public abstract class TileIC2Manipulator extends TileCartManipulator implements ISidedInventory, ITileRotate {
 
     private static final int SLOT_CHARGE = 0;
     private static final int SLOT_BATTERY = 1;
@@ -48,7 +49,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     protected boolean transferredEnergy;
     private boolean addedToIC2EnergyNet;
 
-    protected TileLoaderEnergyBase() {
+    protected TileIC2Manipulator() {
         setInventorySize(6);
     }
 

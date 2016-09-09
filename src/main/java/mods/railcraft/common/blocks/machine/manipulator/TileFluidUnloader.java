@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -35,14 +35,14 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.io.IOException;
 
-public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturnHandler {
+public class TileFluidUnloader extends TileFluidManipulator implements IGuiReturnHandler {
 
     private static final int TRANSFER_RATE = 80;
     private final MultiButtonController<ButtonState> stateController = MultiButtonController.create(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
 
     @Override
-    public EnumMachineGamma getMachineType() {
-        return EnumMachineGamma.FLUID_UNLOADER;
+    public ManipulatorVariant getMachineType() {
+        return ManipulatorVariant.FLUID_UNLOADER;
     }
 
     public MultiButtonController<ButtonState> getStateController() {

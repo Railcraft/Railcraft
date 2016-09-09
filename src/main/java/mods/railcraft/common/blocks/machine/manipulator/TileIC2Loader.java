@@ -7,14 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.ic2.IEmitterDelegate;
-import mods.railcraft.common.plugins.ic2.TileIC2EmitterDelegate;
+import mods.railcraft.common.plugins.ic2.ISinkDelegate;
+import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -27,20 +27,21 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitterDelegate, IGuiReturnHandler {
+public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, IGuiReturnHandler {
 
-    private static final int[] OUTPUT_LEVELS = {512, 2048};
-    private boolean waitTillEmpty = true;
-    private TileEntity emitterDelegate;
+    private static final short[] INPUT_LEVELS = {512, 2048};
+    private boolean waitTillFull = false;
+    private boolean waitIfEmpty = true;
+    private TileEntity sinkDelegate;
 
     @Override
-    public EnumMachineGamma getMachineType() {
-        return EnumMachineGamma.ENERGY_UNLOADER;
+    public ManipulatorVariant getMachineType() {
+        return ManipulatorVariant.ENERGY_LOADER;
     }
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_ENERGY, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.LOADER_ENERGY, player, worldObj, getPos());
         return true;
     }
 
@@ -75,28 +76,19 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
 
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
 
-        if (energy < getCapacity() && energyCart.getEnergy() > 0) {
-            double usage = (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
-            double injection = (energyCart.getTransferLimit() * Math.pow(1.3, overclockerUpgrades));
-
-            double room = getCapacity() - getEnergy();
-            if (room < injection) {
-                double ratio = room / injection;
-                injection = room;
-                usage = usage * ratio;
-            }
-
-            double extract = energyCart.extractEnergy(this, usage, getTier(), true, false, false);
-
-            if (extract < usage) {
-                double ratio = extract / usage;
-//                usage = extract;
-                injection = injection * ratio;
+        if (energy > 0 && energyCart.getEnergy() < energyCart.getCapacity()) {
+            double usage = (int) (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
+            double injection = (int) (energyCart.getTransferLimit() * Math.pow(1.3, overclockerUpgrades));
+            if (usage > energy) {
+                double ratio = (double) energy / usage;
+                usage = energy;
+                injection = (int) (injection * ratio);
             }
 
             transferRate = (int) injection;
-            energy += injection;
-            transferredEnergy = extract > 0;
+            double extra = energyCart.injectEnergy(this, injection, getTier(), true, false, false);
+            energy -= usage - extra;
+            transferredEnergy = extra != injection;
         }
 
         if (!transferredEnergy && !isPowered() && shouldSendCart(cart))
@@ -108,7 +100,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
         if (!super.canHandleCart(cart))
             return false;
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
-        return energyCart.canExtractEnergy();
+        return energyCart.canInjectEnergy();
     }
 
     @Override
@@ -116,9 +108,11 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
         if (!(cart instanceof IEnergyTransfer))
             return true;
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
-        if (!waitTillEmpty)
+        if (!waitTillFull && energyCart.getEnergy() > 0)
             return true;
-        else if (energyCart.getEnergy() == 0)
+        else if (!waitIfEmpty && !waitTillFull && energyCart.getEnergy() == 0)
+            return true;
+        else if (energyCart.getEnergy() >= energyCart.getCapacity())
             return true;
         return false;
     }
@@ -126,82 +120,99 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("WaitTillEmpty", waitTillEmpty());
+        data.setBoolean("WaitIfEmpty", waitIfEmpty());
+        data.setBoolean("WaitTillFull", waitTillFull());
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        setWaitTillEmpty(data.getBoolean("WaitTillEmpty"));
+        setWaitIfEmpty(data.getBoolean("WaitIfEmpty"));
+        setWaitTillFull(data.getBoolean("WaitTillFull"));
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeBoolean(waitTillEmpty);
+        byte bits = 0;
+        bits |= waitIfEmpty ? 1 : 0;
+        bits |= waitTillFull ? 2 : 0;
+        data.writeByte(bits);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        waitTillEmpty = data.readBoolean();
+        byte bits = data.readByte();
+        waitIfEmpty = (bits & 1) != 0;
+        waitTillFull = (bits & 2) != 0;
     }
 
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        data.writeBoolean(waitTillEmpty);
+        data.writeBoolean(waitIfEmpty);
+        data.writeBoolean(waitTillFull);
     }
 
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        waitTillEmpty = data.readBoolean();
-    }
-
-    public boolean waitTillEmpty() {
-        return waitTillEmpty;
-    }
-
-    public void setWaitTillEmpty(boolean wait) {
-        waitTillEmpty = wait;
+        waitIfEmpty = data.readBoolean();
+        waitTillFull = data.readBoolean();
     }
 
     @Override
-    public double getOfferedEnergy() {
-        int emit = transformerUpgrades > 0 ? OUTPUT_LEVELS[1] : OUTPUT_LEVELS[0];
-        return Math.min(energy, emit);
+    public double injectEnergy(EnumFacing directionFrom, double amount) {
+        energy += amount;
+        return 0;
     }
 
     @Override
-    public int getSourceTier() {
+    public boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction) {
+        return this.direction != direction;
+    }
+
+    public boolean waitTillFull() {
+        return waitTillFull;
+    }
+
+    public void setWaitTillFull(boolean waitTillFull) {
+        this.waitTillFull = waitTillFull;
+    }
+
+    public boolean waitIfEmpty() {
+        return waitIfEmpty;
+    }
+
+    public void setWaitIfEmpty(boolean waitIfEmpty) {
+        this.waitIfEmpty = waitIfEmpty;
+    }
+
+    @Override
+    public double getDemandedEnergy() {
+        return getCapacity() - energy;
+    }
+
+    @Override
+    public int getSinkTier() {
         return transformerUpgrades > 0 ? 4 : 3;
     }
 
     @Override
-    public void drawEnergy(double amount) {
-        energy -= amount;
-    }
-
-    @Override
-    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
-        return this.direction != direction;
+    public TileEntity getIC2Delegate() {
+        if (sinkDelegate == null)
+            try {
+                sinkDelegate = new TileIC2SinkDelegate(this);
+            } catch (Throwable error) {
+                Game.logErrorAPI("IndustrialCraft", error);
+            }
+        return sinkDelegate;
     }
 
     @Override
     public TileEntity getTile() {
         return this;
-    }
-
-    @Override
-    public TileEntity getIC2Delegate() {
-        if (emitterDelegate == null)
-            try {
-                emitterDelegate = new TileIC2EmitterDelegate(this);
-            } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error);
-            }
-        return emitterDelegate;
     }
 }

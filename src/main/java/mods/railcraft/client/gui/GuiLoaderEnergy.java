@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.machine.gamma.TileEnergyLoader;
+import mods.railcraft.common.blocks.machine.manipulator.TileIC2Loader;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEnergyLoader;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -24,11 +25,11 @@ public class GuiLoaderEnergy extends TileGui {
 
     private final String BUTTON1 = LocalizationPlugin.translate("railcraft.gui.energy.loader.empty");
     private final String BUTTON2 = LocalizationPlugin.translate("railcraft.gui.energy.loader.fill");
-    private TileEnergyLoader tile;
+    private TileIC2Loader tile;
     private boolean waitIfEmpty;
     private boolean waitTillFull;
 
-    public GuiLoaderEnergy(InventoryPlayer inv, TileEnergyLoader tile) {
+    public GuiLoaderEnergy(InventoryPlayer inv, TileIC2Loader tile) {
         super(tile, new ContainerEnergyLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy_loader.png");
         this.tile = tile;
         waitIfEmpty = tile.waitIfEmpty();
@@ -107,8 +108,8 @@ public class GuiLoaderEnergy extends TileGui {
     public void updateScreen() {
         super.updateScreen();
         TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
-        if (t instanceof TileEnergyLoader)
-            tile = (TileEnergyLoader) t;
+        if (t instanceof TileIC2Loader)
+            tile = (TileIC2Loader) t;
         else
             mc.thePlayer.closeScreen();
     }

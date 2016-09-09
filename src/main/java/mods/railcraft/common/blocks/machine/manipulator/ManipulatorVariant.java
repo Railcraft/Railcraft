@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
+public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
     ITEM_LOADER(ModuleTransport.class, "loader.item", TileItemLoader.class),
     ITEM_UNLOADER(ModuleTransport.class, "unloader.item", TileItemUnloader.class),
@@ -36,16 +36,16 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", TileItemUnloaderAdvanced.class),
     FLUID_LOADER(ModuleTransport.class, "loader.liquid", TileFluidLoader.class, true),
     FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", TileFluidUnloader.class, true),
-    ENERGY_LOADER(ModuleIC2.class, "loader.energy", TileEnergyLoader.class),
-    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", TileEnergyUnloader.class),
+    ENERGY_LOADER(ModuleIC2.class, "loader.energy", TileIC2Loader.class),
+    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", TileIC2Unloader.class),
     DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", TileDispenserCart.class),
     DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", TileDispenserTrain.class),
     RF_LOADER(ModuleRF.class, "loader.rf", TileRFLoader.class),
     RF_UNLOADER(ModuleRF.class, "unloader.rf", TileRFUnloader.class);
-    public static final PropertyEnum<EnumMachineGamma> VARIANT = PropertyEnum.create("variant", EnumMachineGamma.class);
-    private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
-    private static final EnumMachineGamma[] VALUES = values();
-    public static final MachineProxy<EnumMachineGamma> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
+    public static final PropertyEnum<ManipulatorVariant> VARIANT = PropertyEnum.create("variant", ManipulatorVariant.class);
+    private static final List<ManipulatorVariant> creativeList = new ArrayList<ManipulatorVariant>();
+    private static final ManipulatorVariant[] VALUES = values();
+    public static final MachineProxy<ManipulatorVariant> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
         creativeList.add(ITEM_LOADER);
@@ -68,24 +68,24 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     private final boolean passesLight;
     private ToolTip tip;
 
-    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
+    ManipulatorVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
         this(module, tag, tile, false);
     }
 
-    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, boolean passesLight) {
+    ManipulatorVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, boolean passesLight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
         this.passesLight = passesLight;
     }
 
-    public static EnumMachineGamma fromId(int id) {
+    public static ManipulatorVariant fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;
         return VALUES[id];
     }
 
-    public static List<EnumMachineGamma> getCreativeList() {
+    public static List<ManipulatorVariant> getCreativeList() {
         return creativeList;
     }
 
@@ -101,7 +101,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.machine.gamma." + getBaseTag();
+        return "tile.railcraft.machine.loader." + getBaseTag();
     }
 
     @Override
@@ -130,11 +130,11 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.MACHINE_GAMMA;
+        return RailcraftBlocks.MANIPULATOR;
     }
 
     @Override
-    public PropertyEnum<EnumMachineGamma> getVariantProperty() {
+    public PropertyEnum<ManipulatorVariant> getVariantProperty() {
         return VARIANT;
     }
 

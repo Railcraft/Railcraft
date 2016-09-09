@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
@@ -32,7 +32,7 @@ public class ModuleTrain extends RailcraftModulePayload {
                         RailcraftBlocks.DETECTOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track
-//                        RailcraftBlocks.machine_gamma
+//                        RailcraftBlocks.manipulator
                 );
             }
 
@@ -50,13 +50,13 @@ public class ModuleTrain extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                EnumMachineGamma type = EnumMachineGamma.DISPENSER_TRAIN;
-                if (type.isAvailable() && EnumMachineGamma.DISPENSER_CART.isAvailable()) {
+                ManipulatorVariant type = ManipulatorVariant.DISPENSER_TRAIN;
+                if (type.isAvailable() && ManipulatorVariant.DISPENSER_CART.isAvailable()) {
                     CraftingPlugin.addRecipe(type.getItem(),
                             "rcr",
                             "cdc",
                             "rcr",
-                            'd', EnumMachineGamma.DISPENSER_CART.getItem(),
+                            'd', ManipulatorVariant.DISPENSER_CART.getItem(),
                             'c', IToolCrowbar.ORE_TAG,
                             'r', "dustRedstone");
                 }

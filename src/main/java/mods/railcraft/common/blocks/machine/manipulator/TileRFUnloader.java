@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.gamma;
+package mods.railcraft.common.blocks.machine.manipulator;
 
 import cofh.api.energy.IEnergyProvider;
 import mods.railcraft.api.carts.CartToolsAPI;
@@ -28,13 +28,13 @@ import net.minecraft.util.EnumFacing;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider, IGuiReturnHandler {
+public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider, IGuiReturnHandler {
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
     private boolean waitTillEmpty = true;
 
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineGamma.RF_UNLOADER;
+        return ManipulatorVariant.RF_UNLOADER;
     }
 
     @Override

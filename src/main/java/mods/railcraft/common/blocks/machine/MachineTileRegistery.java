@@ -11,12 +11,11 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
-import mods.railcraft.common.blocks.machine.delta.TileCage;
 import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
 import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
-import mods.railcraft.common.blocks.machine.gamma.*;
+import mods.railcraft.common.blocks.machine.manipulator.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -64,8 +63,8 @@ public class MachineTileRegistery {
 
         // Gamma
         GameRegistry.registerTileEntity(TileDispenserCart.class, "RCMinecartDispenserTile");
-        GameRegistry.registerTileEntity(TileEnergyLoader.class, "RCLoaderTileEnergy");
-        GameRegistry.registerTileEntity(TileEnergyUnloader.class, "RCUnloaderTileEnergy");
+        GameRegistry.registerTileEntity(TileIC2Loader.class, "RCLoaderTileEnergy");
+        GameRegistry.registerTileEntity(TileIC2Unloader.class, "RCUnloaderTileEnergy");
         GameRegistry.registerTileEntity(TileDispenserTrain.class, "RCTrainDispenserTile");
         GameRegistry.registerTileEntity(TileItemLoader.class, "RCLoaderTile");
         GameRegistry.registerTileEntity(TileItemLoaderAdvanced.class, "RCLoaderAdvancedTile");
@@ -75,9 +74,6 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileFluidUnloader.class, "RCUnloaderTileLiquid");
         GameRegistry.registerTileEntity(TileRFLoader.class, "RCLoaderTileRF");
         GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
-
-        // Delta
-        GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");
 
         // Epsilon
         GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");

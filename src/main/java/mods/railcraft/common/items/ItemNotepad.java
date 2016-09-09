@@ -11,9 +11,9 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.render.models.resource.ModelManager;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderBase;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
+import mods.railcraft.common.blocks.machine.manipulator.TileCartManipulator;
+import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
+import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -227,8 +227,8 @@ public class ItemNotepad extends ItemRailcraft {
         FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tip.contents.filter.cart") {
             @Override
             NBTTagCompound copy(Object target) {
-                if (target instanceof TileLoaderBase) {
-                    PhantomInventory cartFilters = ((TileLoaderBase) target).getCartFilters();
+                if (target instanceof TileCartManipulator) {
+                    PhantomInventory cartFilters = ((TileCartManipulator) target).getCartFilters();
                     NBTTagCompound nbt = new NBTTagCompound();
                     cartFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -238,8 +238,8 @@ public class ItemNotepad extends ItemRailcraft {
 
             @Override
             boolean paste(Object target, NBTTagCompound nbt) {
-                if (target instanceof TileLoaderBase) {
-                    ((TileLoaderBase) target).getCartFilters().readFromNBT("inv", nbt);
+                if (target instanceof TileCartManipulator) {
+                    ((TileCartManipulator) target).getCartFilters().readFromNBT("inv", nbt);
                     return true;
                 }
                 return false;
@@ -248,8 +248,8 @@ public class ItemNotepad extends ItemRailcraft {
         FILTER_ITEMS("filter.items", "item.railcraft.tool.notepad.tip.contents.filter.items") {
             @Override
             NBTTagCompound copy(Object target) {
-                if (target instanceof TileLoaderItemBase) {
-                    PhantomInventory itemFilters = ((TileLoaderItemBase) target).getItemFilters();
+                if (target instanceof TileItemManipulator) {
+                    PhantomInventory itemFilters = ((TileItemManipulator) target).getItemFilters();
                     NBTTagCompound nbt = new NBTTagCompound();
                     itemFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -259,8 +259,8 @@ public class ItemNotepad extends ItemRailcraft {
 
             @Override
             boolean paste(Object target, NBTTagCompound nbt) {
-                if (target instanceof TileLoaderItemBase) {
-                    ((TileLoaderItemBase) target).getItemFilters().readFromNBT("inv", nbt);
+                if (target instanceof TileItemManipulator) {
+                    ((TileItemManipulator) target).getItemFilters().readFromNBT("inv", nbt);
                     return true;
                 }
                 return false;
@@ -269,8 +269,8 @@ public class ItemNotepad extends ItemRailcraft {
         FILTER_FLUID("filter.fluid", "item.railcraft.tool.notepad.tip.contents.filter.fluid") {
             @Override
             NBTTagCompound copy(Object target) {
-                if (target instanceof TileLoaderFluidBase) {
-                    PhantomInventory itemFilters = ((TileLoaderFluidBase) target).getFluidFilter();
+                if (target instanceof TileFluidManipulator) {
+                    PhantomInventory itemFilters = ((TileFluidManipulator) target).getFluidFilter();
                     NBTTagCompound nbt = new NBTTagCompound();
                     itemFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -280,8 +280,8 @@ public class ItemNotepad extends ItemRailcraft {
 
             @Override
             boolean paste(Object target, NBTTagCompound nbt) {
-                if (target instanceof TileLoaderFluidBase) {
-                    ((TileLoaderFluidBase) target).getFluidFilter().readFromNBT("inv", nbt);
+                if (target instanceof TileFluidManipulator) {
+                    ((TileFluidManipulator) target).getFluidFilter().readFromNBT("inv", nbt);
                     return true;
                 }
                 return false;

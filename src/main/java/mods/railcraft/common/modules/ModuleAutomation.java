@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,7 +36,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.DETECTOR,
                         RailcraftBlocks.GENERIC,
 //                        RailcraftBlocks.machine_alpha,
-//                        RailcraftBlocks.machine_gamma,
+//                        RailcraftBlocks.manipulator,
 
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,
@@ -51,7 +51,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumMachineGamma gamma = EnumMachineGamma.DISPENSER_CART;
+                ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "ML",

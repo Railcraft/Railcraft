@@ -1,14 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -38,7 +40,7 @@ import static net.minecraft.util.EnumFacing.UP;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: investigate chest locking
-public abstract class TileChestRailcraft extends TileMachineItem {
+public abstract class TileChestRailcraft extends TileMachineItem implements ITileRotate {
 
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int TICK_PER_SYNC = 64;

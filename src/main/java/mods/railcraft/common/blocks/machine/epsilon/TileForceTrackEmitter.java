@@ -14,6 +14,7 @@ import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
@@ -41,7 +42,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: migrate to new charge API
-public class TileForceTrackEmitter extends TileMachineBase {
+public class TileForceTrackEmitter extends TileMachineBase implements ITileRotate {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;

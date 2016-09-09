@@ -13,7 +13,7 @@ import ic2.api.recipe.Recipes;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.ModItems;
@@ -43,7 +43,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         RailcraftCarts.ENERGY_BATBOX,
                         RailcraftCarts.ENERGY_MFE,
                         RailcraftCarts.ENERGY_CESU
-//                        RailcraftBlocks.machine_gamma
+//                        RailcraftBlocks.manipulator
                 );
                 if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
             }
@@ -153,8 +153,8 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
                 if (battery != null && machine != null) {
-                    if (EnumMachineGamma.ENERGY_LOADER.isAvailable())
-                        Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_LOADER.getItem(),
+                    if (ManipulatorVariant.ENERGY_LOADER.isAvailable())
+                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_LOADER.getItem(),
                                 "BLB",
                                 "BIB",
                                 "BDB",
@@ -163,8 +163,8 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 'I', machine,
                                 'L', new ItemStack(Blocks.HOPPER));
 
-                    if (EnumMachineGamma.ENERGY_UNLOADER.isAvailable())
-                        Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_UNLOADER.getItem(),
+                    if (ManipulatorVariant.ENERGY_UNLOADER.isAvailable())
+                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_UNLOADER.getItem(),
                                 "BDB",
                                 "BIB",
                                 "BLB",

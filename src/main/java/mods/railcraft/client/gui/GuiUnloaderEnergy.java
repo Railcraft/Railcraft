@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.machine.gamma.TileEnergyUnloader;
+import mods.railcraft.common.blocks.machine.manipulator.TileIC2Unloader;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEnergyLoader;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -25,9 +26,9 @@ public class GuiUnloaderEnergy extends TileGui {
     private final String label;
     private final String button1Label = LocalizationPlugin.translate("railcraft.gui.energy.unloader.wait");
     //    private final String BUTTON1 = "Wait till Empty";
-    private TileEnergyUnloader tile;
+    private TileIC2Unloader tile;
 
-    public GuiUnloaderEnergy(InventoryPlayer inv, TileEnergyUnloader tile) {
+    public GuiUnloaderEnergy(InventoryPlayer inv, TileIC2Unloader tile) {
         super(tile, new ContainerEnergyLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy_loader.png");
         this.tile = tile;
         label = tile.getName();
@@ -91,8 +92,8 @@ public class GuiUnloaderEnergy extends TileGui {
     public void updateScreen() {
         super.updateScreen();
         TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
-        if (t instanceof TileEnergyUnloader)
-            tile = (TileEnergyUnloader) t;
+        if (t instanceof TileIC2Unloader)
+            tile = (TileIC2Unloader) t;
         else
             mc.thePlayer.closeScreen();
     }

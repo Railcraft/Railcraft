@@ -1,13 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.gamma;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
 
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.manipulator;
+
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -23,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 import java.io.IOException;
 
 //TODO: standardize with other loaders
-public abstract class TileRFLoaderBase extends TileLoaderBase {
+public abstract class TileRFManipulator extends TileCartManipulator implements ITileRotate {
     protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
     private static final int RF_CAP = 4000000;
@@ -31,7 +33,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     protected EnumFacing direction = EnumFacing.NORTH;
     private int ticksSinceTransfer;
 
-    public TileRFLoaderBase() {
+    protected TileRFManipulator() {
         setInventorySize(0);
     }
 

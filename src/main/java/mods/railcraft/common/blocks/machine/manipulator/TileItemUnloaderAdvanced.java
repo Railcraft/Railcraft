@@ -1,13 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.gamma;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
 
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.manipulator;
+
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -19,13 +21,13 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public class TileItemUnloaderAdvanced extends TileItemUnloader {
+public class TileItemUnloaderAdvanced extends TileItemUnloader implements ITileRotate {
 
     private EnumFacing direction = EnumFacing.NORTH;
 
     @Override
-    public EnumMachineGamma getMachineType() {
-        return EnumMachineGamma.ITEM_UNLOADER_ADVANCED;
+    public ManipulatorVariant getMachineType() {
+        return ManipulatorVariant.ITEM_UNLOADER_ADVANCED;
     }
 
     @Override

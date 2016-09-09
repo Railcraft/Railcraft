@@ -97,14 +97,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         return openGui(player);
     }
 
-    public boolean rotateBlock(EnumFacing axis) {
-        return false;
-    }
-
-    public EnumFacing[] getValidRotations() {
-        return EnumFacing.VALUES;
-    }
-
     public boolean isSideSolid(EnumFacing side) {
         return true;
     }

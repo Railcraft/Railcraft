@@ -18,7 +18,7 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.machine.gamma.*;
+import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
@@ -50,15 +50,15 @@ public class FactoryGui {
         try {
             switch (gui) {
                 case LOADER_ITEM:
-                    return new GuiLoaderItem(inv, (TileLoaderItemBase) obj);
+                    return new GuiLoaderItem(inv, (TileItemManipulator) obj);
                 case LOADER_FLUID:
                     return new GuiLoaderFluid(inv, (TileFluidLoader) obj);
                 case UNLOADER_FLUID:
                     return new GuiUnloaderFluid(inv, (TileFluidUnloader) obj);
                 case LOADER_ENERGY:
-                    return new GuiLoaderEnergy(inv, (TileEnergyLoader) obj);
+                    return new GuiLoaderEnergy(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
-                    return new GuiUnloaderEnergy(inv, (TileEnergyUnloader) obj);
+                    return new GuiUnloaderEnergy(inv, (TileIC2Unloader) obj);
                 case LOADER_RF:
                     return new GuiLoaderRF((TileRFLoader) obj);
                 case UNLOADER_RF:
