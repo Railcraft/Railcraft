@@ -120,17 +120,17 @@ public class ItemTicket extends ItemRailcraft {
         if (stack.hasTagCompound()) {
             GameProfile owner = getOwner(stack);
             if (owner.getId() != null) {
-                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.issuer"));
+                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tips.issuer"));
                 list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(player.worldObj, owner));
             }
 
             String dest = getDestination(stack);
             if (!dest.equals("")) {
-                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.dest"));
+                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tips.dest"));
                 list.add(TextFormatting.GRAY + dest);
             }
         } else
-            list.add(LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.blank"));
+            list.add(LocalizationPlugin.translate("railcraft.gui.routing.ticket.tips.blank"));
     }
 
 }

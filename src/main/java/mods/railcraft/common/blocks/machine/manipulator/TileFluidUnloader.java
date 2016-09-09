@@ -9,115 +9,66 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.buttons.IButtonTextureSet;
-import mods.railcraft.common.gui.buttons.IMultiButtonState;
-import mods.railcraft.common.gui.buttons.MultiButtonController;
-import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
-import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import java.io.IOException;
-
-public class TileFluidUnloader extends TileFluidManipulator implements IGuiReturnHandler {
+public class TileFluidUnloader extends TileFluidManipulator {
 
     private static final int TRANSFER_RATE = 80;
-    private final MultiButtonController<ButtonState> stateController = MultiButtonController.create(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
 
     @Override
     public ManipulatorVariant getMachineType() {
         return ManipulatorVariant.FLUID_UNLOADER;
     }
 
-    public MultiButtonController<ButtonState> getStateController() {
-        return stateController;
+    @Override
+    public EnumFacing getFacing() {
+        return EnumFacing.UP;
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (Game.isClient(getWorld()))
-            return;
-
-        flow = 0;
-
-        ItemStack topSlot = getStackInSlot(SLOT_INPUT);
-        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
-            setInventorySlotContents(SLOT_INPUT, null);
-            dropItem(topSlot);
-        }
-
-        ItemStack bottomSlot = getStackInSlot(SLOT_OUTPUT);
-        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
-            setInventorySlotContents(SLOT_OUTPUT, null);
-            dropItem(bottomSlot);
-        }
+    protected void upkeep() {
+        super.upkeep();
 
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, loaderTank.getFluidType());
 
         tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALUES, 0, TRANSFER_RATE);
+    }
 
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, EnumFacing.UP);
-
-        if (cart != currentCart) {
-            setPowered(false);
-            currentCart = cart;
-            cartWasSent();
-        }
-
-        if (cart == null)
-            return;
-
-        if (!canHandleCart(cart)) {
-            sendCart(cart);
-            return;
-        }
-
-        if (isPaused())
-            return;
-
+    @Override
+    protected void processCart(EntityMinecart cart) {
         TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
 
         FluidStack drained = tankCart.drain(EnumFacing.DOWN, RailcraftConfig.getTankCartFillRate(), false);
         if (getFilterFluid() == null || Fluids.areEqual(getFilterFluid(), drained)) {
-            flow = tankManager.get(0).fill(drained, true);
+            int flow = tankManager.get(0).fill(drained, true);
             tankCart.drain(EnumFacing.DOWN, flow, true);
+            setProcessing(flow > 0);
         }
-
-        if (flow > 0)
-            setPowered(false);
-
-        if (!isManualMode() && flow <= 0 && !isPowered() && shouldSendCart(cart))
-            sendCart(cart);
     }
 
     @Override
-    protected boolean shouldSendCart(EntityMinecart cart) {
+    protected boolean hasWorkForCart(EntityMinecart cart) {
+        if (isProcessing())
+            return true;
         if (!(cart instanceof IFluidHandler))
-            return true;
+            return false;
         TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
-        if (stateController.getButtonState() == ButtonState.IMMEDIATE)
-            return true;
+        if (getRedstoneModeController().getButtonState() == EnumRedstoneMode.IMMEDIATE)
+            return false;
         if (getFilterFluid() != null && tankCart.isTankEmpty(getFilterFluid()))
-            return true;
-        return tankCart.areTanksEmpty();
+            return false;
+        return !tankCart.areTanksEmpty();
     }
 
     @Override
@@ -136,45 +87,6 @@ public class TileFluidUnloader extends TileFluidManipulator implements IGuiRetur
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        stateController.writeToNBT(data, "state");
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        stateController.readFromNBT(data, "state");
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-        data.writeByte(stateController.getCurrentState());
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-        stateController.setCurrentState(data.readByte());
-    }
-
-    @Override
-    public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        data.writeByte(stateController.getCurrentState());
-    }
-
-    @Override
-    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        stateController.setCurrentState(data.readByte());
-    }
-
-    public EnumFacing getOrientation() {
-        return EnumFacing.UP;
-    }
-
-    @Override
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.UNLOADER_FLUID, player, worldObj, getPos());
         return true;
@@ -187,39 +99,5 @@ public class TileFluidUnloader extends TileFluidManipulator implements IGuiRetur
                 return FluidItemHelper.isEmptyContainer(stack);
         }
         return false;
-    }
-
-    @Override
-    public boolean isManualMode() {
-        return stateController.getButtonState() == ButtonState.MANUAL;
-    }
-
-    public enum ButtonState implements IMultiButtonState {
-
-        EMPTY_COMPLETELY("railcraft.gui.liquid.unloader.empty"),
-        IMMEDIATE("railcraft.gui.liquid.unloader.immediate"),
-        MANUAL("railcraft.gui.liquid.unloader.manual");
-        private final String label;
-        private final ToolTip tip;
-
-        ButtonState(String label) {
-            this.label = label;
-            this.tip = ToolTip.buildToolTip(label + ".tip");
-        }
-
-        @Override
-        public String getLabel() {
-            return LocalizationPlugin.translate(label);
-        }
-
-        @Override
-        public IButtonTextureSet getTextureSet() {
-            return StandardButtonTextureSets.SMALL_BUTTON;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return tip;
-        }
     }
 }

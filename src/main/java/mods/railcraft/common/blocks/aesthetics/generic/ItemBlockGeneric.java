@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
@@ -38,7 +38,7 @@ public class ItemBlockGeneric extends ItemBlockRailcraft {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
-        String tag = getUnlocalizedName(stack) + ".tip";
+        String tag = getUnlocalizedName(stack) + ".tips";
         if (LocalizationPlugin.hasTag(tag))
             info.add(LocalizationPlugin.translate(tag));
     }

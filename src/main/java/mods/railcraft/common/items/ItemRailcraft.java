@@ -81,7 +81,7 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
     }
 
     public String getTooltipTag(ItemStack stack) {
-        return stack.getUnlocalizedName() + ".tip";
+        return stack.getUnlocalizedName() + ".tips";
     }
 
     @Nullable

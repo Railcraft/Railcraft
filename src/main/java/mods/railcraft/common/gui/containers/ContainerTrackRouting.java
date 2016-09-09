@@ -36,7 +36,7 @@ public class ContainerTrackRouting extends RailcraftContainer {
         this.playerInv = playerInv;
 
         slotTicket = new SlotSecure(ItemTicketGold.FILTER, track.getInventory(), 0, 44, 24);
-        slotTicket.setToolTips(ToolTip.buildToolTip("routing.track.tip.slot"));
+        slotTicket.setToolTips(ToolTip.buildToolTip("routing.track.tips.slot"));
         addSlot(slotTicket);
 
         for (int i = 0; i < 3; i++) {

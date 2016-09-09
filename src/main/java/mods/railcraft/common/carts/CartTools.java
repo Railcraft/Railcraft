@@ -96,8 +96,10 @@ public class CartTools {
      * @return true if the item matches the cart
      * @see IMinecart
      */
-    public static boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
+    public static boolean doesCartMatchFilter(@Nullable ItemStack stack, @Nullable EntityMinecart cart) {
         if (stack == null)
+            return false;
+        if (cart == null)
             return false;
         if (cart instanceof IMinecart) {
             if (stack.hasDisplayName())

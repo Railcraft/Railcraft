@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
@@ -17,7 +16,6 @@ import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -61,48 +59,19 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (Game.isClient(getWorld())) {
-            return;
-        }
-
-        emptyCart();
-        clearInv();
+    protected void reset() {
+        transferredItems.clear();
     }
 
-    private void emptyCart() {
-        movedItemCart = false;
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, getOrientation());
-
-        if (cart == null) {
-            setPowered(false);
-            currentCart = null;
-            return;
-        }
-
-        if (cart != currentCart) {
-            setPowered(false);
-            currentCart = cart;
-            transferredItems.clear();
-            cartWasSent();
-        }
-
-        if (!canHandleCart(cart)) {
-            sendCart(cart);
-            return;
-        }
-
-        if (isPaused())
-            return;
-
+    @Override
+    protected void processCart(EntityMinecart cart) {
         chests.clear();
         chests.addAll(invCache.getAdjacentInventories());
         chests.addFirst(invBuffer);
 
         checkedItems.clear();
 
-        IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+        IInventoryObject cartInv = InvTools.getInventory(cart, getFacing().getOpposite());
         if (cartInv == null) {
             sendCart(cart);
             return;
@@ -126,7 +95,7 @@ public class TileItemUnloader extends TileItemManipulator {
                     if (numMoved < InvTools.countItems(getItemFilters(), filter)) {
                         ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
                         if (moved != null) {
-                            movedItemCart = true;
+                            setProcessing(true);
                             numMoved++;
                             transferredItems.put(moved, numMoved);
                             break;
@@ -136,7 +105,7 @@ public class TileItemUnloader extends TileItemManipulator {
                 if (!hasFilter) {
                     ItemStack moved = InvTools.moveOneItem(cartInv, chests);
                     if (moved != null) {
-                        movedItemCart = true;
+                        setProcessing(true);
                         break;
                     }
                 }
@@ -154,7 +123,7 @@ public class TileItemUnloader extends TileItemManipulator {
                     if (stocked < InvTools.countItems(getItemFilters(), filter)) {
                         ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
                         if (moved != null) {
-                            movedItemCart = true;
+                            setProcessing(true);
                             break;
                         }
                     }
@@ -173,14 +142,14 @@ public class TileItemUnloader extends TileItemManipulator {
                     if (stocked > InvTools.countItems(getItemFilters(), filter)) {
                         ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
                         if (moved != null) {
-                            movedItemCart = true;
+                            setProcessing(true);
                             break;
                         }
                     }
                 }
-                if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(cartInv, chests, getFilters()) != null;
-                }
+                if (!isProcessing())
+                    setProcessing(InvTools.moveOneItemExcept(cartInv, chests, getFilters()) != null);
+
                 break;
             }
             case ALL: {
@@ -195,14 +164,14 @@ public class TileItemUnloader extends TileItemManipulator {
                     hasFilter = true;
                     ItemStack moved = InvTools.moveOneItem(cartInv, chests, filter);
                     if (moved != null) {
-                        movedItemCart = true;
+                        setProcessing(true);
                         break;
                     }
                 }
                 if (!hasFilter) {
                     ItemStack moved = InvTools.moveOneItem(cartInv, chests);
                     if (moved != null) {
-                        movedItemCart = true;
+                        setProcessing(true);
                         break;
                     }
                 }
@@ -210,10 +179,7 @@ public class TileItemUnloader extends TileItemManipulator {
             }
         }
 
-        EnumRedstoneMode state = getRedstoneModeController().getButtonState();
-        if (state != EnumRedstoneMode.MANUAL && !isPowered() && shouldSendCart(cart)) {
-            sendCart(cart);
-        }
+        clearInv();
     }
 
     @Override
@@ -222,25 +188,25 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    protected boolean shouldSendCart(EntityMinecart cart) {
-        IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+    protected boolean hasWorkForCart(EntityMinecart cart) {
+        IInventoryObject cartInv = InvTools.getInventory(cart, getFacing().getOpposite());
         if (cartInv == null)
-            return true;
+            return false;
         EnumRedstoneMode state = getRedstoneModeController().getButtonState();
-        if (!movedItemCart && state != EnumRedstoneMode.COMPLETE) {
-            return true;
+        if (!isProcessing() && state != EnumRedstoneMode.COMPLETE) {
+            return false;
         } else if (getMode() == EnumTransferMode.TRANSFER && isTransferComplete(getItemFilters().getContents())) {
-            return true;
+            return false;
         } else if (getMode() == EnumTransferMode.STOCK && isStockComplete(chests, getItemFilters().getContents())) {
-            return true;
+            return false;
         } else if (getMode() == EnumTransferMode.EXCESS && isExcessComplete(cartInv, getItemFilters().getContents())) {
-            return true;
+            return false;
         } else if (getMode() == EnumTransferMode.ALL && isAllComplete(chests, getItemFilters().getContents())) {
-            return true;
-        } else if (!movedItemCart && InvTools.isAccessibleInventoryEmpty(cartInv)) {
-            return true;
+            return false;
+        } else if (!isProcessing() && InvTools.isAccessibleInventoryEmpty(cartInv)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private boolean isTransferComplete(ItemStack[] filters) {
@@ -329,7 +295,7 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    public EnumFacing getOrientation() {
+    public EnumFacing getFacing() {
         return EnumFacing.UP;
     }
 
@@ -339,7 +305,7 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         return false;
     }
 }

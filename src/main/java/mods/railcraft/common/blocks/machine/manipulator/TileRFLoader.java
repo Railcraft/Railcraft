@@ -10,12 +10,10 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import cofh.api.energy.IEnergyReceiver;
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -26,7 +24,7 @@ import net.minecraft.util.EnumFacing;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileRFLoader extends TileRFManipulator implements IGuiReturnHandler, IEnergyReceiver {
+public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
     private boolean waitTillFull = true;
     private boolean waitIfEmpty = true;
 
@@ -42,28 +40,7 @@ public class TileRFLoader extends TileRFManipulator implements IGuiReturnHandler
     }
 
     @Override
-    protected boolean processCart() {
-        boolean transferred = false;
-
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
-
-        if (cart != currentCart) {
-            setPowered(false);
-            currentCart = cart;
-            cartWasSent();
-        }
-
-        if (cart == null)
-            return false;
-
-        if (!canHandleCart(cart)) {
-            sendCart(cart);
-            return false;
-        }
-
-        if (isPaused())
-            return false;
-
+    protected void processCart(EntityMinecart cart) {
         EntityCartRF rfCart = (EntityCartRF) cart;
 
         if (amountRF > 0 && rfCart.getRF() < rfCart.getMaxRF()) {
@@ -74,28 +51,26 @@ public class TileRFLoader extends TileRFManipulator implements IGuiReturnHandler
             int used = rfCart.addRF(injection);
             if (used > 0) {
                 amountRF -= used;
-                transferred = true;
+                setProcessing(true);
             }
         }
 
-        if (!transferred && !isPowered() && shouldSendCart(cart))
-            sendCart(cart);
-
-        return transferred;
+        if (isProcessing())
+            setResetTimer(TRANSFER_FADE);
     }
 
     @Override
-    protected boolean shouldSendCart(EntityMinecart cart) {
+    protected boolean hasWorkForCart(EntityMinecart cart) {
         if (!(cart instanceof EntityCartRF))
-            return true;
+            return false;
         EntityCartRF energyCart = (EntityCartRF) cart;
         if (!waitTillFull && energyCart.getRF() > 0)
-            return true;
+            return false;
         else if (!waitIfEmpty && !waitTillFull && energyCart.getRF() == 0)
-            return true;
+            return false;
         else if (energyCart.getRF() >= energyCart.getMaxRF())
-            return true;
-        return false;
+            return false;
+        return true;
     }
 
     @Override

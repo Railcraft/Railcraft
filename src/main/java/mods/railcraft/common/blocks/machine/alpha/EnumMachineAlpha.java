@@ -191,7 +191,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
                     return addAnchorInfo(stack);
                 break;
             default:
-                String tipTag = getTag() + ".tip";
+                String tipTag = getTag() + ".tips";
                 if (LocalizationPlugin.hasTag(tipTag))
                     tip = ToolTip.buildToolTip(tipTag);
                 break;

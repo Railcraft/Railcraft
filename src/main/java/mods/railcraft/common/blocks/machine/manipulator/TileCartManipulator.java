@@ -12,58 +12,128 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.carts.CartTools;
+import mods.railcraft.common.gui.buttons.IButtonTextureSet;
+import mods.railcraft.common.gui.buttons.IMultiButtonState;
+import mods.railcraft.common.gui.buttons.MultiButtonController;
+import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
+import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasCart;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileCartManipulator extends TileMachineItem implements IHasCart, IHasWork {
+public abstract class TileCartManipulator extends TileMachineItem implements IHasCart, IHasWork, IGuiReturnHandler {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
+    private EnumFacing direction = EnumFacing.NORTH;
+    private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
     protected EntityMinecart currentCart;
     private boolean powered;
     private boolean sendCartGateAction;
+    private boolean processing;
     private int pause;
+    private int resetTimer;
+
+    public EnumRedstoneMode[] getValidRedstoneModes() {
+        return EnumRedstoneMode.values();
+    }
+
+    public MultiButtonController<EnumRedstoneMode> getRedstoneModeController() {
+        return redstoneModeController;
+    }
 
     @Override
     public boolean hasMinecart() {
         return currentCart != null;
     }
 
-    public abstract boolean canHandleCart(EntityMinecart cart);
+    @Nullable
+    public EntityMinecart getCart() {
+        return CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, getFacing());
+    }
+
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (isSendCartGateAction())
+            return false;
+        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
+        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
+        if (minecartSlot1 != null || minecartSlot2 != null)
+            if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
+                return false;
+        return true;
+    }
+
+    protected void setCurrentCart(@Nullable EntityMinecart newCart) {
+        if (newCart != currentCart) {
+            reset();
+            setPowered(false);
+            currentCart = newCart;
+            cartWasSent();
+        }
+    }
+
+    protected void reset() {
+    }
+
+    protected final void setProcessing(boolean processing) {
+        this.processing = processing;
+    }
+
+    protected final boolean isProcessing() {
+        return processing;
+    }
 
     @Override
     public boolean hasWork() {
-        return currentCart != null && canHandleCart(currentCart) && (isProcessing() || !shouldSendCart(currentCart));
+        return currentCart != null && canHandleCart(currentCart) && (isProcessing() || hasWorkForCart(currentCart));
     }
 
-    public abstract boolean isManualMode();
+    public boolean isManualMode() {
+        return getRedstoneModeController().getButtonState() == EnumRedstoneMode.MANUAL;
+    }
 
-    public abstract boolean isProcessing();
+    protected final void trySendCart(EntityMinecart cart) {
+        EnumRedstoneMode state = getRedstoneModeController().getButtonState();
+        if (state != EnumRedstoneMode.MANUAL && !isPowered() && !hasWorkForCart(cart))
+            sendCart(cart);
+    }
 
-    protected abstract boolean shouldSendCart(EntityMinecart cart);
+    protected abstract boolean hasWorkForCart(EntityMinecart cart);
 
-    protected void sendCart(EntityMinecart cart) {
+    protected void sendCart(@Nullable EntityMinecart cart) {
         if (cart == null)
             return;
         if (isManualMode())
             return;
-        if (CartToolsAPI.cartVelocityIsLessThan(cart, STOP_VELOCITY) || cart.isPoweredCart()) {
+        if (CartToolsAPI.cartVelocityIsLessThan(cart, STOP_VELOCITY) || cart.isPoweredCart())
             setPowered(true);
-        }
     }
 
     public final boolean isPowered() {
@@ -71,6 +141,7 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     }
 
     protected void setPowered(boolean p) {
+        if (p) setProcessing(false);
         if (isManualMode())
             p = false;
         if (powered != p) {
@@ -103,14 +174,81 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
         return pause > 0;
     }
 
+    protected void setResetTimer(int ticks) {
+        resetTimer = ticks;
+    }
+
+    protected void waitForReset(@Nullable EntityMinecart cart) {
+        sendCart(cart);
+    }
+
+    protected void onNoCart() {
+    }
+
     @Override
     public void update() {
         super.update();
         if (Game.isClient(getWorld()))
             return;
+
+        upkeep();
+
         if (pause > 0)
             pause--;
+
+        boolean wasProcessing = isProcessing();
+
+        setProcessing(false);
+
+        // Find cart to play with
+        EntityMinecart cart = getCart();
+
+        setCurrentCart(cart);
+
+        // Wait for reset timer (used by loaders that trickle fill forever)
+        if (resetTimer > 0)
+            resetTimer--;
+
+        if (resetTimer > 0) {
+            waitForReset(cart);
+            return;
+        }
+
+        // We are alone
+        if (cart == null) {
+            onNoCart();
+            return;
+        }
+
+        // We only like some carts
+        if (!canHandleCart(cart)) {
+            sendCart(cart);
+            return;
+        }
+
+        // Time out
+        if (isPaused())
+            return;
+
+        // Play time!
+        processCart(cart);
+
+        // We did something!
+        if (isProcessing())
+            setPowered(false);
+
+        // Are we done?
+        trySendCart(cart);
+
+        // Tell our twin
+        if (isProcessing() != wasProcessing)
+            sendUpdateToClient();
     }
+
+    protected void upkeep() {
+    }
+
+    protected abstract void processCart(EntityMinecart cart);
 
     @Override
     public final boolean canConnectRedstone(EnumFacing dir) {
@@ -126,9 +264,39 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     }
 
     @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeByte(redstoneModeController.getCurrentState());
+        if (canRotate())
+            data.writeByte(direction.ordinal());
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        redstoneModeController.setCurrentState(data.readByte());
+        if (canRotate())
+            direction = EnumFacing.getFront(data.readByte());
+    }
+
+    @Override
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
+        data.writeByte(redstoneModeController.getCurrentState());
+    }
+
+    @Override
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
+        redstoneModeController.setCurrentState(data.readByte());
+    }
+
+    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
+        redstoneModeController.writeToNBT(data, "redstone");
+
+        if (canRotate())
+            data.setByte("direction", (byte) direction.ordinal());
 
         getCartFilters().writeToNBT("invCarts", data);
         return data;
@@ -138,7 +306,100 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         setPowered(data.getBoolean("powered"));
+        redstoneModeController.readFromNBT(data, "redstone");
+
+        if (canRotate())
+            direction = EnumFacing.getFront(data.getByte("direction"));
 
         getCartFilters().readFromNBT("invCarts", data);
+    }
+
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    public boolean canRotate() {
+        return this instanceof ITileRotate;
+    }
+
+    @Override
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
+        if (canRotate()) {
+            direction = MiscTools.getSideFacingTrack(worldObj, getPos());
+            if (direction == null)
+                direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
+        }
+    }
+
+    public boolean rotateBlock(EnumFacing axis) {
+        if (!canRotate()) return false;
+        if (direction == axis)
+            direction = axis.getOpposite();
+        else
+            direction = axis;
+        markBlockForUpdate();
+        return true;
+    }
+
+    public enum EnumTransferMode implements IMultiButtonState {
+
+        ALL("all"),
+        EXCESS("excess"),
+        STOCK("stock"),
+        TRANSFER("transfer");
+        private final String locTag;
+        private final ToolTip tip;
+
+        EnumTransferMode(String locTag) {
+            this.locTag = "gui.railcraft.manipulator.transfer." + locTag;
+            this.tip = ToolTip.buildToolTip(locTag + ".tips");
+        }
+
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(locTag + ".name");
+        }
+
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
+    }
+
+    public enum EnumRedstoneMode implements IMultiButtonState {
+
+        COMPLETE("complete"),
+        IMMEDIATE("immediate"),
+        MANUAL("manual"),
+        PARTIAL("partial");
+        private final String locTag;
+        private final ToolTip tip;
+
+        EnumRedstoneMode(String locTag) {
+            this.locTag = "gui.railcraft.manipulator.redstone." + locTag;
+            this.tip = ToolTip.buildToolTip(locTag + ".tips");
+        }
+
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(locTag + ".name");
+        }
+
+        @Override
+        public StandardButtonTextureSets getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
     }
 }

@@ -264,7 +264,7 @@ public class ForestryPlugin {
 
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         private void addBackpackTooltip(ItemStack stack) {
-            InvTools.addItemToolTip(stack, "\u00a77\u00a7o" + LocalizationPlugin.translate("item.railcraft.backpack.tip"));
+            InvTools.addItemToolTip(stack, "\u00a77\u00a7o" + LocalizationPlugin.translate("item.railcraft.backpack.tips"));
         }
 
         @Override

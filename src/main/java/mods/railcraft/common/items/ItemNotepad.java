@@ -140,7 +140,7 @@ public class ItemNotepad extends ItemRailcraft {
         String contentString;
         EnumMap<Contents, NBTTagCompound> contents = getContents(stack);
         if (contents.isEmpty()) {
-            contentString = LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.contents.empty");
+            contentString = LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.contents.empty");
         } else {
             List<String> contentTypes = new ArrayList<String>();
             for (Contents content : contents.keySet()) {
@@ -148,10 +148,10 @@ public class ItemNotepad extends ItemRailcraft {
             }
             contentString = StringUtils.join(contentTypes, ", ");
         }
-        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.contents", contentString));
+        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.contents", contentString));
 
         PasteMode pasteMode = getPasteMode(stack);
-        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString()));
+        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.mode", TextFormatting.DARK_PURPLE + pasteMode.toString()));
 
         super.addInformation(stack, player, info, adv);
     }
@@ -163,7 +163,7 @@ public class ItemNotepad extends ItemRailcraft {
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
             if (Game.isClient(world))
-                ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString());
+                ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tips.mode", TextFormatting.DARK_PURPLE + pasteMode.toString());
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
@@ -224,7 +224,7 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     private enum Contents {
-        FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tip.contents.filter.cart") {
+        FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tips.contents.filter.cart") {
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileCartManipulator) {
@@ -245,7 +245,7 @@ public class ItemNotepad extends ItemRailcraft {
                 return false;
             }
         },
-        FILTER_ITEMS("filter.items", "item.railcraft.tool.notepad.tip.contents.filter.items") {
+        FILTER_ITEMS("filter.items", "item.railcraft.tool.notepad.tips.contents.filter.items") {
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileItemManipulator) {
@@ -266,7 +266,7 @@ public class ItemNotepad extends ItemRailcraft {
                 return false;
             }
         },
-        FILTER_FLUID("filter.fluid", "item.railcraft.tool.notepad.tip.contents.filter.fluid") {
+        FILTER_FLUID("filter.fluid", "item.railcraft.tool.notepad.tips.contents.filter.fluid") {
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileFluidManipulator) {
@@ -303,9 +303,9 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     private enum PasteMode {
-        ALL("item.railcraft.tool.notepad.tip.mode.all", Contents.VALUES),
-        CART_FILTER("item.railcraft.tool.notepad.tip.mode.cart.filter", Contents.FILTER_CART),
-        LOADER_FILTERS("item.railcraft.tool.notepad.tip.mode.loader.filters", Contents.FILTER_ITEMS, Contents.FILTER_ITEMS);
+        ALL("item.railcraft.tool.notepad.tips.mode.all", Contents.VALUES),
+        CART_FILTER("item.railcraft.tool.notepad.tips.mode.cart.filter", Contents.FILTER_CART),
+        LOADER_FILTERS("item.railcraft.tool.notepad.tips.mode.loader.filters", Contents.FILTER_ITEMS, Contents.FILTER_ITEMS);
         public static final PasteMode[] VALUES = values();
         private final String locTag;
         private final EnumSet<Contents> allows;

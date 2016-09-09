@@ -38,7 +38,7 @@ public class GuiUnloaderFluid extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(button = GuiMultiButton.create(0, w + 40, h + 60, 80, tile.getStateController().copy()));
+        buttonList.add(button = GuiMultiButton.create(0, w + 40, h + 60, 80, tile.getRedstoneModeController().copy()));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class GuiUnloaderFluid extends TileGui {
     @Override
     public void onGuiClosed() {
         if (Game.isClient(tile.getWorld())) {
-            tile.getStateController().setCurrentState(button.getController().getCurrentState());
+            tile.getRedstoneModeController().setCurrentState(button.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);
         }
     }

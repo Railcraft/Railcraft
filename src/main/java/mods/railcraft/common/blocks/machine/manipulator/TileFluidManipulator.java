@@ -9,8 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.TankManager;
@@ -18,7 +16,6 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -46,7 +43,6 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
     protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     protected final TankManager tankManager = new TankManager();
     protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
-    protected int flow;
 
     protected TileFluidManipulator() {
         setInventorySize(2);
@@ -78,48 +74,27 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
     }
 
     @Override
-    public boolean isProcessing() {
-        return flow > 0;
-    }
-
-    @Override
-    protected void sendCart(EntityMinecart cart) {
-        if (cart == null)
-            return;
-        if (isManualMode())
-            return;
-        if (CartToolsAPI.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
-            flow = 0;
-            setPowered(true);
-        }
-    }
-
-    @Override
-    protected void setPowered(boolean p) {
-        if (isManualMode())
-            p = false;
-        super.setPowered(p);
-    }
-
-    @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        if (isSendCartGateAction())
-            return false;
-        if (!(cart instanceof IFluidHandler))
-            return false;
-        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
-        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (minecartSlot1 != null || minecartSlot2 != null)
-            if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
-                return false;
-        return true;
+        return cart instanceof IFluidHandler && super.canHandleCart(cart);
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (Game.isHost(getWorld()) && clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
+    protected void upkeep() {
+        super.upkeep();
+        if (clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
             sendUpdateToClient();
+
+        ItemStack topSlot = getStackInSlot(SLOT_INPUT);
+        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
+            setInventorySlotContents(SLOT_INPUT, null);
+            dropItem(topSlot);
+        }
+
+        ItemStack bottomSlot = getStackInSlot(SLOT_OUTPUT);
+        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
+            setInventorySlotContents(SLOT_OUTPUT, null);
+            dropItem(bottomSlot);
+        }
     }
 
     @Override

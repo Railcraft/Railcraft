@@ -67,7 +67,7 @@ public class GuiTradeStation extends TileGui {
 
         GuiSimpleButton[] dice = new GuiSimpleButton[3];
 
-        ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tip");
+        ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tips");
         if (tip != null)
             tip.get(0).format = TextFormatting.YELLOW;
 

@@ -60,7 +60,7 @@ public class ContainerRouting extends RailcraftContainer {
             }
 
         };
-        slotTicket.setToolTips(ToolTip.buildToolTip("routing.tip.slot"));
+        slotTicket.setToolTips(ToolTip.buildToolTip("routing.tips.slot"));
         addSlot(slotTicket);
 
         for (int i = 0; i < 3; i++) {

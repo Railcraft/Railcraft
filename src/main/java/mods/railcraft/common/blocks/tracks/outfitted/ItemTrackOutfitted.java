@@ -94,7 +94,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
 
     @Override
     public String getTooltipTag(ItemStack stack) {
-        return TrackRegistry.TRACK_KIT.get(stack).getLocalizationTag().replace(".name", ".tip");
+        return TrackRegistry.TRACK_KIT.get(stack).getLocalizationTag().replace(".name", ".tips");
     }
 
     @Override

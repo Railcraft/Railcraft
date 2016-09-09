@@ -9,14 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,10 +25,8 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, IGuiReturnHandler {
-
-    private static final short[] INPUT_LEVELS = {512, 2048};
-    private boolean waitTillFull = false;
+public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
+    private boolean waitTillFull;
     private boolean waitIfEmpty = true;
     private TileEntity sinkDelegate;
 
@@ -46,34 +42,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, 
     }
 
     @Override
-    public void update() {
-        super.update();
-
-        if (Game.isClient(getWorld()))
-            return;
-
-        transferredEnergy = false;
-        transferRate = 0;
-
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
-
-        if (cart != currentCart) {
-            setPowered(false);
-            currentCart = cart;
-            cartWasSent();
-        }
-
-        if (cart == null)
-            return;
-
-        if (!canHandleCart(cart)) {
-            sendCart(cart);
-            return;
-        }
-
-        if (isPaused())
-            return;
-
+    protected void processCart(EntityMinecart cart) {
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
 
         if (energy > 0 && energyCart.getEnergy() < energyCart.getCapacity()) {
@@ -88,11 +57,8 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, 
             transferRate = (int) injection;
             double extra = energyCart.injectEnergy(this, injection, getTier(), true, false, false);
             energy -= usage - extra;
-            transferredEnergy = extra != injection;
+            setProcessing(extra != injection);
         }
-
-        if (!transferredEnergy && !isPowered() && shouldSendCart(cart))
-            sendCart(cart);
     }
 
     @Override
@@ -104,17 +70,17 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, 
     }
 
     @Override
-    protected boolean shouldSendCart(EntityMinecart cart) {
+    protected boolean hasWorkForCart(EntityMinecart cart) {
         if (!(cart instanceof IEnergyTransfer))
-            return true;
+            return false;
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
         if (!waitTillFull && energyCart.getEnergy() > 0)
-            return true;
+            return false;
         else if (!waitIfEmpty && !waitTillFull && energyCart.getEnergy() == 0)
-            return true;
+            return false;
         else if (energyCart.getEnergy() >= energyCart.getCapacity())
-            return true;
-        return false;
+            return false;
+        return true;
     }
 
     @Override
@@ -171,7 +137,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate, 
 
     @Override
     public boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction) {
-        return this.direction != direction;
+        return getFacing() != direction;
     }
 
     public boolean waitTillFull() {

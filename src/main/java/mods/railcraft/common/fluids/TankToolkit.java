@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import net.minecraft.util.EnumFacing;
@@ -13,6 +14,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import javax.annotation.Nullable;
 
 /**
  * This class provides some convenience functions for ITankContainers
@@ -96,10 +99,8 @@ public class TankToolkit implements IFluidHandler {
         return capacity == 0 ? 0 : amount / (float) capacity;
     }
 
-    public boolean canPutFluid(EnumFacing from, FluidStack liquid) {
-        if (liquid == null)
-            return false;
-        return fill(from, liquid, false) > 0;
+    public boolean canPutFluid(EnumFacing from, @Nullable FluidStack fluid) {
+        return fluid != null && fill(from, fluid, false) > 0;
     }
 
     @Override

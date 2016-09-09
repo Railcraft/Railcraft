@@ -50,9 +50,9 @@ public class GuiAspectAction extends GuiContainerRailcraft {
         for (SignalAspect aspect : SignalAspect.values()) {
             aspects[aspect.ordinal()] = actionManager.doesActionOnAspect(aspect);
         }
-        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + ownerName);
-        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + ownerName);
-        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
+        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + ownerName);
+        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + ownerName);
     }
 
     @Override
@@ -105,9 +105,9 @@ public class GuiAspectAction extends GuiContainerRailcraft {
         String username = ((ContainerAspectAction) container).ownerName;
         if (username != null && !username.equals(ownerName)) {
             ownerName = username;
-            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + username);
-            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + username);
-            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
+            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + username);
+            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + username);
         }
     }
 

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import cofh.api.energy.EnergyStorage;
@@ -44,7 +45,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
                 if (stack != null && Game.isClient(tile.getWorld()))
-                    InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tip.craft"));
+                    InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tips.craft"));
             }
 
         };

@@ -10,14 +10,11 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import cofh.api.energy.IEnergyProvider;
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -28,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider, IGuiReturnHandler {
+public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider {
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
     private boolean waitTillEmpty = true;
 
@@ -44,37 +41,13 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (Game.isClient(worldObj))
-            return;
-
+    public void upkeep() {
+        super.upkeep();
         RedstoneFluxPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);
     }
 
     @Override
-    protected boolean processCart() {
-        boolean transferred = false;
-
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
-
-        if (cart != currentCart) {
-            setPowered(false);
-            currentCart = cart;
-            cartWasSent();
-        }
-
-        if (cart == null)
-            return false;
-
-        if (!canHandleCart(cart)) {
-            sendCart(cart);
-            return false;
-        }
-
-        if (isPaused())
-            return false;
-
+    protected void processCart(EntityMinecart cart) {
         EntityCartRF rfCart = (EntityCartRF) cart;
 
         if (amountRF < getMaxRF() && rfCart.getRF() > 0) {
@@ -87,24 +60,20 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
 
             double extracted = rfCart.removeRF(request);
             amountRF += extracted;
-            transferred = extracted > 0;
+            setProcessing(extracted > 0);
         }
-
-        if (!transferred && !isPowered() && shouldSendCart(cart))
-            sendCart(cart);
-        return transferred;
     }
 
     @Override
-    protected boolean shouldSendCart(EntityMinecart cart) {
+    protected boolean hasWorkForCart(EntityMinecart cart) {
         if (!(cart instanceof EntityCartRF))
-            return true;
+            return false;
         EntityCartRF rfCart = (EntityCartRF) cart;
         if (!waitTillEmpty)
-            return true;
+            return false;
         else if (rfCart.getRF() <= 0)
-            return true;
-        return false;
+            return false;
+        return true;
     }
 
     @Override

@@ -45,11 +45,11 @@ public class GuiRouting extends TileGui {
         this.tile = tile;
         this.router = router;
         this.player = inv.player;
-        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + ownerName);
-        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + ownerName);
-        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
-        privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tip", "{owner}=" + ownerName);
-        publicToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.public.tip");
+        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + ownerName);
+        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + ownerName);
+        privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tips", "{owner}=" + ownerName);
+        publicToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.public.tips");
     }
 
     @Override
@@ -93,10 +93,10 @@ public class GuiRouting extends TileGui {
         String username = ((ContainerRouting) container).ownerName;
         if (username != null && !username.equals(ownerName)) {
             ownerName = username;
-            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + username);
-            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + username);
-            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
-            privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tip", "{owner}=" + username);
+            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + username);
+            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + username);
+            privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tips", "{owner}=" + username);
         }
         lockButton.setToolTip(router.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
         routingButton.setToolTip(router.getRoutingController().getButtonState() == IRouter.RoutingButtonState.PRIVATE ? privateToolTips : publicToolTips);

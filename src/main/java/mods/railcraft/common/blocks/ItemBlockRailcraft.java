@@ -51,7 +51,7 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
     }
 
     public String getTooltipTag(ItemStack stack) {
-        return stack.getUnlocalizedName() + ".tip";
+        return stack.getUnlocalizedName() + ".tips";
     }
 
     @Nullable

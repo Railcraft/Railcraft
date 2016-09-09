@@ -147,7 +147,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
-        String tipTag = getTag() + ".tip";
+        String tipTag = getTag() + ".tips";
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;

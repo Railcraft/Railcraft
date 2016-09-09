@@ -127,7 +127,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
         GoggleAura aura = getCurrentAura(stack);
         String mode = LocalizationPlugin.translate("railcraft.gui.goggles.mode");
-        String tip = LocalizationPlugin.translate("railcraft.gui.goggles.tip");
+        String tip = LocalizationPlugin.translate("railcraft.gui.goggles.tips");
 
         list.add(String.format(mode, "\u00A75" + aura));
         list.add(tip);

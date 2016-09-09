@@ -14,12 +14,8 @@ import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -45,8 +41,6 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     protected int energy;
     protected short transformerUpgrades;
     protected short overclockerUpgrades;
-    protected EnumFacing direction = EnumFacing.NORTH;
-    protected boolean transferredEnergy;
     private boolean addedToIC2EnergyNet;
 
     protected TileIC2Manipulator() {
@@ -73,14 +67,6 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
-    }
-
-    @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
-        if (direction == null)
-            direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
     protected void countUpgrades() {
@@ -119,40 +105,19 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     }
 
     @Override
-    public boolean isManualMode() {
-        return false;
-    }
-
-    @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        if (isSendCartGateAction())
-            return false;
         if (!(cart instanceof IEnergyTransfer))
             return false;
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
-        if (energyCart.getTier() > getTier())
-            return false;
-//        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
-//        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-//        if (minecartSlot1 != null || minecartSlot2 != null)
-//            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart))
-//                return false;
-        return true;
-    }
-
-    @Override
-    public boolean isProcessing() {
-        return transferredEnergy;
+        return energyCart.getTier() <= getTier() && super.canHandleCart(cart);
     }
 
     public abstract TileEntity getIC2Delegate();
 
     @Override
-    public void update() {
-        super.update();
-
-        if (Game.isClient(getWorld()))
-            return;
+    protected void upkeep() {
+        super.upkeep();
+        transferRate = 0;
 
         if (!addedToIC2EnergyNet) {
             IC2Plugin.addTileToNet(getIC2Delegate());
@@ -196,7 +161,6 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("energy", energy);
-        data.setByte("direction", (byte) direction.ordinal());
         return data;
     }
 
@@ -204,8 +168,6 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         energy = data.getInteger("energy");
-        direction = EnumFacing.getFront(data.getByte("direction"));
-
         countUpgrades();
     }
 
@@ -213,7 +175,6 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeByte(direction.ordinal());
         data.writeShort(storageUpgrades);
         data.writeShort(lapotronUpgrades);
     }
@@ -222,19 +183,8 @@ public abstract class TileIC2Manipulator extends TileCartManipulator implements 
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getFront(data.readByte());
         storageUpgrades = data.readShort();
         lapotronUpgrades = data.readShort();
-    }
-
-    @Override
-    public boolean rotateBlock(EnumFacing axis) {
-        if (direction == axis)
-            direction = axis.getOpposite();
-        else
-            direction = axis;
-        markBlockForUpdate();
-        return true;
     }
 
     public double getEnergy() {

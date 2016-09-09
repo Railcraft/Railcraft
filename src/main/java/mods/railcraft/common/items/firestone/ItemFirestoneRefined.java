@@ -135,9 +135,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        String tipTag = getUnlocalizedName() + ".tip.charged";
+        String tipTag = getUnlocalizedName() + ".tips.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
-            tipTag = getUnlocalizedName() + ".tip.empty";
+            tipTag = getUnlocalizedName() + ".tips.empty";
         ToolTip tip = ToolTip.buildToolTip(tipTag);
         if (tip != null)
             info.addAll(tip.convertToStrings());

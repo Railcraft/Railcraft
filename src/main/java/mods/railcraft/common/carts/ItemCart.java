@@ -98,7 +98,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
-        ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
+        ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tips");
         if (tip != null)
             info.addAll(tip.convertToStrings());
         ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);

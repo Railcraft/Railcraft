@@ -224,7 +224,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean advInfo) {
-        info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tip"));
+        info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tips"));
     }
 
     private void removeAndDrop(World world, BlockPos pos, IBlockState state) {

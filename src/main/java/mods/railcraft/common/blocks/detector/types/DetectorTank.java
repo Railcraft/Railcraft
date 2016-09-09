@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.common.blocks.detector.DetectorFilter;
@@ -196,7 +196,7 @@ public class DetectorTank extends DetectorFilter {
 
         ButtonState(String label) {
             this.label = label;
-            this.tip = ToolTip.buildToolTip("gui.detector.tank.tip." + name().toLowerCase(Locale.ENGLISH).replace("_", "."));
+            this.tip = ToolTip.buildToolTip("gui.detector.tank.tips." + name().toLowerCase(Locale.ENGLISH).replace("_", "."));
         }
 
         @Override
