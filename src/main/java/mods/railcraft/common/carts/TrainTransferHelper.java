@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.api.carts.ITrainTransferHelper;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.item.EntityMinecart;
@@ -35,7 +35,7 @@ import java.util.function.Predicate;
 public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTransferHelper {
     public static final ITrainTransferHelper INSTANCE = new TrainTransferHelper();
     private static final int NUM_SLOTS = 8;
-    private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
+    private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
 
     private TrainTransferHelper() {
     }

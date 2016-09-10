@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -76,8 +76,8 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     public float output;
     private final FluidStack waterFilter = Fluids.WATER.get(2);
-    protected final FilteredTank tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.STEAM.get(), this);
-    protected final FilteredTank tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.WATER.get(), this);
+    protected final FilteredTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, Fluids.STEAM.get(), this);
+    protected final FilteredTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, Fluids.WATER.get(), this);
     protected final TankManager tankManager = new TankManager();
     public static final int TANK_STEAM = 0;
     public static final int TANK_WATER = 1;
@@ -221,7 +221,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
         TankManager tMan = getTankManager();
         if (tMan != null)
-            tMan.outputLiquid(getOutputs(), 0, WATER_OUTPUT);
+            tMan.outputFluid(getOutputs(), 0, WATER_OUTPUT);
     }
 
     private IFluidHandler getOutputOnSide(EnumFacing side) {

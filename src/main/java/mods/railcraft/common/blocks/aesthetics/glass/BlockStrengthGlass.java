@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
@@ -92,9 +92,9 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         ColorPlugin.instance.register(this, this);
 
         Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
-        FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
+        FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         // TODO: this is bogus, waiting on FluidStacks as ingredients
-        for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
+        for (ItemStack container : FluidTools.getContainersFilledWith(water)) {
             for (Object frame : frameTypes) {
                 CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
                         "GFG",

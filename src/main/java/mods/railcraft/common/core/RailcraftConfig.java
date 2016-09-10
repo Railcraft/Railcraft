@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -768,7 +768,7 @@ public class RailcraftConfig {
     }
 
     public static int getTankCartCapacity() {
-        return minecartTankCapacity * FluidHelper.BUCKET_VOLUME;
+        return minecartTankCapacity * FluidTools.BUCKET_VOLUME;
     }
 
     public static int getMaxTankSize() {

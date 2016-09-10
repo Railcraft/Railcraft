@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.machine.beta;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.gui.EnumGui;
@@ -40,7 +40,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     private static final int TANK_FUEL = 2;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidHelper.BUCKET_VOLUME * 16, this);
+    protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidTools.BUCKET_VOLUME * 16, this);
 
     public TileBoilerFireboxFluid() {
         super(2);
@@ -86,7 +86,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     protected boolean handleClick(EntityPlayer player, EnumFacing side) {
-        if (FluidHelper.handleRightClick(this, side, player, true, false))
+        if (FluidTools.handleRightClick(this, side, player, true, false))
             return true;
         return super.handleClick(player, side);
     }
@@ -99,7 +99,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     protected void processBuckets() {
         super.processBuckets();
 
-        FluidHelper.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override

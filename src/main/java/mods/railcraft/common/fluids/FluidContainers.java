@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import net.minecraft.item.Item;
@@ -37,7 +38,7 @@ public class FluidContainers {
 //            item.setUnlocalizedName(tag);
 //            RailcraftRegistry.register(item);
 //
-//            FluidHelper.registerBucket(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//            FluidTools.registerBucket(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //
 //            itemCreosoteOilBucket = item;
 //        }
@@ -61,7 +62,7 @@ public class FluidContainers {
 //                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.RAILWAY);
 //
 //                if (!RailcraftConfig.useCreosoteFurnaceRecipes() && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.COKE_OVEN.getTag()))
-//                    FluidHelper.registerBottle(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                    FluidTools.registerBottle(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //
 //                itemCreosoteOilBottle = item;
 //            } else
@@ -84,7 +85,7 @@ public class FluidContainers {
 //                item.setUnlocalizedName(tag);
 //                RailcraftRegistry.register(item);
 //
-//                boolean forestry = FluidHelper.registerCan(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                boolean forestry = FluidTools.registerCan(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //                if (forestry)
 //                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 //
@@ -109,7 +110,7 @@ public class FluidContainers {
 //                item.setUnlocalizedName(tag);
 //                RailcraftRegistry.register(item);
 //
-//                boolean forestry = FluidHelper.registerWax(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                boolean forestry = FluidTools.registerWax(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //                if (forestry)
 //                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 //
@@ -134,7 +135,7 @@ public class FluidContainers {
 //                item.setUnlocalizedName(tag);
 //                RailcraftRegistry.register(item);
 //
-//                boolean forestry = FluidHelper.registerRefactory(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                boolean forestry = FluidTools.registerRefactory(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //                if (forestry)
 //                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 //
@@ -159,7 +160,7 @@ public class FluidContainers {
 //                item.setUnlocalizedName(tag);
 //                RailcraftRegistry.register(item);
 //
-//                boolean ic2 = FluidHelper.registerCell(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                boolean ic2 = FluidTools.registerCell(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //                if (ic2)
 //                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 //
@@ -184,7 +185,7 @@ public class FluidContainers {
 //            item.setUnlocalizedName(tag);
 //            RailcraftRegistry.register(item);
 //
-//            FluidHelper.registerBottle(Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//            FluidTools.registerBottle(Fluids.STEAM.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
 //
 //            itemSteamBottle = item;
 //        }

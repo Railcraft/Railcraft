@@ -16,18 +16,17 @@ import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankToolkit;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -35,7 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -49,17 +48,9 @@ public class TileFluidLoader extends TileFluidManipulator {
     private float pipeLength;
     private boolean needsPipe;
 
-    public TileFluidLoader() {
-        tankManager.add(loaderTank);
-    }
-
     @Override
     public ManipulatorVariant getMachineType() {
         return ManipulatorVariant.FLUID_LOADER;
-    }
-
-    public IInventory getInputInventory() {
-        return invInput;
     }
 
     @Override
@@ -118,28 +109,11 @@ public class TileFluidLoader extends TileFluidManipulator {
     protected void upkeep() {
         super.upkeep();
 
-        if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-            FluidHelper.drainContainers(this, this, SLOT_INPUT, SLOT_OUTPUT);
+        // TODO: fix this
+//        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//            FluidTools.drainContainers(tank, this, SLOT_INPUT, SLOT_OUTPUT);
 
-        for (EnumFacing side : EnumFacing.values()) {
-            if (side == null)
-                continue;
-            TileEntity tile = tileCache.getTileOnSide(side);
-            if (tile instanceof IFluidHandler) {
-                IFluidHandler nearbyTank = (IFluidHandler) tile;
-                side = side.getOpposite();
-                Fluid filterFluid = getFilterFluid();
-                if (filterFluid != null) {
-                    FluidStack drained = nearbyTank.drain(side, new FluidStack(filterFluid, TRANSFER_RATE), false);
-                    int used = loaderTank.fill(drained, true);
-                    nearbyTank.drain(side, new FluidStack(filterFluid, used), true);
-                } else {
-                    FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
-                    int used = loaderTank.fill(drained, true);
-                    nearbyTank.drain(side, used, true);
-                }
-            }
-        }
+        tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }
 
     @Nullable
@@ -178,7 +152,9 @@ public class TileFluidLoader extends TileFluidManipulator {
             }
         }
 
-        TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
+        AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.UP);
+        if (tankCart == null)
+            return;
         boolean cartNeedsFilling = cartNeedsFilling(tankCart);
 
         if (cartNeedsFilling && needsPipe)
@@ -188,12 +164,8 @@ public class TileFluidLoader extends TileFluidManipulator {
 
         setProcessing(false);
         if (cartNeedsFilling && (!needsPipe || pipeIsExtended())) {
-            FluidStack drained = tankManager.drain(0, RailcraftConfig.getTankCartFillRate(), false);
-            if (drained != null) {
-                int flow = tankCart.fill(EnumFacing.UP, drained, true);
-                tankManager.drain(0, flow, true);
-                setProcessing(flow > 0);
-            }
+            FluidStack moved = FluidUtil.tryFluidTransfer(tankCart, tank, RailcraftConfig.getTankCartFillRate(), true);
+            setProcessing(FluidTools.isNotEmpty(moved));
         }
 
         if (isProcessing())
@@ -202,24 +174,24 @@ public class TileFluidLoader extends TileFluidManipulator {
         if (cart instanceof IFluidCart)
             ((IFluidCart) cart).setFilling(isProcessing());
 
-        if (tankCart.isTankFull(loaderTank.getFluidType()))
+        if (tankCart.isTankFull(tank.getFluidType()))
             setResetTimer(RESET_WAIT);
     }
 
-    private boolean cartNeedsFilling(TankToolkit tankCart) {
-        FluidStack loaderLiquid = loaderTank.getFluid();
-        return loaderLiquid != null && loaderLiquid.amount > 0 && tankCart.canPutFluid(EnumFacing.UP, loaderLiquid);
+    private boolean cartNeedsFilling(AdvancedFluidHandler tankCart) {
+        FluidStack fluidStack = tank.getFluid();
+        return fluidStack != null && fluidStack.amount > 0 && tankCart.canPutFluid(fluidStack);
     }
 
     @Override
     protected boolean hasWorkForCart(EntityMinecart cart) {
         if (!pipeIsRetracted() || isProcessing())
             return true;
-        if (!(cart instanceof IFluidHandler))
+        AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.UP);
+        if (tankCart == null)
             return false;
-        TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
         Fluid fluidHandled = getFluidHandled();
-        if (!loaderTank.isEmpty() && !tankCart.canPutFluid(EnumFacing.UP, loaderTank.getFluid()))
+        if (!tank.isEmpty() && !tankCart.canPutFluid(tank.getFluid()))
             return false;
         else if (getRedstoneModeController().getButtonState() != EnumRedstoneMode.COMPLETE && !tankCart.isTankEmpty(fluidHandled))
             return false;
@@ -266,35 +238,6 @@ public class TileFluidLoader extends TileFluidManipulator {
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        Fluid fluidFilter = getFilterFluid();
-        if (resource == null || (fluidFilter != null && !Fluids.areEqual(fluidFilter, resource)))
-            return 0;
-        return super.fill(from, resource, doFill);
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        Fluid fluidFilter = getFilterFluid();
-        return fluidFilter == null || fluid.equals(fluidFilter);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
@@ -329,10 +272,10 @@ public class TileFluidLoader extends TileFluidManipulator {
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         switch (slot) {
             case SLOT_INPUT:
-                return FluidItemHelper.isFilledContainer(stack);
+                return FluidItemHelper.isFluidInContainer(stack);
         }
         return false;
     }

@@ -20,7 +20,7 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear;
@@ -422,8 +422,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Blocks.COAL_BLOCK), false, false, EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
 
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
-                    FluidStack creosote = Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME);
-                    for (ItemStack container : FluidHelper.getContainersFilledWith(creosote)) {
+                    FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
+                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
                         CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                                 "C",
                                 "W",
@@ -432,7 +432,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 'W', Blocks.WOOL,
                                 'S', "stickWood");
                     }
-                    ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), null, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+                    ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), null, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                             "#",
                             "|",
                             '#', Blocks.WOOL,

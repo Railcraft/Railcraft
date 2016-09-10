@@ -10,7 +10,7 @@
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -165,9 +165,9 @@ public class TileRitual extends RailcraftTickingTileEntity {
                 return;
 
             IBlockState state = WorldPlugin.getBlockState(worldObj, index);
-            if (state.getBlock() == Blocks.OBSIDIAN || Fluids.LAVA.is(FluidHelper.getFluid(state))) {
+            if (state.getBlock() == Blocks.OBSIDIAN || Fluids.LAVA.is(FluidTools.getFluid(state))) {
                 lavaFound.add(index);
-                if (FluidHelper.isFullFluidBlock(state, worldObj, index))
+                if (FluidTools.isFullFluidBlock(state, worldObj, index))
                     queue.addLast(index);
             }
         }

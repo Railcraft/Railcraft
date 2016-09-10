@@ -11,8 +11,8 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -159,7 +159,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
                 return StandardStackFilters.FUEL.test(stack);
             case SLOT_LIQUID_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
-                if (fluidStack != null && fluidStack.amount > FluidHelper.BUCKET_VOLUME)
+                if (fluidStack != null && fluidStack.amount > FluidTools.BUCKET_VOLUME)
                     return false;
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:

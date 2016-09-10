@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -48,7 +49,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
-    public static final int TRANSFER_RATE = FluidHelper.BUCKET_VOLUME;
+    public static final int TRANSFER_RATE = FluidTools.BUCKET_VOLUME;
     public static final int TICKS_LOW = 16;
     public static final int TICKS_HIGH = 8;
     public static final int STEAM_LOW = 16;
@@ -93,10 +94,10 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     protected TileBoiler() {
         super(patterns);
 
-        tankWater = new FilteredTank(4 * FluidHelper.BUCKET_VOLUME, Fluids.WATER.get(), this);
+        tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, Fluids.WATER.get(), this);
         tankManager.add(tankWater);
 
-        tankSteam = new FilteredTank(16 * FluidHelper.BUCKET_VOLUME, Fluids.STEAM.get(), this);
+        tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, Fluids.STEAM.get(), this);
         tankManager.add(tankSteam);
     }
 
@@ -193,7 +194,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
                 if (steam != null && (!mBlock.boiler.isBoiling() || steam.amount >= tank.getCapacity() / 2))
-                    mBlock.tankManager.outputLiquid(tileCache, getOutputFilter(), EnumFacing.VALUES, TANK_STEAM, TRANSFER_RATE);
+                    mBlock.tankManager.outputFluid(tileCache, getOutputFilter(), EnumFacing.VALUES, TANK_STEAM, TRANSFER_RATE);
             }
         }
     }

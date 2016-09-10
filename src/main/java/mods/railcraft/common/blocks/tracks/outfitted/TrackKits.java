@@ -179,9 +179,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
                     CraftingPlugin.addShapelessRecipe(trackKit.getTrackKitItem(), finalRecipe);
                 });
             }
-            //TODO: Should we register outfitted track items?
-//            ItemStack stack = getTrackKitSpec().getItem();
-//            RailcraftRegistry.register(stack);
         }
     }
 

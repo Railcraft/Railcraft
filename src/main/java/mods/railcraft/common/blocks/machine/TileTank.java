@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.fluids.TankManager;
@@ -20,9 +21,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -72,43 +75,43 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+    public int fill(FluidStack resource, boolean doFill) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
-            return tMan.fill(from, resource, doFill);
+            return tMan.fill(resource, doFill);
         }
         return 0;
     }
 
     @Override
     @Nullable
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
-            return tMan.drain(from, maxDrain, doDrain);
+            return tMan.drain(maxDrain, doDrain);
         }
         return null;
     }
 
     @Override
     @Nullable
-    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
+    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
         if (tMan != null) {
-            return tMan.drain(from, resource, doDrain);
+            return tMan.drain(resource, doDrain);
         }
         return null;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing side) {
+    public IFluidTankProperties[] getTankProperties() {
         TankManager tMan = getTankManager();
         if (tMan != null) {
-            return tMan.getTankInfo();
+            return tMan.getTankProperties();
         }
-        return FakeTank.INFO;
+        return FakeTank.PROPERTIES;
     }
 
     @Override
@@ -145,12 +148,23 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-//        tankManager.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-//        tankManager.readPacketData(data);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) this;
+        return super.getCapability(capability, facing);
     }
 }

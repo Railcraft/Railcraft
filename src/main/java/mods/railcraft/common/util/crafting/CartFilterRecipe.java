@@ -32,7 +32,7 @@ public class CartFilterRecipe implements IRecipe {
         Tank(RailcraftCarts.TANK) {
             @Override
             public boolean isAllowedFilterItem(ItemStack stack) {
-                return FluidItemHelper.isFilledContainer(stack);
+                return FluidItemHelper.isFluidInContainer(stack);
             }
         };
         public static FilterType[] VALUES = values();

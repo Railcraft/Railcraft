@@ -186,7 +186,7 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     }
 
     @Override
-    public void update() {
+    public final void update() {
         super.update();
         if (Game.isClient(getWorld()))
             return;
@@ -257,10 +257,11 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
 
     @Override
     public final boolean isPoweringTo(EnumFacing side) {
-        if (!isPowered())
-            return false;
-        Block block = WorldPlugin.getBlock(worldObj, getPos().offset(side.getOpposite()));
-        return TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
+        if (isPowered()) {
+            Block block = WorldPlugin.getBlock(worldObj, getPos().offset(side.getOpposite()));
+            return TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
+        }
+        return false;
     }
 
     @Override
@@ -323,15 +324,18 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
         if (canRotate()) {
             direction = MiscTools.getSideFacingTrack(worldObj, getPos());
             if (direction == null)
-                direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
+                if (entityLiving != null) {
+                    direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
+                } else direction = EnumFacing.NORTH;
         }
     }
 
+    @SuppressWarnings("unused")
     public boolean rotateBlock(EnumFacing axis) {
         if (!canRotate()) return false;
         if (direction == axis)

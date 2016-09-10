@@ -10,16 +10,20 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.*;
+import mods.railcraft.common.fluids.AdvancedFluidHandler;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
+
+import javax.annotation.Nullable;
 
 public class TileFluidUnloader extends TileFluidManipulator {
 
@@ -39,51 +43,35 @@ public class TileFluidUnloader extends TileFluidManipulator {
     protected void upkeep() {
         super.upkeep();
 
-        if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-            FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, loaderTank.getFluidType());
+        // TODO: fix this
+//        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//            FluidTools.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
 
-        tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALUES, 0, TRANSFER_RATE);
+        tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }
 
     @Override
     protected void processCart(EntityMinecart cart) {
-        TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
-
-        FluidStack drained = tankCart.drain(EnumFacing.DOWN, RailcraftConfig.getTankCartFillRate(), false);
-        if (getFilterFluid() == null || Fluids.areEqual(getFilterFluid(), drained)) {
-            int flow = tankManager.get(0).fill(drained, true);
-            tankCart.drain(EnumFacing.DOWN, flow, true);
-            setProcessing(flow > 0);
+        AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.DOWN);
+        if (tankCart != null) {
+            FluidStack moved = FluidUtil.tryFluidTransfer(tank, tankCart, RailcraftConfig.getTankCartFillRate(), true);
+            setProcessing(FluidTools.isNotEmpty(moved));
         }
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     protected boolean hasWorkForCart(EntityMinecart cart) {
         if (isProcessing())
             return true;
-        if (!(cart instanceof IFluidHandler))
+        AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.DOWN);
+        if (tankCart == null)
             return false;
-        TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
         if (getRedstoneModeController().getButtonState() == EnumRedstoneMode.IMMEDIATE)
             return false;
         if (getFilterFluid() != null && tankCart.isTankEmpty(getFilterFluid()))
             return false;
         return !tankCart.areTanksEmpty();
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        return 0;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return true;
     }
 
     @Override
@@ -93,7 +81,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         switch (slot) {
             case SLOT_INPUT:
                 return FluidItemHelper.isEmptyContainer(stack);

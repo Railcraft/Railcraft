@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -60,7 +61,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     protected void onPatternLock(MultiBlockPattern pattern) {
-        int capacity = getNumTanks() * FluidHelper.BUCKET_VOLUME;
+        int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
         tankManager.setCapacity(TANK_WATER, capacity * 4);
         boiler.setMaxHeat(((BoilerPattern) pattern).maxHeat);
@@ -129,7 +130,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
             boiler.tick(getNumTanks());
 
-            if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
+            if (clock % FluidTools.BUCKET_FILL_TIME == 0)
                 processBuckets();
         }
     }
@@ -137,7 +138,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected abstract void process();
 
     protected void processBuckets() {
-        FluidHelper.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -233,7 +234,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     protected boolean handleClick(EntityPlayer player, EnumFacing side) {
-        return FluidHelper.handleRightClick(this, side, player, true, false);
+        return FluidTools.handleRightClick(this, side, player, true, false);
     }
 
     @Override

@@ -20,7 +20,7 @@ import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
@@ -93,7 +93,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
+                        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
                             CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                         }
                     }
@@ -257,7 +257,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();
-                    for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
+                    for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
                         CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                     }
                     ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");

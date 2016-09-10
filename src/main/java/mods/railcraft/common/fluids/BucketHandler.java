@@ -51,7 +51,7 @@ public class BucketHandler {
             return null;
         BlockPos blockPos = mop.getBlockPos();
         IBlockState state = WorldPlugin.getBlockState(world, blockPos);
-        FluidStack fluidStack = FluidHelper.drainBlock(state, world, blockPos, false);
+        FluidStack fluidStack = FluidTools.drainBlock(state, world, blockPos, false);
         if (fluidStack == null)
             return null;
 
@@ -60,7 +60,7 @@ public class BucketHandler {
 
         FluidItemHelper.FillReturn filled = FluidItemHelper.fillContainer(stack, fluidStack);
         if (filled.amount > 0)
-            FluidHelper.drainBlock(state, world, blockPos, true);
+            FluidTools.drainBlock(state, world, blockPos, true);
         return filled.container;
     }
 }

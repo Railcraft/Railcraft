@@ -9,44 +9,47 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileFluidManipulator extends TileCartManipulator implements IFluidHandler, ISidedInventory {
+public abstract class TileFluidManipulator extends TileCartManipulator implements ISidedInventory {
 
     protected static final int SLOT_INPUT = 0;
     protected static final int SLOT_OUTPUT = 1;
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    protected static final int CAPACITY = FluidHelper.BUCKET_VOLUME * 32;
+    protected static final int CAPACITY = FluidTools.BUCKET_VOLUME * 32;
     protected final PhantomInventory invFilter = new PhantomInventory(1);
-    protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    //    protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     protected final TankManager tankManager = new TankManager();
-    protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
+    protected final FilteredTank tank = new FilteredTank(CAPACITY, this);
 
     protected TileFluidManipulator() {
         setInventorySize(2);
-        tankManager.add(loaderTank);
+        tankManager.add(tank);
+        tank.setFilter(this::getFilterFluid);
     }
 
     public TankManager getTankManager() {
@@ -66,11 +69,25 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
         return null;
     }
 
+    @Nullable
     public Fluid getFluidHandled() {
         Fluid fluid = getFilterFluid();
         if (fluid != null)
             return fluid;
-        return loaderTank.getFluidType();
+        return tank.getFluidType();
+    }
+
+    @Nullable
+    protected AdvancedFluidHandler getFluidHandler(EntityMinecart cart, EnumFacing facing) {
+        net.minecraftforge.fluids.capability.IFluidHandler fluidHandler = cart.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+        if (fluidHandler == null)
+            return null;
+        return new AdvancedFluidHandler(fluidHandler);
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return FluidTools.interactWithFluidHandler(heldItem, tank, player) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -81,7 +98,7 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
     @Override
     protected void upkeep() {
         super.upkeep();
-        if (clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
+        if (clock % FluidTools.NETWORK_UPDATE_INTERVAL == 0)
             sendUpdateToClient();
 
         ItemStack topSlot = getStackInSlot(SLOT_INPUT);
@@ -98,30 +115,8 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         return slot != SLOT_OUTPUT;
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        return tankManager.fill(from, resource, doFill);
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return tankManager.drain(from, maxDrain, doDrain);
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        return tankManager.drain(from, resource, doDrain);
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
-        return tankManager.getTankInfo();
     }
 
     @Override
@@ -166,14 +161,25 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-
         tankManager.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-
         tankManager.readPacketData(data);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) tankManager;
+        return super.getCapability(capability, facing);
     }
 }

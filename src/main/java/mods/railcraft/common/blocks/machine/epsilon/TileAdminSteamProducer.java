@@ -1,7 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -61,7 +71,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
             if (tile instanceof IFluidHandler) {
                 IFluidHandler fluidHandler = (IFluidHandler) tile;
                 if (fluidHandler.canFill(side.getOpposite(), Fluids.STEAM.get())) {
-                    FluidStack fluidStack = Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME);
+                    FluidStack fluidStack = Fluids.STEAM.get(FluidTools.BUCKET_VOLUME);
                     fluidHandler.fill(side.getOpposite(), fluidStack, true);
                 }
             }
@@ -90,7 +100,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         if (!powered)
             return null;
-        return Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME);
+        return Fluids.STEAM.get(FluidTools.BUCKET_VOLUME);
     }
 
     @Override
@@ -105,9 +115,9 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
 
     @Override
     public FluidTankInfo[] getTankInfo(EnumFacing from) {
-        FluidStack fluidStack = Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME);
+        FluidStack fluidStack = Fluids.STEAM.get(FluidTools.BUCKET_VOLUME);
         return new FluidTankInfo[]{
-                new FluidTankInfo(fluidStack, FluidHelper.BUCKET_VOLUME)
+                new FluidTankInfo(fluidStack, FluidTools.BUCKET_VOLUME)
         };
     }
 

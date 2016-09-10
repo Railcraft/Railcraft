@@ -1,61 +1,67 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilteredTank extends StandardTank {
 
-    private final Fluid filter;
+    private Supplier<Fluid> filter;
+
+    public FilteredTank(int capacity) {
+        this(capacity, (TileEntity) null);
+    }
 
     public FilteredTank(int capacity, Fluid filter) {
         this(capacity, filter, null);
     }
 
-    public FilteredTank(int capacity, Fluid filter, TileEntity tile) {
+    public FilteredTank(int capacity, Fluid filter, @Nullable TileEntity tile) {
+        this(capacity, tile);
+        setFilter(() -> filter);
+    }
+
+    public FilteredTank(int capacity, @Nullable TileEntity tile) {
         super(capacity, tile);
+    }
+
+    public void setFilter(Supplier<Fluid> filter) {
         this.filter = filter;
     }
 
     @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        if (liquidMatchesFilter(resource))
-            return super.fill(resource, doFill);
-        return 0;
-    }
-
-    public Fluid getFilter() {
-        return filter;
-    }
-
-    public boolean liquidMatchesFilter(FluidStack resource) {
-        if (resource == null || filter == null)
-            return false;
-        return resource.getFluid() == filter;
+    public boolean canFillFluidType(FluidStack fluid) {
+        return super.canFillFluidType(fluid) && (filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluid));
     }
 
     @Override
     protected void refreshTooltip() {
         toolTip.clear();
         int amount = 0;
-        if (filter != null) {
-            EnumRarity rarity = filter.getRarity();
+        Fluid filterFluid = filter.get();
+        if (filterFluid != null) {
+            EnumRarity rarity = filterFluid.getRarity();
             if (rarity == null)
                 rarity = EnumRarity.COMMON;
-            ToolTipLine name = new ToolTipLine(filter.getLocalizedName(getFluid()), rarity.rarityColor);
+            ToolTipLine name = new ToolTipLine(filterFluid.getLocalizedName(getFluid()), rarity.rarityColor);
             name.setSpacing(2);
             toolTip.add(name);
             FluidStack fluidStack = getFluid();

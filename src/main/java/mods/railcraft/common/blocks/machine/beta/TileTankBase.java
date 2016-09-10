@@ -13,8 +13,8 @@ import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
@@ -63,9 +63,9 @@ import java.util.Map;
 public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @SuppressWarnings("WeakerAccess")
-    public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
+    public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidTools.BUCKET_VOLUME;
     @SuppressWarnings("WeakerAccess")
-    public static final int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
+    public static final int CAPACITY_PER_BLOCK_STEEL = 32 * FluidTools.BUCKET_VOLUME;
     @SuppressWarnings("WeakerAccess")
     protected static final int SLOT_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
@@ -73,7 +73,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     private static final int NETWORK_UPDATE_INTERVAL = 64;
     private static final MetalTank IRON_TANK = new IronTank();
     private static final List<MultiBlockPattern> patterns = buildPatterns();
-    protected final StandardTank tank = new StandardTank(64 * FluidHelper.BUCKET_VOLUME, this);
+    protected final StandardTank tank = new StandardTank(64 * FluidTools.BUCKET_VOLUME, this);
     protected final TankManager tankManager = new TankManager();
     private final StandaloneInventory inv;
     private final Timer networkTimer = new Timer();
@@ -459,7 +459,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldObj)) {
             TankManager tankManager = getTankManager();
-            if (isStructureValid() && tankManager != null && FluidHelper.handleRightClick(tankManager, side, player, true, true)) {
+            if (isStructureValid() && tankManager != null && FluidTools.handleRightClick(tankManager, side, player, true, true)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();
@@ -571,9 +571,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         if (Game.isHost(worldObj))
             if (isMaster) {
 
-                if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
+                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
                     //noinspection ConstantConditions
-                    FluidHelper.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
+                    FluidTools.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
 
                 if (networkTimer.hasTriggered(worldObj, NETWORK_UPDATE_INTERVAL))
                     syncClient();

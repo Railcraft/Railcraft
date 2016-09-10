@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import net.minecraft.block.Block;
@@ -30,14 +31,16 @@ public enum Fluids {
         tag = name().toLowerCase(Locale.ROOT);
     }
 
-    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-        if (fluidStack != null && fluid == fluidStack.getFluid())
-            return true;
-        return fluid == null && fluidStack == null;
+    public static boolean areEqual(@Nullable Fluid fluid, @Nullable FluidStack fluidStack) {
+        return (fluidStack != null && fluid == fluidStack.getFluid()) || (fluid == null && fluidStack == null);
     }
 
     public static boolean areIdentical(@Nullable FluidStack fluidStackA, @Nullable FluidStack fluidStackB) {
         return fluidStackA == fluidStackB || fluidStackA != null && fluidStackA.isFluidStackIdentical(fluidStackB);
+    }
+
+    public static boolean contains(@Nullable FluidStack pool, @Nullable FluidStack request) {
+        return pool == request || (pool != null && (request == null || pool.amount >= request.amount));
     }
 
     public String getTag() {
@@ -79,7 +82,7 @@ public enum Fluids {
     }
 
     public boolean is(@Nullable Block fluidBlock) {
-        return fluidBlock != null && get() == FluidHelper.getFluid(fluidBlock);
+        return fluidBlock != null && get() == FluidTools.getFluid(fluidBlock);
     }
 
     public boolean isContained(ItemStack containerStack) {

@@ -14,8 +14,8 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -36,10 +36,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     public static final int SLOT_LIQUID_INPUT = 3;
     private static final int COOK_STEP_LENGTH = 50;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
-    private static final int TANK_CAPACITY = 64 * FluidHelper.BUCKET_VOLUME;
+    private static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
@@ -130,6 +129,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         return EnumMachineAlpha.COKE_OVEN;
     }
 
+    @Nullable
     public TankManager getTankManager() {
         TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
         if (mBlock != null)
@@ -139,11 +139,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (isStructureValid() && FluidHelper.handleRightClick(this, side, player, false, true))
-            return true;
-        else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
-            return true;
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, this, player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -227,8 +223,9 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
                     dropItem(bottomSlot);
                 }
 
-                if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-                    FluidHelper.fillContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT, Fluids.CREOSOTE.get());
+                // FIXME
+//                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//                    FluidTools.fillContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT, Fluids.CREOSOTE.get());
             }
     }
 
@@ -257,43 +254,43 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+    public int fill(FluidStack resource, boolean doFill) {
+        TankManager tMan = getTankManager();
+        if (tMan != null) {
+            return tMan.fill(resource, doFill);
+        }
         return 0;
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+    @Nullable
+    public FluidStack drain(int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
-        if (tMan != null)
-            return tMan.drain(0, maxDrain, doDrain);
+        if (tMan != null) {
+            return tMan.drain(maxDrain, doDrain);
+        }
         return null;
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+    @Nullable
+    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
-        if (!Fluids.CREOSOTE.is(resource))
-            return null;
-        return drain(from, resource.amount, doDrain);
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return fluid == null || Fluids.CREOSOTE.is(fluid);
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
         TankManager tMan = getTankManager();
-        if (tMan != null)
-            return tMan.getTankInfo();
-        return FakeTank.INFO;
+        if (tMan != null) {
+            return tMan.drain(resource, doDrain);
+        }
+        return null;
+    }
+
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        TankManager tMan = getTankManager();
+        if (tMan != null) {
+            return tMan.getTankProperties();
+        }
+        return FakeTank.PROPERTIES;
     }
 
     @Override

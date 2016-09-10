@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -73,8 +73,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     {
         setAllowedSpeeds(EnumSet.of(LocoSpeed.MAX, LocoSpeed.NORMAL, LocoSpeed.SLOWER, LocoSpeed.SLOWEST, LocoSpeed.REVERSE_SLOWEST));
 
-        tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 6, Fluids.WATER.get());
-        tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 16, Fluids.STEAM.get());
+        tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6, Fluids.WATER.get());
+        tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16, Fluids.STEAM.get());
 
         tankManager.add(tankWater);
         tankManager.add(tankSteam);
@@ -121,8 +121,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                     ventSteam();
             }
 
-            if (update % FluidHelper.BUCKET_FILL_TIME == 0)
-                FluidHelper.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+            if (update % FluidTools.BUCKET_FILL_TIME == 0)
+                FluidTools.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
         } else {
             if (isSmoking())
                 if (rand.nextInt(3) == 0) {

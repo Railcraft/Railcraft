@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import com.google.common.collect.ForwardingList;
@@ -19,13 +20,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -33,24 +41,8 @@ import java.util.stream.Collectors;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TankManager extends ForwardingList<StandardTank> implements IFluidHandler {
-    public static final Predicate<TileEntity> TANK_FILTER = tile -> tile instanceof IFluidHandler;
-    private static final byte NETWORK_DATA = 3;
+    public static final BiFunction<TileEntity, EnumFacing, Boolean> TANK_FILTER = (t, f) -> t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, f);
     private final List<StandardTank> tanks = new ArrayList<>();
-
-    public TankManager() {
-    }
-
-    public TankManager(StandardTank... tanks) {
-        addAll(Arrays.asList(tanks));
-    }
-
-    @Nullable
-    public static IFluidHandler getTankFromTile(@Nullable TileEntity tile) {
-        IFluidHandler tank = null;
-        if (tile instanceof IFluidHandler)
-            tank = (IFluidHandler) tile;
-        return tank;
-    }
 
     @Override
     protected List<StandardTank> delegate() {
@@ -101,7 +93,13 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     @Override
-    public int fill(EnumFacing from, @Nullable FluidStack resource, boolean doFill) {
+    public IFluidTankProperties[] getTankProperties() {
+        List<IFluidTankProperties> info = stream().filter(tank -> !tank.isHidden()).flatMap(t -> Arrays.stream(t.getTankProperties())).collect(Collectors.toList());
+        return info.toArray(new IFluidTankProperties[info.size()]);
+    }
+
+    @Override
+    public int fill(FluidStack resource, boolean doFill) {
         return fill(0, resource, doFill);
     }
 
@@ -114,8 +112,16 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Nullable
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return drain(0, maxDrain, doDrain);
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
+        return drain(0, resource, doDrain);
+    }
+
+    @Nullable
+    public FluidStack drain(int tankIndex, FluidStack resource, boolean doDrain) {
+        if (tankIndex < 0 || tankIndex >= tanks.size())
+            return null;
+
+        return tanks.get(tankIndex).drain(resource, doDrain);
     }
 
     @Nullable
@@ -128,90 +134,58 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Nullable
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        for (StandardTank tank : tanks) {
-            if (tankCanDrainFluid(tank, resource))
-                return tank.drain(resource.amount, doDrain);
-        }
-        return null;
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        return drain(0, maxDrain, doDrain);
     }
 
     @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return true;
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return true;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(@Nullable EnumFacing direction) {
-        List<FluidTankInfo> info = stream().filter(tank -> !tank.isHidden()).map(FluidTank::getInfo).collect(Collectors.toList());
-        return info.toArray(new FluidTankInfo[info.size()]);
-    }
-
-    public FluidTankInfo[] getTankInfo() {
-        return getTankInfo(null);
-    }
-
-    @Override
-    @Nullable
     public StandardTank get(int tankIndex) {
         if (tankIndex < 0 || tankIndex >= tanks.size())
-            return null;
+            throw new IllegalArgumentException("No Fluid Tank exists for index " + tankIndex);
         return tanks.get(tankIndex);
     }
 
     public void setCapacity(int tankIndex, int capacity) {
         StandardTank tank = get(tankIndex);
-        if (tank == null)
-            return;
         tank.setCapacity(capacity);
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null && fluidStack.amount > capacity)
             fluidStack.amount = capacity;
     }
 
-    public void outputLiquid(AdjacentTileCache cache, Predicate<TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
+    public void pull(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
+        Collection<IFluidHandler> targets = findNeighbors(cache, filter, sides);
+        pull(targets, tankIndex, amount);
+    }
+
+    public void push(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
+        Collection<IFluidHandler> targets = findNeighbors(cache, filter, sides);
+        push(targets, tankIndex, amount);
+    }
+
+    public void pull(Collection<IFluidHandler> targets, int tankIndex, int amount) {
+        transfer(targets, tankIndex, (me, them) -> FluidUtil.tryFluidTransfer(me, them, amount, true));
+    }
+
+    public void push(Collection<IFluidHandler> targets, int tankIndex, int amount) {
+        transfer(targets, tankIndex, (me, them) -> FluidUtil.tryFluidTransfer(them, me, amount, true));
+    }
+
+    private Collection<IFluidHandler> findNeighbors(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides) {
+        List<IFluidHandler> targets = new ArrayList<>();
         for (EnumFacing side : sides) {
             TileEntity tile = cache.getTileOnSide(side);
             if (tile == null) continue;
+            if (!TANK_FILTER.apply(tile, side.getOpposite())) continue;
             if (!filter.test(tile)) continue;
-            IFluidHandler tank = getTankFromTile(tile);
-            if (tank == null) continue;
-            outputLiquid(tank, side, tankIndex, amount);
+            IFluidHandler tank = FluidTools.getFluidHandler(side.getOpposite(), tile);
+            if (tank != null)
+                targets.add(tank);
         }
+        return targets;
     }
 
-    public void outputLiquid(IFluidHandler[] outputs, int tankIndex, int amount) {
-        for (int side = 0; side < 6; side++) {
-            IFluidHandler nearbyTank = outputs[side];
-            if (nearbyTank != null)
-                outputLiquid(nearbyTank, EnumFacing.VALUES[side], tankIndex, amount);
-        }
-    }
-
-    private void outputLiquid(IFluidHandler tank, EnumFacing side, int tankIndex, int amount) {
-        FluidStack available = drain(tankIndex, amount, false);
-        if (available != null) {
-            int used = tank.fill(side.getOpposite(), available, true);
-            if (used > 0)
-                drain(tankIndex, used, true);
-        }
-    }
-
-    private boolean tankAcceptsFluid(StandardTank tank, @Nullable FluidStack fluidStack) {
-        return fluidStack != null && tank.fill(fluidStack, false) > 0;
-    }
-
-    private boolean tankCanDrain(StandardTank tank) {
-        FluidStack drained = tank.drain(1, false);
-        return drained != null && drained.amount > 0;
-    }
-
-    private boolean tankCanDrainFluid(StandardTank tank, @Nullable FluidStack fluidStack) {
-        return fluidStack != null && Fluids.areEqual(tank.getFluidType(), fluidStack) && tankCanDrain(tank);
+    public void transfer(Collection<IFluidHandler> targets, int tankIndex, BiConsumer<IFluidHandler, IFluidHandler> transfer) {
+        targets.forEach(them -> transfer.accept(get(tankIndex), them));
     }
 }

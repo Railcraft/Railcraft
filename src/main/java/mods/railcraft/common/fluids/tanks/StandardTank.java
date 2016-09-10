@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -37,7 +38,7 @@ public class StandardTank extends FluidTank {
         super(capacity);
     }
 
-    public StandardTank(int capacity, TileEntity tile) {
+    public StandardTank(int capacity, @Nullable TileEntity tile) {
         this(capacity);
         this.tile = tile;
     }
@@ -69,6 +70,7 @@ public class StandardTank extends FluidTank {
         return capacity - getFluidAmount();
     }
 
+    @Nullable
     public Fluid getFluidType() {
         return getFluid() != null ? getFluid().getFluid() : null;
     }
@@ -115,18 +117,5 @@ public class StandardTank extends FluidTank {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-    }
-
-    public static class TankRenderData {
-        @Nullable
-        public Fluid fluid = null;
-        public int amount = 0;
-        public int color = DEFAULT_COLOR;
-
-        public void reset() {
-            fluid = null;
-            amount = 0;
-            color = DEFAULT_COLOR;
-        }
     }
 }

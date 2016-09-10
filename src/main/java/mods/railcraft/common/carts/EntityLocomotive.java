@@ -18,7 +18,7 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -203,7 +203,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 }
                 return true;
             }
-            if (this instanceof IFluidHandler && FluidHelper.handleRightClick((IFluidHandler) this, null, player, true, false))
+            if (this instanceof IFluidHandler && FluidTools.handleRightClick((IFluidHandler) this, null, player, true, false))
                 return true;
             if (!isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), player.getGameProfile()))
                 openGui(player);

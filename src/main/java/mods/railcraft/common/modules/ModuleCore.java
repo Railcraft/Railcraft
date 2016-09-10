@@ -27,7 +27,7 @@ import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
@@ -344,13 +344,13 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 addLiquidFuels();
 
-                FluidHelper.nerfWaterBottle();
+                FluidTools.nerfWaterBottle();
 
 //----------------------------------------------
 // Boiler Test Setup
 // ---------------------------------------------
-//        StandardTank tankWater = new StandardTank(FluidHelper.BUCKET_VOLUME * 1000);
-//        StandardTank tankSteam = new StandardTank(FluidHelper.BUCKET_VOLUME * 1000);
+//        StandardTank tankWater = new StandardTank(FluidTools.BUCKET_VOLUME * 1000);
+//        StandardTank tankSteam = new StandardTank(FluidTools.BUCKET_VOLUME * 1000);
 //        tankWater.setFluid(Fluids.WATER.get(tankWater.getCapacity()));
 //        SteamBoiler boiler = new SteamBoiler(tankWater, tankSteam);
 //        class TestProvider implements IFuelProvider {

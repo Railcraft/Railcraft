@@ -10,7 +10,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -50,7 +50,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     @Override
     public void finalizeDefinition() {
         ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
-        for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
+        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
             CraftingPlugin.addRecipe(tieWood,
                     " O ",
                     "###",

@@ -11,9 +11,10 @@ package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.common.blocks.detector.DetectorFilter;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankToolkit;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -28,7 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,7 +54,8 @@ public class DetectorTank extends DetectorFilter {
         return buttonController;
     }
 
-    public Fluid getFilterLiquid() {
+    @Nullable
+    public Fluid getFilterFluid() {
         ItemStack filter = getFilters().getStackInSlot(0);
         if (filter != null)
             return FluidItemHelper.getFluidInContainer(filter);
@@ -63,16 +65,17 @@ public class DetectorTank extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            if (cart instanceof IFluidHandler) {
-                TankToolkit tank = new TankToolkit((IFluidHandler) cart);
+            IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
+            if (fluidHandler != null) {
+                AdvancedFluidHandler tank = new AdvancedFluidHandler(fluidHandler);
                 boolean liquidMatches = false;
-                Fluid filterFluid = getFilterLiquid();
-                FluidStack tankLiquid = tank.drain(null, 1, false);
+                Fluid filterFluid = getFilterFluid();
+                FluidStack tankLiquid = tank.drain(1, false);
                 if (filterFluid == null)
                     liquidMatches = true;
                 else if (Fluids.areEqual(filterFluid, tankLiquid))
                     liquidMatches = true;
-                else if (tank.canPutFluid(null, new FluidStack(filterFluid, 1)))
+                else if (tank.canPutFluid(new FluidStack(filterFluid, 1)))
                     liquidMatches = true;
                 boolean quantityMatches = false;
                 ButtonState state = buttonController.getButtonState();

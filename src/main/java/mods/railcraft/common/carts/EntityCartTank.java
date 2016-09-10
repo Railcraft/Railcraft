@@ -11,8 +11,8 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
@@ -134,14 +134,14 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
             entityDropItem(bottomSlot, 1);
         }
 
-        if (update % FluidHelper.BUCKET_FILL_TIME == 0)
-            FluidHelper.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
+        if (update % FluidTools.BUCKET_FILL_TIME == 0)
+            FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
     }
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj)) {
-            if (FluidHelper.handleRightClick(this, null, player, true, true))
+            if (FluidTools.handleRightClick(this, null, player, true, true))
                 return true;
             GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
         }

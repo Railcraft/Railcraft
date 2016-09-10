@@ -1,21 +1,24 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Helper functions for Fluid Items
@@ -83,116 +86,69 @@ public class FluidItemHelper {
     }
 
     public static boolean isContainer(@Nullable ItemStack stack) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            return ((IFluidContainerItem) stack.getItem()).getCapacity(stack) > 0;
-        }
-        return FluidContainerRegistry.isContainer(stack);
+        return FluidUtil.getFluidHandler(stack) != null;
     }
 
-    public static boolean isFilledContainer(@Nullable ItemStack stack) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            return fluidCon.getFluid(stack) != null && fluidCon.getFluid(stack).amount > 0;
-        }
-        return FluidContainerRegistry.isFilledContainer(stack);
+    public static boolean testContainerProperties(boolean all, @Nullable ItemStack stack, Predicate<IFluidTankProperties> test) {
+        IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
+        if (fluidHandler == null)
+            return false;
+        IFluidTankProperties[] properties = fluidHandler.getTankProperties();
+        if (all)
+            return Arrays.stream(properties).allMatch(test);
+        return Arrays.stream(properties).anyMatch(test);
+    }
+
+    public static boolean isFluidInContainer(@Nullable ItemStack stack) {
+        return testContainerProperties(false, stack, p -> {
+            FluidStack contents = p.getContents();
+            return contents != null && contents.amount > 0;
+        });
     }
 
     public static boolean isFullContainer(@Nullable ItemStack stack) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            int capacity = fluidCon.getCapacity(stack);
-            FluidStack fluidStack = fluidCon.getFluid(stack);
-            return capacity > 0 && fluidStack != null && fluidStack.amount >= capacity;
-        }
-        return FluidContainerRegistry.isFilledContainer(stack);
+        return testContainerProperties(true, stack, p -> {
+            FluidStack contents = p.getContents();
+            return contents != null && contents.amount >= p.getCapacity();
+        });
     }
 
     public static boolean isEmptyContainer(@Nullable ItemStack stack) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            FluidStack fluidStack = fluidCon.getFluid(stack);
-            return fluidCon.getCapacity(stack) > 0 && (fluidStack == null || fluidStack.amount <= 0);
-        }
-        return FluidContainerRegistry.isEmptyContainer(stack);
+        return testContainerProperties(true, stack, p -> {
+            FluidStack contents = p.getContents();
+            return FluidTools.isEmpty(contents);
+        });
     }
 
     public static boolean isRoomInContainer(@Nullable ItemStack stack) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            FluidStack fluidStack = fluidCon.getFluid(stack);
-            int capacity = fluidCon.getCapacity(stack);
-            return capacity > 0 && (fluidStack == null || fluidStack.amount < capacity);
-        }
-        return FluidContainerRegistry.isEmptyContainer(stack);
+        return testContainerProperties(false, stack, p -> {
+            FluidStack contents = p.getContents();
+            return contents == null || contents.amount < p.getCapacity();
+        });
     }
 
-    public static boolean isRoomInContainer(@Nullable ItemStack stack, Fluid fluid) {
-        if (stack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            return fluidCon.fill(stack, new FluidStack(fluid, 1), false) > 0;
-        }
-        return FluidContainerRegistry.isEmptyContainer(stack);
-    }
-
-    public static int getRoomInContainer(@Nullable ItemStack stack, Fluid fluid) {
-        if (stack == null) return 0;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            return fluidCon.fill(stack, new FluidStack(fluid, Integer.MAX_VALUE), false);
-        }
-        ItemStack filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(fluid, Integer.MAX_VALUE), stack);
-        if (filled != null) {
-            FluidStack filledFluid = getFluidStackInContainer(filled);
-            return filledFluid != null ? filledFluid.amount : 0;
-        }
-        return 0;
+    public static boolean isRoomInContainer(@Nullable ItemStack stack, @Nullable Fluid fluid) {
+        if (fluid == null) return false;
+        IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
+        return fluidHandler != null && fluidHandler.fill(new FluidStack(fluid, 1), false) > 0;
     }
 
     public static boolean containsFluid(@Nullable ItemStack stack, @Nullable Fluid fluid) {
-        if (stack == null || fluid == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            return Fluids.areEqual(fluid, fluidCon.getFluid(stack));
-        }
-        return FluidContainerRegistry.containsFluid(stack, new FluidStack(fluid, 1));
+        return testContainerProperties(false, stack, p -> Fluids.areEqual(fluid, p.getContents()));
     }
 
     public static boolean containsFluid(@Nullable ItemStack stack, @Nullable FluidStack fluidStack) {
-        if (stack == null || fluidStack == null) return false;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            FluidStack conFluidStack = fluidCon.getFluid(stack);
-            return conFluidStack != null && conFluidStack.containsFluid(fluidStack);
-        }
-        return FluidContainerRegistry.containsFluid(stack, fluidStack);
+        return testContainerProperties(false, stack, p -> Fluids.contains(p.getContents(), fluidStack));
     }
 
     @Nullable
     public static FluidStack getFluidStackInContainer(@Nullable ItemStack stack) {
-        if (stack == null) return null;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            return fluidCon.getFluid(stack);
-        }
-        return FluidContainerRegistry.getFluidForFilledItem(stack);
+        return FluidUtil.getFluidContained(stack);
     }
 
     @Nullable
     public static Fluid getFluidInContainer(@Nullable ItemStack stack) {
-        if (stack == null) return null;
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
-            FluidStack conFluidStack = fluidCon.getFluid(stack);
-            return conFluidStack == null ? null : conFluidStack.getFluid();
-        }
-        FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(stack);
-        return fluidStack != null ? fluidStack.getFluid() : null;
+        return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }
 
     public static class FillReturn {

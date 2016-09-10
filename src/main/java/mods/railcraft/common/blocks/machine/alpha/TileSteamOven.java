@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -68,7 +68,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private static final int COOK_STEP = 16;
     private static final int ITEMS_SMELTED = 9;
     private static final int[] SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
-    private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
+    private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;

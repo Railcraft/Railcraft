@@ -11,35 +11,27 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronValve extends TileTankBase implements IFluidHandler, ITileCompare {
 
-    private static final Predicate<TileEntity> FLUID_OUTPUT_FILTER = tile -> {
-        if (tile instanceof TileTankBase)
-            return false;
-        else if (tile instanceof IFluidHandler)
-            return true;
-        return false;
-    };
     private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
-    private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
+    private static final int FLOW_RATE = FluidTools.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
     private final StandardTank fillTank = new StandardTank(20);
     private int previousComparatorValue;
@@ -97,11 +89,11 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
                     StandardTank tankBelow = valveBelow.getTankManager().get(0);
                     assert tankBelow != null;
                     FluidStack liquid = tankBelow.getFluid();
-                    if (liquid != null && liquid.amount >= tankBelow.getCapacity() - FluidHelper.BUCKET_VOLUME) {
+                    if (liquid != null && liquid.amount >= tankBelow.getCapacity() - FluidTools.BUCKET_VOLUME) {
                         valveBelow = null;
 
                         FluidStack fillStack = liquid.copy();
-                        fillStack.amount = FluidHelper.BUCKET_VOLUME - (tankBelow.getCapacity() - liquid.amount);
+                        fillStack.amount = FluidTools.BUCKET_VOLUME - (tankBelow.getCapacity() - liquid.amount);
                         if (fillStack.amount > 0) {
                             int used = tank.fill(fillStack, false);
                             if (used > 0) {
@@ -115,9 +107,9 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
             }
 
             if (valveBelow != null) {
-                FluidStack available = tankManager.drain(0, FluidHelper.BUCKET_VOLUME, false);
+                FluidStack available = tankManager.drain(0, FluidTools.BUCKET_VOLUME, false);
                 if (available != null && available.amount > 0) {
-                    int used = valveBelow.fill(EnumFacing.UP, available, true);
+                    int used = valveBelow.fill(available, true);
                     tankManager.drain(0, used, true);
                 }
             }
@@ -126,7 +118,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() == 0) {
             TankManager tMan = getTankManager();
             if (tMan != null)
-                tMan.outputLiquid(tileCache, FLUID_OUTPUT_FILTER, FLUID_OUTPUTS, 0, FLOW_RATE);
+                tMan.push(tileCache, Predicates.notInstanceOf(TileTankBase.class), FLUID_OUTPUTS, 0, FLOW_RATE);
         }
 
         TileMultiBlock masterBlock = getMasterBlock();
@@ -160,61 +152,59 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
 //    }
 
     @Override
-    public int fill(EnumFacing from, @Nullable FluidStack resource, boolean doFill) {
-        if (!canFill(from, null))
+    public int fill(FluidStack resource, boolean doFill) {
+        if (!canFill())
             return 0;
-        if (resource == null || resource.amount <= 0) return 0;
         TankManager tMan = getTankManager();
-        if (tMan == null)
-            return 0;
-        resource = resource.copy();
-//        resource.amount = Math.min(resource.amount, FLOW_RATE);
-        int filled = tMan.fill(0, resource, doFill);
-        if (filled > 0 && doFill)
-            setFilling(resource.copy());
-        return filled;
+        if (tMan != null) {
+            int amount = tMan.fill(resource, doFill);
+            if (amount > 0 && doFill)
+                setFilling(resource.copy());
+        }
+        return 0;
     }
 
-    @Nullable
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() != 1)
+    @Nullable
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        if (!canDrain())
             return null;
         TankManager tMan = getTankManager();
-        if (tMan != null)
-            //            maxDrain = Math.min(maxDrain, FLOW_RATE);
-            return tMan.drain(0, maxDrain, doDrain);
+        if (tMan != null) {
+            return tMan.drain(maxDrain, doDrain);
+        }
         return null;
     }
 
-    @Nullable
     @Override
-    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
+    @Nullable
+    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
+        if (!canDrain())
+            return null;
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
-        //noinspection ConstantConditions
-        if (tMan != null && tMan.get(0).getFluidType() == resource.getFluid())
-            return drain(from, resource.amount, doDrain);
+        if (tMan != null) {
+            return tMan.drain(resource, doDrain);
+        }
         return null;
     }
 
     @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
+    public IFluidTankProperties[] getTankProperties() {
+        TankManager tMan = getTankManager();
+        if (tMan != null) {
+            return tMan.getTankProperties();
+        }
+        return FakeTank.PROPERTIES;
+    }
+
+    public boolean canFill() {
         return getPatternPosition().getY() - getPattern().getMasterOffset().getY() > 0;
     }
 
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
+    public boolean canDrain() {
         return getPatternPosition().getY() - getPattern().getMasterOffset().getY() <= 1;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing side) {
-        TankManager tMan = getTankManager();
-        if (tMan != null)
-            return tMan.getTankInfo();
-        return FakeTank.INFO;
     }
 
     @Override

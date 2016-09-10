@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -55,7 +55,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     protected boolean powered;
     private byte jet;
     private final TankManager tankManager = new TankManager();
-    private final FilteredTank tank = new FilteredTank(FluidHelper.BUCKET_VOLUME * 32, Fluids.STEAM.get());
+    private final FilteredTank tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, Fluids.STEAM.get());
 
     protected TileSteamTrap() {
         tankManager.add(tank);

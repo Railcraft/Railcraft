@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -20,7 +21,7 @@ public class SlotFluidFilter extends SlotRailcraft {
     }
 
     public static boolean canPlaceItem(ItemStack itemstack) {
-        return FluidItemHelper.isFilledContainer(itemstack);
+        return FluidItemHelper.isFluidInContainer(itemstack);
     }
 
     @Override

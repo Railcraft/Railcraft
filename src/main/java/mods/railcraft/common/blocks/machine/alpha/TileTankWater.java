@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileTank;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -24,6 +24,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -36,16 +37,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -53,7 +51,7 @@ import java.util.function.Predicate;
 public class TileTankWater extends TileTank {
 
     private static final int OUTPUT_RATE = 40;
-    private static final int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
+    private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 400;
     private static final int REFILL_INTERVAL = 8;
     private static final float REFILL_RATE = 10f;
     private static final float REFILL_PENALTY_INSIDE = 0.5f;
@@ -64,13 +62,6 @@ public class TileTankWater extends TileTank {
     private static final int SLOT_OUTPUT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private static final EnumFacing[] LIQUID_OUTPUTS = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
-    private static final Predicate<TileEntity> LIQUID_OUTPUT_FILTER = tile -> {
-        if (tile instanceof TileTank)
-            return false;
-        else if (tile instanceof IFluidHandler)
-            return true;
-        return false;
-    };
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final FilteredTank tank;
 
@@ -119,7 +110,8 @@ public class TileTankWater extends TileTank {
 
     public TileTankWater() {
         super("gui.tank.water", 2, patterns);
-        tank = new FilteredTank(TANK_CAPACITY, Fluids.WATER.get(), this);
+        tank = new FilteredTank(TANK_CAPACITY, this);
+        tank.setFilter(Fluids.WATER::get);
         tankManager.add(tank);
     }
 
@@ -151,12 +143,7 @@ public class TileTankWater extends TileTank {
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true))
-                return true;
-        } else if (FluidItemHelper.isContainer(heldItem))
-            return true;
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, this, player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -197,17 +184,17 @@ public class TileTankWater extends TileTank {
 //                    System.out.println(debug);
 
                     FluidStack fillStack = Fluids.WATER.get(rateFinal);
-                    fill(EnumFacing.UP, fillStack, true);
+                    fill(fillStack, true);
                 }
 
-                if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-                    //noinspection ConstantConditions
-                    FluidHelper.processContainers(tankManager.get(0), this, SLOT_INPUT, SLOT_OUTPUT);
+                //FIXME
+//                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//                    FluidTools.processContainers(tankManager.get(0), this, SLOT_INPUT, SLOT_OUTPUT);
             }
 
             TankManager tMan = getTankManager();
             if (tMan != null)
-                tMan.outputLiquid(tileCache, LIQUID_OUTPUT_FILTER, LIQUID_OUTPUTS, 0, OUTPUT_RATE);
+                tMan.push(tileCache, Predicates.notInstanceOf(getClass()), LIQUID_OUTPUTS, 0, OUTPUT_RATE);
         }
     }
 
@@ -219,31 +206,6 @@ public class TileTankWater extends TileTank {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public int fill(EnumFacing from, @Nullable FluidStack resource, boolean doFill) {
-        if (from != EnumFacing.UP || resource == null || !Fluids.WATER.is(resource))
-            return 0;
-        return super.fill(from, resource, doFill);
-    }
-
-    @Override
-    @Nullable
-    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
-        if (resource == null || !Fluids.WATER.is(resource))
-            return null;
-        return super.drain(from, resource.amount, doDrain);
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return from == EnumFacing.UP && Fluids.WATER.is(fluid);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return from != EnumFacing.UP && Fluids.WATER.is(fluid);
     }
 
     @Override

@@ -12,7 +12,7 @@ package mods.railcraft.common.items.firestone;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.RailcraftItems;
@@ -81,7 +81,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'P', Items.DIAMOND_PICKAXE,
                 'F', RailcraftItems.FIRESTONE_RAW);
 
-        for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
+        for (ItemStack stack : FluidTools.getContainersFilledWith(Fluids.LAVA.get(FluidTools.BUCKET_VOLUME))) {
             CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
                     "LRL",
                     "RFR",

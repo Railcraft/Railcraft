@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
@@ -62,9 +62,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     private boolean explode = false;
 
     public TileEngineSteamHobby() {
-        FilteredTank tankWater = new FilteredTank(4 * FluidHelper.BUCKET_VOLUME, Fluids.WATER.get(), this);
+        FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, Fluids.WATER.get(), this);
         getTankManager().add(tankWater);
-        getTankManager().get(TANK_STEAM).setCapacity(4 * FluidHelper.BUCKET_VOLUME);
+        getTankManager().get(TANK_STEAM).setCapacity(4 * FluidTools.BUCKET_VOLUME);
 
         boiler = new SteamBoiler(tankWater, getTankManager().get(TANK_STEAM));
         boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
@@ -93,7 +93,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && heldItem.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
-                if (FluidHelper.handleRightClick(this, side, player, true, false))
+                if (FluidTools.handleRightClick(this, side, player, true, false))
                     return true;
             } else if (FluidItemHelper.isContainer(heldItem))
                 return true;
@@ -125,8 +125,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     public void burn() {
         super.burn();
 
-        if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-            FluidHelper.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+            FluidTools.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
 
         boiler.tick(1);
 

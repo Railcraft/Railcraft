@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.fluids.FluidUtil net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(net.minecraft.item.ItemStack) 0'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>
