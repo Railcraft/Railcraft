@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.machine;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
-import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;

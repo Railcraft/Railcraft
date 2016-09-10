@@ -10,37 +10,39 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
+import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidHandler, IRefuelableCart, IFluidCart {
+public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidCart, IBoilerContainer {
     @SuppressWarnings("WeakerAccess")
     public static final int SLOT_LIQUID_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
@@ -50,9 +52,9 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
     public SteamBoiler boiler;
-    protected StandardTank tankWater;
+    protected FilteredTank tankWater;
     @SuppressWarnings("WeakerAccess")
-    protected StandardTank tankSteam;
+    protected FilteredTank tankSteam;
     @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
@@ -73,8 +75,19 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     {
         setAllowedSpeeds(EnumSet.of(LocoSpeed.MAX, LocoSpeed.NORMAL, LocoSpeed.SLOWER, LocoSpeed.SLOWEST, LocoSpeed.REVERSE_SLOWEST));
 
-        tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6, Fluids.WATER.get());
-        tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16, Fluids.STEAM.get());
+        tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
+            @Override
+            public int fillInternal(FluidStack resource, boolean doFill) {
+                IBoilerContainer.onFillWater(EntityLocomotiveSteam.this);
+                return super.fillInternal(resource, doFill);
+            }
+        };
+        tankWater.setFilter(Fluids.WATER::get);
+
+        tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16);
+        tankSteam.setFilter(Fluids.STEAM::get);
+        tankSteam.setCanDrain(false);
+        tankSteam.setCanFill(false);
 
         tankManager.add(tankWater);
         tankManager.add(tankSteam);
@@ -92,13 +105,32 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         return RailcraftSoundEvents.ENTITY_LOCOMOTIVE_STEAM_WHISTLE.getSoundEvent();
     }
 
+    @Nullable
     @Override
     protected ItemStack getCartItemBase() {
         return RailcraftCarts.LOCO_STEAM_SOLID.getStack();
     }
 
+    @Override
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+        return FluidTools.interactWithFluidHandler(stack, getTankManager(), player) || super.doInteract(player, stack, hand);
+    }
+
     public TankManager getTankManager() {
         return tankManager;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -121,8 +153,9 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                     ventSteam();
             }
 
-            if (update % FluidTools.BUCKET_FILL_TIME == 0)
-                FluidTools.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+            //FIXME
+//            if (update % FluidTools.BUCKET_FILL_TIME == 0)
+//                FluidTools.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
         } else {
             if (isSmoking())
                 if (rand.nextInt(3) == 0) {
@@ -156,14 +189,25 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     private void ventSteam() {
-        tankSteam.drain(4, true);
+        tankSteam.drainInternal(4, true);
+    }
+
+    @Nullable
+    @Override
+    public SteamBoiler getBoiler() {
+        return boiler;
+    }
+
+    @Override
+    public float getTemperature() {
+        return (float) boiler.getHeat();
     }
 
     @Override
     public int getMoreGoJuice() {
         FluidStack steam = tankSteam.getFluid();
         if (steam != null && steam.amount >= tankSteam.getCapacity() / 2) {
-            tankSteam.drain(Steam.STEAM_PER_UNIT_WATER, true);
+            tankSteam.drainInternal(Steam.STEAM_PER_UNIT_WATER, true);
             return FUEL_PER_REQUEST;
         }
         return 0;
@@ -186,42 +230,6 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     public boolean isSafeToFill() {
         return !boiler.isSuperHeated() || !tankWater.isEmpty();
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (doFill && Fluids.WATER.is(resource))
-            if (boiler.isSuperHeated() && Steam.BOILERS_EXPLODE) {
-                FluidStack water = tankWater.getFluid();
-                if (water == null || water.amount <= 0)
-                    explode();
-            }
-        return tankWater.fill(resource, doFill);
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return Fluids.WATER.is(fluid);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing direction) {
-        return tankManager.getTankInfo();
     }
 
     @Override

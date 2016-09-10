@@ -7,16 +7,19 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.steam;
 
-import net.minecraft.tileentity.TileEntity;
+package mods.railcraft.common.blocks.machine.interfaces;
 
-import java.util.function.Predicate;
+import mods.railcraft.common.fluids.TankManager;
+
+import javax.annotation.Nullable;
 
 /**
+ * Created by CovertJaguar on 9/10/2016 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ISteamUser {
-
-    Predicate<TileEntity> FILTER = tile -> tile instanceof ISteamUser;
+public interface ITileTanks {
+    @Nullable
+    TankManager getTankManager();
 }

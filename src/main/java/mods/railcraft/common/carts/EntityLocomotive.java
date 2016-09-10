@@ -18,7 +18,6 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -55,7 +54,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
@@ -190,6 +188,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         return item;
     }
 
+    @Nullable
     protected abstract ItemStack getCartItemBase();
 
     @Override
@@ -203,8 +202,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 }
                 return true;
             }
-            if (this instanceof IFluidHandler && FluidTools.handleRightClick((IFluidHandler) this, null, player, true, false))
-                return true;
             if (!isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), player.getGameProfile()))
                 openGui(player);
         }
@@ -576,7 +573,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         super.setDead();
     }
 
-    protected void explode() {
+    public void explode() {
         CartTools.explodeCart(this);
         setDead();
     }

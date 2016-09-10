@@ -76,6 +76,22 @@ public class StandardTank extends FluidTank {
     }
 
     @Override
+    public boolean canFillFluidType(FluidStack fluid) {
+        return super.canFillFluidType(fluid) && matchesFilter(fluid);
+    }
+
+    public boolean matchesFilter(FluidStack fluidStack) {
+        return true;
+    }
+
+    @Override
+    public int fillInternal(FluidStack resource, boolean doFill) {
+        if (!matchesFilter(resource))
+            return 0;
+        return super.fillInternal(resource, doFill);
+    }
+
+    @Override
     public int fill(final FluidStack resource, final boolean doFill) {
         if (resource == null)
             return 0;

@@ -22,7 +22,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotWaterOrEmpty;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.state.IBlockState;
@@ -32,14 +31,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,8 +102,8 @@ public class TileTankWater extends TileTank {
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+//    private InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+//    private InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
 
     public TileTankWater() {
         super("gui.tank.water", 2, patterns);
@@ -139,11 +136,6 @@ public class TileTankWater extends TileTank {
     @Override
     public Slot getInputSlot(IInventory inv, int id, int x, int y) {
         return new SlotWaterOrEmpty(inv, id, x, y);
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, this, player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -184,7 +176,7 @@ public class TileTankWater extends TileTank {
 //                    System.out.println(debug);
 
                     FluidStack fillStack = Fluids.WATER.get(rateFinal);
-                    fill(fillStack, true);
+                    tank.fillInternal(fillStack, true);
                 }
 
                 //FIXME

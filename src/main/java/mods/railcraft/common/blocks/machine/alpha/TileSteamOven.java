@@ -17,9 +17,7 @@ import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -46,9 +44,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
@@ -71,7 +67,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
-    private final StandardTank tank;
+    private final FilteredTank tank;
     private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
     private final Set<Object> actions = new HashSet<Object>();
@@ -110,11 +106,12 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     public TileSteamOven() {
         super("railcraft.gui.steam.oven", 18, patterns);
-        tank = new FilteredTank(TANK_CAPACITY, Fluids.STEAM.get(), this);
+        tank = new FilteredTank(TANK_CAPACITY, this);
+        tank.setFilter(Fluids.STEAM::get);
         tankManager.add(tank);
     }
 
-    public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
+    public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
         blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
@@ -254,9 +251,10 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        facing = MiscTools.getHorizontalSideFacingPlayer(placer);
+        if (placer != null)
+            facing = MiscTools.getHorizontalSideFacingPlayer(placer);
     }
 
     @Override
@@ -326,43 +324,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (resource == null) return 0;
-        TankManager tMan = getTankManager();
-        if (tMan == null)
-            return 0;
-        return tMan.fill(0, resource, doFill);
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return fluid == null || Fluids.STEAM.is(fluid);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
-        TankManager tMan = getTankManager();
-        if (tMan != null)
-            return tMan.getTankInfo();
-        return FakeTank.INFO;
-    }
-
-    @Override
     public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
@@ -379,7 +340,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (stack == null)

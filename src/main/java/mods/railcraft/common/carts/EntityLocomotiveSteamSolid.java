@@ -113,7 +113,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     @Override
-    public boolean needsRefuel() {
+    public boolean needsFuel() {
         FluidStack water = tankWater.getFluid();
         if (water == null || water.amount < tankWater.getCapacity() / 3)
             return true;

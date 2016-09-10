@@ -23,6 +23,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackTileFactory;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -40,6 +41,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -274,7 +276,9 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (tile instanceof TileEngineSteamHobby) {
             TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;
             engine.switchOrientation();
-            engine.fill(EnumFacing.UP, Fluids.WATER.getB(4), true);
+            IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, engine);
+            assert fluidHandler != null;
+            fluidHandler.fill(Fluids.WATER.getB(4), true);
 //            engine.setInventorySlotContents(TileEngineSteamHobby.SLOT_FUEL, new ItemStack(Items.COAL, 16));
         }
     }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -28,7 +29,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     protected final StandaloneInventory inv;
     private final String guiTag;
 
-    public TileMultiBlockInventory(String guiTag, int invSize, List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlockInventory(String guiTag, int invSize, List<? extends MultiBlockPattern> patterns) {
         super(patterns);
         inv = new StandaloneInventory(invSize, (IInventory) this);
         this.guiTag = guiTag;
@@ -62,20 +63,19 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+    public boolean isItemValidForSlot(int p_94041_1_, @Nullable ItemStack p_94041_2_) {
         return isStructureValid();
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("invStructure", data);
         return data;
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("invStructure", data);
     }
@@ -84,7 +84,6 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     public int getSizeInventory() {
         return inv.getSizeInventory();
     }
-
 
     @Override
     public String getName() {

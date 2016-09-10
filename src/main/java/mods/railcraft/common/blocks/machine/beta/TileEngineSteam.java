@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -25,9 +26,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,17 +37,18 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
+public abstract class TileEngineSteam extends TileEngine implements ISteamUser, ITileTanks {
 
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     public static final int TANK_STEAM = 0;
-    private final FilteredTank steamTank;
-    private final TankManager tankManager = new TankManager();
+    protected final FilteredTank tankSteam;
+    protected final TankManager tankManager = new TankManager();
     private int steamUsed;
 
     protected TileEngineSteam() {
-        steamTank = new FilteredTank(TANK_CAPACITY, Fluids.STEAM.get(), this);
-        tankManager.add(steamTank);
+        tankSteam = new FilteredTank(TANK_CAPACITY, this);
+        tankSteam.setFilter(Fluids.STEAM::get);
+        tankManager.add(tankSteam);
     }
 
     @Override
@@ -101,8 +103,8 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
 
         if (getEnergyStage() != EnergyStage.OVERHEAT) {
             if (isPowered()) {
-                FluidStack steam = steamTank.getFluid();
-                if (steam != null && steam.amount >= steamTank.getCapacity() / 2 - Steam.STEAM_PER_UNIT_WATER) {
+                FluidStack steam = tankSteam.getFluid();
+                if (steam != null && steam.amount >= tankSteam.getCapacity() / 2 - Steam.STEAM_PER_UNIT_WATER) {
                     steam = tankManager.drain(0, steamUsedPerTick() - 1, true);
                     if (steam != null)
                         steamUsed += steam.amount;
@@ -146,9 +148,8 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
 
     public abstract int steamUsedPerTick();
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         tankManager.writeTanksToNBT(data);
@@ -156,47 +157,27 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         tankManager.readTanksFromNBT(data);
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        return null;
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (!isPowered())
-            return 0;
-        return tankManager.fill(0, resource, doFill);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return getOrientation() != from && Fluids.STEAM.is(fluid);
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing from) {
-        if (getOrientation() == from)
-            return null;
-        return tankManager.getTankInfo();
-    }
-
     public TankManager getTankManager() {
         return tankManager;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
     }
 }

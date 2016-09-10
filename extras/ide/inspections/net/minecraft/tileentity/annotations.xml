@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.tileentity.TileEntity T getCapability(net.minecraftforge.common.capabilities.Capability&lt;T&gt;, net.minecraft.util.EnumFacing)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

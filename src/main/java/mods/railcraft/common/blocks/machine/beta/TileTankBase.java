@@ -418,9 +418,11 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
-        NBTTagCompound nbt = InvTools.getItemData(drop);
-        nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
-        items.add(drop);
+        if (drop != null) {
+            NBTTagCompound nbt = InvTools.getItemData(drop);
+            nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
+            items.add(drop);
+        }
         return items;
     }
 
@@ -428,9 +430,11 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public ArrayList<ItemStack> getBlockDroppedSilkTouch(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
-        NBTTagCompound nbt = InvTools.getItemData(drop);
-        nbt.setByte("color", (byte) color.ordinal());
-        items.add(drop);
+        if (drop != null) {
+            NBTTagCompound nbt = InvTools.getItemData(drop);
+            nbt.setByte("color", (byte) color.ordinal());
+            items.add(drop);
+        }
         return items;
     }
 
@@ -459,7 +463,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldObj)) {
             TankManager tankManager = getTankManager();
-            if (isStructureValid() && tankManager != null && FluidTools.handleRightClick(tankManager, side, player, true, true)) {
+            if (isStructureValid() && tankManager != null && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();
@@ -571,9 +575,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         if (Game.isHost(worldObj))
             if (isMaster) {
 
-                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-                    //noinspection ConstantConditions
-                    FluidTools.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
+                //FIXME
+//                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//                    FluidTools.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
 
                 if (networkTimer.hasTriggered(worldObj, NETWORK_UPDATE_INTERVAL))
                     syncClient();

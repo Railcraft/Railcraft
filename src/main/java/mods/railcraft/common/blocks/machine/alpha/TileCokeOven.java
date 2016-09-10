@@ -18,16 +18,13 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,9 +33,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, ISidedInventory {
+public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -58,8 +54,8 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 2, false);
+//    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+//    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 2, false);
 
     static {
         char[][][] map = {
@@ -138,8 +134,21 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, this, player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -240,61 +249,20 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         return data;
     }
 
     @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.fill(resource, doFill);
-        }
-        return 0;
-    }
-
-    @Override
-    @Nullable
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.drain(maxDrain, doDrain);
-        }
-        return null;
-    }
-
-    @Override
-    @Nullable
-    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
-        if (resource == null)
-            return null;
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.drain(resource, doDrain);
-        }
-        return null;
-    }
-
-    @Override
-    public IFluidTankProperties[] getTankProperties() {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.getTankProperties();
-        }
-        return FakeTank.PROPERTIES;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot,  ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
@@ -307,19 +275,18 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         }
     }
 
-
     @Override
-    public int[] getSlotsForFace( EnumFacing side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_OUTPUT || index == SLOT_LIQUID_OUTPUT;
     }
 }

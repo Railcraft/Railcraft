@@ -12,14 +12,12 @@ package mods.railcraft.common.blocks.machine.beta;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.steam.ISteamUser;
-import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -27,9 +25,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,7 +39,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITemperature {
+public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
@@ -109,6 +105,9 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
+    public abstract boolean needsFuel();
+
+    @Override
     public Predicate<TileEntity> getOutputFilter() {
         return ISteamUser.FILTER;
     }
@@ -138,7 +137,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected abstract void process();
 
     protected void processBuckets() {
-        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        //FIXME
+//        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -231,23 +231,6 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     @Override
     public int getSizeInventory() {
         return inventory.getSizeInventory();
-    }
-
-    protected boolean handleClick(EntityPlayer player, EnumFacing side) {
-        return FluidTools.handleRightClick(this, side, player, true, false);
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        return fill(TANK_WATER, resource, doFill);
-    }
-
-    @Override
-    public float getTemperature() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-        if (mBlock != null)
-            return (float) mBlock.boiler.getHeat();
-        return Steam.COLD_TEMP;
     }
 
     @Override

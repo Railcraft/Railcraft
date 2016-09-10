@@ -9,23 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank extends TileMultiBlockInventory implements IFluidHandler, ITankTile, ISidedInventory {
+public abstract class TileTank extends TileMultiBlockInventory implements ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
@@ -50,6 +49,11 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    }
+
+    @Override
     @Nullable
     public TankManager getTankManager() {
         TileTank mBlock = (TileTank) getMasterBlock();
@@ -57,6 +61,19 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
             return mBlock.tankManager;
         }
         return null;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -72,46 +89,6 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     @Override
     public Slot getInputSlot(IInventory inv, int id, int x, int y) {
         return new SlotLiquidContainer(inv, id, x, y);
-    }
-
-    @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.fill(resource, doFill);
-        }
-        return 0;
-    }
-
-    @Override
-    @Nullable
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.drain(maxDrain, doDrain);
-        }
-        return null;
-    }
-
-    @Override
-    @Nullable
-    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
-        if (resource == null)
-            return null;
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.drain(resource, doDrain);
-        }
-        return null;
-    }
-
-    @Override
-    public IFluidTankProperties[] getTankProperties() {
-        TankManager tMan = getTankManager();
-        if (tMan != null) {
-            return tMan.getTankProperties();
-        }
-        return FakeTank.PROPERTIES;
     }
 
     @Override
@@ -155,16 +132,4 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
         super.readPacketData(data);
     }
 
-    @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) this;
-        return super.getCapability(capability, facing);
-    }
 }

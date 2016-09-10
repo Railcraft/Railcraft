@@ -1,16 +1,18 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
@@ -69,7 +71,7 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemstack) {
+    public void setInventorySlotContents(int slot, @Nullable ItemStack itemstack) {
         inv.setInventorySlotContents(start + slot, itemstack);
     }
 

@@ -10,25 +10,22 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
-import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -43,7 +40,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, INeedsFuel, ITemperature {
+public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, IBoilerContainer {
 
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
@@ -59,14 +56,20 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
     private InventoryMapper invFuel = new InventoryMapper(inv, SLOT_FUEL, 1);
     private InventoryMapper invOutput = new InventoryMapper(inv, SLOT_LIQUID_OUTPUT, 1);
-    private boolean explode = false;
-
+    private boolean explode;
     public TileEngineSteamHobby() {
-        FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, Fluids.WATER.get(), this);
-        getTankManager().add(tankWater);
-        getTankManager().get(TANK_STEAM).setCapacity(4 * FluidTools.BUCKET_VOLUME);
+        FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
+            @Override
+            public int fillInternal(FluidStack resource, boolean doFill) {
+                IBoilerContainer.onFillWater(TileEngineSteamHobby.this);
+                return super.fillInternal(resource, doFill);
+            }
+        };
+        tankWater.setFilter(Fluids.WATER::get);
+        tankManager.add(tankWater);
+        tankSteam.setCapacity(4 * FluidTools.BUCKET_VOLUME);
 
-        boiler = new SteamBoiler(tankWater, getTankManager().get(TANK_STEAM));
+        boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
         boiler.setEfficiencyModifier(FUEL_PER_CONVERSION_MULTIPLIER);
         boiler.setFuelProvider(new SolidFuelProvider(inv, SLOT_FUEL) {
@@ -76,6 +79,11 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
                 return super.getMoreFuel();
             }
         });
+    }
+
+    @Override
+    public SteamBoiler getBoiler() {
+        return boiler;
     }
 
     @Override
@@ -91,13 +99,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null && heldItem.getItem() != Items.BUCKET)
-            if (Game.isHost(worldObj)) {
-                if (FluidTools.handleRightClick(this, side, player, true, false))
-                    return true;
-            } else if (FluidItemHelper.isContainer(heldItem))
-                return true;
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -124,9 +126,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void burn() {
         super.burn();
-
-        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-            FluidTools.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        //FIXME
+//        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+//            FluidTools.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
 
         boiler.tick(1);
 
@@ -270,24 +272,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (isPowered() && Fluids.STEAM.is(resource))
-            return fill(0, resource, doFill);
-        if (Fluids.WATER.is(resource))
-            return fill(1, resource, doFill);
-        return 0;
-    }
-
-    private int fill(int tankIndex, FluidStack resource, boolean doFill) {
-        if (tankIndex == 1)
-            if (boiler.isSuperHeated() && Steam.BOILERS_EXPLODE) {
-                FluidStack water = getTankManager().get(TANK_WATER).getFluid();
-                if (water == null || water.amount <= 0)
-                    explode();
-            }
-        return getTankManager().fill(tankIndex, resource, doFill);
-    }
-
     public void explode() {
         explode = true;
     }

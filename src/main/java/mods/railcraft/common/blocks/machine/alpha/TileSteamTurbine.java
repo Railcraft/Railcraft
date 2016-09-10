@@ -12,10 +12,10 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
+import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -29,16 +29,16 @@ import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: migrate to new charge API
-public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser {
+public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     enum Texture {
 
@@ -76,12 +76,12 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     public float output;
     private final FluidStack waterFilter = Fluids.WATER.get(2);
-    protected final FilteredTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, Fluids.STEAM.get(), this);
-    protected final FilteredTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, Fluids.WATER.get(), this);
+    protected final FilteredTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this);
+    protected final FilteredTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this);
     protected final TankManager tankManager = new TankManager();
     public static final int TANK_STEAM = 0;
     public static final int TANK_WATER = 1;
-    private byte gaugeState = 0;
+    private byte gaugeState;
     // mainGauge is a renderer field 
     public double mainGauge;
     private double energy;
@@ -152,6 +152,10 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     public TileSteamTurbine() {
         super(patterns);
+        tankSteam.setFilter(Fluids.STEAM::get);
+        tankWater.setFilter(Fluids.WATER::get);
+        tankSteam.setCanDrain(false);
+        tankWater.setCanFill(false);
         tankManager.add(tankSteam); // Steam
         tankManager.add(tankWater); // Water
 
@@ -193,15 +197,15 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
             if (isMaster()) {
                 boolean addedEnergy = false;
                 if (energy < BC_OUTPUT * 2) {
-                    FluidStack steam = tankManager.drain(TANK_STEAM, STEAM_USAGE, false);
+                    FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
 //                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
                         if (InvTools.isItemEqual(rotor, getSampleRotor()) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
                             addedEnergy = true;
                             energy += BC_OUTPUT;
-                            tankManager.drain(TANK_STEAM, STEAM_USAGE, true);
-                            tankWater.fill(waterFilter, true);
+                            tankSteam.drainInternal(STEAM_USAGE, true);
+                            tankWater.fillInternal(waterFilter, true);
 
                             inv.setInventorySlotContents(0, ((ItemTurbineRotor) rotor.getItem()).useRotor(rotor));
                         }
@@ -221,23 +225,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
         TankManager tMan = getTankManager();
         if (tMan != null)
-            tMan.outputFluid(getOutputs(), 0, WATER_OUTPUT);
-    }
-
-    private IFluidHandler getOutputOnSide(EnumFacing side) {
-        TileEntity tile = tileCache.getTileOnSide(side);
-        if (tile instanceof TileBoilerFirebox)
-            return (IFluidHandler) tile;
-        return null;
-    }
-
-    private IFluidHandler[] getOutputs() {
-        IFluidHandler[] outputs = new IFluidHandler[6];
-        for (int side = 2; side < 6; side++) {
-            EnumFacing dir = EnumFacing.VALUES[side];
-            outputs[side] = getOutputOnSide(dir);
-        }
-        return outputs;
+            tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
     }
 
     private void addToNet() {
@@ -393,6 +381,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return inv;
     }
 
+    @Override
     @Nullable
     public TankManager getTankManager() {
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
@@ -402,45 +391,17 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) return tMan.fill(TANK_STEAM, resource, doFill);
-        return 0;
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @Nullable
+    @SuppressWarnings("unchecked")
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) return tMan.drain(TANK_WATER, maxDrain, doDrain);
-        return null;
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
     }
-
-    @Nullable
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        if (Fluids.WATER.is(resource))
-            return drain(from, resource.amount, doDrain);
-        return null;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing side) {
-        TankManager tMan = getTankManager();
-        if (tMan != null) return tMan.getTankInfo();
-        return FakeTank.INFO;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return fluid == null || Fluids.STEAM.is(fluid);
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return fluid == null || Fluids.WATER.is(fluid);
-    }
-
     /*@Override
     public void onDisable(int duration) {
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();

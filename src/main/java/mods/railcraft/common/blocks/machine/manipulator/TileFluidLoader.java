@@ -18,7 +18,7 @@ import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Predicates;
@@ -165,7 +165,7 @@ public class TileFluidLoader extends TileFluidManipulator {
         setProcessing(false);
         if (cartNeedsFilling && (!needsPipe || pipeIsExtended())) {
             FluidStack moved = FluidUtil.tryFluidTransfer(tankCart, tank, RailcraftConfig.getTankCartFillRate(), true);
-            setProcessing(FluidTools.isNotEmpty(moved));
+            setProcessing(Fluids.isNotEmpty(moved));
         }
 
         if (isProcessing())

@@ -48,8 +48,8 @@ public class FilteredTank extends StandardTank {
     }
 
     @Override
-    public boolean canFillFluidType(FluidStack fluid) {
-        return super.canFillFluidType(fluid) && (filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluid));
+    public boolean matchesFilter(FluidStack fluidStack) {
+        return filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluid);
     }
 
     @Override

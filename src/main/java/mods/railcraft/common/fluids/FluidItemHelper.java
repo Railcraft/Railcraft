@@ -116,7 +116,7 @@ public class FluidItemHelper {
     public static boolean isEmptyContainer(@Nullable ItemStack stack) {
         return testContainerProperties(true, stack, p -> {
             FluidStack contents = p.getContents();
-            return FluidTools.isEmpty(contents);
+            return Fluids.isEmpty(contents);
         });
     }
 

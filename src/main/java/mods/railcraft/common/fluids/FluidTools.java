@@ -64,7 +64,7 @@ public final class FluidTools {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
-    public static boolean interactWithFluidHandler(@Nullable ItemStack heldItem, IFluidHandler fluidHandler, EntityPlayer player) {
+    public static boolean interactWithFluidHandler(@Nullable ItemStack heldItem, @Nullable IFluidHandler fluidHandler, EntityPlayer player) {
         if (Game.isHost(player.worldObj))
             return FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
         return FluidItemHelper.isContainer(heldItem);
@@ -362,13 +362,5 @@ public final class FluidTools {
             Particle fx = new ParticleDrip(world, new Vec3d(px, py, pz), particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
-    }
-
-    public static boolean isEmpty(@Nullable FluidStack fluidStack) {
-        return fluidStack == null || fluidStack.amount <= 0;
-    }
-
-    public static boolean isNotEmpty(@Nullable FluidStack fluidStack) {
-        return fluidStack != null && fluidStack.amount > 0;
     }
 }

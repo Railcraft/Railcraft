@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.steam;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.widgets.IIndicatorController;
 import mods.railcraft.common.gui.widgets.IndicatorController;
@@ -23,13 +25,14 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public class SteamBoiler {
 
-    public double burnTime;
-    public double currentItemBurnTime;
-    protected boolean isBurning = false;
-    protected byte burnCycle;
+    public final IIndicatorController heatIndicator = new HeatIndicator();
     private final StandardTank tankWater;
     private final StandardTank tankSteam;
-    private double partialConversions = 0;
+    public double burnTime;
+    public double currentItemBurnTime;
+    protected boolean isBurning;
+    protected byte burnCycle;
+    private double partialConversions;
     private double heat = Steam.COLD_TEMP;
     private double maxHeat = Steam.MAX_HEAT_LOW;
     private double efficiencyModifier = 1;
@@ -37,9 +40,17 @@ public class SteamBoiler {
     private RailcraftTileEntity tile;
     private IFuelProvider fuelProvider;
 
-    public SteamBoiler(StandardTank tankWater, StandardTank tankSteam) {
+    public SteamBoiler(FilteredTank tankWater, FilteredTank tankSteam) {
         this.tankWater = tankWater;
         this.tankSteam = tankSteam;
+    }
+
+    public StandardTank getTankWater() {
+        return tankWater;
+    }
+
+    public StandardTank getTankSteam() {
+        return tankSteam;
     }
 
     public SteamBoiler setFuelProvider(IFuelProvider fuelProvider) {
@@ -62,13 +73,13 @@ public class SteamBoiler {
         return this;
     }
 
+    public double getMaxHeat() {
+        return maxHeat;
+    }
+
     public SteamBoiler setMaxHeat(double maxHeat) {
         this.maxHeat = maxHeat;
         return this;
-    }
-
-    public double getMaxHeat() {
-        return maxHeat;
     }
 
     public double getHeatStep() {
@@ -202,7 +213,7 @@ public class SteamBoiler {
             return 0;
         partialConversions -= waterCost;
 
-        FluidStack water = tankWater.drain(waterCost, false);
+        FluidStack water = tankWater.drainInternal(waterCost, false);
         if (water == null)
             return 0;
 
@@ -211,8 +222,8 @@ public class SteamBoiler {
         if (steam == null)
             return 0;
 
-        tankWater.drain(waterCost, true);
-        tankSteam.fill(steam, true);
+        tankWater.drainInternal(waterCost, true);
+        tankSteam.fillInternal(steam, true);
 
         return steam.amount;
     }
@@ -230,8 +241,6 @@ public class SteamBoiler {
         burnTime = data.getFloat("burnTime");
         currentItemBurnTime = data.getFloat("currentItemBurnTime");
     }
-
-    public final IIndicatorController heatIndicator = new HeatIndicator();
 
     private class HeatIndicator extends IndicatorController {
 

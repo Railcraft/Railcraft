@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IPaintedCart;
-import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.api.carts.IRoutableCart;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;
@@ -87,7 +87,7 @@ public class RoutingLogic {
                 return cart;
             if (cart instanceof IPaintedCart)
                 return cart;
-            if (cart instanceof IRefuelableCart)
+            if (cart instanceof INeedsFuel)
                 return cart;
         }
         return train.getLocomotive();
@@ -324,9 +324,9 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            if (cart instanceof IRefuelableCart) {
-                IRefuelableCart rCart = (IRefuelableCart) cart;
-                return needsRefuel == rCart.needsRefuel();
+            if (cart instanceof INeedsFuel) {
+                INeedsFuel rCart = (INeedsFuel) cart;
+                return needsRefuel == rCart.needsFuel();
             }
             return false;
         }

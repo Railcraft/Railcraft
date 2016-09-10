@@ -43,6 +43,14 @@ public enum Fluids {
         return pool == request || (pool != null && (request == null || pool.amount >= request.amount));
     }
 
+    public static boolean isEmpty(@Nullable FluidStack fluidStack) {
+        return fluidStack == null || fluidStack.amount <= 0;
+    }
+
+    public static boolean isNotEmpty(@Nullable FluidStack fluidStack) {
+        return fluidStack != null && fluidStack.amount > 0;
+    }
+
     public String getTag() {
         return tag;
     }
@@ -55,6 +63,7 @@ public enum Fluids {
     /**
      * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
      */
+    @Nullable
     public FluidStack get(int qty) {
         return FluidRegistry.getFluidStack(tag, qty);
     }

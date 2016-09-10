@@ -72,10 +72,6 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-//        ItemStack current = player.getCurrentEquippedItem();
-//        if (current != null && current.itemID == getBlockId()) {
-//            return false;
-//        }
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, worldObj, mBlock.getPos());
@@ -85,35 +81,14 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    protected boolean handleClick(EntityPlayer player, EnumFacing side) {
-        if (FluidTools.handleRightClick(this, side, player, true, false))
-            return true;
-        return super.handleClick(player, side);
-    }
-
-    @Override
     protected void process() {
     }
 
     @Override
     protected void processBuckets() {
         super.processBuckets();
-
-        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        if (fluid == null) return false;
-        if (FuelManager.getBoilerFuelValue(fluid) > 0) return true;
-        return super.canFill(from, fluid);
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (Fluids.WATER.is(resource))
-            return fill(TANK_WATER, resource, doFill);
-        return fill(TANK_FUEL, resource, doFill);
+        //FIXME
+//        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -150,4 +125,11 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         }
         return false;
     }
+
+    @Override
+    public boolean needsFuel() {
+        TileBoilerFireboxFluid mBlock = (TileBoilerFireboxFluid) getMasterBlock();
+        return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
+    }
+
 }

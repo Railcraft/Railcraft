@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Predicates;
@@ -55,7 +55,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
         AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.DOWN);
         if (tankCart != null) {
             FluidStack moved = FluidUtil.tryFluidTransfer(tank, tankCart, RailcraftConfig.getTankCartFillRate(), true);
-            setProcessing(FluidTools.isNotEmpty(moved));
+            setProcessing(Fluids.isNotEmpty(moved));
         }
     }
 

@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -41,7 +40,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsFuel {
+public class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;

@@ -14,7 +14,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
@@ -33,23 +33,23 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 
-public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, ISidedInventory, IFluidCart {
+public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
     private static final DataParameter<Optional<FluidStack>> FLUID_STACK = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataManagerPlugin.OPTIONAL_FLUID_STACK);
     private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_OUTPUT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final TankManager tankManager = new TankManager();
-    private final StandardTank tank = new StandardTank(RailcraftConfig.getTankCartCapacity());
+    private final FilteredTank tank = new FilteredTank(RailcraftConfig.getTankCartCapacity());
     private final InventoryMapper invLiquids = new InventoryMapper(this, false);
     private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
@@ -57,6 +57,7 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
 
     public EntityCartTank(World world) {
         super(world);
+        tank.setFilter(this::getFilterFluid);
         tankManager.add(tank);
     }
 
@@ -98,6 +99,19 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
     }
 
     @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) getTankManager();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
     public void setDead() {
         super.setDead();
         InvTools.dropInventory(invLiquids, worldObj, getPosition());
@@ -134,15 +148,16 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
             entityDropItem(bottomSlot, 1);
         }
 
-        if (update % FluidTools.BUCKET_FILL_TIME == 0)
-            FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
+        //FIXME
+//        if (update % FluidTools.BUCKET_FILL_TIME == 0)
+//            FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+        if (FluidTools.interactWithFluidHandler(stack, getTankManager(), player))
+            return true;
         if (Game.isHost(worldObj)) {
-            if (FluidTools.handleRightClick(this, null, player, true, true))
-                return true;
             GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
         }
         return true;
@@ -163,49 +178,6 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
     protected void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
         tankManager.writeTanksToNBT(data);
-    }
-
-    @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (resource == null)
-            return 0;
-        Fluid filterFluid = getFilterFluid();
-        if (filterFluid == null || resource.getFluid() == filterFluid)
-            return tank.fill(resource, doFill);
-        return 0;
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return tank.drain(maxDrain, doDrain);
-    }
-
-    @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        if (resource == null)
-            return null;
-        if (tank.getFluidType() == resource.getFluid())
-            return tank.drain(resource.amount, doDrain);
-        return null;
-    }
-
-    @Override
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        Fluid filterFluid = getFilterFluid();
-        return filterFluid == null || fluid == filterFluid;
-    }
-
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return true;
-    }
-
-    /**
-     * @return Array of {@link StandardTank}s contained in this ITankContainer
-     */
-    @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing side) {
-        return tankManager.getTankInfo();
     }
 
     public boolean isFilling() {
@@ -230,7 +202,7 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         return slot == SLOT_INPUT && FluidItemHelper.isContainer(stack);
     }
 
