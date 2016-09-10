@@ -29,7 +29,6 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     private static final float CBOX = -0.0625f;
     private static final float SBOX = -0.0625f * 3;
     private static final float SBOXY = -0.0625f * 5;
-    private static final AxisAlignedBB SELECTION_BOX = AABBFactory.start().box().expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
     private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(CBOX).build();
     private boolean reversed;
 
@@ -45,7 +44,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return SELECTION_BOX;
+        return AABBFactory.start().createBoxForTileAt(getPos()).expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
     }
 
     @Override
