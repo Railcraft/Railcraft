@@ -14,6 +14,7 @@ import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +37,16 @@ public class EntityCartCommand extends EntityMinecartCommandBlock {
 
     public EntityCartCommand(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        // Command block logic overrode this and the custom name is
+        // somewhat set to the command block's name ("@")
+        if (!getCustomNameTag().isEmpty()) {
+            compound.setString("CustomName", getCustomNameTag());
+        }
     }
 
     /**
