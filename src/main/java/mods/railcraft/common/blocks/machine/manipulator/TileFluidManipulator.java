@@ -29,8 +29,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -79,7 +79,7 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
 
     @Nullable
     protected AdvancedFluidHandler getFluidHandler(EntityMinecart cart, EnumFacing facing) {
-        net.minecraftforge.fluids.capability.IFluidHandler fluidHandler = cart.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+        IFluidHandler fluidHandler = cart.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
         if (fluidHandler == null)
             return null;
         return new AdvancedFluidHandler(fluidHandler);
@@ -92,7 +92,7 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        return cart instanceof IFluidHandler && super.canHandleCart(cart);
+        return FluidTools.getFluidHandler(getFacing(), cart) != null && super.canHandleCart(cart);
     }
 
     @Override

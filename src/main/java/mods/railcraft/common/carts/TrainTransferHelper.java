@@ -12,7 +12,9 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.api.carts.ITrainTransferHelper;
+import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.item.EntityMinecart;
@@ -20,8 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -144,7 +145,9 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     private FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedFluid(requester, cart, fluidStack.getFluid())) {
-                fluidStack.amount -= ((IFluidHandler) cart).fill(EnumFacing.UP, fluidStack, true);
+                IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, cart);
+                if (fluidHandler != null)
+                    fluidStack.amount -= fluidHandler.fill(fluidStack, true);
             }
             if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack.getFluid()))
                 break;
@@ -168,9 +171,9 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     private FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {
-                IFluidHandler fluidHandler = (IFluidHandler) cart;
-                if (fluidHandler.canDrain(EnumFacing.DOWN, fluidStack.getFluid())) {
-                    FluidStack drained = fluidHandler.drain(EnumFacing.DOWN, fluidStack, true);
+                IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.DOWN, cart);
+                if (fluidHandler != null) {
+                    FluidStack drained = fluidHandler.drain(fluidStack, true);
                     if (drained != null)
                         return drained;
                 }
@@ -183,39 +186,36 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     private boolean canAcceptPushedFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
-        if (!(cart instanceof IFluidHandler))
+        IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, cart);
+        if (fluidHandler == null)
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canAcceptPushedFluid(requester, fluid);
-        return ((IFluidHandler) cart).canFill(EnumFacing.UP, fluid);
+        AdvancedFluidHandler advancedFluidHandler = new AdvancedFluidHandler(fluidHandler);
+        return advancedFluidHandler.canPutFluid(new FluidStack(fluid, 1));
     }
 
     private boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
-        if (!(cart instanceof IFluidHandler))
+        IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.DOWN, cart);
+        if (fluidHandler == null)
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canProvidePulledFluid(requester, fluid);
-        return ((IFluidHandler) cart).canDrain(EnumFacing.DOWN, fluid);
+        return !Fluids.isEmpty(fluidHandler.drain(new FluidStack(fluid, 1), false));
     }
 
     private boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canPassFluidRequests(fluid);
-        if (cart instanceof IFluidHandler) {
-            if (hasMatchingTank((IFluidHandler) cart, fluid))
+        IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
+        if (fluidHandler != null) {
+            if (hasMatchingTank(fluidHandler, fluid))
                 return true;
         }
         return false;
     }
 
     private boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
-        FluidTankInfo[] tankInfo = handler.getTankInfo(EnumFacing.UP);
-        for (FluidTankInfo info : tankInfo) {
-            if (info.capacity >= TANK_CAPACITY) {
-                if (info.fluid == null || info.fluid.amount == 0 || info.fluid.getFluid() == fluid)
-                    return true;
-            }
-        }
-        return false;
+        return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || Fluids.areEqual(fluid, p.getContents())));
     }
 }

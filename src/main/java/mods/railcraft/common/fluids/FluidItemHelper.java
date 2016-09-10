@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -91,12 +90,7 @@ public class FluidItemHelper {
 
     public static boolean testContainerProperties(boolean all, @Nullable ItemStack stack, Predicate<IFluidTankProperties> test) {
         IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
-        if (fluidHandler == null)
-            return false;
-        IFluidTankProperties[] properties = fluidHandler.getTankProperties();
-        if (all)
-            return Arrays.stream(properties).allMatch(test);
-        return Arrays.stream(properties).anyMatch(test);
+        return FluidTools.testProperties(all, fluidHandler, test);
     }
 
     public static boolean isFluidInContainer(@Nullable ItemStack stack) {

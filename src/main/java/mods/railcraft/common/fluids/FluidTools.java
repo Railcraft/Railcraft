@@ -30,15 +30,14 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -62,6 +61,10 @@ public final class FluidTools {
     @Nullable
     public static net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+    }
+
+    public static boolean hasFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
+        return object.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
     public static boolean interactWithFluidHandler(@Nullable ItemStack heldItem, @Nullable IFluidHandler fluidHandler, EntityPlayer player) {
@@ -362,5 +365,14 @@ public final class FluidTools {
             Particle fx = new ParticleDrip(world, new Vec3d(px, py, pz), particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
+    }
+
+    public static boolean testProperties(boolean all, @Nullable IFluidHandler fluidHandler, Predicate<IFluidTankProperties> test) {
+        if (fluidHandler == null)
+            return false;
+        IFluidTankProperties[] properties = fluidHandler.getTankProperties();
+        if (all)
+            return Arrays.stream(properties).allMatch(test);
+        return Arrays.stream(properties).anyMatch(test);
     }
 }

@@ -25,4 +25,12 @@ public class Predicates {
     public static <T> Predicate<T> notInstanceOf(Class<? extends T> clazz) {
         return Predicates.<T>instanceOf(clazz).negate();
     }
+
+    public static <T> Predicate<T> alwaysTrue() {
+        return t -> true;
+    }
+
+    public static <T> Predicate<T> alwaysFalse() {
+        return t -> false;
+    }
 }
