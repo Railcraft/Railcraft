@@ -30,9 +30,9 @@ public class ModuleTrain extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.DETECTOR,
+                        RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track
-//                        RailcraftBlocks.manipulator
                 );
             }
 

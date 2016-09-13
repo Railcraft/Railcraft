@@ -282,7 +282,7 @@ public abstract class InvTools {
 
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isClient(world)) return;
-        for (IExtInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
             spewItem(slot.getStack(), world, pos);
             slot.setStack(null);
         }
@@ -317,9 +317,27 @@ public abstract class InvTools {
         }
     }
 
+    public static void validateInventory(IInventory inv, int slot, World world, BlockPos pos, Predicate<ItemStack> canStay) {
+        ItemStack stack = inv.getStackInSlot(slot);
+        if (stack != null && !canStay.test(stack)) {
+            inv.setInventorySlotContents(slot, null);
+            dropItem(stack, world, pos);
+        }
+    }
+
+    public static void validateInventory(IInventory inv, World world, BlockPos pos) {
+        for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
+            ItemStack stack = slot.getStack();
+            if (stack != null && !inv.isItemValidForSlot(slot.getIndex(), stack)) {
+                slot.setStack(null);
+                dropItem(stack, world, pos);
+            }
+        }
+    }
+
     public static boolean isInventoryEmpty(IInventoryObject inv) {
         ItemStack stack = null;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             stack = slot.getStack();
             if (stack != null)
                 break;
@@ -328,7 +346,7 @@ public abstract class InvTools {
     }
 
     public static boolean isAccessibleInventoryEmpty(IInventoryObject inv) {
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null && slot.canTakeStackFromSlot(stack))
                 return false;
@@ -338,7 +356,7 @@ public abstract class InvTools {
 
     public static boolean isInventoryFull(IInventoryObject inv) {
         ItemStack stack = null;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             stack = slot.getStack();
             if (stack == null)
                 break;
@@ -347,7 +365,7 @@ public abstract class InvTools {
     }
 
     public static boolean isEmptySlot(IInventoryObject inv) {
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack == null)
                 return true;
@@ -363,7 +381,7 @@ public abstract class InvTools {
      */
     public static int countItems(IInventoryObject inv) {
         int count = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.stackSize;
@@ -373,7 +391,7 @@ public abstract class InvTools {
 
     public static int countMaxItemStackSize(IInventoryObject inv) {
         int count = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.getMaxStackSize();
@@ -383,7 +401,7 @@ public abstract class InvTools {
 
     public static int countItems(IInventoryObject inv, Predicate<ItemStack> filter) {
         int count = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null && filter.test(stack))
                 count += stack.stackSize;
@@ -393,7 +411,7 @@ public abstract class InvTools {
 
     public static boolean numItemsMoreThan(IInventoryObject inv, int amount) {
         int count = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.stackSize;
@@ -424,7 +442,7 @@ public abstract class InvTools {
 
     public static int countStacks(IInventoryObject inv) {
         int count = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null)
                 count++;
@@ -440,7 +458,7 @@ public abstract class InvTools {
      * @return true is exists
      */
     public static boolean containsItem(IInventoryObject inv, ItemStack item) {
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null && isItemEqual(stack, item))
                 return true;
@@ -984,7 +1002,7 @@ public abstract class InvTools {
     @Nonnull
     public static Set<ItemStack> findMatchingItems(IInventoryObject inv, Predicate<ItemStack> filter) {
         Set<ItemStack> items = new ItemStackSet();
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && filter.test(stack)) {
                 stack = stack.copy();
@@ -1079,7 +1097,7 @@ public abstract class InvTools {
         int numStacks = 0;
         float average = 0.0F;
 
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null) {
                 average += (float) stack.stackSize / (float) Math.min(stackLimit, stack.getMaxStackSize());

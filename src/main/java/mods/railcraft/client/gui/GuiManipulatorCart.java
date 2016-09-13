@@ -11,24 +11,21 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
-import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerItemLoader;
+import mods.railcraft.common.blocks.machine.manipulator.TileManipulatorCart;
+import mods.railcraft.common.gui.containers.ContainerManipulatorCart;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiLoaderItem extends TileGui {
+public class GuiManipulatorCart extends TileGui {
 
-    private final String FILTER_LABEL = LocalizationPlugin.translate("railcraft.gui.filters");
     private final String CART_FILTER_LABEL = LocalizationPlugin.translate("railcraft.gui.filters.carts");
-    private final String BUFFER_LABEL = LocalizationPlugin.translate("railcraft.gui.item.loader.buffer");
     private GuiMultiButton transferMode;
     private GuiMultiButton redstoneMode;
-    private final TileItemManipulator tile;
+    private final TileManipulatorCart tile;
 
-    public GuiLoaderItem(InventoryPlayer inv, TileItemManipulator tile) {
-        super(tile, new ContainerItemLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
+    public GuiManipulatorCart(TileManipulatorCart tile, ContainerManipulatorCart container, String texture) {
+        super(tile, container, texture);
         this.tile = tile;
     }
 
@@ -40,22 +37,23 @@ public class GuiLoaderItem extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(transferMode = GuiMultiButton.create(0, w + 62, h + 45, 52, tile.getTransferModeController().copy()));
-        buttonList.add(redstoneMode = GuiMultiButton.create(0, w + 62, h + 62, 52, tile.getRedstoneModeController().copy()));
+        if (tile instanceof TileItemManipulator)
+            buttonList.add(transferMode = GuiMultiButton.create(0, w + 73, h + 45, 30, ((TileItemManipulator) tile).getTransferModeController().copy()));
+        buttonList.add(redstoneMode = GuiMultiButton.create(0, w + 73, h + 62, 30, tile.getRedstoneModeController().copy()));
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, tile.getName(), 6);
-        fontRendererObj.drawString(FILTER_LABEL, 18, 16, 0x404040);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        GuiTools.drawCenteredString(fontRendererObj, tile);
         fontRendererObj.drawString(CART_FILTER_LABEL, 75, 16, 0x404040);
-        fontRendererObj.drawString(BUFFER_LABEL, 126, 16, 0x404040);
     }
 
     @Override
     public void onGuiClosed() {
         if (Game.isClient(tile.getWorld())) {
-            tile.getTransferModeController().setCurrentState(transferMode.getController().getCurrentState());
+            if (tile instanceof TileItemManipulator)
+                ((TileItemManipulator) tile).getTransferModeController().setCurrentState(transferMode.getController().getCurrentState());
             tile.getRedstoneModeController().setCurrentState(redstoneMode.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);
         }

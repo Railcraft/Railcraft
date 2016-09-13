@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import net.minecraft.item.EnumRarity;
@@ -113,18 +114,21 @@ public class StandardTank extends FluidTank {
 
     protected void refreshTooltip() {
         toolTip.clear();
-        int amount = 0;
+        int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
-        if (fluidStack != null && fluidStack.amount > 0) {
-            EnumRarity rarity = fluidStack.getFluid().getRarity();
-            if (rarity == null)
-                rarity = EnumRarity.COMMON;
-            ToolTipLine fluidName = new ToolTipLine(fluidStack.getLocalizedName(), rarity.rarityColor);
-            fluidName.setSpacing(2);
-            toolTip.add(fluidName);
-            amount = fluidStack.amount;
+        if (!Fluids.isEmpty(fluidStack)) {
+            toolTip.add(getFluidNameToolTip(fluidStack.getFluid()));
         }
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
+    }
+
+    protected ToolTipLine getFluidNameToolTip(Fluid fluid) {
+        EnumRarity rarity = fluid.getRarity();
+        if (rarity == null)
+            rarity = EnumRarity.COMMON;
+        ToolTipLine fluidName = new ToolTipLine(fluid.getLocalizedName(getFluid()), rarity.rarityColor);
+        fluidName.setSpacing(2);
+        return fluidName;
     }
 
     public boolean isHidden() {

@@ -10,8 +10,11 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.client.particles.ParticleDrip;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -20,6 +23,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -34,6 +38,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -73,6 +78,30 @@ public final class FluidTools {
         return FluidItemHelper.isContainer(heldItem);
     }
 
+    /**
+     * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as slot 2.
+     * Will handle moving an item through all stages from input to output for either filling or draining.
+     */
+    //FIXME - This might need to be split into two functions, the logic for determining whether to fill or drain escapes me
+    public static void processContainer(IInventory inv, StandardTank tank) {
+        ItemStack container = inv.getStackInSlot(1);
+        if (container == null) {
+            InvTools.moveOneItem(new InventoryMapper(inv, 0, 1), new InventoryMapper(inv, 1, 1, false));
+            return;
+        }
+        if (tank.canFill()) {
+            if (FluidItemHelper.isEmptyContainer(container))
+                InvTools.moveOneItem(new InventoryMapper(inv, 1, 1), new InventoryMapper(inv, 2, 1, false));
+            else
+                FluidUtil.tryEmptyContainerAndStow(container, tank, new InvWrapper(new InventoryMapper(inv, 2, 1, false)), Fluid.BUCKET_VOLUME, null);
+        }
+        if (tank.canDrain()) {
+            if (FluidItemHelper.isFullContainer(container))
+                InvTools.moveOneItem(new InventoryMapper(inv, 1, 1), new InventoryMapper(inv, 2, 1, false));
+            else
+                FluidUtil.tryFillContainerAndStow(container, tank, new InvWrapper(new InventoryMapper(inv, 2, 1, false)), Fluid.BUCKET_VOLUME, null);
+        }
+    }
 //    @Deprecated
 //    public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {
 //        if (player == null)

@@ -7,19 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.manipulator;
 
-import net.minecraft.util.EnumFacing;
+package mods.railcraft.common.blocks.machine.interfaces;
 
-public class TileItemUnloaderAdvanced extends TileItemUnloader {
-
-    @Override
-    public ManipulatorVariant getMachineType() {
-        return ManipulatorVariant.ITEM_UNLOADER_ADVANCED;
-    }
-
-    @Override
-    public EnumFacing[] getValidRotations() {
-        return EnumFacing.VALUES;
-    }
+/**
+ * Created by CovertJaguar on 9/12/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface ITile {
+    void markBlockForUpdate();
 }

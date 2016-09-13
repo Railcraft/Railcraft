@@ -14,7 +14,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -26,23 +26,24 @@ import java.util.function.Function;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileManager<T extends TileEntity> {
-    private final World world;
+    private final IBlockAccess world;
     private final BlockPos pos;
     private final Class<T> tileClass;
     private Optional<TileEntity> tile = Optional.empty();
 
-    private TileManager(Function<IBlockState, Class<T>> classMapper, IBlockState state, World world, BlockPos pos) {
+    private TileManager(Function<IBlockState, Class<T>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
         this.tileClass = classMapper.apply(state);
         this.world = world;
         this.pos = pos;
     }
 
-    public static <T extends TileEntity> TileManager<T> forTile(Function<IBlockState, Class<T>> classMapper, IBlockState state, World world, BlockPos pos) {
+    public static <T extends TileEntity> TileManager<T> forTile(Function<IBlockState, Class<T>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
         return new TileManager<T>(classMapper, state, world, pos);
     }
 
     public static <T extends TileEntity, I> boolean isInstance(Function<IBlockState, Class<T>> classMapper, Class<I> interfaceClass, IBlockState state) {
-        return interfaceClass.isAssignableFrom(classMapper.apply(state));
+        Class<T> clazz = classMapper.apply(state);
+        return clazz != null && interfaceClass.isAssignableFrom(clazz);
     }
 
     public <I> TileManager action(Class<I> interfaceClass, Consumer<I> action) {

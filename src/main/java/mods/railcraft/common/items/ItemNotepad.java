@@ -11,9 +11,9 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.render.models.resource.ModelManager;
-import mods.railcraft.common.blocks.machine.manipulator.TileCartManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
+import mods.railcraft.common.blocks.machine.manipulator.TileManipulatorCart;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -227,8 +227,8 @@ public class ItemNotepad extends ItemRailcraft {
         FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tips.contents.filter.cart") {
             @Override
             NBTTagCompound copy(Object target) {
-                if (target instanceof TileCartManipulator) {
-                    PhantomInventory cartFilters = ((TileCartManipulator) target).getCartFilters();
+                if (target instanceof TileManipulatorCart) {
+                    PhantomInventory cartFilters = ((TileManipulatorCart) target).getCartFilters();
                     NBTTagCompound nbt = new NBTTagCompound();
                     cartFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -238,8 +238,8 @@ public class ItemNotepad extends ItemRailcraft {
 
             @Override
             boolean paste(Object target, NBTTagCompound nbt) {
-                if (target instanceof TileCartManipulator) {
-                    ((TileCartManipulator) target).getCartFilters().readFromNBT("inv", nbt);
+                if (target instanceof TileManipulatorCart) {
+                    ((TileManipulatorCart) target).getCartFilters().readFromNBT("inv", nbt);
                     return true;
                 }
                 return false;

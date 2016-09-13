@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.client.gui.GuiContainerRailcraft;
@@ -14,15 +15,15 @@ import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,7 +31,8 @@ import java.util.Map;
 public class FluidGaugeWidget extends Widget {
 
     public final StandardTank tank;
-    private Map<IContainerListener, FluidStack> lastSyncedFluidStack = new HashMap<>();
+    private FluidStack lastSyncedFluidStack;
+    private int syncCounter;
 
     public FluidGaugeWidget(StandardTank tank, int x, int y, int u, int v, int w, int h) {
         super(x, y, u, v, w, h);
@@ -39,14 +41,16 @@ public class FluidGaugeWidget extends Widget {
 
     @Override
     public boolean hasServerSyncData(IContainerListener listener) {
-        return !Fluids.areIdentical(lastSyncedFluidStack.get(listener), tank.getFluid());
+        syncCounter++;
+        return syncCounter % 16 == 0 || !Fluids.areIdentical(lastSyncedFluidStack, tank.getFluid());
     }
 
     @Override
     public void writeServerSyncData(IContainerListener listener, RailcraftOutputStream data) throws IOException {
         super.writeServerSyncData(listener, data);
         FluidStack fluidStack = tank.getFluid();
-        lastSyncedFluidStack.put(listener, fluidStack == null ? null : fluidStack.copy());
+        Game.log(Level.INFO, "fluid write {0}", tank.getFluidAmount());
+        lastSyncedFluidStack = fluidStack == null ? null : fluidStack.copy();
         data.writeFluidStack(fluidStack);
     }
 
@@ -54,6 +58,7 @@ public class FluidGaugeWidget extends Widget {
     public void readServerSyncData(RailcraftInputStream data) throws IOException {
         super.readServerSyncData(data);
         tank.setFluid(data.readFluidStack());
+        Game.log(Level.INFO, "fluid read {0}", tank.getFluidAmount());
     }
 
     @Override

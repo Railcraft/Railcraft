@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,11 +6,12 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -160,23 +161,7 @@ public abstract class MiscTools {
      */
     @Nonnull
     public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase entity) {
-        if (MathHelper.abs((float) entity.posX - pos.getX()) < 2.0F && MathHelper.abs((float) entity.posZ - pos.getZ()) < 2.0F) {
-            double d = (entity.posY + 1.82D) - entity.getYOffset();
-            if (d - pos.getY() > 2D)
-                return EnumFacing.UP;
-            if (pos.getY() - d > 0.0D)
-                return EnumFacing.DOWN;
-        }
-        int dir = MathHelper.floor_double((double) ((entity.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-        switch (dir) {
-            case 0:
-                return EnumFacing.NORTH;
-            case 1:
-                return EnumFacing.EAST;
-            case 2:
-                return EnumFacing.SOUTH;
-        }
-        return dir != 3 ? EnumFacing.DOWN : EnumFacing.WEST;
+        return BlockPistonBase.getFacingFromEntity(pos, entity);
     }
 
     /**

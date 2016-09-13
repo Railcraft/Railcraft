@@ -1,0 +1,151 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "active": {
+      "true": {
+        "textures": {
+          "end": "#end_active",
+          "side": "#side_active",
+          "overlay": "#overlay_active"
+        }
+      },
+      "false": {
+      }
+    },
+    "front": {
+      "down": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "x": 90}}},
+      "up": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "x": 270}}},
+      "north": {"submodel": {"overlay": {"model": "railcraft:face_overlay"}}},
+      "south": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "y": 180}}},
+      "west": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "y": 270}}},
+      "east": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "y": 90}}}
+    },
+    "variant": {
+      "loader_item": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_loader_item_0",
+          "side_active": "railcraft:blocks/manipulator_loader_item_1",
+          "overlay_active": "railcraft:blocks/manipulator_loader_item_2",
+          "end": "railcraft:blocks/manipulator_loader_item_0",
+          "side": "railcraft:blocks/manipulator_loader_item_1",
+          "overlay": "railcraft:blocks/manipulator_loader_item_2"
+        }
+      },
+      "unloader_item": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_unloader_item_0",
+          "side_active": "railcraft:blocks/manipulator_unloader_item_1",
+          "overlay_active": "railcraft:blocks/manipulator_unloader_item_2",
+          "end": "railcraft:blocks/manipulator_unloader_item_0",
+          "side": "railcraft:blocks/manipulator_unloader_item_1",
+          "overlay": "railcraft:blocks/manipulator_unloader_item_2"
+        }
+      },
+      "loader_item_advanced": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_loader_item_advanced_0",
+          "side_active": "railcraft:blocks/manipulator_loader_item_advanced_1",
+          "overlay_active": "railcraft:blocks/manipulator_loader_item_advanced_2",
+          "end": "railcraft:blocks/manipulator_loader_item_advanced_0",
+          "side": "railcraft:blocks/manipulator_loader_item_advanced_1",
+          "overlay": "railcraft:blocks/manipulator_loader_item_advanced_2"
+        }
+      },
+      "unloader_item_advanced": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_unloader_item_advanced_0",
+          "side_active": "railcraft:blocks/manipulator_unloader_item_advanced_1",
+          "overlay_active": "railcraft:blocks/manipulator_unloader_item_advanced_2",
+          "end": "railcraft:blocks/manipulator_unloader_item_advanced_0",
+          "side": "railcraft:blocks/manipulator_unloader_item_advanced_1",
+          "overlay": "railcraft:blocks/manipulator_unloader_item_advanced_2"
+        }
+      },
+      "loader_fluid": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_loader_fluid_0",
+          "side_active": "railcraft:blocks/manipulator_loader_fluid_1",
+          "overlay_active": "railcraft:blocks/manipulator_loader_fluid_2",
+          "end": "railcraft:blocks/manipulator_loader_fluid_0",
+          "side": "railcraft:blocks/manipulator_loader_fluid_1",
+          "overlay": "railcraft:blocks/manipulator_loader_fluid_2"
+        }
+      },
+      "unloader_fluid": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_unloader_fluid_0",
+          "side_active": "railcraft:blocks/manipulator_unloader_fluid_1",
+          "overlay_active": "railcraft:blocks/manipulator_unloader_fluid_2",
+          "end": "railcraft:blocks/manipulator_unloader_fluid_0",
+          "side": "railcraft:blocks/manipulator_unloader_fluid_1",
+          "overlay": "railcraft:blocks/manipulator_unloader_fluid_2"
+        }
+      },
+      "loader_ic2": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_loader_ic2_0",
+          "side_active": "railcraft:blocks/manipulator_loader_ic2_1",
+          "overlay_active": "railcraft:blocks/manipulator_loader_ic2_2",
+          "end": "railcraft:blocks/manipulator_loader_ic2_0",
+          "side": "railcraft:blocks/manipulator_loader_ic2_1",
+          "overlay": "railcraft:blocks/manipulator_loader_ic2_2"
+        }
+      },
+      "unloader_ic2": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_unloader_ic2_0",
+          "side_active": "railcraft:blocks/manipulator_unloader_ic2_1",
+          "overlay_active": "railcraft:blocks/manipulator_unloader_ic2_2",
+          "end": "railcraft:blocks/manipulator_unloader_ic2_0",
+          "side": "railcraft:blocks/manipulator_unloader_ic2_1",
+          "overlay": "railcraft:blocks/manipulator_unloader_ic2_2"
+        }
+      },
+      "dispenser_cart": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_dispenser_cart_0",
+          "side_active": "railcraft:blocks/manipulator_dispenser_cart_1",
+          "overlay_active": "railcraft:blocks/manipulator_dispenser_cart_2",
+          "end": "railcraft:blocks/manipulator_dispenser_cart_0",
+          "side": "railcraft:blocks/manipulator_dispenser_cart_1",
+          "overlay": "railcraft:blocks/manipulator_dispenser_cart_2"
+        }
+      },
+      "dispenser_train": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_dispenser_train_0",
+          "side_active": "railcraft:blocks/manipulator_dispenser_train_1",
+          "overlay_active": "railcraft:blocks/manipulator_dispenser_train_2",
+          "end": "railcraft:blocks/manipulator_dispenser_train_0",
+          "side": "railcraft:blocks/manipulator_dispenser_train_1",
+          "overlay": "railcraft:blocks/manipulator_dispenser_train_2"
+        }
+      },
+      "loader_rf": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_loader_rf_side",
+          "side_active": "railcraft:blocks/manipulator_loader_rf_side",
+          "overlay_active": "railcraft:blocks/manipulator_loader_rf_front",
+          "end": "railcraft:blocks/manipulator_loader_rf_side_unpowered",
+          "side": "railcraft:blocks/manipulator_loader_rf_side_unpowered",
+          "overlay": "railcraft:blocks/manipulator_loader_rf_front_unpowered"
+        }
+      },
+      "unloader_rf": {
+        "textures": {
+          "end_active": "railcraft:blocks/manipulator_unloader_rf_side",
+          "side_active": "railcraft:blocks/manipulator_unloader_rf_side",
+          "overlay_active": "railcraft:blocks/manipulator_unloader_rf_front",
+          "end": "railcraft:blocks/manipulator_loader_rf_side_unpowered",
+          "side": "railcraft:blocks/manipulator_loader_rf_side_unpowered",
+          "overlay": "railcraft:blocks/manipulator_loader_rf_front_unpowered"
+        }
+      }
+    }
+  }
+}

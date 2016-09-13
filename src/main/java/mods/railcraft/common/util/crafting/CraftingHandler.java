@@ -44,7 +44,7 @@ public class CraftingHandler {
 //            if (type != null && EnumCart.getCartType(result) == EnumCart.getCartType(cartItem)) {
 //                ItemStack filterItem = EntityCartFiltered.getFilterFromCartItem(result);
 //                if (filterItem != null)
-//                    for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix).notNull()) {
+//                    for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix).notNull()) {
 //                        ItemStack stack = slot.getStackInSlot();
 //                        if (InvTools.isItemEqual(stack, filterItem)) {
 //                            if (!player.inventory.addItemStackToInventory(stack))

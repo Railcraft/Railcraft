@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileItemManipulator extends TileCartManipulator implements ISidedInventory {
+public abstract class TileItemManipulator extends TileManipulatorCart implements ISidedInventory {
 
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);

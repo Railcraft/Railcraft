@@ -189,11 +189,11 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
      * Evenly redistributes items between all the slots.
      */
     private void balanceSlots() {
-        for (IInvSlot slotA : InventoryIterator.getIterable(craftMatrix)) {
+        for (IInvSlot slotA : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stackA = slotA.getStack();
             if (stackA == null)
                 continue;
-            for (IInvSlot slotB : InventoryIterator.getIterable(craftMatrix)) {
+            for (IInvSlot slotB : InventoryIterator.getVanilla(craftMatrix)) {
                 if (slotA.getIndex() == slotB.getIndex())
                     continue;
                 ItemStack stackB = slotB.getStack();
@@ -211,7 +211,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
 
     private void findMoreStuff() {
         Collection<IInventoryObject> chests = cache.getAdjacentInventories();
-        for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix)) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
             if (stack != null && stack.isStackable() && stack.stackSize == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
@@ -75,9 +76,9 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 }
             }
             for (Object button : buttonList) {
-                if (!(button instanceof GuiSimpleButton))
+                if (!(button instanceof GuiBetterButton))
                     continue;
-                GuiSimpleButton betterButton = (GuiSimpleButton) button;
+                GuiBetterButton betterButton = (GuiBetterButton) button;
                 if (!betterButton.visible)
                     continue;
                 ToolTip tips = betterButton.getToolTip();

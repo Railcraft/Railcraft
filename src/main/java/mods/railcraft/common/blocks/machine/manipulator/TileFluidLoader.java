@@ -21,6 +21,7 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -109,9 +110,9 @@ public class TileFluidLoader extends TileFluidManipulator {
     protected void upkeep() {
         super.upkeep();
 
-        // TODO: fix this
-//        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-//            FluidTools.drainContainers(tank, this, SLOT_INPUT, SLOT_OUTPUT);
+        InvTools.validateInventory(this, SLOT_INPUT, worldObj, getPos(), s -> isItemValidForSlot(SLOT_INPUT, s));
+        InvTools.validateInventory(this, SLOT_PROCESSING, worldObj, getPos(), FluidItemHelper::isContainer);
+        InvTools.validateInventory(this, SLOT_OUTPUT, worldObj, getPos(), FluidItemHelper::isContainer);
 
         tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }

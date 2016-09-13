@@ -11,8 +11,6 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
@@ -22,27 +20,19 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+public class TileDispenserCart extends TileManipulator {
 
-public class TileDispenserCart extends TileMachineItem implements ITileRotate {
-
-    protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;
     protected int timeSinceLastSpawn;
 
@@ -56,31 +46,9 @@ public class TileDispenserCart extends TileMachineItem implements ITileRotate {
     }
 
     @Override
-    public boolean rotateBlock(EnumFacing axis) {
-        if (direction == axis)
-            direction = axis.getOpposite();
-        else
-            direction = axis;
-        markBlockForUpdate();
-        return true;
-    }
-
-    @Override
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.CART_DISPENSER, player, worldObj, getPos());
         return true;
-    }
-
-    @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityLiving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
-        if (direction == null) {
-            if (entityLiving != null)
-                direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
-            else
-                direction = EnumFacing.NORTH;
-        }
     }
 
     @Override
@@ -91,13 +59,13 @@ public class TileDispenserCart extends TileMachineItem implements ITileRotate {
     }
 
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing);
         if (cart == null) {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
                     ItemStack cartStack = getStackInSlot(ii);
                     if (cartStack != null) {
-                        BlockPos pos = getPos().offset(direction);
+                        BlockPos pos = getPos().offset(facing);
                         boolean minecartItem = cartStack.getItem() instanceof IMinecartItem;
                         if (cartStack.getItem() instanceof ItemMinecart || minecartItem) {
                             boolean canPlace = true;
@@ -159,7 +127,6 @@ public class TileDispenserCart extends TileMachineItem implements ITileRotate {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
-        data.setByte("direction", (byte) direction.ordinal());
 
         data.setInteger("time", timeSinceLastSpawn);
         return data;
@@ -170,27 +137,8 @@ public class TileDispenserCart extends TileMachineItem implements ITileRotate {
         super.readFromNBT(data);
 
         powered = data.getBoolean("powered");
-        direction = EnumFacing.getFront(data.getByte("direction"));
 
         timeSinceLastSpawn = data.getInteger("time");
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-
-        data.writeByte(direction.ordinal());
-//        data.writeBoolean(powered);
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-
-        direction = EnumFacing.getFront(data.readByte());
-//        powered = data.readBoolean();
-
-        markBlockForUpdate();
     }
 
     public boolean getPowered() {

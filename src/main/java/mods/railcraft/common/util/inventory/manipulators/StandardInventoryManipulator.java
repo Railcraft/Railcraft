@@ -34,7 +34,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
 
     @Override
     public Iterator<IExtInvSlot> iterator() {
-        return InventoryIterator.getIterable(inv).iterator();
+        return InventoryIterator.getVanilla(inv).iterator();
     }
 
     protected ItemStack addStack(ItemStack stack, boolean doAdd) {

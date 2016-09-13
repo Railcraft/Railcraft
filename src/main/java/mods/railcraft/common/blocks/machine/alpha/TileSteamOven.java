@@ -105,7 +105,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private boolean paused;
 
     public TileSteamOven() {
-        super("railcraft.gui.steam.oven", 18, patterns);
+        super(18, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
         tank.setFilter(Fluids.STEAM::get);
         tankManager.add(tank);

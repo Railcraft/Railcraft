@@ -36,7 +36,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.DETECTOR,
                         RailcraftBlocks.GENERIC,
 //                        RailcraftBlocks.machine_alpha,
-//                        RailcraftBlocks.manipulator,
+                        RailcraftBlocks.MANIPULATOR,
 
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,

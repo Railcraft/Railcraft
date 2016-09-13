@@ -18,9 +18,9 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,22 +30,21 @@ import java.util.List;
  */
 public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
-    ITEM_LOADER(ModuleTransport.class, "loader.item", TileItemLoader.class),
-    ITEM_UNLOADER(ModuleTransport.class, "unloader.item", TileItemUnloader.class),
-    ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader.item.advanced", TileItemLoaderAdvanced.class),
-    ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", TileItemUnloaderAdvanced.class),
-    FLUID_LOADER(ModuleTransport.class, "loader.liquid", TileFluidLoader.class, true),
-    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", TileFluidUnloader.class, true),
-    ENERGY_LOADER(ModuleIC2.class, "loader.energy", TileIC2Loader.class),
-    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", TileIC2Unloader.class),
-    DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", TileDispenserCart.class),
-    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", TileDispenserTrain.class),
-    RF_LOADER(ModuleRF.class, "loader.rf", TileRFLoader.class),
-    RF_UNLOADER(ModuleRF.class, "unloader.rf", TileRFUnloader.class);
-    public static final PropertyEnum<ManipulatorVariant> VARIANT = PropertyEnum.create("variant", ManipulatorVariant.class);
+    ITEM_LOADER(ModuleTransport.class, "loader_item", TileItemLoader.class),
+    ITEM_UNLOADER(ModuleTransport.class, "unloader_item", TileItemUnloader.class),
+    ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader_item_advanced", TileItemLoaderAdvanced.class),
+    ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader_item_advanced", TileItemUnloaderAdvanced.class),
+    FLUID_LOADER(ModuleTransport.class, "loader_fluid", TileFluidLoader.class, true),
+    FLUID_UNLOADER(ModuleTransport.class, "unloader_fluid", TileFluidUnloader.class, true),
+    ENERGY_LOADER(ModuleIC2.class, "loader_ic2", TileIC2Loader.class),
+    ENERGY_UNLOADER(ModuleIC2.class, "unloader_ic2", TileIC2Unloader.class),
+    DISPENSER_CART(ModuleAutomation.class, "dispenser_cart", TileDispenserCart.class),
+    DISPENSER_TRAIN(ModuleTrain.class, "dispenser_train", TileDispenserTrain.class),
+    RF_LOADER(ModuleRF.class, "loader_rf", TileRFLoader.class),
+    RF_UNLOADER(ModuleRF.class, "unloader_rf", TileRFUnloader.class);
     private static final List<ManipulatorVariant> creativeList = new ArrayList<ManipulatorVariant>();
-    private static final ManipulatorVariant[] VALUES = values();
-    public static final MachineProxy<ManipulatorVariant> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
+    public static final ManipulatorVariant[] VALUES = values();
+    public static final MachineProxy<ManipulatorVariant> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         creativeList.add(ITEM_LOADER);
@@ -101,12 +100,24 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.machine.loader." + getBaseTag();
+        return "tile.railcraft.manipulator." + getBaseTag();
+    }
+
+    @Override
+    public String getResourcePathSuffix() {
+        return tag;
     }
 
     @Override
     public boolean passesLight() {
         return passesLight;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        if (this == RF_LOADER || this == RF_UNLOADER)
+            return IEnumMachine.super.getTextureDimensions();
+        return new Tuple<>(3, 1);
     }
 
     @Override
@@ -134,11 +145,6 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     }
 
     @Override
-    public PropertyEnum<ManipulatorVariant> getVariantProperty() {
-        return VARIANT;
-    }
-
-    @Override
     public boolean isAvailable() {
         return block() != null && isEnabled();
     }
@@ -147,7 +153,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
-        String tipTag = getTag() + ".tips";
+        String tipTag = getLocalizationTag() + ".tips";
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
@@ -155,6 +161,6 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
     @Override
     public String getName() {
-        return tag.replace(".", "_");
+        return tag;
     }
 }

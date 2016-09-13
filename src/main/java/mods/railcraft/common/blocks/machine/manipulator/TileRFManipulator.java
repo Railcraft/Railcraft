@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.IOException;
 
-public abstract class TileRFManipulator extends TileCartManipulator implements ITileRotate {
+public abstract class TileRFManipulator extends TileManipulatorCart implements ITileRotate {
     protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
     private static final int RF_CAP = 4000000;

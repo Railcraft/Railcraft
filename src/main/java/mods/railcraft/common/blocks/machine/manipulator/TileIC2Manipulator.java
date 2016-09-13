@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.IEnergyTransfer;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -26,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public abstract class TileIC2Manipulator extends TileCartManipulator implements ISidedInventory, ITileRotate {
+public abstract class TileIC2Manipulator extends TileManipulatorCart implements ISidedInventory {
 
     private static final int SLOT_CHARGE = 0;
     private static final int SLOT_BATTERY = 1;

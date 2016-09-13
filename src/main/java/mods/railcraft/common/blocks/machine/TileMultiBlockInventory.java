@@ -27,12 +27,10 @@ import java.util.List;
 public abstract class TileMultiBlockInventory extends TileMultiBlock implements IInventory {
 
     protected final StandaloneInventory inv;
-    private final String guiTag;
 
-    protected TileMultiBlockInventory(String guiTag, int invSize, List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlockInventory(int invSize, List<? extends MultiBlockPattern> patterns) {
         super(patterns);
         inv = new StandaloneInventory(invSize, (IInventory) this);
-        this.guiTag = guiTag;
     }
 
     protected void dropItem(ItemStack stack) {
@@ -87,7 +85,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public String getName() {
-        return LocalizationPlugin.translate(guiTag);
+        return LocalizationPlugin.translate(getLocalizationTag());
     }
 
     @Override

@@ -1,12 +1,12 @@
-/******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016                                      *
- * http://railcraft.info                                                      *
- * *
- * This code is the property of CovertJaguar                                  *
- * and may only be used with explicit written                                 *
- * permission unless otherwise specified on the                               *
- * license page at http://railcraft.info/wiki/info:license.                   *
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -22,17 +22,17 @@ import java.util.List;
  */
 public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<T> {
 
-    public static InventoryIterator<IExtInvSlot> getIterable(IInventory inv) {
+    public static InventoryIterator<IExtInvSlot> getVanilla(IInventory inv) {
         if (inv instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv);
         return new StandardInventoryIterator(inv);
     }
 
-    public static InventoryIterator<IInvSlot> getIterable(IItemHandler inv) {
+    public static InventoryIterator<IInvSlot> getForge(IItemHandler inv) {
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator<? extends IInvSlot> getIterable(IInventoryObject inv) {
+    public static InventoryIterator<? extends IInvSlot> getRailcraft(IInventoryObject inv) {
         if (inv.getInventoryObject() instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv.getInventoryObject());
         if (inv.getInventoryObject() instanceof IInventory)

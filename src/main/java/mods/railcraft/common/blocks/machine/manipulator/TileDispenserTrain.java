@@ -85,9 +85,9 @@ public class TileDispenserTrain extends TileDispenserCart {
             resetSpawnSequence();
             return false;
         }
-        BlockPos offset = getPos().offset(direction);
+        BlockPos offset = getPos().offset(facing);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
-                && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction) == null) {
+                && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (cartItem != null) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
@@ -121,7 +121,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing);
         if (cart == null)
             if (!spawningTrain && canBuildTrain())
                 if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)

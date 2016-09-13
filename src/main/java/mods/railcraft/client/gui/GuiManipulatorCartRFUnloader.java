@@ -23,13 +23,13 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiUnloaderRF extends TileGui {
+public class GuiManipulatorCartRFUnloader extends TileGui {
 
     private final String button1Label = LocalizationPlugin.translate("railcraft.gui.energy.unloader.wait");
     //    private final String BUTTON1 = "Wait till Empty";
     private TileRFUnloader tile;
 
-    public GuiUnloaderRF(TileRFUnloader tile) {
+    public GuiManipulatorCartRFUnloader(TileRFUnloader tile) {
         super(tile, new ContainerLoaderRF(tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rf_device.png");
         this.tile = tile;
     }
@@ -59,6 +59,7 @@ public class GuiUnloaderRF extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         GuiTools.drawCenteredString(fontRendererObj, tile.getName(), 6);
     }
 

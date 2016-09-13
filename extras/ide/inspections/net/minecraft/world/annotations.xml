@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.world.IWorldNameable net.minecraft.util.text.ITextComponent getDisplayName()'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

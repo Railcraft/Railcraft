@@ -14,25 +14,20 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserTrain;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDispenserTrain extends TileGui
-{
+public class GuiDispenserTrain extends TileGui {
 
-    private final String label;
+    private final TileDispenserTrain tile;
 
-    public GuiDispenserTrain(InventoryPlayer inv, TileDispenserTrain tile)
-    {
+    public GuiDispenserTrain(InventoryPlayer inv, TileDispenserTrain tile) {
         super(tile, new ContainerDispenserTrain(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_dispenser_train.png");
         xSize = 176;
         ySize = 198;
-        label = tile.getName();
+        this.tile = tile;
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
-        int sWidth = fontRendererObj.getStringWidth(label);
-        int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(label, sPos, 6, 0x404040);
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        GuiTools.drawCenteredString(fontRendererObj, tile);
         fontRendererObj.drawString("Pattern", 10, 20, 0x404040);
         fontRendererObj.drawString("Buffer", 10, 56, 0x404040);
     }

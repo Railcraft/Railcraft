@@ -11,7 +11,6 @@ package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
-import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -55,19 +54,17 @@ public class FilteredTank extends StandardTank {
     @Override
     protected void refreshTooltip() {
         toolTip.clear();
-        int amount = 0;
-        Fluid filterFluid = filter.get();
-        if (filterFluid != null) {
-            EnumRarity rarity = filterFluid.getRarity();
-            if (rarity == null)
-                rarity = EnumRarity.COMMON;
-            ToolTipLine name = new ToolTipLine(filterFluid.getLocalizedName(getFluid()), rarity.rarityColor);
-            name.setSpacing(2);
-            toolTip.add(name);
-            FluidStack fluidStack = getFluid();
-            if (fluidStack != null && fluidStack.amount > 0)
-                amount = fluidStack.amount;
-        }
+        int amount = getFluidAmount();
+        FluidStack fluidStack = getFluid();
+        Fluid fluid;
+        if (Fluids.isEmpty(fluidStack))
+            fluid = filter.get();
+        else
+            fluid = fluidStack.getFluid();
+
+        if (fluid != null)
+            toolTip.add(getFluidNameToolTip(fluid));
+
         toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
     }
 

@@ -38,7 +38,7 @@ public class CartDisassemblyRecipe implements IRecipe {
     public boolean matches(InventoryCrafting grid, World worldIn) {
         int itemCount = 0;
         boolean foundCart = false;
-        for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(grid).notNull()) {
             if (InvTools.isItemEqual(slot.getStack(), fullCart))
                 foundCart = true;
             itemCount++;
@@ -65,7 +65,7 @@ public class CartDisassemblyRecipe implements IRecipe {
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
-        for (IInvSlot slot : InventoryIterator.getIterable(inv).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(inv).notNull()) {
             ItemStack stack = slot.getStack();
             if (InvTools.isItemEqual(stack, fullCart))
                 grid[slot.getIndex()] = emptyCart.copy();

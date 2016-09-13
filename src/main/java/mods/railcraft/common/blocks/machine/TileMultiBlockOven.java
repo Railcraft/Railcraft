@@ -39,8 +39,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     protected boolean paused;
     private boolean wasBurning;
 
-    protected TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
-        super(name, invNum, patterns);
+    protected TileMultiBlockOven(int invNum, List<? extends MultiBlockPattern> patterns) {
+        super(invNum, patterns);
     }
 
     @Override

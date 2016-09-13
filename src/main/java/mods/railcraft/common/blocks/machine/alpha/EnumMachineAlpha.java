@@ -54,7 +54,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
     public static final EnumMachineAlpha[] VALUES = values();
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
-    public static final MachineProxy<EnumMachineAlpha> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
+    public static final MachineProxy<EnumMachineAlpha> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         String pickaxe3 = HarvestPlugin.ToolClass.PICKAXE.getToolString(3);
@@ -160,11 +160,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         return RailcraftBlocks.MACHINE_ALPHA;
     }
 
-    @Override
-    public PropertyEnum<EnumMachineAlpha> getVariantProperty() {
-        return VARIANT;
-    }
-
     /**
      * Block is enabled and defined.
      */
@@ -191,7 +186,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
                     return addAnchorInfo(stack);
                 break;
             default:
-                String tipTag = getTag() + ".tips";
+                String tipTag = getLocalizationTag() + ".tips";
                 if (LocalizationPlugin.hasTag(tipTag))
                     tip = ToolTip.buildToolTip(tipTag);
                 break;

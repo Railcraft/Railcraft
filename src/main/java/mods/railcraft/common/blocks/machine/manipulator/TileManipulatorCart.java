@@ -11,8 +11,6 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -20,6 +18,7 @@ import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasCart;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
@@ -27,19 +26,17 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -48,11 +45,10 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileCartManipulator extends TileMachineItem implements IHasCart, IHasWork, IGuiReturnHandler {
+public abstract class TileManipulatorCart extends TileManipulator implements IHasCart, IHasWork, IGuiReturnHandler {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
-    private EnumFacing direction = EnumFacing.NORTH;
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
     protected EntityMinecart currentCart;
     private boolean powered;
@@ -268,16 +264,12 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(redstoneModeController.getCurrentState());
-        if (canRotate())
-            data.writeByte(direction.ordinal());
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         redstoneModeController.setCurrentState(data.readByte());
-        if (canRotate())
-            direction = EnumFacing.getFront(data.readByte());
     }
 
     @Override
@@ -296,9 +288,6 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
         data.setBoolean("powered", powered);
         redstoneModeController.writeToNBT(data, "redstone");
 
-        if (canRotate())
-            data.setByte("direction", (byte) direction.ordinal());
-
         getCartFilters().writeToNBT("invCarts", data);
         return data;
     }
@@ -309,60 +298,33 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
         setPowered(data.getBoolean("powered"));
         redstoneModeController.readFromNBT(data, "redstone");
 
-        if (canRotate())
-            direction = EnumFacing.getFront(data.getByte("direction"));
-
         getCartFilters().readFromNBT("invCarts", data);
-    }
-
-    public EnumFacing getFacing() {
-        return direction;
-    }
-
-    public boolean canRotate() {
-        return this instanceof ITileRotate;
-    }
-
-    @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityLiving, stack);
-        if (canRotate()) {
-            direction = MiscTools.getSideFacingTrack(worldObj, getPos());
-            if (direction == null)
-                if (entityLiving != null) {
-                    direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
-                } else direction = EnumFacing.NORTH;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public boolean rotateBlock(EnumFacing axis) {
-        if (!canRotate()) return false;
-        if (direction == axis)
-            direction = axis.getOpposite();
-        else
-            direction = axis;
-        markBlockForUpdate();
-        return true;
     }
 
     public enum EnumTransferMode implements IMultiButtonState {
 
-        ALL("all"),
-        EXCESS("excess"),
-        STOCK("stock"),
-        TRANSFER("transfer");
+        ALL("➧➧➧", "all"),
+        EXCESS("#➧➧", "excess"),
+        STOCK("➧➧#", "stock"),
+        TRANSFER("➧#➧", "transfer");
+        private final String label;
         private final String locTag;
-        private final ToolTip tip;
+        private final ToolTip tips;
 
-        EnumTransferMode(String locTag) {
+        EnumTransferMode(String label, String locTag) {
+            this.label = label;
             this.locTag = "gui.railcraft.manipulator.transfer." + locTag;
-            this.tip = ToolTip.buildToolTip(locTag + ".tips");
+            this.tips = new ToolTip(150);
+            tips.add(new ToolTipLine(label, TextFormatting.WHITE));
+            tips.add(new ToolTipLine(LocalizationPlugin.translate(this.locTag + ".name"), TextFormatting.DARK_GREEN));
+            ToolTip desc = ToolTip.buildToolTip(this.locTag + ".tips");
+            if (desc != null)
+                tips.addAll(desc);
         }
 
         @Override
         public String getLabel() {
-            return LocalizationPlugin.translate(locTag + ".name");
+            return label;
         }
 
         @Override
@@ -372,28 +334,35 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
 
         @Override
         public ToolTip getToolTip() {
-            return tip;
+            return tips;
         }
 
     }
 
     public enum EnumRedstoneMode implements IMultiButtonState {
 
-        COMPLETE("complete"),
-        IMMEDIATE("immediate"),
-        MANUAL("manual"),
-        PARTIAL("partial");
+        COMPLETE("✔", "complete"),
+        IMMEDIATE("❢", "immediate"),
+        MANUAL("✘", "manual"),
+        PARTIAL("➧", "partial");
+        private final String label;
         private final String locTag;
-        private final ToolTip tip;
+        private final ToolTip tips;
 
-        EnumRedstoneMode(String locTag) {
+        EnumRedstoneMode(String label, String locTag) {
+            this.label = label;
             this.locTag = "gui.railcraft.manipulator.redstone." + locTag;
-            this.tip = ToolTip.buildToolTip(locTag + ".tips");
+            this.tips = new ToolTip(150);
+            tips.add(new ToolTipLine(label, TextFormatting.WHITE));
+            tips.add(new ToolTipLine(LocalizationPlugin.translate(this.locTag + ".name"), TextFormatting.DARK_GREEN));
+            ToolTip desc = ToolTip.buildToolTip(this.locTag + ".tips");
+            if (desc != null)
+                tips.addAll(desc);
         }
 
         @Override
         public String getLabel() {
-            return LocalizationPlugin.translate(locTag + ".name");
+            return label;
         }
 
         @Override
@@ -403,7 +372,7 @@ public abstract class TileCartManipulator extends TileMachineItem implements IHa
 
         @Override
         public ToolTip getToolTip() {
-            return tip;
+            return tips;
         }
     }
 }

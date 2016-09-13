@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
@@ -24,6 +25,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -57,8 +59,7 @@ import java.util.stream.Collectors;
 
 public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockContainerRailcraft implements IPostConnection, ColorPlugin.IColoredBlock {
 
-    private final MachineProxy<M> proxy;
-    private final BlockStateContainer myBlockState;
+    protected final MachineProxy<M> proxy;
 
     public BlockMachine(MachineProxy<M> proxy, Boolean opaque) {
         super(Material.ROCK);
@@ -68,8 +69,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
         this.proxy = proxy;
-        this.myBlockState = new BlockStateContainer(this, proxy.getVariantProperty());
-        setDefaultState(myBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
+        setDefaultState(getDefaultState().withProperty(getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -85,19 +85,31 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         ColorPlugin.instance.register(this, this);
     }
 
+    public IProperty<M> getVariantProperty() {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public BlockStateContainer getBlockState() {
-        return myBlockState;
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        if (variant == null)
+            return getDefaultState();
+        return getDefaultState().withProperty(getVariantProperty(), (M) variant);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return proxy.getMetaMap().inverse().get(state.getValue(proxy.getVariantProperty()));
+        return proxy.getMetaMap().inverse().get(state.getValue(getVariantProperty()));
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(meta));
+        return getDefaultState().withProperty(getVariantProperty(), proxy.getMetaMap().get(meta));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, getVariantProperty());
     }
 
     /**
@@ -114,7 +126,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
     }
 
     public IEnumMachine<M> getMachineType(IBlockState state) {
-        return state.getValue(proxy.getVariantProperty());
+        return state.getValue(getVariantProperty());
     }
 
     public Class<? extends TileMachineBase> getTileClass(IBlockState state) {
@@ -345,7 +357,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
 
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return getMachineType(WorldPlugin.getBlockState(world, pos)).passesLight() ? 0 : 255;
+        return getMachineType(state).passesLight() ? 0 : 255;
     }
 
     @Override

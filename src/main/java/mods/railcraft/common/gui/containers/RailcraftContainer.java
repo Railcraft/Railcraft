@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -50,14 +51,14 @@ public abstract class RailcraftContainer extends Container {
     }
 
     public void addWidget(Widget widget) {
-        widget.addToContainer(this);
         widgets.add(widget);
+        widget.addToContainer(this);
     }
 
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        sendWidgetsServerData();
+//        detectAndSendChanges();
     }
 
     @Override
@@ -70,7 +71,7 @@ public abstract class RailcraftContainer extends Container {
     }
 
     private void sendWidgetsServerData() {
-        widgets.stream().forEach(this::sendWidgetServerData);
+        widgets.forEach(this::sendWidgetServerData);
     }
 
     private void sendWidgetServerData(Widget widget) {

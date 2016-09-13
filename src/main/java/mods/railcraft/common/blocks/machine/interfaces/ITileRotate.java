@@ -12,16 +12,37 @@ package mods.railcraft.common.blocks.machine.interfaces;
 
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileRotate {
-    default boolean rotateBlock(EnumFacing axis) {
-        return false;
+public interface ITileRotate extends ITile {
+    default EnumFacing getFacing() {
+        return null;
     }
 
+    default void setFacing(EnumFacing facing) {
+    }
+
+    default boolean canRotate() {
+        EnumFacing[] rotations = getValidRotations();
+        return rotations != null && rotations.length > 1;
+    }
+
+    default boolean rotateBlock(EnumFacing axis) {
+        if (!canRotate()) return false;
+        if (getFacing() == axis)
+            setFacing(axis.getOpposite());
+        else
+            setFacing(axis);
+        markBlockForUpdate();
+        return true;
+    }
+
+    @Nullable
     default EnumFacing[] getValidRotations() {
         return EnumFacing.VALUES;
     }

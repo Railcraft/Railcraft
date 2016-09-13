@@ -244,7 +244,7 @@ task releaseInit << {
 task release << {
 }
 
-build.dependsOn signMainJar, signDevJar, apiZip
+build.dependsOn clean, signMainJar, signDevJar, apiZip
 release.dependsOn releaseInit, build
 build.shouldRunAfter releaseInit
 uploadArchives.shouldRunAfter releaseInit, build

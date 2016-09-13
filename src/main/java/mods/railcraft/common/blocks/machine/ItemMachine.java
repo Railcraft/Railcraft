@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
@@ -14,8 +15,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftSubtyped {
@@ -25,7 +26,6 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
     public ItemMachine(Block block) {
         super(block);
         this.machineBlock = (BlockMachine<? extends IEnumMachine<?>>) block;
-        setUnlocalizedName("railcraft.machine");
     }
 
     private IEnumMachine<?> getMachine(ItemStack stack) {
@@ -34,7 +34,7 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return getMachine(stack).getTag();
+        return getMachine(stack).getLocalizationTag();
     }
 
     @Override

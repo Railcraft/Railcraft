@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
 import mods.railcraft.common.util.inventory.StandaloneInventory;
@@ -30,7 +30,7 @@ public class InventoryCopy extends InvWrapperBase {
     public InventoryCopy(IInventory original) {
         super(original);
         this.copy = new StandaloneInventory(original.getSizeInventory());
-        for (IInvSlot slot : InventoryIterator.getIterable(original)) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(original)) {
             ItemStack stack = slot.getStack();
             if (stack != null) {
                 copy.setInventorySlotContents(slot.getIndex(), stack.copy());

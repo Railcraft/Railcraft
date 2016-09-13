@@ -39,8 +39,8 @@ public abstract class TileTank extends TileMultiBlockInventory implements ITankT
 
     protected final TankManager tankManager = new TankManager();
 
-    protected TileTank(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
-        super(name, invNum, patterns);
+    protected TileTank(int invNum, List<? extends MultiBlockPattern> patterns) {
+        super(invNum, patterns);
     }
 
     @Override

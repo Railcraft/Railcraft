@@ -52,7 +52,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     public static final PropertyEnum<EnumMachineBeta> VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
-    public static final MachineProxy<EnumMachineBeta> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
+    public static final MachineProxy<EnumMachineBeta> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         SENTINEL.toolClass = "pickaxe:3";
@@ -152,10 +152,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         return RailcraftBlocks.MACHINE_BETA;
     }
 
-    @Override
-    public PropertyEnum<EnumMachineBeta> getVariantProperty() {
-        return VARIANT;
-    }
 
     @Override
     public boolean isAvailable() {
@@ -166,7 +162,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
-        String tipTag = getTag() + ".tips";
+        String tipTag = getLocalizationTag() + ".tips";
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;

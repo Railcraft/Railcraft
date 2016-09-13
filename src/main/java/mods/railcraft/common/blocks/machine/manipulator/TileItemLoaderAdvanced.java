@@ -10,12 +10,18 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import net.minecraft.util.EnumFacing;
 
 public class TileItemLoaderAdvanced extends TileItemLoader implements ITileRotate {
 
     @Override
     public ManipulatorVariant getMachineType() {
         return ManipulatorVariant.ITEM_LOADER_ADVANCED;
+    }
+
+    @Override
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.VALUES;
     }
 
 }

@@ -295,8 +295,8 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    public EnumFacing getFacing() {
-        return EnumFacing.UP;
+    public EnumFacing[] getValidRotations() {
+        return new EnumFacing[]{EnumFacing.UP};
     }
 
     @Override

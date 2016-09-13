@@ -10,7 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.machine.manipulator.TileIC2Loader;
+import mods.railcraft.common.blocks.machine.manipulator.TileIC2Unloader;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEnergyLoader;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -21,19 +21,17 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class GuiLoaderEnergy extends TileGui {
+public class GuiManipulatorCartIC2Unloader extends TileGui {
 
-    private final String BUTTON1 = LocalizationPlugin.translate("railcraft.gui.energy.loader.empty");
-    private final String BUTTON2 = LocalizationPlugin.translate("railcraft.gui.energy.loader.fill");
-    private TileIC2Loader tile;
-    private boolean waitIfEmpty;
-    private boolean waitTillFull;
+    private final String label;
+    private final String button1Label = LocalizationPlugin.translate("railcraft.gui.energy.unloader.wait");
+    //    private final String BUTTON1 = "Wait till Empty";
+    private TileIC2Unloader tile;
 
-    public GuiLoaderEnergy(InventoryPlayer inv, TileIC2Loader tile) {
+    public GuiManipulatorCartIC2Unloader(InventoryPlayer inv, TileIC2Unloader tile) {
         super(tile, new ContainerEnergyLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy_loader.png");
         this.tile = tile;
-        waitIfEmpty = tile.waitIfEmpty();
-        waitTillFull = tile.waitTillFull();
+        label = tile.getName();
     }
 
     @Override
@@ -44,8 +42,7 @@ public class GuiLoaderEnergy extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(new GuiToggleButton(0, w + 75, h + 18, 70, BUTTON1, waitIfEmpty));
-        buttonList.add(new GuiToggleButton(1, w + 75, h + 42, 70, BUTTON2, waitTillFull));
+        buttonList.add(new GuiToggleButton(0, w + 75, h + 18, 70, button1Label, tile.waitTillEmpty()));
     }
 
     @Override
@@ -53,33 +50,24 @@ public class GuiLoaderEnergy extends TileGui {
         if (tile == null)
             return;
         if (guibutton.id == 0) {
-            waitIfEmpty = !waitIfEmpty;
-            if (!waitIfEmpty)
-                waitTillFull = false;
-            ((GuiToggleButton) guibutton).active = waitIfEmpty;
-            ((GuiToggleButton) buttonList.get(1)).active = waitTillFull;
-        }
-        if (guibutton.id == 1) {
-            waitTillFull = !waitTillFull;
-            if (waitTillFull)
-                waitIfEmpty = true;
-            ((GuiToggleButton) buttonList.get(0)).active = waitIfEmpty;
-            ((GuiToggleButton) guibutton).active = waitTillFull;
+            tile.setWaitTillEmpty(!tile.waitTillEmpty());
+            ((GuiToggleButton) guibutton).active = tile.waitTillEmpty();
         }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         int sWidth = fontRendererObj.getStringWidth(tile.getName());
         int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(tile.getName(), sPos, 6, 0x404040);
+        fontRendererObj.drawString(label, sPos, 6, 0x404040);
 
         fontRendererObj.drawString(Integer.toString((int) tile.getEnergy()), 30, 55, 0x404040);
 
         String capacity = "/" + tile.getCapacity();
         fontRendererObj.drawString(capacity, 28, 65, 0x404040);
 
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.ic2.energy.rate", tile.getTransferRate()), 80, 67, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.ic2.energy.rate", tile.getTransferRate()), 90, 67, 0x404040);
     }
 
     @Override
@@ -87,7 +75,6 @@ public class GuiLoaderEnergy extends TileGui {
         super.drawGuiContainerBackgroundLayer(f, i, j);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-
         if (tile.getEnergy() > 0) {
             int energy = tile.getEnergyBarScaled(24);
             drawTexturedModalRect(x + 31, y + 34, 176, 14, energy, 17);
@@ -97,8 +84,6 @@ public class GuiLoaderEnergy extends TileGui {
     @Override
     public void onGuiClosed() {
         if (Game.isClient(tile.getWorld())) {
-            tile.setWaitIfEmpty(waitIfEmpty);
-            tile.setWaitTillFull(waitTillFull);
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }
@@ -108,8 +93,8 @@ public class GuiLoaderEnergy extends TileGui {
     public void updateScreen() {
         super.updateScreen();
         TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
-        if (t instanceof TileIC2Loader)
-            tile = (TileIC2Loader) t;
+        if (t instanceof TileIC2Unloader)
+            tile = (TileIC2Unloader) t;
         else
             mc.thePlayer.closeScreen();
     }

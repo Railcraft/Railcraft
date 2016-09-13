@@ -101,7 +101,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     private int finishedAt;
 
     public TileCokeOven() {
-        super("railcraft.gui.coke.oven", 4, patterns);
+        super(4, patterns);
         tank = new StandardTank(TANK_CAPACITY, this);
         tankManager.add(tank);
     }

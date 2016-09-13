@@ -145,7 +145,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
-        super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
+        super(18, patterns);
 
         if (RailcraftConfig.machinesRequirePower())
             energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
@@ -253,7 +253,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
                 ItemStack input = null;
                 ICrusherCraftingManager.ICrusherRecipe recipe = null;
-                for (IInvSlot slot : InventoryIterator.getIterable((IInventory) invInput)) {
+                for (IInvSlot slot : InventoryIterator.getVanilla((IInventory) invInput)) {
                     input = slot.getStack();
                     if (input != null) {
                         recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);

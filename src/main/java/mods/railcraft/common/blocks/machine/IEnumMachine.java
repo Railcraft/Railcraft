@@ -15,7 +15,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,6 +28,10 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     String getBaseTag();
 
     String getTag();
+
+    default String getLocalizationTag() {
+        return getTag().replace("_", ".");
+    }
 
     Class<? extends IRailcraftModule> getModule();
 
@@ -44,15 +47,14 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     boolean isDepreciated();
 
-    PropertyEnum<M> getVariantProperty();
-
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
     default IBlockState getDefaultState() {
         IBlockState state = getContainer().getDefaultState();
-        if (state != null)
-            return state.withProperty(getVariantProperty(), (M) this);
+        BlockMachine<M> block = (BlockMachine<M>) block();
+        if (state != null && block != null)
+            return state.withProperty(block.getVariantProperty(), (M) this);
         return null;
     }
 
@@ -84,6 +86,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     TileMachineBase getTileEntity();
 
+    @Nullable
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 
     @Override

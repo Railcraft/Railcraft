@@ -35,19 +35,22 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileFluidManipulator extends TileCartManipulator implements ISidedInventory {
+public abstract class TileFluidManipulator extends TileManipulatorCart implements ISidedInventory {
 
     protected static final int SLOT_INPUT = 0;
-    protected static final int SLOT_OUTPUT = 1;
-    protected static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
+    protected static final int SLOT_PROCESSING = 1;
+    protected static final int SLOT_OUTPUT = 2;
+    protected static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
     protected static final int CAPACITY = FluidTools.BUCKET_VOLUME * 32;
     protected final PhantomInventory invFilter = new PhantomInventory(1);
-    //    protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    //        protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+//        protected final IInventory invInput = new InventoryMapper(this, SLOT_PROCESSING, 1);
+//        protected final IInventory invInput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tank = new FilteredTank(CAPACITY, this);
 
     protected TileFluidManipulator() {
-        setInventorySize(2);
+        setInventorySize(3);
         tankManager.add(tank);
         tank.setFilter(this::getFilterFluid);
     }
@@ -101,22 +104,15 @@ public abstract class TileFluidManipulator extends TileCartManipulator implement
         if (clock % FluidTools.NETWORK_UPDATE_INTERVAL == 0)
             sendUpdateToClient();
 
-        ItemStack topSlot = getStackInSlot(SLOT_INPUT);
-        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
-            setInventorySlotContents(SLOT_INPUT, null);
-            dropItem(topSlot);
-        }
 
-        ItemStack bottomSlot = getStackInSlot(SLOT_OUTPUT);
-        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
-            setInventorySlotContents(SLOT_OUTPUT, null);
-            dropItem(bottomSlot);
+        if (clock % FluidTools.BUCKET_FILL_TIME == 0) {
+            FluidTools.processContainer(this, tank);
         }
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
-        return slot != SLOT_OUTPUT;
+        return slot == SLOT_INPUT;
     }
 
     @Override

@@ -7,32 +7,28 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.manipulator.TileFluidUnloader;
-import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
-import mods.railcraft.common.gui.slots.SlotFluidFilter;
+import mods.railcraft.common.blocks.machine.manipulator.TileManipulatorCart;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
-import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerFluidUnloader extends RailcraftContainer {
+/**
+ * Created by CovertJaguar on 9/12/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public class ContainerManipulatorCart extends RailcraftContainer {
+    public TileManipulatorCart tile;
 
-    private final TileFluidUnloader tile;
-
-    public ContainerFluidUnloader(InventoryPlayer inventoryplayer, TileFluidUnloader tile) {
+    public ContainerManipulatorCart(InventoryPlayer inventoryplayer, TileManipulatorCart tile) {
         super(tile);
         this.tile = tile;
 
-        addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 17, 23, 176, 0, 16, 47));
-
-        addSlot(new SlotMinecartFilter(tile.getCartFilters(), 0, 44, 39));
-        addSlot(new SlotMinecartFilter(tile.getCartFilters(), 1, 62, 39));
-        addSlot(new SlotFluidFilter(tile.getFluidFilter(), 0, 89, 39));
-        addSlot(new SlotFluidContainerEmpty(tile, 0, 134, 21));
-        addSlot(new SlotOutput(tile, 1, 134, 56));
+        addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 0, 71, 26));
+        addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 1, 89, 26));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -44,5 +40,4 @@ public class ContainerFluidUnloader extends RailcraftContainer {
             addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
     }
-
 }

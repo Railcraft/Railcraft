@@ -106,7 +106,7 @@ public class TileTankWater extends TileTank {
 //    private InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
 
     public TileTankWater() {
-        super("gui.tank.water", 2, patterns);
+        super(2, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
         tank.setFilter(Fluids.WATER::get);
         tankManager.add(tank);

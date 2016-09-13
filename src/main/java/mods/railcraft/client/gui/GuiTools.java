@@ -17,6 +17,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IWorldNameable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -24,6 +26,18 @@ import java.util.Collection;
 import java.util.List;
 
 public class GuiTools {
+
+    public static void drawCenteredString(FontRenderer fr, IWorldNameable nameable) {
+        ITextComponent name = nameable.getDisplayName();
+        if (name != null)
+            drawCenteredString(fr, nameable, 6);
+    }
+
+    public static void drawCenteredString(FontRenderer fr, IWorldNameable nameable, int y) {
+        ITextComponent name = nameable.getDisplayName();
+        if (name != null)
+            drawCenteredString(fr, name.getFormattedText(), y);
+    }
 
     public static void drawCenteredString(FontRenderer fr, String s, int y) {
         drawCenteredString(fr, s, y, 176);

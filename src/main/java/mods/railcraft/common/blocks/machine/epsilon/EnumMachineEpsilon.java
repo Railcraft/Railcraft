@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     public static final PropertyEnum<EnumMachineEpsilon> VARIANT = PropertyEnum.create("variant", EnumMachineEpsilon.class);
     public static final EnumMachineEpsilon[] VALUES = values();
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
-    public static final MachineProxy<EnumMachineEpsilon> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
+    public static final MachineProxy<EnumMachineEpsilon> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         creativeList.add(FLUX_TRANSFORMER);
@@ -122,11 +123,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         return RailcraftBlocks.MACHINE_EPSILON;
     }
 
-    @Override
-    public PropertyEnum<EnumMachineEpsilon> getVariantProperty() {
-        return VARIANT;
-    }
-
     /**
      * Block is enabled and defined.
      */
@@ -135,11 +131,12 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         return block() != null && isEnabled();
     }
 
+    @Nullable
     @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
-        String tipTag = getTag() + ".tips";
+        String tipTag = getLocalizationTag() + ".tips";
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;

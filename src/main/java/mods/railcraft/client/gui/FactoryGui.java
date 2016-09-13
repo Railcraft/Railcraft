@@ -50,19 +50,19 @@ public class FactoryGui {
         try {
             switch (gui) {
                 case LOADER_ITEM:
-                    return new GuiLoaderItem(inv, (TileItemManipulator) obj);
+                    return new GuiManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case LOADER_FLUID:
-                    return new GuiLoaderFluid(inv, (TileFluidLoader) obj);
+                    return new GuiManipulatorCartFluid(inv, (TileFluidLoader) obj);
                 case UNLOADER_FLUID:
-                    return new GuiUnloaderFluid(inv, (TileFluidUnloader) obj);
+                    return new GuiManipulatorCartFluid(inv, (TileFluidUnloader) obj);
                 case LOADER_ENERGY:
-                    return new GuiLoaderEnergy(inv, (TileIC2Loader) obj);
+                    return new GuiManipulatorCartIC2Loader(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
-                    return new GuiUnloaderEnergy(inv, (TileIC2Unloader) obj);
+                    return new GuiManipulatorCartIC2Unloader(inv, (TileIC2Unloader) obj);
                 case LOADER_RF:
                     return new GuiLoaderRF((TileRFLoader) obj);
                 case UNLOADER_RF:
-                    return new GuiUnloaderRF((TileRFUnloader) obj);
+                    return new GuiManipulatorCartRFUnloader((TileRFUnloader) obj);
                 case DETECTOR_ITEM:
                     return new GuiDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:

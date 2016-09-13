@@ -32,8 +32,8 @@ public class ModuleRF extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.DETECTOR,
-                        RailcraftCarts.REDSTONE_FLUX
-//                        RailcraftBlocks.manipulator
+                        RailcraftCarts.REDSTONE_FLUX,
+                        RailcraftBlocks.MANIPULATOR
                 );
             }
 

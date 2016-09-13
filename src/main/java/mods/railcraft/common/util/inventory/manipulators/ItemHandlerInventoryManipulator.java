@@ -33,7 +33,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
 
     @Override
     public Iterator<IInvSlot> iterator() {
-        return InventoryIterator.getIterable(inv).iterator();
+        return InventoryIterator.getForge(inv).iterator();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         stack = stack.copy();
         List<IInvSlot> filledSlots = new ArrayList<IInvSlot>(inv.getSlots());
         List<IInvSlot> emptySlots = new ArrayList<IInvSlot>(inv.getSlots());
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IInvSlot slot : InventoryIterator.getForge(inv)) {
             if (slot.canPutStackInSlot(stack)) {
                 if (slot.getStack() == null)
                     emptySlots.add(slot);

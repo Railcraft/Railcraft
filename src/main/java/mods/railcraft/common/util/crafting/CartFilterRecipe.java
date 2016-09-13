@@ -71,7 +71,7 @@ public class CartFilterRecipe implements IRecipe {
         int cartSlot = -1;
         int itemCount = 0;
         int filterCartCount = 0;
-        for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(grid).notNull()) {
             itemCount++;
             ItemStack stack = slot.getStack();
             FilterType type = FilterType.fromCartType(RailcraftCarts.getCartType(stack));
@@ -84,7 +84,7 @@ public class CartFilterRecipe implements IRecipe {
         }
         if (filterType == null || itemCount > 2 || filterCartCount > 1)
             return null;
-        for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(grid).notNull()) {
             if (slot.getIndex() == cartSlot)
                 continue;
             ItemStack stack = slot.getStack();
@@ -114,7 +114,7 @@ public class CartFilterRecipe implements IRecipe {
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
-        for (IInvSlot slot : InventoryIterator.getIterable(inv).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(inv).notNull()) {
             ItemStack stack = slot.getStack();
             if (FilterType.fromCartType(RailcraftCarts.getCartType(stack)) == null) {
                 grid[slot.getIndex()] = stack.copy();

@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -36,10 +37,10 @@ public class ModuleTransport extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftCarts.CARGO,
-                        RailcraftCarts.TANK
+                        RailcraftCarts.TANK,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
-//                        RailcraftBlocks.manipulator
+                        RailcraftBlocks.MANIPULATOR
                 );
             }
 
