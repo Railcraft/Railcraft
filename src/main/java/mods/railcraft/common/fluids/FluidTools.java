@@ -38,7 +38,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -78,29 +77,72 @@ public final class FluidTools {
         return FluidItemHelper.isContainer(heldItem);
     }
 
+    public enum ProcessState {
+        FILLING,
+        DRAINING,
+        RESET
+    }
+
+    private static void sendToProcessing(IInventory inv) {
+        InvTools.moveOneItem(new InventoryMapper(inv, 0, 1), new InventoryMapper(inv, 1, 1, false));
+    }
+
+    private static void sendToOutput(IInventory inv) {
+        InvTools.moveOneItem(new InventoryMapper(inv, 1, 1), new InventoryMapper(inv, 2, 1, false));
+    }
+
+    private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
+        ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+        if (filled == null) {
+            sendToOutput(inv);
+            return ProcessState.RESET;
+        }
+        inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
+        return ProcessState.FILLING;
+    }
+
+    private static ProcessState tryDrain(IInventory inv, StandardTank tank, ItemStack container) {
+        ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+        if (drained == null) {
+            sendToOutput(inv);
+            return ProcessState.RESET;
+        }
+        inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
+        return ProcessState.FILLING;
+    }
+
     /**
      * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as slot 2.
      * Will handle moving an item through all stages from input to output for either filling or draining.
      */
-    //FIXME - This might need to be split into two functions, the logic for determining whether to fill or drain escapes me
-    public static void processContainer(IInventory inv, StandardTank tank) {
+    public static ProcessState processContainer(IInventory inv, StandardTank tank, boolean defaultToFill, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
-        if (container == null) {
-            InvTools.moveOneItem(new InventoryMapper(inv, 0, 1), new InventoryMapper(inv, 1, 1, false));
-            return;
+        if (container == null || FluidUtil.getFluidHandler(container) == null) {
+            sendToProcessing(inv);
+            return ProcessState.RESET;
         }
-        if (tank.canFill()) {
-            if (FluidItemHelper.isEmptyContainer(container))
-                InvTools.moveOneItem(new InventoryMapper(inv, 1, 1), new InventoryMapper(inv, 2, 1, false));
-            else
-                FluidUtil.tryEmptyContainerAndStow(container, tank, new InvWrapper(new InventoryMapper(inv, 2, 1, false)), Fluid.BUCKET_VOLUME, null);
+        if (state == ProcessState.RESET) {
+            if (defaultToFill) {
+                ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+                if (filled == null) {
+                    return tryDrain(inv, tank, container);
+                }
+                inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
+                return ProcessState.FILLING;
+            } else {
+                ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+                if (drained == null) {
+                    return tryFill(inv, tank, container);
+                }
+                inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
+                return ProcessState.DRAINING;
+            }
         }
-        if (tank.canDrain()) {
-            if (FluidItemHelper.isFullContainer(container))
-                InvTools.moveOneItem(new InventoryMapper(inv, 1, 1), new InventoryMapper(inv, 2, 1, false));
-            else
-                FluidUtil.tryFillContainerAndStow(container, tank, new InvWrapper(new InventoryMapper(inv, 2, 1, false)), Fluid.BUCKET_VOLUME, null);
-        }
+        if (state == ProcessState.FILLING)
+            return tryFill(inv, tank, container);
+        if (state == ProcessState.DRAINING)
+            return tryDrain(inv, tank, container);
+        return state;
     }
 //    @Deprecated
 //    public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {

@@ -28,7 +28,6 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -270,14 +269,5 @@ public class TileFluidLoader extends TileFluidManipulator {
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.LOADER_FLUID, player, worldObj, getPos());
         return true;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
-        switch (slot) {
-            case SLOT_INPUT:
-                return FluidItemHelper.isFluidInContainer(stack);
-        }
-        return false;
     }
 }

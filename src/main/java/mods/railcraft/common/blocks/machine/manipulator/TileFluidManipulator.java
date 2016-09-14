@@ -14,6 +14,7 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -48,6 +49,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 //        protected final IInventory invInput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tank = new FilteredTank(CAPACITY, this);
+    private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     protected TileFluidManipulator() {
         setInventorySize(3);
@@ -106,13 +108,18 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
 
         if (clock % FluidTools.BUCKET_FILL_TIME == 0) {
-            FluidTools.processContainer(this, tank);
+            processState = FluidTools.processContainer(this, tank, this instanceof TileFluidUnloader, processState);
         }
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
-        return slot == SLOT_INPUT;
+        switch (slot) {
+            case SLOT_INPUT:
+                Fluid filter;
+                return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
+        }
+        return false;
     }
 
     @Override
@@ -133,6 +140,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
+        NBTPlugin.writeEnumOrdinal(data, "processState", processState);
 
         tankManager.writeTanksToNBT(data);
         getFluidFilter().writeToNBT("invFilter", data);
@@ -142,6 +150,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
+        processState = NBTPlugin.readEnumOrdinal(data, "processState", FluidTools.ProcessState.values(), FluidTools.ProcessState.RESET);
 
         if (data.getTag("tanks") instanceof NBTTagCompound)
             data.setTag("tanks", new NBTTagList());

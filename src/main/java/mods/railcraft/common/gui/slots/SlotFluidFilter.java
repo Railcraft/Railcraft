@@ -13,6 +13,8 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 public class SlotFluidFilter extends SlotRailcraft {
     public SlotFluidFilter(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
@@ -20,12 +22,8 @@ public class SlotFluidFilter extends SlotRailcraft {
         setStackLimit(1);
     }
 
-    public static boolean canPlaceItem(ItemStack itemstack) {
-        return FluidItemHelper.isFluidInContainer(itemstack);
-    }
-
     @Override
-    public boolean isItemValid(ItemStack itemstack) {
-        return canPlaceItem(itemstack);
+    public boolean isItemValid(@Nullable ItemStack itemstack) {
+        return FluidItemHelper.isFluidInContainer(itemstack);
     }
 }

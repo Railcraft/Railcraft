@@ -11,19 +11,15 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
-import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
-import javax.annotation.Nullable;
 
 public class TileFluidUnloader extends TileFluidManipulator {
 
@@ -80,12 +76,4 @@ public class TileFluidUnloader extends TileFluidManipulator {
         return true;
     }
 
-    @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
-        switch (slot) {
-            case SLOT_INPUT:
-                return FluidItemHelper.isEmptyContainer(stack);
-        }
-        return false;
-    }
 }
