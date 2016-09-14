@@ -61,7 +61,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         return EnumRedstoneMode.values();
     }
 
-    public MultiButtonController<EnumRedstoneMode> getRedstoneModeController() {
+    public MultiButtonController<EnumRedstoneMode> redstoneController() {
         return redstoneModeController;
     }
 
@@ -112,12 +112,11 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     }
 
     public boolean isManualMode() {
-        return getRedstoneModeController().getButtonState() == EnumRedstoneMode.MANUAL;
+        return redstoneController().getButtonState() == EnumRedstoneMode.MANUAL;
     }
 
     protected final void trySendCart(EntityMinecart cart) {
-        EnumRedstoneMode state = getRedstoneModeController().getButtonState();
-        if (state != EnumRedstoneMode.MANUAL && !isPowered() && !hasWorkForCart(cart))
+        if (!redstoneController().is(EnumRedstoneMode.MANUAL) && !isPowered() && !hasWorkForCart(cart))
             sendCart(cart);
     }
 
@@ -232,9 +231,9 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         // We did something!
         if (isProcessing())
             setPowered(false);
-
-        // Are we done?
-        trySendCart(cart);
+        else
+            // Are we done?
+            trySendCart(cart);
 
         // Tell our twin
         if (isProcessing() != wasProcessing)

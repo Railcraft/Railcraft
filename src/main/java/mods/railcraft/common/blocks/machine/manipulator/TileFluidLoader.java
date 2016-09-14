@@ -185,19 +185,19 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     @Override
     protected boolean hasWorkForCart(EntityMinecart cart) {
-        if (!pipeIsRetracted() || isProcessing())
+        if (!pipeIsRetracted())
             return true;
         AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.UP);
         if (tankCart == null)
             return false;
-        Fluid fluidHandled = getFluidHandled();
-        if (!tank.isEmpty() && !tankCart.canPutFluid(tank.getFluid()))
-            return false;
-        else if (getRedstoneModeController().getButtonState() != EnumRedstoneMode.COMPLETE && !tankCart.isTankEmpty(fluidHandled))
-            return false;
-        else if (getRedstoneModeController().getButtonState() == EnumRedstoneMode.IMMEDIATE && tankCart.isTankEmpty(fluidHandled))
-            return false;
-        return !tankCart.isTankFull(fluidHandled);
+        Fluid fluid = getFluidHandled();
+        switch (redstoneController().getButtonState()) {
+            case COMPLETE:
+                return !tankCart.isTankFull(fluid);
+            case PARTIAL:
+                return tankCart.isTankEmpty(fluid);
+        }
+        return false;
     }
 
     @Override
@@ -267,7 +267,7 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_FLUID, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, worldObj, getPos());
         return true;
     }
 }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.buttons;
 
 import net.minecraft.nbt.NBTTagByte;
@@ -85,6 +86,10 @@ public class MultiButtonController<T extends IMultiButtonState> {
 
     public T getButtonState() {
         return validStates[currentState];
+    }
+
+    public boolean is(T state) {
+        return getButtonState() == state;
     }
 
     public void writeToNBT(NBTTagCompound nbt, String tag) {

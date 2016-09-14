@@ -11,7 +11,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerManipulatorCartItemLoader;
+import mods.railcraft.common.gui.containers.ContainerManipulatorCartItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -22,7 +22,7 @@ public class GuiManipulatorCartItem extends GuiManipulatorCart {
     private final TileItemManipulator tile;
 
     public GuiManipulatorCartItem(InventoryPlayer inv, TileItemManipulator tile) {
-        super(tile, new ContainerManipulatorCartItemLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
+        super(tile, new ContainerManipulatorCartItem(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
         this.tile = tile;
     }
 

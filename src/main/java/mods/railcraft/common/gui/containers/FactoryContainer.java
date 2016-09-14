@@ -46,20 +46,16 @@ public class FactoryContainer {
 
         try {
             switch (gui) {
-                case LOADER_ITEM:
-                    return new ContainerManipulatorCartItemLoader(inv, (TileItemManipulator) obj);
-                case LOADER_FLUID:
-                    return new ContainerManipulatorCartFluid(inv, (TileFluidLoader) obj);
-                case UNLOADER_FLUID:
-                    return new ContainerManipulatorCartFluid(inv, (TileFluidUnloader) obj);
+                case MANIPULATOR_ITEM:
+                    return new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
+                case MANIPULATOR_FLUID:
+                    return new ContainerManipulatorCartFluid(inv, (TileFluidManipulator) obj);
                 case LOADER_ENERGY:
                     return new ContainerEnergyLoader(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
                     return new ContainerEnergyLoader(inv, (TileIC2Unloader) obj);
-                case LOADER_RF:
-                    return new ContainerLoaderRF((TileRFManipulator) obj);
-                case UNLOADER_RF:
-                    return new ContainerLoaderRF((TileRFManipulator) obj);
+                case MANIPULATOR_RF:
+                    return new ContainerManipulatorCartRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:
                     return new ContainerDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:

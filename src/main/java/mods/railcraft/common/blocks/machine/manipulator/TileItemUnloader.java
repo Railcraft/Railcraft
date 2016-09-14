@@ -192,7 +192,7 @@ public class TileItemUnloader extends TileItemManipulator {
         IInventoryObject cartInv = InvTools.getInventory(cart, getFacing().getOpposite());
         if (cartInv == null)
             return false;
-        EnumRedstoneMode state = getRedstoneModeController().getButtonState();
+        EnumRedstoneMode state = redstoneController().getButtonState();
         if (!isProcessing() && state != EnumRedstoneMode.COMPLETE) {
             return false;
         } else if (getMode() == EnumTransferMode.TRANSFER && isTransferComplete(getItemFilters().getContents())) {
@@ -290,7 +290,7 @@ public class TileItemUnloader extends TileItemManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_ITEM, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_ITEM, player, worldObj, getPos());
         return true;
     }
 

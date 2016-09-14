@@ -39,7 +39,7 @@ public class GuiManipulatorCart extends TileGui {
         int h = (height - ySize) / 2;
         if (tile instanceof TileItemManipulator)
             buttonList.add(transferMode = GuiMultiButton.create(0, w + 73, h + 45, 30, ((TileItemManipulator) tile).getTransferModeController().copy()));
-        buttonList.add(redstoneMode = GuiMultiButton.create(0, w + 73, h + 62, 30, tile.getRedstoneModeController().copy()));
+        buttonList.add(redstoneMode = GuiMultiButton.create(0, w + 73, h + 62, 30, tile.redstoneController().copy()));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GuiManipulatorCart extends TileGui {
         if (Game.isClient(tile.getWorld())) {
             if (tile instanceof TileItemManipulator)
                 ((TileItemManipulator) tile).getTransferModeController().setCurrentState(transferMode.getController().getCurrentState());
-            tile.getRedstoneModeController().setCurrentState(redstoneMode.getController().getCurrentState());
+            tile.redstoneController().setCurrentState(redstoneMode.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);
         }
     }

@@ -13,11 +13,11 @@ import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
 import mods.railcraft.common.gui.slots.SlotFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerManipulatorCartItemLoader extends ContainerManipulatorCart {
+public class ContainerManipulatorCartItem extends ContainerManipulatorCart {
 
     public TileItemManipulator tile;
 
-    public ContainerManipulatorCartItemLoader(InventoryPlayer inventoryplayer, TileItemManipulator tile) {
+    public ContainerManipulatorCartItem(InventoryPlayer inventoryplayer, TileItemManipulator tile) {
         super(inventoryplayer, tile);
         this.tile = tile;
 

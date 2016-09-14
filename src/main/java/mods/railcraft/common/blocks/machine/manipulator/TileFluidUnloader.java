@@ -58,12 +58,10 @@ public class TileFluidUnloader extends TileFluidManipulator {
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     protected boolean hasWorkForCart(EntityMinecart cart) {
-        if (isProcessing())
-            return true;
         AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.DOWN);
         if (tankCart == null)
             return false;
-        if (getRedstoneModeController().getButtonState() == EnumRedstoneMode.IMMEDIATE)
+        if (redstoneController().is(EnumRedstoneMode.IMMEDIATE))
             return false;
         if (getFilterFluid() != null && tankCart.isTankEmpty(getFilterFluid()))
             return false;
@@ -72,7 +70,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_FLUID, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, worldObj, getPos());
         return true;
     }
 

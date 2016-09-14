@@ -63,7 +63,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart implements
 
     @Override
     protected void setPowered(boolean p) {
-        if (!isSendCartGateAction() && getRedstoneModeController().getButtonState() == EnumRedstoneMode.MANUAL) {
+        if (!isSendCartGateAction() && redstoneController().getButtonState() == EnumRedstoneMode.MANUAL) {
             super.setPowered(false);
             return;
         }

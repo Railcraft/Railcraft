@@ -15,19 +15,12 @@ import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
 
 public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider {
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
-    private boolean waitTillEmpty = true;
 
     @Override
     public IEnumMachine getMachineType() {
@@ -36,7 +29,7 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_RF, player, worldObj, getX(), getY(), getZ());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_RF, player, worldObj, getX(), getY(), getZ());
         return true;
     }
 
@@ -69,56 +62,13 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
         if (!(cart instanceof EntityCartRF))
             return false;
         EntityCartRF rfCart = (EntityCartRF) cart;
-        if (!waitTillEmpty)
-            return false;
-        else if (rfCart.getRF() <= 0)
-            return false;
-        return true;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setBoolean("WaitTillEmpty", waitTillEmpty());
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
-        super.readFromNBT(nbttagcompound);
-        setWaitTillEmpty(nbttagcompound.getBoolean("WaitTillEmpty"));
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-
-        data.writeBoolean(waitTillEmpty);
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-
-        waitTillEmpty = data.readBoolean();
-    }
-
-    @Override
-    public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        data.writeBoolean(waitTillEmpty);
-    }
-
-    @Override
-    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
-        waitTillEmpty = data.readBoolean();
-    }
-
-    public boolean waitTillEmpty() {
-        return waitTillEmpty;
-    }
-
-    public void setWaitTillEmpty(boolean wait) {
-        waitTillEmpty = wait;
+        switch (redstoneController().getButtonState()) {
+            case COMPLETE:
+                return rfCart.getRF() > 0;
+            case PARTIAL:
+                return rfCart.getRF() >= rfCart.getMaxRF();
+        }
+        return false;
     }
 
     @Override

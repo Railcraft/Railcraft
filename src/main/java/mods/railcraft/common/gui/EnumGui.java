@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui;
 
 /**
@@ -13,13 +14,11 @@ package mods.railcraft.common.gui;
  */
 public enum EnumGui {
 
-    LOADER_ITEM(true),
-    LOADER_FLUID(true),
+    MANIPULATOR_ITEM(true),
+    MANIPULATOR_FLUID(true),
+    MANIPULATOR_RF(true),
     LOADER_ENERGY(true),
-    LOADER_RF(true),
-    UNLOADER_FLUID(true),
     UNLOADER_ENERGY(true),
-    UNLOADER_RF(true),
     DETECTOR_CART(true),
     DETECTOR_ITEM(true),
     DETECTOR_TANK(true),

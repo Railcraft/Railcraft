@@ -17,16 +17,19 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class GuiDispenserCart extends TileGui {
 
     private final TileDispenserCart tile;
+    private final InventoryPlayer inv;
 
     public GuiDispenserCart(InventoryPlayer inv, TileDispenserCart tile) {
         super(tile, new ContainerDispenserCart(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_dispenser_cart.png");
         xSize = 176;
         ySize = 140;
+        this.inv = inv;
         this.tile = tile;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRendererObj, tile);
+        fontRendererObj.drawString(inv.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
     }
 }

@@ -15,6 +15,8 @@ import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 9/12/2016 for Railcraft.
  *
@@ -23,21 +25,29 @@ import net.minecraft.inventory.Slot;
 public class ContainerManipulatorCart extends RailcraftContainer {
     public TileManipulatorCart tile;
 
-    public ContainerManipulatorCart(InventoryPlayer inventoryplayer, TileManipulatorCart tile) {
+    public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile) {
+        this(inventoryplayer, tile, false);
+    }
+
+    public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile, boolean hasCartFilter) {
         super(tile);
         this.tile = tile;
 
-        addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 0, 71, 26));
-        addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 1, 89, 26));
-
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
+        if (hasCartFilter) {
+            addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 0, 71, 26));
+            addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 1, 89, 26));
         }
 
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
+        if (inventoryplayer != null) {
+            for (int i = 0; i < 3; i++) {
+                for (int k = 0; k < 9; k++) {
+                    addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
+                }
+            }
+
+            for (int j = 0; j < 9; j++) {
+                addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
+            }
         }
     }
 }
