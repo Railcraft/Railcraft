@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.render.tools;
 
@@ -110,16 +110,17 @@ public class CubeRenderer {
 
     }
 
-    {
-        //TODO: create IBlockState for our IBakedModel and figure out how to insert both into the system
-    }
-
-    // TODO: Maybe use a tessellator instead?
     public static void render(RenderInfo renderInfo) {
         if (renderInfo.glow)
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
 
-        //TODO: generate BakedQuads
+//        Tessellator tessellator = Tessellator.getInstance();
+//        VertexBuffer vertexBuffer = tessellator.getBuffer();
+//        vertexBuffer.pos(renderInfo.boundingBox.minX, renderInfo.boundingBox.minY, renderInfo.boundingBox.minZ).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+//        vertexBuffer.pos(0, 1, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+//        vertexBuffer.pos(1, 1, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
+//        vertexBuffer.pos(1, 0, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
+//        tessellator.draw();
 
 //        GlStateManager.pushMatrix();
 //        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(state, brightness.apply(partialTicks));

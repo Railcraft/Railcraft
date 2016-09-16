@@ -36,7 +36,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockMachineManipulator() {
-        super(ManipulatorVariant.PROXY, false);
+        super(ManipulatorVariant.PROXY, true);
         setDefaultState(getDefaultState().withProperty(FRONT, EnumFacing.DOWN).withProperty(ACTIVE, false));
     }
 

@@ -15,13 +15,11 @@ import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fluids.FluidStack;
-import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 
@@ -49,7 +47,7 @@ public class FluidGaugeWidget extends Widget {
     public void writeServerSyncData(IContainerListener listener, RailcraftOutputStream data) throws IOException {
         super.writeServerSyncData(listener, data);
         FluidStack fluidStack = tank.getFluid();
-        Game.log(Level.INFO, "fluid write {0}", tank.getFluidAmount());
+//        Game.log(Level.INFO, "fluid write {0}", tank.getFluidAmount());
         lastSyncedFluidStack = fluidStack == null ? null : fluidStack.copy();
         data.writeFluidStack(fluidStack);
     }
@@ -58,7 +56,7 @@ public class FluidGaugeWidget extends Widget {
     public void readServerSyncData(RailcraftInputStream data) throws IOException {
         super.readServerSyncData(data);
         tank.setFluid(data.readFluidStack());
-        Game.log(Level.INFO, "fluid read {0}", tank.getFluidAmount());
+//        Game.log(Level.INFO, "fluid read {0}", tank.getFluidAmount());
     }
 
     @Override

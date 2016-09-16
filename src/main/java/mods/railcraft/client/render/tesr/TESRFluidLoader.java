@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
+import mods.railcraft.client.render.models.resource.FluidModelRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
-import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidLoader;
@@ -65,27 +65,25 @@ public class TESRFluidLoader extends TileEntitySpecialRenderer<TileFluidManipula
         backDrop.lightSource(tile.getWorld(), tile.getPos());
         CubeRenderer.render(backDrop);
 
-        OpenGL.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
-        OpenGL.glScalef(1f, 0.6f, 1f);
+        OpenGL.glTranslatef((float) x + 0.5F, (float) y + 0.06256F * 4, (float) z + 0.5F);
+        OpenGL.glScalef(0.95f, 1f, 0.95f);
+        OpenGL.glTranslatef(-0.5F, 0, -0.5F);
 
         StandardTank tank = tile.getTankManager().get(0);
 
         if (tank != null) {
+
             FluidStack fluidStack = tank.getFluid();
             if (fluidStack != null && fluidStack.amount > 0) {
-                int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
-                OpenGL.glPushMatrix();
-
-                if (FluidRenderer.hasTexture(fluidStack, FluidRenderer.FlowState.STILL)) {
-                    float cap = tank.getCapacity();
-                    float level = Math.min(fluidStack.amount, cap) / cap;
-
-                    bindTexture(FluidRenderer.getFluidSheet(fluidStack));
-                    FluidRenderer.setColorForFluid(fluidStack);
-                    OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
-                }
-
-                OpenGL.glPopMatrix();
+                float cap = tank.getCapacity();
+                float level = Math.min(fluidStack.amount, cap) / cap;
+                OpenGL.glEnable(GL11.GL_CULL_FACE);
+                OpenGL.glDisable(GL11.GL_LIGHTING);
+//                OpenGL.glEnable(GL11.GL_BLEND);
+//                OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                FluidModelRenderer.INSTANCE.renderFluid(fluidStack, Math.min(8, (int) Math.ceil(level * 8F)));
+//                OpenGL.glDisable(GL11.GL_BLEND);
+                OpenGL.glEnable(GL11.GL_LIGHTING);
             }
         }
 

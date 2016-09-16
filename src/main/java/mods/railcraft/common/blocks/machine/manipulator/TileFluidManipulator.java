@@ -17,6 +17,7 @@ import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -92,7 +93,10 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return FluidTools.interactWithFluidHandler(heldItem, tank, player) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        boolean bucket = FluidTools.interactWithFluidHandler(heldItem, tank, player);
+        if (bucket && Game.isHost(worldObj))
+            sendUpdateToClient();
+        return bucket || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

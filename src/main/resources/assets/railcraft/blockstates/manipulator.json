@@ -67,23 +67,25 @@
         }
       },
       "loader_fluid": {
+        "model": "railcraft:manipulator_fluid",
         "textures": {
-          "end_active": "railcraft:blocks/manipulator_loader_fluid_0",
-          "side_active": "railcraft:blocks/manipulator_loader_fluid_1",
-          "overlay_active": "railcraft:blocks/manipulator_loader_fluid_2",
-          "end": "railcraft:blocks/manipulator_loader_fluid_0",
-          "side": "railcraft:blocks/manipulator_loader_fluid_1",
-          "overlay": "railcraft:blocks/manipulator_loader_fluid_2"
+          "end_active": "railcraft:blocks/manipulator_fluid_cap",
+          "side_active": "railcraft:blocks/manipulator_fluid_side",
+          "overlay_active": "railcraft:blocks/manipulator_fluid_valve",
+          "end": "railcraft:blocks/manipulator_fluid_cap",
+          "side": "railcraft:blocks/manipulator_fluid_side",
+          "overlay": "railcraft:blocks/manipulator_fluid_valve"
         }
       },
       "unloader_fluid": {
+        "model": "railcraft:manipulator_fluid",
         "textures": {
-          "end_active": "railcraft:blocks/manipulator_unloader_fluid_0",
-          "side_active": "railcraft:blocks/manipulator_unloader_fluid_1",
-          "overlay_active": "railcraft:blocks/manipulator_unloader_fluid_2",
-          "end": "railcraft:blocks/manipulator_unloader_fluid_0",
-          "side": "railcraft:blocks/manipulator_unloader_fluid_1",
-          "overlay": "railcraft:blocks/manipulator_unloader_fluid_2"
+          "end_active": "railcraft:blocks/manipulator_fluid_cap",
+          "side_active": "railcraft:blocks/manipulator_fluid_side",
+          "overlay_active": "railcraft:blocks/manipulator_fluid_valve",
+          "end": "railcraft:blocks/manipulator_fluid_cap",
+          "side": "railcraft:blocks/manipulator_fluid_side",
+          "overlay": "railcraft:blocks/manipulator_fluid_valve"
         }
       },
       "loader_ic2": {

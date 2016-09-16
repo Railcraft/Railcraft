@@ -48,7 +48,7 @@ public class FilteredTank extends StandardTank {
 
     @Override
     public boolean matchesFilter(FluidStack fluidStack) {
-        return filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluid);
+        return filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluidStack);
     }
 
     @Override

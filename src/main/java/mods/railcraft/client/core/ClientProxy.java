@@ -15,6 +15,7 @@ import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
+import mods.railcraft.client.render.models.resource.FluidModelRenderer;
 import mods.railcraft.client.render.models.resource.JSONModelRenderer;
 import mods.railcraft.client.render.models.resource.OutfittedTrackItemModel;
 import mods.railcraft.client.render.models.resource.OutfittedTrackModel;
@@ -90,6 +91,7 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(JSONModelRenderer.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(FluidModelRenderer.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new Object() {
             @SubscribeEvent
             public void textureStitch(TextureStitchEvent.Pre event) {

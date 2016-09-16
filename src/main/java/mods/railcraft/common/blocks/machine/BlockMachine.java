@@ -112,14 +112,14 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         return new BlockStateContainer(this, getVariantProperty());
     }
 
-    /**
-     * Returns the default ambient occlusion value based on block opacity
-     */
-    @SideOnly(Side.CLIENT)
-    @Override
-    public float getAmbientOcclusionLightValue(IBlockState state) {
-        return 1;
-    }
+//    /**
+//     * Returns the default ambient occlusion value based on block opacity
+//     */
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public float getAmbientOcclusionLightValue(IBlockState state) {
+//        return 0.2F;
+//    }
 
     public MachineProxy<M> getMachineProxy() {
         return proxy;
