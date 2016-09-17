@@ -1,0 +1,22 @@
+{
+  "__comment": "Designed by CovertJaguar with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
+  "parent": "block/block",
+  "textures": {
+    "particle": "railcraft:blocks/manipulator_pipe_side",
+    "side": "railcraft:blocks/manipulator_pipe_side",
+    "cap": "railcraft:blocks/manipulator_pipe_cap"
+  },
+  "elements": [
+    {
+      "from": [5, 0.5, 5],
+      "to": [11, 15.5, 11],
+      "faces": {
+        "down": {"uv": [11, 11, 5, 5], "texture": "#cap"},
+        "north": {"uv": [5, 0.5, 11, 15.5], "texture": "#side"},
+        "south": {"uv": [5, 0.5, 11, 15.5], "texture": "#side"},
+        "west": {"uv": [5, 0.5, 11, 15.5], "texture": "#side"},
+        "east": {"uv": [5, 0.5, 11, 15.5], "texture": "#side"}
+      }
+    }
+  ]
+}

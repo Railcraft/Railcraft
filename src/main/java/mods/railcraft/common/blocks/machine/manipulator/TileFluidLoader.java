@@ -43,7 +43,7 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     private static final int RESET_WAIT = 200;
     private static final int TRANSFER_RATE = 20;
-    private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
+    private static final float MAX_PIPE_LENGTH = 0.96F;
     private static final float PIPE_INCREMENT = 0.01f;
     private float pipeLength;
     private boolean needsPipe;

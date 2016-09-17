@@ -37,6 +37,8 @@ public class WorldPlugin {
 
     @Nullable
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
+        if (pos.getY() < 0)
+            return null;
         return world.getTileEntity(pos);
     }
 

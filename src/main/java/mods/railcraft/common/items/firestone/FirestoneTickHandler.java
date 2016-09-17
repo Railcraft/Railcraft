@@ -14,16 +14,20 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -45,39 +49,44 @@ public class FirestoneTickHandler {
     }
 
     @SubscribeEvent
-    public void tick(TickEvent.PlayerTickEvent event) {
-        if (event.side == Side.CLIENT)
+    public void tick(LivingEvent.LivingUpdateEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        if (Game.isClient(entity.worldObj))
             return;
         clock++;
         if (clock % 4 != 0)
             return;
-        EntityPlayer player = event.player;
-        if (player.openContainer != player.inventoryContainer) return;
-        for (ItemStack stack : player.inventory.mainInventory) {
-            if (shouldSpawnFire(stack)) {
-                boolean spawnedFire = false;
-                for (int i = 0; i < stack.stackSize; i++) {
-                    spawnedFire |= spawnFire(player);
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
+            return;
+        IInventoryObject inv = InvTools.getInventory(entity);
+        if (inv != null) {
+            for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
+                ItemStack stack = slot.getStack();
+                if (shouldSpawnFire(stack)) {
+                    boolean spawnedFire = false;
+                    for (int i = 0; i < stack.stackSize; i++) {
+                        spawnedFire |= spawnFire(entity);
+                    }
+                    if (spawnedFire && stack.isItemStackDamageable() && stack.getItemDamage() < stack.getMaxDamage() - 1)
+                        InvTools.damageItem(stack, 1);
                 }
-                if (spawnedFire && stack.isItemStackDamageable() && stack.getItemDamage() < stack.getMaxDamage() - 1)
-                    InvTools.damageItem(stack, 1);
             }
         }
     }
 
-    private boolean spawnFire(EntityPlayer player) {
-        Random rnd = player.getRNG();
-        int x = (int) Math.round(player.posX) - 5 + rnd.nextInt(12);
-        int y = (int) Math.round(player.posY) - 5 + rnd.nextInt(12);
-        int z = (int) Math.round(player.posZ) - 5 + rnd.nextInt(12);
+    private boolean spawnFire(EntityLivingBase entity) {
+        Random rnd = entity.getRNG();
+        int x = (int) Math.round(entity.posX) - 5 + rnd.nextInt(12);
+        int y = (int) Math.round(entity.posY) - 5 + rnd.nextInt(12);
+        int z = (int) Math.round(entity.posZ) - 5 + rnd.nextInt(12);
 
         if (y < 1)
             y = 1;
-        if (y > player.worldObj.getActualHeight())
-            y = player.worldObj.getActualHeight() - 2;
+        if (y > entity.worldObj.getActualHeight())
+            y = entity.worldObj.getActualHeight() - 2;
 
         BlockPos pos = new BlockPos(x, y, z);
-        return canBurn(player.worldObj, pos) && player.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
+        return canBurn(entity.worldObj, pos) && entity.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
     }
 
     private boolean canBurn(World world, BlockPos pos) {

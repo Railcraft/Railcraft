@@ -150,6 +150,7 @@ public class ClientProxy extends CommonProxy {
 
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);
+        JSONModelRenderer.INSTANCE.registerModel(TESRManipulatorFluid.PIPE_MODEL);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
@@ -190,7 +191,7 @@ public class ClientProxy extends CommonProxy {
         bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
         bindTESR(TileTankBase.class, TESRHollowTank::new);
-        bindTESR(TileFluidManipulator.class, TESRFluidLoader::new);
+        bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
         bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
         bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);

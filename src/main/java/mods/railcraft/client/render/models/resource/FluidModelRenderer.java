@@ -57,6 +57,9 @@ public class FluidModelRenderer {
         });
     }
 
+    /**
+     * @param level Ranges from 1 to 16 inclusively, 0 will crash
+     */
     public void renderFluid(FluidStack fluidStack, int level) {
         IBakedModel bakedModel = new ModelFluid(fluidStack, false).bake(TRSRTransformation.identity(),
                 DefaultVertexFormats.BLOCK, RenderTools::getTexture);
@@ -69,7 +72,7 @@ public class FluidModelRenderer {
         IExtendedBlockState state = (IExtendedBlockState) new ExtendedBlockState(Blocks.WATER, new IProperty[]{BlockFluidBase.LEVEL}, BlockFluidBase.FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).getBaseState();
         for (int i = 0; i < 4; i++)
             state = state.withProperty(BlockFluidBase.LEVEL_CORNERS[i], level / 16F);
-        state = (IExtendedBlockState) state.withProperty(BlockFluidBase.LEVEL, level);
+        state = (IExtendedBlockState) state.withProperty(BlockFluidBase.LEVEL, level - 1);
         state = state.withProperty(BlockFluidBase.FLOW_DIRECTION, -1000F);
         putQuads(buffer, bakedModel.getQuads(state, null, 1234));
         for (EnumFacing side : EnumFacing.VALUES) {

@@ -34,7 +34,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     ITEM_UNLOADER(ModuleTransport.class, "unloader_item", TileItemUnloader.class),
     ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader_item_advanced", TileItemLoaderAdvanced.class),
     ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader_item_advanced", TileItemUnloaderAdvanced.class),
-    FLUID_LOADER(ModuleTransport.class, "loader_fluid", TileFluidLoader.class),
+    FLUID_LOADER(ModuleTransport.class, "loader_fluid", TileFluidLoader.class, true),
     FLUID_UNLOADER(ModuleTransport.class, "unloader_fluid", TileFluidUnloader.class),
     ENERGY_LOADER(ModuleIC2.class, "loader_ic2", TileIC2Loader.class),
     ENERGY_UNLOADER(ModuleIC2.class, "unloader_ic2", TileIC2Unloader.class),

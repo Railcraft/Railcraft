@@ -11,9 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -30,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -40,10 +39,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
-    private static final DataParameter<Optional<FluidStack>> FLUID_STACK = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataManagerPlugin.OPTIONAL_FLUID_STACK);
+    private static final DataParameter<OptionalFluidStack> FLUID_STACK = EntityDataManager.createKey(EntityCartTank.class, DataManagerPlugin.OPTIONAL_FLUID_STACK);
     private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_OUTPUT = 1;
@@ -80,7 +78,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(FLUID_STACK, Optional.empty());
+        dataManager.register(FLUID_STACK, OptionalFluidStack.empty());
         dataManager.register(FILLING, false);
     }
 
@@ -90,8 +88,18 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     private void setFluidStack(@Nullable FluidStack fluidStack) {
-        dataManager.set(FLUID_STACK, Optional.ofNullable(fluidStack));
-        dataManager.setDirty(FLUID_STACK);
+        dataManager.set(FLUID_STACK, OptionalFluidStack.of(Fluids.copy(fluidStack)));
+//        dataManager.setDirty(FLUID_STACK);
+//        Game.log(Level.INFO, "sync tank");
+    }
+
+    @Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        super.notifyDataManagerChange(key);
+        if (Game.isHost(worldObj))
+            return;
+        if (key == FLUID_STACK)
+            tank.setFluid(Fluids.copy(getFluidStack()));
     }
 
     public TankManager getTankManager() {
@@ -126,13 +134,9 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         }
 
         FluidStack fluidStack = tank.getFluid();
-        if (fluidStack != null) {
-            FluidStack syncedStack = getFluidStack();
-            if (!fluidStack.isFluidStackIdentical(syncedStack))
-                setFluidStack(fluidStack);
-        } else {
-            setFluidStack(null);
-        }
+        if (!Fluids.areIdentical(fluidStack, getFluidStack()))
+            setFluidStack(fluidStack);
+
 
         update++;
 

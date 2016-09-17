@@ -51,6 +51,11 @@ public enum Fluids {
         return fluidStack != null && fluidStack.amount > 0;
     }
 
+    @Nullable
+    public static FluidStack copy(@Nullable FluidStack fluidStack) {
+        return fluidStack == null ? null : fluidStack.copy();
+    }
+
     public String getTag() {
         return tag;
     }

@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.forge;
 
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import mods.railcraft.common.fluids.OptionalFluidStack;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -22,10 +23,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Created by CovertJaguar on 6/12/2016 for Railcraft.
@@ -65,15 +64,17 @@ public class DataManagerPlugin {
         }
     }
 
-    public static final DataSerializer<Optional<FluidStack>> OPTIONAL_FLUID_STACK = new DataSerializerIO<java.util.Optional<FluidStack>>() {
+    public static final DataSerializer<OptionalFluidStack> OPTIONAL_FLUID_STACK = new DataSerializerIO<OptionalFluidStack>() {
         @Override
-        public void write(RailcraftOutputStream outputStream, Optional<FluidStack> value) throws IOException {
+        public void write(RailcraftOutputStream outputStream, OptionalFluidStack value) throws IOException {
             outputStream.writeFluidStack(value.orElse(null));
+//            Game.log(Level.INFO, "fluid write");
         }
 
         @Override
-        public Optional<FluidStack> read(RailcraftInputStream inputStream) throws IOException {
-            return Optional.ofNullable(inputStream.readFluidStack());
+        public OptionalFluidStack read(RailcraftInputStream inputStream) throws IOException {
+//            Game.log(Level.INFO, "fluid read");
+            return OptionalFluidStack.of(inputStream.readFluidStack());
         }
     };
 
@@ -89,7 +90,7 @@ public class DataManagerPlugin {
         }
     };
 
-    static {
+    public static void register() {
         DataSerializers.registerSerializer(OPTIONAL_FLUID_STACK);
         DataSerializers.registerSerializer(ENUM_COLOR);
     }

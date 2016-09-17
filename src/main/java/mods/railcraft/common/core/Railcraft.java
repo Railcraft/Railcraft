@@ -20,6 +20,7 @@ import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
@@ -159,6 +160,7 @@ public final class Railcraft {
         RailcraftConfig.preInit();
 
         PacketHandler.init();
+        DataManagerPlugin.register();
 
         StartupChecks.checkForNewVersion();
 

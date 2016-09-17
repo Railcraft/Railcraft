@@ -1,13 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.models.resource.FluidModelRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
@@ -37,21 +39,18 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
         if (tank != null) {
             FluidStack fluidStack = tank.getFluid();
             if (fluidStack != null && fluidStack.amount > 0) {
-                int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
                 OpenGL.glPushMatrix();
 
                 OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
                 OpenGL.glEnable(GL11.GL_BLEND);
                 OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-                OpenGL.glTranslatef(0, 0.0625f, 0);
+                OpenGL.glTranslatef(-0.5F, -0.501F + 0.0625f, -0.5F);
 
                 float cap = tank.getCapacity();
-                float level = Math.min(fluidStack.amount, cap) / cap;
+                float level = Math.min(fluidStack.amount / cap, cap);
 
-                renderer.bindTex(FluidRenderer.getFluidSheet(fluidStack));
-                FluidRenderer.setColorForFluid(fluidStack);
-                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+                FluidModelRenderer.INSTANCE.renderFluid(fluidStack, Math.min(16, (int) Math.ceil(level * 16F)));
 
                 if (cart.isFilling()) {
                     ResourceLocation texSheet = FluidRenderer.setupFluidTexture(fluidStack, FluidRenderer.FlowState.FLOWING, fillBlock);
