@@ -28,10 +28,14 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -82,7 +86,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         IBlockState torch = Blocks.TORCH.getDefaultState();
         IBlockState blockBrick = Blocks.BRICK_BLOCK.getDefaultState();
         IBlockState glassPane = Blocks.GLASS_PANE.getDefaultState();
-        IBlockState stainedGlass = Blocks.STAINED_GLASS.getStateFromMeta(9);
+        IBlockState stainedGlass = Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.CYAN);
 
         IBlockState stoneBrick = Blocks.STONEBRICK.getDefaultState();
         IBlockState mossyStoneBrick = stoneBrick.withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
@@ -161,18 +165,21 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             }
         };
 
-        fillWithRandomizedBlocks(world, sbb, 6, 5, 0, 8, 5, 10, true, random, roofSelector);
+        fillWithRandomizedBlocks(world, sbb, 6, 5, 0, 8, 5, 10, false, random, roofSelector);
         setBlockState(world, stainedGlass, 7, 5, 2, sbb);
         setBlockState(world, stainedGlass, 7, 5, 5, sbb);
         setBlockState(world, stainedGlass, 7, 5, 8, sbb);
 
+        PropertyDirection facing = BlockTorch.FACING;
         // hall torches
 //        int meta = getMetadataWithOffset(torch, 4);
+        torch = torch.withProperty(facing, EnumFacing.WEST);
         setBlockState(world, torch, 9, 3, 1, sbb);
         setBlockState(world, torch, 9, 3, 5, sbb);
         setBlockState(world, torch, 9, 3, 9, sbb);
 
 //        meta = getMetadataWithOffset(torch, 3);
+        torch = torch.withProperty(facing, EnumFacing.EAST);
         setBlockState(world, torch, 5, 3, 1, sbb);
         setBlockState(world, torch, 5, 3, 5, sbb);
         setBlockState(world, torch, 5, 3, 9, sbb);
@@ -183,7 +190,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithBlocks(world, sbb, 1, 0, 5, 3, 3, 5, blockBrick, blockBrick, false);
 
         // hut roof
-        fillWithRandomizedBlocks(world, sbb, 1, 4, 2, 4, 4, 4, true, random, roofSelector);
+        fillWithRandomizedBlocks(world, sbb, 1, 4, 2, 4, 4, 4, false, random, roofSelector);
         fillWithBlocks(world, sbb, 0, 4, 1, 0, 4, 5, roofEast, roofEast, false);
         fillWithBlocks(world, sbb, 1, 4, 1, 3, 4, 1, roofNorth, roofNorth, false);
         fillWithBlocks(world, sbb, 1, 4, 5, 3, 4, 5, roofSouth, roofSouth, false);
@@ -201,8 +208,10 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // hut torches
 //        meta = getMetadataWithOffset(torch, 1);
+        torch = torch.withProperty(facing, EnumFacing.NORTH);
         setBlockState(world, torch, 2, 3, 2, sbb);
 //        meta = getMetadataWithOffset(torch, 2);
+        torch = torch.withProperty(facing, EnumFacing.SOUTH);
         setBlockState(world, torch, 2, 3, 4, sbb);
 
         // machines
