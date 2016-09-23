@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
+import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -33,6 +34,7 @@ public final class RailcraftBlockProperties {
     public static final IUnlistedProperty<Materials> SLAB_BOTTOM_MATERIAL = Properties.toUnlisted(PropertyEnum.create("bottom_material", Materials.class));
     public static final PropertyEnum<BrickVariant> BRICK_VARIANT = PropertyEnum.create("variant", BrickVariant.class);
     public static final PropertyEnum<EnumPost> POST_VARIANT = PropertyEnum.create("variant", EnumPost.class);
+    public static final PropertyEnum<EnumOre> ORE_VARIANT = PropertyEnum.create("variant", EnumOre.class);
     public static final PropertyEnum<EnumMachineAlpha> MACHINE_ALPHA_VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
     public static final PropertyEnum<EnumMachineBeta> MACHINE_BETA_VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
     public static final PropertyEnum<EnumGeneric> GENERIC_VARIANT = PropertyEnum.create("variant", EnumGeneric.class);
