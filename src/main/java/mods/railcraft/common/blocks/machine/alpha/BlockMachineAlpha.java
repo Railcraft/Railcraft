@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -42,7 +41,7 @@ public class BlockMachineAlpha extends BlockMachine<EnumMachineAlpha> {
 
     @Override
     public IVariantEnum[] getVariants() {
-        return ManipulatorVariant.VALUES;
+        return EnumMachineAlpha.VALUES;
     }
 
     @Override

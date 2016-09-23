@@ -17,7 +17,7 @@
       "false": {
       }
     },
-    "front": {
+    "facing": {
       "down": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "x": 90}}},
       "up": {"submodel": {"overlay": {"model": "railcraft:face_overlay", "x": 270}}},
       "north": {"submodel": {"overlay": {"model": "railcraft:face_overlay"}}},
