@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -186,7 +185,6 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     @Override
     public void setFacing(@Nonnull EnumFacing facing) {
         direction = facing;
-        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
     @Override

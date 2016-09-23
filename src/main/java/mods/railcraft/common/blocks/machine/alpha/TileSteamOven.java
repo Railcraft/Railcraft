@@ -22,7 +22,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -172,7 +171,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
             masterOven.facing = facing;
         }
         this.facing = facing;
-        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
     private boolean hasFinishedCycle() {

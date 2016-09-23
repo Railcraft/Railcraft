@@ -13,7 +13,6 @@ import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.alpha.BlockMachineAlpha;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -22,7 +21,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -336,7 +334,6 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     @Override
     public void setFacing(@Nonnull EnumFacing facing) {
         direction = facing;
-        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
     @Nullable

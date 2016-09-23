@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.alpha.BlockMachineAlpha;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -183,7 +182,6 @@ public abstract class TileChestRailcraft extends TileMachineItem implements ITil
     @Override
     public void setFacing(@Nonnull EnumFacing facing) {
         this.facing = facing;
-        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
 }
