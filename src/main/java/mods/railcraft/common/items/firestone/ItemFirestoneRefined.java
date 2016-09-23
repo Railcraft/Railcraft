@@ -147,6 +147,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (world.isRemote) {
+            return EnumActionResult.PASS;
+        }
         if (player.canPlayerEdit(pos, side, stack)) {
             Block block = WorldPlugin.getBlock(world, pos);
             if (block != Blocks.STONE) {

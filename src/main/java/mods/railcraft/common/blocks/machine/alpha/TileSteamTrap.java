@@ -17,6 +17,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -184,5 +185,16 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
         jet = data.readByte();
         direction = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();
+    }
+
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        direction = facing;
+        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 }

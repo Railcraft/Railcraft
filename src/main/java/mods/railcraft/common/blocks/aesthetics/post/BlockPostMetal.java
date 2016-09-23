@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -40,7 +41,7 @@ import java.util.List;
  */
 public class BlockPostMetal extends BlockPostBase {
 
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
+    public static final PropertyEnum<EnumColor> COLOR = RailcraftBlockProperties.COLOR;
     public static BlockPostMetal post;
     public static BlockPostMetal platform;
     public final boolean isPlatform;

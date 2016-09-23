@@ -35,6 +35,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -319,7 +320,14 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
             markBlockForUpdate();
     }
 
+    @Override
+    @Nonnull
     public EnumFacing getFacing() {
         return facing;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        this.facing = facing;
     }
 }

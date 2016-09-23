@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.materials.slab;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.items.RailcraftItems;
@@ -26,7 +27,6 @@ import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -48,7 +48,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,8 +63,8 @@ import static net.minecraft.util.EnumFacing.UP;
 
 public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMaterialBlock {
 
-    public static final IUnlistedProperty<Materials> TOP_MATERIAL = Properties.toUnlisted(PropertyEnum.create("top_material", Materials.class));
-    public static final IUnlistedProperty<Materials> BOTTOM_MATERIAL = Properties.toUnlisted(PropertyEnum.create("bottom_material", Materials.class));
+    public static final IUnlistedProperty<Materials> TOP_MATERIAL = RailcraftBlockProperties.SLAB_TOP_MATERIAL;
+    public static final IUnlistedProperty<Materials> BOTTOM_MATERIAL = RailcraftBlockProperties.SLAB_BOTTOM_MATERIAL;
     public static int currentRenderPass;
     static BlockRailcraftSlab block;
 

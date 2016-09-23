@@ -37,6 +37,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
+import mods.railcraft.common.blocks.machine.alpha.BlockMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -97,7 +98,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     FRAME("frame", BlockFrame::new, ItemBlockRailcraft::new),
     GLASS("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern::new, ItemMaterial::new),
-    MACHINE_ALPHA("machine_alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new, EnumMachineAlpha.class),
+    MACHINE_ALPHA("machine_alpha", BlockMachineAlpha::new, ItemMachine::new, EnumMachineAlpha.class),
     MACHINE_BETA("machine_beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
     MANIPULATOR("manipulator", BlockMachineManipulator::new, ItemMachine::new, ManipulatorVariant.class),
     MACHINE_EPSILON("machine_epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),

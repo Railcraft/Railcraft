@@ -13,6 +13,7 @@ import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.alpha.BlockMachineAlpha;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -21,6 +22,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -38,6 +40,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
@@ -65,6 +68,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
     private final Set<Object> actions = new HashSet<Object>();
+    private EnumFacing direction = EnumFacing.NORTH;
 
     public TileEngravingBench() {
         super(2);
@@ -321,5 +325,23 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();
+    }
+
+    @Nonnull
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        direction = facing;
+        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
+    }
+
+    @Nullable
+    @Override
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.HORIZONTALS;
     }
 }

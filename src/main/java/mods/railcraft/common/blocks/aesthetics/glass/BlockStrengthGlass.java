@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -55,8 +56,8 @@ import java.util.*;
  */
 public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, ColorPlugin.IColoredBlock {
 
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
-    public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
+    public static final PropertyEnum<EnumColor> COLOR = RailcraftBlockProperties.COLOR;
+    public static final PropertyEnum<Position> POSITION = RailcraftBlockProperties.GLASS_POSITION;
 
     public BlockStrengthGlass() {
         super(Material.GLASS, false);

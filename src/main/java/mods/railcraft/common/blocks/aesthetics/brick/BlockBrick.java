@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -36,7 +37,7 @@ import java.util.List;
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
 public class BlockBrick extends BlockRailcraft {
-    public static final PropertyEnum<BrickVariant> VARIANT = PropertyEnum.create("variant", BrickVariant.class);
+    public static final PropertyEnum<BrickVariant> VARIANT = RailcraftBlockProperties.BRICK_VARIANT;
     private final BrickTheme theme;
 
     public BlockBrick(BrickTheme theme) {

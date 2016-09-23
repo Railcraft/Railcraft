@@ -22,6 +22,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -47,6 +48,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
@@ -154,11 +156,23 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return -1;
     }
 
+    @Override
+    @Nonnull
     public EnumFacing getFacing() {
         TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
         return facing;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
+        if (masterOven != null) {
+            masterOven.facing = facing;
+        }
+        this.facing = facing;
+        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
     private boolean hasFinishedCycle() {

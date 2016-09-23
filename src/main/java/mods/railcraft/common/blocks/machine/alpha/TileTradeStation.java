@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -38,6 +39,7 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
@@ -74,9 +76,8 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     @Override
     public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-//        state = state.withProperty(FACING, direction);
-        return state;
+        return super.getActualState(state)
+                .withProperty(BlockMachineAlpha.FRONT, direction);
     }
 
     public IInventory getRecipeSlots() {
@@ -174,6 +175,18 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         direction = placer == null ? EnumFacing.NORTH : MiscTools.getSideFacingPlayer(getPos(), placer);
+    }
+
+    @Nonnull
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        direction = facing;
+        WorldPlugin.setBlockState(worldObj, getPos(), getBlockState().withProperty(BlockMachineAlpha.FRONT, facing));
     }
 
     @Override

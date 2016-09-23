@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.interfaces;
 
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -20,12 +21,10 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITileRotate extends ITile {
-    default EnumFacing getFacing() {
-        return null;
-    }
+    @Nonnull
+    EnumFacing getFacing();
 
-    default void setFacing(EnumFacing facing) {
-    }
+    void setFacing(@Nonnull EnumFacing facing);
 
     default boolean canRotate() {
         EnumFacing[] rotations = getValidRotations();

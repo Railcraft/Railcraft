@@ -12,13 +12,13 @@ package mods.railcraft.common.blocks.aesthetics.materials;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.block.*;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -121,7 +121,7 @@ public enum Materials implements IVariantEnum {
 
     NO_MAT("no_mat", () -> null);
     public static final String MATERIAL_KEY = "mat";
-    public static final IUnlistedProperty<Materials> MATERIAL_PROPERTY = net.minecraftforge.common.property.Properties.toUnlisted(PropertyEnum.create("material", Materials.class));
+    public static final IUnlistedProperty<Materials> MATERIAL_PROPERTY = RailcraftBlockProperties.MATERIAL_PROPERTY;
     public static final Map<String, Materials> NAMES = new HashMap<String, Materials>();
     //    public static final BlockMaterial[] OLD_WALL1_MATS;
 //    public static final BlockMaterial[] OLD_WALL2_MATS;

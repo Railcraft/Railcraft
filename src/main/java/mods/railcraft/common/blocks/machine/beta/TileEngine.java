@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -399,5 +400,16 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             return VALUES[ordinal];
         }
 
+    }
+
+    @Nonnull
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        direction = facing;
     }
 }
