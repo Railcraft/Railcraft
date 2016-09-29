@@ -10,11 +10,16 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +113,16 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     protected int removeOldTrack(int x, int y, int z, Block block) {
-        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, 0, 0);
+        int meta = WorldPlugin.getBlockMetadata(worldObj, x, y, z);
+        if (!worldObj.isRemote && !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(x, y, z, worldObj, block,
+                meta, PlayerPlugin.getFakePlayer((WorldServer) worldObj, x, y, z, this)))) {
+            return 0;
+        }
+        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, meta, 0);
 
         for (ItemStack stack : drops) {
             CartTools.offerOrDropItem(this, stack);
         }
-        int meta = worldObj.getBlockMetadata(x, y, z);
         if (((BlockRailBase) block).isPowered())
             meta = meta & 7;
         worldObj.setBlockToAir(x, y, z);

@@ -8,16 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
@@ -25,12 +15,28 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EntityCartUndercutter extends CartMaintenancePatternBase {
 
@@ -174,6 +180,19 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
             int newMeta = 0;
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
+            if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(x, y, z, worldObj, blockToReplace,
+                    oldMeta, PlayerPlugin.getFakePlayer((WorldServer) worldObj, x, y, z, this)))) {
+                return;
+            }
+            Block placedAgainst = WorldPlugin.getBlock(worldObj, x, y - 1, z);
+            BlockEvent.PlaceEvent placeEvent = new BlockEvent.PlaceEvent(
+                    new BlockSnapshot(worldObj, x, y, z, stockBlock, 0), placedAgainst,
+                    PlayerPlugin.getFakePlayer((WorldServer) worldObj, x, y, z, this)
+            );
+            MinecraftForge.EVENT_BUS.post(placeEvent);
+            if (placeEvent.isCanceled()) {
+                return;
+            }
             if (worldObj.setBlock(x, y, z, stockBlock, newMeta, 3)) {
                 SoundHelper.playBlockSound(worldObj, x, y, z, stockBlock.stepSound.func_150496_b(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
                 decrStackSize(slotStock, 1);
