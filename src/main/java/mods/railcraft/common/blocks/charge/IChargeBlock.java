@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import com.google.common.collect.ForwardingMap;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,7 +54,7 @@ public interface IChargeBlock {
                 int x = pos.getX();
                 int y = pos.getY();
                 int z = pos.getZ();
-                Map<BlockPos, EnumSet<ConnectType>> positions = new HashMap<BlockPos, EnumSet<ConnectType>>();
+                Map<BlockPos, EnumSet<ConnectType>> positions = new ConnectionMap();
 
                 EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
                 EnumSet<ConnectType> notWire = EnumSet.complementOf(EnumSet.of(ConnectType.WIRE));
@@ -88,7 +89,7 @@ public interface IChargeBlock {
                 int x = pos.getX();
                 int y = pos.getY();
                 int z = pos.getZ();
-                Map<BlockPos, EnumSet<ConnectType>> positions = new HashMap<BlockPos, EnumSet<ConnectType>>();
+                Map<BlockPos, EnumSet<ConnectType>> positions = new ConnectionMap();
 
                 EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
                 EnumSet<ConnectType> notTrack = EnumSet.complementOf(EnumSet.of(ConnectType.TRACK));
@@ -106,7 +107,7 @@ public interface IChargeBlock {
         BLOCK {
             @Override
             public Map<BlockPos, EnumSet<ConnectType>> getPossibleConnectionLocations(BlockPos pos) {
-                Map<BlockPos, EnumSet<ConnectType>> positions = new HashMap<BlockPos, EnumSet<ConnectType>>();
+                Map<BlockPos, EnumSet<ConnectType>> positions = new ConnectionMap();
 
                 EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
 
@@ -121,6 +122,27 @@ public interface IChargeBlock {
         @Nonnull
         public abstract Map<BlockPos, EnumSet<ConnectType>> getPossibleConnectionLocations(BlockPos pos);
 
+    }
+
+    class ConnectionMap extends ForwardingMap<BlockPos, EnumSet<ConnectType>> {
+
+        private final Map<BlockPos, EnumSet<ConnectType>> delegate;
+
+        ConnectionMap() {
+            delegate = new HashMap<>();
+        }
+
+        @Override
+        protected Map<BlockPos, EnumSet<ConnectType>> delegate() {
+            return delegate;
+        }
+
+        @Override
+        @Nonnull
+        public EnumSet<ConnectType> get(@Nullable Object key) {
+            EnumSet<ConnectType> ret = super.get(key);
+            return ret == null ? EnumSet.noneOf(ConnectType.class) : ret;
+        }
     }
 
     final class ChargeDef {
