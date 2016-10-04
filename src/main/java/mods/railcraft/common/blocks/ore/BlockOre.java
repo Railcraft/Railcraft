@@ -19,6 +19,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -33,6 +34,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -249,5 +251,16 @@ public class BlockOre extends RailcraftBlockSubtyped {
     @Override
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
+    }
+
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        super.randomDisplayTick(stateIn, worldIn, pos, rand);
+        if (getVariant(stateIn) == EnumOre.FIRESTONE) {
+            BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
+            Vec3d startPosition = new Vec3d(start).addVector(0.5, 0.5, 0.5);
+            Vec3d endPosition = new Vec3d(pos).addVector(0.5, 0.8, 0.5);
+            EffectManager.instance.fireSparkEffect(worldIn, startPosition, endPosition);
+        }
     }
 }
