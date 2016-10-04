@@ -19,10 +19,8 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
@@ -81,16 +79,8 @@ public class TileDispenserCart extends TileManipulator {
                                 }
                             }
                         } else {
-                            float rx = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
-                            float ry = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
-                            float rz = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
-                            EntityItem item = new EntityItem(worldObj, pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz, cartStack);
-                            float factor = 0.05F;
-                            item.motionX = (float) MiscTools.RANDOM.nextGaussian() * factor;
-                            item.motionY = (float) MiscTools.RANDOM.nextGaussian() * factor + 0.2F;
-                            item.motionZ = (float) MiscTools.RANDOM.nextGaussian() * factor;
-                            if (worldObj.spawnEntityInWorld(item))
-                                setInventorySlotContents(ii, null);
+                            InvTools.spewItem(cartStack, worldObj, pos.getX(), pos.getY(), pos.getZ());
+                            setInventorySlotContents(ii, null);
                         }
                     }
                 }

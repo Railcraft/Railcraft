@@ -295,7 +295,11 @@ public abstract class InvTools {
         }
     }
 
-    private static void spewItem(@Nullable ItemStack stack, World world, BlockPos pos) {
+    public static void spewItem(@Nullable ItemStack stack, World world, BlockPos pos) {
+        spewItem(stack, world, pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public static void spewItem(@Nullable ItemStack stack, World world, double x, double y, double z) {
         if (stack != null) {
             float xOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
             float yOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
@@ -307,7 +311,7 @@ public abstract class InvTools {
                 ItemStack newStack = stack.copy();
                 newStack.stackSize = numToDrop;
                 stack.stackSize -= numToDrop;
-                EntityItem entityItem = new EntityItem(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, newStack);
+                EntityItem entityItem = new EntityItem(world, x + xOffset, y + yOffset, z + zOffset, newStack);
                 float variance = 0.05F;
                 entityItem.motionX = (float) MiscTools.RANDOM.nextGaussian() * variance;
                 entityItem.motionY = (float) MiscTools.RANDOM.nextGaussian() * variance + 0.2F;

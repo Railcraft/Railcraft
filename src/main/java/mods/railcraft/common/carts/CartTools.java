@@ -82,8 +82,8 @@ public class CartTools {
                 if (cartStack.hasDisplayName())
                     cart.setCustomNameTag(cartStack.getDisplayName());
                 CartToolsAPI.setCartOwner(cart, owner);
-                if (world.spawnEntityInWorld(cart))
-                    return cart;
+                world.spawnEntityInWorld(cart);
+                return cart;
             }
         return null;
     }
