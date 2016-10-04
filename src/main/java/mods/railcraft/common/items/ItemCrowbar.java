@@ -20,16 +20,19 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.*;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Arrays;
@@ -147,7 +150,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
                 if (!player.isSneaking()) {
                     int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction.effectId, stack) * 2 + 1;
                     if (level > 0)
-                        checkBlocks(world, level, x, y, z);
+                        checkBlocks(world, level, x, y, z, entity, stack);
                 }
             }
         return super.onBlockDestroyed(stack, world, block, x, y, z, entity);
@@ -223,46 +226,47 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tip"));
     }
 
-    private void removeAndDrop(World world, int x, int y, int z, Block block) {
-        int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
-        List<ItemStack> drops = block.getDrops(world, x, y, z, meta, 0);
-        InvTools.dropItems(drops, world, x, y, z);
-        world.setBlockToAir(x, y, z);
-    }
-
-    private void removeExtraBlocks(World world, int level, int x, int y, int z, Block block) {
-        if (level > 0) {
-            removeAndDrop(world, x, y, z, block);
-            checkBlocks(world, level, x, y, z);
+    private void removeAndDrop(World world, int x, int y, int z, Block block, EntityLivingBase entity, ItemStack stack, int meta) {
+        if (!ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP) entity).theItemInWorldManager.getGameType(), (EntityPlayerMP) entity, x, y, z).isCanceled()) {
+            InvTools.dropItems(block.getDrops(world, x, y, z, meta, EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, stack)), world, x, y, z);
+            world.setBlockToAir(x, y, z);
         }
     }
 
-    private void checkBlock(World world, int level, int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
-        if (TrackTools.isRailBlock(block) || block instanceof BlockTrackElevator || block.isToolEffective("crowbar", WorldPlugin.getBlockMetadata(world, x, y, z)))
-            removeExtraBlocks(world, level - 1, x, y, z, block);
+    private void removeExtraBlocks(World world, int level, int x, int y, int z, Block block, EntityLivingBase entity, ItemStack stack, int meta) {
+        if (level > 0) {
+            removeAndDrop(world, x, y, z, block, entity, stack, meta);
+            checkBlocks(world, level, x, y, z, entity, stack);
+        }
     }
 
-    private void checkBlocks(World world, int level, int x, int y, int z) {
+    private void checkBlock(World world, int level, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+        Block block = WorldPlugin.getBlock(world, x, y, z);
+        int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
+        if (TrackTools.isRailBlock(block) || block instanceof BlockTrackElevator || block.isToolEffective("crowbar", meta))
+            removeExtraBlocks(world, level - 1, x, y, z, block, entity, stack, meta);
+    }
+
+    private void checkBlocks(World world, int level, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         //NORTH
-        checkBlock(world, level, x, y, z - 1);
-        checkBlock(world, level, x, y + 1, z - 1);
-        checkBlock(world, level, x, y - 1, z - 1);
+        checkBlock(world, level, x, y, z - 1, entity, stack);
+        checkBlock(world, level, x, y + 1, z - 1, entity, stack);
+        checkBlock(world, level, x, y - 1, z - 1, entity, stack);
         //SOUTH
-        checkBlock(world, level, x, y, z + 1);
-        checkBlock(world, level, x, y + 1, z + 1);
-        checkBlock(world, level, x, y - 1, z + 1);
+        checkBlock(world, level, x, y, z + 1, entity, stack);
+        checkBlock(world, level, x, y + 1, z + 1, entity, stack);
+        checkBlock(world, level, x, y - 1, z + 1, entity, stack);
         //EAST
-        checkBlock(world, level, x + 1, y, z);
-        checkBlock(world, level, x + 1, y + 1, z);
-        checkBlock(world, level, x + 1, y - 1, z);
+        checkBlock(world, level, x + 1, y, z, entity, stack);
+        checkBlock(world, level, x + 1, y + 1, z, entity, stack);
+        checkBlock(world, level, x + 1, y - 1, z, entity, stack);
         //WEST
-        checkBlock(world, level, x - 1, y, z);
-        checkBlock(world, level, x - 1, y + 1, z);
-        checkBlock(world, level, x - 1, y - 1, z);
+        checkBlock(world, level, x - 1, y, z, entity, stack);
+        checkBlock(world, level, x - 1, y + 1, z, entity, stack);
+        checkBlock(world, level, x - 1, y - 1, z, entity, stack);
         //UP_DOWN
-        checkBlock(world, level, x, y + 1, z);
-        checkBlock(world, level, x, y - 1, z);
+        checkBlock(world, level, x, y + 1, z, entity, stack);
+        checkBlock(world, level, x, y - 1, z, entity, stack);
     }
 
 }
