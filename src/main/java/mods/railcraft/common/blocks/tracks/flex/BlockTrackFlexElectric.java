@@ -14,8 +14,8 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -53,11 +53,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        int chance = 200;
-        if (worldIn.isRainingAt(pos))
-            chance = 75;
-        if (rand.nextInt(chance) == 50)
-            EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
+        TrackTools.throwSparks(stateIn, worldIn, pos, rand);
     }
 
     @Override

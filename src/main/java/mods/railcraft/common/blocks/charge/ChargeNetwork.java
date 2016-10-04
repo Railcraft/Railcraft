@@ -103,8 +103,10 @@ public class ChargeNetwork {
 
     private void deleteNode(BlockPos pos) {
         ChargeNode chargeNode = chargeNodes.remove(pos);
-        chargeNode.invalid = true;
-        chargeNode.chargeGraph.destroy(true);
+        if (chargeNode != null) {
+            chargeNode.invalid = true;
+            chargeNode.chargeGraph.destroy(true);
+        }
         batterySaveData.removeBattery(pos);
     }
 

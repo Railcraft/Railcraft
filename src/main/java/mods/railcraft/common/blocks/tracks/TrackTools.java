@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -36,6 +37,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -233,5 +235,13 @@ public class TrackTools {
 //        //noinspection ConstantConditions
 //        return Optional.ofNullable(tile);
 //    }
+
+    public static void throwSparks(IBlockState state, World world, BlockPos pos, Random rand) {
+        int chance = 200;
+        if (world.isRainingAt(pos))
+            chance = 75;
+        if (rand.nextInt(chance) == 50)
+            EffectManager.instance.sparkEffectSurface(state, world, pos);
+    }
 
 }

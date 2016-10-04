@@ -14,6 +14,8 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -71,7 +73,8 @@ import java.util.Random;
 
 //TODO: Add charge interface
 //FIXME: abandoned track breaks when track kit placed on it
-public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection {
+public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock {
+    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -82,6 +85,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         setCreativeTab(CreativePlugin.TRACK_TAB);
         setHarvestLevel("crowbar", 0);
         setDefaultState(getDefaultState().withProperty(TICKING, false));
+        setTickRandomly(true);
 
         GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
         GameRegistry.registerTileEntity(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
@@ -393,6 +397,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 //            return super.clearBlock(state, world, pos, player);
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
+        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
         return WorldPlugin.setBlockState(world, pos, newState);
     }
 
@@ -443,6 +448,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
+        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
     }
 
     @Override
@@ -498,5 +504,34 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, IPostConnection.class, ITrackKitInstance.class);
         }
         return ConnectStyle.NONE;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (getTrackType(worldIn, pos).isElectric())
+            TrackTools.throwSparks(stateIn, worldIn, pos, rand);
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        if (getTrackType(worldIn, pos).isElectric())
+            registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        if (getTrackType(worldIn, pos).isElectric())
+            registerNode(state, worldIn, pos);
+    }
+
+    @Nullable
+    @Override
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (getTrackType(world, pos).isElectric())
+            return CHARGE_DEF;
+        return null;
     }
 }
