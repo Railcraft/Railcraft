@@ -1080,13 +1080,16 @@ public abstract class InvTools {
     }
 
     @Nullable
-    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack, WorldServer world, BlockPos pos) {
+    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack, World world, BlockPos pos) {
         if (stack == null)
             return null;
         Item item = stack.getItem();
         if (item instanceof ItemBlock) {
             int meta = item.getMetadata(stack.getMetadata());
-            return ((ItemBlock) item).getBlock().onBlockPlaced(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get(world, pos.up()));
+            if (world instanceof WorldServer)
+                return ((ItemBlock) item).getBlock().onBlockPlaced(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()));
+            else
+                return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
         }
         return null;
     }

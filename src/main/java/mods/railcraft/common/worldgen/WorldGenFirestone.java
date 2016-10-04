@@ -50,9 +50,7 @@ public class WorldGenFirestone extends WorldGenerator {
         }
         BlockPos pos = new BlockPos(x, yy, z);
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
-        if (blockState.getBlock().isReplaceableOreGen(blockState, world, pos, GenTools.NETHERRACK::test))
-            return world.setBlockState(pos, firestone, 2);
-        return false;
+        return blockState.getBlock().isReplaceableOreGen(blockState, world, pos, GenTools.NETHERRACK::test) && world.setBlockState(pos, firestone, 2);
     }
 
 }

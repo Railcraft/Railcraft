@@ -25,6 +25,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -39,7 +40,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -143,8 +143,6 @@ public class ItemFirestoneRefined extends ItemFirestone {
             info.addAll(tip.convertToStrings());
     }
 
-    //TODO: test (and check sound)
-
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.canPlayerEdit(pos, side, stack)) {
@@ -154,7 +152,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
                     if (cooked != null && cooked.getItem() instanceof ItemBlock) {
-                        IBlockState newState = InvTools.getBlockStateFromStack(cooked, (WorldServer) world, pos);
+                        IBlockState newState = InvTools.getBlockStateFromStack(cooked, world, pos);
                         if (newState != null) {
                             WorldPlugin.setBlockState(world, pos, newState);
                             SoundHelper.playSound(world, null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
@@ -175,6 +173,20 @@ public class ItemFirestoneRefined extends ItemFirestone {
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+        if (!target.isImmuneToFire()) {
+            target.setFire(5);
+            stack.damageItem(1, playerIn);
+            SoundHelper.playSound(playerIn.worldObj, null, target.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+            playerIn.swingArm(hand);
+            BlockPos pos = new BlockPos(target);
+            playerIn.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
+            return true;
+        }
+        return false;
     }
 
     /**

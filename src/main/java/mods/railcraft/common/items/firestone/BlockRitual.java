@@ -48,7 +48,7 @@ import java.util.Random;
  */
 public class BlockRitual extends BlockContainerRailcraft {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
-    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseFloor(0.4).raiseCeiling(-0.1).build();
+    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -8.0).shiftY(0.0625F * 8.0).build();
 
     public BlockRitual() {
         super(Material.ROCK);
@@ -68,7 +68,7 @@ public class BlockRitual extends BlockContainerRailcraft {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUNDING_BOX;
+        return AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -9.0).shiftY(0.0625F * 12.0).build();
     }
 
     /**
@@ -125,7 +125,7 @@ public class BlockRitual extends BlockContainerRailcraft {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileRitual) {
             TileRitual firestone = (TileRitual) tile;
-            Item item = state.getValue(CRACKED) ? RailcraftItems.FIRESTONE_REFINED.item() : RailcraftItems.FIRESTONE_CRACKED.item();
+            Item item = state.getValue(CRACKED) ? RailcraftItems.FIRESTONE_CRACKED.item() : RailcraftItems.FIRESTONE_REFINED.item();
             if (item != null) {
                 ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.CHARGES - firestone.charge);
                 if (firestone.hasCustomName())

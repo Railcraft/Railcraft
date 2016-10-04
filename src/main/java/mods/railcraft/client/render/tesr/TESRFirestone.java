@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.OpenGL;
@@ -55,14 +55,7 @@ public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
         entityitem.getEntityItem().stackSize = 1;
         entityitem.hoverStart = 0.0F;
 
-//        RenderItem.renderInFrame = true;
         Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
-        if (!Minecraft.getMinecraft().getRenderManager().options.fancyGraphics) {
-            OpenGL.glRotatef(180, 0, 1, 0);
-            Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
-            OpenGL.glRotatef(-180, 0, 1, 0);
-        }
-//        RenderItem.renderInFrame = false;
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
