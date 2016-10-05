@@ -9,22 +9,27 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChargeFeederIC2 extends RailcraftTickingTileEntity implements ISinkDelegate {
+public class TileChargeFeederIC2 extends TileChargeFeeder implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
     public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery();
+
+    @Override
+    public IChargeBlock.ChargeBattery getChargeBattery() {
+        return chargeBattery;
+    }
 
     @Override
     public void update() {
@@ -58,8 +63,12 @@ public class TileChargeFeederIC2 extends RailcraftTickingTileEntity implements I
 
     @Override
     public double getDemandedEnergy() {
-        double chargeDifference = chargeBattery.getCapacity() - chargeBattery.getCharge();
-        return chargeDifference > 0.0 ? chargeDifference : 0.0;
+        IBlockState state = getBlockState();
+        if (state.getValue(BlockChargeFeeder.REDSTONE)) {
+            double chargeDifference = chargeBattery.getCapacity() - chargeBattery.getCharge();
+            return chargeDifference > 0.0 ? chargeDifference : 0.0;
+        }
+        return 0.0;
     }
 
     @Override

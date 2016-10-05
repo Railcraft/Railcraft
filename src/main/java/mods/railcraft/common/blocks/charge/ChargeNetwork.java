@@ -262,6 +262,11 @@ public class ChargeNetwork {
             return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCapacity).sum();
         }
 
+        public int getComparatorOutput() {
+            double level = getCharge() / getCapacity();
+            return Math.round((float) (15.0 * level));
+        }
+
         public double getMaintenanceCost() {
             return totalMaintenanceCost;
         }

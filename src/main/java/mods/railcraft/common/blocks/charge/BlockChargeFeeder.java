@@ -50,22 +50,15 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
 
     public static final PropertyEnum<FeederVariant> VARIANT = PropertyEnum.create("variant", FeederVariant.class);
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static final ChargeBattery infiniteBattery = new ChargeBattery() {
-        @Override
-        public boolean isInfinite() {
-            return true;
-        }
 
-        @Override
-        public double getCharge() {
-            return getCapacity();
+    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
+        TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
+        if (tileEntity instanceof TileChargeFeeder) {
+            return ((TileChargeFeeder) tileEntity).getChargeBattery();
         }
-
-        @Override
-        public double removeCharge(double request) {
-            return request;
-        }
-    };
+        //noinspection ConstantConditions
+        return null;
+    });
 
     public BlockChargeFeeder() {
         super(Material.IRON, FeederVariant.class);
@@ -76,6 +69,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
 
+        RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");
         RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
     }
 
@@ -100,8 +94,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     @Nullable
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        FeederVariant variant = state.getValue(VARIANT);
-        return variant.chargeDef;
+        return CHARGE_DEF;
     }
 
     @Override
@@ -143,7 +136,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return state.getValue(VARIANT) == FeederVariant.IC2;
+        return true;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -151,6 +144,8 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     public TileEntity createTileEntity(World world, IBlockState state) {
         if (state.getValue(VARIANT) == FeederVariant.IC2)
             return new TileChargeFeederIC2();
+        else if (state.getValue(VARIANT) == FeederVariant.ADMIN)
+            return new TileChargeFeederAdmin();
         return null;
     }
 
@@ -165,6 +160,9 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
         IBlockState newState = detectRedstoneState(state, worldIn, pos);
         if (state != newState)
             WorldPlugin.setBlockState(worldIn, pos, newState);
+        TileEntity tileEntity = WorldPlugin.getBlockTile(worldIn, pos);
+        if (tileEntity instanceof TileChargeFeeder)
+            ((TileChargeFeeder) tileEntity).neighborChanged(newState, worldIn, pos, blockIn);
     }
 
     @Override
@@ -203,24 +201,25 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
         ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
     }
 
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+    }
+
     public enum FeederVariant implements IVariantEnumBlock {
 
-        IC2(new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
-            TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
-            if (tileEntity instanceof TileChargeFeederIC2) {
-                return ((TileChargeFeederIC2) tileEntity).chargeBattery;
-            }
-            //noinspection ConstantConditions
-            return null;
-        })),
-        ADMIN(new ChargeDef(ConnectType.BLOCK, (world, pos) -> infiniteBattery));
+        IC2,
+        ADMIN;
         public static final FeederVariant[] VALUES = values();
         private final String name;
-        private final ChargeDef chargeDef;
 
-        FeederVariant(ChargeDef chargeDef) {
+        FeederVariant() {
             name = name().toLowerCase(Locale.ROOT);
-            this.chargeDef = chargeDef;
         }
 
         @Override
