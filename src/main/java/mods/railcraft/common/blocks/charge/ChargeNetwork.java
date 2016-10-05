@@ -424,6 +424,12 @@ public class ChargeNetwork {
             return recording;
         }
 
+        /**
+         * Remove the requested amount of charge if possible and
+         * return whether sufficient charge was available to perform the operation.
+         *
+         * @return true if charge could be removed in full
+         */
         public boolean useCharge(double amount) {
             boolean removed = chargeGraph.useCharge(amount);
             if (removed) {
@@ -434,6 +440,9 @@ public class ChargeNetwork {
             return removed;
         }
 
+        /**
+         * @return amount removed, may be less than desiredAmount
+         */
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
             listeners.forEach(c -> c.accept(this, removed));

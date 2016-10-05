@@ -29,13 +29,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackKitLimiter extends TrackKitPowered {
-    //    public static final PropertyEnum<LocoSpeed> MODE = PropertyEnum.create("mode", LocoSpeed.class);
+public class TrackKitThrottle extends TrackKitPowered {
     private LocoSpeed speed = LocoSpeed.MAX;
 
     @Override
     public TrackKits getTrackKitContainer() {
-        return TrackKits.LIMITER;
+        return TrackKits.THROTTLE;
     }
 
     @Override

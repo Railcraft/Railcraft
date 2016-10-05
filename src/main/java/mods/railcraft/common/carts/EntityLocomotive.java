@@ -28,6 +28,7 @@ import mods.railcraft.common.items.ItemWhistleTuner;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -76,6 +77,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
     private static final DataParameter<Byte> LOCOMOTIVE_SPEED = DataManagerPlugin.create(DataSerializers.BYTE);
+    private static final DataParameter<Boolean> REVERSE = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<EnumColor> PRIMARY_COLOR = DataManagerPlugin.create(DataManagerPlugin.ENUM_COLOR);
     private static final DataParameter<EnumColor> SECONDARY_COLOR = DataManagerPlugin.create(DataManagerPlugin.ENUM_COLOR);
     private static final DataParameter<String> EMBLEM = DataManagerPlugin.create(DataSerializers.STRING);
@@ -101,12 +103,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private float whistlePitch = getNewWhistlePitch();
 
     private EnumSet<LocoMode> allowedModes = EnumSet.allOf(LocoMode.class);
-    private EnumSet<LocoSpeed> allowedSpeeds = EnumSet.allOf(LocoSpeed.class);
+    private LocoSpeed maxReverseSpeed = LocoSpeed.NORMAL;
 
     protected EntityLocomotive(World world) {
         super(world);
-        setPrimaryColor(EnumColor.SILVER.getDye());
-        setSecondaryColor(EnumColor.GRAY.getDye());
     }
 
     protected EntityLocomotive(World world, double x, double y, double z) {
@@ -122,6 +122,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         dataManager.register(SECONDARY_COLOR, EnumColor.WHITE);
         dataManager.register(LOCOMOTIVE_MODE, (byte) LocoMode.SHUTDOWN.ordinal());
         dataManager.register(LOCOMOTIVE_SPEED, (byte) LocoSpeed.NORMAL.ordinal());
+        dataManager.register(REVERSE, false);
         dataManager.register(EMBLEM, "");
         dataManager.register(DEST, "");
     }
@@ -279,32 +280,27 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     public void setSpeed(LocoSpeed speed) {
-        while (!getAllowedSpeeds().contains(speed)) {
-            if (speed.shiftDown == 0)
-                return;
-            speed = speed.shiftDown();
-        }
         if (getSpeed() != speed)
             DataManagerPlugin.writeEnum(dataManager, LOCOMOTIVE_SPEED, speed);
     }
 
-    public EnumSet<LocoSpeed> getAllowedSpeeds() {
-        return allowedSpeeds;
+    public LocoSpeed getMaxReverseSpeed() {
+        return maxReverseSpeed;
     }
 
-    protected final void setAllowedSpeeds(EnumSet<LocoSpeed> allowedSpeeds) {
-        this.allowedSpeeds = allowedSpeeds;
+    protected final void setMaxReverseSpeed(LocoSpeed speed) {
+        this.maxReverseSpeed = maxReverseSpeed;
     }
 
     public void increaseSpeed() {
         LocoSpeed speed = getSpeed();
-        speed.shiftUp();
+        speed = speed.shiftUp();
         setSpeed(speed);
     }
 
     public void decreaseSpeed() {
         LocoSpeed speed = getSpeed();
-        speed.shiftDown();
+        speed = speed.shiftDown();
         setSpeed(speed);
     }
 
@@ -314,6 +310,14 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public void setHasFuel(boolean powered) {
         dataManager.set(HAS_FUEL, powered);
+    }
+
+    public boolean isReverse() {
+        return dataManager.get(REVERSE);
+    }
+
+    public void setReverse(boolean reverse) {
+        dataManager.set(REVERSE, reverse);
     }
 
     public boolean isRunning() {
@@ -426,15 +430,16 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         motionY *= 0.0D;
         motionZ *= getDrag();
 
+        if (isReverse() && getSpeed().getLevel() > getMaxReverseSpeed().getLevel()) {
+            setSpeed(getMaxReverseSpeed());
+        }
+
         LocoSpeed speed = getSpeed();
         if (isRunning()) {
             float force = RailcraftConfig.locomotiveHorsepower() * 0.006F;
+            if (isReverse())
+                force = -force;
             switch (speed) {
-                case REVERSE_SLOWEST:
-                case REVERSE_SLOWER:
-                case REVERSE_MAX:
-                    force = -force;
-                    break;
                 case MAX:
                     boolean highSpeed = CartTools.isTravellingHighSpeed(this);
                     if (highSpeed)
@@ -450,15 +455,12 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             float limit = 0.4f;
             switch (speed) {
                 case SLOWEST:
-                case REVERSE_SLOWEST:
                     limit = 0.1f;
                     break;
                 case SLOWER:
-                case REVERSE_SLOWER:
                     limit = 0.2f;
                     break;
                 case NORMAL:
-                case REVERSE_MAX:
                     limit = 0.3f;
                     break;
             }
@@ -472,13 +474,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             LocoSpeed speed = getSpeed();
             switch (speed) {
                 case SLOWEST:
-                case REVERSE_SLOWEST:
                     return 2;
                 case SLOWER:
-                case REVERSE_SLOWER:
                     return 4;
                 case NORMAL:
-                case REVERSE_MAX:
                     return 6;
                 default:
                     return 8;
@@ -623,11 +622,11 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         setDestString(data.getString("dest"));
 
-        setMode(LocoMode.values()[data.getByte("locoMode")]);
-        setSpeed(LocoSpeed.values()[data.getByte("locoSpeed")]);
+        setMode(LocoMode.VALUES[data.getByte("locoMode")]);
+        setSpeed(NBTPlugin.readEnumOrdinal(data, "locoSpeed", LocoSpeed.VALUES, LocoSpeed.NORMAL));
 
         setPrimaryColor(EnumColor.readFromNBT(data, "primaryColor").getDye());
-        setPrimaryColor(EnumColor.readFromNBT(data, "secondaryColor").getDye());
+        setSecondaryColor(EnumColor.readFromNBT(data, "secondaryColor").getDye());
 
         whistlePitch = data.getFloat("whistlePitch");
 
@@ -641,6 +640,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         data.writeByte(clientMode.ordinal());
         data.writeByte(clientSpeed.ordinal());
         data.writeByte(lockController.getCurrentState());
+        data.writeBoolean(isReverse());
     }
 
     @Override
@@ -650,6 +650,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         byte lock = data.readByte();
         if (PlayerPlugin.isOwnerOrOp(getOwner(), sender.getGameProfile()))
             lockController.setCurrentState(lock);
+        setReverse(data.readBoolean());
     }
 
     @Override
@@ -763,7 +764,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public enum LocoMode implements IStringSerializable {
 
-        RUNNING, IDLE, SHUTDOWN;
+        SHUTDOWN, IDLE, RUNNING;
         public static final LocoMode[] VALUES = values();
 
         @Override
@@ -774,13 +775,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public enum LocoSpeed implements IStringSerializable {
 
-        MAX(4, 0, 1),
-        NORMAL(3, -1, 1),
-        SLOWER(2, -1, 1),
-        SLOWEST(1, -1, 0),
-        REVERSE_SLOWEST(-1, 1, 0),
-        REVERSE_SLOWER(-2, 1, -1),
-        REVERSE_MAX(-3, 0, -1);
+        SLOWEST(1, 1, 0),
+        SLOWER(2, 1, -1),
+        NORMAL(3, 1, -1),
+        MAX(4, 0, -1);
         public static final LocoSpeed[] VALUES = values();
         private final int shiftUp;
         private final int shiftDown;
@@ -804,17 +802,14 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             return level;
         }
 
-        public int getLevelAbs() {
-            return Math.abs(level);
-        }
-
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ROOT);
         }
 
         public LocoSpeed shiftUp() {
-            return LocoSpeed.VALUES[ordinal() + shiftUp];
+            LocoSpeed newSpeed = LocoSpeed.VALUES[ordinal() + shiftUp];
+            return newSpeed;
         }
 
         public LocoSpeed shiftDown() {

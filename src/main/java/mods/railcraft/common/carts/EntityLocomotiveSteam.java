@@ -37,7 +37,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -73,7 +72,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     {
-        setAllowedSpeeds(EnumSet.of(LocoSpeed.MAX, LocoSpeed.NORMAL, LocoSpeed.SLOWER, LocoSpeed.SLOWEST, LocoSpeed.REVERSE_SLOWEST));
+        setMaxReverseSpeed(LocoSpeed.SLOWEST);
 
         tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
             @Override

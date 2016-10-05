@@ -10,7 +10,9 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.CartBattery;
+import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
@@ -24,18 +26,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityLocomotiveElectric extends EntityLocomotive implements ISidedInventory, IElectricMinecart {
+public class EntityLocomotiveElectric extends EntityLocomotive implements ISidedInventory {
 
     private static final int CHARGE_USE_PER_TICK = 20;
     private static final int FUEL_PER_REQUEST = 1;
@@ -44,7 +47,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     private static final int SLOT_TICKET = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
     private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.USER, MAX_CHARGE);
+    private final CartBattery cartBattery = new CartBattery(ICartBattery.Type.USER, MAX_CHARGE);
 
     public EntityLocomotiveElectric(World world) {
         super(world);
@@ -69,11 +72,6 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
-    }
-
-    @Override
     protected void openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.LOCO_ELECTRIC, player, worldObj, this);
     }
@@ -85,8 +83,8 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
 
     @Override
     public int getMoreGoJuice() {
-        if (chargeHandler.getCharge() > CHARGE_USE_PER_REQUEST) {
-            chargeHandler.removeCharge(CHARGE_USE_PER_REQUEST);
+        if (cartBattery.getCharge() > CHARGE_USE_PER_REQUEST) {
+            cartBattery.removeCharge(CHARGE_USE_PER_REQUEST);
             return FUEL_PER_REQUEST;
         }
         return 0;
@@ -112,7 +110,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         super.onUpdate();
         if (Game.isClient(worldObj))
             return;
-        chargeHandler.tick();
+        cartBattery.tick(this);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         super.moveAlongTrack(pos, state);
         if (Game.isClient(worldObj))
             return;
-        chargeHandler.tickOnTrack(pos);
+        cartBattery.tickOnTrack(this, pos);
     }
 
     @Override
@@ -149,7 +147,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         switch (slot) {
             case SLOT_TICKET:
                 return ItemTicket.FILTER.test(stack);
@@ -159,15 +157,15 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound data) {
-        super.writeEntityToNBT(data);
-        chargeHandler.writeToNBT(data);
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY || super.hasCapability(capability, facing);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void readEntityFromNBT(NBTTagCompound data) {
-        super.readEntityFromNBT(data);
-        chargeHandler.readFromNBT(data);
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY)
+            return (T) cartBattery;
+        return super.getCapability(capability, facing);
     }
-
 }

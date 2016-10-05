@@ -10,7 +10,7 @@ package mods.railcraft.api.electricity;
 
 import com.google.common.base.Optional;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
+import mods.railcraft.api.charge.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackTile;
 import net.minecraft.tileentity.TileEntity;

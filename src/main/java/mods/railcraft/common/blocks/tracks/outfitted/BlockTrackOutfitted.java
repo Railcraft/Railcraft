@@ -71,8 +71,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-//TODO: Add charge interface
-//FIXME: abandoned track breaks when track kit placed on it
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock {
     public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
@@ -193,7 +191,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             if (tile instanceof TileTrackOutfitted) {
                 TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
                 ITrackKitInstance track = trackTile.getTrackKitInstance();
-                ItemStack itemStack = track.getTrackKit().getOutfittedTrack(trackTile.getTrackType());
+                ItemStack itemStack = track.getTrackKit().getTrackKitItem();
                 if (itemStack != null)
                     return itemStack;
             }

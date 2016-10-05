@@ -28,7 +28,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         RailcraftItems.WHISTLE_TUNER,
                         TrackKits.WHISTLE,
                         TrackKits.LOCOMOTIVE,
-                        TrackKits.LIMITER,
+                        TrackKits.THROTTLE,
                         RailcraftCarts.LOCO_STEAM_SOLID,
                         RailcraftCarts.LOCO_ELECTRIC,
                         RailcraftCarts.LOCO_CREATIVE

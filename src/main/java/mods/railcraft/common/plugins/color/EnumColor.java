@@ -102,10 +102,10 @@ public enum EnumColor implements IVariantEnum {
 
     public static EnumColor readFromNBT(NBTTagCompound nbt, String tag) {
         if (nbt != null) {
-            if (nbt.hasKey("color", 8))
-                return EnumColor.fromName(nbt.getString("color"));
-            if (nbt.hasKey("color", 1))
-                return EnumColor.fromOrdinal(nbt.getByte("color"));
+            if (nbt.hasKey(tag, 8))
+                return EnumColor.fromName(nbt.getString(tag));
+            if (nbt.hasKey(tag, 1))
+                return EnumColor.fromOrdinal(nbt.getByte(tag));
         }
         return EnumColor.WHITE;
     }

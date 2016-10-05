@@ -1,14 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.widgets.ChargeIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
@@ -19,13 +21,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
-    private final IElectricMinecart.ChargeHandler chargeHandler;
+    private final ICartBattery chargeHandler;
     private final ChargeIndicator chargeIndicator;
     private double lastCharge;
 
     private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
-        this.chargeHandler = loco.getChargeHandler();
+        this.chargeHandler = loco.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
         this.chargeIndicator = new ChargeIndicator(EntityLocomotiveElectric.MAX_CHARGE);
     }
 

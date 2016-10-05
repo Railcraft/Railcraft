@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.api.electricity.GridTools;
-import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
+import mods.railcraft.api.charge.GridTools;
+import mods.railcraft.api.charge.IElectricGrid;
+import mods.railcraft.api.charge.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.client.render.tools.MatrixTransformations;
 import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;

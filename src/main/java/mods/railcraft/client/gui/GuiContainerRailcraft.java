@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
-import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -187,9 +186,9 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
-        if (button instanceof GuiSimpleButton)
-            ((GuiSimpleButton) button).consumeClick();
-        buttonList.stream().flatMap(Streams.toType(GuiSimpleButton.class)).forEach(GuiSimpleButton::updateStatus);
+        if (button instanceof GuiBetterButton)
+            ((GuiBetterButton) button).consumeClick();
+        buttonList.stream().flatMap(Streams.toType(GuiBetterButton.class)).forEach(GuiBetterButton::updateStatus);
     }
 
     private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {

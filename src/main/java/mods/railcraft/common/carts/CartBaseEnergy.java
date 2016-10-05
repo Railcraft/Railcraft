@@ -12,7 +12,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.CartBattery;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -28,23 +29,33 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IElectricMinecart, IIC2EnergyCart {
+abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.STORAGE, getCapacity());
+    private final CartBattery cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
     protected CartBaseEnergy(World world) {
         super(world);
     }
 
     @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY)
+            return (T) cartBattery;
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -207,12 +218,12 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
 
     @Override
     public double getEnergy() {
-        return chargeHandler.getCharge();
+        return cartBattery.getCharge();
     }
 
     @Override
     public void setEnergy(double energy) {
-        chargeHandler.setCharge(energy);
+        cartBattery.setCharge(energy);
     }
 
     @Override

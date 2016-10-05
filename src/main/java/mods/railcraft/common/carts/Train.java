@@ -10,7 +10,8 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
-import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.ICartBattery;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -335,9 +336,9 @@ public class Train implements Iterable<EntityMinecart> {
         int numLocomotives = getNumRunningLocomotives();
         for (EntityMinecart c : this) {
             float baseSpeed = c.getMaxCartSpeedOnRail();
-            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c instanceof IElectricMinecart) {
-                IElectricMinecart e = (IElectricMinecart) c;
-                if (e.getChargeHandler().getType() != IElectricMinecart.ChargeHandler.Type.USER) {
+            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null)) {
+                ICartBattery battery = c.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
+                if (battery.getType() != ICartBattery.Type.USER) {
                     baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
                 }
             }

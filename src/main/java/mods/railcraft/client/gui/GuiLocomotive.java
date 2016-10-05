@@ -25,7 +25,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class GuiLocomotive extends EntityGui {
@@ -34,7 +36,7 @@ public abstract class GuiLocomotive extends EntityGui {
     private final EntityPlayer player;
     private final String typeTag;
     private Map<LocoMode, GuiToggleButtonSmall> modeButtons = new LinkedHashMap<>();
-    private Map<LocoSpeed, GuiToggleButtonSmall> speedButtons = new LinkedHashMap<>();
+    private List<GuiToggleButtonSmall> speedButtons = new ArrayList<>();
     private GuiMultiButton lockButton;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
@@ -74,17 +76,21 @@ public abstract class GuiLocomotive extends EntityGui {
         }
         GuiTools.newButtonRowAuto(buttonList, w + 3, 171, modeButtons.values());
 
-        for (LocoSpeed speed : loco.getAllowedSpeeds()) {
+        GuiToggleButtonSmall reverseButton = new GuiToggleButtonSmall(id++, 0, h + ySize - 112, 12, "R", loco.isReverse());
+        reverseButton.setClickConsumer(b -> loco.setReverse(!loco.isReverse()));
+        reverseButton.setStatusUpdater(b -> b.active = loco.isReverse());
+        speedButtons.add(reverseButton);
+        for (LocoSpeed speed : LocoSpeed.VALUES) {
             String label = "";
-            for (int i = 0; i < speed.getLevelAbs(); i++) {
-                label += speed.getLevel() > 0 ? ">" : "<";
+            for (int i = 0; i < speed.getLevel(); i++) {
+                label += ">";
             }
-            GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 112, 7 + speed.getLevelAbs() * 5, label, loco.clientSpeed == speed);
+            GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 112, 7 + speed.getLevel() * 5, label, loco.clientSpeed == speed);
             button.setClickConsumer(b -> loco.clientSpeed = speed);
             button.setStatusUpdater(b -> b.active = loco.clientSpeed == speed);
-            speedButtons.put(speed, button);
+            speedButtons.add(button);
         }
-        GuiTools.newButtonRow(buttonList, w + 8, 3, speedButtons.values());
+        GuiTools.newButtonRow(buttonList, w + 8, 3, speedButtons);
 
         buttonList.add(lockButton = GuiMultiButton.create(id, w + 152, h + ySize - 111, 16, loco.getLockController()));
         lockButton.enabled = loco.clientCanLock;
