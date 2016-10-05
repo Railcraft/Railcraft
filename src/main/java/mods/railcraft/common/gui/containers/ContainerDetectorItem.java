@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -25,7 +26,7 @@ public class ContainerDetectorItem extends RailcraftContainer {
         this.detector = (DetectorItem) tile.getDetector();
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotFilter(detector.getFilters(), i, 8 + i * 18, 61, detector.getSlotController()));
+            addSlot(new SlotFilter(detector.getFilters(), i, 8 + i * 18, 61, () -> detector.getPrimaryMode() == DetectorItem.PrimaryMode.FILTERED));
         }
 
         for (int i = 0; i < 3; i++) {
