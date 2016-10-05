@@ -21,7 +21,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -280,16 +279,6 @@ public class TileItemLoader extends TileItemManipulator {
     @Override
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.MANIPULATOR_ITEM, player, worldObj, getPos());
-        return true;
-    }
-
-    @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nullable EnumFacing direction) {
-        return false;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return true;
     }
 }

@@ -18,11 +18,9 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 import java.util.function.Predicate;
@@ -30,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileItemManipulator extends TileManipulatorCart implements ISidedInventory {
+public abstract class TileItemManipulator extends TileManipulatorCart {
 
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
@@ -50,16 +48,6 @@ public abstract class TileItemManipulator extends TileManipulatorCart implements
     }
 
     public abstract Slot getBufferSlot(int id, int x, int y);
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return SLOTS;
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
 
     @Override
     protected void setPowered(boolean p) {

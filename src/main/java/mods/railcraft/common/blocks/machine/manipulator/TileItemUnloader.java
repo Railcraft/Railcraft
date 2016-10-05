@@ -23,7 +23,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -297,15 +296,5 @@ public class TileItemUnloader extends TileItemManipulator {
     @Override
     public EnumFacing[] getValidRotations() {
         return new EnumFacing[]{EnumFacing.UP};
-    }
-
-    @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nullable EnumFacing direction) {
-        return true;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
-        return false;
     }
 }
