@@ -27,7 +27,6 @@ import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
@@ -344,7 +343,8 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 addLiquidFuels();
 
-                FluidTools.nerfWaterBottle();
+                // TODO: restore this when you figure out the new fluid containers, with a config
+//                FluidTools.nerfWaterBottle();
 
 //----------------------------------------------
 // Boiler Test Setup
