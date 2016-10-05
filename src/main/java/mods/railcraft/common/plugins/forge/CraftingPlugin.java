@@ -53,7 +53,7 @@ public class CraftingPlugin {
         FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
-    private static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
+    public static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);

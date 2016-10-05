@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -286,6 +287,14 @@ public class ForestryPlugin {
         public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, @Nullable ItemStack box, @Nullable ItemStack product, Object... materials) {
             if (product == null) {
                 Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", the result was null or zero. Skipping", recipeTag);
+                return;
+            }
+            try {
+                materials = CraftingPlugin.cleanRecipeArray(CraftingPlugin.RecipeType.SHAPED, product, materials);
+            } catch (InvalidRecipeException ex) {
+                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", some ingredients were missing. Skipping", recipeTag);
+                Game.logTrace(Level.WARN, ex.getRawMessage());
+                return;
             }
             try {
                 if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
