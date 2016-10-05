@@ -18,8 +18,8 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -49,7 +49,7 @@ public class BlockGeneric extends BlockRailcraft {
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumGeneric.BLOCK_COKE));
         setResistance(20);
         setHardness(5);
-        setSoundType(RailcraftSoundTypes.OVERRIDE);
+        setSoundType(SoundType.STONE);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
@@ -200,4 +200,20 @@ public class BlockGeneric extends BlockRailcraft {
         return getVariant(world, pos).getBlockDef().isFlammable(world, pos, face);
     }
 
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        switch (getVariant(state)) {
+            case BLOCK_COPPER:
+            case BLOCK_LEAD:
+            case BLOCK_STEEL:
+            case BLOCK_TIN:
+                return SoundType.METAL;
+            case BLOCK_CREOSOTE:
+                return SoundType.WOOD;
+            case CRUSHED_OBSIDIAN:
+            case BLOCK_COKE:
+                return SoundType.GROUND;
+        }
+        return super.getSoundType(state, world, pos, entity);
+    }
 }

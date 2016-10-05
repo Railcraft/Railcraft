@@ -10,8 +10,6 @@
 package mods.railcraft.common.util.sounds;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -54,18 +52,6 @@ public class SoundRegistry {
             registerBlockSound(EnumPost.WOOD_PLATFORM.getDefaultState(), SoundType.WOOD);
             registerBlockSound(EnumPost.STONE_PLATFORM.getDefaultState(), SoundType.STONE);
             registerBlockSound(EnumPost.METAL_PLATFORM_UNPAINTED.getDefaultState(), SoundType.METAL);
-        }
-
-        block = BlockGeneric.getBlock();
-        if (block != null) {
-
-            for (EnumGeneric cube : EnumGeneric.VALUES) {
-                registerBlockSound(cube.getDefaultState(), SoundType.STONE);
-            }
-
-            registerBlockSound(EnumGeneric.BLOCK_STEEL.getDefaultState(), SoundType.METAL);
-            registerBlockSound(EnumGeneric.CRUSHED_OBSIDIAN.getDefaultState(), SoundType.GROUND);
-            registerBlockSound(EnumGeneric.BLOCK_CREOSOTE.getDefaultState(), SoundType.WOOD);
         }
     }
 
