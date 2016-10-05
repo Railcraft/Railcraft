@@ -1,0 +1,141 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.modules;
+
+import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.misc.BallastRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+@RailcraftModule(value = "railcraft:resources")
+public class ModuleResources extends RailcraftModulePayload {
+    public ModuleResources() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.GENERIC
+                );
+            }
+
+            @Override
+            public void preInit() {
+                if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
+                    FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
+                    //TODO: this is wrong, needs fluidstack recipe support
+                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
+                        CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+                                "C",
+                                "W",
+                                "S",
+                                'C', container,
+                                'W', Blocks.WOOL,
+                                'S', "stickWood");
+                    }
+                }
+
+                if (BlockGeneric.getBlock() != null) {
+                    EnumGeneric type = EnumGeneric.BLOCK_STEEL;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
+                        initMetalBlock(Metal.STEEL);
+
+                        LootPlugin.addLoot(type.getStack(), 1, 1, LootPlugin.Type.TOOL, "steel.block");
+
+                        if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
+                            RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
+                    }
+
+                    type = EnumGeneric.BLOCK_COPPER;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.COPPER);
+
+                    type = EnumGeneric.BLOCK_TIN;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.TIN);
+
+                    type = EnumGeneric.BLOCK_LEAD;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.LEAD);
+
+                    type = EnumGeneric.CRUSHED_OBSIDIAN;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
+                        ItemStack stack = type.getStack();
+
+                        BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
+
+                        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
+                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
+                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
+                        }
+                    }
+
+                    type = EnumGeneric.BLOCK_COKE;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
+                        Block cube = BlockGeneric.getBlock();
+                        if (cube != null) {
+                            ItemStack stack = type.getStack();
+                            CraftingPlugin.addRecipe(stack,
+                                    "CCC",
+                                    "CCC",
+                                    "CCC",
+                                    'C', RailcraftItems.COKE);
+                            CraftingPlugin.addShapelessRecipe(RailcraftItems.COKE.getStack(9), stack);
+                        }
+                    }
+                }
+            }
+
+            private void initMetalBlock(Metal m) {
+                String blockTag = m.getOreTag(Metal.Form.BLOCK);
+                OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
+                CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
+                        "III",
+                        "III",
+                        "III",
+                        'I', m.getOreTag(Metal.Form.INGOT));
+                CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
+            }
+
+            @Override
+            public void postInit() {
+                checkSteelBlock();
+            }
+        });
+        setDisabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void postInit() {
+                checkSteelBlock();
+            }
+        });
+    }
+
+    private void checkSteelBlock() {
+        if (OreDictionary.getOres("blockSteel").isEmpty())
+            OreDictionary.registerOre("blockSteel", Blocks.IRON_BLOCK);
+    }
+}

@@ -15,29 +15,22 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import mods.railcraft.common.util.misc.BallastRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -55,7 +48,6 @@ public class ModuleFactory extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.ANVIL_STEEL,
-                        RailcraftBlocks.GENERIC,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
                         RailcraftItems.COKE
@@ -314,68 +306,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'A', new ItemStack(Blocks.ANVIL),
                             'P', new ItemStack(Blocks.PISTON),
                             'G', RailcraftItems.GEAR.getRecipeObject(ItemGear.EnumGear.STEEL));
-
-                if (BlockGeneric.getBlock() != null) {
-                    EnumGeneric type = EnumGeneric.BLOCK_STEEL;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
-                        initMetalBlock(Metal.STEEL);
-
-                        LootPlugin.addLoot(type.getStack(), 1, 1, LootPlugin.Type.TOOL, "steel.block");
-
-                        if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-                            RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
-                    }
-
-                    type = EnumGeneric.BLOCK_COPPER;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
-                        initMetalBlock(Metal.COPPER);
-
-                    type = EnumGeneric.BLOCK_TIN;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
-                        initMetalBlock(Metal.TIN);
-
-                    type = EnumGeneric.BLOCK_LEAD;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
-                        initMetalBlock(Metal.LEAD);
-
-                    type = EnumGeneric.CRUSHED_OBSIDIAN;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
-                        ItemStack stack = type.getStack();
-
-                        BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
-
-                        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
-                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
-                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
-                        }
-                    }
-
-                    type = EnumGeneric.BLOCK_COKE;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
-                        Block cube = BlockGeneric.getBlock();
-                        if (cube != null) {
-                            ItemStack stack = type.getStack();
-                            CraftingPlugin.addRecipe(stack,
-                                    "CCC",
-                                    "CCC",
-                                    "CCC",
-                                    'C', RailcraftItems.COKE);
-                            CraftingPlugin.addShapelessRecipe(RailcraftItems.COKE.getStack(9), stack);
-                        }
-                    }
-                }
             }
 
-            private void initMetalBlock(Metal m) {
-                String blockTag = m.getOreTag(Metal.Form.BLOCK);
-                OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
-                CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
-                        "III",
-                        "III",
-                        "III",
-                        'I', m.getOreTag(Metal.Form.INGOT));
-                CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
-            }
 
             private void addAnchorOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {
                 if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
@@ -420,24 +352,6 @@ public class ModuleFactory extends RailcraftModulePayload {
 
                 if (EnumGeneric.BLOCK_COKE.isEnabled())
                     RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Blocks.COAL_BLOCK), false, false, EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
-
-                if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
-                    FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
-                        CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
-                                "C",
-                                "W",
-                                "S",
-                                'C', container,
-                                'W', Blocks.WOOL,
-                                'S', "stickWood");
-                    }
-                    ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), null, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
-                            "#",
-                            "|",
-                            '#', Blocks.WOOL,
-                            '|', Items.STICK);
-                }
             }
 
             private void registerCrushedOreRecipe(ItemStack ore, ItemStack dust) {
@@ -452,9 +366,6 @@ public class ModuleFactory extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                if (OreDictionary.getOres("blockSteel").isEmpty())
-                    OreDictionary.registerOre("blockSteel", Blocks.IRON_BLOCK);
-
                 if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                     registerAltSteelFurnaceRecipe();
 
