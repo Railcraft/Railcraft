@@ -48,22 +48,10 @@
           "front": "railcraft:blocks/detector_mob_1"
         }
       },
-      "powered": {
-        "textures": {
-          "side": "railcraft:blocks/detector_powered_0",
-          "front": "railcraft:blocks/detector_powered_1"
-        }
-      },
       "player": {
         "textures": {
           "side": "railcraft:blocks/detector_player_0",
           "front": "railcraft:blocks/detector_player_1"
-        }
-      },
-      "explosive": {
-        "textures": {
-          "side": "railcraft:blocks/detector_explosive_0",
-          "front": "railcraft:blocks/detector_explosive_1"
         }
       },
       "animal": {
@@ -82,12 +70,6 @@
         "textures": {
           "side": "railcraft:blocks/detector_advanced_0",
           "front": "railcraft:blocks/detector_advanced_1"
-        }
-      },
-      "energy": {
-        "textures": {
-          "side": "railcraft:blocks/detector_energy_0",
-          "front": "railcraft:blocks/detector_energy_1"
         }
       },
       "age": {

@@ -125,24 +125,24 @@ public class BlockDetector extends BlockContainerRailcraft {
                 "XXX",
                 'X', Blocks.MOSSY_COBBLESTONE,
                 'P', Blocks.STONE_PRESSURE_PLATE);
-        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.POWERED.ordinal()),
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', "cobblestone",
-                'P', Blocks.STONE_PRESSURE_PLATE);
+//        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.POWERED.ordinal()),
+//                "XXX",
+//                "XPX",
+//                "XXX",
+//                'X', "cobblestone",
+//                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.PLAYER.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', new ItemStack(Blocks.STONE_SLAB, 1, 0),
                 'P', Blocks.STONE_PRESSURE_PLATE);
-        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EXPLOSIVE.ordinal()),
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', "slabWood",
-                'P', Blocks.STONE_PRESSURE_PLATE);
+//        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EXPLOSIVE.ordinal()),
+//                "XXX",
+//                "XPX",
+//                "XXX",
+//                'X', "slabWood",
+//                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ANIMAL.ordinal()),
                 "XXX",
                 "XPX",

@@ -15,12 +15,9 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.ModItems;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -39,7 +36,6 @@ public class ModuleIC2 extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.DETECTOR,
                         RailcraftCarts.ENERGY_BATBOX,
                         RailcraftCarts.ENERGY_MFE,
                         RailcraftCarts.ENERGY_CESU,
@@ -69,20 +65,20 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                Block blockDetector = RailcraftBlocks.DETECTOR.block();
-
-                if (blockDetector != null) {
-                    ItemStack stack = EnumDetector.ENERGY.getItem();
-                    Object tin = RailcraftItems.PLATE.getRecipeObject(Metal.TIN);
-                    if (tin == null)
-                        tin = "ingotTin";
-                    CraftingPlugin.addRecipe(stack, false,
-                            "XXX",
-                            "XPX",
-                            "XXX",
-                            'X', tin,
-                            'P', Blocks.STONE_PRESSURE_PLATE);
-                }
+//                Block blockDetector = RailcraftBlocks.DETECTOR.block();
+//
+//                if (blockDetector != null) {
+//                    ItemStack stack = EnumDetector.ENERGY.getItem();
+//                    Object tin = RailcraftItems.PLATE.getRecipeObject(Metal.TIN);
+//                    if (tin == null)
+//                        tin = "ingotTin";
+//                    CraftingPlugin.addRecipe(stack, false,
+//                            "XXX",
+//                            "XPX",
+//                            "XXX",
+//                            'X', tin,
+//                            'P', Blocks.STONE_PRESSURE_PLATE);
+//                }
 
                 ItemStack batbox = ModItems.BAT_BOX.get();
                 if (batbox != null) {
@@ -147,8 +143,8 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 ItemStack machine = ModItems.IC2_MACHINE.get();
 
                 ItemStack detector;
-                if (blockDetector != null)
-                    detector = EnumDetector.ENERGY.getItem();
+                if (RailcraftBlocks.DETECTOR.isLoaded())
+                    detector = EnumDetector.ADVANCED.getItem();
                 else
                     detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
