@@ -79,7 +79,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
                     MinecraftForge.ORE_GEN_BUS.register(new GeneratorSaltpeter());
                 if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorSulfur());
                 if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
                     MinecraftForge.EVENT_BUS.register(new DecoratorFirestone());
                 if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumGeneric.STONE_ABYSSAL.isEnabled())

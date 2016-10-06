@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +25,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SulfurGenerator {
+public class GeneratorSulfur {
 
     public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SULFUR", new Class[0], new Object[0]);
     private final WorldGenerator sulfur = new WorldGenSulfur();
