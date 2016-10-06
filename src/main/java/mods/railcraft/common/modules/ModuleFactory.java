@@ -294,8 +294,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'I', "ingotIron",
                             'P', Blocks.PISTON,
                             'C', "workbench");
-                } else
-                    RollingMachineCraftingManager.copyRecipesToWorkbench();
+                }
 
                 EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
                 if (metalsChest.isAvailable())
@@ -307,7 +306,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'P', new ItemStack(Blocks.PISTON),
                             'G', RailcraftItems.GEAR.getRecipeObject(ItemGear.EnumGear.STEEL));
             }
-
 
             private void addAnchorOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {
                 if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
@@ -366,6 +364,8 @@ public class ModuleFactory extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
+                if (!EnumMachineAlpha.ROLLING_MACHINE.isAvailable())
+                    RollingMachineCraftingManager.copyRecipesToWorkbench();
                 if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                     registerAltSteelFurnaceRecipe();
 
