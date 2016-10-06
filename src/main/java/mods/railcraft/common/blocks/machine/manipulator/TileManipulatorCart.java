@@ -341,7 +341,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     public enum EnumRedstoneMode implements IMultiButtonState {
 
         COMPLETE("✔", "complete"),
-        IMMEDIATE("❢", "immediate"),
+        IMMEDIATE("\u2762", "immediate"),
         MANUAL("✘", "manual"),
         PARTIAL("➧", "partial");
         private final String label;
