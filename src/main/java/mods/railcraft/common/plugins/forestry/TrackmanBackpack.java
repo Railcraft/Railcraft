@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.fluids.FluidContainers;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -58,18 +57,14 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(IToolCrowbar.ORE_TAG);
 
-        add(FluidContainers.getCreosoteOilBottle());
-        add(FluidContainers.getCreosoteOilBucket());
-        add(FluidContainers.getCreosoteOilCell());
-        add(FluidContainers.getCreosoteOilCan());
-        add(FluidContainers.getCreosoteOilRefactory());
-        add(FluidContainers.getCreosoteOilWax());
-
         add(EnumMachineAlpha.ANCHOR_WORLD.getItem());
         add(EnumMachineAlpha.ANCHOR_PERSONAL.getItem());
         add(EnumMachineAlpha.ANCHOR_ADMIN.getItem());
         add(EnumMachineAlpha.ANCHOR_PASSIVE.getItem());
         add(EnumMachineBeta.SENTINEL.getItem());
+
+        add(RailcraftItems.BUCKET_CREOSOTE);
+        add(RailcraftItems.BOTTLE_CREOSOTE);
 
         add(RailcraftItems.CROWBAR_IRON);
         add(RailcraftItems.CROWBAR_STEEL);

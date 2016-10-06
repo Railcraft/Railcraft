@@ -28,26 +28,11 @@ public enum RailcraftFluids {
 
     CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500) {
         @Override
-        void defineContainers() {
-            FluidContainers.getCreosoteOilBucket();
-            FluidContainers.getCreosoteOilBottle();
-            FluidContainers.getCreosoteOilCan();
-            FluidContainers.getCreosoteOilCell();
-            FluidContainers.getCreosoteOilWax();
-            FluidContainers.getCreosoteOilRefactory();
-        }
-
-        @Override
         public Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluid(fluid, Material.WATER).setFlammable(true).setFlammability(10);
         }
     },
     STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
-        @Override
-        void defineContainers() {
-            FluidContainers.getSteamBottle();
-        }
-
         @Override
         Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow();
@@ -84,8 +69,6 @@ public enum RailcraftFluids {
         //TODO: re-enable and fix
 //        initBlock();
         checkStandardFluidBlock();
-        if (standardFluid.get() != null)
-            defineContainers();
     }
 
     private void postInit() {
@@ -112,9 +95,6 @@ public enum RailcraftFluids {
 //                        + "recommended that you disable all but one instance of the fluid via your configs.", standardFluid.getTag());
 //            }
         }
-    }
-
-    void defineContainers() {
     }
 
     abstract Block makeBlock(Fluid fluid);

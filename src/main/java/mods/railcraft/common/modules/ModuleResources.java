@@ -39,7 +39,10 @@ public class ModuleResources extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.GENERIC
+                        RailcraftBlocks.GENERIC,
+                        RailcraftItems.BOTTLE_CREOSOTE,
+                        RailcraftItems.BOTTLE_STEAM,
+                        RailcraftItems.BUCKET_CREOSOTE
                 );
             }
 

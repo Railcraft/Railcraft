@@ -11,11 +11,11 @@ package mods.railcraft.common.fluids;
 
 import net.minecraft.init.Items;
 
-public class ItemBucketRailcraft extends ItemFluidContainer {
+public class ItemBottle extends ItemFluidContainer {
 
-    public ItemBucketRailcraft(Fluids fluid) {
-        super(fluid, Items.BUCKET);
-        setMaxStackSize(1);
+    public ItemBottle(Fluids fluid) {
+        super(fluid, Items.GLASS_BOTTLE);
+        setMaxStackSize(16);
     }
 
 }

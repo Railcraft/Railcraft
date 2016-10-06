@@ -20,6 +20,9 @@ import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.ItemBottle;
+import mods.railcraft.common.fluids.ItemBucketRailcraft;
 import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
@@ -55,6 +58,9 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     CIRCUIT(ItemCircuit::new, "circuit"),
     COKE(ItemCoke::new, "fuel.coke"),
     CONCRETE(ItemConcrete::new, "concrete"),
+    BOTTLE_CREOSOTE(() -> new ItemBottle(Fluids.CREOSOTE), "fluid_bottle_creosote"),
+    BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
+    BUCKET_CREOSOTE(() -> new ItemBucketRailcraft(Fluids.CREOSOTE), "fluid_bucket_creosote"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool.crowbar.iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool.crowbar.steel"),
     CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool.crowbar.thaumium", null, Mod.THAUMCRAFT::isLoaded),

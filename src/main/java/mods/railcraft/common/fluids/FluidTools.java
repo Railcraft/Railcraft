@@ -309,7 +309,7 @@ public final class FluidTools {
         return registerContainer(liquid, filled, empty);
     }
 
-    private static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
+    public static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
         if (empty != null) {
             FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
             registerContainer(container);
