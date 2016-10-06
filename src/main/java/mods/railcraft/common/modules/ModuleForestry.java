@@ -38,7 +38,7 @@ public class ModuleForestry extends RailcraftModulePayload {
 
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void init() {
+            public void preInit() {
                 ForestryPlugin.instance().registerBackpacks();
             }
 
