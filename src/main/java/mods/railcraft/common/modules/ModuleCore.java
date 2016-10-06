@@ -26,7 +26,6 @@ import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidContainers;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
@@ -153,6 +152,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(LinkageHandler.getInstance());
                 MinecraftForge.EVENT_BUS.register(new CraftingHandler());
                 MinecraftForge.EVENT_BUS.register(new SoundLimiterTicker());
+                MinecraftForge.EVENT_BUS.register(new MinecartRiderAIDisabler());
                 MinecraftForge.EVENT_BUS.register(new Object() {
                     @SubscribeEvent
                     public void logout(PlayerEvent.PlayerLoggedOutEvent event) {
@@ -303,8 +303,8 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
-                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
-                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);
                 }
 
                 // Finish initializing ItemRegistry
