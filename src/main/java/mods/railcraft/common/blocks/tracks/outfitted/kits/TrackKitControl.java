@@ -10,7 +10,9 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.ITrackKitReversible;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -40,8 +42,8 @@ public class TrackKitControl extends TrackKitPowered implements ITrackKitReversi
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        int meta = getTile().getBlockMetadata();
-        if (meta == 0 || meta == 4 || meta == 5) {
+        BlockRailBase.EnumRailDirection trackShape = getTrackShape();
+        if (TrackShapeHelper.isNorthSouth(trackShape)) {
             if (cart.motionZ <= 0) {
                 if (isPowered() ^ !reversed) {
                     cart.motionZ -= BOOST_AMOUNT;
@@ -55,7 +57,7 @@ public class TrackKitControl extends TrackKitPowered implements ITrackKitReversi
                     cart.motionZ -= SLOW_AMOUNT;
                 }
             }
-        } else if (meta == 1 || meta == 2 || meta == 3) {
+        } else {
             if (cart.motionX <= 0) {
                 if (isPowered() ^ reversed) {
                     cart.motionX -= BOOST_AMOUNT;
