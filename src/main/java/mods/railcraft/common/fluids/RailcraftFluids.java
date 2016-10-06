@@ -98,7 +98,11 @@ public enum RailcraftFluids {
         if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
             String fluidName = standardFluid.getTag();
             ResourceLocation stillTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_still");
-            ResourceLocation flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
+            ResourceLocation flowTexture;
+            if (this == STEAM)
+                flowTexture = stillTexture;
+            else
+                flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
             railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
 //            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
