@@ -20,6 +20,7 @@ import net.minecraft.world.World;
  */
 public abstract class TileChargeFeeder extends RailcraftTickingTileEntity {
     public abstract IChargeBlock.ChargeBattery getChargeBattery();
+
     private int prevComparatorOutput;
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
@@ -36,6 +37,7 @@ public abstract class TileChargeFeeder extends RailcraftTickingTileEntity {
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return oldState.getValue(BlockChargeFeeder.VARIANT) != newSate.getValue(BlockChargeFeeder.VARIANT);
+        return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
+                && oldState.getValue(BlockChargeFeeder.VARIANT) == newSate.getValue(BlockChargeFeeder.VARIANT));
     }
 }
