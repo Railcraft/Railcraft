@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits.locking;
 
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLocking;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -24,11 +25,14 @@ public abstract class LockingProfile {
 
     protected final TrackKitLocking track;
 
-    public LockingProfile(TrackKitLocking track) {
+    protected LockingProfile(TrackKitLocking track) {
         this.track = track;
     }
 
     public void onLock(EntityMinecart cart) {
+    }
+
+    public void onPass(EntityMinecart cart) {
     }
 
     public void onRelease(EntityMinecart cart) {
@@ -44,5 +48,9 @@ public abstract class LockingProfile {
     }
 
     public void readPacketData(DataInputStream data) throws IOException {
+    }
+
+    protected BlockRailBase.EnumRailDirection getTrackShape() {
+        return track.getTrackShape();
     }
 }

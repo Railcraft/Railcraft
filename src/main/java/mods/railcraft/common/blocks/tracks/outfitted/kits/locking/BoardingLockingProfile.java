@@ -10,7 +10,9 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits.locking;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLocking;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
@@ -25,7 +27,7 @@ public class BoardingLockingProfile extends LockingProfile {
     @Override
     public void onRelease(EntityMinecart cart) {
         super.onRelease(cart);
-        int meta = track.getTile().getBlockMetadata();
+        BlockRailBase.EnumRailDirection trackShape = getTrackShape();
         double speed = CartToolsAPI.getCartSpeedUncapped(cart);
         double boostX = TrackKitLocking.START_BOOST;
         double boostZ = TrackKitLocking.START_BOOST;
@@ -33,16 +35,17 @@ public class BoardingLockingProfile extends LockingProfile {
             boostX = (Math.abs(cart.motionX) / speed) * TrackKitLocking.BOOST_FACTOR;
             boostZ = (Math.abs(cart.motionZ) / speed) * TrackKitLocking.BOOST_FACTOR;
         }
-        if (meta == 0 || meta == 4 || meta == 5)
+        if (TrackShapeHelper.isNorthSouth(trackShape)) {
             if (isReversed())
                 cart.motionZ += boostZ;
             else
                 cart.motionZ -= boostZ;
-        else if (meta == 1 || meta == 2 || meta == 3)
+        } else {
             if (isReversed())
                 cart.motionX -= boostX;
             else
                 cart.motionX += boostX;
+        }
     }
 
     private boolean isReversed() {

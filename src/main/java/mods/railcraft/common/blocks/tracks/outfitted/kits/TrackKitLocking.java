@@ -14,6 +14,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.events.CartLockdownEvent;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.ITrackKitPowered;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.BoardingLockingProfile;
@@ -26,6 +27,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -191,8 +193,8 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
             currentCart.motionZ = 0.0D;
-            int meta = getTile().getBlockMetadata();
-            if (meta == 0 || meta == 4 || meta == 5)
+            BlockRailBase.EnumRailDirection trackShape = getTrackShape();
+            if (TrackShapeHelper.isNorthSouth(trackShape))
                 currentCart.posZ = getTile().getPos().getZ() + 0.5D;
             else
                 currentCart.posX = getTile().getPos().getX() + 0.5D;
@@ -202,6 +204,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         currentCart = cart;
+        profileInstance.onPass(currentCart);
     }
 
     private void releaseCurrentCart() {

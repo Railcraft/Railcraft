@@ -10,7 +10,9 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits.locking;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLocking;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -37,9 +39,14 @@ public class HoldingLockingProfile extends LockingProfile {
     }
 
     @Override
+    public void onPass(EntityMinecart cart) {
+        setLaunchDirection(cart);
+    }
+
+    @Override
     public void onRelease(EntityMinecart cart) {
         super.onRelease(cart);
-        int meta = track.getTile().getBlockMetadata();
+        BlockRailBase.EnumRailDirection trackShape = getTrackShape();
         double speed = CartToolsAPI.getCartSpeedUncapped(cart);
         double boostX = TrackKitLocking.START_BOOST;
         double boostZ = TrackKitLocking.START_BOOST;
@@ -47,26 +54,27 @@ public class HoldingLockingProfile extends LockingProfile {
             boostX = (Math.abs(cart.motionX) / speed) * TrackKitLocking.BOOST_FACTOR;
             boostZ = (Math.abs(cart.motionZ) / speed) * TrackKitLocking.BOOST_FACTOR;
         }
-        if (meta == 0 || meta == 4 || meta == 5)
+        if (TrackShapeHelper.isNorthSouth(trackShape)) {
             if (launchForward)
                 cart.motionZ += boostZ;
             else
                 cart.motionZ -= boostZ;
-        else if (meta == 1 || meta == 2 || meta == 3)
+        } else {
             if (launchForward)
                 cart.motionX += boostX;
             else
                 cart.motionX -= boostX;
+        }
     }
 
     protected void setLaunchDirection(EntityMinecart cart) {
-        int meta = track.getTile().getBlockMetadata();
+        BlockRailBase.EnumRailDirection trackShape = getTrackShape();
         double speed = CartToolsAPI.getCartSpeedUncapped(cart);
         if (speed > DIR_THRESHOLD) {
-            boolean launch = launchForward;
-            if (meta == 0 || meta == 4 || meta == 5)
+            boolean launch;
+            if (TrackShapeHelper.isNorthSouth(trackShape))
                 launch = cart.motionZ > 0;
-            else if (meta == 1 || meta == 2 || meta == 3)
+            else
                 launch = cart.motionX > 0;
             if (launchForward != launch) {
                 launchForward = launch;

@@ -12,7 +12,10 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackKitInstance;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.BlockRailBase;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -32,5 +35,9 @@ public abstract class TrackKitRailcraft extends TrackKitInstance {
 
     public boolean canPropagatePowerTo(ITrackKitInstance track) {
         return true;
+    }
+
+    public BlockRailBase.EnumRailDirection getTrackShape() {
+        return TrackTools.getTrackDirectionRaw(WorldPlugin.getBlockState(theWorldAsserted(), getPos()));
     }
 }
