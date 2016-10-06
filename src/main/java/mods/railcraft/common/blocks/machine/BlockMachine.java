@@ -136,9 +136,12 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
     @Override
     public IBlockColor colorHandler() {
         return (state, worldIn, pos, tintIndex) -> {
-            TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-            if (tile instanceof TileMachineBase)
-                return ((TileMachineBase) tile).colorMultiplier();
+            //TODO: this probably not entirely correct, may need to handle this differently if world/pos null
+            if (worldIn != null && pos != null) {
+                TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
+                if (tile instanceof TileMachineBase)
+                    return ((TileMachineBase) tile).colorMultiplier();
+            }
             return EnumColor.WHITE.getHexColor();
         };
     }
