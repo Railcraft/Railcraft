@@ -91,7 +91,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
                     if (!player.capabilities.isCreativeMode)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
                     fuel += burnTime;
-                    ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 0);
+                    ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 1);
 
                     pushX = posX - player.posX;
                     pushZ = posZ - player.posZ;
