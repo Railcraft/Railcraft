@@ -10,13 +10,17 @@
 package mods.railcraft.common.carts;
 
 import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCartBasic extends EntityMinecartEmpty {
+import javax.annotation.Nullable;
+
+public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCart {
 
     public EntityCartBasic(World world) {
         super(world);
@@ -24,6 +28,22 @@ public class EntityCartBasic extends EntityMinecartEmpty {
 
     public EntityCartBasic(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.BASIC;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getCartItem() {
+        return createCartItem(this);
+    }
+
+    @Override
+    public void killMinecart(DamageSource par1DamageSource) {
+        killAndDrop(this);
     }
 
     /**

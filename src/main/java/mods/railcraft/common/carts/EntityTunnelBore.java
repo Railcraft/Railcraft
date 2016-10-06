@@ -55,7 +55,10 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart {
@@ -1023,13 +1026,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         motionX *= CartConstants.STANDARD_DRAG;
         motionY *= 0.0D;
         motionZ *= CartConstants.STANDARD_DRAG;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
     }
 
     @Override

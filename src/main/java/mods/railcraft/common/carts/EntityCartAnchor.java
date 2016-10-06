@@ -11,9 +11,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
@@ -41,11 +38,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMinecart {
+public abstract class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMinecart {
     public static final byte TICKET_FLAG = 6;
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -58,11 +53,11 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     private int disabled;
     private int clock = MiscTools.RANDOM.nextInt();
 
-    public EntityCartAnchor(World world) {
+    protected EntityCartAnchor(World world) {
         super(world);
     }
 
-    public EntityCartAnchor(World world, double x, double y, double z) {
+    protected EntityCartAnchor(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -149,18 +144,14 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
         }
     }
 
-    protected Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, ForgeChunkManager.Type.ENTITY);
-    }
+    protected abstract Ticket getTicketFromForge();
 
     public boolean needsFuel() {
         return !getFuelMap().isEmpty();
     }
 
     @Override
-    public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.anchorFuelWorld;
-    }
+    public abstract ItemMap<Float> getFuelMap();
 
     protected boolean meetsTicketRequirements() {
         return !isDead && !teleported && disabled <= 0 && (hasFuel() || !needsFuel());
@@ -263,14 +254,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
-    }
-
-    @Override
-    public ItemStack getCartItem() {
+    public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack drop = super.getCartItem();
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
@@ -281,9 +265,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     @Override
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_WORLD;
-    }
+    public abstract boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
 
     @Override
     public boolean canBeRidden() {
@@ -296,9 +278,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     @Override
-    public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_WORLD.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
-    }
+    public abstract IBlockState getDefaultDisplayTile();
 
     @Override
     public long getAnchorFuel() {

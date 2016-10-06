@@ -9,19 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -46,18 +40,6 @@ public class EntityCartWork extends CartBase {
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.WORK;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.CRAFTING_TABLE));
-        } else {
-            items.add(getCartItem());
-        }
-        return items;
     }
 
     @Override

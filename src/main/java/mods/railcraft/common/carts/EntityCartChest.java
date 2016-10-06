@@ -18,16 +18,12 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityCartChest extends CartBaseContainer {
     public EntityCartChest(World world) {
@@ -41,17 +37,6 @@ public class EntityCartChest extends CartBaseContainer {
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.CHEST;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.CHEST));
-        } else
-            items.add(getCartItem());
-        return items;
     }
 
     @Override

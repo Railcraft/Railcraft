@@ -14,15 +14,12 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class EntityCartRF extends CartBase {
     private static final DataParameter<Integer> RF = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
@@ -90,13 +87,6 @@ public final class EntityCartRF extends CartBase {
 
     public int getMaxRF() {
         return RF_CAP;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
     }
 
     @Override

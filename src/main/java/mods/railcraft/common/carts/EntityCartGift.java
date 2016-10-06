@@ -9,16 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO: Test this
 public class EntityCartGift extends CartBaseSurprise {
@@ -163,17 +158,6 @@ public class EntityCartGift extends CartBaseSurprise {
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.GIFT;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.PUMPKIN));
-        } else
-            items.add(getCartItem());
-        return items;
     }
 
     @Override

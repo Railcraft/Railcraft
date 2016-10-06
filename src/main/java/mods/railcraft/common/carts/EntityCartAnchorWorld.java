@@ -11,37 +11,46 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.util.collections.ItemMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartAnchorAdmin extends EntityCartAnchorWorld {
+public class EntityCartAnchorWorld extends EntityCartAnchor {
 
-    public EntityCartAnchorAdmin(World world) {
+    public EntityCartAnchorWorld(World world) {
         super(world);
     }
 
-    public EntityCartAnchorAdmin(World world, double x, double y, double z) {
+    public EntityCartAnchorWorld(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_ADMIN;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_WORLD;
     }
 
     @Override
-    public boolean needsFuel() {
-        return false;
+    protected ForgeChunkManager.Ticket getTicketFromForge() {
+        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, ForgeChunkManager.Type.ENTITY);
+    }
+
+    @Override
+    public ItemMap<Float> getFuelMap() {
+        return RailcraftConfig.anchorFuelWorld;
     }
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_ADMIN.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
+        return EnumMachineAlpha.ANCHOR_WORLD.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
     }
 
 }

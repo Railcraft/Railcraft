@@ -14,7 +14,6 @@ import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.CartBattery;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -26,16 +25,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-
-import java.util.ArrayList;
-import java.util.List;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
@@ -56,18 +51,6 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY)
             return (T) cartBattery;
         return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack stack = getIC2Item();
-        if (RailcraftConfig.doCartsBreakOnDrop() && stack != null) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(stack);
-        } else
-            items.add(getCartItem());
-        return items;
     }
 
     @Override

@@ -9,10 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.entity.item.EntityMinecartCommandBlock;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -20,16 +17,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * Credits to CovertJaguar.
  *
  * @author liach
  */
-public class EntityCartCommand extends EntityMinecartCommandBlock {
+public class EntityCartCommand extends EntityMinecartCommandBlock implements IRailcraftCart {
 
     public EntityCartCommand(World world) {
         super(world);
@@ -37,6 +32,11 @@ public class EntityCartCommand extends EntityMinecartCommandBlock {
 
     public EntityCartCommand(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.COMMAND_BLOCK;
     }
 
     @Override
@@ -58,33 +58,14 @@ public class EntityCartCommand extends EntityMinecartCommandBlock {
         return CartTools.isInRangeToRenderDist(this, distance);
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public ItemStack getCartItem() {
-        ItemStack stack = new ItemStack(Items.COMMAND_BLOCK_MINECART);
-        if (hasCustomName())
-            stack.setStackDisplayName(getName());
-        return stack;
-    }
-
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.COMMAND_BLOCK));
-        } else
-            items.add(getCartItem());
-        return items;
+        return createCartItem(this);
     }
 
     @Override
     public void killMinecart(DamageSource par1DamageSource) {
-        setDead();
-        List<ItemStack> drops = getItemsDropped();
-        if (hasCustomName())
-            drops.get(0).setStackDisplayName(getCustomNameTag());
-        for (ItemStack item : drops) {
-            entityDropItem(item, 0.0F);
-        }
+        killAndDrop(this);
     }
 }

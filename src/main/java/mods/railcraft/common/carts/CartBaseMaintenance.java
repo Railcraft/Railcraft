@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,13 +74,6 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
 
         if (isBlinking())
             setBlink((byte) (getBlink() - 1));
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
     }
 
     @Override

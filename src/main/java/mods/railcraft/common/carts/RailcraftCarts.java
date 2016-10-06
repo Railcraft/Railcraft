@@ -52,7 +52,7 @@ import java.util.function.Supplier;
 public enum RailcraftCarts implements IRailcraftCartContainer {
 
     // Vanilla Carts
-    // TODO: listing vanilla classes here causes weird error messages
+    // TODO: listing vanilla classes here causes weird error messages, see hopper
     BASIC(0, "cart_basic", EntityCartBasic.class, (c) -> Items.MINECART),
     CHEST(0, "cart_chest", EntityCartChest.class, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
     COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),
@@ -61,7 +61,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
-    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchor.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem) {
+    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem) {
         {
             conditions.add(RailcraftBlocks.MACHINE_ALPHA);
             conditions.add(EnumMachineAlpha.ANCHOR_WORLD);

@@ -23,8 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * It also contains some generic code that most carts will find useful.
@@ -39,8 +37,6 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
-
-    public abstract IRailcraftCartContainer getCartType();
 
     @Nonnull
     @Override
@@ -61,30 +57,15 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         return true;
     }
 
-    @Nonnull
+    @Nullable
     @Override
-    public ItemStack getCartItem() {
-        ItemStack stack = RailcraftCarts.fromCart(this).getStack();
-        if (hasCustomName())
-            stack.setStackDisplayName(getCustomNameTag());
-        return stack;
-    }
-
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
+    public final ItemStack getCartItem() {
+        return createCartItem(this);
     }
 
     @Override
     public void killMinecart(DamageSource par1DamageSource) {
-        setDead();
-        List<ItemStack> drops = getItemsDropped();
-        if (hasCustomName())
-            drops.get(0).setStackDisplayName(this.getCustomNameTag());
-        for (ItemStack item : drops) {
-            entityDropItem(item, 0.0F);
-        }
+        killAndDrop(this);
     }
 
     @Override

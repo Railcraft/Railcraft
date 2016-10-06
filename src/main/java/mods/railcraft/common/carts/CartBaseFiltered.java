@@ -23,8 +23,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
     private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
@@ -72,8 +70,11 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         return cart;
     }
 
+    @Nullable
     public ItemStack getFilteredCartItem(@Nullable ItemStack filter) {
         ItemStack stack = getCartType().getStack();
+        if (stack == null)
+            return null;
         return addFilterToCartItem(stack, filter);
     }
 
@@ -84,19 +85,13 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         setFilter(filter);
     }
 
+    @Nullable
     @Override
-    public ItemStack getCartItem() {
+    public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack stack = getFilteredCartItem(getFilterItem());
-        if (hasCustomName())
+        if (stack != null && hasCustomName())
             stack.setStackDisplayName(getName());
         return stack;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
     }
 
     @Override

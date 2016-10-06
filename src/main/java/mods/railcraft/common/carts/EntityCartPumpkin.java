@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -22,8 +21,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.MAINHAND;
@@ -79,17 +76,6 @@ public class EntityCartPumpkin extends CartBaseSurprise {
     @Override
     public IBlockState getDefaultDisplayTile() {
         return Blocks.PUMPKIN.getDefaultState();
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.PUMPKIN));
-        } else
-            items.add(getCartItem());
-        return items;
     }
 
     @Override

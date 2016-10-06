@@ -9,13 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -25,10 +22,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class EntityCartFurnace extends EntityMinecartFurnace {
+public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart {
 
     public EntityCartFurnace(World world) {
         super(world);
@@ -36,6 +31,11 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
 
     public EntityCartFurnace(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.FURNACE;
     }
 
     /**
@@ -47,33 +47,15 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
         return CartTools.isInRangeToRenderDist(this, distance);
     }
 
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.FURNACE));
-        } else
-            items.add(getCartItem());
-        return items;
+    @Nullable
+    @Override
+    public ItemStack getCartItem() {
+        return createCartItem(this);
     }
 
     @Override
     public void killMinecart(DamageSource par1DamageSource) {
-        setDead();
-        List<ItemStack> drops = getItemsDropped();
-        if (hasCustomName())
-            drops.get(0).setStackDisplayName(getName());
-        for (ItemStack item : drops) {
-            entityDropItem(item, 0.0F);
-        }
-    }
-
-    @Override
-    public ItemStack getCartItem() {
-        ItemStack stack = new ItemStack(Items.FURNACE_MINECART);
-        if (hasCustomName())
-            stack.setStackDisplayName(getName());
-        return stack;
+        killAndDrop(this);
     }
 
 //    public double getDrag() {

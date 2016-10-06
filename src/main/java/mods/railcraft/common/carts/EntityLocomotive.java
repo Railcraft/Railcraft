@@ -49,7 +49,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
@@ -64,9 +63,7 @@ import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -169,14 +166,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
-    }
-
-    @Override
-    public ItemStack getCartItem() {
+    public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack item = getCartItemBase();
         if (isSecure() && CartToolsAPI.doesCartHaveOwner(this))
             ItemLocomotive.setOwnerData(item, CartToolsAPI.getCartOwner(this));
@@ -561,9 +551,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public void killMinecart(DamageSource par1DamageSource) {
+    public void killAndDrop(EntityMinecart cart) {
         getTicketInventory().setInventorySlotContents(1, null);
-        super.killMinecart(par1DamageSource);
+        super.killAndDrop(cart);
     }
 
     @Override

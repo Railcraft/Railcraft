@@ -18,17 +18,14 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityCartCargo extends CartBaseFiltered {
     private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
@@ -75,18 +72,7 @@ public class EntityCartCargo extends CartBaseFiltered {
     }
 
     @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.TRAPPED_CHEST));
-        } else
-            items.add(getCartItem());
-        return items;
-    }
-
-    @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
         if (Game.isHost(worldObj)) {
             GuiHandler.openGui(EnumGui.CART_CARGO, player, worldObj, this);
         }
