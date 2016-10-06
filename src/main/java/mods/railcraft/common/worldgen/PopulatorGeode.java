@@ -19,7 +19,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 
 import java.util.Locale;
@@ -29,7 +28,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class PopulatorGeode extends Populator {
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0]);
+    //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0]);
     public static final int MIN_DEPTH = 16;
     public static final int MIN_FLOOR = 24;
     public static final int GEN_HEIGHT = 60;
@@ -37,7 +36,7 @@ public class PopulatorGeode extends Populator {
     private final WorldGenerator geode = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState());
 
     private PopulatorGeode() {
-        super(EVENT_TYPE, GEN_HEIGHT);
+        super(EventType.CUSTOM, GEN_HEIGHT);
     }
 
     public static PopulatorGeode instance() {

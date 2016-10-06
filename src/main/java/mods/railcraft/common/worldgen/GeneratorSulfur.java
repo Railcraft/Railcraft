@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -27,7 +26,7 @@ import java.util.Random;
  */
 public class GeneratorSulfur {
 
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SULFUR", new Class[0], new Object[0]);
+    //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SULFUR", new Class[0], new Object[0]);
     private final WorldGenerator sulfur = new WorldGenSulfur();
 
     @SubscribeEvent
@@ -37,7 +36,7 @@ public class GeneratorSulfur {
         Random rand = event.getRand();
         BlockPos pos = event.getPos();
 
-        if (!TerrainGen.generateOre(world, rand, sulfur, pos, EVENT_TYPE))
+        if (!TerrainGen.generateOre(world, rand, sulfur, pos, EventType.CUSTOM))
             return;
 
         Biome biome = world.getBiome(pos.add(8, 0, 8));

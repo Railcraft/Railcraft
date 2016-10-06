@@ -1,18 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType;
 
 import java.util.Random;
@@ -22,10 +22,10 @@ import java.util.Random;
  */
 public class DecoratorFirestone extends Decorator {
 
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FIRESTONE", new Class[0], new Object[0]);
+//    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FIRESTONE", new Class[0], new Object[0]);
 
     public DecoratorFirestone() {
-        super(EVENT_TYPE, new WorldGenFirestone());
+        super(EventType.CUSTOM, new WorldGenFirestone());
     }
 
     @Override

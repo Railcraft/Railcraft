@@ -16,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 
 import java.util.Random;
@@ -26,7 +25,7 @@ import java.util.Random;
  */
 public class PopulatorQuarry extends Populator {
 
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_QUARRY", new Class[0]);
+    //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_QUARRY", new Class[0]);
     public static final int GEN_HEIGHT = 50;
     private static PopulatorQuarry instance;
     private final WorldGenQuarry quarry = new WorldGenQuarry(EnumGeneric.STONE_QUARRIED.getDefaultState());
@@ -39,7 +38,7 @@ public class PopulatorQuarry extends Populator {
     }
 
     private PopulatorQuarry() {
-        super(EVENT_TYPE, GEN_HEIGHT);
+        super(EventType.CUSTOM, GEN_HEIGHT);
     }
 
     @Override
