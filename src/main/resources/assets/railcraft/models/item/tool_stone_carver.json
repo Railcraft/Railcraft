@@ -1,14 +1,14 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "railcraft:items/tool.stone.carver"
+        "layer0": "railcraft:items/tool_stone_carver"
     },
     "overrides": [
     {
         "predicate": {
             "held": 1
         },
-        "model": "railcraft:item/tool.stone.carver.held"
+        "model": "railcraft:item/tool_stone_carver_held"
     }
 ]
 }

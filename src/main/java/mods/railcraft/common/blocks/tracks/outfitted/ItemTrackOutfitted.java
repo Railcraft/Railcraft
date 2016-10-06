@@ -67,6 +67,16 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
         return 0;
     }
 
+    @Override
+    public int getDamage(ItemStack stack) {
+        return super.getMetadata(stack);
+    }
+
+    @Override
+    public int getMetadata(ItemStack stack) {
+        return getSuffix(stack).hashCode();
+    }
+
     private String getSuffix(ItemStack stack) {
         return TrackRegistry.TRACK_TYPE.get(stack).getName() + "." + TrackRegistry.TRACK_KIT.get(stack).getName();
     }

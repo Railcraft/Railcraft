@@ -37,6 +37,10 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
         heat = HEAT;
     }
 
+    @Override
+    public void defineRecipes() {
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack getContainerItem(ItemStack stack) {

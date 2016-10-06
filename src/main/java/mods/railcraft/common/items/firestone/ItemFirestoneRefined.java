@@ -61,7 +61,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Nullable
     public static ItemStack getItemEmpty() {
-        return RailcraftItems.FIRESTONE_REFINED.getStack(CHARGES - 1);
+        return RailcraftItems.FIRESTONE_REFINED.getStack(1, CHARGES - 1);
     }
 
     public ItemFirestoneRefined() {

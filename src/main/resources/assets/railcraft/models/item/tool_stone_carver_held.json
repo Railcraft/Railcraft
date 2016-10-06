@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "railcraft:items/tool.stone.carver.held"
+        "layer0": "railcraft:items/tool_stone_carver_held"
     }
 }
