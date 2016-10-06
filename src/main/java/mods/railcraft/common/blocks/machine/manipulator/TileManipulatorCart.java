@@ -302,10 +302,10 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
 
     public enum EnumTransferMode implements IMultiButtonState {
 
-        ALL("➧➧➧", "all"),
-        EXCESS("#➧➧", "excess"),
-        STOCK("➧➧#", "stock"),
-        TRANSFER("➧#➧", "transfer");
+        ALL("\u27a7\u27a7\u27a7", "all"),
+        EXCESS("#\u27a7\u27a7", "excess"),
+        STOCK("\u27a7\u27a7#", "stock"),
+        TRANSFER("\u27a7#\u27a7", "transfer");
         private final String label;
         private final String locTag;
         private final ToolTip tips;
@@ -340,10 +340,10 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
 
     public enum EnumRedstoneMode implements IMultiButtonState {
 
-        COMPLETE("✔", "complete"),
+        COMPLETE("\u2714", "complete"),
         IMMEDIATE("\u2762", "immediate"),
-        MANUAL("✘", "manual"),
-        PARTIAL("➧", "partial");
+        MANUAL("\u2718", "manual"),
+        PARTIAL("\u27a7", "partial");
         private final String label;
         private final String locTag;
         private final ToolTip tips;
