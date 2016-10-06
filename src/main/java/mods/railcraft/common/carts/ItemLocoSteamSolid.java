@@ -14,9 +14,9 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -34,15 +34,17 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        ItemStack tank;
+        Object tank;
         if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
             tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getItem();
         else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
             tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
         else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
             tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
-        else if (RailcraftItems.INGOT.getStack(Metal.STEEL) != null)
-            tank = RailcraftItems.INGOT.getStack(Metal.STEEL);
+        else if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
+            tank = Metal.STEEL.getStack(Metal.Form.PLATE);
+        else if (OreDictPlugin.oreExists("ingotSteel"))
+            tank = "ingotSteel";
         else
             tank = new ItemStack(Items.IRON_INGOT);
 

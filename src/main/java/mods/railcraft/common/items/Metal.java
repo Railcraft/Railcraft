@@ -149,7 +149,12 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        PLATE("plate", RailcraftItems.PLATE),
+        PLATE("plate", RailcraftItems.PLATE) {
+            @Override
+            public String getOreDictTag(Metal metal) {
+                return null;
+            }
+        },
         BLOCK("block", RailcraftBlocks.GENERIC, blockMap) {
             @Nullable
             @Override
@@ -186,7 +191,8 @@ public enum Metal implements IVariantEnum {
             this.variantMap = variantMap;
         }
 
-        public final String getOreDictTag(Metal metal) {
+        @Nullable
+        public String getOreDictTag(Metal metal) {
             return metal.getOreTag(this);
         }
 
@@ -208,8 +214,11 @@ public enum Metal implements IVariantEnum {
             ItemStack stack = null;
             if (variant != null)
                 stack = container.getStack(qty, variant);
-            if (stack == null)
-                stack = OreDictPlugin.getOre(getOreDictTag(metal), qty);
+            if (stack == null) {
+                String oreTag = getOreDictTag(metal);
+                if (oreTag != null)
+                    stack = OreDictPlugin.getOre(oreTag, qty);
+            }
             return stack;
         }
     }
