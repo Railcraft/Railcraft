@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class)
+@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class, description = "cart linking, train drag, train dispenser")
 public class ModuleTrain extends RailcraftModulePayload {
 
     public ModuleTrain() {

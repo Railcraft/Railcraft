@@ -20,7 +20,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.ModItems;
-import mods.railcraft.common.modules.ModuleElectricity;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.ModuleThaumcraft;
@@ -115,7 +115,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     LOCO_ELECTRIC(1, "locomotive_electric", EntityLocomotiveElectric.class, ItemLocoElectric::new) {
         {
             conditions.add(ModuleLocomotives.class);
-            conditions.add(ModuleElectricity.class);
+            conditions.add(ModuleCharge.class);
         }
     },
     LOCO_CREATIVE(3, "locomotive_creative", EntityLocomotiveCreative.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA)) {

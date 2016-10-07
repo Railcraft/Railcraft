@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.ModuleElectricity;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -35,8 +35,8 @@ import java.util.List;
 public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     ADMIN_STEAM_PRODUCER(ModuleSteam.class, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1),
-    FORCE_TRACK_EMITTER(ModuleElectricity.class, "force.track.emitter", TileForceTrackEmitter.class, 1, 1),
-    FLUX_TRANSFORMER(ModuleElectricity.class, "flux.transformer", TileFluxTransformer.class, 1, 1),
+    FORCE_TRACK_EMITTER(ModuleCharge.class, "force.track.emitter", TileForceTrackEmitter.class, 1, 1),
+    FLUX_TRANSFORMER(ModuleCharge.class, "flux.transformer", TileFluxTransformer.class, 1, 1),
     ENGRAVING_BENCH("emblem", "engraving.bench", TileEngravingBench.class, 4, 1);
     public static final PropertyEnum<EnumMachineEpsilon> VARIANT = PropertyEnum.create("variant", EnumMachineEpsilon.class);
     public static final EnumMachineEpsilon[] VALUES = values();

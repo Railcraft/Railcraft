@@ -23,10 +23,10 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule("railcraft:electricity")
-public class ModuleElectricity extends RailcraftModulePayload {
+@RailcraftModule(value = "railcraft:charge", description = "all things charge")
+public class ModuleCharge extends RailcraftModulePayload {
 
-    public ModuleElectricity() {
+    public ModuleCharge() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {

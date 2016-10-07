@@ -36,7 +36,7 @@ import java.util.List;
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1),
-    TURBINE(ModuleElectricity.class, "turbine", TileSteamTurbine.class, 3, 3),
+    TURBINE(ModuleCharge.class, "turbine", TileSteamTurbine.class, 3, 3),
     ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
     STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
     ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
