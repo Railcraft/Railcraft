@@ -15,6 +15,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -26,6 +27,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
@@ -45,8 +48,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     public static final int SLOT_LIQUID_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
     public static final int SLOT_LIQUID_OUTPUT = 1;
-    private static final byte SMOKE_FLAG = 6;
-    private static final byte STEAM_FLAG = 7;
+    private static final DataParameter<Boolean> SMOKE = DataManagerPlugin.create(DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> STEAM = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
     public SteamBoiler boiler;
@@ -96,6 +99,14 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setEfficiencyModifier(RailcraftConfig.steamLocomotiveEfficiencyMultiplier());
         boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+
+        dataManager.register(SMOKE, false);
+        dataManager.register(STEAM, false);
     }
 
     @Override
@@ -167,22 +178,20 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     @SuppressWarnings("WeakerAccess")
     public boolean isSmoking() {
-        return getFlag(SMOKE_FLAG);
+        return dataManager.get(SMOKE);
     }
 
     private void setSmoking(boolean smoke) {
-        if (getFlag(SMOKE_FLAG) != smoke)
-            setFlag(SMOKE_FLAG, smoke);
+        dataManager.set(SMOKE, smoke);
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean isSteaming() {
-        return getFlag(STEAM_FLAG);
+        return dataManager.get(STEAM);
     }
 
     private void setSteaming(boolean steam) {
-        if (getFlag(STEAM_FLAG) != steam)
-            setFlag(STEAM_FLAG, steam);
+        dataManager.set(STEAM, steam);
     }
 
     private void ventSteam() {

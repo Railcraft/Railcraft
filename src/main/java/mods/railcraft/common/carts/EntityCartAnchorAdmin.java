@@ -41,7 +41,7 @@ public class EntityCartAnchorAdmin extends EntityCartAnchorWorld {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_ADMIN.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
+        return EnumMachineAlpha.ANCHOR_ADMIN.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
     }
 
 }

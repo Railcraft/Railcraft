@@ -14,6 +14,7 @@ import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -107,7 +108,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         OpenGL.glTranslatef((float) x, (float) y + 0.375F, (float) z);
 
         boolean name = false;
-        if (cart.hasCustomName()) {
+        if (cart.hasCustomName() && !SeasonPlugin.isGhostTrain(cart)) {
             renderHaloText(cart, cart.getName(), 0, 0, 0, 64);
             name = true;
         }
@@ -135,6 +136,11 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(getTeamColor(cart));
+        }
+
+        if (SeasonPlugin.isGhostTrain(cart)) {
+            GlStateManager.enableBlend();
+            GlStateManager.color(1, 1, 1, 0.5F);
         }
 
         float light = cart.getBrightness(partialTicks);

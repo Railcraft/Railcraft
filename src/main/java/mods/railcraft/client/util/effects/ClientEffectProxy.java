@@ -17,6 +17,7 @@ import mods.railcraft.client.render.tesr.TESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
@@ -252,7 +253,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public void locomotiveEffect(World world, double x, double y, double z) {
         if (thinParticles(false))
             return;
-        spawnParticle(new ParticleLocomotive(world, new Vec3d(x, y, z)));
+        if (SeasonPlugin.HALLOWEEN && rand.nextInt(4) == 0) {
+            spawnParticle(new ParticlePumpkin(world, new Vec3d(x, y, z)));
+        } else
+            spawnParticle(new ParticleLocomotive(world, new Vec3d(x, y, z)));
     }
 
     @Override

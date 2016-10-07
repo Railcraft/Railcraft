@@ -49,7 +49,8 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
             setExpired();
         this.particleAge++;
 
-        setParticleTextureIndex(7 - particleAge * 8 / particleMaxAge);
+        if (getFXLayer() == 0)
+            setParticleTextureIndex(7 - particleAge * 8 / particleMaxAge);
         this.motionY -= 0.04D * particleGravity;
         moveEntity(motionX, motionY, motionZ);
 

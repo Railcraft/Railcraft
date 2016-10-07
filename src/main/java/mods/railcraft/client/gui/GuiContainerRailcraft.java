@@ -191,6 +191,12 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         buttonList.stream().flatMap(Streams.toType(GuiBetterButton.class)).forEach(GuiBetterButton::updateStatus);
     }
 
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        buttonList.stream().flatMap(Streams.toType(GuiBetterButton.class)).forEach(GuiBetterButton::updateStatus);
+    }
+
     private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
         if (toolTips.size() > 0) {
             int left = guiLeft;

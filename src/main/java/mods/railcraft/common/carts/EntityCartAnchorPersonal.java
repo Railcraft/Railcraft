@@ -74,7 +74,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
+        return EnumMachineAlpha.ANCHOR_PERSONAL.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
     }
 
 }

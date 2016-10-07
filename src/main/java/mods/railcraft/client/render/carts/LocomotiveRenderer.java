@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
@@ -13,6 +14,7 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
@@ -28,8 +30,11 @@ public class LocomotiveRenderer extends CartModelRenderer {
     public boolean render(ICartRenderer renderer, EntityMinecart cart, float light, float time) {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
-        int primaryColor = EnumColor.fromDye(loco.getPrimaryColor()).getHexColor();
-        int secondaryColor = EnumColor.fromDye(loco.getSecondaryColor()).getHexColor();
+        EnumColor pColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.WHITE : EnumColor.fromDye(loco.getPrimaryColor());
+        EnumColor sColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.WHITE : EnumColor.fromDye(loco.getSecondaryColor());
+
+        int primaryColor = pColor.getHexColor();
+        int secondaryColor = sColor.getHexColor();
 
         String emblem = loco.getEmblem();
         ResourceLocation emblemTexture = null;

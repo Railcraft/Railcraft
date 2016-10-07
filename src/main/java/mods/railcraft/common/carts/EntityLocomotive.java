@@ -279,7 +279,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     protected final void setMaxReverseSpeed(LocoSpeed speed) {
-        this.maxReverseSpeed = maxReverseSpeed;
+        this.maxReverseSpeed = speed;
     }
 
     public void increaseSpeed() {

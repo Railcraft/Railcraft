@@ -14,6 +14,7 @@ import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -100,7 +101,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             float c1 = (float) (c >> 16 & 255) / 255.0F;
             float c2 = (float) (c >> 8 & 255) / 255.0F;
             float c3 = (float) (c & 255) / 255.0F;
-            OpenGL.glColor4f(c1 * dim, c2 * dim, c3 * dim, 1);
+            OpenGL.glColor4f(c1 * dim, c2 * dim, c3 * dim, SeasonPlugin.isGhostTrain(cart) ? 0.5F : 1);
             model.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
         OpenGL.glPopAttrib();

@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -30,6 +31,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -41,7 +44,7 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 public abstract class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMinecart {
-    public static final byte TICKET_FLAG = 6;
+    private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
     private final InventoryMapper invWrapper = new InventoryMapper(this);
@@ -62,6 +65,13 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+
+        dataManager.register(TICKET, false);
+    }
+
+    @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.ANCHOR_WORLD;
     }
@@ -78,14 +88,22 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     }
 
     public boolean hasActiveTicket() {
-        return ticket != null || (Game.isClient(worldObj) && getFlag(TICKET_FLAG));
+        return ticket != null || (Game.isClient(worldObj) && hasTicketFlag());
+    }
+
+    private void setTicketFlag(boolean flag) {
+        dataManager.set(TICKET, flag);
+    }
+
+    public boolean hasTicketFlag() {
+        return dataManager.get(TICKET);
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
         if (Game.isClient(worldObj)) {
-            if (getFlag(TICKET_FLAG))
+            if (hasTicketFlag())
                 if (chunks != null)
                     EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
                 else
@@ -160,7 +178,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     protected void releaseTicket() {
         ForgeChunkManager.releaseTicket(ticket);
         ticket = null;
-        setFlag(TICKET_FLAG, false);
+        setTicketFlag(false);
     }
 
     private boolean requestTicket() {
@@ -184,7 +202,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
         if (this.ticket != ticket)
             ForgeChunkManager.releaseTicket(this.ticket);
         this.ticket = ticket;
-        setFlag(TICKET_FLAG, this.ticket != null);
+        setTicketFlag(this.ticket != null);
     }
 
     public void forceChunkLoading(int xChunk, int zChunk) {
@@ -212,7 +230,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     }
 
     public void setupChunks(int xChunk, int zChunk) {
-        if (getFlag(TICKET_FLAG))
+        if (hasTicketFlag())
             chunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, ANCHOR_RADIUS);
         else
             chunks = null;

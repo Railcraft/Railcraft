@@ -11,12 +11,11 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
-
-import java.util.Calendar;
 
 /**
  * Created by CovertJaguar on 8/30/2016 for Railcraft.
@@ -30,9 +29,7 @@ public class ItemCartGift extends ItemCart {
 
     @Override
     public void defineRecipes() {
-        Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH);
-        if (month == Calendar.DECEMBER || month == Calendar.JANUARY) {
+        if (SeasonPlugin.HOLIDAYS) {
             Game.log(Level.INFO, "Activating Christmas Seasonal Pack");
             CraftingPlugin.addRecipe(getStack(), "GGG",
                     "WEW",

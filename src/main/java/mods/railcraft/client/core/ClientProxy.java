@@ -11,6 +11,7 @@ package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
@@ -99,6 +100,7 @@ public class ClientProxy extends CommonProxy {
 //                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux_frame")));
 
                 ParticleSpark.sprite = event.getMap().registerSprite(new ResourceLocation("railcraft:particle/spark"));
+                ParticlePumpkin.sprite = event.getMap().registerSprite(new ResourceLocation("railcraft:particle/pumpkin"));
 
                 for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
                     Block block = blockContainer.block();
