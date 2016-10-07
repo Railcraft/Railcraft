@@ -208,7 +208,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
     @Override
     public String getEntityLocalizationTag() {
-        return "entity.railcraft." + tag.replace("_", ".") + ".name";
+        return "entity.railcraft." + tag + ".name";
     }
 
     @Override
