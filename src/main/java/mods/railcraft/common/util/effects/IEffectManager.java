@@ -39,6 +39,8 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void chimneyEffect(World world, double x, double y, double z);
 
+    void locomotiveEffect(World world, double x, double y, double z);
+
     void sparkEffectPoint(World world, Object source);
 
     void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos);

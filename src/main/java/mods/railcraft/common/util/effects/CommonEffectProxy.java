@@ -127,6 +127,10 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
+    public void locomotiveEffect(World world, double x, double y, double z) {
+    }
+
+    @Override
     public void sparkEffectPoint(World world, Object source) {
     }
 

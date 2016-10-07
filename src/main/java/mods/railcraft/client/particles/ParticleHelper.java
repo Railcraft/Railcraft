@@ -28,7 +28,7 @@ import java.util.Random;
 public class ParticleHelper {
     public static final float SMOKE_GRAVITY = -0.1F;
 
-    private static final Random rand = new Random();
+    public static final Random RANDOM = new Random();
 
     @SideOnly(Side.CLIENT)
     public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, @Nullable ParticleHelperCallback callback) {
@@ -43,9 +43,9 @@ public class ParticleHelper {
 //        int meta = world.getBlockMetadata(x, y, z);
 //
 //        float b = 0.1F;
-//        double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
-//        double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
-//        double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
+//        double px = x + RANDOM.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
+//        double py = y + RANDOM.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
+//        double pz = z + RANDOM.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 //
 //        if (sideHit == DOWN)
 //            py = (double) y + block.getBlockBoundsMinY() - (double) b;
@@ -96,7 +96,7 @@ public class ParticleHelper {
 //                    double px = x + (i + 0.5D) / (double) its;
 //                    double py = y + (j + 0.5D) / (double) its;
 //                    double pz = z + (k + 0.5D) / (double) its;
-//                    int random = rand.nextInt(6);
+//                    int random = RANDOM.nextInt(6);
 //                    EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, state);
 //                    fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
 //                    if (callback != null)

@@ -61,9 +61,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
 //        for(int i = 0; i < TELEPORT_PARTICLES / 4; i++) {
-//            float vX = (rand.nextFloat() - 0.5F) * 0.2F;
-//            float vY = (rand.nextFloat() - 0.5F) * 0.2F;
-//            float vZ = (rand.nextFloat() - 0.5F) * 0.2F;
+//            float vX = (RANDOM.nextFloat() - 0.5F) * 0.2F;
+//            float vY = (RANDOM.nextFloat() - 0.5F) * 0.2F;
+//            float vZ = (RANDOM.nextFloat() - 0.5F) * 0.2F;
 //            Game.getWorld().spawnParticle("portal", startX, startY, startZ, vX, vY, vZ);
 //        }
         for (int i = 0; i < TELEPORT_PARTICLES; i++) {
@@ -90,9 +90,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-//        double vx = rand.nextGaussian() * 0.1;
-//        double vy = rand.nextDouble() * 0.01;
-//        double vz = rand.nextGaussian() * 0.1;
+//        double vx = RANDOM.nextGaussian() * 0.1;
+//        double vy = RANDOM.nextDouble() * 0.01;
+//        double vz = RANDOM.nextGaussian() * 0.1;
         Vec3d vel = new Vec3d(0, 0, 0);
         spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.1), vel));
         spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.1), vel));
@@ -246,6 +246,13 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (thinParticles(false))
             return;
         spawnParticle(new ParticleChimney(world, new Vec3d(x, y, z)));
+    }
+
+    @Override
+    public void locomotiveEffect(World world, double x, double y, double z) {
+        if (thinParticles(false))
+            return;
+        spawnParticle(new ParticleLocomotive(world, new Vec3d(x, y, z)));
     }
 
     @Override

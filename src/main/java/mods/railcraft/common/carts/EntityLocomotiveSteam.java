@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -156,12 +155,11 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 //            if (update % FluidTools.BUCKET_FILL_TIME == 0)
 //                FluidTools.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
         } else {
-            if (isSmoking())
-                if (rand.nextInt(3) == 0) {
-                    double rads = renderYaw * Math.PI / 180D;
-                    float offset = 0.4f;
-                    worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX - Math.cos(rads) * offset, posY + 1.2f, posZ - Math.sin(rads) * offset, 0, 0, 0);
-                }
+            if (isSmoking()) {
+                double rads = renderYaw * Math.PI / 180D;
+                float offset = 0.4f;
+                EffectManager.instance.locomotiveEffect(worldObj, posX - Math.cos(rads) * offset, posY + 1.5f, posZ - Math.sin(rads) * offset);
+            }
             if (isSteaming())
                 EffectManager.instance.steamEffect(worldObj, this, getEntityBoundingBox().minY - posY - 0.3);
         }
