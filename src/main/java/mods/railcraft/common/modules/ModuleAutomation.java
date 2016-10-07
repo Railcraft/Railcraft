@@ -24,7 +24,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-@RailcraftModule("railcraft:automation")
+@RailcraftModule(value = "railcraft:automation", description = "tunnel bore, maintenance carts, feed station, trade station, detectors")
 public class ModuleAutomation extends RailcraftModulePayload {
     public ModuleAutomation() {
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -34,7 +34,6 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
                         RailcraftBlocks.DETECTOR,
-                        RailcraftBlocks.GENERIC,
 //                        RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.MANIPULATOR,
 

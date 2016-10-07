@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 
-@RailcraftModule("railcraft:tracks|reinforced")
+@RailcraftModule(value = "railcraft:tracks|reinforced", description = "reinforced tracks")
 public class ModuleTracksReinforced extends RailcraftModulePayload {
 
     public ModuleTracksReinforced() {

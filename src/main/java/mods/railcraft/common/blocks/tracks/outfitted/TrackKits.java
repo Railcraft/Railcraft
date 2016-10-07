@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<TrackKit>> {
 
     ACTIVATOR(ModuleTracks.class, 2, "activator", 8, TrackKitActivator.class, () -> recipe(Items.REDSTONE, Items.REDSTONE)),
-    BOOSTER(ModuleTracksWood.class, 2, "booster", 8, TrackKitBooster.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
+    BOOSTER(ModuleTracksStrapIron.class, 2, "booster", 8, TrackKitBooster.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
     BUFFER_STOP(ModuleTracks.class, 2, "buffer", 8, TrackBufferStop.class, () -> recipe("ingotIron", "ingotIron")),
     CONTROL(ModuleTracks.class, 2, "control", 16, TrackKitControl.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
     COUPLER(ModuleTracks.class, 6, "coupler", 8, TrackKitCoupler.class, () -> recipe(Items.LEAD, Items.REDSTONE)),

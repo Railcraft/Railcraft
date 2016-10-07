@@ -16,7 +16,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 @RailcraftModule(value = "railcraft:tracks|high_speed_electric",
-        dependencyClasses = {ModuleLocomotives.class, ModuleCharge.class, ModuleTracksElectric.class, ModuleTracksHighSpeed.class})
+        dependencyClasses = {ModuleLocomotives.class, ModuleCharge.class, ModuleTracksElectric.class, ModuleTracksHighSpeed.class},
+        description = "high speed electric tracks")
 public class ModuleTracksHighSpeedElectric extends RailcraftModulePayload {
 
     public ModuleTracksHighSpeedElectric() {

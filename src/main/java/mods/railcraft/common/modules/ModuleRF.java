@@ -24,14 +24,13 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:redstone_flux")
+@RailcraftModule(value = "railcraft:redstone_flux", description = "redstone flux cart")
 public class ModuleRF extends RailcraftModulePayload {
     public ModuleRF() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.DETECTOR,
                         RailcraftCarts.REDSTONE_FLUX,
                         RailcraftBlocks.MANIPULATOR
                 );
@@ -39,7 +38,6 @@ public class ModuleRF extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-
                 ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getItem();

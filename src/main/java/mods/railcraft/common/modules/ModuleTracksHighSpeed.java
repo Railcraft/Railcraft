@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 
-@RailcraftModule("railcraft:tracks|high_speed")
+@RailcraftModule(value = "railcraft:tracks|high_speed", description = "high speed tracks")
 public class ModuleTracksHighSpeed extends RailcraftModulePayload {
 
     public ModuleTracksHighSpeed() {

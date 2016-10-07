@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.items.RailcraftItems;
 
-@RailcraftModule("railcraft:signals")
+@RailcraftModule(value = "railcraft:signals", description = "signals, signal boxes")
 public class ModuleSignals extends RailcraftModulePayload {
 
     public ModuleSignals() {

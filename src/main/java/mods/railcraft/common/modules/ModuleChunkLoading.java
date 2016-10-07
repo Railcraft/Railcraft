@@ -26,7 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:chunk_loading")
+@RailcraftModule(value = "railcraft:chunk_loading", description = "world anchors, world anchor carts")
 public class ModuleChunkLoading extends RailcraftModulePayload {
 
     public ModuleChunkLoading() {

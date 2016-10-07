@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.carts.RailcraftCarts;
 
-@RailcraftModule("railcraft:seasonal")
+@RailcraftModule(value = "railcraft:seasonal", description = "christmas, halloween")
 public class ModuleSeasonal extends RailcraftModulePayload {
 
     public ModuleSeasonal() {

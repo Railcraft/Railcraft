@@ -22,7 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-@RailcraftModule("railcraft:ic2")
+@RailcraftModule(value = "railcraft:ic2", description = "industrial craft integration")
 public class ModuleIC2 extends RailcraftModulePayload {
 
     @Override

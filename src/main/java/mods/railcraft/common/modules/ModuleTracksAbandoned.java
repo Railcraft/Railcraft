@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 
-@RailcraftModule("railcraft:tracks|abandoned")
+@RailcraftModule(value = "railcraft:tracks|abandoned", description = "abandoned tracks")
 public class ModuleTracksAbandoned extends RailcraftModulePayload {
 
     public ModuleTracksAbandoned() {

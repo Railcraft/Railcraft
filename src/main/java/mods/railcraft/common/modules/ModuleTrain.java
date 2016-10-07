@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class, description = "cart linking, train drag, train dispenser")
+@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class, description = "cart linking, train dispenser, coupler track kit")
 public class ModuleTrain extends RailcraftModulePayload {
 
     public ModuleTrain() {
@@ -29,7 +29,6 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.DETECTOR,
                         RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track

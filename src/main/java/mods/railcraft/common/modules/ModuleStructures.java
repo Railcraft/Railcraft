@@ -33,7 +33,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-@RailcraftModule("railcraft:structures")
+@RailcraftModule(value = "railcraft:structures", description = "glass, posts, stairs, slabs, lanterns, walls")
 public class ModuleStructures extends RailcraftModulePayload {
 
     public ModuleStructures() {

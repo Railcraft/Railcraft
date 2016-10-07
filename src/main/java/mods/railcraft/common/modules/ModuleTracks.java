@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.items.RailcraftItems;
 
-@RailcraftModule("railcraft:tracks")
+@RailcraftModule(value = "railcraft:tracks", description = "track kits, outfitted track")
 public class ModuleTracks extends RailcraftModulePayload {
 
     public ModuleTracks() {

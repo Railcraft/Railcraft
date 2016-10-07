@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule(value = "railcraft:tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleCharge.class})
+@RailcraftModule(value = "railcraft:tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleCharge.class}, description = "electric tracks")
 public class ModuleTracksElectric extends RailcraftModulePayload {
 
     public ModuleTracksElectric() {

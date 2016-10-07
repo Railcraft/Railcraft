@@ -12,10 +12,10 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 
-@RailcraftModule("railcraft:tracks|wood")
-public class ModuleTracksWood extends RailcraftModulePayload {
+@RailcraftModule(value = "railcraft:tracks|strap_iron", description = "strap iron tracks")
+public class ModuleTracksStrapIron extends RailcraftModulePayload {
 
-    public ModuleTracksWood() {
+    public ModuleTracksStrapIron() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
