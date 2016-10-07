@@ -41,7 +41,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -372,12 +371,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         try {
-            if (tile instanceof TileTrackOutfitted) {
+            if (tile instanceof TileTrackOutfitted)
                 items.addAll(((TileTrackOutfitted) tile).getTrackKitInstance().getDrops(fortune));
-            } else {
-                Game.log(Level.WARN, "Rail Tile was invalid when harvesting rail");
-                items.add(new ItemStack(Blocks.RAIL));
-            }
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class, TrackKitInstance.class);
         }
