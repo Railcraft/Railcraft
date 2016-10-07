@@ -229,7 +229,8 @@ public class RailcraftModuleManager {
     }
 
     private static boolean isConfigured(Configuration config, IRailcraftModule m) {
-        Property prop = config.get(CATEGORY_MODULES, getModuleName(m).toLowerCase(Locale.ENGLISH).replaceAll("[_|]", "."), true);
+        RailcraftModule annotation = m.getClass().getAnnotation(RailcraftModule.class);
+        Property prop = config.get(CATEGORY_MODULES, annotation.value().toLowerCase(Locale.ENGLISH).replaceAll("[_|]", "."), true, annotation.description());
         return prop.getBoolean(true);
     }
 

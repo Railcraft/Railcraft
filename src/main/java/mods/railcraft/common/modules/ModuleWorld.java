@@ -31,7 +31,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("railcraft:world")
+@RailcraftModule(value = "railcraft:world", description = "world gen, ores, villages")
 public class ModuleWorld extends RailcraftModulePayload {
 
     public static final String VILLAGER_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/trackman.png";

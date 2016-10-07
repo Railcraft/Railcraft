@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@RailcraftModule("railcraft:factory")
+@RailcraftModule(value = "railcraft:factory", description = "coke oven, blast furnace, rolling machine, rock crusher, etc...")
 public class ModuleFactory extends RailcraftModulePayload {
     private static final int COKE_COOK_TIME = 1800;
     private static final int COKE_COOK_CREOSOTE = 500;

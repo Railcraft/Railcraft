@@ -28,11 +28,12 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-@RailcraftModule(value = "railcraft:resources")
+@RailcraftModule(value = "railcraft:resources", description = "metals, fluids, raw materials")
 public class ModuleResources extends RailcraftModulePayload {
     public ModuleResources() {
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -50,7 +51,7 @@ public class ModuleResources extends RailcraftModulePayload {
             public void preInit() {
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    //TODO: this is wrong, needs fluidstack recipe support
+                    //TODO: this is wrong, needs fluid stack recipe support
                     for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
                         CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                                 "C",
@@ -122,6 +123,14 @@ public class ModuleResources extends RailcraftModulePayload {
                         "III",
                         'I', m.getOreTag(Metal.Form.INGOT));
                 CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
+            }
+
+            @Override
+            public void init() {
+                if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);
+                }
             }
 
             @Override

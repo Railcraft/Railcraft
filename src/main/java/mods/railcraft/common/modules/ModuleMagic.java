@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule("railcraft:magic")
+@RailcraftModule(value = "railcraft:magic", description = "firestone, waterstone, icestone")
 public class ModuleMagic extends RailcraftModulePayload {
     public ModuleMagic() {
         setEnabledEventHandler(new ModuleEventHandler() {
