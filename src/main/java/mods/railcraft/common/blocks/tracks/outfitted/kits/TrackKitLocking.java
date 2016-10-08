@@ -41,6 +41,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.BitSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +83,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     @Override
     public int getRenderState() {
         int state = profile.ordinal();
-        if (!locked)
+        if (!justLoaded && !locked)
             state += LockingProfileType.VALUES.length;
         return state;
     }
@@ -359,8 +360,11 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         super.writePacketData(data);
 
         data.writeByte(profile.ordinal());
-        data.writeBoolean(redstone);
-        data.writeBoolean(locked);
+        BitSet bits = new BitSet();
+        bits.set(0, redstone);
+        bits.set(1, locked);
+        bits.set(2, justLoaded);
+        data.write(bits.toByteArray());
 
         profileInstance.writePacketData(data);
     }
@@ -374,8 +378,10 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             profile = p;
             profileInstance = p.create(this);
         }
-        redstone = data.readBoolean();
-        locked = data.readBoolean();
+        BitSet bits = BitSet.valueOf(new byte[]{data.readByte()});
+        redstone = bits.get(0);
+        locked = bits.get(1);
+        justLoaded = bits.get(2);
         profileInstance.readPacketData(data);
 
         markBlockNeedsUpdate();
