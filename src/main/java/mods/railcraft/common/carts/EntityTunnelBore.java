@@ -489,8 +489,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         }
 
         if (isMoving()) {
-            float factorX = MathHelper.cos((float) Math.toRadians(rotationYaw));
-            float factorZ = -MathHelper.sin((float) Math.toRadians(rotationYaw));
+            float factorX = -MathHelper.sin((float) Math.toRadians(rotationYaw));
+            float factorZ = MathHelper.cos((float) Math.toRadians(rotationYaw));
             motionX = SPEED * factorX;
             motionZ = SPEED * factorZ;
         } else {
