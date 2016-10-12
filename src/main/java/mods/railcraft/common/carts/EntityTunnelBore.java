@@ -196,7 +196,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         prevPosX = i;
         prevPosY = j;
         prevPosZ = k;
-//        cargoItems = new ItemStack[25];
         setFacing(f);
         setSize(LENGTH, HEIGHT);
     }
@@ -362,7 +361,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             maxZ += len;
         }
 
-        // TODO: Test this!
         setEntityBoundingBox(new AxisAlignedBB(minX, y, minZ, maxX, y + height, maxZ));
     }
 
@@ -654,7 +652,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                         searchPos = searchPos.down();
                         if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
                             invBallast.decrStackSize(inv, 1);
-                            IBlockState state = InvTools.getBlockStateFromStack(stack, (WorldServer) worldObj, targetPos);
+                            IBlockState state = InvTools.getBlockStateFromStack(stack, worldObj, targetPos);
                             if (state != null) {
                                 WorldPlugin.setBlockState(worldObj, targetPos, state);
                                 return true;

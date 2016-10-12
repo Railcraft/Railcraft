@@ -152,7 +152,7 @@ public class CartTools {
     }
 
     public static void addPassenger(EntityMinecart cart, Entity passenger) {
-        cart.startRiding(passenger);
+        passenger.startRiding(cart);
     }
 
     public static void removePassengers(EntityMinecart cart) {
