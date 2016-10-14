@@ -185,4 +185,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
         direction = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();
     }
+
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        direction = facing;
+    }
 }

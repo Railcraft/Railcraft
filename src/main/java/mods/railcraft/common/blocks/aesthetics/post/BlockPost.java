@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
-    public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
+    public static final PropertyEnum<EnumPost> VARIANT = RailcraftBlockProperties.POST_VARIANT;
 
     public BlockPost() {
         setUnlocalizedName("railcraft.post");

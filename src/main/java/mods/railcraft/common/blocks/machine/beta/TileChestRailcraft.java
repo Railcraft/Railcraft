@@ -29,6 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
@@ -177,4 +178,10 @@ public abstract class TileChestRailcraft extends TileMachineItem implements ITil
         super.readPacketData(data);
         facing = EnumFacing.getFront(data.readByte());
     }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        this.facing = facing;
+    }
+
 }

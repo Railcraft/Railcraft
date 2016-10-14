@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlockProperties;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
@@ -31,9 +32,9 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
-    public static final PropertyEnum<ManipulatorVariant> VARIANT = PropertyEnum.create("variant", ManipulatorVariant.class);
-    public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    public static final PropertyEnum<ManipulatorVariant> VARIANT = RailcraftBlockProperties.MANIPULATOR_VARIANT;
+    public static final PropertyEnum<EnumFacing> FRONT = RailcraftBlockProperties.FACING;
+    public static final PropertyBool ACTIVE = RailcraftBlockProperties.ACTIVE;
 
     public BlockMachineManipulator() {
         super(ManipulatorVariant.PROXY, true);

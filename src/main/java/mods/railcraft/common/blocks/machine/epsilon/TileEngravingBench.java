@@ -38,6 +38,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
@@ -65,6 +66,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
     private final Set<Object> actions = new HashSet<Object>();
+    private EnumFacing direction = EnumFacing.NORTH;
 
     public TileEngravingBench() {
         super(2);
@@ -321,5 +323,22 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();
+    }
+
+    @Nonnull
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        direction = facing;
+    }
+
+    @Nullable
+    @Override
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.HORIZONTALS;
     }
 }

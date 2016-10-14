@@ -47,6 +47,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
@@ -154,11 +155,22 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return -1;
     }
 
+    @Override
+    @Nonnull
     public EnumFacing getFacing() {
         TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
         return facing;
+    }
+
+    @Override
+    public void setFacing(@Nonnull EnumFacing facing) {
+        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
+        if (masterOven != null) {
+            masterOven.facing = facing;
+        }
+        this.facing = facing;
     }
 
     private boolean hasFinishedCycle() {
