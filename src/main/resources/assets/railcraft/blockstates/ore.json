@@ -12,7 +12,6 @@
       "dark_diamond": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_diamond"}},
       "dark_emerald": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_emerald"}},
       "dark_lapis": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_lapis"}},
-      "firestone": {"textures": {"stone": "blocks/netherrack", "ore": "railcraft:blocks/ore_firestone"}},
       "poor_iron": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_iron"}},
       "poor_gold": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_gold"}},
       "poor_copper": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_copper"}},

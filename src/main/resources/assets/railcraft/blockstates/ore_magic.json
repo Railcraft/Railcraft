@@ -7,7 +7,7 @@
     "normal": [{}],
     "inventory": [{"transform": "forge:default-block"}],
     "variant": {
-      "firestone": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_firestone"}}
+      "firestone": {"textures": {"stone": "blocks/netherrack", "ore": "railcraft:blocks/ore_firestone"}}
     }
   }
 }
