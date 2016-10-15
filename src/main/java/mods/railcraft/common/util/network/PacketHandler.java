@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,21 +6,24 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftPacket.PacketType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class PacketHandler {
@@ -40,15 +43,16 @@ public class PacketHandler {
 
     @SubscribeEvent
     public void onPacket(ServerCustomPacketEvent event) {
-        onPacketData(event.getPacket().payload(), ((NetHandlerPlayServer) event.getHandler()).playerEntity);
+        EntityPlayerMP player = ((NetHandlerPlayServer) event.getHandler()).playerEntity;
+        onPacketData(event.getPacket().payload(), player, player.getServer());
     }
 
     @SubscribeEvent
     public void onPacket(ClientCustomPacketEvent event) {
-        onPacketData(event.getPacket().payload(), null);
+        onPacketData(event.getPacket().payload(), null, Minecraft.getMinecraft());
     }
 
-    private void onPacketData(ByteBuf byteBuf, EntityPlayerMP player) {
+    private void onPacketData(ByteBuf byteBuf, EntityPlayerMP player, @Nullable IThreadListener listener) {
         RailcraftInputStream data = new RailcraftInputStream(new ByteBufInputStream(byteBuf));
         try {
             RailcraftPacket pkt;
@@ -104,9 +108,21 @@ public class PacketHandler {
                 default:
                     return;
             }
-            pkt.readData(data);
+            readPacket(pkt, data, listener);
         } catch (IOException e) {
             Game.logThrowable("Exception in PacketHandler.onPacketData", e);
+        }
+    }
+
+    private static void readPacket(final RailcraftPacket packet, final RailcraftInputStream data, @Nullable IThreadListener threadListener) {
+        if (threadListener != null && !threadListener.isCallingFromMinecraftThread()) {
+            threadListener.addScheduledTask(() -> {
+                try {
+                    packet.readData(data);
+                } catch (IOException e) {
+                    Game.logThrowable("Exception in PacketHandler.readPacket", e);
+                }
+            });
         }
     }
 }

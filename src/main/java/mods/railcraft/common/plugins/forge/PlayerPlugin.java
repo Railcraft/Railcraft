@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -59,7 +61,7 @@ public class PlayerPlugin {
     }
 
     @SuppressWarnings("unused")
-    public static String getUsername(World world, UUID playerId) {
+    public static String getUsername(World world, @Nullable UUID playerId) {
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
             if (player != null)
@@ -72,7 +74,7 @@ public class PlayerPlugin {
         return isOwnerOrOp(owner, player.getGameProfile());
     }
 
-    public static boolean isOwnerOrOp(GameProfile owner, GameProfile accessor) {
+    public static boolean isOwnerOrOp(@Nullable GameProfile owner, @Nullable GameProfile accessor) {
         return !(owner == null || accessor == null) && (owner.equals(accessor) || isPlayerOp(accessor));
     }
 
@@ -90,7 +92,7 @@ public class PlayerPlugin {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
             throw new RuntimeException("You derped up! Don't call this on the client!");
         MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (mcServer.getPlayerList().canSendCommands(gameProfile)) {
+        if (mcServer != null && mcServer.getPlayerList().canSendCommands(gameProfile)) {
             UserListOpsEntry opsEntry = mcServer.getPlayerList().getOppedPlayers().getEntry(gameProfile);
             return opsEntry != null ? opsEntry.getPermissionLevel() : 0;
         }
@@ -98,7 +100,8 @@ public class PlayerPlugin {
     }
 
     public static boolean isPlayerConnected(GameProfile player) {
-        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(player.getName()) != null;
+        MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+        return mcServer != null && mcServer.getPlayerList().getPlayerByUsername(player.getName()) != null;
     }
 
     public static void swingArm(EntityPlayer player, EnumHand hand) {
