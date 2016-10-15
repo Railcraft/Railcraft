@@ -1,3 +1,16 @@
+10.0.0-beta-3:
+	CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.
+	CHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should unaffected.
+	CONFIG: Added config option to reduce/eliminate vanilla Gold/Iron Ore generation.
+	FIX: Fix Geode generation.
+	FIX: Various other fixes.
+
+10.0.0-beta-2:
+	FIX: Fix various crash bugs and incompatibilities.
+
+10.0.0-beta-1
+	INFO: Minecraft 1.10.2 update. Not feature complete.
+
 9.12.2.1
 	NEW: Added Trackman's Notepad, a tool for copying settings from one block to another. (contribution by Forecaster)
 	INFO: Notepad currently only supports Item and Fluid Loaders/Unloaders.
