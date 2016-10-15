@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.aesthetics.brick;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -54,7 +55,7 @@ public enum BrickVariant implements IVariantEnum {
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return alt;
     }
 }

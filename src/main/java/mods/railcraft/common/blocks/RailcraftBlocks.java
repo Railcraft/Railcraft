@@ -42,10 +42,7 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
-import mods.railcraft.common.blocks.ore.BlockOre;
-import mods.railcraft.common.blocks.ore.BlockWorldLogic;
-import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.blocks.ore.ItemOre;
+import mods.railcraft.common.blocks.ore.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -101,7 +98,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     MACHINE_BETA("machine_beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
     MANIPULATOR("manipulator", BlockMachineManipulator::new, ItemMachine::new, ManipulatorVariant.class),
     MACHINE_EPSILON("machine_epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),
-    ORE("ore", BlockOre::new, ItemOre::new, EnumOre.class),
+    ORE("ore", BlockOre::new, ItemBlockRailcraftSubtyped::new, EnumOre.class),
+    ORE_MAGIC("ore_magic", BlockOreMagic::new, ItemOreMagic::new, EnumOreMagic.class),
     POST("post", BlockPost::new, ItemPost::new, EnumPost.class),
     POST_METAL("post_metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
@@ -266,7 +264,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         if (block != null)
             obj = ((IRailcraftObject) block).getRecipeObject(variant);
         if (obj == null && variant != null)
-            obj = variant.getAlternate(tag);
+            obj = variant.getAlternate(this);
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

@@ -77,7 +77,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
             return o.getRecipeObject(variant);
         }).orElse(null);
         if (obj == null && variant != null)
-            obj = variant.getAlternate(getBaseTag());
+            obj = variant.getAlternate(this);
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;

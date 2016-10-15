@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.fml.common.FMLCommonHandler net.minecraft.server.MinecraftServer getMinecraftServerInstance()'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

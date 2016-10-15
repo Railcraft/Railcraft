@@ -3,8 +3,8 @@
   "defaults": {
     "model": "railcraft:frame",
     "textures": {
-      "up": "railcraft:blocks/frame.top",
-      "side": "railcraft:blocks/frame.side"
+      "up": "railcraft:blocks/frame_top",
+      "side": "railcraft:blocks/frame_side"
     }
   },
   "variants": {

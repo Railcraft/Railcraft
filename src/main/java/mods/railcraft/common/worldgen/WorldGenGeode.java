@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.ore.BlockOre;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -52,7 +52,7 @@ public class WorldGenGeode extends WorldGenerator {
 
         ores.addAll(OreDictPlugin.getOreBlocks());
 
-        blockOre = BlockOre.getBlock();
+        blockOre = RailcraftBlocks.ORE.block();
     }
 
     @Override
@@ -67,6 +67,7 @@ public class WorldGenGeode extends WorldGenerator {
                         placeAir(existingState, world, rand, targetPos);
                     else if (distSq <= DISTANCE_OUTER_SQ)
                         placeStone(existingState, world, rand, targetPos);
+                    existingState = WorldPlugin.getBlockState(world, targetPos);
                     if (blockOre != null && distSq > DISTANCE_INNER_SQ && distSq <= DISTANCE_ORE_SQ)
                         placeOre(existingState, world, rand, targetPos);
                 }
@@ -89,11 +90,11 @@ public class WorldGenGeode extends WorldGenerator {
         if (existingState == geodeStone) {
             double chance = rand.nextDouble();
             IBlockState oreState = null;
-            if (chance <= 0.002 && EnumOre.DARK_DIAMOND.isEnabled())
+            if (chance <= 0.004 && EnumOre.DARK_DIAMOND.isEnabled())
                 oreState = EnumOre.DARK_DIAMOND.getDefaultState();
-            else if (chance <= 0.004 && EnumOre.DARK_EMERALD.isEnabled())
+            else if (chance <= 0.008 && EnumOre.DARK_EMERALD.isEnabled())
                 oreState = EnumOre.DARK_EMERALD.getDefaultState();
-            else if (chance <= 0.01 && EnumOre.DARK_LAPIS.isEnabled())
+            else if (chance <= 0.02 && EnumOre.DARK_LAPIS.isEnabled())
                 oreState = EnumOre.DARK_LAPIS.getDefaultState();
             if (oreState != null)
                 world.setBlockState(pos, oreState, 2);

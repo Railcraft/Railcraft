@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.server.management.UserList V getEntry(K)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -38,9 +39,9 @@ public enum EnumGeneric implements IVariantEnumBlock {
     BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
     BLOCK_CREOSOTE(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
     BLOCK_COKE(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
-    CRUSHED_OBSIDIAN(ModuleFactory.class, "crushed.obsidian", new CrushedObsidian(), 2f, 45f),
-    STONE_ABYSSAL(ModuleWorld.class, "stone.abyssal", new SimpleCube(), 2f, 10f),
-    STONE_QUARRIED(ModuleWorld.class, "stone.quarried", new SimpleCube(), 2f, 10f),;
+    CRUSHED_OBSIDIAN(ModuleFactory.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
+    STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
+    STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),;
     public static final EnumGeneric[] VALUES = values();
     private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
@@ -84,7 +85,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 
@@ -94,7 +95,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
     }
 
     public String getTag() {
-        return "tile.railcraft.generic." + tag;
+        return "tile.railcraft.generic_" + tag;
     }
 
     public SimpleCube getBlockDef() {
@@ -137,6 +138,6 @@ public enum EnumGeneric implements IVariantEnumBlock {
     @Nonnull
     @Override
     public String getName() {
-        return tag.replace(".", "_");
+        return tag;
     }
 }

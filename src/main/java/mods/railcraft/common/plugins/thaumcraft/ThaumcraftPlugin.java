@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.ItemDust;
@@ -187,7 +188,7 @@ public class ThaumcraftPlugin {
 
             addItemAspect(EnumOre.SULFUR.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 3));
             addItemAspect(EnumOre.SALTPETER.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.AIR, 3));
-            addItemAspect(EnumOre.FIRESTONE.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 6).add(Aspect.ENTROPY, 1));
+            addItemAspect(EnumOreMagic.FIRESTONE.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 6).add(Aspect.ENTROPY, 1));
 
             addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
             addItemAspect(RailcraftItems.DUST.getStack(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));

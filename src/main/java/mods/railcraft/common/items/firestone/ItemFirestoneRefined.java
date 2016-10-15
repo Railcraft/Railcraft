@@ -11,7 +11,7 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -71,8 +71,11 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public void defineRecipes() {
-        ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumOre.FIRESTONE.getItem(), true, false);
-        recipe.addOutput(RailcraftItems.FIRESTONE_RAW.getStack(), 1F);
+        ItemStack ore = EnumOreMagic.FIRESTONE.getItem();
+        if (ore != null) {
+            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
+            recipe.addOutput(RailcraftItems.FIRESTONE_RAW.getStack(), 1F);
+        }
 
         CraftingPlugin.addRecipe(RailcraftItems.FIRESTONE_CUT.getStack(),
                 " P ",

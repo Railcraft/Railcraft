@@ -9,14 +9,14 @@
     "variant": {
       "coke": {"textures": {"all": "railcraft:blocks/coke"}},
       "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
-      "steel": {"textures": {"all": "railcraft:blocks/metal.steel"}},
-      "crushed_obsidian": {"textures": {"all": "railcraft:blocks/crushed.obsidian"}},
-      "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone.abyssal"}},
-      "stone_quarried": {"textures": {"all": "railcraft:blocks/stone.quarried"}},
+      "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
+      "crushed_obsidian": {"textures": {"all": "railcraft:blocks/crushed_obsidian"}},
+      "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone_abyssal"}},
+      "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
       "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
-      "copper": {"textures": {"all": "railcraft:blocks/metal.copper"}},
-      "tin": {"textures": {"all": "railcraft:blocks/metal.tin"}},
-      "lead": {"textures": {"all": "railcraft:blocks/metal.lead"}}
+      "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
+      "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
+      "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}}
     }
   }
 }

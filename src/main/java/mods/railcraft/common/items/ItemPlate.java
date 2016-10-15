@@ -23,7 +23,7 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemPlate extends ItemMetal {
 
     public ItemPlate() {
-        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD));
+        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD, SILVER));
     }
 
     @Override
@@ -42,41 +42,13 @@ public class ItemPlate extends ItemMetal {
     public void defineRecipes() {
         RailcraftItems plate = RailcraftItems.PLATE;
 
-        // Iron Plate
-        IRecipe recipe = new ShapedOreRecipe(plate.getStack(4, Metal.IRON),
-                "II",
-                "II",
-                'I', "ingotIron");
-        RailcraftCraftingManager.rollingMachine.getRecipeList().add(recipe);
-
-        // Steel Plate
-        recipe = new ShapedOreRecipe(plate.getStack(4, Metal.STEEL),
-                "II",
-                "II",
-                'I', "ingotSteel");
-        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
-
-        // Tin Plate
-        recipe = new ShapedOreRecipe(plate.getStack(4, Metal.TIN),
-                "IT",
-                "TI",
-                'I', "ingotIron",
-                'T', "ingotTin");
-        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
-
-        // Copper Plate
-        recipe = new ShapedOreRecipe(plate.getStack(4, Metal.COPPER),
-                "II",
-                "II",
-                'I', "ingotCopper");
-        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
-
-        // Lead Plate
-        recipe = new ShapedOreRecipe(plate.getStack(4, Metal.LEAD),
-                "II",
-                "II",
-                'I', "ingotLead");
-        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
+        for (Metal m : getMetalBiMap().values()) {
+            IRecipe recipe = new ShapedOreRecipe(plate.getStack(4, m),
+                    "II",
+                    "II",
+                    'I', m.getOreTag(Form.INGOT));
+            RailcraftCraftingManager.rollingMachine.getRecipeList().add(recipe);
+        }
 
         RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(Metal.IRON), true, false, 1280, Metal.STEEL.getStack(Form.INGOT));
     }

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class WorldGenFirestone extends WorldGenerator {
 
-    private final IBlockState firestone = EnumOre.FIRESTONE.getDefaultState();
+    private final IBlockState firestone = EnumOreMagic.FIRESTONE.getDefaultState();
 
     @Override
     public boolean generate(World world, Random rand, BlockPos position) {

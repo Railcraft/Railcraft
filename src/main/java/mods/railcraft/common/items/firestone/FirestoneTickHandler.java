@@ -9,8 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.blocks.ore.BlockOre;
-import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -45,7 +44,7 @@ public class FirestoneTickHandler {
         if (RailcraftItems.FIRESTONE_RAW.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CUT.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack)) return true;
-        return InvTools.isStackEqualToBlock(stack, BlockOre.getBlock()) && stack.getItemDamage() == EnumOre.FIRESTONE.ordinal();
+        return InvTools.isStackEqualToBlock(stack, EnumOreMagic.FIRESTONE.block()) && stack.getItemDamage() == EnumOreMagic.FIRESTONE.ordinal();
     }
 
     @SubscribeEvent

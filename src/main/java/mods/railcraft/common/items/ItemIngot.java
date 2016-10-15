@@ -20,7 +20,7 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemIngot extends ItemMetal {
 
     public ItemIngot() {
-        super(Form.INGOT, true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD));
+        super(Form.INGOT, true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD, SILVER));
         setSmeltingExperience(1);
     }
 

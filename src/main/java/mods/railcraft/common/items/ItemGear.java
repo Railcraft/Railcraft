@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -33,8 +34,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
 
         OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));
 
-        ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
-        LootPlugin.addLoot(itemStack, 1, 8, LootPlugin.Type.RAILWAY, "gear.bushing");
+        LootPlugin.addLootUnique(RailcraftItems.GEAR, EnumGear.BUSHING, 1, 8, LootPlugin.Type.RAILWAY);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
         }
 
         @Override
-        public Object getAlternate(String objectTag) {
+        public Object getAlternate(IRailcraftRecipeIngredient container) {
             return alternate;
         }
 

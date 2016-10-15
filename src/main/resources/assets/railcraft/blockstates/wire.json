@@ -13,8 +13,8 @@
         "submodel": {
           "frame": {
             "textures": {
-              "up": "railcraft:blocks/frame.top.powered",
-              "side": "railcraft:blocks/frame.side"
+              "up": "railcraft:blocks/frame_top_powered",
+              "side": "railcraft:blocks/frame_side"
             },
             "model": "railcraft:frame"
           }

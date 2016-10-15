@@ -108,6 +108,8 @@ public class RailcraftConfig {
     private static int wreckingID;
     private static int implosionID;
     private static int destructionID;
+    private static int mineStandardOreGenChance = 20;
+    private static int vanillaOreGenChance = 100;
     private static float boreMiningSpeedMultiplier = 1F;
     private static float chargeMaintenanceCostMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
@@ -116,7 +118,7 @@ public class RailcraftConfig {
     private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
     private static Configuration configMain;
-    private static Configuration configBlock;
+    private static Configuration configBlocks;
     private static Configuration configItems;
     private static Configuration configEntity;
 
@@ -129,8 +131,8 @@ public class RailcraftConfig {
         configMain = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "railcraft.cfg"));
         configMain.load();
 
-        configBlock = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "blocks.cfg"));
-        configBlock.load();
+        configBlocks = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "blocks.cfg"));
+        configBlocks.load();
 
         configItems = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "items.cfg"));
         configItems.load();
@@ -163,8 +165,8 @@ public class RailcraftConfig {
         if (configMain.hasChanged())
             configMain.save();
 
-        if (configBlock.hasChanged())
-            configBlock.save();
+        if (configBlocks.hasChanged())
+            configBlocks.save();
 
         if (configItems.hasChanged())
             configItems.save();
@@ -339,23 +341,33 @@ public class RailcraftConfig {
 
     private static void loadWorldGen() {
         configMain.addCustomCategoryComment(CAT_WORLD_GEN + ".generate",
-                "You can control which Ores/Features generate in the world here.\n"
-                        + "If wish to disable world gen entirely it is recommended\n"
-                        + "that you disable the World Module in 'modules.cfg' instead.");
+                "You can control which Ores/Features generate in the world here.\n" +
+                        "If wish to disable world gen entirely it is recommended\n" +
+                        "that you disable the World Module in 'modules.cfg' instead.\n" +
+                        "Before disabling Railcraft metal ore gen, you should be aware\n" +
+                        "that is does not spawn like vanilla ore. It forms localized clouds\n" +
+                        "in distinct regions rather than a uniform spread.\n" +
+                        "It also consists of two types of ore, standard and poor.\n" +
+                        "Poor ore forms throughout the cloud, standard ore only forms in the core of the cloud.\n" +
+                        "These are referred to as Railcraft Ore Mines.");
 
-        worldGen.put("sulfur", get(configMain, CAT_WORLD_GEN + ".generate", "sulfur", true));
-        worldGen.put("saltpeter", get(configMain, CAT_WORLD_GEN + ".generate", "saltpeter", true));
-        worldGen.put("firestone", get(configMain, CAT_WORLD_GEN + ".generate", "firestone", true));
-        worldGen.put("abyssal", get(configMain, CAT_WORLD_GEN + ".generate", "abyssal.geodes", true));
-        worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried.stone", true));
+        worldGen.put("sulfur", get(configMain, CAT_WORLD_GEN + ".generate", "sulfur", true, "spawns near lava layer in mountains"));
+        worldGen.put("saltpeter", get(configMain, CAT_WORLD_GEN + ".generate", "saltpeter", true, "spawns beneath surface of deserts, regenerates via bedrock layer block"));
+        worldGen.put("firestone", get(configMain, CAT_WORLD_GEN + ".generate", "firestone", true, "spawns on lava sea floor in Nether"));
+        worldGen.put("abyssal", get(configMain, CAT_WORLD_GEN + ".generate", "abyssal.geodes", true, "spawns beneath the sea in spheres"));
+        worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried.stone", true, "spawns on the surface in forests"));
 
-        worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true));
+        worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true, "village building"));
 
-        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "poor.iron", true));
-        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "poor.gold", true));
-        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "poor.copper", true));
-        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "poor.tin", true));
-        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "poor.lead", true));
+        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "mineIron", true, "Iron Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "mineGold", true, "Gold Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "mineCopper", true, "Copper Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "mineTin", true, "Tin Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
+
+        mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
+        vanillaOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "vanillaOreGenChance", 0, 100, 100, "chance that vanilla ore gen (Iron, Gold) will spawn ore uniformly throughout the world, set to zero to disable, min=0, default=100, max=100");
 
         villagerID = configMain.get(CAT_WORLD_GEN + ".id", "workshop", 456).getInt(456);
     }
@@ -379,8 +391,8 @@ public class RailcraftConfig {
                 + "   Record = 5\n"
                 + "   Golden Apple = 1");
 
-        loadLootProperty("tie.wood", 20);
-        loadLootProperty("tie.stone", 10);
+        loadLootProperty("tie_wood", 20);
+        loadLootProperty("tie_stone", 10);
         loadLootProperty("rail", 20);
         loadLootProperty("plate", 20);
         loadLootProperty("cart_basic", 10);
@@ -389,35 +401,36 @@ public class RailcraftConfig {
         loadLootProperty("cart_tnt_wood", 5);
         loadLootProperty("cart_work", 8);
         loadLootProperty("cart_hopper", 5);
-        loadLootProperty("fuel.coke", 20);
-        loadLootProperty("fuel.coal", 20);
-        loadLootProperty("fluid.creosote.bottle", 20);
+        loadLootProperty("fuel_coke", 20);
+        loadLootProperty("fuel_coal", 20);
+        loadLootProperty("fluid_creosote_bottle", 20);
         loadLootProperty("track_flex_iron", 30);
 
-        loadLootProperty("ingot.copper", 10);
-        loadLootProperty("ingot.lead", 10);
-        loadLootProperty("ingot.steel", 10);
-        loadLootProperty("ingot.tin", 10);
+        loadLootProperty("ingot_copper", 10);
+        loadLootProperty("ingot_lead", 10);
+        loadLootProperty("ingot_steel", 10);
+        loadLootProperty("ingot_tin", 10);
+        loadLootProperty("ingot_silver", 5);
 
         loadLootProperty("steel.block", 5);
-        loadLootProperty("tool.crowbar.iron", 10);
-        loadLootProperty("tool.hoe.steel", 5);
-        loadLootProperty("tool.shears.steel", 5);
-        loadLootProperty("tool.sword.steel", 5);
-        loadLootProperty("tool.shovel.steel", 5);
-        loadLootProperty("tool.pickaxe.steel", 5);
-        loadLootProperty("tool.axe.steel", 5);
-        loadLootProperty("tool.signal.tuner", 5);
-        loadLootProperty("tool.signal.surveyor", 5);
-        loadLootProperty("tool.magnifying.glass", 5);
-        loadLootProperty("tool.charge.meter", 5);
-        loadLootProperty("armor.goggles", 5);
-        loadLootProperty("armor.helmet.steel", 5);
-        loadLootProperty("armor.chestplate.steel", 5);
-        loadLootProperty("armor.leggings.steel", 5);
-        loadLootProperty("armor.boots.steel", 5);
-        loadLootProperty("armor.overalls", 10);
-        loadLootProperty("gear.bushing", 5);
+        loadLootProperty("tool_crowbar_iron", 10);
+        loadLootProperty("tool_hoe_steel", 5);
+        loadLootProperty("tool_shears_steel", 5);
+        loadLootProperty("tool_sword_steel", 5);
+        loadLootProperty("tool_shovel_steel", 5);
+        loadLootProperty("tool_pickaxe_steel", 5);
+        loadLootProperty("tool_axe_steel", 5);
+        loadLootProperty("tool_signal_tuner", 5);
+        loadLootProperty("tool_signal_surveyor", 5);
+        loadLootProperty("tool_magnifying_glass", 5);
+        loadLootProperty("tool_charge_meter", 5);
+        loadLootProperty("armor_goggles", 5);
+        loadLootProperty("armor_helmet_steel", 5);
+        loadLootProperty("armor_chestplate_steel", 5);
+        loadLootProperty("armor_leggings_steel", 5);
+        loadLootProperty("armor_boots_steel", 5);
+        loadLootProperty("armor_overalls", 10);
+        loadLootProperty("gear_bushing", 5);
     }
 
     private static void loadCarts() {
@@ -435,12 +448,12 @@ public class RailcraftConfig {
     }
 
     private static void loadBlocks() {
-        configBlock.addCustomCategoryComment(CAT_BLOCKS,
+        configBlocks.addCustomCategoryComment(CAT_BLOCKS,
                 "Here you can disable entire blocks.\n"
                         + "Changing these will have adverse effects on existing worlds.\n"
                         + "For the list of which sub-blocks are on each ID see the sub-block section below.");
 
-        configBlock.addCustomCategoryComment(CAT_SUB_BLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
+        configBlocks.addCustomCategoryComment(CAT_SUB_BLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
                 + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
 
         for (RailcraftBlocks block : RailcraftBlocks.VALUES) {
@@ -448,7 +461,8 @@ public class RailcraftConfig {
             Class<? extends IVariantEnum> variantClass = block.getVariantClass();
             if (variantClass != null)
                 for (IVariantEnum variant : variantClass.getEnumConstants()) {
-                    loadBlockFeature(block.getBaseTag() + "." + variant.getResourcePathSuffix());
+                    String tag = block.getBaseTag() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
+                    loadBlockFeature(tag);
                 }
         }
 
@@ -461,6 +475,12 @@ public class RailcraftConfig {
 //                continue;
             loadBlockFeature(type.getTag());
         }
+
+        Map<String, Property> blocks = configBlocks.getCategory(CAT_BLOCKS);
+        blocks.keySet().retainAll(enabledBlocks.keySet());
+
+        Map<String, Property> subBlocks = configBlocks.getCategory(CAT_SUB_BLOCKS);
+        subBlocks.keySet().retainAll(enabledSubBlocks.keySet());
 
 //        for (EnumGeneric type : EnumGeneric.VALUES) {
 //            loadBlockFeature(type.getTag());
@@ -516,14 +536,37 @@ public class RailcraftConfig {
 //        }
     }
 
+    private static void cleanOldTags(Map<String, Property> props, String tag) {
+        String oldTag = null;
+        for (Map.Entry<String, Property> entry : props.entrySet()) {
+            String thisTag = entry.getKey();
+            if (thisTag.replaceAll("[_.]", "").equals(tag.replaceAll("[_.]", "")) && thisTag.contains(".")) {
+                oldTag = entry.getKey();
+                break;
+            }
+        }
+        if (oldTag != null) {
+            Property prop = props.remove(oldTag);
+            if (prop != null) {
+                prop.setName(tag);
+                props.put(tag, prop);
+            }
+        }
+    }
+
     private static void loadBlockProperty(String tag) {
-        Property prop = configBlock.get(CAT_BLOCKS, tag, true);
+        cleanOldTags(configBlocks.getCategory(CAT_BLOCKS), tag);
+
+        Property prop = configBlocks.get(CAT_BLOCKS, tag, true);
         enabledBlocks.put(tag, prop.getBoolean(true));
     }
 
     private static void loadBlockFeature(String tag) {
         tag = MiscTools.cleanTag(tag);
-        Property prop = configBlock.get(CAT_SUB_BLOCKS, tag, true);
+
+        cleanOldTags(configBlocks.getCategory(CAT_SUB_BLOCKS), tag);
+
+        Property prop = configBlocks.get(CAT_SUB_BLOCKS, tag, true);
         enabledSubBlocks.put(tag, prop.getBoolean(true));
     }
 
@@ -536,85 +579,80 @@ public class RailcraftConfig {
             loadItemProperty(item.getBaseTag());
         }
 
-        loadItemProperty("tool.crowbar.magic");
-        loadItemProperty("tool.crowbar.void");
-
-        loadItemProperty("backpack.trackman.t1");
-        loadItemProperty("backpack.trackman.t2");
-        loadItemProperty("backpack.iceman.t1");
-        loadItemProperty("backpack.iceman.t2");
-        loadItemProperty("backpack.apothecary.t1");
-        loadItemProperty("backpack.apothecary.t2");
-
-        loadItemProperty("fluid.steam.bottle");
-        loadItemProperty("fluid.creosote.cell");
-        loadItemProperty("fluid.creosote.bottle");
-        loadItemProperty("fluid.creosote.can");
-        loadItemProperty("fluid.creosote.wax");
-        loadItemProperty("fluid.creosote.refactory");
-        loadItemProperty("fluid.creosote.bucket");
-
-        loadItemProperty("firestone.cut");
-        loadItemProperty("firestone.raw");
-        loadItemProperty("firestone.refined");
-        loadItemProperty("firestone.cracked");
-
-        loadItemProperty("tool.steel.shears");
-        loadItemProperty("tool.steel.sword");
-        loadItemProperty("tool.steel.shovel");
-        loadItemProperty("tool.steel.pickaxe");
-        loadItemProperty("tool.steel.axe");
-        loadItemProperty("tool.steel.hoe");
-
-        loadItemProperty("armor.steel.helmet");
-        loadItemProperty("armor.steel.plate");
-        loadItemProperty("armor.steel.legs");
-        loadItemProperty("armor.steel.boots");
-
-        changeItemProperty("item.ic2.upgrade.lapotron", "ic2.upgrade.lapotron");
-
-        loadItemProperty("tool.bore.head.diamond");
-        loadItemProperty("tool.bore.head.iron");
-        loadItemProperty("tool.bore.head.steel");
-
-        changeItemProperty("item.cart.tnt", "cart.tnt");
-        loadItemProperty("cart.tnt.wood");
-        changeItemProperty("item.cart.pumpkin", "cart.pumpkin");
-        changeItemProperty("item.cart.gift", "cart.gift");
-
-        changeItemProperty("item.cart.tank", "cart.tank");
-        changeItemProperty("item.cart.bore", "cart.bore");
-
-        loadItemProperty("cart.energy.batbox");
-        loadItemProperty("cart.energy.cesu");
-        loadItemProperty("cart.energy.mfe");
-        loadItemProperty("cart.energy.mfsu");
-
-        changeItemProperty("item.cart.anchor", "cart.anchor");
-        changeItemProperty("item.cart.anchor.personal", "cart.anchor.personal");
-        changeItemProperty("item.cart.anchor.admin", "cart.anchor.admin");
-        changeItemProperty("item.cart.work", "cart.work");
-        changeItemProperty("item.cart.track.relayer", "cart.track.relayer");
-        changeItemProperty("item.cart.undercutter", "cart.undercutter");
-
-        changeItemProperty("cart.loco.steam", "cart.loco.steam.solid");
-
-        loadItemProperty("emblem");
-    }
-
-    private static void changeItemProperty(String oldTag, String newTag) {
         Map<String, Property> items = configItems.getCategory(CAT_ITEMS);
-        Property prop = items.remove(oldTag);
-        if (prop != null) {
-            prop.setName(newTag);
-            items.put(newTag, prop);
-        }
+        items.keySet().retainAll(enabledItems.keySet());
 
-        loadItemProperty(newTag);
+//        loadItemProperty("tool.crowbar.magic");
+//        loadItemProperty("tool.crowbar.void");
+
+//        loadItemProperty("backpack.trackman.t1");
+//        loadItemProperty("backpack.trackman.t2");
+//        loadItemProperty("backpack.iceman.t1");
+//        loadItemProperty("backpack.iceman.t2");
+//        loadItemProperty("backpack.apothecary.t1");
+//        loadItemProperty("backpack.apothecary.t2");
+//
+//        loadItemProperty("fluid.steam.bottle");
+//        loadItemProperty("fluid.creosote.cell");
+//        loadItemProperty("fluid.creosote.bottle");
+//        loadItemProperty("fluid.creosote.can");
+//        loadItemProperty("fluid.creosote.wax");
+//        loadItemProperty("fluid.creosote.refactory");
+//        loadItemProperty("fluid.creosote.bucket");
+//
+//        loadItemProperty("firestone.cut");
+//        loadItemProperty("firestone.raw");
+//        loadItemProperty("firestone.refined");
+//        loadItemProperty("firestone.cracked");
+//
+//        loadItemProperty("tool.steel.shears");
+//        loadItemProperty("tool.steel.sword");
+//        loadItemProperty("tool.steel.shovel");
+//        loadItemProperty("tool.steel.pickaxe");
+//        loadItemProperty("tool.steel.axe");
+//        loadItemProperty("tool.steel.hoe");
+//
+//        loadItemProperty("armor.steel.helmet");
+//        loadItemProperty("armor.steel.plate");
+//        loadItemProperty("armor.steel.legs");
+//        loadItemProperty("armor.steel.boots");
+//
+//        changeItemProperty("item.ic2.upgrade.lapotron", "ic2.upgrade.lapotron");
+//
+//        loadItemProperty("tool.bore.head.diamond");
+//        loadItemProperty("tool.bore.head.iron");
+//        loadItemProperty("tool.bore.head.steel");
+//
+//        changeItemProperty("item.cart.tnt", "cart.tnt");
+//        loadItemProperty("cart.tnt.wood");
+//        changeItemProperty("item.cart.pumpkin", "cart.pumpkin");
+//        changeItemProperty("item.cart.gift", "cart.gift");
+//
+//        changeItemProperty("item.cart.tank", "cart.tank");
+//        changeItemProperty("item.cart.bore", "cart.bore");
+//
+//        loadItemProperty("cart.energy.batbox");
+//        loadItemProperty("cart.energy.cesu");
+//        loadItemProperty("cart.energy.mfe");
+//        loadItemProperty("cart.energy.mfsu");
+//
+//        changeItemProperty("item.cart.anchor", "cart.anchor");
+//        changeItemProperty("item.cart.anchor.personal", "cart.anchor.personal");
+//        changeItemProperty("item.cart.anchor.admin", "cart.anchor.admin");
+//        changeItemProperty("item.cart.work", "cart.work");
+//        changeItemProperty("item.cart.track.relayer", "cart.track.relayer");
+//        changeItemProperty("item.cart.undercutter", "cart.undercutter");
+//
+//        changeItemProperty("cart.loco.steam", "cart.loco.steam.solid");
+//
+//        loadItemProperty("emblem");
     }
 
     private static void loadItemProperty(String tag) {
         tag = MiscTools.cleanTag(tag);
+
+        cleanOldTags(configItems.getCategory(CAT_ITEMS), tag);
+
         Property prop = configItems.get(CAT_ITEMS, tag, true);
         enabledItems.put(tag, prop.getBoolean(true));
     }
@@ -807,6 +845,14 @@ public class RailcraftConfig {
         return steamLocomotiveEfficiencyMultiplier;
     }
 
+    public static int mineStandardOreGenChance() {
+        return mineStandardOreGenChance;
+    }
+
+    public static int vanillaOreGenChance() {
+        return vanillaOreGenChance;
+    }
+
     public static int villagerID() {
         return villagerID;
     }
@@ -941,6 +987,11 @@ public class RailcraftConfig {
         return prop.getBoolean(defaultValue);
     }
 
+    private static boolean get(Configuration config, String cat, String tag, boolean defaultValue, String comment) {
+        Property prop = config.get(cat, tag, defaultValue, comment);
+        return prop.getBoolean(defaultValue);
+    }
+
     private static int get(String tag, int defaultValue, String comment) {
         return get(Configuration.CATEGORY_GENERAL, tag, defaultValue, comment);
     }
@@ -957,7 +1008,11 @@ public class RailcraftConfig {
     }
 
     private static int get(String cat, String tag, int min, int defaultValue, int max, String comment) {
-        Property prop = configMain.get(cat, tag, defaultValue);
+        return get(configMain, cat, tag, min, defaultValue, max, comment);
+    }
+
+    private static int get(Configuration config, String cat, String tag, int min, int defaultValue, int max, String comment) {
+        Property prop = config.get(cat, tag, defaultValue);
         decorateComment(prop, tag, comment);
         int parsed = parseInteger(prop, defaultValue);
         int clamped = Math.max(parsed, min);
@@ -968,7 +1023,11 @@ public class RailcraftConfig {
     }
 
     private static float get(String cat, String tag, float min, float defaultValue, float max, String comment) {
-        Property prop = configMain.get(cat, tag, defaultValue);
+        return get(configMain, cat, tag, min, defaultValue, max, comment);
+    }
+
+    private static float get(Configuration config, String cat, String tag, float min, float defaultValue, float max, String comment) {
+        Property prop = config.get(cat, tag, defaultValue);
         decorateComment(prop, tag, comment);
         double parsed = parseDouble(prop, defaultValue);
         double clamped = Math.max(parsed, min);

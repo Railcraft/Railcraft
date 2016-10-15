@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -53,7 +54,7 @@ public class BlockWorldLogic extends BlockRailcraft {
         world.scheduleBlockUpdate(pos, this, tickRate(world), 0);
         if (MiscTools.RANDOM.nextInt(32) != 0)
             return;
-        BlockOre blockOre = BlockOre.getBlock();
+        Block blockOre = RailcraftBlocks.ORE.block();
         if (blockOre == null || !EnumOre.SALTPETER.isEnabled() || !RailcraftConfig.isWorldGenEnabled("saltpeter"))
             return;
         int surfaceY = world.getTopSolidOrLiquidBlock(pos).getY() - 2;
@@ -76,7 +77,7 @@ public class BlockWorldLogic extends BlockRailcraft {
             return;
 
         int airCount = 0;
-        Block ore = BlockOre.getBlock();
+        Block ore = RailcraftBlocks.ORE.block();
         for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
             boolean isAir = world.isAirBlock(surfacePos.offset(side));
             if (isAir)

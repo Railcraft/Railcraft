@@ -100,7 +100,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.manipulator." + getBaseTag();
+        return "tile.railcraft.manipulator_" + getBaseTag();
     }
 
     @Override

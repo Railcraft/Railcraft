@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.color;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -205,7 +206,7 @@ public enum EnumColor implements IVariantEnum {
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 

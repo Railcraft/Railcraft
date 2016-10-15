@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.ItemTie.EnumTie;
@@ -114,7 +115,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
         }
 
         @Override
-        public Object getAlternate(String objectTag) {
+        public Object getAlternate(IRailcraftRecipeIngredient container) {
             return alternate;
         }
 

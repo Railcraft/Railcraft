@@ -9,12 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
@@ -27,15 +29,19 @@ public enum EnumOre implements IVariantEnumBlock {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),
-    DARK_DIAMOND("dark.diamond"),
-    DARK_EMERALD("dark.emerald"),
-    DARK_LAPIS("dark.lapis"),
-    POOR_IRON("poor.iron"),
-    POOR_GOLD("poor.gold"),
-    POOR_COPPER("poor.copper"),
-    POOR_TIN("poor.tin"),
-    POOR_LEAD("poor.lead"),
-    FIRESTONE("firestone"),;
+    DARK_DIAMOND("dark_diamond"),
+    DARK_EMERALD("dark_emerald"),
+    DARK_LAPIS("dark_lapis"),
+    POOR_IRON("poor_iron"),
+    POOR_GOLD("poor_gold"),
+    POOR_COPPER("poor_copper"),
+    POOR_TIN("poor_tin"),
+    POOR_LEAD("poor_lead"),
+    POOR_SILVER("poor_silver"),
+    COPPER("copper"),
+    TIN("tin"),
+    LEAD("lead"),
+    SILVER("silver"),;
     public static final EnumOre[] VALUES = values();
     private final String tag;
 
@@ -51,30 +57,32 @@ public enum EnumOre implements IVariantEnumBlock {
     @Nullable
     @Override
     public IBlockState getDefaultState() {
-        if (block() == null)
+        Block block = block();
+        if (block == null)
             return null;
-        return block().getDefaultState().withProperty(BlockOre.VARIANT, this);
+        return block.getDefaultState().withProperty(BlockOre.VARIANT, this);
     }
 
+    public String getTag() {
+        return "tile.railcraft.ore_" + tag;
+    }
+
+    @Nullable
     public ItemStack getItem() {
         return getItem(1);
     }
 
-    public String getTag() {
-        return "tile.railcraft.ore." + tag;
-    }
-
+    @Nullable
     public ItemStack getItem(int qty) {
-        return new ItemStack(BlockOre.getBlock(), qty, ordinal());
+        Block block = block();
+        if (block == null)
+            return null;
+        return new ItemStack(block, qty, ordinal());
     }
 
     @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
-    }
-
-    public boolean isDepreciated() {
-        return false;
+        return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && block() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     public static EnumOre fromOrdinal(int meta) {
@@ -85,12 +93,12 @@ public enum EnumOre implements IVariantEnumBlock {
 
     @Override
     public String getName() {
-        return tag.replace(".","_");
+        return tag;
     }
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 }

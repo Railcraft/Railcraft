@@ -36,7 +36,7 @@ public class LootPlugin {
                 CHESTS_ABANDONED_MINESHAFT,
                 CHESTS_VILLAGE_BLACKSMITH);
         LootPlugin.increaseLootGen(10, 16, CHESTS_VILLAGE_WORKSHOP);*/
-        addLoot(new ItemStack(Items.COAL), 8, 16, Type.WORKSHOP, "fuel.coal");
+        addLoot(new ItemStack(Items.COAL), 8, 16, Type.WORKSHOP, "fuel_coal");
     }
 
     /*public static void increaseLootGen(int min, int max, ResourceLocation... locations) {
@@ -77,7 +77,7 @@ public class LootPlugin {
     }
 
     public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
-        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag() + "." + variant.getResourcePathSuffix(), type.locations);
+        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix(), type.locations);
     }
 
     public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> item, int minStack, int maxStack, Type type) {

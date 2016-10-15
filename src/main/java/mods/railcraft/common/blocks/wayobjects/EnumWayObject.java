@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -148,7 +149,7 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 }

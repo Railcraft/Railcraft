@@ -30,6 +30,7 @@ import java.util.Random;
 public class PopulatorGeode extends Populator {
     //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0]);
     public static final int MIN_DEPTH = 16;
+    public static final int MIN_Y = 12;
     public static final int MIN_FLOOR = 24;
     public static final int GEN_HEIGHT = 60;
     private static PopulatorGeode instance;
@@ -46,12 +47,13 @@ public class PopulatorGeode extends Populator {
         return instance;
     }
 
-    //TODO: Much testing, oh god
     @Override
     public void populate(World world, Random rand, BlockPos chunkCenterPos) {
         OceanFloor floor = scanOceanFloor(world, chunkCenterPos);
         if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
-            int y = 12 + rand.nextInt(floor.floorY - 12);
+            int deviation = MIN_Y + Math.round(Math.abs((float) rand.nextGaussian()) * (floor.floorY - MIN_Y) * 0.5F);
+//            Game.log(Level.INFO, "Deviation from floor: {0}", deviation - floor.floorY);
+            int y = Math.min(floor.floorY, deviation);
             geode.generate(world, rand, new BlockPos(chunkCenterPos.getX(), y, chunkCenterPos.getZ()));
         }
     }
@@ -65,7 +67,7 @@ public class PopulatorGeode extends Populator {
         if (biome.getBiomeName() == null || biome.getBiomeName().toLowerCase(Locale.ENGLISH).contains("river")) {
             return false;
         }
-        return rand.nextDouble() <= 0.3;
+        return rand.nextDouble() <= 0.2;
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {
@@ -78,7 +80,7 @@ public class PopulatorGeode extends Populator {
         int depth = 0;
         for (; y > 0; --y) {
             IBlockState blockState = chunk.getBlockState(trimmedX, y, trimmedZ);
-            if (blockState == Blocks.AIR)
+            if (blockState.getBlock() == Blocks.AIR)
                 continue;
             else if (blockState.getMaterial() == Material.WATER)
                 depth++;

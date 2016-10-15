@@ -9,9 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlockSubtyped;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
@@ -19,27 +17,21 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -47,7 +39,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOre extends RailcraftBlockSubtyped {
+public class BlockOre extends RailcraftBlockSubtyped<EnumOre> {
 
     public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
     private final Random rand = new Random();
@@ -60,27 +52,32 @@ public class BlockOre extends RailcraftBlockSubtyped {
         setSoundType(SoundType.STONE);
     }
 
-    @Nullable
-    public static BlockOre getBlock() {
-        return (BlockOre) RailcraftBlocks.ORE.block();
-    }
-
     @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        if (variant != null) {
-            checkVariant(variant);
-            return getDefaultState().withProperty(VARIANT, (EnumOre) variant);
-        }
-        return getDefaultState();
+    public IProperty<EnumOre> getVariantProperty() {
+        return VARIANT;
     }
 
     @Override
     public void defineRecipes() {
+        registerOreRecipe(Metal.IRON);
+        registerOreRecipe(Metal.TIN);
+        registerOreRecipe(Metal.LEAD);
+        registerOreRecipe(Metal.SILVER);
+
         registerPoorOreRecipe(Metal.COPPER);
         registerPoorOreRecipe(Metal.GOLD);
         registerPoorOreRecipe(Metal.IRON);
         registerPoorOreRecipe(Metal.TIN);
         registerPoorOreRecipe(Metal.LEAD);
+        registerPoorOreRecipe(Metal.SILVER);
+    }
+
+    private static void registerPoorOreRecipe(Metal metal) {
+        CraftingPlugin.addFurnaceRecipe(Metal.Form.POOR_ORE.getStack(metal), metal.getStack(Metal.Form.NUGGET, 2), 0.1F);
+    }
+
+    private static void registerOreRecipe(Metal metal) {
+        CraftingPlugin.addFurnaceRecipe(Metal.Form.ORE.getStack(metal), metal.getStack(Metal.Form.INGOT), 0.7F);
     }
 
     @Override
@@ -91,17 +88,12 @@ public class BlockOre extends RailcraftBlockSubtyped {
             ForestryPlugin.addBackpackItem("forestry.miner", ore.getItem());
 
             switch (ore) {
-                case FIRESTONE:
-                    HarvestPlugin.setStateHarvestLevel("pickaxe", 3, ore);
-                    break;
-                case DARK_LAPIS:
-                case POOR_IRON:
-                case POOR_TIN:
-                case POOR_COPPER:
-                    HarvestPlugin.setStateHarvestLevel("pickaxe", 1, ore);
+                case DARK_DIAMOND:
+                case DARK_EMERALD:
+                    HarvestPlugin.setStateHarvestLevel("pickaxe", 2, ore);
                     break;
                 default:
-                    HarvestPlugin.setStateHarvestLevel("pickaxe", 2, ore);
+                    HarvestPlugin.setStateHarvestLevel("pickaxe", 1, ore);
             }
         }
 
@@ -112,38 +104,23 @@ public class BlockOre extends RailcraftBlockSubtyped {
         registerOre("oreDiamond", EnumOre.DARK_DIAMOND);
         registerOre("oreEmerald", EnumOre.DARK_EMERALD);
         registerOre("oreLapis", EnumOre.DARK_LAPIS);
-        registerOre("oreFirestone", EnumOre.FIRESTONE);
-        registerOre("orePoorCopper", EnumOre.POOR_COPPER);
+
         registerOre("orePoorGold", EnumOre.POOR_GOLD);
         registerOre("orePoorIron", EnumOre.POOR_IRON);
+        registerOre("orePoorCopper", EnumOre.POOR_COPPER);
         registerOre("orePoorTin", EnumOre.POOR_TIN);
         registerOre("orePoorLead", EnumOre.POOR_LEAD);
-    }
+        registerOre("orePoorSilver", EnumOre.POOR_SILVER);
 
-    private static void registerPoorOreRecipe(Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(Metal.Form.POOR_ORE.getStack(metal), metal.getStack(Metal.Form.NUGGET, 2), 0.1F);
+        registerOre("oreCopper", EnumOre.COPPER);
+        registerOre("oreTin", EnumOre.TIN);
+        registerOre("oreLead", EnumOre.LEAD);
+        registerOre("oreSilver", EnumOre.SILVER);
     }
 
     private static void registerOre(String name, EnumOre ore) {
-        if (!ore.isDepreciated() && ore.isEnabled())
+        if (ore.isEnabled())
             OreDictionary.registerOre(name, ore.getItem());
-    }
-
-    public EnumOre getVariant(IBlockState state) {
-        return state.getValue(VARIANT);
-    }
-
-    @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumOre ore : EnumOre.values()) {
-            if (!ore.isDepreciated() && ore.isEnabled())
-                list.add(ore.getItem());
-        }
-    }
-
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return getVariant(state).getItem();
     }
 
     @Override
@@ -206,61 +183,12 @@ public class BlockOre extends RailcraftBlockSubtyped {
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
-        return getVariant(state).ordinal();
-    }
-
-    @Override
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
 
     @Override
     public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT_MIPPED;
-    }
-
-    @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if (EnumOre.FIRESTONE == getVariant(state))
-            return 15;
-        return super.getLightValue(state, world, pos);
-    }
-
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANT, EnumOre.fromOrdinal(meta));
-    }
-
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
-    }
-
-    @Override
-    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        super.randomDisplayTick(stateIn, worldIn, pos, rand);
-        if (getVariant(stateIn) == EnumOre.FIRESTONE) {
-            BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
-            Vec3d startPosition = new Vec3d(start).addVector(0.5, 0.5, 0.5);
-            Vec3d endPosition = new Vec3d(pos).addVector(0.5, 0.8, 0.5);
-            EffectManager.instance.fireSparkEffect(worldIn, startPosition, endPosition);
-        }
+        return BlockRenderLayer.CUTOUT;
     }
 }

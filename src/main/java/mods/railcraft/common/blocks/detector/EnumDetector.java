@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -114,7 +115,7 @@ public enum EnumDetector implements IVariantEnumBlock {
 
     @Nullable
     @Override
-    public Object getAlternate(String objectTag) {
+    public Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 

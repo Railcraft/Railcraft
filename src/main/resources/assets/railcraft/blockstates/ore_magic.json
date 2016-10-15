@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:ore"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "firestone": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_firestone"}}
+    }
+  }
+}

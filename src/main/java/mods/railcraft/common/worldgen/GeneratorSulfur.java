@@ -12,42 +12,35 @@ package mods.railcraft.common.worldgen;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GeneratorSulfur {
+public class GeneratorSulfur extends Generator {
 
     //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SULFUR", new Class[0], new Object[0]);
-    private final WorldGenerator sulfur = new WorldGenSulfur();
 
-    @SubscribeEvent
-    public void generate(OreGenEvent.Post event) {
-
-        World world = event.getWorld();
-        Random rand = event.getRand();
-        BlockPos pos = event.getPos();
-
-        if (!TerrainGen.generateOre(world, rand, sulfur, pos, EventType.CUSTOM))
-            return;
-
-        Biome biome = world.getBiome(pos.add(8, 0, 8));
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN))
-            for (int i = 0; i < 90; i++) {
-                int x = pos.getX() + rand.nextInt(16);
-                int y = 6 + rand.nextInt(10);
-                int z = pos.getZ() + rand.nextInt(16);
-
-                sulfur.generate(world, rand, new BlockPos(x, y, z));
-            }
+    public GeneratorSulfur() {
+        super(EventType.CUSTOM, new WorldGenSulfur());
     }
 
+    @Override
+    public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
+        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN);
+    }
+
+    @Override
+    public void generate(World world, Random rand, BlockPos targetPos) {
+        for (int i = 0; i < 90; i++) {
+            int x = targetPos.getX() + rand.nextInt(16);
+            int y = 6 + rand.nextInt(10);
+            int z = targetPos.getZ() + rand.nextInt(16);
+
+            generators[0].generate(world, rand, new BlockPos(x, y, z));
+        }
+    }
 }

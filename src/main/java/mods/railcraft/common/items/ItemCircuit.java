@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -83,7 +84,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
         }
 
         @Override
-        public Object getAlternate(String objectTag) {
+        public Object getAlternate(IRailcraftRecipeIngredient container) {
             return alternate;
         }
 

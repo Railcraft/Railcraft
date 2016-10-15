@@ -33,4 +33,8 @@ public class Predicates {
     public static <T> Predicate<T> alwaysFalse() {
         return t -> false;
     }
+
+    public static <T> Predicate<T> nonNull() {
+        return t -> t != null;
+    }
 }

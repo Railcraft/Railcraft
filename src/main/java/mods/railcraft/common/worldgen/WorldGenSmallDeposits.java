@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -49,7 +50,7 @@ public class WorldGenSmallDeposits extends WorldGenerator {
     private void placeOre(World world, Random rand, BlockPos pos) {
         for (int num = 0; num < number; num++) {
             IBlockState blockState = WorldPlugin.getBlockState(world, pos);
-            if (!WorldPlugin.isBlockAir(world, pos, blockState) && blockState.getBlock().isReplaceableOreGen(blockState, world, pos, replace::test))
+            if (blockState.getBlock().isReplaceableOreGen(blockState, world, pos, replace::test))
                 WorldPlugin.setBlockState(world, pos, ore, 2);
 
             pos = pos.offset(EnumFacing.random(rand));

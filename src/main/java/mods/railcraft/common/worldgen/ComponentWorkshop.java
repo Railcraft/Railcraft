@@ -107,8 +107,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // track
         fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL.getDefaultState(), Blocks.RAIL.getDefaultState(), false);
-        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
-        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
+        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, true);
+        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, false);
 
 
         // hall walls

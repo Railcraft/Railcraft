@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
 /**
@@ -14,6 +15,7 @@ package mods.railcraft.common.core;
 public class RailcraftConstants {
 
     public static final String RESOURCE_DOMAIN = Railcraft.MOD_ID;
+    public static final String SEPERATOR = "_";
     public static final String SOUND_FOLDER = RESOURCE_DOMAIN + ":";
     public static final String TEXTURE_FOLDER = RESOURCE_DOMAIN + ":textures/";
     public static final String ENTITY_TEXTURE_FOLDER = TEXTURE_FOLDER + "entities/";
