@@ -135,6 +135,6 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     @Override
     public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
         RoutingLogic logic = getLogic();
-        return logic != null && logic.isValid() && logic.matches(this, cart);
+        return logic != null && logic.isValid() && logic.evaluate(this, cart) != 0;
     }
 }

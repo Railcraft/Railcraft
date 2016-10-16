@@ -105,8 +105,9 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
             if (routingController.getButtonState() == RoutingButtonState.PRIVATE)
                 if (!getOwner().equals(CartToolsAPI.getCartOwner(cart)))
                     continue;
-            if (logic.matches(this, cart))
-                return FULL_POWER;
+            int value = logic.evaluate(this, cart);
+            if (value != 0)
+                return (value == -1 ? FULL_POWER : value);
         }
         return NO_POWER;
     }

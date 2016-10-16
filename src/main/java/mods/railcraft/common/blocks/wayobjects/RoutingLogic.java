@@ -93,17 +93,18 @@ public class RoutingLogic {
         return train.getLocomotive();
     }
 
-    public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+    public int evaluate(IRoutingTile tile, EntityMinecart cart) {
         if (conditions == null)
-            return false;
+            return 0;
         EntityMinecart controllingCart = getRoutableCart(cart);
         if (controllingCart == null)
-            return false;
+            return 0;
         for (Condition condition : conditions) {
-            if (condition.matches(tile, controllingCart))
-                return true;
+            int value = condition.evaluate(tile, controllingCart);
+            if (value != 0)
+                return value;
         }
-        return false;
+        return 0;
     }
 
     private Condition parseLine(String line, Deque<Condition> stack) throws RoutingLogicException {
@@ -132,6 +133,17 @@ public class RoutingLogic {
             throw ex;
         } catch (Exception ex) {
             throw new RoutingLogicException("railcraft.gui.routing.logic.malformed.syntax", line);
+        }
+        if (line.equals("TRUE"))
+            return new ConstantCondition(true);
+        if (line.equals("FALSE"))
+            return new ConstantCondition(false);
+        try {
+            return new ConstantCondition(Integer.parseInt(line));
+        } catch (NumberFormatException ignored) {
+            // not an integer; pass through
+        } catch (IllegalArgumentException ex) {
+            throw new RoutingLogicException("railcraft.gui.routing.logic.constant.invalid", line);
         }
         try {
             if (line.equals("NOT"))
@@ -164,8 +176,14 @@ public class RoutingLogic {
 
     private abstract class Condition {
 
-        public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
+        public abstract int evaluate(IRoutingTile tile, EntityMinecart cart);
 
+    }
+
+    private static final int valueForBool(boolean b) {
+        // Use -1 as a sentinel for "maximum value" (i.e. FULL_POWER). This
+        // keeps us independent of the actual full power.
+        return b ? -1 : 0;
     }
 
     private abstract class ParsedCondition extends Condition {
@@ -191,7 +209,7 @@ public class RoutingLogic {
         }
 
         @Override
-        public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
+        public abstract int evaluate(IRoutingTile tile, EntityMinecart cart);
 
     }
 
@@ -204,8 +222,8 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return !a.matches(tile, cart);
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return valueForBool(a.evaluate(tile, cart) == 0);
         }
 
     }
@@ -220,8 +238,8 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return a.matches(tile, cart) && b.matches(tile, cart);
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return (a.evaluate(tile, cart) != 0 ? b.evaluate(tile, cart) : valueForBool(false));
         }
 
     }
@@ -236,8 +254,29 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return a.matches(tile, cart) || b.matches(tile, cart);
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            int value = a.evaluate(tile, cart);
+            return (value != 0 ? value : b.evaluate(tile, cart));
+        }
+
+    }
+
+    private class ConstantCondition extends Condition {
+
+        private final int value;
+
+        public ConstantCondition(int value) {
+            if (value < -1)
+                throw new IllegalArgumentException("Illegal constant value");
+            this.value = value;
+        }
+
+        public ConstantCondition(boolean value) {
+            this(valueForBool(value));
+        }
+
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return value;
         }
 
     }
@@ -249,18 +288,18 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IRoutableCart) {
                 String cartDest = ((IRoutableCart) cart).getDestination();
                 if (StringUtils.equalsIgnoreCase("null", value))
-                    return StringUtils.isBlank(cartDest);
+                    return valueForBool(StringUtils.isBlank(cartDest));
                 if (StringUtils.isBlank(cartDest))
-                    return false;
+                    return valueForBool(false);
                 if (isRegex)
-                    return cartDest.matches(value);
-                return cartDest.startsWith(value);
+                    return valueForBool(cartDest.matches(value));
+                return valueForBool(cartDest.startsWith(value));
             }
-            return false;
+            return valueForBool(false);
         }
 
     }
@@ -272,8 +311,8 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return StringUtils.equalsIgnoreCase(value, CartToolsAPI.getCartOwner(cart).getName());
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return valueForBool(StringUtils.equalsIgnoreCase(value, CartToolsAPI.getCartOwner(cart).getName()));
         }
 
     }
@@ -285,13 +324,13 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             if (!cart.hasCustomName())
-                return StringUtils.equalsIgnoreCase("null", value);
+                return valueForBool(StringUtils.equalsIgnoreCase("null", value));
             String customName = cart.getName();
             if (isRegex)
-                return customName.matches(value);
-            return StringUtils.equalsIgnoreCase(customName, value);
+                return valueForBool(customName.matches(value));
+            return valueForBool(StringUtils.equalsIgnoreCase(customName, value));
         }
 
     }
@@ -303,12 +342,12 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             ItemStack stack = cart.getCartItem();
             if (stack == null || stack.getItem() == null)
-                return false;
+                return valueForBool(false);
             String itemName = stack.getItem().getRegistryName().toString();
-            return itemName.equalsIgnoreCase(value);
+            return valueForBool(itemName.equalsIgnoreCase(value));
         }
 
     }
@@ -323,12 +362,12 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof INeedsFuel) {
                 INeedsFuel rCart = (INeedsFuel) cart;
-                return needsRefuel == rCart.needsFuel();
+                return valueForBool(needsRefuel == rCart.needsFuel());
             }
-            return false;
+            return valueForBool(false);
         }
 
     }
@@ -343,12 +382,12 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             for (EntityMinecart c : Train.getTrain(cart)) {
                 if (c != null && c.getPassengers().stream().anyMatch(p -> p instanceof EntityPlayer))
-                    return ridden;
+                    return valueForBool(ridden);
             }
-            return !ridden;
+            return valueForBool(!ridden);
         }
 
     }
@@ -360,12 +399,12 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return Train.getTrain(cart).stream()
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return valueForBool(Train.getTrain(cart).stream()
                     .filter(c -> c != null)
                     .flatMap(c -> c.getPassengers().stream())
                     .filter(entity -> entity instanceof EntityPlayer)
-                    .anyMatch(player -> StringUtils.equalsIgnoreCase(player.getName(), value));
+                    .anyMatch(player -> StringUtils.equalsIgnoreCase(player.getName(), value)));
         }
 
     }
@@ -380,8 +419,8 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return powered == tile.isPowered();
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return valueForBool(powered == tile.isPowered());
         }
 
     }
@@ -410,12 +449,12 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IPaintedCart) {
                 IPaintedCart pCart = (IPaintedCart) cart;
-                return (primary == null || primary.isEqual(pCart.getPrimaryColor())) && (secondary == null || secondary.isEqual(pCart.getSecondaryColor()));
+                return valueForBool((primary == null || primary.isEqual(pCart.getPrimaryColor())) && (secondary == null || secondary.isEqual(pCart.getSecondaryColor())));
             }
-            return false;
+            return valueForBool(false);
         }
     }
 
@@ -426,19 +465,19 @@ public class RoutingLogic {
         }
 
         @Override
-        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof EntityLocomotive) {
                 EntityLocomotive loco = (EntityLocomotive) cart;
                 if (value.equalsIgnoreCase("Electric"))
-                    return loco.getCartType() == RailcraftCarts.LOCO_ELECTRIC;
+                    return valueForBool(loco.getCartType() == RailcraftCarts.LOCO_ELECTRIC);
                 if (value.equalsIgnoreCase("Steam"))
-                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_SOLID;
+                    return valueForBool(loco.getCartType() == RailcraftCarts.LOCO_STEAM_SOLID);
                 if (value.equalsIgnoreCase("Steam_Magic"))
-                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_MAGIC;
+                    return valueForBool(loco.getCartType() == RailcraftCarts.LOCO_STEAM_MAGIC);
                 if (value.equalsIgnoreCase("None"))
-                    return false;
+                    return valueForBool(false);
             }
-            return value.equalsIgnoreCase("None");
+            return valueForBool(value.equalsIgnoreCase("None"));
         }
 
     }
