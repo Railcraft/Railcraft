@@ -39,6 +39,8 @@ public class ModuleWorld extends RailcraftModulePayload {
     public static final String ZOMBIE_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/zombie_trackman.png";
     public static final String VILLAGER_ID = RailcraftConstants.RESOURCE_DOMAIN + ":trackman";
 
+    public static VillagerRegistry.VillagerProfession villagerTrackman;
+
     public ModuleWorld() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
@@ -53,7 +55,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     VillagerRegistry villagerRegistry = VillagerRegistry.instance();
                     villagerRegistry.registerVillageCreationHandler(workshop);
 
-                    VillagerRegistry.VillagerProfession villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
+                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
                     villagerRegistry.register(villagerTrackman);
 
                     VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");

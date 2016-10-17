@@ -1,6 +1,9 @@
+next:
+    NEW: Updated monster spawn list for Pumpkin Cart.
+
 10.0.0-beta-3:
 	CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.
-	CHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should unaffected.
+	CHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should be unaffected.
 	CONFIG: Added config option to reduce/eliminate vanilla Gold/Iron Ore generation.
 	FIX: Fix Geode generation.
 	FIX: Various other fixes.
