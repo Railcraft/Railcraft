@@ -210,20 +210,12 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileWayObject.class, TESRSignals::new);
 
-        //TODO: this needs a smart model or something
-//        if (RailcraftBlocks.track.block() != null)
-//            RenderingRegistry.registerBlockHandler(new RenderTrack());
-
-//        if (RailcraftBlocksOld.getBlockElevator() != null)
-//            RenderingRegistry.registerBlockHandler(new RenderElevator());
-
 //        registerBlockRenderer(new RenderBlockMachineBeta());
 //        registerBlockRenderer(new RenderBlockMachineDelta());
 //        registerBlockRenderer(new RenderBlockSignal());
 //        registerBlockRenderer(RenderBlockPost.make());
 //        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.post));
 //        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.platform));
-//        registerBlockRenderer(new RenderBlockOre());
 //        registerBlockRenderer(new RenderBlockFrame());
 //        registerBlockRenderer(new RenderBlockStrengthGlass());
 //        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockStone()));
@@ -233,6 +225,7 @@ public class ClientProxy extends CommonProxy {
 //        registerBlockRenderer(new RenderStair());
 //        registerBlockRenderer(new RenderSlab());
 
+        // TODO: these carts still need custom item models
 //        stack = EnumCart.TANK.getCartItem();
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));

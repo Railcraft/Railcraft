@@ -179,7 +179,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return "railcraft:" + getCartType().getBaseTag();
     }
 
-    //TODO: Will this explode?
+    // Will this explode?
     @Nonnull
     @Override
     public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {

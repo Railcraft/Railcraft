@@ -257,7 +257,7 @@ public class LinkageHandler {
 //     * @return true if leader is leading follower
 //     */
 //    private boolean isCartLeading(EntityMinecart leader, EntityMinecart follower) {
-//        return true; // TODO: magic
+//        return true; // magic goes here
 //    }
 
 //    /**
