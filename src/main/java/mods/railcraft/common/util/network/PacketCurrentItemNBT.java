@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.stream.Stream;
 
-//TODO: dual welding breaks this
 public class PacketCurrentItemNBT extends RailcraftPacket {
 
     private final EntityPlayer player;
@@ -39,15 +39,22 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         try {
-            ItemStack stack = data.readItemStack();
+            ItemStack stack = data.readItemStack(), currentItem;
 
-            if (stack == null || currentItem == null)
+            if (stack == null)
                 return;
 
-            if (stack.getItem() != currentItem.getItem())
-                return;
+            // Since dual wielding was introduced, the server may have "lost"
+            // the active item by the time it gets this packet. In this case,
+            // check the player's hands as well.
+            currentItem = Stream
+                .of(this.currentItem, player.getHeldItemMainhand(), player.getHeldItemOffhand())
+                .filter(ci -> ci != null
+                        && ci.getItem() == stack.getItem()
+                        && ci.getItem() instanceof IEditableItem)
+                .findFirst().orElse(null);
 
-            if (!(currentItem.getItem() instanceof IEditableItem))
+            if (currentItem == null)
                 return;
 
             IEditableItem eItem = (IEditableItem) stack.getItem();
