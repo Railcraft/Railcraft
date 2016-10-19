@@ -39,7 +39,7 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         try {
-            ItemStack stack = data.readItemStack(), currentItem;
+            ItemStack stack = data.readItemStack();
 
             if (stack == null)
                 return;
@@ -47,20 +47,20 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
             // Since dual wielding was introduced, the server may have "lost"
             // the active item by the time it gets this packet. In this case,
             // check the player's hands as well.
-            currentItem = Stream
-                .of(this.currentItem, player.getHeldItemMainhand(), player.getHeldItemOffhand())
-                .filter(ci -> ci != null
-                        && ci.getItem() == stack.getItem()
-                        && ci.getItem() instanceof IEditableItem)
-                .findFirst().orElse(null);
+            ItemStack targetItem = Stream
+                    .of(currentItem, player.getHeldItemMainhand(), player.getHeldItemOffhand())
+                    .filter(ci -> ci != null
+                            && ci.getItem() == stack.getItem()
+                            && ci.getItem() instanceof IEditableItem)
+                    .findFirst().orElse(null);
 
-            if (currentItem == null)
+            if (targetItem == null)
                 return;
 
             IEditableItem eItem = (IEditableItem) stack.getItem();
 
-            if (!eItem.canPlayerEdit(player, currentItem)) {
-                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), currentItem.getItem().getUnlocalizedName());
+            if (!eItem.canPlayerEdit(player, targetItem)) {
+                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetItem.getItem().getUnlocalizedName());
                 return;
             }
 
@@ -70,7 +70,7 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
                 return;
             }
 
-            currentItem.setTagCompound(stack.getTagCompound());
+            targetItem.setTagCompound(stack.getTagCompound());
         } catch (Exception exception) {
             Game.logThrowable("Error reading Item NBT packet", exception);
         }
