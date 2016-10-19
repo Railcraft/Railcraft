@@ -9,10 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
@@ -32,6 +29,16 @@ public class ItemSteelHoe extends ItemHoe implements IRailcraftItem {
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(RailcraftItems.HOE_STEEL, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

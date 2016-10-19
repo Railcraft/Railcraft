@@ -11,9 +11,11 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 
 /**
  * Created by CovertJaguar on 8/30/2016 for Railcraft.
@@ -29,5 +31,15 @@ public abstract class ItemRailcraftArmor extends ItemArmor implements IRailcraft
     @Override
     public Item getObject() {
         return this;
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 }

@@ -23,6 +23,10 @@ import java.util.Map;
 public class LocalizationPlugin {
     public static final String ENGLISH = "en_US";
 
+    public static String convertTag(String tag) {
+        return tag.replace("_", ".");
+    }
+
     public static String translate(String tag) {
         return I18n.translateToLocal(tag).replace("\\n", "\n").replace("\\%", "@");
     }

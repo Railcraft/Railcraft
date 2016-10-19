@@ -69,7 +69,7 @@ public class LootPlugin {
     }
 
     public static void addLoot(ItemStack loot, int minStack, int maxStack, Type type) {
-        addLoot(loot, minStack, maxStack, loot.getUnlocalizedName(), type.locations);
+        addLoot(loot, minStack, maxStack, loot.getItem().getRegistryName().getResourcePath(), type.locations);
     }
 
     public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {

@@ -86,8 +86,13 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return "item.railcraft.track_kit";
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
+        return getUnlocalizedName() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
     }
 
     @Override

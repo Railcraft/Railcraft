@@ -11,6 +11,8 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -64,7 +66,8 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
         IVariantEnum[] variants = getVariants();
         if (variants == null || damage < 0 || damage >= variants.length)
             return getUnlocalizedName();
-        return getUnlocalizedName() + "." + variants[damage].getResourcePathSuffix();
+        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
+        return LocalizationPlugin.convertTag(tag);
     }
 
     @Override

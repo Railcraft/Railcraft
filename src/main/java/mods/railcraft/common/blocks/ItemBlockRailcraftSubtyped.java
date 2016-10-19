@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -50,6 +52,7 @@ public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
         IVariantEnum[] variants = getVariants();
         if (variants == null || damage < 0 || damage >= variants.length)
             return getUnlocalizedName();
-        return getUnlocalizedName() + "." + variants[damage].getResourcePathSuffix();
+        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
+        return LocalizationPlugin.convertTag(tag);
     }
 }

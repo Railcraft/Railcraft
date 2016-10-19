@@ -79,6 +79,7 @@ public enum Metal implements IVariantEnum {
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
         blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
+        blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
 
     }
 

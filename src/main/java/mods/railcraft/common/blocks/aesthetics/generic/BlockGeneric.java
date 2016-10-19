@@ -58,8 +58,14 @@ public class BlockGeneric extends BlockRailcraft {
     public void initializeDefinintion() {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_STEEL);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_CONCRETE);
+
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_STEEL);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_SILVER);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_LEAD);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_TIN);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COPPER);
+
         HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
 
@@ -70,16 +76,17 @@ public class BlockGeneric extends BlockRailcraft {
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_LEAD.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_STEEL.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_TIN.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_SILVER.getStack());
+
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CONCRETE.getStack());
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
+
         ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_ABYSSAL.getStack());
         ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_QUARRIED.getStack());
 
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_CONCRETE.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_CREOSOTE.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_STEEL.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.STONE_ABYSSAL.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.STONE_QUARRIED.ordinal());
+        for (EnumGeneric block : EnumGeneric.VALUES) {
+            MicroBlockPlugin.addMicroBlockCandidate(this, block.ordinal());
+        }
     }
 
     @Nullable
@@ -207,6 +214,7 @@ public class BlockGeneric extends BlockRailcraft {
             case BLOCK_LEAD:
             case BLOCK_STEEL:
             case BLOCK_TIN:
+            case BLOCK_SILVER:
                 return SoundType.METAL;
             case BLOCK_CREOSOTE:
                 return SoundType.WOOD;

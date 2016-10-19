@@ -80,6 +80,16 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
+    }
+
+    @Override
     public Item getObject() {
         return this;
     }
@@ -271,14 +281,6 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     @Override
     public Object getRecipeObject(IVariantEnum meta) {
         return ORE_TAG;
-    }
-
-    @Override
-    public void defineRecipes() {
-    }
-
-    @Override
-    public void finalizeDefinition() {
     }
 
     @Override

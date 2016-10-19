@@ -86,6 +86,10 @@ public class ModuleResources extends RailcraftModulePayload {
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.LEAD);
 
+                    type = EnumGeneric.BLOCK_SILVER;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.SILVER);
+
                     type = EnumGeneric.CRUSHED_OBSIDIAN;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         ItemStack stack = type.getStack();

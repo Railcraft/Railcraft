@@ -16,7 +16,8 @@
       "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
       "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
-      "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}}
+      "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
+      "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}}
     }
   }
 }

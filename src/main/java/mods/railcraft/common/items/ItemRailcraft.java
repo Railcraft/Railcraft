@@ -100,6 +100,16 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
+    }
+
+    @Override
     public Object getRecipeObject(@Nullable IVariantEnum variant) {
         checkVariant(variant);
         String oreTag = getOreTag(variant);

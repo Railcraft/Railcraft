@@ -63,6 +63,16 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
+    }
+
+    @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         ToolTip toolTip = getToolTip(stack, player, adv);
         if (toolTip != null)

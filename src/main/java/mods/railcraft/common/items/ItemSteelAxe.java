@@ -36,6 +36,16 @@ public class ItemSteelAxe extends ItemAxe implements IRailcraftItem {
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
+    }
+
+    @Override
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this), false,
                 "II ",
