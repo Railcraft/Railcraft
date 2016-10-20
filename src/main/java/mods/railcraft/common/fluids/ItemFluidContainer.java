@@ -38,7 +38,6 @@ public class ItemFluidContainer extends ItemRailcraft {
     public ItemFluidContainer(Fluids fluid, Item empty) {
         this.fluid = fluid;
         this.empty = empty;
-        setContainerItem(empty);
     }
 
     @Override
