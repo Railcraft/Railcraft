@@ -34,7 +34,7 @@ public final class StackFilters {
      * Matches against the provided ItemStack.
      */
     public static Predicate<ItemStack> of(@Nonnull final ItemStack stack) {
-        return stack1 -> InvTools.isItemEqual(stack1, stack1);
+        return stack1 -> InvTools.isItemEqual(stack1, stack);
     }
 
     /**

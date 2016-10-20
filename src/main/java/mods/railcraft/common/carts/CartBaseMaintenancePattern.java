@@ -57,12 +57,11 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
         if (stackStock != null && !InvTools.isItemEqual(stackReplace, stackStock)) {
             CartToolsAPI.transferHelper.offerOrDropItem(this, stackStock);
             setInventorySlotContents(slotStock, null);
+            stackStock = null;
         }
 
         if (stackReplace == null)
             return;
-
-        stackStock = getStackInSlot(slotStock);
 
         if (stackStock == null)
             setInventorySlotContents(slotStock, CartToolsAPI.transferHelper.pullStack(this, StackFilters.of(stackReplace)));
