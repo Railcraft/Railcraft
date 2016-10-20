@@ -234,10 +234,7 @@ public class ChargeNetwork {
                 invalid = true;
                 totalMaintenanceCost = 0.0;
                 if (touchNodes) {
-                    forEach(n -> {
-                        n.chargeGraph = NULL_GRAPH;
-                        batterySaveData.removeBattery(n.pos);
-                    });
+                    forEach(n -> n.chargeGraph = NULL_GRAPH);
                 }
                 chargeBatteries.clear();
                 super.clear();
