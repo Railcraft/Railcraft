@@ -13,6 +13,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,7 +32,7 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
         if (variants != null) {
             for (int i = 0, variantsLength = variants.length; i < variantsLength; i++) {
                 IVariantEnum variant = variants[i];
-                ModelManager.registerItemModel((Item) this, i, getResourcePath() + "_" + variant.getResourcePathSuffix());
+                ModelManager.registerItemModel((Item) this, i, getResourcePath() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix());
             }
         } else {
             ModelManager.registerItemModel((Item) this, 0);

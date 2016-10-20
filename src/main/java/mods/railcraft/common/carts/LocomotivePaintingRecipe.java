@@ -1,17 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.DyeHelper;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -40,7 +40,7 @@ public class LocomotivePaintingRecipe implements IRecipe {
         if (stack == null)
             return null;
         for (EnumColor color : EnumColor.VALUES) {
-            if (InvTools.isItemEqual(stack, DyeHelper.getDyes().get(color)))
+            if (InvTools.isItemEqual(stack, color.getDyesStacks()))
                 return color;
         }
         return null;
