@@ -17,57 +17,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 
-import java.util.Locale;
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PopulatorGeode extends Populator {
+public class GeneratorGeode extends Generator {
     //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0]);
     public static final int MIN_DEPTH = 16;
     public static final int MIN_Y = 12;
     public static final int MIN_FLOOR = 24;
-    public static final int GEN_HEIGHT = 60;
-    private static PopulatorGeode instance;
-    private final WorldGenerator geode = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState());
 
-    private PopulatorGeode() {
-        super(EventType.CUSTOM, GEN_HEIGHT);
-    }
-
-    public static PopulatorGeode instance() {
-        if (instance == null) {
-            instance = new PopulatorGeode();
-        }
-        return instance;
+    public GeneratorGeode() {
+        super(new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState()));
     }
 
     @Override
-    public void populate(World world, Random rand, BlockPos chunkCenterPos) {
+    public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
+        BlockPos chunkCenterPos = targetPos.add(8, 0, 8);
         OceanFloor floor = scanOceanFloor(world, chunkCenterPos);
         if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
             int deviation = MIN_Y + Math.round(Math.abs((float) rand.nextGaussian()) * (floor.floorY - MIN_Y) * 0.5F);
 //            Game.log(Level.INFO, "Deviation from floor: {0}", deviation - floor.floorY);
             int y = Math.min(floor.floorY, deviation);
-            geode.generate(world, rand, new BlockPos(chunkCenterPos.getX(), y, chunkCenterPos.getZ()));
+            generators[0].generate(world, rand, new BlockPos(chunkCenterPos.getX(), y, chunkCenterPos.getZ()));
         }
     }
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos pos, Biome biome) {
-        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.WATER)) {
-            return false;
-        }
-        //noinspection ConstantConditions
-        if (biome.getBiomeName() == null || biome.getBiomeName().toLowerCase(Locale.ENGLISH).contains("river")) {
-            return false;
-        }
-        return rand.nextDouble() <= 0.2;
+        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.2;
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {

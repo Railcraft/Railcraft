@@ -103,6 +103,8 @@ public class WorldGenGeode extends WorldGenerator {
 
     private boolean isReplaceable(IBlockState existingState, World world, BlockPos pos) {
         Block existing = existingState.getBlock();
+        if (existing == Blocks.PRISMARINE)
+            return false;
         if (existing.isReplaceableOreGen(existingState, world, pos, GenTools.STONE::test))
             return true;
         if (existing.isReplaceableOreGen(existingState, world, pos, GenTools.DIRT::test))
@@ -112,6 +114,10 @@ public class WorldGenGeode extends WorldGenerator {
         if (existing.isReplaceableOreGen(existingState, world, pos, GenTools.SAND::test))
             return true;
         if (existingState.getMaterial() == Material.WATER)
+            return true;
+        if (existingState.getMaterial() == Material.ROCK)
+            return true;
+        if (existingState.getMaterial() == Material.GROUND)
             return true;
         return ores.contains(existing);
     }

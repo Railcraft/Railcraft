@@ -20,18 +20,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
+
+import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class GeneratorMine extends Generator {
-    private static final boolean SKY_GEN = false;
+    private static final EnumSet<BiomeDictionary.Type> RICH_BIOMES = EnumSet.of(MOUNTAIN, MESA, HILLS);
+    private static final boolean SKY_GEN = true;
     private static final Predicate<IBlockState> STONE_TEST = SKY_GEN ? Predicates.alwaysTrue() : GenTools.STONE;
     @Nullable
     private final WorldGenerator poorGen;
@@ -43,7 +50,7 @@ public abstract class GeneratorMine extends Generator {
     private final Map<World, NoiseGen> veinMap = new MapMaker().weakKeys().makeMap();
 
     protected GeneratorMine(EventType eventType, Metal metal, int density, int yLevel, int yRange, int noiseSeed) {
-        super(eventType, getGen(metal.getState(Metal.Form.POOR_ORE), density), getGen(metal.getState(Metal.Form.ORE), density));
+        super(getGen(metal.getState(Metal.Form.POOR_ORE), density), getGen(metal.getState(Metal.Form.ORE), density));
         this.yLevel = SKY_GEN ? 100 + yLevel : yLevel;
         this.yRange = yRange;
         this.noiseSeed = noiseSeed;
@@ -64,13 +71,13 @@ public abstract class GeneratorMine extends Generator {
     }
 
     @Override
-    public void generate(World world, Random rand, BlockPos targetPos) {
+    public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
         int worldX = targetPos.getX();
         int worldZ = targetPos.getZ();
 
-        boolean generated = attemptGen(world, rand, worldX, worldZ, 16);
+        boolean generated = attemptGen(world, rand, worldX, worldZ, biome, 16);
         if (generated)
-            attemptGen(world, rand, worldX, worldZ, 200);
+            attemptGen(world, rand, worldX, worldZ, biome, 200);
     }
 
     private long getNoiseSeed(World world) {
@@ -99,12 +106,22 @@ public abstract class GeneratorMine extends Generator {
         return noise;
     }
 
-    private boolean attemptGen(World world, Random rand, int worldX, int worldZ, int cycles) {
+    private boolean attemptGen(World world, Random rand, int worldX, int worldZ, Biome biome, int cycles) {
         NoiseGen cloudNoise = getCloudNoise(world);
         NoiseGen veinNoise = getVeinNoise(world);
 
-        double fringeArea = 0.85;
-        double denseArea = 0.65;
+
+        boolean rich = false;
+        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
+        for (BiomeDictionary.Type type : types) {
+            if (RICH_BIOMES.contains(type)) {
+                rich = true;
+                break;
+            }
+        }
+
+        double fringeArea = 0.7;
+        double denseArea = rich ? 0.8 : 0.9;
 
         boolean generated = false;
         for (int i = 0; i < cycles; i++) {
@@ -145,6 +162,9 @@ public abstract class GeneratorMine extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        return true;
+        if (world.provider.getDimension() != 0)
+            return false;
+        WorldGenerator gen = Arrays.stream(generators).filter(Predicates.nonNull()).findFirst().orElse(null);
+        return TerrainGen.generateOre(world, rand, gen, targetPos, EventType.CUSTOM);
     }
 }
