@@ -183,7 +183,7 @@ public class RailcraftConfig {
         anchorFuelWorld.putAll(BlockItemListParser.parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPersonal.putAll(BlockItemListParser.parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPassive.putAll(BlockItemListParser.parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
+        EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
     }
 
     private static void loadEnchantment() {

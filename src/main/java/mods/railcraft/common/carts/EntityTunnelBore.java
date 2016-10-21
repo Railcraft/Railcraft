@@ -73,7 +73,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final int BALLAST_DELAY = 10;
     public static final int FUEL_CONSUMPTION = 12;
     public static final float HARDNESS_MULTIPLIER = 8;
-    public static final BlockSet mineableBlocks = new BlockSet();
+    public static final BlockSet mineableStates = new BlockSet();
+    public static final Set<Block> mineableBlocks = new HashSet<>();
     public static final Set<Block> replaceableBlocks = new HashSet<Block>();
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
@@ -147,9 +148,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             Blocks.DOUBLE_PLANT};
 
     static {
-        for (Block block : mineable) {
-            addMineableBlock(block);
-        }
+        mineableBlocks.addAll(Arrays.asList(mineable));
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
@@ -209,7 +208,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     public static void addMineableBlock(IBlockState blockState) {
-        mineableBlocks.add(blockState);
+        mineableStates.add(blockState);
     }
 
     public static boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
@@ -255,7 +254,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     private boolean isMineableBlock(IBlockState blockState) {
-        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState);
+        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState.getBlock()) || mineableStates.contains(blockState);
     }
 
     @Override
