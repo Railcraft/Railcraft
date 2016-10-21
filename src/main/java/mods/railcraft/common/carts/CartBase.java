@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IItemCart;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,7 +42,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Nonnull
     @Override
     public String getName() {
-        return hasCustomName() ? getCustomNameTag() : getCartType().getEntityLocalizationTag();
+        return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
     }
 
     @Override
