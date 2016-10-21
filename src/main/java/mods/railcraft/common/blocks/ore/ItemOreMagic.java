@@ -10,11 +10,13 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import mods.railcraft.common.items.EntityItemFireproof;
+import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
 
@@ -49,10 +51,11 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
      * @return A new Entity object to spawn or null
      */
     @Override
+    @Nullable
     public Entity createEntity(World world, Entity location, ItemStack stack) {
         if (!hasCustomEntity(stack))
             return null;
-        EntityItemFireproof entity = new EntityItemFireproof(world, location.posX, location.posY, location.posZ, stack);
+        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;

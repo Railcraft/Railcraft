@@ -205,11 +205,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
      */
     @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
-        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
-        entity.motionX = location.motionX;
-        entity.motionY = location.motionY;
-        entity.motionZ = location.motionZ;
-        entity.setDefaultPickupDelay();
+        EntityItemFirestone entity = (EntityItemFirestone) super.createEntity(world, location, stack);
+        entity.setRefined(true);
         return entity;
     }
 

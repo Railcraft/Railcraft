@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.items.ItemRailcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -18,9 +18,6 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemFirestone extends ItemRailcraft {
-    public ItemFirestone() {
-        setMaxStackSize(1);
-    }
 
     /**
      * Determines if this Item has a special entity for when they are in the
@@ -50,7 +47,7 @@ public class ItemFirestone extends ItemRailcraft {
      */
     @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
-        EntityItemFireproof entity = new EntityItemFireproof(world, location.posX, location.posY, location.posZ, stack);
+        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;
