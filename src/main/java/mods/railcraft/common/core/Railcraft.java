@@ -46,14 +46,14 @@ import java.io.File;
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
         acceptedMinecraftVersions = Railcraft.MC_VERSION,
-        dependencies = "required-after:Forge@[12.18.0.2010,);"
+        dependencies = "required-after:Forge@[12.18.2.2099,);"
                 + "after:BuildCraft|Core[6.1.7,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
                 + "after:BuildCraftAPI|statements[1.0,);"
                 + "after:BuildCraftAPI|transport[1.0,);"
-                + "after:forestry[5,);"
+                + "after:forestry[5.2.15,);"
                 + "after:Thaumcraft;"
                 + "after:IC2@[2.6.9-ex110,)")
 public final class Railcraft {
