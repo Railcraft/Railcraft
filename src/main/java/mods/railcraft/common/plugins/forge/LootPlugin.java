@@ -13,7 +13,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.loot.WeightedRandomChestContent;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -72,15 +72,15 @@ public class LootPlugin {
         addLoot(loot, minStack, maxStack, loot.getItem().getRegistryName().getResourcePath(), type.locations);
     }
 
-    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
+    public static void addLoot(IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
         addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag(), type.locations);
     }
 
-    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItem> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
+    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
         addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix(), type.locations);
     }
 
-    public static void addLoot(IRailcraftObjectContainer<IRailcraftItem> item, int minStack, int maxStack, Type type) {
+    public static void addLoot(IRailcraftObjectContainer<IRailcraftItemSimple> item, int minStack, int maxStack, Type type) {
         addLoot(item.getStack(), minStack, maxStack, item.getBaseTag(), type.locations);
     }
 

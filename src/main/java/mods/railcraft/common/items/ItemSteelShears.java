@@ -23,7 +23,7 @@ import net.minecraftforge.common.IShearable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemSteelShears extends ItemShears implements IRailcraftItem {
+public class ItemSteelShears extends ItemShears implements IRailcraftItemSimple {
 
     public ItemSteelShears() {
         setMaxDamage(500);

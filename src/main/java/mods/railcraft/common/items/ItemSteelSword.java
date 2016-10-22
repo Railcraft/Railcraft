@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class ItemSteelSword extends ItemSword implements IRailcraftItem {
+public class ItemSteelSword extends ItemSword implements IRailcraftItemSimple {
 
     public ItemSteelSword() {
         super(ItemMaterials.STEEL_TOOL);

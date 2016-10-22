@@ -9,11 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.items.ItemRailcraft;
-import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -41,10 +39,6 @@ public class FuelPlugin {
 
     private static class FuelHandler implements IFuelHandler {
 
-        private static final int COKE_HEAT = 3200;
-        private final ItemStack coke = RailcraftItems.COKE.getStack();
-        private final ItemStack cokeBlock = EnumGeneric.BLOCK_COKE.getStack();
-
         private FuelHandler() {
         }
 
@@ -52,12 +46,8 @@ public class FuelPlugin {
         public int getBurnTime(ItemStack fuel) {
             if (fuel == null)
                 return 0;
-            if (InvTools.isItemEqual(fuel, coke))
-                return COKE_HEAT;
-            if (InvTools.isItemEqual(fuel, cokeBlock))
-                return COKE_HEAT * 10;
-            if (fuel.getItem() instanceof ItemRailcraft)
-                return ((ItemRailcraft) fuel.getItem()).getHeatValue(fuel);
+            if (fuel.getItem() instanceof IRailcraftItem)
+                return ((IRailcraftItem) fuel.getItem()).getHeatValue(fuel);
             return 0;
         }
 

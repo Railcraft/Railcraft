@@ -57,7 +57,7 @@ import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -182,8 +182,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             if (item != null) {
                 if (!(item instanceof IRailcraftItemBlock))
                     throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftItemBlock");
-                if (item instanceof IRailcraftItem)
-                    throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItem");
+                if (item instanceof IRailcraftItemSimple)
+                    throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItemSimple");
                 IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
                 itemObject.initializeDefinintion();
                 itemObject.defineRecipes();
@@ -198,6 +198,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     @Override
     public boolean isEqual(@Nullable ItemStack stack) {
         return stack != null && block != null && InvTools.getBlockFromStack(stack) == block;
+    }
+
+    public boolean isEqual(IVariantEnum variant, @Nullable ItemStack stack) {
+        return stack != null && block != null && InvTools.isItemEqual(getStack(variant));
     }
 
     public boolean isEqual(@Nullable Block block) {

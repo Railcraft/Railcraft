@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class ItemRailcraftArmor extends ItemArmor implements IRailcraftItem {
+public abstract class ItemRailcraftArmor extends ItemArmor implements IRailcraftItemSimple {
     protected ItemRailcraftArmor(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
         super(materialIn, renderIndexIn, equipmentSlotIn);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);

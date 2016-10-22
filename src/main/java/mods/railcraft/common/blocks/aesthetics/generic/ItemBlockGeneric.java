@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.items.ItemCoke;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,4 +44,13 @@ public class ItemBlockGeneric extends ItemBlockRailcraft {
             info.add(LocalizationPlugin.translate(tag));
     }
 
+    @Override
+    public int getHeatValue(ItemStack stack) {
+        int meta = stack.getMetadata();
+        if (meta == EnumGeneric.BLOCK_COKE.ordinal())
+            return ItemCoke.COKE_HEAT * 10;
+        if (meta == EnumGeneric.BLOCK_CREOSOTE.ordinal())
+            return 600;
+        return 0;
+    }
 }

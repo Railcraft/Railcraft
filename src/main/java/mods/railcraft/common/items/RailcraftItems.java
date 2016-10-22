@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> {
+public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSimple> {
     ARMOR_BOOTS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.FEET), "armor_boots_steel", Items.IRON_BOOTS),
     ARMOR_HELMET_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.HEAD), "armor_helmet_steel", Items.IRON_HELMET),
     ARMOR_LEGGINGS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor_leggings_steel", Items.IRON_LEGGINGS),
@@ -109,7 +109,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     private final Object altRecipeObject;
     private final Supplier<Boolean> prerequisites;
     private Item item;
-    private Optional<IRailcraftItem> railcraftObject = Optional.empty();
+    private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
@@ -127,7 +127,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     }
 
     public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItem::finalizeDefinition));
+        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition));
     }
 
     @Override
@@ -137,9 +137,9 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
 
         if (isEnabled()) {
             item = itemSupplier.get();
-            if (!(item instanceof IRailcraftItem))
-                throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
-            IRailcraftItem railcraftItem = (IRailcraftItem) item;
+            if (!(item instanceof IRailcraftItemSimple))
+                throw new RuntimeException("Railcraft Items must implement IRailcraftItemSimple");
+            IRailcraftItemSimple railcraftItem = (IRailcraftItemSimple) item;
             railcraftObject = Optional.of(railcraftItem);
             item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
@@ -213,7 +213,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItem> 
     }
 
     @Override
-    public Optional<IRailcraftItem> getObject() {
+    public Optional<IRailcraftItemSimple> getObject() {
         return railcraftObject;
     }
 

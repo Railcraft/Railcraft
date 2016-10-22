@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelShovel extends ItemSpade implements IRailcraftItem {
+public class ItemSteelShovel extends ItemSpade implements IRailcraftItemSimple {
 
     public ItemSteelShovel() {
         super(ItemMaterials.STEEL_TOOL);

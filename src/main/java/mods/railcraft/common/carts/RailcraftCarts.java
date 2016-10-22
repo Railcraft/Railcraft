@@ -18,7 +18,7 @@ import mods.railcraft.common.core.InitializationConditional;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
@@ -193,7 +193,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItem::finalizeDefinition));
+        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition));
     }
 
     @Override
@@ -233,7 +233,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    public Optional<IRailcraftItem> getObject() {
+    public Optional<IRailcraftItemSimple> getObject() {
         return Optional.ofNullable(item instanceof ItemCart ? (ItemCart) item : null);
     }
 
@@ -323,7 +323,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + getEntityTag());
                     itemCart.setUnlocalizedName("railcraft.entity." + tag.replace("_", "."));
                     itemCart.setRarity(rarity);
-                    RailcraftRegistry.register((IRailcraftItem) itemCart);
+                    RailcraftRegistry.register((IRailcraftItemSimple) itemCart);
 
                     itemCart.initializeDefinintion();
                     itemCart.defineRecipes();

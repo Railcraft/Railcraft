@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelHoe extends ItemHoe implements IRailcraftItem {
+public class ItemSteelHoe extends ItemHoe implements IRailcraftItemSimple {
 
     public ItemSteelHoe() {
         super(ItemMaterials.STEEL_TOOL);

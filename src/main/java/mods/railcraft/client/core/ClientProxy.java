@@ -39,7 +39,7 @@ import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
 import mods.railcraft.common.util.misc.Game;
@@ -121,11 +121,11 @@ public class ClientProxy extends CommonProxy {
             }
         });
 
-        Set<IRailcraftObjectContainer<IRailcraftItem>> items = new HashSet<>();
+        Set<IRailcraftObjectContainer<IRailcraftItemSimple>> items = new HashSet<>();
         items.addAll(Arrays.asList(RailcraftItems.VALUES));
         items.addAll(Arrays.asList(RailcraftCarts.VALUES));
-        for (IRailcraftObjectContainer<IRailcraftItem> itemContainer : items) {
-            itemContainer.getObject().ifPresent(IRailcraftItem::initializeClient);
+        for (IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer : items) {
+            itemContainer.getObject().ifPresent(IRailcraftItemSimple::initializeClient);
         }
 
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {

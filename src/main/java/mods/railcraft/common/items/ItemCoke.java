@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemCoke extends ItemRailcraft {
+    public static final int COKE_HEAT = 3200;
+
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(RailcraftItems.COKE, 4, 16, LootPlugin.Type.TOOL);
@@ -36,4 +38,8 @@ public class ItemCoke extends ItemRailcraft {
         }
     }
 
+    @Override
+    public int getHeatValue(ItemStack stack) {
+        return COKE_HEAT;
+    }
 }
