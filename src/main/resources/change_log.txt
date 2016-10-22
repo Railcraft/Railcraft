@@ -1,5 +1,8 @@
-next:
-    NEW: Updated monster spawn list for Pumpkin Cart.
+10.0.0-beta-4:
+    NEW: Updated monster spawn list for Pumpkin Cart
+    NEW: Ores and Geodes are now SimpleRetrogen compatible
+    CHANGE: Mines are richer in Mountain, Mesa, and Hills types of biomes
+    FIX: Various other fixes
 
 10.0.0-beta-3:
 	CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.

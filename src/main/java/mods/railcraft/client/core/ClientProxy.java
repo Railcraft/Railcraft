@@ -160,8 +160,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void finalizeClient() {
-        MinecraftForge.EVENT_BUS.register(new LatestVersionMessage());
-
         SoundRegistry.setupBlockSounds();
 
         MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);

@@ -46,6 +46,7 @@ import java.io.File;
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
         acceptedMinecraftVersions = Railcraft.MC_VERSION,
+        updateJSON = "http://www.railcraft.info/railcraft_versions",
         dependencies = "required-after:Forge@[12.18.2.2099,);"
                 + "after:BuildCraft|Core[6.1.7,);"
                 + "after:BuildCraft|Energy;"
@@ -161,8 +162,6 @@ public final class Railcraft {
 
         PacketHandler.init();
         DataManagerPlugin.register();
-
-        StartupChecks.checkForNewVersion();
 
         StandardStackFilters.initialize();
 
