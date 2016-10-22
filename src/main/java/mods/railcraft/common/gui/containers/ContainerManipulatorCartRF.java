@@ -24,7 +24,7 @@ public class ContainerManipulatorCartRF extends ContainerManipulatorCart {
     private int lastEnergy;
 
     public ContainerManipulatorCartRF(TileRFManipulator device) {
-        super(null, device);
+        super(null, device, false);
         this.device = device;
         energyIndicator = new RFEnergyIndicator(device.getMaxRF());
         addWidget(new IndicatorWidget(energyIndicator, 57, 38, 176, 0, 62, 8, false));

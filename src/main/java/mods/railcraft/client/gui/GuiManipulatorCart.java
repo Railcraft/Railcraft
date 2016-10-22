@@ -46,7 +46,8 @@ public class GuiManipulatorCart extends TileGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         GuiTools.drawCenteredString(fontRendererObj, tile);
-        fontRendererObj.drawString(CART_FILTER_LABEL, 75, 16, 0x404040);
+        if (((ContainerManipulatorCart) container).hasCartFilter)
+            fontRendererObj.drawString(CART_FILTER_LABEL, 75, 16, 0x404040);
     }
 
     @Override

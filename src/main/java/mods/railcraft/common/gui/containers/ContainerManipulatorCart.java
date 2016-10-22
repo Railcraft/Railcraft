@@ -24,14 +24,16 @@ import javax.annotation.Nullable;
  */
 public class ContainerManipulatorCart extends RailcraftContainer {
     public TileManipulatorCart tile;
+    public final boolean hasCartFilter;
 
     public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile) {
-        this(inventoryplayer, tile, false);
+        this(inventoryplayer, tile, true);
     }
 
     public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile, boolean hasCartFilter) {
         super(tile);
         this.tile = tile;
+        this.hasCartFilter = hasCartFilter;
 
         if (hasCartFilter) {
             addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 0, 71, 26));
