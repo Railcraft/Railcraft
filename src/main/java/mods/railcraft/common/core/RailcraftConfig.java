@@ -95,6 +95,7 @@ public class RailcraftConfig {
     private static boolean routingOpsOnly;
     private static boolean machinesRequirePower;
     private static boolean trackingAuraEnabled;
+    private static boolean enableGhostTrain;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -274,6 +275,8 @@ public class RailcraftConfig {
 
         minecartsBreakOnDrop = get(CAT_TWEAKS_CARTS + ".general", "breakOnDrop", false, "change to '{t}=true' to restore vanilla behavior");
         minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.collision.handler=false'");
+
+        enableGhostTrain = get(CAT_TWEAKS_CARTS + ".general", "enableGhostTrain", true, "change to '{t}=false' to disable Ghost Train rendering, client side config");
 
         printLinkingDebug = get(CAT_TWEAKS_CARTS + ".general", "printLinkingDebug", false, "change to '{t}=true' to log debug info for Cart Linking");
 
@@ -779,6 +782,10 @@ public class RailcraftConfig {
 
     public static boolean areCartsSolid() {
         return cartsAreSolid;
+    }
+
+    public static boolean isGhostTrainEnabled() {
+        return enableGhostTrain;
     }
 
     public static boolean playSounds() {

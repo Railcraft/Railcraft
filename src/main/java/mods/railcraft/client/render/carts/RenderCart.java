@@ -23,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -138,22 +137,50 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             GlStateManager.enableOutlineMode(getTeamColor(cart));
         }
 
-        if (SeasonPlugin.isGhostTrain(cart)) {
+        boolean ghost = SeasonPlugin.isGhostTrain(cart);
+
+        if (ghost) {
             GlStateManager.enableBlend();
-            GlStateManager.color(1, 1, 1, 0.5F);
+            GlStateManager.disableLighting();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.DST_COLOR);
+            float color = 0.5F;
+            GlStateManager.color(color, color, color, 0.8F);
         }
 
         float light = cart.getBrightness(partialTicks);
 //        light = light + ((1.0f - light) * 0.4f);
 
-        boolean renderContents = renderCore(cart, light, partialTicks);
+        doRender(cart, light, partialTicks);
 
-        if (renderContents) {
-            float blockScale = 0.74F;
-            OpenGL.glScalef(blockScale, blockScale, blockScale);
-            OpenGL.glPushAttrib(GL11.GL_LIGHTING_BIT);
-            renderContents(cart, light, partialTicks);
-            OpenGL.glPopAttrib();
+        if (ghost) {
+            float scale = 1.1F;
+            OpenGL.glScalef(scale, scale, scale);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
+            float color = 1F;
+            GlStateManager.color(color, color, color, 0.15F);
+            doRender(cart, light, partialTicks);
+            GlStateManager.color(1F, 1F, 1F, 1F);
+
+//            GlStateManager.disableLighting();
+//            GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 0xFFFF);
+//            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+//            GL11.glLineWidth(3.0f );
+//            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+//            color = 0.2F;
+//            GlStateManager.color(color, color, color, 1F);
+//            GlStateManager.enableTexture2D();
+//            doRender(cart, light, partialTicks);
+//
+//            GL11.glClearStencil(0);
+//            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+////            GL11.glEnable(GL11.GL_STENCIL_TEST);
+//            GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFFFF);
+//            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+//            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+
+            GlStateManager.disableBlend();
+            GlStateManager.enableLighting();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         }
 
         if (renderOutlines) {
@@ -161,6 +188,18 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             GlStateManager.disableColorMaterial();
         }
 
+        OpenGL.glPopMatrix();
+    }
+
+    private void doRender(EntityMinecart cart, float light, float partialTicks) {
+        OpenGL.glPushMatrix();
+        boolean renderContents = renderCore(cart, light, partialTicks);
+
+        if (renderContents) {
+            float blockScale = 0.74F;
+            OpenGL.glScalef(blockScale, blockScale, blockScale);
+            renderContents(cart, light, partialTicks);
+        }
         OpenGL.glPopMatrix();
     }
 

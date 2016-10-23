@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Vec2D;
@@ -238,10 +237,11 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
 
-        if (SeasonPlugin.isGhostTrain(cart)) {
-            cart.setGlowing(true);
-            data.setBoolean("ghost", true);
-        } else if (data.getBoolean("ghost")) {
+//        if (SeasonPlugin.isGhostTrain(cart)) {
+//            cart.setGlowing(true);
+//            data.setBoolean("ghost", true);
+//        } else
+        if (data.getBoolean("ghost")) {
             cart.setGlowing(false);
             data.setBoolean("ghost", false);
         }

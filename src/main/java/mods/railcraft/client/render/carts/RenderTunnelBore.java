@@ -14,7 +14,6 @@ import mods.railcraft.client.render.models.programmatic.bore.ModelTunnelBore;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -88,16 +87,16 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
         float light = bore.getBrightness(partialTicks);
         light = light + ((1.0f - light) * 0.4f);
 
-        boolean ghost = SeasonPlugin.isGhostTrain(bore);
-        if (ghost)
-            GlStateManager.enableBlend();
+//        boolean ghost = SeasonPlugin.isGhostTrain(bore);
+//        if (ghost)
+//            GlStateManager.enableBlend();
 
         int j = 0xffffff;
         float c1 = (float) (j >> 16 & 0xff) / 255F;
         float c2 = (float) (j >> 8 & 0xff) / 255F;
         float c3 = (float) (j & 0xff) / 255F;
 
-        OpenGL.glColor4f(c1 * light, c2 * light, c3 * light, ghost ? 0.5F : 1.0F);
+        OpenGL.glColor4f(c1 * light, c2 * light, c3 * light, 1.0F);
 
         IBoreHead head = bore.getBoreHead();
         if (head != null) {
@@ -113,6 +112,11 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
         modelTunnelBore.setBoreHeadRotation(bore.getBoreRotationAngle());
         modelTunnelBore.setBoreActive(bore.isMinecartPowered());
         modelTunnelBore.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+
+
+//        if (ghost)
+//            GlStateManager.disableBlend();
+
         OpenGL.glPopMatrix();
     }
 
