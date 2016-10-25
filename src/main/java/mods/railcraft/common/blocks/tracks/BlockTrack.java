@@ -103,14 +103,16 @@ public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrac
         EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (!TrackSupportTools.isSupported(world, pos, maxSupportedDistance))
             valid = false;
-        if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
-            valid = false;
+        if (maxSupportedDistance == 0) {
+            if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
+                valid = false;
+            else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
+                valid = false;
+            else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
+                valid = false;
+            else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
+                valid = false;
+        }
         return valid;
     }
 
