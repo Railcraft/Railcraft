@@ -17,20 +17,18 @@ import mods.railcraft.common.gui.slots.SlotUntouchable;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerManipulatorCartFluid extends ContainerManipulatorCart {
-
-    private final TileFluidManipulator tile;
+public class ContainerManipulatorCartFluid extends ContainerManipulatorCart<TileFluidManipulator> {
 
     public ContainerManipulatorCartFluid(InventoryPlayer player, TileFluidManipulator tile) {
         super(player, tile);
-        this.tile = tile;
-
         addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 17, 21, 176, 0, 16, 47));
+    }
 
+    @Override
+    protected void addSlots(TileFluidManipulator tile) {
         addSlot(new SlotFluidFilter(tile.getFluidFilter(), 0, 116, 26));
         addSlot(new SlotPassThrough(tile, 0, 152, 26));
         addSlot(new SlotUntouchable(tile, 1, 152, 62));
         addSlot(new SlotOutput(tile, 2, 116, 62));
-
     }
 }

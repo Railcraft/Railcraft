@@ -13,14 +13,14 @@ import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
 import mods.railcraft.common.gui.slots.SlotFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerManipulatorCartItem extends ContainerManipulatorCart {
-
-    public TileItemManipulator tile;
+public class ContainerManipulatorCartItem extends ContainerManipulatorCart<TileItemManipulator> {
 
     public ContainerManipulatorCartItem(InventoryPlayer inventoryplayer, TileItemManipulator tile) {
         super(inventoryplayer, tile);
-        this.tile = tile;
+    }
 
+    @Override
+    protected void addSlots(TileItemManipulator tile) {
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
                 addSlot(new SlotFilter(tile.getItemFilters(), k + i * 3, 8 + k * 18, 26 + i * 18));
@@ -32,7 +32,5 @@ public class ContainerManipulatorCartItem extends ContainerManipulatorCart {
                 addSlot(tile.getBufferSlot(k + i * 3, 116 + k * 18, 26 + i * 18));
             }
         }
-
     }
-
 }

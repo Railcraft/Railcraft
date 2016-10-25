@@ -17,7 +17,7 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerManipulatorCartRF extends ContainerManipulatorCart {
+public class ContainerManipulatorCartRF extends ContainerManipulatorCart<TileRFManipulator> {
 
     private TileRFManipulator device;
     private final RFEnergyIndicator energyIndicator;
