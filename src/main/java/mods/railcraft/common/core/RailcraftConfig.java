@@ -91,7 +91,6 @@ public class RailcraftConfig {
     private static boolean registerCollisionHandler;
     private static boolean cartsAreSolid;
     private static boolean playSounds;
-    private static boolean doUpdateCheck;
     private static boolean routingOpsOnly;
     private static boolean machinesRequirePower;
     private static boolean trackingAuraEnabled;
@@ -118,10 +117,11 @@ public class RailcraftConfig {
     private static float fuelPerSteamMultiplier = Steam.FUEL_PER_BOILER_CYCLE;
     private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
-    private static Configuration configMain;
-    private static Configuration configBlocks;
-    private static Configuration configItems;
-    private static Configuration configEntity;
+    public static Configuration configMain;
+    public static Configuration configBlocks;
+    public static Configuration configItems;
+    public static Configuration configEntity;
+    public static Configuration configClient;
 
     public static void preInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing pre-init parsing");
@@ -141,7 +141,8 @@ public class RailcraftConfig {
         configEntity = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "entities.cfg"));
         configEntity.load();
 
-        doUpdateCheck = get("check.version.online", true, "change to '{t}=false' to disable latest version checking");
+        configClient = new Configuration(new File(Railcraft.getMod().getConfigFolder(), "client.cfg"));
+        configClient.load();
 
         playSounds = get("play.sounds", true, "change to '{t}=false' to prevent all mod sounds from playing");
 
@@ -162,7 +163,12 @@ public class RailcraftConfig {
         loadWorldGen();
         loadFluids();
         loadEnchantment();
+        loadClient();
 
+        Locale.setDefault(locale);
+    }
+
+    public static void saveConfigs() {
         if (configMain.hasChanged())
             configMain.save();
 
@@ -175,7 +181,8 @@ public class RailcraftConfig {
         if (configEntity.hasChanged())
             configEntity.save();
 
-        Locale.setDefault(locale);
+        if (configClient.hasChanged())
+            configClient.save();
     }
 
     public static void postInit() {
@@ -185,6 +192,10 @@ public class RailcraftConfig {
         anchorFuelPersonal.putAll(BlockItemListParser.parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPassive.putAll(BlockItemListParser.parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
+    }
+
+    private static void loadClient() {
+        enableGhostTrain = get(configClient, "client", "enableGhostTrain", true, "change to '{t}=false' to disable Ghost Train rendering");
     }
 
     private static void loadEnchantment() {
@@ -247,7 +258,7 @@ public class RailcraftConfig {
     }
 
     private static void loadItemTweaks() {
-        trackingAuraEnabled = get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
+//        trackingAuraEnabled = get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
     }
 
     private static void loadTrackTweaks() {
@@ -275,8 +286,6 @@ public class RailcraftConfig {
 
         minecartsBreakOnDrop = get(CAT_TWEAKS_CARTS + ".general", "breakOnDrop", false, "change to '{t}=true' to restore vanilla behavior");
         minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.collision.handler=false'");
-
-        enableGhostTrain = get(CAT_TWEAKS_CARTS + ".general", "enableGhostTrain", true, "change to '{t}=false' to disable Ghost Train rendering, client side config");
 
         printLinkingDebug = get(CAT_TWEAKS_CARTS + ".general", "printLinkingDebug", false, "change to '{t}=true' to log debug info for Cart Linking");
 
@@ -698,10 +707,6 @@ public class RailcraftConfig {
 
     public static int coalCokeTorchOutput() {
         return coalcokeTorchOutput;
-    }
-
-    public static boolean doUpdateCheck() {
-        return doUpdateCheck;
     }
 
     public static boolean isRoutingOpsOnly() {

@@ -35,6 +35,7 @@ public class RailcraftModuleManager {
     private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
     private static final List<Class<? extends IRailcraftModule>> loadOrder = new LinkedList<>();
     private static Stage stage = Stage.LOADING;
+    public static Configuration config;
 
     private RailcraftModuleManager() {
     }
@@ -82,7 +83,7 @@ public class RailcraftModuleManager {
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
-        Configuration config = new Configuration(new File(Railcraft.getMod().getConfigFolder(), MODULE_CONFIG_FILE_NAME));
+        config = new Configuration(new File(Railcraft.getMod().getConfigFolder(), MODULE_CONFIG_FILE_NAME));
 
         config.load();
         config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these Modules can greatly change how the mod functions.\n"
