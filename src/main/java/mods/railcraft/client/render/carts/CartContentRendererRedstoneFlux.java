@@ -12,9 +12,9 @@ package mods.railcraft.client.render.carts;
 import mods.railcraft.client.render.models.resource.JSONModelRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -56,11 +56,9 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityC
         JSONModelRenderer.INSTANCE.renderModel(FRAME_MODEL);
 
         float bright = 0.5F + 0.5F * (float) ((double) cart.getRF() / (double) cart.getMaxRF());
-        float lastBrightnessX = OpenGlHelper.lastBrightnessX;
-        float lastBrightnessY = OpenGlHelper.lastBrightnessY;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255F * bright, 255F * bright);
+        RenderTools.setBrightness(bright);
         JSONModelRenderer.INSTANCE.renderModel(CORE_MODEL);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
+        RenderTools.resetBrightness();
 
 //        OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

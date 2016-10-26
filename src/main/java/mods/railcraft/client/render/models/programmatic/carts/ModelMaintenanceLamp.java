@@ -15,9 +15,9 @@ import mods.railcraft.client.render.models.programmatic.ModelSimple;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ModelMaintanceLampOff extends ModelSimple {
+public class ModelMaintenanceLamp extends ModelSimple {
 
-    public ModelMaintanceLampOff() {
+    public ModelMaintenanceLamp() {
         super("maint");
         renderer.setTextureSize(16, 16);
         setTextureOffset("maint.lamp", 0, 1);

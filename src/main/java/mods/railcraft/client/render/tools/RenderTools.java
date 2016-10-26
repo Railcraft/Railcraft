@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tools;
 
 import net.minecraft.client.Minecraft;
@@ -26,12 +26,25 @@ public class RenderTools {
 
     public static final int BOX_BRIGHTNESS = 165;
     public static final float PIXEL = 0.0625f;
+    private static float lastBrightnessX;
+    private static float lastBrightnessY;
 
     public static void setColor(int color) {
         float red = (float) (color >> 16 & 255) / 255.0F;
         float green = (float) (color >> 8 & 255) / 255.0F;
         float blue = (float) (color & 255) / 255.0F;
         OpenGL.glColor4f(red, green, blue, 1);
+    }
+
+    public static void setBrightness(float brightness) {
+        lastBrightnessX = OpenGlHelper.lastBrightnessX;
+        lastBrightnessY = OpenGlHelper.lastBrightnessY;
+        float newValue = 240 * brightness;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, newValue, newValue);
+    }
+
+    public static void resetBrightness() {
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
     }
 
 //    public static boolean renderStandardBlock(RenderBlocks renderblocks, Block block, int x, int y, int z) {

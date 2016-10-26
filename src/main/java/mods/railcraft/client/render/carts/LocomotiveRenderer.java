@@ -44,7 +44,7 @@ public class LocomotiveRenderer extends CartModelRenderer {
         LocomotiveRenderType renderType = loco.getRenderType();
         mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer locoRenderer = renderType.getRenderer(loco.getModel());
 
-        locoRenderer.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
+        locoRenderer.renderLocomotive(renderer, loco, primaryColor, secondaryColor, emblemTexture, light, time);
         return false;
     }
 
