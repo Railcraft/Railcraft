@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotPassThrough;
-import mods.railcraft.common.gui.slots.SlotUntouchable;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -28,7 +27,7 @@ public class ContainerManipulatorCartFluid extends ContainerManipulatorCart<Tile
     protected void addSlots(TileFluidManipulator tile) {
         addSlot(new SlotFluidFilter(tile.getFluidFilter(), 0, 116, 26));
         addSlot(new SlotPassThrough(tile, 0, 152, 26));
-        addSlot(new SlotUntouchable(tile, 1, 152, 62));
+        addSlot(new SlotOutput(tile, 1, 152, 62));
         addSlot(new SlotOutput(tile, 2, 116, 62));
     }
 }

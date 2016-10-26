@@ -36,12 +36,12 @@ import net.minecraftforge.fluids.FluidStack;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements ISidedInventory {
-    private static final int SLOT_BURN = 2;
-    private static final int SLOT_FUEL_A = 3;
-    private static final int SLOT_FUEL_B = 4;
-    private static final int SLOT_FUEL_C = 5;
-    private static final int SLOT_TICKET = 6;
-    private static final int SLOT_DESTINATION = 7;
+    private static final int SLOT_BURN = 3;
+    private static final int SLOT_FUEL_A = 4;
+    private static final int SLOT_FUEL_B = 5;
+    private static final int SLOT_FUEL_C = 6;
+    private static final int SLOT_TICKET = 7;
+    private static final int SLOT_DESTINATION = 8;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
     private final InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
     private final InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
@@ -102,7 +102,8 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
                 FluidStack pulled = CartToolsAPI.transferHelper.pullFluid(this, Fluids.WATER.getB(1));
-                tankWater.fill(pulled, true);
+                if (pulled != null)
+                    tankWater.fill(pulled, true);
             }
         }
     }
@@ -131,7 +132,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public int getSizeInventory() {
-        return 8;
+        return 9;
     }
 
     @Override
@@ -157,7 +158,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
                 return StandardStackFilters.FUEL.test(stack);
-            case SLOT_LIQUID_INPUT:
+            case SLOT_WATER_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluidStack != null && fluidStack.amount > FluidTools.BUCKET_VOLUME)
                     return false;

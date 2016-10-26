@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import com.google.common.collect.Lists;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ICartBattery;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,8 +27,7 @@ import java.util.stream.StreamSupport;
  */
 @SuppressWarnings("unused")
 public class Train implements Iterable<EntityMinecart> {
-    public static final String TRAIN_HIGH = "rcTrainHigh";
-    public static final String TRAIN_LOW = "rcTrainLow";
+    public static final String TRAIN_NBT = "rcTrain";
     private static final Map<UUID, Train> trains = new HashMap<UUID, Train>();
     private final UUID uuid;
     private final LinkedList<UUID> carts = new LinkedList<UUID>();
@@ -67,14 +67,10 @@ public class Train implements Iterable<EntityMinecart> {
         return trains.get(getTrainUUID(cart));
     }
 
+    @Nullable
     public static UUID getTrainUUID(EntityMinecart cart) {
         NBTTagCompound nbt = cart.getEntityData();
-        if (nbt.hasKey(TRAIN_HIGH)) {
-            long high = nbt.getLong(TRAIN_HIGH);
-            long low = nbt.getLong(TRAIN_LOW);
-            return new UUID(high, low);
-        }
-        return null;
+        return NBTPlugin.readUUID(nbt, TRAIN_NBT);
     }
 
     public static void resetTrain(EntityMinecart cart) {
@@ -113,14 +109,12 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public static void removeTrainTag(EntityMinecart cart) {
-        cart.getEntityData().removeTag(TRAIN_HIGH);
-        cart.getEntityData().removeTag(TRAIN_LOW);
+        cart.getEntityData().removeTag(TRAIN_NBT);
     }
 
     public static void addTrainTag(EntityMinecart cart, Train train) {
         UUID trainId = train.getUUID();
-        cart.getEntityData().setLong(TRAIN_HIGH, trainId.getMostSignificantBits());
-        cart.getEntityData().setLong(TRAIN_LOW, trainId.getLeastSignificantBits());
+        NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
     @Nullable

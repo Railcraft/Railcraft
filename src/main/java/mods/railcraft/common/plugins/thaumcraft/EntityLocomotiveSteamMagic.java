@@ -179,7 +179,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
                 return FuelPlugin.getBurnTime(stack) > 0;
-            case SLOT_LIQUID_INPUT:
+            case SLOT_WATER_INPUT:
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
                 return ItemTicket.FILTER.test(stack);

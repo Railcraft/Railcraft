@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
@@ -39,17 +40,18 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
 
     @Override
     public void defineSlotsAndWidgets() {
-        addWidget(new FluidGaugeWidget(loco.getTankManager().get(0), 116, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(loco.getTankManager().get(0), 53, 23, 176, 0, 16, 47));
         addWidget(new FluidGaugeWidget(loco.getTankManager().get(1), 17, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(loco.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 
-        addSlot(new SlotWaterLimited(loco, 0, 143, 21));
-        addSlot(new SlotOutput(loco, 1, 143, 56));
-        addSlot(new SlotFuel(loco, 2, 62, 39));
-        addSlot(new SlotFuel(loco, 3, 89, 20));
-        addSlot(new SlotFuel(loco, 4, 89, 38));
-        addSlot(new SlotFuel(loco, 5, 89, 56));
+        addSlot(new SlotWaterLimited(loco, 0, 152, 20));
+        addSlot(new SlotOutput(loco, 1, 152, 56));
+        addSlot(new SlotOutput(loco, 2, 116, 56));
+        addSlot(new SlotFuel(loco, 3, 116, 20));
+        addSlot(new SlotFuel(loco, 4, 80, 20));
+        addSlot(new SlotFuel(loco, 5, 80, 38));
+        addSlot(new SlotFuel(loco, 6, 80, 56));
     }
 
     @Override
