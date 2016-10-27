@@ -61,7 +61,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
 //    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
-//    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
 //    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
 //    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackKitWye.class),
     ;

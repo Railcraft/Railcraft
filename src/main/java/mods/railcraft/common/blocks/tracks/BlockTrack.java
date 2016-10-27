@@ -33,6 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 /**
@@ -147,6 +149,14 @@ public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrac
     @Override
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
         getTrackType(world, pos).getEventHandler().onMinecartPass(world, cart, pos, null);
+    }
+
+    @Override
+    public EnumRailDirection getRailDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+        EnumRailDirection shape = getTrackType(world, pos).getEventHandler().getRailDirectionOverride(world, pos, state, cart);
+        if (shape != null)
+            return shape;
+        return super.getRailDirection(world, pos, state, cart);
     }
 
     @Override

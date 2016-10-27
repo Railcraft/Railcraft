@@ -286,6 +286,12 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             data.setByte("elevator", elevator);
         }
 
+        byte derail = data.getByte("derail");
+        if (derail > 0) {
+            derail--;
+            data.setByte("derail", derail);
+        }
+
         if (data.getBoolean("explode")) {
             cart.getEntityData().setBoolean("explode", false);
             CartTools.explodeCart(cart);

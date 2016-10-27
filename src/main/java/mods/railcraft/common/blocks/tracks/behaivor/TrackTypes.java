@@ -17,12 +17,14 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -132,6 +134,12 @@ public enum TrackTypes {
         @Override
         public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
             collisionHandler.onEntityCollidedWithBlock(world, pos, state, entity);
+        }
+
+        @Nullable
+        @Override
+        public BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+            return speedController.getRailDirectionOverride(world, pos, state, cart);
         }
 
         @Override
