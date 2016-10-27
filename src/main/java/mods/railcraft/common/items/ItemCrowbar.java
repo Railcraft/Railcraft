@@ -123,7 +123,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
 
         if (WorldPlugin.isBlockAir(world, pos, blockState))
@@ -135,10 +135,9 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         if (isBannedRotation(blockState.getBlock().getClass()))
             return EnumActionResult.PASS;
 
-        if (blockState.getBlock().rotateBlock(world, pos, side)) {
+        if (blockState.getBlock().rotateBlock(world, pos, facing)) {
             player.swingArm(hand);
             stack.damageItem(1, player);
-            //TODO: test (was !world.isRemote)
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;

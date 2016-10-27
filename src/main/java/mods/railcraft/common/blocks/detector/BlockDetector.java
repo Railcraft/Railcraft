@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.util.EnumFacing.*;
+import static net.minecraft.util.EnumFacing.NORTH;
 
 public class BlockDetector extends BlockContainerRailcraft {
 
@@ -418,17 +418,10 @@ public class BlockDetector extends BlockContainerRailcraft {
         }
     }
 
-    // TODO: wtf? test this
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         EnumFacing front = state.getValue(FRONT);
-        if (side == UP && front == EAST)
-            return true;
-        if (side == SOUTH && front == WEST)
-            return true;
-        if (side == NORTH && front == SOUTH)
-            return true;
-        return side == DOWN && front == NORTH;
+        return side == front.getOpposite();
     }
 
     @Override
