@@ -356,6 +356,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isClient(worldObj))
             return;
 
+//        boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
+//        Game.log(Level.INFO, "reverse={0}, yaw={1}", reverse, rotationYaw);
+
         processTicket();
         updateFuel();
 
@@ -369,21 +372,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         if (update % WHISTLE_INTERVAL == 0 && isRunning() && rand.nextInt(WHISTLE_CHANCE) == 0)
             whistle();
-
-        if (isShutdown()) {
-            double yaw = rotationYaw * Math.PI / 180D;
-            double cos = Math.cos(yaw);
-            double sin = Math.sin(yaw);
-            float limit = 0.05f;
-            if (motionX > limit && cos < 0)
-                rotationYaw += 180;
-            else if (motionX < -limit && cos > 0)
-                rotationYaw += 180;
-            else if (motionZ > limit && sin < 0)
-                rotationYaw += 180;
-            else if (motionZ < -limit && sin > 0)
-                rotationYaw += 180;
-        }
     }
 
     @Override
