@@ -80,28 +80,29 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             Vec3d vec3d3 = vec3d2.addVector(-vec3d1.xCoord, -vec3d1.yCoord, -vec3d1.zCoord);
             if (vec3d3.lengthVector() != 0.0D) {
                 vec3d3 = vec3d3.normalize();
-                yaw = (float) (Math.atan2(vec3d3.zCoord, vec3d3.xCoord) / Math.PI) * 180;
+                yaw = (float) (Math.atan2(vec3d3.zCoord, vec3d3.xCoord) / Math.PI) * 180F;
                 pitch = (float) (Math.atan(vec3d3.yCoord) * 73D);
             }
         }
-        if (cart instanceof IDirectionalCart) {
-            yaw %= 360;
-            if (yaw < 0)
-                yaw += 360;
+
+        yaw %= 360;
+        if (yaw < 0)
             yaw += 360;
+        yaw += 360;
 
-            double serverYaw = cart.rotationYaw;
-            serverYaw += 180;
-            serverYaw %= 360;
-            if (serverYaw < 0)
-                serverYaw += 360;
+        double serverYaw = cart.rotationYaw;
+        serverYaw += 180;
+        serverYaw %= 360;
+        if (serverYaw < 0)
             serverYaw += 360;
+        serverYaw += 360;
 
-            if (Math.abs(yaw - serverYaw) > 90) {
-                yaw += 180;
-                pitch = -pitch;
-            }
+        if (Math.abs(yaw - serverYaw) > 90) {
+            yaw += 180;
+            pitch = -pitch;
+        }
 
+        if (cart instanceof IDirectionalCart) {
             ((IDirectionalCart) cart).setRenderYaw(yaw);
         }
         OpenGL.glTranslatef((float) x, (float) y + 0.375F, (float) z);

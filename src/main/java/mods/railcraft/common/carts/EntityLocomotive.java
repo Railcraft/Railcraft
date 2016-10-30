@@ -18,6 +18,7 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -86,7 +87,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private static final int WHISTLE_INTERVAL = 256;
     private static final int WHISTLE_DELAY = 160;
     private static final int WHISTLE_CHANCE = 4;
-    private static final int IS_REVERSED_INDEX = 6;
     private final MultiButtonController<LocoLockButtonState> lockController = MultiButtonController.create(0, LocoLockButtonState.VALUES);
     public LocoMode clientMode = LocoMode.SHUTDOWN;
     public LocoSpeed clientSpeed = LocoSpeed.MAX;
@@ -98,6 +98,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
+    private boolean preReverse;
 
     private EnumSet<LocoMode> allowedModes = EnumSet.allOf(LocoMode.class);
     private LocoSpeed maxReverseSpeed = LocoSpeed.NORMAL;
@@ -356,8 +357,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isClient(worldObj))
             return;
 
-//        boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
-//        Game.log(Level.INFO, "reverse={0}, yaw={1}", reverse, rotationYaw);
+//        {
+//            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
+//            if (reverse != preReverse || prevRotationYaw != rotationYaw) {
+//                preReverse = reverse;
+//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", worldObj.getTotalWorldTime(), reverse, rotationYaw);
+//            }
+//        }
 
         processTicket();
         updateFuel();
@@ -565,7 +571,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
+        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         data.setBoolean("isInReverse", isInReverse);
 
@@ -592,7 +598,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
-        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), IS_REVERSED_INDEX);
+        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         model = data.getString("model");
 

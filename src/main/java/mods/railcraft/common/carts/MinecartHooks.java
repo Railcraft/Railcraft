@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MathTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.block.Block;
@@ -38,11 +39,14 @@ import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static mods.railcraft.common.core.RailcraftConstants.IS_REVERSED_VARIABLE_INDEX;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_GROUND = 0.5f;
@@ -236,6 +240,17 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     public void onMinecartUpdate(MinecartUpdateEvent event) {
         EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
+
+        // Fix flip
+        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
+        float cutoff = 120F;
+        if (distance < -cutoff || distance >= cutoff) {
+            cart.rotationYaw += 180.0F;
+            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
+            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
+            cart.rotationYaw = cart.rotationYaw % 360.0F;
+        }
+
 
 //        if (SeasonPlugin.isGhostTrain(cart)) {
 //            cart.setGlowing(true);
