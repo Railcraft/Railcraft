@@ -17,6 +17,7 @@ import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -62,10 +63,10 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     private boolean canBuildTrain() {
-        Map<ItemStack, Integer> pattern = InvTools.getManifest(getPattern());
-        Map<ItemStack, Integer> buffer = InvTools.getManifest(this);
+        Map<StackKey, Integer> pattern = InvTools.createManifest(getPattern());
+        Map<StackKey, Integer> buffer = InvTools.createManifest(this);
 
-        for (Map.Entry<ItemStack, Integer> entry : pattern.entrySet()) {
+        for (Map.Entry<StackKey, Integer> entry : pattern.entrySet()) {
             Integer count = buffer.get(entry.getKey());
             if (count == null || count < entry.getValue())
                 return false;

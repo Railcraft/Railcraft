@@ -13,6 +13,8 @@ import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
@@ -133,15 +135,15 @@ public abstract class InvTools {
         if (obj == null)
             return null;
 
-        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
-            return InventoryObject.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side));
-        } else if (obj instanceof TileEntityChest) {
+        if (obj instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) obj;
             return new ChestWrapper(chest);
         } else if (obj instanceof ISidedInventory) {
             return new SidedInventoryMapper((ISidedInventory) obj, side);
         } else if (obj instanceof IInventory) {
             return InventoryObject.get((IInventory) obj);
+        } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+            return InventoryObject.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side));
         }
         return null;
     }
@@ -468,30 +470,70 @@ public abstract class InvTools {
                 return true;
         }
         return false;
+
+    }
+
+    /**
+     * Returns true if the inventory contains the specified item.
+     *
+     * @param inv    the inventory  The inventory to check
+     * @param filter The ItemStack to look for
+     * @return true is exists
+     */
+    public static boolean containsItem(IInventoryObject inv, Predicate<ItemStack> filter) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
+            ItemStack stack = slot.getStack();
+            if (stack != null && filter.test(stack))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean containsItem(Collection<IInventoryObject> inventories, Predicate<ItemStack> filter) {
+        for (IInventoryObject inv : inventories) {
+            if (containsItem(inv, filter))
+                return true;
+        }
+        return false;
+    }
+
+    private static void populateManifest(Map<StackKey, Integer> manifest, IInventoryObject inv) {
+        for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
+            ItemStack stack = slot.getStack();
+            if (stack != null && stack.stackSize > 0) {
+                StackKey key = StackKey.make(stack);
+                Integer count = manifest.get(key);
+                if (count == null)
+                    count = 0;
+                count += stack.stackSize;
+                manifest.put(key, count);
+            }
+        }
     }
 
     /**
      * Returns a map backed by an <code>ItemStackMap</code> that lists the total
      * number of each type of item in the inventory.
      *
-     * @param inv the inventory The <code>IInventory</code> to generate the manifest for
-     * @return A <code>Map</code> that lists how many of each item is in * * *
-     * the <code>IInventory</code>
-     * @see ItemStackMap
+     * @param invs the inventories to generate the manifest for
+     * @return A <code>Map</code> that lists how many of each item is in the inventories
      */
     @Nonnull
-    public static Map<ItemStack, Integer> getManifest(IInventory inv) {
-        Map<ItemStack, Integer> manifest = new ItemStackMap<Integer>();
-        for (int i = 0; i < inv.getSizeInventory(); i++) {
-            ItemStack slot = inv.getStackInSlot(i);
-            if (slot != null) {
-                Integer count = manifest.get(slot);
-                if (count == null)
-                    count = 0;
-                count += slot.stackSize;
-                manifest.put(slot, count);
-            }
-        }
+    public static Map<StackKey, Integer> createManifest(IInventoryObject... invs) {
+        return createManifest(Arrays.asList(invs));
+    }
+
+    /**
+     * Returns a map backed by an <code>ItemStackMap</code> that lists the total
+     * number of each type of item in the inventory.
+     *
+     * @param invs the inventories to generate the manifest for
+     * @return A <code>Map</code> that lists how many of each item is in the inventories
+     */
+    @Nonnull
+    public static Map<StackKey, Integer> createManifest(List<IInventoryObject> invs) {
+        Map<StackKey, Integer> manifest = CollectionTools.createItemStackMap();
+        invs.forEach(inv -> populateManifest(manifest, inv));
         return manifest;
     }
 
@@ -516,6 +558,7 @@ public abstract class InvTools {
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
+    @Deprecated
     public static ItemStack moveOneItem(IInventoryObject source, IInventoryObject dest, ItemStack... filters) {
         return moveOneItem(source, dest, StackFilters.anyOf(filters));
     }
@@ -532,6 +575,24 @@ public abstract class InvTools {
     public static ItemStack moveOneItem(IInventoryObject source, IInventoryObject dest, java.util.function.Predicate<ItemStack> filter) {
         InventoryManipulator imSource = InventoryManipulator.get(source);
         return imSource.moveItem(dest, filter);
+    }
+
+    /**
+     * Attempts to move one item from a collection of inventories.
+     *
+     * @param sources the source inventories
+     * @param dest    the destination inventory
+     * @param filters ItemStack to match against
+     * @return null if nothing was moved, the stack moved otherwise
+     */
+    @Nullable
+    public static ItemStack moveOneItem(Collection<IInventoryObject> sources, Collection<IInventoryObject> dest, ItemStack... filters) {
+        for (IInventoryObject inv : sources) {
+            ItemStack moved = InvTools.moveOneItem(inv, dest, filters);
+            if (moved != null)
+                return moved;
+        }
+        return null;
     }
 
     /**
@@ -851,6 +912,59 @@ public abstract class InvTools {
         return im.canAddStack(stack);
     }
 
+    /**
+     * Checks if there is room for the ItemStack in the inventory.
+     *
+     * @param stack The ItemStack
+     * @param dest  The IInventory
+     * @return true if room for stack
+     */
+    public static boolean isRoomForStack(@Nullable ItemStack stack, List<IInventoryObject> dest) {
+        if (stack == null)
+            return false;
+        return dest.stream().anyMatch(inv -> isRoomForStack(stack, inv));
+    }
+
+    /**
+     * Checks if inventory will accept the ItemStack.
+     *
+     * @param stack The ItemStack
+     * @param dest  The IInventory
+     * @return true if room for stack
+     */
+    public static boolean acceptsItemStack(@Nullable ItemStack stack, IInventoryObject dest) {
+        if (stack == null)
+            return false;
+        ItemStack newStack = stack.copy();
+        newStack.stackSize = 1;
+        for (IInvSlot slot : InventoryIterator.getRailcraft(dest)) {
+            if (slot.canPutStackInSlot(stack))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if inventory will accept the ItemStack.
+     *
+     * @param stack The ItemStack
+     * @param dest  The IInventory
+     * @return true if room for stack
+     */
+    public static boolean acceptsItemStack(@Nullable ItemStack stack, List<IInventoryObject> dest) {
+        if (stack == null)
+            return false;
+        ItemStack newStack = stack.copy();
+        newStack.stackSize = 1;
+        for (IInventoryObject inv : dest) {
+            for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
+                if (slot.canPutStackInSlot(stack))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 //    /**
 //     * Removes a up to numItems worth of items from the inventory, not caring
 //     * about what the items are.
@@ -1004,14 +1118,14 @@ public abstract class InvTools {
      * @return A Set of ItemStacks
      */
     @Nonnull
-    public static Set<ItemStack> findMatchingItems(IInventoryObject inv, Predicate<ItemStack> filter) {
-        Set<ItemStack> items = new ItemStackSet();
+    public static Set<StackKey> findMatchingItems(IInventoryObject inv, Predicate<ItemStack> filter) {
+        Set<StackKey> items = CollectionTools.createItemStackSet();
         for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
             ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && filter.test(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
-                items.add(stack);
+                items.add(StackKey.make(stack));
             }
         }
         return items;

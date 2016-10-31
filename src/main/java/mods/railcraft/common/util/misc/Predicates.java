@@ -10,6 +10,13 @@
 
 package mods.railcraft.common.util.misc;
 
+import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.collections.StackKey;
+import net.minecraft.item.ItemStack;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -24,6 +31,16 @@ public class Predicates {
 
     public static <T> Predicate<T> notInstanceOf(Class<? extends T> clazz) {
         return Predicates.<T>instanceOf(clazz).negate();
+    }
+
+    public static <T> Predicate<T> distinct(Function<? super T, Object> keyFunction) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyFunction.apply(t), Boolean.TRUE) == null;
+    }
+
+    public static Predicate<ItemStack> distinctStack() {
+        Map<StackKey, Boolean> seen = CollectionTools.createItemStackMap();
+        return stack -> seen.putIfAbsent(StackKey.make(stack), Boolean.TRUE) == null;
     }
 
     public static <T> Predicate<T> alwaysTrue() {

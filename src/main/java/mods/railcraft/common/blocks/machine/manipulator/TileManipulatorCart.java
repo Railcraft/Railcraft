@@ -96,6 +96,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     }
 
     protected void reset() {
+        resetTimer = 0;
     }
 
     protected final void setProcessing(boolean processing) {

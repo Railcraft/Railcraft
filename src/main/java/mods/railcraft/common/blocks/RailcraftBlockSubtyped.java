@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -102,7 +103,10 @@ public abstract class RailcraftBlockSubtyped<T extends Enum<T> & IVariantEnum> e
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), variantValues[meta]);
+        IBlockState state = getDefaultState();
+        if (ArrayTools.indexInBounds(variantValues.length, meta))
+            state = state.withProperty(getVariantProperty(), variantValues[meta]);
+        return state;
     }
 
     /**

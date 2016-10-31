@@ -58,6 +58,7 @@ public class BlockGeneric extends BlockRailcraft {
     public void initializeDefinintion() {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_QUARRIED);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_CONCRETE);
 
         HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_STEEL);

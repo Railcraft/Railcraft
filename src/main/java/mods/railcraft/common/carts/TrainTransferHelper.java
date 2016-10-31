@@ -15,6 +15,7 @@ import mods.railcraft.api.carts.ITrainTransferHelper;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.item.EntityMinecart;
@@ -95,9 +96,10 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         for (EntityMinecart cart : carts) {
             IInventoryObject inv = InvTools.getInventory(cart);
             if (inv != null) {
-                Set<ItemStack> items = InvTools.findMatchingItems(inv, filter);
-                for (ItemStack stack : items) {
-                    if (stack != null && canProvidePulledItem(requester, cart, stack)) {
+                Set<StackKey> items = InvTools.findMatchingItems(inv, filter);
+                for (StackKey stackKey : items) {
+                    ItemStack stack = stackKey.get();
+                    if (canProvidePulledItem(requester, cart, stack)) {
                         ItemStack removed = InvTools.removeOneItem(inv, stack);
                         if (removed != null)
                             return removed;
