@@ -165,6 +165,8 @@ public class RailcraftConfig {
         loadEnchantment();
         loadClient();
 
+        saveConfigs();
+
         Locale.setDefault(locale);
     }
 
