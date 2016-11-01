@@ -4,6 +4,8 @@
 	FIX: Fix various GUI issues
 	FIX: Render Locomotive and Maintenance Cart Lamps
 	FIX: Add Steam Locomotive Fluid Container handling
+	FIX: Fix Locomotives flipping when reversing on a corner
+	FIX: Fix Item Loader/Unloader item handling
 	FIX: Various other fixes
 
 10.0.0-beta-4:
