@@ -44,9 +44,7 @@ public class EntityCartCommand extends EntityMinecartCommandBlock implements IRa
         super.writeEntityToNBT(compound);
         // Command block logic overrode this and the custom name is
         // somewhat set to the command block's name ("@")
-        if (!getCustomNameTag().isEmpty()) {
-            compound.setString("CustomName", getCustomNameTag());
-        }
+        compound.setString("CustomName", getCustomNameTag());
     }
 
     /**
