@@ -22,6 +22,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
@@ -111,8 +112,8 @@ public class SoundHelper {
     //TODO: test
     public static void playBlockSound(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch, IBlockState state) {
         if (world != null && sound != null) {
-            ResourceLocation soundPath = sound.getSoundName();
-            if (matchesSoundResource(sound.getSoundName(), "override")) {
+            ResourceLocation soundPath = ReflectionHelper.getPrivateValue(SoundEvent.class, sound, 1);
+            if (matchesSoundResource(soundPath, "override")) {
                 SoundType blockSound = SoundRegistry.getBlockSound(state, world, pos);
                 if (blockSound != null) {
                     SoundEvent newSound = matchSoundEvent(soundPath, blockSound);
