@@ -33,7 +33,15 @@ import net.minecraftforge.common.config.Property;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class RailcraftConfig {
     public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
@@ -110,6 +118,7 @@ public class RailcraftConfig {
     private static int destructionID;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
+    private static int locomotiveLightLevel;
     private static float boreMiningSpeedMultiplier = 1F;
     private static float chargeMaintenanceCostMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
@@ -198,6 +207,7 @@ public class RailcraftConfig {
 
     private static void loadClient() {
         enableGhostTrain = get(configClient, "client", "enableGhostTrain", true, "change to '{t}=false' to disable Ghost Train rendering");
+        locomotiveLightLevel = get(configClient, "client", "locomotiveLightLevel", 0, 14, 15, "change '14' to a number ranging from '0' to '15' to represent the dynamic lighting of the locomotive when Dynamic Lights mod is present.\nIf it is '0' then locomotive lightning will be disabled.");
     }
 
     private static void loadEnchantment() {
@@ -733,6 +743,10 @@ public class RailcraftConfig {
 
     public static int locomotiveHorsepower() {
         return locomotiveHorsepower;
+    }
+
+    public static int locomotiveLightLevel() {
+        return locomotiveLightLevel;
     }
 
     public static boolean printLinkingDebug() {
