@@ -187,6 +187,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             return RailcraftCarts.FURNACE;
         if (cart.getItem() == Items.HOPPER_MINECART)
             return RailcraftCarts.HOPPER;
+        if (cart.getItem() == Items.COMMAND_BLOCK_MINECART)
+            return RailcraftCarts.COMMAND_BLOCK;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();
         return null;
