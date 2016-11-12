@@ -59,7 +59,7 @@ public class BlockOre extends RailcraftBlockSubtyped<EnumOre> {
 
     @Override
     public void defineRecipes() {
-        registerOreRecipe(Metal.IRON);
+        registerOreRecipe(Metal.COPPER);
         registerOreRecipe(Metal.TIN);
         registerOreRecipe(Metal.LEAD);
         registerOreRecipe(Metal.SILVER);
