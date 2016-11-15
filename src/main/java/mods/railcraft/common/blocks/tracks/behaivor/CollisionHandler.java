@@ -25,6 +25,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 8/7/2016 for Railcraft.
  *
@@ -42,19 +44,28 @@ public enum CollisionHandler {
                 return;
 
             ChargeNetwork.ChargeGraph graph = ChargeManager.getNetwork(world).getGraph(pos);
-            if (graph.getCharge() > 2000)
-                if (entity instanceof EntityPlayer) {
-                    EntityPlayer player = ((EntityPlayer) entity);
-                    ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                    if (pants != null && RailcraftItems.OVERALLS.isInstance(pants)
-                            && !((EntityPlayer) entity).capabilities.isCreativeMode) {
-                        if(MiscTools.RANDOM.nextInt(150) == 0)
-                            player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
-                    } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) {
-                        graph.removeCharge(2000);
-                    }
-                } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
+            if (graph.getCharge() > 2000) {
+                boolean shock = true;
+                ItemStack overalls = getOveralls(entity);
+                if (overalls != null) {
+                    shock = false;
+                    if (MiscTools.RANDOM.nextInt(150) == 0)
+                        entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
+                }
+                if (shock && entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
                     graph.removeCharge(2000);
+            }
+        }
+
+        @Nullable
+        private ItemStack getOveralls(Entity entity) {
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = ((EntityPlayer) entity);
+                ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+                if (pants != null && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
+                    return pants;
+            }
+            return null;
         }
     };
 
