@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import net.minecraft.init.SoundEvents;
@@ -71,7 +72,7 @@ public class ItemMaterials {
     public static ToolMaterial STEEL_TOOL = EnumHelper.addToolMaterial("RAILCRAFT_STEEL", 2, 500, 7, 2.5F, 9);
 
     //TODO: texture?
-    public static ArmorMaterial STEEL_ARMOR = EnumHelper.addArmorMaterial("RAILCRAFT_STEEL", "texture?", 25, new int[]{2, 6, 5, 2}, 8, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0F);
-    public static ArmorMaterial GOGGLES = EnumHelper.addArmorMaterial("RAILCRAFT_GOGGLES", "texture?", 20, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
-    public static ArmorMaterial OVERALLS = EnumHelper.addArmorMaterial("RAILCRAFT_OVERALLS", "texture?", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
+    public static ArmorMaterial STEEL_ARMOR = EnumHelper.addArmorMaterial("RAILCRAFT_STEEL", "texture?", 25, new int[]{2, 5, 6, 2}, 8, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0F);
+    public static ArmorMaterial GOGGLES = EnumHelper.addArmorMaterial("RAILCRAFT_GOGGLES", "texture?", 20, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
+    public static ArmorMaterial OVERALLS = EnumHelper.addArmorMaterial("RAILCRAFT_OVERALLS", "texture?", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
 }
