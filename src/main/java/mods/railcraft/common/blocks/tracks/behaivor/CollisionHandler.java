@@ -47,9 +47,11 @@ public enum CollisionHandler {
                     EntityPlayer player = ((EntityPlayer) entity);
                     ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
                     if (pants != null && RailcraftItems.OVERALLS.isInstance(pants)
-                            && !((EntityPlayer) entity).capabilities.isCreativeMode
-                            && MiscTools.RANDOM.nextInt(150) == 0) {
-                        player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
+                            && !((EntityPlayer) entity).capabilities.isCreativeMode) {
+                        if(MiscTools.RANDOM.nextInt(150) == 0)
+                            player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
+                    } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) {
+                        graph.removeCharge(2000);
                     }
                 } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
                     graph.removeCharge(2000);
