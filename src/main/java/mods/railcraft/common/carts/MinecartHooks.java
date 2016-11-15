@@ -280,7 +280,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (TrackTools.isRailBlock(block)) {
             cart.fallDistance = 0;
             if (cart.isBeingRidden())
-                cart.getPassengers().stream().forEach(p -> p.fallDistance = 0);
+                cart.getPassengers().forEach(p -> p.fallDistance = 0);
             if (launched > 1)
                 land(cart);
         } else if (launched == 1) {
@@ -315,7 +315,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
             if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
-            else
+            else if (data.getInteger("Launched") == 0)
                 HighSpeedTools.checkSafetyAndExplode(cart.worldObj, event.getPos(), cart);
 
 
