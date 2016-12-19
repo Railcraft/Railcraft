@@ -35,6 +35,7 @@ public class WorldGenGeode extends WorldGenerator {
     private static final int DISTANCE_INNER_SQ = 4 * 4;
     private final IBlockState geodeStone;
     public final Set<Block> ores = new HashSet<Block>();
+    public final Set<Block> banned = new HashSet<Block>();
     private final Block blockOre;
 
     public WorldGenGeode(IBlockState geodeStone) {
@@ -53,6 +54,13 @@ public class WorldGenGeode extends WorldGenerator {
         ores.addAll(OreDictPlugin.getOreBlocks());
 
         blockOre = RailcraftBlocks.ORE.block();
+
+        banned.add(Blocks.PRISMARINE);
+        banned.add(Blocks.STONEBRICK);
+        banned.add(Blocks.END_PORTAL);
+        banned.add(Blocks.END_PORTAL_FRAME);
+        banned.add(Blocks.STONE_BRICK_STAIRS);
+        banned.add(Blocks.STONE_STAIRS);
     }
 
     @Override
@@ -103,7 +111,7 @@ public class WorldGenGeode extends WorldGenerator {
 
     private boolean isReplaceable(IBlockState existingState, World world, BlockPos pos) {
         Block existing = existingState.getBlock();
-        if (existing == Blocks.PRISMARINE)
+        if (banned.contains(existing))
             return false;
         if (existing.isReplaceableOreGen(existingState, world, pos, GenTools.STONE::test))
             return true;

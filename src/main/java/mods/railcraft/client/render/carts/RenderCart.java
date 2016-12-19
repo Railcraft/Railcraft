@@ -162,23 +162,6 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             doRender(cart, light, partialTicks);
             GlStateManager.color(1F, 1F, 1F, 1F);
 
-//            GlStateManager.disableLighting();
-//            GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 0xFFFF);
-//            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-//            GL11.glLineWidth(3.0f );
-//            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-//            color = 0.2F;
-//            GlStateManager.color(color, color, color, 1F);
-//            GlStateManager.enableTexture2D();
-//            doRender(cart, light, partialTicks);
-//
-//            GL11.glClearStencil(0);
-//            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-////            GL11.glEnable(GL11.GL_STENCIL_TEST);
-//            GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFFFF);
-//            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-//            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-
             GlStateManager.disableBlend();
             GlStateManager.enableLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
