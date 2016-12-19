@@ -28,10 +28,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -64,7 +67,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (String skin : renderType.getRendererTags()) {
             list.add(renderType.getItemWithRenderer(skin, new ItemStack(this)));
         }
@@ -113,6 +116,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 //        return renderer.getItemIcons()[pass];
 //    }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);

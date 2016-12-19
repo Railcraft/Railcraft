@@ -28,7 +28,7 @@ public class TileChestVoid extends TileChestRailcraft {
     public void update() {
         super.update();
 
-        if (clock % TICK_PER_VOID == 0 && Game.isHost(worldObj))
+        if (clock % TICK_PER_VOID == 0 && Game.isHost(world))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 ItemStack stack = getStackInSlot(slot);
                 if (stack != null) {

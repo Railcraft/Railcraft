@@ -1,21 +1,21 @@
 /**
  * Copyright (c) 2011-2015, SpaceToad and the BuildCraft Team http://www.mod-buildcraft.com
  *
- * BuildCraft is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL. Please check the contents
- * of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ * BuildCraft is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
+ * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 package buildcraft.api.robots;
 
-import buildcraft.api.core.BCLog;
-import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.statements.StatementSlot;
-import buildcraft.api.transport.IInjectable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidHandler;
+
+import buildcraft.api.core.BCLog;
+import buildcraft.api.core.EnumPipePart;
+import buildcraft.api.statements.StatementSlot;
+import buildcraft.api.transport.IInjectable;
 
 public abstract class DockingStation {
     public EnumFacing side;
@@ -196,17 +196,17 @@ public abstract class DockingStation {
         return EnumPipePart.CENTER;
     }
 
-    public IFluidHandler getFluidOutput() {
-        return null;
-    }
+//    public IFluidHandler getFluidOutput() {
+//        return null;
+//    }
 
     public EnumPipePart getFluidOutputSide() {
         return EnumPipePart.CENTER;
     }
 
-    public IFluidHandler getFluidInput() {
-        return null;
-    }
+//    public IFluidHandler getFluidInput() {
+//        return null;
+//    }
 
     public EnumPipePart getFluidInputSide() {
         return EnumPipePart.CENTER;

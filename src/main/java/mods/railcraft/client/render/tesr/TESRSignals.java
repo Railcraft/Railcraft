@@ -76,7 +76,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
 
                     if (dist <= (double) (viewDist * viewDist)) {
                         RayTraceResult mop = player.rayTrace(8, partialTicks);
-                        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && player.worldObj.getTileEntity(mop.getBlockPos()) == tile) {
+                        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && player.world.getTileEntity(mop.getBlockPos()) == tile) {
                             RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
                         }
                     }

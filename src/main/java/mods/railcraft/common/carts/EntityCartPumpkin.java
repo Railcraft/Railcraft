@@ -14,10 +14,13 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.HorseType;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -42,11 +45,10 @@ public class EntityCartPumpkin extends CartBaseSurprise {
         MOBS.add(SurpriseEntity.create(EntityPigZombie.class, 25, 1));
         MOBS.add(SurpriseEntity.create(EntityWither.class, 5, 1));
 
-        MOBS.add(SurpriseEntity.create(EntitySkeleton.class, 50, 1, (cart, skeleton) -> {
+        MOBS.add(SurpriseEntity.create(EntityWitherSkeleton.class, 50, 1, (cart, skeleton) -> {
             Random rand = cart.getRandom();
             if (rand.nextInt(4) == 0) {
                 skeleton.tasks.addTask(4, new EntityAIAttackMelee(skeleton, 0.25F, false));
-                skeleton.setSkeletonType(SkeletonType.WITHER);
                 skeleton.setItemStackToSlot(MAINHAND, new ItemStack(Items.STONE_SWORD));
             } else {
                 skeleton.tasks.addTask(4, new EntityAIAttackRanged(skeleton, 0.25F, 60, 10.0F));
@@ -56,18 +58,16 @@ public class EntityCartPumpkin extends CartBaseSurprise {
             skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(rand.nextFloat() < 0.25F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
         }));
 
-        MOBS.add(SurpriseEntity.create(EntityHorse.class, 10, 1,
+        MOBS.add(SurpriseEntity.create(EntitySkeletonHorse.class, 10, 1,
                 (cart, horse) -> {
-                    horse.setType(HorseType.SKELETON);
                     horse.setGrowingAge(0);
                     horse.tasks.addTask(1, new EntityAIHalloweenKnights(horse));
                 },
-                (cart, horse) -> cart.worldObj.addWeatherEffect(new EntityLightningBolt(horse.worldObj, horse.posX, horse.posY, horse.posZ, true))
+                (cart, horse) -> cart.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true))
         ));
 
-        MOBS.add(SurpriseEntity.create(EntityHorse.class, 20, 1,
+        MOBS.add(SurpriseEntity.create(EntityZombieHorse.class, 20, 1,
                 (cart, horse) -> {
-                    horse.setType(HorseType.ZOMBIE);
                     horse.setGrowingAge(0);
                 }
         ));

@@ -51,17 +51,16 @@ public class OreDictPlugin {
 //        return false;
     }
 
-    @Nullable
     public static ItemStack getOre(String name, int qty) {
         List<ItemStack> ores = OreDictionary.getOres(name);
         for (ItemStack ore : ores) {
             if (!InvTools.isWildcard(ore)) {
                 ore = ore.copy();
-                ore.stackSize = Math.min(qty, ore.getMaxStackSize());
+                ore.setCount(Math.min(qty, ore.getMaxStackSize()));
                 return ore;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static boolean oreExists(String name) {

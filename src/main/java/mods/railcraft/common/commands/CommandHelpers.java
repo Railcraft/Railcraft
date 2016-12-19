@@ -48,13 +48,13 @@ public class CommandHelpers {
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-        sender.addChatMessage(new TextComponentTranslation(locTag, args));
+        sender.sendMessage(new TextComponentTranslation(locTag, args));
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, Style chatStyle, String locTag, Object... args) {
         TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
         chat.setStyle(chatStyle);
-        sender.addChatMessage(chat);
+        sender.sendMessage(chat);
     }
 
     /**
@@ -65,15 +65,15 @@ public class CommandHelpers {
      * Messages will not be localized properly if you use StringUtil.localize().
      */
     public static void sendChatMessage(ICommandSender sender, String message) {
-        sender.addChatMessage(new TextComponentString(message));
+        sender.sendMessage(new TextComponentString(message));
     }
 
     public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
-        throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getCommandUsage(sender))));
+        throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getUsage(sender))));
     }
 
     public static void executeChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
-        if (!sender.canCommandSenderUseCommand(child.getRequiredPermissionLevel(), child.getFullCommandString()))
+        if (!sender.canUseCommand(child.getRequiredPermissionLevel(), child.getFullCommandString()))
             throw new WrongUsageException(LocalizationPlugin.translate("command.railcraft.noperms"));
         String[] newArgs = new String[args.length - 1];
         System.arraycopy(args, 1, newArgs, 0, newArgs.length);
@@ -86,13 +86,13 @@ public class CommandHelpers {
         sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
         Style body = new Style();
         body.setColor(TextFormatting.GRAY);
-        sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
+        sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getAliases().toString().replace("[", "").replace("]", ""));
         sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getRequiredPermissionLevel());
         sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".help");
         if (!command.getChildren().isEmpty()) {
             sendLocalizedChatMessage(sender, "command.railcraft.list");
             for (SubCommand child : command.getChildren()) {
-                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullCommandString().replace(" ", ".") + ".desc", child.getCommandName());
+                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullCommandString().replace(" ", ".") + ".desc", child.getName());
             }
         }
     }
@@ -114,10 +114,10 @@ public class CommandHelpers {
     }
 
     public static boolean matches(String commandName, IModCommand command) {
-        if (commandName.equals(command.getCommandName()))
+        if (commandName.equals(command.getName()))
             return true;
-        else if (command.getCommandAliases() != null)
-            for (String alias : command.getCommandAliases()) {
+        else if (command.getAliases() != null)
+            for (String alias : command.getAliases()) {
                 if (commandName.equals(alias))
                     return true;
             }

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -26,6 +25,6 @@ public class SlotEnergy extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return IC2Plugin.isEnergyItem(stack);
+        return false;//IC2Plugin.isEnergyItem(stack);
     }
 }

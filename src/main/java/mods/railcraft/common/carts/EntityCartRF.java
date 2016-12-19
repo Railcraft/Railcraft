@@ -93,7 +93,7 @@ public final class EntityCartRF extends CartBase {
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (getRF() > RF_CAP)
@@ -102,8 +102,8 @@ public final class EntityCartRF extends CartBase {
 
     @Override
     public boolean doInteract(EntityPlayer player) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_RF, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_RF, player, world, this);
         return true;
     }
 

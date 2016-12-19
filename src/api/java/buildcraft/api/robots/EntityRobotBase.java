@@ -1,14 +1,12 @@
 /**
  * Copyright (c) 2011-2015, SpaceToad and the BuildCraft Team http://www.mod-buildcraft.com
  *
- * The BuildCraft API is distributed under the terms of the MIT License. Please check the contents of the license, which
- * should be located as "LICENSE.API" in the BuildCraft source code distribution.
+ * The BuildCraft API is distributed under the terms of the MIT License. Please check the contents
+ * of the license, which should be located as "LICENSE.API" in the BuildCraft source code
+ * distribution.
  */
 package buildcraft.api.robots;
 
-import buildcraft.api.boards.RedstoneBoardRobot;
-import buildcraft.api.core.IZone;
-import cofh.api.energy.IEnergyStorage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.IInventory;
@@ -16,9 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidHandler;
 
-public abstract class EntityRobotBase extends EntityLiving implements IInventory, IFluidHandler {
+import buildcraft.api.boards.RedstoneBoardRobot;
+import buildcraft.api.core.IZone;
+import cofh.api.energy.IEnergyStorage;
+
+public abstract class EntityRobotBase extends EntityLiving implements IInventory {//, IFluidHandler {
 
     public static final int MAX_ENERGY = 100000;
     public static final int SAFETY_ENERGY = MAX_ENERGY / 5;

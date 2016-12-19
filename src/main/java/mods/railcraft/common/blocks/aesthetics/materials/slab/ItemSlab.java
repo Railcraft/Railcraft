@@ -24,6 +24,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,8 +52,9 @@ public class ItemSlab extends ItemMaterial {
      */
     @Nonnull
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, @Nonnull EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (stack.stackSize == 0) {
+    public EnumActionResult onItemUse(@Nonnull EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (stack.isEmpty()) {
             return EnumActionResult.PASS;
         }
 
@@ -69,7 +72,7 @@ public class ItemSlab extends ItemMaterial {
                 return EnumActionResult.SUCCESS;
             }
 
-            return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+            return super.onItemUse(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 
         }
     }
@@ -99,11 +102,12 @@ public class ItemSlab extends ItemMaterial {
                     SoundCategory.BLOCKS,
                     (block.getSoundType().getVolume() + 1.0F) / 2.0F,
                     block.getSoundType().getPitch() * 0.8F, state);
-            --stack.stackSize;
+            stack.shrink(1);
         }
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean canPlaceBlockOnSide(World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side, EntityPlayer player, @Nonnull ItemStack stack) {
         TileSlab tileSlab = BlockRailcraftSlab.getSlabTile(world, pos);

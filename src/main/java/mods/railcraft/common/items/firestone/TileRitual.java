@@ -63,7 +63,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             preRotationYaw = rotationYaw;
             rotationYaw += 5;
             if (rotationYaw >= 360) {
@@ -100,13 +100,13 @@ public class TileRitual extends RailcraftTickingTileEntity {
     }
 
     private boolean coolLava(BlockPos pos) {
-        Block block = WorldPlugin.getBlock(worldObj, pos);
+        Block block = WorldPlugin.getBlock(world, pos);
         if (Fluids.LAVA.is(block)) {
-            boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.OBSIDIAN.getDefaultState());
+            boolean placed = WorldPlugin.setBlockState(world, pos, Blocks.OBSIDIAN.getDefaultState());
             if (placed) {
                 Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
                 Vec3d endPosition = new Vec3d(getPos()).addVector(0.5, 0.8, 0.5);
-                EffectManager.instance.fireSparkEffect(worldObj, startPosition, endPosition);
+                EffectManager.instance.fireSparkEffect(world, startPosition, endPosition);
                 queueAdjacent(pos);
                 expandQueue();
                 return true;
@@ -140,7 +140,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
     private void expandQueue() {
         while (!lavaFound.isEmpty()) {
             Deque<BlockPos> blocksToExpand = lavaFound;
-            lavaFound = new LinkedList<BlockPos>();
+            lavaFound = new LinkedList<>();
 
             for (BlockPos index : blocksToExpand) {
                 queueAdjacent(index);
@@ -164,10 +164,10 @@ public class TileRitual extends RailcraftTickingTileEntity {
             if ((index.getX() - pos.getX()) * (index.getX() - pos.getX()) + (index.getZ() - pos.getZ()) * (index.getZ() - pos.getZ()) > 64 * 64)
                 return;
 
-            IBlockState state = WorldPlugin.getBlockState(worldObj, index);
+            IBlockState state = WorldPlugin.getBlockState(world, index);
             if (state.getBlock() == Blocks.OBSIDIAN || Fluids.LAVA.is(FluidTools.getFluid(state))) {
                 lavaFound.add(index);
-                if (FluidTools.isFullFluidBlock(state, worldObj, index))
+                if (FluidTools.isFullFluidBlock(state, world, index))
                     queue.addLast(index);
             }
         }

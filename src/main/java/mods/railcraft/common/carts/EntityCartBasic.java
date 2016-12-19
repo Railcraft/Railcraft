@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -63,15 +64,15 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //    }
 //    @Override
 //    public void onUpdate() {
-//        if (Game.isHost(worldObj) && worldObj instanceof WorldServer) {
-//            int blockId = worldObj.getBlockId((int) posX, (int) posY, (int) posZ);
+//        if (Game.isHost(world) && world instanceof WorldServer) {
+//            int blockId = world.getBlockId((int) posX, (int) posY, (int) posZ);
 //
 //            if (blockId == Block.portal.blockID) {
 //                setInPortal();
 //            }
 //
 //            if (inPortal) {
-//                MinecraftServer mc = ((WorldServer) worldObj).getMinecraftServer();
+//                MinecraftServer mc = ((WorldServer) world).getMinecraftServer();
 //                if (mc.getAllowNether()) {
 //                    int maxPortalTime = getMaxInPortalTime();
 //                    if (ridingEntity == null && field_82153_h++ >= maxPortalTime) {
@@ -79,7 +80,7 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //                        timeUntilPortal = getPortalCooldown();
 //                        byte dim;
 //
-//                        if (worldObj.provider.getDimensionId() == -1) {
+//                        if (world.provider.getDimensionId() == -1) {
 //                            dim = 0;
 //                        } else {
 //                            dim = -1;
@@ -114,8 +115,8 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //        }
 
         double max = getMaxSpeed();
-        mX = MathHelper.clamp_double(mX, -max, max);
-        mZ = MathHelper.clamp_double(mZ, -max, max);
-        moveEntity(mX, 0.0D, mZ);
+        mX = MathHelper.clamp(mX, -max, max);
+        mZ = MathHelper.clamp(mZ, -max, max);
+        move(MoverType.SELF, mX, 0.0D, mZ);
     }
 }

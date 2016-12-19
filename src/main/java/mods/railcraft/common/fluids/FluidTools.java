@@ -9,13 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.client.particles.ParticleDrip;
-import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.items.ModItems;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -30,8 +23,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -39,9 +35,18 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
+import mods.railcraft.client.particles.ParticleDrip;
+import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.Game;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -52,12 +57,7 @@ public final class FluidTools {
     public static final int NETWORK_UPDATE_INTERVAL = 128;
     public static final int BUCKET_VOLUME = 1000;
     public static final int PROCESS_VOLUME = BUCKET_VOLUME * 4;
-    private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
-
-    static {
-        adapters.add(ForestryFluidRegistrar.INSTANCE);
-        adapters.add(ForgeFluidRegistrar.INSTANCE);
-    }
+    public static final ItemStack EMPTY_BUCKET = new ItemStack(Items.BUCKET);
 
     private FluidTools() {
     }
@@ -71,9 +71,9 @@ public final class FluidTools {
         return object.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
-    public static boolean interactWithFluidHandler(@Nullable ItemStack heldItem, @Nullable IFluidHandler fluidHandler, EntityPlayer player) {
-        if (Game.isHost(player.worldObj))
-            return FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
+    public static boolean interactWithFluidHandler(ItemStack heldItem, @Nullable IFluidHandler fluidHandler, EntityPlayer player) {
+        if (Game.isHost(player.world))
+            return FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player).isSuccess();
         return FluidItemHelper.isContainer(heldItem);
     }
 
@@ -92,49 +92,50 @@ public final class FluidTools {
     }
 
     private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
-        ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (filled == null) {
+        ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true).getResult();
+        if (filled.isEmpty()) {
             sendToOutput(inv);
             return ProcessState.RESET;
         }
-        inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
+        inv.setInventorySlotContents(1, filled);
         return ProcessState.FILLING;
     }
 
     private static ProcessState tryDrain(IInventory inv, StandardTank tank, ItemStack container) {
-        ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (drained == null) {
+        ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true).getResult();
+        if (drained.isEmpty()) {
             sendToOutput(inv);
             return ProcessState.RESET;
         }
-        inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
+        inv.setInventorySlotContents(1, drained);
         return ProcessState.FILLING;
     }
 
     /**
-     * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as slot 2.
-     * Will handle moving an item through all stages from input to output for either filling or draining.
+     * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as
+     * slot 2. Will handle moving an item through all stages from input to output for either filling
+     * or draining.
      */
     public static ProcessState processContainer(IInventory inv, StandardTank tank, boolean defaultToFill, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
-        if (container == null || FluidUtil.getFluidHandler(container) == null) {
+        if (container.isEmpty() || FluidUtil.getFluidHandler(container) == null) {
             sendToProcessing(inv);
             return ProcessState.RESET;
         }
         if (state == ProcessState.RESET) {
             if (defaultToFill) {
-                ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-                if (filled == null) {
+                ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true).getResult();
+                if (filled.isEmpty()) {
                     return tryDrain(inv, tank, container);
                 }
-                inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
+                inv.setInventorySlotContents(1, filled);
                 return ProcessState.FILLING;
             } else {
-                ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-                if (drained == null) {
+                ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true).getResult();
+                if (drained.isEmpty()) {
                     return tryFill(inv, tank, container);
                 }
-                inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
+                inv.setInventorySlotContents(1, drained);
                 return ProcessState.DRAINING;
             }
         }
@@ -146,7 +147,7 @@ public final class FluidTools {
     }
 //    @Deprecated
 //    public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {
-//        if (player == null)
+//        if (player.isEmpty())
 //            return false;
 //        ItemStack current = player.inventory.getCurrentItem();
 //        if (current != null) {
@@ -211,7 +212,7 @@ public final class FluidTools {
 //    public static void processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
 //        ItemStack input = inv.getStackInSlot(inputSlot);
 //
-//        if (input == null)
+//        if (input.isEmpty())
 //            return;
 //
 //        if (processFilled && drainContainers(fluidHandler, inv, inputSlot, outputSlot))
@@ -222,7 +223,7 @@ public final class FluidTools {
 //    }
 //
 //    public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
-//        if (fluidToFill == null)
+//        if (fluidToFill.isEmpty())
 //            return false;
 //        ItemStack input = inv.getStackInSlot(inputSlot);
 //        ItemStack output = inv.getStackInSlot(outputSlot);
@@ -246,7 +247,7 @@ public final class FluidTools {
 //        ItemStack output = inv.getStackInSlot(outputSlot);
 //        if (input != null) {
 //            FluidItemHelper.DrainReturn drain = FluidItemHelper.drainContainer(input, PROCESS_VOLUME);
-//            if (drain.fluidDrained != null && (drain.container == null || hasPlaceToPutContainer(output, drain.container))) {
+//            if (drain.fluidDrained != null && (drain.container.isEmpty() || hasPlaceToPutContainer(output, drain.container))) {
 //                int used = fluidHandler.fill(null, drain.fluidDrained, false);
 //                if (drain.isAtomic ? used == drain.fluidDrained.amount : drain.fluidDrained.amount > 0) {
 //                    fluidHandler.fill(null, drain.fluidDrained, true);
@@ -259,7 +260,7 @@ public final class FluidTools {
 //    }
 //
 //    private static boolean hasPlaceToPutContainer(@Nullable ItemStack output, @Nullable ItemStack container) {
-//        return output == null || output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
+//        return output.isEmpty() || output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
 //    }
 //
 //    /**
@@ -267,81 +268,17 @@ public final class FluidTools {
 //     * was consumed by the process and we should just remove the input container.
 //     */
 //    private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, @Nullable ItemStack container) {
-//        if (container == null) {
+//        if (container.isEmpty()) {
 //            inv.decrStackSize(inputSlot, 1);
 //            return;
 //        }
 //        ItemStack output = inv.getStackInSlot(outputSlot);
-//        if (output == null)
+//        if (output.isEmpty())
 //            inv.setInventorySlotContents(outputSlot, container);
 //        else
 //            output.stackSize++;
 //        inv.decrStackSize(inputSlot, 1);
 //    }
-
-    public static boolean registerBucket(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.BUCKET);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerBottle(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerWax(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.WAX_CAPSULE.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerRefactory(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.REFRACTORY_EMPTY.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerCan(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.CAN_EMPTY.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerCell(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.CELL_EMPTY.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
-        if (empty != null) {
-            FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
-            registerContainer(container);
-            return true;
-        }
-        return false;
-    }
-
-    public static void registerContainer(FluidContainerData container) {
-        for (FluidRegistrar adapter : adapters) {
-            adapter.registerContainer(container);
-        }
-    }
-
-    public static Collection<ItemStack> getContainersFilledWith(FluidStack fluidStack) {
-        List<ItemStack> containers = new ArrayList<ItemStack>();
-        for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            FluidStack inContainer = FluidItemHelper.getFluidStackInContainer(data.filledContainer);
-            if (inContainer != null && inContainer.containsFluid(fluidStack))
-                containers.add(data.filledContainer.copy());
-        }
-        return containers;
-    }
-
-    public static void nerfWaterBottle() {
-        for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if (data.filledContainer.getItem() == Items.POTIONITEM && data.emptyContainer.getItem() == Items.GLASS_BOTTLE && Fluids.WATER.is(data.fluid)) {
-                data.fluid.amount = 333;
-                return;
-            }
-        }
-    }
 
     @Nullable
     public static FluidStack drainBlock(World world, BlockPos pos, boolean doDrain) {
@@ -418,13 +355,13 @@ public final class FluidTools {
         return getFluid(state.getBlock());
     }
 
-    public static int getFluidId(@Nullable FluidStack stack) {
-        if (stack == null)
-            return -1;
-        if (stack.getFluid() == null)
-            return -1;
-        return FluidRegistry.getFluidID(stack.getFluid().getName());
-    }
+//    public static int getFluidId(@Nullable FluidStack stack) {
+//        if (stack == null)
+//            return -1;
+//        if (stack.getFluid() == null)
+//            return -1;
+//        return FluidRegistry.getFluidID(stack.getFluid().getName());
+//    }
 
     @SideOnly(Side.CLIENT)
     public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {

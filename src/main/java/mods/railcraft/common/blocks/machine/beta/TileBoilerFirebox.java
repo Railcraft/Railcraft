@@ -73,7 +73,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         boolean b = isBurning();
         if (wasLit != b) {
             wasLit = b;
-            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
+            world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
     }
@@ -96,10 +96,10 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
                 float f2 = (float) getZ() + 0.5F;
                 float f3 = 0.52F;
                 float f4 = random.nextFloat() * 0.6F - 0.3F;
-                worldObj.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -234,7 +234,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -281,5 +281,10 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
             mBlock.inventory.clear();
         else
             inventory.clear();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inventory.isEmpty();
     }
 }

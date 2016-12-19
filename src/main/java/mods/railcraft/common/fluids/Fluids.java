@@ -12,12 +12,12 @@ package mods.railcraft.common.fluids;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -77,14 +77,14 @@ public enum Fluids {
      * Gets a FluidStack filled with n buckets worth of Fluid.
      */
     public FluidStack getB(int n) {
-        return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
+        return FluidRegistry.getFluidStack(tag, n * FluidTools.BUCKET_VOLUME);
     }
 
     /**
      * Gets a FluidStack filled with one buckets worth of Fluid.
      */
     public FluidStack getBucket() {
-        return FluidRegistry.getFluidStack(tag, FluidContainerRegistry.BUCKET_VOLUME);
+        return FluidRegistry.getFluidStack(tag, FluidTools.BUCKET_VOLUME);
     }
 
     public boolean is(Fluid fluid) {
@@ -100,7 +100,7 @@ public enum Fluids {
     }
 
     public boolean isContained(ItemStack containerStack) {
-        return containerStack != null && FluidItemHelper.containsFluid(containerStack, get());
+        return !containerStack.isEmpty() && FluidItemHelper.containsFluid(containerStack, get());
     }
 
 }

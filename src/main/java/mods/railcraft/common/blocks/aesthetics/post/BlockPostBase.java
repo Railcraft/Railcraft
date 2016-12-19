@@ -60,9 +60,11 @@ public abstract class BlockPostBase extends BlockRailcraft {
             return AABBFactory.start().box().expandHorizontally(-0.2F).build();
     }
 
+
+
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
         if (isPlatform(blockState))
             return AABBFactory.start().createBoxForTileAt(pos).build();
         if (!worldIn.isAirBlock(pos.down())

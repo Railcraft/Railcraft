@@ -10,23 +10,24 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.HorseType;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 
-public class EntityAIHalloweenKnights extends EntityAIBase {
-    private final EntityHorse horse;
+import mods.railcraft.common.util.misc.MiscTools;
 
-    public EntityAIHalloweenKnights(EntityHorse horseIn) {
+public class EntityAIHalloweenKnights extends EntityAIBase {
+    private final AbstractHorse horse;
+
+    public EntityAIHalloweenKnights(AbstractHorse horseIn) {
         this.horse = horseIn;
     }
 
@@ -35,7 +36,7 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        return horse.worldObj.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
+        return horse.world.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
     }
 
     /**
@@ -43,12 +44,11 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        DifficultyInstance difficultyinstance = horse.worldObj.getDifficultyForLocation(new BlockPos(horse));
+        DifficultyInstance difficultyinstance = horse.world.getDifficultyForLocation(new BlockPos(horse));
         horse.tasks.removeTask(this);
-        horse.setType(HorseType.SKELETON);
         horse.setHorseTamed(true);
         horse.setGrowingAge(0);
-        horse.worldObj.addWeatherEffect(new EntityLightningBolt(horse.worldObj, horse.posX, horse.posY, horse.posZ, true));
+        horse.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true));
         EntitySkeleton entityskeleton = createSkeleton(difficultyinstance, horse);
         entityskeleton.startRiding(horse);
 
@@ -61,20 +61,19 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
     }
 
     private EntityHorse createHorse(DifficultyInstance difficultyInstance) {
-        EntityHorse entityhorse = new EntityHorse(horse.worldObj);
+        EntityHorse entityhorse = new EntityHorse(horse.world);
         entityhorse.onInitialSpawn(difficultyInstance, null);
         entityhorse.setPosition(horse.posX, horse.posY, horse.posZ);
         entityhorse.hurtResistantTime = 60;
         entityhorse.enablePersistence();
-        entityhorse.setType(HorseType.SKELETON);
         entityhorse.setHorseTamed(true);
         entityhorse.setGrowingAge(0);
-        entityhorse.worldObj.spawnEntityInWorld(entityhorse);
+        entityhorse.world.spawnEntity(entityhorse);
         return entityhorse;
     }
 
-    private EntitySkeleton createSkeleton(DifficultyInstance difficultyInstance, EntityHorse entityHorse) {
-        EntitySkeleton skeleton = new EntitySkeleton(entityHorse.worldObj);
+    private EntitySkeleton createSkeleton(DifficultyInstance difficultyInstance, AbstractHorse entityHorse) {
+        EntitySkeleton skeleton = new EntitySkeleton(entityHorse.world);
         skeleton.onInitialSpawn(difficultyInstance, null);
         skeleton.setPosition(entityHorse.posX, entityHorse.posY, entityHorse.posZ);
         skeleton.hurtResistantTime = 60;
@@ -84,7 +83,7 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
 
         EnchantmentHelper.addRandomEnchantment(skeleton.getRNG(), skeleton.getHeldItemMainhand(), (int) (5.0F + difficultyInstance.getClampedAdditionalDifficulty() * (float) skeleton.getRNG().nextInt(18)), false);
 //        EnchantmentHelper.addRandomEnchantment(skeleton.getRNG(), skeleton.getItemStackFromSlot(EntityEquipmentSlot.HEAD), (int)(5.0F + difficultyInstance.getClampedAdditionalDifficulty() * (float)skeleton.getRNG().nextInt(18)), false);
-        skeleton.worldObj.spawnEntityInWorld(skeleton);
+        skeleton.world.spawnEntity(skeleton);
         return skeleton;
     }
 }

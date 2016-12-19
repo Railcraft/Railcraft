@@ -9,23 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import com.google.common.collect.Iterators;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 
 /**
  * Creates a standalone instance of IInventory.
@@ -40,23 +39,23 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     private final String name;
     @Nullable
     private final Callback callback;
-    private final ItemStack[] contents;
+    private final NonNullList<ItemStack> contents;
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable IInventory callback) {
         this.name = name;
-        contents = new ItemStack[size];
+        contents = NonNullList.withSize(size, ItemStack.EMPTY);
         this.callback = callback == null ? null : new InventoryCallback(callback);
     }
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable RailcraftTileEntity callback) {
         this.name = name;
-        contents = new ItemStack[size];
+        contents = NonNullList.withSize(size, ItemStack.EMPTY);
         this.callback = callback == null ? null : new TileCallback(callback);
     }
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable Callback callback) {
         this.name = name;
-        contents = new ItemStack[size];
+        contents = NonNullList.withSize(size, ItemStack.EMPTY);
         this.callback = callback;
     }
 
@@ -77,11 +76,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     }
 
     public Stream<ItemStack> stream() {
-        return Arrays.stream(contents);
-    }
-
-    public Predicate<ItemStack> precenseTest() {
-        return StackFilters.containedIn(this);
+        return contents.stream();
     }
 
     @Override
@@ -96,47 +91,36 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public int getSizeInventory() {
-        return contents.length;
+        return contents.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return contents[i];
+        return contents.get(i);
     }
 
     @Override
-    public ItemStack decrStackSize(int i, int j) {
-        if (contents[i] != null) {
-            if (contents[i].stackSize <= j) {
-                ItemStack itemstack = contents[i];
-                contents[i] = null;
-                markDirty();
-                return itemstack;
-            }
-            ItemStack itemStack1 = contents[i].splitStack(j);
-            if (contents[i].stackSize <= 0) {
-                contents[i] = null;
-            }
-            markDirty();
-            return itemStack1;
-        } else {
-            return null;
-        }
+    public ItemStack decrStackSize(int index, int count) {
+        ItemStack stack = contents.get(index);
+        if (stack.isEmpty())
+            return ItemStack.EMPTY;
+        ItemStack ret = stack.splitStack(count);
+        markDirty();
+        return ret;
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = contents[index];
-        contents[index] = null;
+        ItemStack ret = contents.set(index, ItemStack.EMPTY);
         markDirty();
-        return stack;
+        return ret;
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
-        contents[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
+    public void setInventorySlotContents(int i, ItemStack stack) {
+        contents.set(i, stack);
+        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
+            stack.setCount(getInventoryStackLimit());
         }
         markDirty();
     }
@@ -179,7 +163,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
         return callback == null || callback.isUsableByPlayer(entityplayer);
     }
 
@@ -197,7 +181,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
         }
     }
 
-    public ItemStack[] getContents() {
+    public NonNullList<ItemStack> getContents() {
         return contents;
     }
 
@@ -211,7 +195,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public Iterator<ItemStack> iterator() {
-        return Iterators.forArray(contents);
+        return contents.iterator();
     }
 
     @Override
@@ -236,10 +220,15 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public void clear() {
-        for (int i = 0; i < contents.length; i++) {
-            contents[i] = null;
+        for (int i = 0; i < contents.size(); i++) {
+            contents.set(i, ItemStack.EMPTY);
         }
         markDirty();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getSizeInventory() == 0;
     }
 
     public abstract static class Callback {
@@ -271,13 +260,13 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
         private final IInventory inv;
 
-        public InventoryCallback(IInventory inv) {
+        InventoryCallback(IInventory inv) {
             this.inv = inv;
         }
 
         @Override
         public boolean isUsableByPlayer(EntityPlayer player) {
-            return inv.isUseableByPlayer(player);
+            return inv.isUsableByPlayer(player);
         }
 
         @Override
@@ -311,7 +300,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
         private final RailcraftTileEntity tile;
 
-        public TileCallback(RailcraftTileEntity tile) {
+        TileCallback(RailcraftTileEntity tile) {
             this.tile = tile;
         }
 

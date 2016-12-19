@@ -102,7 +102,15 @@ public class InventoryConcatenator implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    public boolean isEmpty() {
+        for (IInventory inv : invMap)
+            if (!inv.isEmpty())
+                 return false;
+        return true;
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
         return true;
     }
 

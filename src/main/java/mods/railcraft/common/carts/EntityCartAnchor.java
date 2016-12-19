@@ -88,7 +88,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     }
 
     public boolean hasActiveTicket() {
-        return ticket != null || (Game.isClient(worldObj) && hasTicketFlag());
+        return ticket != null || (Game.isClient(world) && hasTicketFlag());
     }
 
     private void setTicketFlag(boolean flag) {
@@ -102,10 +102,10 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             if (hasTicketFlag())
                 if (chunks != null)
-                    EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
+                    EffectManager.instance.chunkLoaderEffect(world, this, chunks);
                 else
                     setupChunks(chunkCoordX, chunkCoordZ);
             return;
@@ -125,7 +125,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             if (anchorFuel <= 0) {
                 stockFuel();
                 ItemStack stack = getStackInSlot(0);
-                if (stack == null || stack.stackSize <= 0) {
+                if (stack.isEmpty()) {
                     setInventorySlotContents(0, null);
                     releaseTicket();
                 } else if (getFuelMap().containsKey(stack)) {
@@ -141,8 +141,8 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
         if (RailcraftConfig.printAnchorDebug() && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, world.provider.getDimension(), world.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, world.provider.getDimension(), world.getWorldTime());
             }
         }
     }
@@ -186,7 +186,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             Ticket chunkTicket = getTicketFromForge();
             //noinspection ConstantConditions
             if (chunkTicket != null) {
-//                System.out.println("Request Ticket: " + worldObj.getClass().getSimpleName());
+//                System.out.println("Request Ticket: " + world.getClass().getSimpleName());
                 chunkTicket.getModData();
                 chunkTicket.setChunkListDepth(MAX_CHUNKS);
                 chunkTicket.bindEntity(this);
@@ -266,8 +266,8 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj) && needsFuel())
-            GuiHandler.openGui(EnumGui.CART_ANCHOR, player, worldObj, this);
+        if (Game.isHost(world) && needsFuel())
+            GuiHandler.openGui(EnumGui.CART_ANCHOR, player, world, this);
         return true;
     }
 

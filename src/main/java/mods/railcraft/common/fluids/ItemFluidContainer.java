@@ -35,7 +35,7 @@ public class ItemFluidContainer extends ItemRailcraft {
     private final Fluids fluid;
     private final Item empty;
 
-    public ItemFluidContainer(Fluids fluid, Item empty) {
+    ItemFluidContainer(Fluids fluid, Item empty) {
         this.fluid = fluid;
         this.empty = empty;
     }
@@ -43,12 +43,12 @@ public class ItemFluidContainer extends ItemRailcraft {
     @Override
     public void initializeDefinintion() {
         FluidStack fluidStack = fluid.get(FluidTools.BUCKET_VOLUME);
-        if (fluidStack != null)
-            FluidTools.registerContainer(fluidStack, new ItemStack(this), new ItemStack(empty));
+        //TODO Capability
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         RayTraceResult mop = rayTrace(world, player, false);
 
         //noinspection ConstantConditions

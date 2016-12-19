@@ -64,7 +64,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             if (pistonStage != 0) {
                 pistonProgress += getPistonSpeed();
                 if (pistonProgress > 0.5 && pistonStage == 1) {
@@ -106,7 +106,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
                 pistonStage = 0;
-//                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
+//                ChatPlugin.sendLocalizedChatToAllFromServer(world, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
 //                outputDebug = 0;
 //                genDebug = 0;
 //                cycleTick = clock;
@@ -146,7 +146,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     public double getPistonSpeed() {
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             return Math.max(0.16 * getEnergyLevel(), 0.01);
         switch (getEnergyStage()) {
             case BLUE:
@@ -189,7 +189,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     private void checkPower() {
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        boolean p = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -215,7 +215,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 direction = dir;
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();
-                if (Game.isClient(worldObj))
+                if (Game.isClient(world))
                     markBlockForUpdate();
                 return true;
             }
@@ -253,7 +253,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     public final EnergyStage getEnergyStage() {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (energyStage == EnergyStage.OVERHEAT)
                 return energyStage;
             EnergyStage newStage = computeEnergyStage();

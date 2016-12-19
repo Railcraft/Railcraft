@@ -53,7 +53,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
             }
         }
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (isMaster) {
                 if (clock % 16 == 0) {
                     processActions();
@@ -66,7 +66,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         boolean b = isBurning();
         if (wasBurning != b) {
             wasBurning = b;
-            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
+            world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
     }
@@ -81,10 +81,10 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
             float z = getPos().getZ() + 0.5F;
             float offset = 0.52F;
             float randVal = random.nextFloat() * 0.6F - 0.3F;
-            worldObj.spawnParticle(FLAME, x - offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, x + offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, x + randVal, y, z - offset, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, x + randVal, y, z + offset, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(FLAME, x - offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(FLAME, x + offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(FLAME, x + randVal, y, z - offset, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(FLAME, x + randVal, y, z + offset, 0.0D, 0.0D, 0.0D);
         }
     }
 

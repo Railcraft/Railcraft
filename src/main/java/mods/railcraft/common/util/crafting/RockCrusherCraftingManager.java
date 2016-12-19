@@ -266,13 +266,13 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
                 ItemStack output = entry.getOutput();
                 for (ItemStack saved : list) {
                     if (InvTools.isItemEqual(saved, output)) {
-                        if (saved.stackSize + output.stackSize <= saved.getMaxStackSize()) {
-                            saved.stackSize += output.stackSize;
+                        if (saved.getCount() + output.getCount() <= saved.getMaxStackSize()) {
+                            saved.grow(output.getCount());
                             output = null;
                         } else {
-                            int diff = saved.getMaxStackSize() - saved.stackSize;
-                            saved.stackSize = saved.getMaxStackSize();
-                            output.stackSize -= diff;
+                            int diff = saved.getMaxStackSize() - saved.getCount();
+                            saved.setCount(saved.getMaxStackSize());
+                            output.shrink(diff);
                         }
                         break;
                     }

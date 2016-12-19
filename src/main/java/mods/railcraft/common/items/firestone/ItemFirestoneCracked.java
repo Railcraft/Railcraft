@@ -48,7 +48,7 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
         if (MiscTools.RANDOM.nextDouble() < damageLevel * 0.0001)
             return RailcraftItems.FIRESTONE_RAW.getStack();
         ItemStack newStack = stack.copy();
-        newStack.stackSize = 1;
+        newStack.setCount(1);
         newStack = InvTools.damageItem(newStack, 1);
         return newStack;
     }

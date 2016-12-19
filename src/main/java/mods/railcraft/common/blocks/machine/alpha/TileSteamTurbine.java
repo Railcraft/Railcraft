@@ -9,6 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
@@ -23,26 +37,12 @@ import mods.railcraft.common.items.ItemTurbineRotor;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
-import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.ISteamUser;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -82,7 +82,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     public static final int TANK_STEAM = 0;
     public static final int TANK_WATER = 1;
     private byte gaugeState;
-    // mainGauge is a renderer field 
+    // mainGauge is a renderer field
     public double mainGauge;
     private double energy;
     private TileEntity emitterDelegate;
@@ -175,7 +175,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     public void update() {
         super.update();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (isStructureValid()) {
                 if (isMaster())
                     addToNet();
@@ -218,7 +218,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 //                System.out.println("addedEnergy=" + addedEnergy);
                 if (clock % 4 == 0) {
                     gaugeState = (byte) getOutput();
-                    WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, gaugeState);
+                    WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, gaugeState);
                 }
             }
         }
@@ -231,8 +231,8 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     private void addToNet() {
         if (emitterDelegate == null)
             try {
-                emitterDelegate = new TileIC2MultiEmitterDelegate(this);
-                IC2Plugin.addTileToNet(emitterDelegate);
+//                emitterDelegate = new TileIC2MultiEmitterDelegate(this);
+//                IC2Plugin.addTileToNet(emitterDelegate);
             } catch (Throwable error) {
                 Game.logErrorAPI("IndustrialCraft", error);
             }
@@ -240,7 +240,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     private void dropFromNet() {
         if (emitterDelegate != null) {
-            IC2Plugin.removeTileFromNet(emitterDelegate);
+//            IC2Plugin.removeTileFromNet(emitterDelegate);
             emitterDelegate = null;
         }
     }
@@ -266,14 +266,14 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     @Override
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TURBINE, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.TURBINE, player, world, mBlock.getPos());
             return true;
         }
         return false;

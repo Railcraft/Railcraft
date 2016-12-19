@@ -22,6 +22,8 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -88,8 +90,8 @@ public class CraftingPlugin {
         return false;
     }
 
-    public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
-        if (result == null || result.stackSize <= 0) {
+    public static ProcessedRecipe processRecipe(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
+        if (result.isEmpty()) {
             throw new InvalidRecipeException("Tried to define invalid {0} recipe, the result was null or zero. Skipping", recipeType);
         }
         recipeArray = cleanRecipeArray(recipeType, result, recipeArray);
@@ -97,7 +99,7 @@ public class CraftingPlugin {
         return new ProcessedRecipe(isOreRecipe, result, recipeArray);
     }
 
-    public static void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
+    public static void addRecipe(ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
             processedRecipe = processRecipe(RecipeType.SHAPED, result, recipeArray);
@@ -112,7 +114,7 @@ public class CraftingPlugin {
             GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
     }
 
-    public static void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
+    public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
             processedRecipe = processRecipe(RecipeType.SHAPELESS, result, recipeArray);
@@ -197,23 +199,22 @@ public class CraftingPlugin {
         return new ShapelessRecipes(output, ingredients);
     }
 
-    public static ItemStack[] emptyContainers(InventoryCrafting inv) {
-        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+    public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
+        NonNullList<ItemStack> grid = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-        for (int i = 0; i < grid.length; ++i) {
+        for (int i = 0; i < grid.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
-            grid[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+            grid.set(i, ForgeHooks.getContainerItem(itemstack));
         }
 
         return grid;
     }
 
-    @Nullable
     public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
         Object object = ingredient.getRecipeObject();
         if (object instanceof ItemStack) {
             ItemStack stack = ((ItemStack) object).copy();
-            stack.stackSize = qty;
+            stack.setCount(qty);
             return stack;
         }
         if (object instanceof Item)
@@ -230,7 +231,7 @@ public class CraftingPlugin {
     }
 
     private static class MissingIngredientException extends InvalidRecipeException {
-        public MissingIngredientException(RecipeType recipeType, ItemStack result) {
+        MissingIngredientException(RecipeType recipeType, ItemStack result) {
             super("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
         }
     }

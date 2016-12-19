@@ -9,11 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 
 /**
@@ -23,7 +21,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
     private final IItemHandler inv;
 
-    protected ItemHandlerInventoryIterator(IItemHandler inv) {
+    ItemHandlerInventoryIterator(IItemHandler inv) {
         this.inv = inv;
     }
 
@@ -54,7 +52,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
         protected final int slot;
 
-        public InvSlot(int slot) {
+        InvSlot(int slot) {
             this.slot = slot;
         }
 
@@ -66,12 +64,12 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
         @Override
         public boolean canPutStackInSlot(ItemStack stack) {
             ItemStack remainder = inv.insertItem(slot, stack, true);
-            return remainder == null || remainder.stackSize < stack.stackSize;
+            return remainder.isEmpty() || remainder.getCount() < stack.getCount();
         }
 
         @Override
         public boolean canTakeStackFromSlot(ItemStack stack) {
-            return inv.extractItem(slot, 1, true) != null;
+            return !inv.extractItem(slot, 1, true).isEmpty();
         }
 
         @Override
@@ -80,9 +78,8 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
         }
 
         @Override
-        @Nullable
         public ItemStack getStack() {
-            return InvTools.makeSafe(inv.getStackInSlot(slot));
+            return inv.getStackInSlot(slot);
         }
 
     }

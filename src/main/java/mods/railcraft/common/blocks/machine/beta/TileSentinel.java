@@ -40,7 +40,7 @@ public class TileSentinel extends TileMachineBase {
                 WorldCoordinate target = TileAnchorWorld.getTarget(player);
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
-                else if (worldObj.provider.getDimension() != target.getDim())
+                else if (world.provider.getDimension() != target.getDim())
                     ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                 else if (new WorldCoordinate(this).equals(target)) {
                     TileAnchorWorld.removeTarget(player);

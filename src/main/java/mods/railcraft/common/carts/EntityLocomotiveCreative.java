@@ -62,7 +62,7 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
 
     @Override
     protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_CREATIVE, player, worldObj, this);
+        GuiHandler.openGui(EnumGui.LOCO_CREATIVE, player, world, this);
     }
 
     @Override

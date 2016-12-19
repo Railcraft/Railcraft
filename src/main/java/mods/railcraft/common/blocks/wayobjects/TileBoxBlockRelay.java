@@ -45,15 +45,15 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getX(), getY(), getZ());
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.BOX_RELAY, player, world, getX(), getY(), getZ());
         return true;
     }
 
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             signalBlock.tickClient();
             return;
@@ -84,7 +84,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     @Override
     public int getPowerOutput(EnumFacing side) {
-        TileEntity tile = WorldPlugin.getBlockTile(worldObj, getPos().offset(side.getOpposite()));
+        TileEntity tile = WorldPlugin.getBlockTile(world, getPos().offset(side.getOpposite()));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return isEmittingRedstone(side) ? FULL_POWER : NO_POWER;

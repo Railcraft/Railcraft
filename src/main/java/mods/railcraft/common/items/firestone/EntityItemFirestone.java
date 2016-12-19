@@ -21,6 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -46,36 +47,36 @@ public class EntityItemFirestone extends EntityItemFireproof {
     }
 
     public static void register() {
-        EntityRegistry.registerModEntity(EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Railcraft.MOD_ID, "firestone"), EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             clock++;
             if (clock % 4 != 0)
                 return;
             ItemStack stack = getEntityItem();
-            FirestoneTools.trySpawnFire(worldObj, getPosition(), stack);
+            FirestoneTools.trySpawnFire(world, getPosition(), stack);
         }
     }
 
     @Override
     protected void setOnFireFromLava() {
-        if (!refined || isDead || worldObj.isRemote)
+        if (!refined || isDead || world.isRemote)
             return;
         IBlockState firestoneBlock = RailcraftBlocks.RITUAL.getDefaultState();
         if (firestoneBlock == null)
             return;
         BlockPos surface = new BlockPos(posX, posY, posZ);
-        if (WorldPlugin.getBlockMaterial(worldObj, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(worldObj, surface.up()) == Material.LAVA)
+        if (WorldPlugin.getBlockMaterial(world, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(world, surface.up()) == Material.LAVA)
             for (int i = 0; i < 10; i++) {
                 surface = surface.up();
-                if (WorldPlugin.isBlockAir(worldObj, surface) && WorldPlugin.getBlockMaterial(worldObj, surface.down()) == Material.LAVA) {
+                if (WorldPlugin.isBlockAir(world, surface) && WorldPlugin.getBlockMaterial(world, surface.down()) == Material.LAVA) {
                     boolean cracked = getEntityItem().getItem() instanceof ItemFirestoneCracked;
-                    WorldPlugin.setBlockState(worldObj, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
-                    TileEntity tile = WorldPlugin.getBlockTile(worldObj, surface);
+                    WorldPlugin.setBlockState(world, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
+                    TileEntity tile = WorldPlugin.getBlockTile(world, surface);
                     if (tile instanceof TileRitual) {
                         TileRitual fireTile = (TileRitual) tile;
                         ItemStack firestone = getEntityItem();

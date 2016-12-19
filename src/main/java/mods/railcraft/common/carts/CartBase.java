@@ -50,8 +50,8 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)) || doInteract(player);
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)) || doInteract(player);
     }
 
     public boolean doInteract(EntityPlayer player) {
@@ -90,7 +90,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     public World theWorld() {
-        return worldObj;
+        return world;
     }
 
     /**

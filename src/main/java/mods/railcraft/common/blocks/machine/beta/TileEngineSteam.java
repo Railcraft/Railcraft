@@ -53,12 +53,12 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     @Override
     protected void playSoundOut() {
-        SoundHelper.playSoundClient(worldObj, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (0.5F + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(world, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (0.5F + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     @Override
     protected void playSoundIn() {
-        SoundHelper.playSoundClient(worldObj, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(world, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     private int getParticleRate() {
@@ -82,7 +82,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ENGINE_STEAM, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ENGINE_STEAM, player, world, getPos());
         return true;
     }
 
@@ -92,7 +92,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
         if (isActive() || getEnergyStage() == EnergyStage.OVERHEAT) {
             int steamRate = getParticleRate();
             for (int i = 0; i < steamRate; i++) {
-                EffectManager.instance.steamEffect(worldObj, this, 0);
+                EffectManager.instance.steamEffect(world, this, 0);
             }
         }
     }

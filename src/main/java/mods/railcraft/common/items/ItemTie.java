@@ -9,18 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
-import java.util.Locale;
 
 public class ItemTie extends ItemRailcraftSubtyped {
 
@@ -51,13 +55,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     @Override
     public void finalizeDefinition() {
         ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
-        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
-            CraftingPlugin.addRecipe(tieWood,
-                    " O ",
-                    "###",
-                    'O', container,
-                    '#', "slabWood");
-        }
+        // TODO fix recipe
     }
 
     public enum EnumTie implements IVariantEnum {

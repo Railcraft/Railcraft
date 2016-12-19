@@ -40,7 +40,7 @@ public class EntityCartAnchorWorld extends EntityCartAnchor {
 
     @Override
     protected ForgeChunkManager.Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, ForgeChunkManager.Type.ENTITY);
+        return ForgeChunkManager.requestTicket(Railcraft.getMod(), world, ForgeChunkManager.Type.ENTITY);
     }
 
     @Override

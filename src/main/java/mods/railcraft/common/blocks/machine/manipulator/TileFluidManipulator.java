@@ -94,7 +94,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         boolean bucket = FluidTools.interactWithFluidHandler(heldItem, tank, player);
-        if (bucket && Game.isHost(worldObj))
+        if (bucket && Game.isHost(world))
             sendUpdateToClient();
         return bucket || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }

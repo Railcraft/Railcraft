@@ -90,7 +90,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
             if (getFuse() <= 0) {
                 explode();
             } else {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -104,7 +104,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     protected void explode(float blastRadius) {
         isExploding = true;
         if (Game.isHost(theWorld())) {
-            worldObj.createExplosion(this, posX, posY, posZ, blastRadius, true);
+            world.createExplosion(this, posX, posY, posZ, blastRadius, true);
             setDead();
         }
     }
@@ -157,10 +157,10 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
                 stack.damageItem(1, player);
             } else if (stack.getItem() == Items.STRING) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
-                GuiHandler.openGui(EnumGui.CART_TNT_FUSE, player, worldObj, this);
+                GuiHandler.openGui(EnumGui.CART_TNT_FUSE, player, world, this);
             } else if (stack.getItem() == Items.GUNPOWDER) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
-                GuiHandler.openGui(EnumGui.CART_TNT_BLAST, player, worldObj, this);
+                GuiHandler.openGui(EnumGui.CART_TNT_BLAST, player, world, this);
             }
         }
         return true;
@@ -178,7 +178,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
 
     @Override
     public void setPrimed(boolean primed) {
-        if (Game.isHost(worldObj) && isPrimed() != primed) {
+        if (Game.isHost(world) && isPrimed() != primed) {
             if (primed) {
                 SoundHelper.playSoundForEntity(this, SoundEvents.ENTITY_TNT_PRIMED, 1F, 1F);
             }

@@ -43,7 +43,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         if (canRotate()) {
-            facing = MiscTools.getSideFacingTrack(worldObj, getPos());
+            facing = MiscTools.getSideFacingTrack(world, getPos());
             if (facing == null)
                 if (entityLiving != null) {
                     facing = MiscTools.getSideFacingPlayer(getPos(), entityLiving);

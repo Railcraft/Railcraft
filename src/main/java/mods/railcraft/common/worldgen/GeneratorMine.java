@@ -10,6 +10,8 @@
 package mods.railcraft.common.worldgen;
 
 import com.google.common.collect.MapMaker;
+import com.google.common.collect.Sets;
+
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.misc.Predicates;
@@ -29,6 +31,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
@@ -37,7 +40,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class GeneratorMine extends Generator {
-    private static final EnumSet<BiomeDictionary.Type> RICH_BIOMES = EnumSet.of(MOUNTAIN, MESA, HILLS);
+    private static final Set<BiomeDictionary.Type> RICH_BIOMES = Sets.newHashSet(MOUNTAIN, MESA, HILLS);
     private static final boolean SKY_GEN = false;
     private static final Predicate<IBlockState> STONE_TEST = SKY_GEN ? Predicates.alwaysTrue() : GenTools.STONE;
     @Nullable
@@ -112,7 +115,7 @@ public abstract class GeneratorMine extends Generator {
 
 
         boolean rich = false;
-        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
+        Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
         for (BiomeDictionary.Type type : types) {
             if (RICH_BIOMES.contains(type)) {
                 rich = true;

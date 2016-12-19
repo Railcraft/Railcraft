@@ -1,13 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
 
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,8 +81,8 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return inv.isUseableByPlayer(entityplayer);
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+        return inv.isUsableByPlayer(entityplayer);
     }
 
     @Override
@@ -138,6 +137,11 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject {
     @Override
     public int getNumSlots() {
         return getSizeInventory();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 }
 

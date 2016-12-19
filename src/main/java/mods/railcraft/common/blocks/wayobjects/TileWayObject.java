@@ -35,7 +35,7 @@ public abstract class TileWayObject extends RailcraftTickingTileEntity {
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         // Check and fix invalid block ids and metadata
@@ -43,23 +43,23 @@ public abstract class TileWayObject extends RailcraftTickingTileEntity {
             checkedBlock = true;
 
             if (!getSignalType().isEnabled()) {
-                worldObj.setBlockToAir(getPos());
+                world.setBlockToAir(getPos());
                 return;
             }
 
 //            if (getBlockType() != getSignalType().getBlock()) {
 //                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getSignalType().getBlock(), getPos());
-//                worldObj.setBlockState(getPos(), newState/*getSignalType().getBlock(), getId()*/, 3);
+//                world.setBlockState(getPos(), newState/*getSignalType().getBlock(), getId()*/, 3);
 //                validate();
-//                worldObj.setTileEntity(getPos(), this);
+//                world.setTileEntity(getPos(), this);
 //                updateContainingBlockInfo();
 //            }
 //
-//            int meta = worldObj.getBlockMetadata(getPos());
+//            int meta = world.getBlockMetadata(getPos());
 //            if (getBlockType() != null && getClass() != ((BlockSignalBase) getBlockType()).getSignalType(meta).getTileClass()) {
-//                worldObj.setBlockState(getPos(), newState/*getSignalType().getMeta()*/, 3);
+//                world.setBlockState(getPos(), newState/*getSignalType().getMeta()*/, 3);
 //                validate();
-//                worldObj.setTileEntity(getPos(), this);
+//                world.setTileEntity(getPos(), this);
 //                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getSignalType().getMeta(), getPos());
 //                updateContainingBlockInfo();
 //            }

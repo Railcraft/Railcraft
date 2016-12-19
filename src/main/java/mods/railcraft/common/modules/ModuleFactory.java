@@ -9,6 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -18,24 +28,13 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @RailcraftModule(value = "railcraft:factory", description = "coke oven, blast furnace, rolling machine, rock crusher, etc...")
 public class ModuleFactory extends RailcraftModulePayload {
@@ -356,7 +355,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 if (dust == null)
                     return;
                 dust = dust.copy();
-                dust.stackSize = 2;
+                dust.setCount(2);
 
                 ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
                 addOutput(recipe, dust, 1.0f);
@@ -376,61 +375,61 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.cokeOven.addRecipe(log, true, false, new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
                 }
 
-                if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
-                    boolean classic = Mod.IC2_CLASSIC.isLoaded();
-                    ItemStack crushedIron = IC2Plugin.getItem(classic ? "ironDust" : "crushedIronOre");
-                    ItemStack crushedGold = IC2Plugin.getItem(classic ? "goldDust" : "crushedGoldOre");
-                    ItemStack crushedCopper = IC2Plugin.getItem(classic ? "copperDust" : "crushedCopperOre");
-                    ItemStack crushedTin = IC2Plugin.getItem(classic ? "tinDust" : "crushedTinOre");
-                    ItemStack crushedSilver = IC2Plugin.getItem(classic ? "silverDust" : "crushedSilverOre");
-                    ItemStack crushedLead = IC2Plugin.getItem("crushedLeadOre");
-                    ItemStack crushedUranium = IC2Plugin.getItem(classic ? "uraniumDrop" : "crushedUraniumOre");
+//                if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
+//                    boolean classic = Mod.IC2_CLASSIC.isLoaded();
+//                    ItemStack crushedIron = IC2Plugin.getItem(classic ? "ironDust" : "crushedIronOre");
+//                    ItemStack crushedGold = IC2Plugin.getItem(classic ? "goldDust" : "crushedGoldOre");
+//                    ItemStack crushedCopper = IC2Plugin.getItem(classic ? "copperDust" : "crushedCopperOre");
+//                    ItemStack crushedTin = IC2Plugin.getItem(classic ? "tinDust" : "crushedTinOre");
+//                    ItemStack crushedSilver = IC2Plugin.getItem(classic ? "silverDust" : "crushedSilverOre");
+//                    ItemStack crushedLead = IC2Plugin.getItem("crushedLeadOre");
+//                    ItemStack crushedUranium = IC2Plugin.getItem(classic ? "uraniumDrop" : "crushedUraniumOre");
 
-                    if (RailcraftConfig.canCrushOres()) {
-                        registerCrushedOreRecipe(new ItemStack(Blocks.IRON_ORE), crushedIron);
-                        registerCrushedOreRecipe(new ItemStack(Blocks.GOLD_ORE), crushedGold);
+//                    if (RailcraftConfig.canCrushOres()) {
+//                        registerCrushedOreRecipe(new ItemStack(Blocks.IRON_ORE), crushedIron);
+//                        registerCrushedOreRecipe(new ItemStack(Blocks.GOLD_ORE), crushedGold);
 
-                        List<ItemStack> ores = OreDictionary.getOres("oreCopper");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedCopper);
-                        }
+//                        List<ItemStack> ores = OreDictionary.getOres("oreCopper");
+//                        for (ItemStack ore : ores) {
+//                            registerCrushedOreRecipe(ore, crushedCopper);
+//                        }
 
-                        ores = OreDictionary.getOres("oreTin");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedTin);
-                        }
+//                        ores = OreDictionary.getOres("oreTin");
+//                        for (ItemStack ore : ores) {
+//                            registerCrushedOreRecipe(ore, crushedTin);
+//                        }
 
-                        ores = OreDictionary.getOres("oreSilver");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedSilver);
-                        }
+//                        ores = OreDictionary.getOres("oreSilver");
+//                        for (ItemStack ore : ores) {
+//                            registerCrushedOreRecipe(ore, crushedSilver);
+//                        }
 
-                        ores = OreDictionary.getOres("oreLead");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedLead);
-                        }
+//                        ores = OreDictionary.getOres("oreLead");
+//                        for (ItemStack ore : ores) {
+//                            registerCrushedOreRecipe(ore, crushedLead);
+//                        }
 
-                        ores = OreDictionary.getOres("oreUranium");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedUranium);
-                        }
-                    }
+//                        ores = OreDictionary.getOres("oreUranium");
+//                        for (ItemStack ore : ores) {
+//                            registerCrushedOreRecipe(ore, crushedUranium);
+//                        }
+//                    }
 
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.ores"))
-                        IC2Plugin.removeMaceratorDustRecipes(crushedIron, crushedGold, crushedCopper, crushedTin, crushedSilver, crushedLead, crushedUranium);
+//                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.ores"))
+//                        IC2Plugin.removeMaceratorDustRecipes(crushedIron, crushedGold, crushedCopper, crushedTin, crushedSilver, crushedLead, crushedUranium);
 
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.bones"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.DYE, 1, 15));
+//                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.bones"))
+//                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.DYE, 1, 15));
 
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.blaze"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_POWDER));
+//                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.blaze"))
+//                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_POWDER));
 
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE));
+//                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble"))
+//                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE));
 
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
-                }
+//                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
+//                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
+//                }
             }
 
             private void addOutput(ICrusherCraftingManager.ICrusherRecipe recipe, @Nullable ItemStack output, float chance) {

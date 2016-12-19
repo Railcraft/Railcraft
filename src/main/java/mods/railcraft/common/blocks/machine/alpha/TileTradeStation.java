@@ -89,7 +89,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.TRADE_STATION, player, worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
+        GuiHandler.openGui(EnumGui.TRADE_STATION, player, world, getPos().getX(), getPos().getY(), getPos().getZ());
         return true;
     }
 
@@ -117,7 +117,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         float x = getPos().getX();
         float y = getPos().getY();
         float z = getPos().getZ();
-        return MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, range);
+        return MiscTools.getNearbyEntities(world, EntityVillager.class, x, y - 1, y + 3, z, range);
     }
 
     private boolean attemptTrade(List<EntityVillager> villagers, int tradeSet) {
@@ -137,7 +137,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
                     continue;
                 if (!InvTools.isItemGreaterOrEqualThan(recipe.getItemToSell(), sell))
                     continue;
-//                System.out.printf("Buying: %d %s Found: %d%n", recipe.getItemToBuy().stackSize, recipe.getItemToBuy().getDisplayName(), InvTools.countItems(invInput, recipe.getItemToBuy()));
+//                System.out.printf("Buying: %d %s Found: %d%n", recipe.getItemToBuy().getCount(), recipe.getItemToBuy().getDisplayName(), InvTools.countItems(invInput, recipe.getItemToBuy()));
                 if (canDoTrade(recipe)) {
 //                    System.out.println("Can do trade");
                     doTrade(villager, recipe);
@@ -151,10 +151,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
         //noinspection ConstantConditions
-        if (recipe.getItemToBuy() != null && InvTools.countItems(invInput, recipe.getItemToBuy()) < recipe.getItemToBuy().stackSize)
+        if (recipe.getItemToBuy() != null && InvTools.countItems(invInput, recipe.getItemToBuy()) < recipe.getItemToBuy().getCount())
             return false;
         //noinspection ConstantConditions
-        if (recipe.getSecondItemToBuy() != null && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < recipe.getSecondItemToBuy().stackSize)
+        if (recipe.getSecondItemToBuy() != null && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < recipe.getSecondItemToBuy().getCount())
             return false;
         return InvTools.isRoomForStack(recipe.getItemToSell(), invOutput);
     }
@@ -163,10 +163,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         merchant.useRecipe(recipe);
         //noinspection ConstantConditions
         if (recipe.getItemToBuy() != null)
-            InvTools.removeItemsAbsolute(invInput, recipe.getItemToBuy().stackSize, recipe.getItemToBuy());
+            InvTools.removeItemsAbsolute(invInput, recipe.getItemToBuy().getCount(), recipe.getItemToBuy());
         //noinspection ConstantConditions
         if (recipe.getSecondItemToBuy() != null)
-            InvTools.removeItemsAbsolute(invInput, recipe.getSecondItemToBuy().stackSize, recipe.getSecondItemToBuy());
+            InvTools.removeItemsAbsolute(invInput, recipe.getSecondItemToBuy().getCount(), recipe.getSecondItemToBuy());
         InvTools.moveItemStack(recipe.getItemToSell().copy(), invOutput);
     }
 
@@ -248,7 +248,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     public void nextTrade(int tradeSet) {
-        EntityVillager villager = new EntityVillager(worldObj);
+        EntityVillager villager = new EntityVillager(world);
         villager.setProfession(profession);
         MerchantRecipeList recipes = villager.getRecipes(null);
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
@@ -275,5 +275,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
         return slot >= 10;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return recipeSlots.isEmpty();
     }
 }

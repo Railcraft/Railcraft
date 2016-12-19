@@ -33,10 +33,10 @@ public class TileTankIronGauge extends TileTankBase {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(Random rand) {
         int oldLightValue = lightValue;
-        if (timer.hasTriggered(worldObj, 80) && isStructureValid())
+        if (timer.hasTriggered(world, 80) && isStructureValid())
             updateLightValue();
         if (oldLightValue != lightValue)
-            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
+            world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
     }
 
     @Override

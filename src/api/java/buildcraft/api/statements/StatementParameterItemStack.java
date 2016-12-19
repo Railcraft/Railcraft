@@ -31,7 +31,7 @@ public class StatementParameterItemStack implements IStatementParameter {
     public void onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         if (stack != null) {
             this.stack = stack.copy();
-            this.stack.stackSize = 1;
+            this.stack.setCount(1);
         } else {
             this.stack = null;
         }
@@ -48,7 +48,7 @@ public class StatementParameterItemStack implements IStatementParameter {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
+        stack = new ItemStack(compound.getCompoundTag("stack"));
     }
 
     @Override

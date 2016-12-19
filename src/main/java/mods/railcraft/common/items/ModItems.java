@@ -9,14 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
+
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
+
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.misc.Game;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -61,7 +62,7 @@ public enum ModItems {
 
     protected void init() {
         if (mod == Mod.IC2)
-            stack = IC2Plugin.getItem(itemTag);
+            stack = ItemStack.EMPTY;//IC2Plugin.getItem(itemTag);
         else if (mod == Mod.FORESTRY)
             stack = ForestryPlugin.getItem(itemTag);
         if (stack == null)

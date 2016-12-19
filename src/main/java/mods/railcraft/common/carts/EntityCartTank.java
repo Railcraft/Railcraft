@@ -96,7 +96,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             return;
         if (key == FLUID_STACK)
             tank.setFluid(Fluids.copy(getFluidStack()));
@@ -122,14 +122,14 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     public void setDead() {
         super.setDead();
-        InvTools.dropInventory(invLiquids, worldObj, getPosition());
+        InvTools.dropInventory(invLiquids, world, getPosition());
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             return;
         }
 
@@ -161,8 +161,8 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
         if (FluidTools.interactWithFluidHandler(stack, getTankManager(), player))
             return true;
-        if (Game.isHost(worldObj)) {
-            GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
+        if (Game.isHost(world)) {
+            GuiHandler.openGui(EnumGui.CART_TANK, player, world, this);
         }
         return true;
     }

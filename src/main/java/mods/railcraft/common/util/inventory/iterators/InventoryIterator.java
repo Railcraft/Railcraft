@@ -43,7 +43,7 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
     }
 
     public Iterable<T> notNull() {
-        List<T> filledSlots = new ArrayList<T>(32);
+        List<T> filledSlots = new ArrayList<>(32);
         for (T slot : this) {
             if (slot.getStack() != null)
                 filledSlots.add(slot);

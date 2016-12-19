@@ -37,6 +37,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -84,27 +85,27 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'P', Items.DIAMOND_PICKAXE,
                 'F', RailcraftItems.FIRESTONE_RAW);
 
-        for (ItemStack stack : FluidTools.getContainersFilledWith(Fluids.LAVA.get(FluidTools.BUCKET_VOLUME))) {
-            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                    "LRL",
-                    "RFR",
-                    "LRL",
-                    'R', "blockRedstone",
-                    'L', stack,
-                    'F', RailcraftItems.FIRESTONE_CUT);
-            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                    "LOL",
-                    "RFR",
-                    "LRL",
-                    'R', "blockRedstone",
-                    'L', stack,
-                    'O', RailcraftItems.FIRESTONE_RAW,
-                    'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
-        }
+//        for (ItemStack stack : FluidTools.getContainersFilledWith(Fluids.LAVA.get(FluidTools.BUCKET_VOLUME))) {
+//            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+//                    "LRL",
+//                    "RFR",
+//                    "LRL",
+//                    'R', "blockRedstone",
+//                    'L', stack,
+//                    'F', RailcraftItems.FIRESTONE_CUT);
+//            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+//                    "LOL",
+//                    "RFR",
+//                    "LRL",
+//                    'R', "blockRedstone",
+//                    'L', stack,
+//                    'O', RailcraftItems.FIRESTONE_RAW,
+//                    'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
+//        }
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.add(new ItemStack(this, 1, getMaxDamage()));
         list.add(new ItemStack(this, 1, 0));
     }
@@ -124,7 +125,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 newStack.setStackDisplayName(stack.getDisplayName());
         } else
             newStack = stack.copy();
-        newStack.stackSize = 1;
+        newStack.setCount(1);
         newStack = InvTools.damageItem(newStack, 1);
         return newStack;
     }
@@ -147,14 +148,17 @@ public class ItemFirestoneRefined extends ItemFirestone {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world,
+            BlockPos pos, EnumHand hand, EnumFacing side, float hitX,
+            float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         if (player.canPlayerEdit(pos, side, stack)) {
             Block block = WorldPlugin.getBlock(world, pos);
             if (block != Blocks.STONE) {
                 List<ItemStack> drops = block.getDrops(world, pos, WorldPlugin.getBlockState(world, pos), 0);
                 if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
-                    if (cooked != null && cooked.getItem() instanceof ItemBlock) {
+                    if (cooked.getItem() instanceof ItemBlock) {
                         IBlockState newState = InvTools.getBlockStateFromStack(cooked, world, pos);
                         if (newState != null) {
                             WorldPlugin.setBlockState(world, pos, newState);
@@ -183,10 +187,10 @@ public class ItemFirestoneRefined extends ItemFirestone {
         if (!target.isImmuneToFire()) {
             target.setFire(5);
             stack.damageItem(1, playerIn);
-            SoundHelper.playSound(playerIn.worldObj, null, target.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+            SoundHelper.playSound(playerIn.world, null, target.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
             playerIn.swingArm(hand);
             BlockPos pos = new BlockPos(target);
-            playerIn.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
+            playerIn.world.setBlockState(pos, Blocks.FIRE.getDefaultState());
             return true;
         }
         return false;

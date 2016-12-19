@@ -32,8 +32,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 
@@ -93,7 +93,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, world, getPos());
         return true;
     }
 
@@ -115,9 +115,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (explode) {
-                worldObj.createExplosion(null, getX(), getY(), getZ(), 2, true);
+                world.createExplosion(null, getX(), getY(), getZ(), 2, true);
                 explode = false;
             }
         }
@@ -170,7 +170,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -187,7 +187,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return fuel.getCount() < 8;
     }
 
     @Override
@@ -261,7 +261,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
             case SLOT_FUEL:
                 return FuelPlugin.getBurnTime(stack) > 0;
             case SLOT_LIQUID_INPUT:
-                return Fluids.WATER.is(FluidContainerRegistry.getFluidForFilledItem(stack));
+                return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+                        && Fluids.WATER.is(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+                        .getTankProperties()[0].getContents());
         }
         return false;
     }
@@ -274,5 +276,11 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void explode() {
         explode = true;
+    }
+
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 }

@@ -9,25 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
-import ic2.api.item.IBoxable;
-import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
-import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -45,11 +40,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import buildcraft.api.tools.IToolWrench;
+import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
         @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 })
-public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar/*, IBoxable*/, IToolWrench, IRailcraftItemSimple {
 
     private static final byte BOOST_DAMAGE = 3;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
@@ -123,7 +129,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
 
         if (WorldPlugin.isBlockAir(world, pos, blockState))
@@ -158,34 +165,30 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
+     * Current implementations of this method in child classes do not use the entry argument beside
+     * ev. They just raise the damage on the stack.
      */
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         stack.damageItem(1, attacker);
         return true;
     }
-//    @Override
-//    public EnumAction getItemUseAction(ItemStack stack) {
-//        return EnumAction.BLOCK;
-//    }
-
-//    @Override
-//    public int getMaxItemUseDuration(ItemStack par1ItemStack) {
-//        return 72000;
-//    }
-
-//    @Override
-//    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-//        player.setActiveHand(hand);
-//        return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
-//    }
 
     @Override
-    public boolean canBeStoredInToolbox(ItemStack itemstack) {
-        return true;
+    public EnumAction getItemUseAction(ItemStack stack) {
+        return EnumAction.BLOCK;
     }
+
+    @Override
+    public int getMaxItemUseDuration(ItemStack par1ItemStack) {
+        return 72000;
+    }
+
+
+//    @Override
+//    public boolean canBeStoredInToolbox(ItemStack itemstack) {
+//        return true;
+//    }
 
     @Override
     public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {

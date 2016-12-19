@@ -12,7 +12,6 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -38,8 +37,8 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                ThaumcraftPlugin.registerAspects();
-                ThaumcraftPlugin.setupResearch();
+//                ThaumcraftPlugin.registerAspects();
+//                ThaumcraftPlugin.setupResearch();
             }
         });
     }

@@ -9,18 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.plugins.misc.Mod;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
+
+import javax.annotation.Nullable;
+
+import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -43,9 +41,9 @@ public class ItemDust extends ItemRailcraftSubtyped {
 
     @Override
     public void finalizeDefinition() {
-        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
-            IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
-        }
+//        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
+//            IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
+//        }
     }
 
     public enum EnumDust implements IVariantEnum {

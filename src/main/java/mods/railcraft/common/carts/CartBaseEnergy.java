@@ -9,18 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.IEnergyTransfer;
-import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
-import mods.railcraft.common.blocks.charge.CartBattery;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.APIErrorHandler;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -31,6 +19,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+
+import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.carts.IEnergyTransfer;
+import mods.railcraft.api.carts.ILinkageManager;
+import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.CartBattery;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.APIErrorHandler;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.SafeNBTWrapper;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
@@ -57,19 +57,19 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (getEnergy() > getCapacity())
             setEnergy(getCapacity());
 
         ItemStack stack = getStackInSlot(0);
-        if (IC2Plugin.isEnergyItem(stack) && getEnergy() > 0)
-            setEnergy(getEnergy() - IC2Plugin.chargeItem(stack, getEnergy(), getTier()));
-
-        stack = getStackInSlot(1);
-        if (IC2Plugin.isEnergyItem(stack) && getEnergy() < getCapacity())
-            setEnergy(getEnergy() + IC2Plugin.dischargeItem(stack, getCapacity() - getEnergy(), getTier()));
+//        if (IC2Plugin.isEnergyItem(stack) && getEnergy() > 0)
+//            setEnergy(getEnergy() - IC2Plugin.chargeItem(stack, getEnergy(), getTier()));
+//
+//        stack = getStackInSlot(1);
+//        if (IC2Plugin.isEnergyItem(stack) && getEnergy() < getCapacity())
+//            setEnergy(getEnergy() + IC2Plugin.dischargeItem(stack, getCapacity() - getEnergy(), getTier()));
     }
 
     @Override
@@ -77,8 +77,8 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_ENERGY, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_ENERGY, player, world, this);
         return true;
     }
 
@@ -135,7 +135,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             return extra;
 
         try {
-            ILinkageManager lm = CartToolsAPI.getLinkageManager(worldObj);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
 
             EntityMinecart linkedCart = lm.getLinkedCartA(this);
             if (extra > 0 && linkedCart != source && linkedCart instanceof IEnergyTransfer)
@@ -168,7 +168,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (!passAlong)
             return provide;
 
-        ILinkageManager lm = CartToolsAPI.getLinkageManager(worldObj);
+        ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
 
         EntityMinecart linkedCart = lm.getLinkedCartA(this);
         if (provide < amount && linkedCart != source && linkedCart instanceof IEnergyTransfer)

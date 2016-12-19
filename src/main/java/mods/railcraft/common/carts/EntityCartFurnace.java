@@ -63,7 +63,8 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
 //    }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
         if (fuel <= 0) {
             if (stack != null) {

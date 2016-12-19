@@ -60,7 +60,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
@@ -70,10 +70,10 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     private void replace() {
         BlockPos pos = getPosition();
 
-        if (TrackTools.isRailBlockAt(worldObj, pos.down()))
+        if (TrackTools.isRailBlockAt(world, pos.down()))
             pos = pos.down();
 
-        Block block = WorldPlugin.getBlock(worldObj, pos);
+        Block block = WorldPlugin.getBlock(world, pos);
 
         if (TrackTools.isRailBlock(block)) {
             ItemStack trackExist = patternInv.getStackInSlot(SLOT_EXIST);
@@ -81,7 +81,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
             boolean nextToSuspended = false;
             for (EnumFacing side : EnumSet.of(EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH)) {
-                TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos.offset(side));
+                TileEntity tile = WorldPlugin.getBlockTile(world, pos.offset(side));
                 if (tile instanceof IOutfittedTrackTile) {
                     IOutfittedTrackTile track = (IOutfittedTrackTile) tile;
                     if (track.getTrackKitInstance() instanceof TrackKitSuspended) {
@@ -98,7 +98,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
                 if (trackExist.getItem() instanceof ITrackItem) {
                     ITrackItem trackItem = (ITrackItem) trackExist.getItem();
                     if (trackItem.getPlacedBlock() == block) {
-                        TileEntity tile = worldObj.getTileEntity(pos);
+                        TileEntity tile = world.getTileEntity(pos);
                         if (trackItem.isPlacedTileEntity(trackExist, tile)) {
                             BlockRailBase.EnumRailDirection trackShape = removeOldTrack(pos, block);
                             placeNewTrack(pos, SLOT_STOCK, trackShape);
@@ -113,8 +113,8 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_TRACK_RELAYER, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_TRACK_RELAYER, player, world, this);
         return true;
     }
 

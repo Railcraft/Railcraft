@@ -85,7 +85,7 @@ public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrac
     }
 
     @Override
-    public boolean rotateBlock(World worldObj, BlockPos pos, EnumFacing axis) {
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
         return false;
     }
 
@@ -119,7 +119,7 @@ public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrac
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos from) {
         if (Game.isClient(worldIn))
             return;
         if (!isRailValid(state, worldIn, pos, getMaxSupportedDistance(worldIn, pos))) {

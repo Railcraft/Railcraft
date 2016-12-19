@@ -276,14 +276,14 @@ public enum Materials implements IVariantEnum {
     public static void tagItemStack(ItemStack stack, String key, Materials material) {
         if (stack == null)
             return;
-        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(Railcraft.MOD_ID);
         nbt.setString(key, material.getName());
     }
 
     public static Materials from(ItemStack stack, String key) {
         if (stack == null)
             return getPlaceholder();
-        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(Railcraft.MOD_ID);
         if (nbt.hasKey(key))
             return fromName(nbt.getString(key));
         Materials material = OLD_ORDINALS.inverse().get(stack.getItemDamage());

@@ -70,7 +70,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, world, getPos());
         return true;
     }
 

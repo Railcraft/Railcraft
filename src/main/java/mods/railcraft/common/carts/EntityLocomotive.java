@@ -185,7 +185,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (stack != null && stack.getItem() instanceof ItemWhistleTuner) {
                 if (whistleDelay <= 0) {
                     whistlePitch = getNewWhistlePitch();
@@ -354,14 +354,14 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         super.onUpdate();
         update++;
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
 //        {
 //            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
 //            if (reverse != preReverse || prevRotationYaw != rotationYaw) {
 //                preReverse = reverse;
-//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", worldObj.getTotalWorldTime(), reverse, rotationYaw);
+//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", world.getTotalWorldTime(), reverse, rotationYaw);
 //            }
 //        }
 
@@ -507,7 +507,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void applyEntityCollision(Entity entity) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (!entity.isEntityAlive())
                 return;
             if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && MiscTools.isKillableEntity(entity)) {
@@ -743,7 +743,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public World theWorld() {
-        return worldObj;
+        return world;
     }
 
     public enum LocoMode implements IStringSerializable {

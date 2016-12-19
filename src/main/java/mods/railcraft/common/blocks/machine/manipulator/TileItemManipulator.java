@@ -287,4 +287,8 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         }
     }
 
+    @Override
+    public boolean isEmpty() {
+        return invBuffer.isEmpty();
+    }
 }

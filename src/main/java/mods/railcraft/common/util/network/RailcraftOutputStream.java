@@ -74,7 +74,7 @@ public class RailcraftOutputStream extends DataOutputStream {
             writeShort(-1);
         else {
             writeShort(Item.getIdFromItem(stack.getItem()));
-            writeByte(stack.stackSize);
+            writeByte(stack.getCount());
             writeShort(stack.getItemDamage());
             NBTTagCompound nbt = null;
 

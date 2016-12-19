@@ -9,17 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.client.gui.GuiRoutingTable;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IEditableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -35,12 +24,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
+import mods.railcraft.client.gui.GuiRoutingTable;
+import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.IEditableItem;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -223,7 +225,8 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (Game.isClient(world))
             Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, stack));
         return ActionResult.newResult(EnumActionResult.SUCCESS, stack);

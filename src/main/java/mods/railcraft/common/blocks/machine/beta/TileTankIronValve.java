@@ -74,7 +74,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
         decrementFilling();
 
@@ -127,12 +127,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
             int compValue = masterTileTankBase.getComparatorValue();
             if (previousComparatorValue != compValue) {
                 previousComparatorValue = compValue;
-                getWorld().notifyNeighborsOfStateChange(getPos(), null);
+                getWorld().notifyNeighborsOfStateChange(getPos(), null, true);
             }
         }
 
         if (previousStructureValidity != isStructureValid())
-            getWorld().notifyNeighborsOfStateChange(getPos(), null);
+            getWorld().notifyNeighborsOfStateChange(getPos(), null, true);
         previousStructureValidity = isStructureValid();
     }
 

@@ -9,20 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager {
 
@@ -43,7 +44,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
                 }
 
             };
-            fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
+//            fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
             fuel.add(RailcraftItems.COKE.getStack());
             fuel.add(EnumGeneric.BLOCK_COKE.getStack());
             fuel.add(new ItemStack(Items.COAL, 1, 1));
@@ -77,7 +78,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
         @Override
         public boolean isRoomForOutput(ItemStack outputSlot) {
-            return (outputSlot == null || output == null || (InvTools.isItemEqual(outputSlot, output) && outputSlot.stackSize + output.stackSize <= output.getMaxStackSize()));
+            return (outputSlot == null || output == null || (InvTools.isItemEqual(outputSlot, output) && outputSlot.getCount() + output.getCount() <= output.getMaxStackSize()));
         }
 
         @Override
@@ -102,7 +103,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
         public int getOutputStackSize() {
             if (output == null)
                 return 0;
-            return output.stackSize;
+            return output.getCount();
         }
 
         @Override
