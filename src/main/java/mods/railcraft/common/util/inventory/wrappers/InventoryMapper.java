@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -89,4 +90,13 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
         return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return inv.isUsableByPlayer(player);
+    }
 }

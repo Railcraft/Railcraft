@@ -183,7 +183,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
         switch (mapPos) {
@@ -205,7 +205,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                     return false;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(pos))
+                if (!world.isAirBlock(pos))
                     return false;
                 break;
         }
@@ -238,7 +238,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                     }
                 }
 
-                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getPos().up());
+                EntityLivingBase entity = MiscTools.getEntityAt(world, EntityLivingBase.class, getPos().up());
                 if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
                     if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useMasterEnergy(KILLING_POWER_COST, true);
@@ -284,7 +284,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
                             InvTools.removeOneItem(invInput, input);
 
-                            SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
@@ -311,7 +311,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getPos().getX(), mBlock.getPos().getY(), mBlock.getPos().getZ());
+            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos().getX(), mBlock.getPos().getY(), mBlock.getPos().getZ());
             return true;
         }
         return false;

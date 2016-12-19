@@ -33,6 +33,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.logging.log4j.Level;
 
 /**
@@ -40,6 +43,7 @@ import org.apache.logging.log4j.Level;
  */
 public class FactoryGui {
 
+    @SideOnly(Side.CLIENT)
     public static GuiScreen build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
@@ -53,10 +57,10 @@ public class FactoryGui {
                     return new GuiManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
                     return new GuiManipulatorCartFluid(inv, (TileFluidManipulator) obj);
-                case LOADER_ENERGY:
-                    return new GuiManipulatorCartIC2Loader(inv, (TileIC2Loader) obj);
-                case UNLOADER_ENERGY:
-                    return new GuiManipulatorCartIC2Unloader(inv, (TileIC2Unloader) obj);
+//                case LOADER_ENERGY:
+//                    return new GuiManipulatorCartIC2Loader(inv, (TileIC2Loader) obj);
+//                case UNLOADER_ENERGY:
+//                    return new GuiManipulatorCartIC2Unloader(inv, (TileIC2Unloader) obj);
                 case MANIPULATOR_RF:
                     return new GuiManipulatorCartRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:

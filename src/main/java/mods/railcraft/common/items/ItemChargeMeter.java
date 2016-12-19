@@ -83,7 +83,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (stack != null && stack.getItem() instanceof ItemChargeMeter)
             player.swingArm(event.getHand());
 
-        if (Game.isClient(player.worldObj))
+        if (Game.isClient(player.world))
             return;
 
         if (stack != null && stack.getItem() instanceof ItemChargeMeter)
@@ -102,9 +102,10 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
             return EnumActionResult.PASS;
+        ItemStack stack = player.getHeldItem(hand);
         EnumActionResult returnValue = EnumActionResult.PASS;
         ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
         if (!node.isNull() && !node.isGraphNull()) {

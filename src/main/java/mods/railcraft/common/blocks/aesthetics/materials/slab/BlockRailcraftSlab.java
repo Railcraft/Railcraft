@@ -39,6 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -183,7 +184,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
     }
 
@@ -261,11 +262,12 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
-        return ParticleHelper.addHitEffects(worldObj, block, target, manager, null);
+    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+        return ParticleHelper.addHitEffects(world, block, target, manager, null);
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return ParticleHelper.addDestroyEffects(world, block, pos, state, manager, null);

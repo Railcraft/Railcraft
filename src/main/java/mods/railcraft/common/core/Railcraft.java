@@ -19,7 +19,6 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
@@ -122,12 +121,12 @@ public final class Railcraft {
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("rock-crusher")) {
                 NBTTagCompound nbt = mess.getNBTValue();
-                ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));
+                ItemStack input = new ItemStack(nbt.getCompoundTag("input"));
                 ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
                 for (int i = 0; i < 9; i++) {
                     if (nbt.hasKey("output" + i)) {
                         NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
-                        recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
+                        recipe.addOutput(new ItemStack(outputNBT), outputNBT.getFloat("chance"));
                     }
                 }
             } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
@@ -191,8 +190,6 @@ public final class Railcraft {
         RailcraftModuleManager.postInit();
 
         proxy.finalizeClient();
-
-        CraftGuidePlugin.init();
 
         RailcraftConfig.postInit();
     }

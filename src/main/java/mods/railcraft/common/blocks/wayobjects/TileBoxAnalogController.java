@@ -56,7 +56,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
-        GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, world, getPos());
         return true;
     }
 
@@ -64,7 +64,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             return;
         }
@@ -99,9 +99,9 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
                 continue;
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos(), side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(world, getPos(), side)) > p)
                 p = tmp;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos().down(), side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(world, getPos().down(), side)) > p)
                 p = tmp;
         }
         return p;

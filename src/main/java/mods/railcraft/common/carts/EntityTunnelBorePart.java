@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 
 /**
  * Pseudo-Entity used to refine the Tunnel Bore collision boxes.
@@ -26,12 +27,17 @@ public class EntityTunnelBorePart extends Entity {
     public final float forwardOffset;
     public final float sideOffset;
 
+    public EntityTunnelBorePart(World world) {
+        super(world);
+        throw new RuntimeException();
+    }
+
     public EntityTunnelBorePart(EntityTunnelBore parent, String partName, float width, float height, float forwardOffset) {
         this(parent, partName, width, height, forwardOffset, 0.0F);
     }
 
     public EntityTunnelBorePart(EntityTunnelBore parent, String partName, float width, float height, float forwardOffset, float sideOffset) {
-        super(parent.worldObj);
+        super(parent.world);
         setSize(width, height);
         this.parent = parent;
         this.partName = partName;

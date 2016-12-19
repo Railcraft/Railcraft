@@ -86,8 +86,8 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
 
     protected void notifyNeighbors() {
         World world = theWorldAsserted();
-        world.notifyNeighborsOfStateChange(getPos(), getTile().getBlockType());
-        world.notifyNeighborsOfStateChange(getPos().down(), getTile().getBlockType());
+        world.notifyNeighborsOfStateChange(getPos(), getTile().getBlockType(), true);
+        world.notifyNeighborsOfStateChange(getPos().down(), getTile().getBlockType(), true);
         sendUpdateToClient();
     }
 

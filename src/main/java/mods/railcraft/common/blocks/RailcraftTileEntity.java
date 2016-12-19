@@ -128,15 +128,15 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public void markBlockForUpdate() {
 //        System.out.println("updating");
-        if (worldObj != null) {
+        if (world != null) {
             IBlockState state = getBlockState();
-            worldObj.notifyBlockUpdate(getPos(), state, state, 3);
+            world.notifyBlockUpdate(getPos(), state, state, 3);
         }
     }
 
     public void notifyBlocksOfNeighborChange() {
-        if (worldObj != null)
-            WorldPlugin.notifyBlocksOfNeighborChange(worldObj, getPos(), getBlockType());
+        if (world != null)
+            WorldPlugin.notifyBlocksOfNeighborChange(world, getPos(), getBlockType());
     }
 
     public void sendUpdateToClient() {
@@ -165,9 +165,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public final int getDimension() {
-        if (worldObj == null || worldObj.provider == null)
+        if (world == null || world.provider == null)
             return 0;
-        return worldObj.provider.getDimension();
+        return world.provider.getDimension();
     }
 
     @Override
@@ -231,7 +231,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Nullable
     @Override
     public final World theWorld() {
-        return worldObj;
+        return world;
     }
 
     public short getId() {

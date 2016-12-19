@@ -98,7 +98,7 @@ public class SoundHelper {
     public static void playSoundAtEntity(Entity entity, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         if (canPlaySound(sound)) {
             incrementLimiter(sound);
-            entity.worldObj.playSound(null, entity.posX, entity.posY, entity.posZ, sound, category, volume, pitch);
+            entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, sound, category, volume, pitch);
         }
     }
 

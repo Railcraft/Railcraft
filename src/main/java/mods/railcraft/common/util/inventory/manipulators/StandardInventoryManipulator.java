@@ -28,7 +28,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
 
     private final IInventory inv;
 
-    protected StandardInventoryManipulator(IInventory inv) {
+    StandardInventoryManipulator(IInventory inv) {
         this.inv = inv;
     }
 
@@ -38,14 +38,14 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
     }
 
     protected ItemStack addStack(ItemStack stack, boolean doAdd) {
-        if (stack == null || stack.stackSize <= 0)
-            return null;
+        if (stack.isEmpty())
+            return ItemStack.EMPTY;
         stack = stack.copy();
-        List<IExtInvSlot> filledSlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
-        List<IExtInvSlot> emptySlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
+        List<IExtInvSlot> filledSlots = new ArrayList<>(inv.getSizeInventory());
+        List<IExtInvSlot> emptySlots = new ArrayList<>(inv.getSizeInventory());
         for (IExtInvSlot slot : this) {
             if (slot.canPutStackInSlot(stack))
-                if (slot.getStack() == null)
+                if (slot.getStack().isEmpty())
                     emptySlots.add(slot);
                 else
                     filledSlots.add(slot);
@@ -54,22 +54,22 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         int injected = 0;
         injected = tryPut(filledSlots, stack, injected, doAdd);
         injected = tryPut(emptySlots, stack, injected, doAdd);
-        stack.stackSize -= injected;
-        if (stack.stackSize <= 0)
-            return null;
+        stack.shrink(injected);
+        if (stack.isEmpty())
+            return ItemStack.EMPTY;
         return stack;
     }
 
     private int tryPut(List<IExtInvSlot> slots, ItemStack stack, int injected, boolean doAdd) {
-        if (injected >= stack.stackSize)
+        if (injected >= stack.getCount())
             return injected;
         for (IExtInvSlot slot : slots) {
             ItemStack stackInSlot = slot.getStack();
-            if (stackInSlot == null || InvTools.isItemEqual(stackInSlot, stack)) {
-                int used = addToSlot(slot, stack, stack.stackSize - injected, doAdd);
+            if (stackInSlot.isEmpty() || InvTools.isItemEqual(stackInSlot, stack)) {
+                int used = addToSlot(slot, stack, stack.getCount() - injected, doAdd);
                 if (used > 0) {
                     injected += used;
-                    if (injected >= stack.stackSize)
+                    if (injected >= stack.getCount())
                         return injected;
                 }
             }
@@ -85,11 +85,11 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
 
         ItemStack stackInSlot = slot.getStack();
-        if (stackInSlot == null) {
+        if (stackInSlot.isEmpty()) {
             int wanted = Math.min(available, max);
             if (doAdd) {
                 stackInSlot = stack.copy();
-                stackInSlot.stackSize = wanted;
+                stackInSlot.setCount(wanted);
                 slot.setStack(stackInSlot);
             }
             return wanted;
@@ -98,7 +98,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         if (!InvTools.isItemEqual(stack, stackInSlot))
             return 0;
 
-        int wanted = max - stackInSlot.stackSize;
+        int wanted = max - stackInSlot.getCount();
         if (wanted <= 0)
             return 0;
 
@@ -106,7 +106,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
             wanted = available;
 
         if (doAdd) {
-            stackInSlot.stackSize += wanted;
+            stackInSlot.grow(wanted);
             slot.setStack(stackInSlot);
         }
         return wanted;
@@ -116,28 +116,28 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
     @Nonnull
     protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
-        List<ItemStack> outputList = new ArrayList<ItemStack>();
+        List<ItemStack> outputList = new ArrayList<>();
         for (IExtInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
+            if (!stack.isEmpty() && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack output = stack.copy();
-                if (output.stackSize >= amountNeeded) {
-                    output.stackSize = amountNeeded;
+                if (output.getCount() >= amountNeeded) {
+                    output.setCount(amountNeeded);
                     if (doRemove) {
-                        stack.stackSize -= amountNeeded;
-                        if (stack.stackSize <= 0)
-                            stack = null;
+                        stack.shrink(amountNeeded);
+                        if (stack.getCount() <= 0)
+                            stack = ItemStack.EMPTY;
                         slot.setStack(stack);
                     }
                     amountNeeded = 0;
                     outputList.add(output);
                 } else {
-                    amountNeeded -= output.stackSize;
+                    amountNeeded -= output.getCount();
                     outputList.add(output);
                     if (doRemove)
-                        slot.setStack(null);
+                        slot.setStack(ItemStack.EMPTY);
                 }
             }
         }

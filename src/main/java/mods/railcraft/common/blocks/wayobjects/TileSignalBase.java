@@ -67,12 +67,12 @@ public abstract class TileSignalBase extends TileWayObject implements IAspectPro
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             boolean needsUpdate = false;
             int lightValue = getLightValue();
             if (prevLightValue != lightValue) {
                 prevLightValue = lightValue;
-                worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
+                world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
                 needsUpdate = true;
             }
             if (needsUpdate) {

@@ -66,7 +66,7 @@ public class RailcraftDamageSource extends DamageSource {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drop);
                     if (cooked != null && MiscTools.RANDOM.nextDouble() < 0.5) {
                         cooked = cooked.copy();
-                        cooked.stackSize = drop.stackSize;
+                        cooked.setCount(drop.getCount());
                         entityItem.setEntityItemStack(cooked);
                     }
                 }

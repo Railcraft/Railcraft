@@ -36,6 +36,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.util.Set;
@@ -45,6 +47,7 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
@@ -109,7 +112,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
         if (RailcraftItems.GOGGLES.item() != null) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
+            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().player);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }
         return AuraKeyHandler.isAuraEnabled(aura);
@@ -144,7 +147,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public void trailEffect(BlockPos start, TileEntity dest, long colorSeed) {
         if (thinParticles(false))
             return;
-        if (Minecraft.getMinecraft().thePlayer.getDistanceSq(start) > TRACKING_DISTANCE)
+        if (Minecraft.getMinecraft().player.getDistanceSq(start) > TRACKING_DISTANCE)
             return;
         if (rand.nextInt(3) == 0) {
             double px = start.getX() + 0.5 + rand.nextGaussian() * 0.1;
@@ -167,7 +170,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     private void doFireSpark(RailcraftInputStream data) throws IOException {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
-        fireSparkEffect(Minecraft.getMinecraft().theWorld, start, destination);
+        fireSparkEffect(Minecraft.getMinecraft().world, start, destination);
     }
 
     @Override
@@ -198,7 +201,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         IEffectSource es = EffectManager.getEffectSource(source);
 
         Vec3d sourcePos = es.getPos();
-        if (FMLClientHandler.instance().getClient().thePlayer.getDistanceSq(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord) > 25600)
+        if (FMLClientHandler.instance().getClient().player.getDistanceSq(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord) > 25600)
             return;
 
         for (ChunkPos chunk : chunks) {

@@ -40,9 +40,9 @@ class PacketTicketGui extends RailcraftPacket {
     @SideOnly(Side.CLIENT)
     public void readData(RailcraftInputStream data) throws IOException {
         try {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
             ItemStack heldItem = player.getHeldItem(data.readEnum(EnumHand.values()));
-            if (heldItem != null && RailcraftItems.TICKET_GOLD.isEqual(heldItem))
+            if (RailcraftItems.TICKET_GOLD.isEqual(heldItem))
                 Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, heldItem));
         } catch (Exception exception) {
             Game.logThrowable("Error reading Golden Ticket Gui Packet", exception);

@@ -95,12 +95,12 @@ public class WorldPlugin {
 
     public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {
         if (world != null && block != null)
-            world.notifyNeighborsOfStateChange(pos, block);
+            world.notifyNeighborsOfStateChange(pos, block, true);
     }
 
     public static void notifyBlocksOfNeighborChangeOnSide(World world, BlockPos pos, Block block, EnumFacing side) {
         pos = pos.offset(side);
-        world.notifyNeighborsOfStateChange(pos, block);
+        world.notifyNeighborsOfStateChange(pos, block, true);
     }
 
     public static void markBlockForUpdate(World world, BlockPos pos) {

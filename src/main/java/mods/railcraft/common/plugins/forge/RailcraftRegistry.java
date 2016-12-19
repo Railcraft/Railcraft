@@ -59,10 +59,9 @@ public final class RailcraftRegistry {
      * @param qty The stackSize of the returned item
      * @return The ItemStack or null if no item exists for that tag
      */
-    @Nullable
     public static ItemStack getItem(String tag, int qty) {
         tag = MiscTools.cleanTag(tag);
-        return RailcraftItemStackRegistry.getStack(tag, qty).orElse(null);
+        return RailcraftItemStackRegistry.getStack(tag, qty).orElse(ItemStack.EMPTY);
 //        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
     }
 
@@ -90,7 +89,7 @@ public final class RailcraftRegistry {
 //    }
 
     public static void register(IRailcraftRegistryEntry<?> object, IVariantEnum variant, ItemStack stack) {
-        assert stack != null : "Do not register null items!";
+        assert !stack.isEmpty() : "Do not register null items!";
         RailcraftItemStackRegistry.register(object, variant, stack);
     }
 
@@ -134,24 +133,6 @@ public final class RailcraftRegistry {
         RailcraftItemStackRegistry.register(item, new ItemStack(item));
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName().toString());
-    }
-
-    /**
-     * Registers a new block with the GameRegistry.
-     * <p/>
-     * This should generally only be called by Railcraft or a Railcraft Module while the mod is
-     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
-     *
-     * @param block The block
-     */
-    @Deprecated
-    public static void register(Block block, Class<? extends ItemBlock> itemBlock) {
-        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
-            throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
-        GameRegistry.registerBlock(block, itemBlock);
-        RailcraftItemStackRegistry.register(block, new ItemStack(block));
-        if (Game.DEVELOPMENT_ENVIRONMENT)
-            Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
     }
 
     /**

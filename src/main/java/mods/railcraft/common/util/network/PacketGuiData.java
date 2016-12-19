@@ -13,6 +13,8 @@ import mods.railcraft.common.gui.containers.RailcraftContainer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
@@ -45,12 +47,13 @@ public class PacketGuiData extends RailcraftPacket {
         data.write(payload);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         windowId = data.readByte();
         dataId = data.readByte();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId)
             ((RailcraftContainer) player.openContainer).updateData(dataId, data);

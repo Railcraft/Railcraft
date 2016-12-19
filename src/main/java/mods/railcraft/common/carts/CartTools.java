@@ -82,7 +82,7 @@ public class CartTools {
                 if (cartStack.hasDisplayName())
                     cart.setCustomNameTag(cartStack.getDisplayName());
                 CartToolsAPI.setCartOwner(cart, owner);
-                world.spawnEntityInWorld(cart);
+                world.spawnEntity(cart);
                 return cart;
             }
         return null;
@@ -116,10 +116,10 @@ public class CartTools {
         setTravellingHighSpeed(cart, false);
         cart.motionX = 0;
         cart.motionZ = 0;
-        if (Game.isClient(cart.worldObj))
+        if (Game.isClient(cart.world))
             return;
         removePassengers(cart, cart.getPositionVector().addVector(0.0, 1.5, 0.0));
-        cart.worldObj.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
+        cart.world.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
     }

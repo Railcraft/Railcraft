@@ -31,7 +31,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             signalBlock.tickClient();
             return;

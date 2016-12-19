@@ -22,6 +22,10 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.version_minecraft
@@ -77,7 +81,7 @@ repositories {
     }
     maven {
         name = "jei"
-        url = "http://dvs1.progwml6.com/files/maven/"
+        url = "http://dvs1.progwml6.com/files/maven"
     }
 }
 
@@ -87,10 +91,12 @@ configurations {
 }
 
 dependencies {
-    api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
-    runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
-    api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
+    //api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
+    //runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
+    //api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     compile "org.jetbrains:annotations:15.0"
+    deobfCompile "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}:api"
+    runtime "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}"
 }
 
 processResources {
@@ -272,5 +278,5 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "2.7"
+    gradleVersion = "3.2.1"
 }

@@ -69,7 +69,7 @@ public class ContainerAnvil extends ContainerRepair {
         int baseCost = 0;
         int nameCost = 0;
 
-        if (input1original == null) {
+        if (input1original.isEmpty()) {
             outputSlot.setInventorySlotContents(0, null);
             this.maximumCost = 0;
         } else {
@@ -80,7 +80,7 @@ public class ContainerAnvil extends ContainerRepair {
             baseCost = baseCost + input1original.getRepairCost() + (input2 == null ? 0 : input2.getRepairCost());
             this.materialCost = 0;
 
-            if (input2 != null) {
+            if (!input2.isEmpty()) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
                     return;
                 isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
@@ -96,7 +96,7 @@ public class ContainerAnvil extends ContainerRepair {
 
                     int projectedMaterialCost;
 
-                    for (projectedMaterialCost = 0; damageToRepair > 0 && projectedMaterialCost < input2.stackSize; ++projectedMaterialCost) {
+                    for (projectedMaterialCost = 0; damageToRepair > 0 && projectedMaterialCost < input2.getCount(); ++projectedMaterialCost) {
                         int repairedDamage = input1.getItemDamage() - damageToRepair;
                         input1.setItemDamage(repairedDamage);
                         ++enchantCost;
@@ -290,7 +290,7 @@ public class ContainerAnvil extends ContainerRepair {
         }
 
         @Override
-        public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
+        public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
             if (!playerIn.capabilities.isCreativeMode) {
                 playerIn.addExperienceLevel(-repairContainer.maximumCost);
             }
@@ -305,8 +305,8 @@ public class ContainerAnvil extends ContainerRepair {
             if (repairContainer.materialCost > 0) {
                 ItemStack itemstack = repairContainer.inputSlots.getStackInSlot(1);
 
-                if (itemstack != null && itemstack.stackSize > repairContainer.materialCost) {
-                    itemstack.stackSize -= repairContainer.materialCost;
+                if (!itemstack.isEmpty() && itemstack.getCount() > repairContainer.materialCost) {
+                    itemstack.shrink(repairContainer.materialCost);
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack);
                 } else {
                     repairContainer.inputSlots.setInventorySlotContents(1, null);
@@ -332,6 +332,7 @@ public class ContainerAnvil extends ContainerRepair {
             } else if (!worldIn.isRemote) {
                 worldIn.playEvent(1030, blockPosIn, 0);
             }
+            return stack;
         }
 
     }

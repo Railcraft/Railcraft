@@ -60,12 +60,12 @@ public class ParticleBase extends Particle {
     }
 
     @Override
-    public void moveEntity(double x, double y, double z) {
+    public void move(double x, double y, double z) {
         if (noClip) {
-            setEntityBoundingBox(getEntityBoundingBox().offset(x, y, z));
+            setBoundingBox(getBoundingBox().offset(x, y, z));
             resetPositionToBB();
         } else {
-            super.moveEntity(x, y, z);
+            super.move(x, y, z);
         }
     }
 }

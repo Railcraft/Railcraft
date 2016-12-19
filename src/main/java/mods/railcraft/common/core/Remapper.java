@@ -97,18 +97,18 @@ public enum Remapper {
     }
 
     protected Optional<Block> findBlock(String oldName) {
-        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
-        Block block = GameRegistry.findBlock(Railcraft.MOD_ID, newName);
-        if (block != null && block != Blocks.AIR)
-            return Optional.of(block);
+//        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
+//        Block block = GameRegistry.findBlock(Railcraft.MOD_ID, newName);
+//        if (block != null && block != Blocks.AIR)
+//            return Optional.of(block);
         return Optional.empty();
     }
 
     protected Optional<Item> findItem(String oldName) {
-        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
-        Item item = GameRegistry.findItem(Railcraft.MOD_ID, newName);
-        if (item != null)
-            return Optional.of(item);
+//        String newName = MiscTools.cleanTag(oldName).replace(".", "_");
+//        Item item = GameRegistry.findItem(Railcraft.MOD_ID, newName);
+//        if (item != null)
+//            return Optional.of(item);
         return Optional.empty();
     }
 

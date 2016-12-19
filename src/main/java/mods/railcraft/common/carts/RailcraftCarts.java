@@ -9,6 +9,26 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartHopper;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -19,35 +39,15 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItemSimple;
-import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.ModuleSteam;
-import mods.railcraft.common.modules.ModuleThaumcraft;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartDisassemblyRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartHopper;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public enum RailcraftCarts implements IRailcraftCartContainer {
 
@@ -81,10 +81,10 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     },
     BORE(1, "bore", EntityTunnelBore.class, ItemTunnelBore::new),
     CARGO(0, "cart_cargo", EntityCartCargo.class, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
-    ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
-    ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, ItemCart::new, ModItems.CESU::get),
-    ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, ItemCart::new, ModItems.MFE::get),
-    ENERGY_MFSU(1, "cart_ic2_MFSU", EntityCartEnergyMFSU.class, ItemCart::new, ModItems.MFSU::get),
+    //    ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
+//    ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, ItemCart::new, ModItems.CESU::get),
+//    ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, ItemCart::new, ModItems.MFE::get),
+//    ENERGY_MFSU(1, "cart_ic2_MFSU", EntityCartEnergyMFSU.class, ItemCart::new, ModItems.MFSU::get),
     GIFT(3, "cart_gift", EntityCartGift.class, ItemCartGift::new),
     MOW_TRACK_LAYER(1, "mow_track_layer", EntityCartTrackLayer.class, ItemCartMOWTrackLayer::new),
     MOW_TRACK_RELAYER(1, "mow_track_relayer", EntityCartTrackRelayer.class, ItemCartMOWTrackRelayer::new),
@@ -106,12 +106,12 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             conditions.add(ModuleSteam.class);
         }
     },
-    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
-        {
-            conditions.add(ModuleLocomotives.class);
-            conditions.add(ModuleThaumcraft.class);
-        }
-    },
+    //    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
+//        {
+//            conditions.add(ModuleLocomotives.class);
+//            conditions.add(ModuleThaumcraft.class);
+//        }
+//    },
     LOCO_ELECTRIC(1, "locomotive_electric", EntityLocomotiveElectric.class, ItemLocoElectric::new) {
         {
             conditions.add(ModuleLocomotives.class);
@@ -305,7 +305,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private void registerEntity() {
         if (id < 0)
             return;
-        EntityRegistry.registerModEntity(type, tag, id, Railcraft.getMod(), 256, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Railcraft.MOD_ID, tag), type, tag, id, Railcraft.getMod(), 256, 3, true);
 
         // Legacy stuff
 //        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);

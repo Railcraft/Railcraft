@@ -9,6 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -28,18 +40,6 @@ import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
-import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -63,8 +63,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BUCKET_CREOSOTE(() -> new ItemBucketRailcraft(Fluids.CREOSOTE), "fluid_bucket_creosote"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool_crowbar_steel"),
-    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium", null, Mod.THAUMCRAFT::isLoaded),
-    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void", null, Mod.THAUMCRAFT::isLoaded),
+//    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium", null, Mod.THAUMCRAFT::isLoaded),
+//    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void", null, Mod.THAUMCRAFT::isLoaded),
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),

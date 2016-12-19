@@ -40,7 +40,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
 
     public EntityAIMateBreeding(EntityAnimal animal, float moveSpeed) {
         this.theAnimal = animal;
-        this.theWorld = animal.worldObj;
+        this.theWorld = animal.world;
         this.moveSpeed = moveSpeed;
     }
 
@@ -94,7 +94,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
             return false;
         }
 
-        List nearbyEntities = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
+        List nearbyEntities = theAnimal.world.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
         if (nearbyEntities.size() > MAX_ANIMALS) {
             return false;
         }
@@ -197,14 +197,14 @@ public class EntityAIMateBreeding extends EntityAIBase {
             if (baby instanceof EntityOcelot) {
                 EntityOcelot cat = (EntityOcelot) baby;
                 if (rand.nextInt(10) == 0) {
-                    cat.setTameSkin(baby.worldObj.rand.nextInt(4));
+                    cat.setTameSkin(baby.world.rand.nextInt(4));
                 }
             }
 
             double x = rand.nextGaussian() * 0.2D;
             double z = rand.nextGaussian() * 0.2D;
             baby.setLocationAndAngles(theAnimal.posX + x, theAnimal.posY, theAnimal.posZ + z, 0.0F, 0.0F);
-            theWorld.spawnEntityInWorld(baby);
+            theWorld.spawnEntity(baby);
 
             for (int i = 0; i < 7; ++i) {
                 double px = rand.nextGaussian() * 0.02D;

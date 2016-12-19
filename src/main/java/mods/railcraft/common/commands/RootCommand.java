@@ -38,7 +38,7 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return ROOT_COMMAND_NAME;
     }
 
@@ -48,7 +48,7 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         List<String> aliases = new ArrayList<>();
         aliases.add("rc");
         aliases.add("rail");
@@ -56,8 +56,8 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/" + getCommandName() + " help";
+    public String getUsage(ICommandSender sender) {
+        return "/" + getName() + " help";
     }
 
     @Override
@@ -68,7 +68,7 @@ public class RootCommand extends CommandBase implements IModCommand {
 
     @Override
     public String getFullCommandString() {
-        return getCommandName();
+        return getName();
     }
 
     @Override

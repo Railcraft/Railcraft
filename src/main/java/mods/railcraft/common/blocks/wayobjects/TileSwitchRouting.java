@@ -49,12 +49,12 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Override
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (current != null && current.getItem() instanceof ItemRoutingTable)
                 if (inv.getStackInSlot(0) == null) {
                     ItemStack copy = current.copy();
-                    copy.stackSize = 1;
+                    copy.setCount(1);
                     inv.setInventorySlotContents(0, copy);
                     if (!player.capabilities.isCreativeMode) {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
@@ -62,7 +62,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
                     }
                     return true;
                 }
-            GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, getPos());
+            GuiHandler.openGui(EnumGui.ROUTING, player, world, getPos());
         }
         return true;
     }
@@ -70,7 +70,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     @Override

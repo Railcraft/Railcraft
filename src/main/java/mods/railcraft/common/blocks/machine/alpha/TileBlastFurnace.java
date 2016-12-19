@@ -152,7 +152,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = worldObj.getBlockState(pos);
+        IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
         switch (mapPos) {
@@ -166,7 +166,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                     return true;
                 break;
             case 'A':
-                if (block.isAir(state, worldObj, pos) || state.getMaterial() == Material.LAVA)
+                if (block.isAir(state, world, pos) || state.getMaterial() == Material.LAVA)
                     return true;
                 break;
         }
@@ -196,28 +196,28 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     private void setLavaIdle() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
-        if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.LAVA.getStateFromMeta(7), 3);
+        if (world.isAirBlock(offsetPos))
+            world.setBlockState(offsetPos, Blocks.LAVA.getStateFromMeta(7), 3);
     }
 
     private void setLavaBurn() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
-        if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
+        if (world.isAirBlock(offsetPos))
+            world.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
         offsetPos = offsetPos.up();
-        if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
+        if (world.isAirBlock(offsetPos))
+            world.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
     }
 
     /*private void destroyLava() {
         int xLava = xCoord + 1;
         int yLava = yCoord + 2;
         int zLava = zCoord + 1;
-        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
-            worldObj.setBlockToAir(xLava, yLava, zLava);
+        if (world.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
+            world.setBlockToAir(xLava, yLava, zLava);
         yLava -= 1;
-        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
-            worldObj.setBlockToAir(xLava, yLava, zLava);
+        if (world.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
+            world.setBlockToAir(xLava, yLava, zLava);
     }*/
 
     @Override
@@ -249,7 +249,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 setLavaIdle();
 
             ItemStack input = getStackInSlot(SLOT_INPUT);
-            if (input != null && input.stackSize > 0) {
+            if (!input.isEmpty()) {
 
                 ItemStack output = getStackInSlot(SLOT_OUTPUT);
                 IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
@@ -276,10 +276,10 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                         if (cookTime >= recipe.getCookTime()) {
                             cookTime = 0;
                             finishedAt = clock;
-                            if (output == null)
+                            if (output.isEmpty())
                                 setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                             else
-                                output.stackSize += recipe.getOutputStackSize();
+                                output.grow(recipe.getOutputStackSize());
                             decrStackSize(SLOT_INPUT, 1);
                         }
                     }
@@ -301,7 +301,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
-            GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, worldObj, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
+            GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, world, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
             return true;
         }
         return false;
@@ -339,14 +339,14 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return fuel.getCount() < 8;
     }
 
     @Override
     public boolean isBurning() {
         TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
         if (mBlock != null)
-            if (worldObj.isRemote)
+            if (world.isRemote)
                 return mBlock.clientBurning;
             else
                 return mBlock.burnTime > 0;

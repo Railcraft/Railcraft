@@ -108,7 +108,7 @@ public class ParticleFireSpark extends ParticleBase {
 
         calculateVector(getHorizontalDistSq(end));
 
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
     }
 
 }

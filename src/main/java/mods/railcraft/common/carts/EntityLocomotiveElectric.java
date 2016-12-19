@@ -73,7 +73,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
 
     @Override
     protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_ELECTRIC, player, worldObj, this);
+        GuiHandler.openGui(EnumGui.LOCO_ELECTRIC, player, world, this);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
         cartBattery.tick(this);
     }
@@ -116,7 +116,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
         super.moveAlongTrack(pos, state);
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
         cartBattery.tickOnTrack(this, pos);
     }

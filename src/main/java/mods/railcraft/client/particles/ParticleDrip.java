@@ -73,7 +73,7 @@ public class ParticleDrip extends ParticleBase {
             setParticleTextureIndex(112);
         this.bobTimer--;
 
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
         this.motionX *= 0.9800000190734863D;
         this.motionY *= 0.9800000190734863D;
         this.motionZ *= 0.9800000190734863D;
@@ -82,7 +82,7 @@ public class ParticleDrip extends ParticleBase {
             setExpired();
         this.particleMaxAge--;
 
-        if (isCollided) {
+        if (canCollide) {
             setParticleTextureIndex(114);
 
             this.motionX *= 0.699999988079071D;
@@ -90,7 +90,7 @@ public class ParticleDrip extends ParticleBase {
         }
 
         BlockPos pos = new BlockPos(posX, posY, posZ);
-        IBlockState blockState = worldObj.getBlockState(pos);
+        IBlockState blockState = world.getBlockState(pos);
         Material material = blockState.getMaterial();
 
         if (material.isLiquid() || material.isSolid()) {
@@ -100,7 +100,7 @@ public class ParticleDrip extends ParticleBase {
                 filledPercent = (double) BlockLiquid.getLiquidHeightPercent(blockState.getValue(BlockLiquid.LEVEL));
             }
 
-            double surfaceY = (double) (MathHelper.floor_double(posY) + 1) - filledPercent;
+            double surfaceY = (double) (MathHelper.floor(posY) + 1) - filledPercent;
 
             if (posY < surfaceY) {
                 setExpired();

@@ -68,13 +68,14 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         if (!TrackTools.isRailBlockAt(world, pos))
             return EnumActionResult.FAIL;
         if (Game.isHost(world)) {
             EntityMinecart placedCart = placeCart(player.getGameProfile(), stack, world, pos);
             if (placedCart != null) {
-                stack.stackSize--;
+                stack.shrink(1);
             }
         }
         return EnumActionResult.SUCCESS;
@@ -96,6 +97,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tips");

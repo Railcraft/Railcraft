@@ -52,7 +52,7 @@ public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
 
         ItemStack firestone = tile.getBlockMetadata() == 0 ? ItemFirestoneRefined.getItemCharged() : ItemFirestoneCracked.getItemCharged();
         EntityItem entityitem = new EntityItem(null, 0.0D, 0.0D, 0.0D, firestone);
-        entityitem.getEntityItem().stackSize = 1;
+        entityitem.getEntityItem().setCount(1);
         entityitem.hoverStart = 0.0F;
 
         Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);

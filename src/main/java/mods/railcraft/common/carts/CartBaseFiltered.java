@@ -10,10 +10,7 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.base.Optional;
-import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,11 +18,17 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 
+import javax.annotation.Nullable;
+
+import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.PhantomInventory;
+
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
-    private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
     protected CartBaseFiltered(World world) {
@@ -46,7 +49,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(FILTER, Optional.absent());
+        dataManager.register(FILTER, ItemStack.EMPTY);
     }
 
     @Nullable
@@ -55,7 +58,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         NBTTagCompound nbt = cart.getTagCompound();
         if (nbt != null) {
             NBTTagCompound filterNBT = nbt.getCompoundTag("filterStack");
-            filter = ItemStack.loadItemStackFromNBT(filterNBT);
+            filter = new ItemStack(filterNBT);
         }
         return filter;
     }
@@ -119,7 +122,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
 
     @Nullable
     public ItemStack getFilterItem() {
-        return dataManager.get(FILTER).orNull();
+        return dataManager.get(FILTER);
     }
 
     public PhantomInventory getFilterInv() {
@@ -139,6 +142,6 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Override
     public void markDirty() {
         super.markDirty();
-        dataManager.set(FILTER, Optional.fromNullable(getFilterInv().getStackInSlot(0)));
+        dataManager.set(FILTER, getFilterInv().getStackInSlot(0));
     }
 }

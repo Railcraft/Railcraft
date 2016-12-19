@@ -18,11 +18,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class CartContentRendererTank extends CartContentRenderer<EntityCartTank> {
 
     private void renderTank(RenderCart renderer, EntityCartTank cart, float light, float partialTicks, int x, int y, int z) {
@@ -73,7 +77,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        item.getEntityItem().stackSize = 1;
+        item.getEntityItem().setCount(1);
         item.hoverStart = 0.0F;
 
         float scale = 1.2F;

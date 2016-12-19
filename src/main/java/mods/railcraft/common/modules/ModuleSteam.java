@@ -9,6 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -17,10 +21,6 @@ import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -171,7 +171,7 @@ public class ModuleSteam extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                IC2Plugin.nerfSyntheticCoal();
+//                IC2Plugin.nerfSyntheticCoal();
             }
         });
     }

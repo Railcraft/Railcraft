@@ -44,18 +44,18 @@ public class TileSmoker extends TileMachineBase {
     public void update() {
         super.update();
         if (!powered) {
-            if (Game.isHost(worldObj)) {
+            if (Game.isHost(world)) {
                 if (clock % SNOW_MELT_INTERVAL == 0) {
-                    Block blockAbove = WorldPlugin.getBlock(worldObj, getPos().up());
+                    Block blockAbove = WorldPlugin.getBlock(world, getPos().up());
                     if (blockAbove == Blocks.SNOW_LAYER)
-                        WorldPlugin.setBlockToAir(worldObj, getPos().up());
+                        WorldPlugin.setBlockToAir(world, getPos().up());
                 }
             } else {
-                if (!WorldPlugin.isBlockAir(worldObj, getPos().up())) return;
+                if (!WorldPlugin.isBlockAir(world, getPos().up())) return;
                 double px = getX() + rand.nextFloat();
                 double py = getY() + rand.nextFloat() * 0.5F + 1;
                 double pz = getZ() + rand.nextFloat();
-                EffectManager.instance.chimneyEffect(worldObj, px, py, pz);
+                EffectManager.instance.chimneyEffect(world, px, py, pz);
             }
         }
     }
@@ -63,7 +63,7 @@ public class TileSmoker extends TileMachineBase {
     @Override
     public void onNeighborBlockChange( IBlockState state,  Block block) {
         super.onNeighborBlockChange(state, block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        powered = PowerPlugin.isBlockBeingPowered(world, getPos());
         sendUpdateToClient();
     }
 

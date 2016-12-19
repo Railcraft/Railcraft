@@ -38,6 +38,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -94,18 +95,18 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         // TODO: this is bogus, waiting on FluidStacks as ingredients
-        for (ItemStack container : FluidTools.getContainersFilledWith(water)) {
-            for (Object frame : frameTypes) {
-                CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
-                        "GFG",
-                        "GSG",
-                        "GWG",
-                        'G', "blockGlassColorless",
-                        'F', frame,
-                        'S', "dustSaltpeter",
-                        'W', container);
-            }
-        }
+//        for (ItemStack container : FluidTools.getContainersFilledWith(water)) {
+//            for (Object frame : frameTypes) {
+//                CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
+//                        "GFG",
+//                        "GSG",
+//                        "GWG",
+//                        'G', "blockGlassColorless",
+//                        'F', frame,
+//                        'S', "dustSaltpeter",
+//                        'W', container);
+//            }
+//        }
     }
 
     @Override
@@ -198,7 +199,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int meta = 0; meta < 16; meta++) {
             list.add(new ItemStack(item, 1, meta));
         }

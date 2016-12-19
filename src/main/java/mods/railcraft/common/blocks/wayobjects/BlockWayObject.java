@@ -9,14 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.wayobjects;
 
-import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.items.IActivationBlockingItem;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.AABBFactory;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -34,9 +26,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.api.signals.SignalTools;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.items.IActivationBlockingItem;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.Game;
 
 public abstract class BlockWayObject extends BlockContainerRailcraft implements IPostConnection {
 
@@ -57,10 +57,10 @@ public abstract class BlockWayObject extends BlockContainerRailcraft implements 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null)
-            if (heldItem.getItem() instanceof IActivationBlockingItem)
-                return false;
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if (heldItem.getItem() instanceof IActivationBlockingItem)
+            return false;
         TileEntity tile = worldIn.getTileEntity(pos);
         return tile instanceof TileWayObject && ((TileWayObject) tile).blockActivated(side, playerIn, hand, heldItem);
     }
@@ -90,7 +90,7 @@ public abstract class BlockWayObject extends BlockContainerRailcraft implements 
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighbor) {
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileWayObject) {
@@ -126,7 +126,7 @@ public abstract class BlockWayObject extends BlockContainerRailcraft implements 
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileWayObject)
             return ((TileWayObject) tile).getBoundingBox(worldIn, pos);

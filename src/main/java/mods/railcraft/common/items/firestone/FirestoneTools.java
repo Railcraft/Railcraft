@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 public class FirestoneTools {
 
     public static final Predicate<ItemStack> SPAWNS_FIRE = stack -> {
-        if (stack == null || stack.getItem() == null) return false;
+        if (stack == null || stack.isEmpty()) return false;
         if (RailcraftItems.FIRESTONE_RAW.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CUT.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack)) return true;
@@ -45,7 +45,7 @@ public class FirestoneTools {
         if (stack == null || !SPAWNS_FIRE.test(stack))
             return false;
         boolean spawnedFire = false;
-        for (int i = 0; i < stack.stackSize; i++) {
+        for (int i = 0; i < stack.getCount(); i++) {
             spawnedFire |= FirestoneTools.spawnFire(world, pos);
         }
         if (spawnedFire && stack.isItemStackDamageable() && stack.getItemDamage() < stack.getMaxDamage() - 1)

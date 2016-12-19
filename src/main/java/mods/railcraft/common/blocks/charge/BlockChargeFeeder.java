@@ -32,6 +32,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -155,8 +156,8 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        super.neighborChanged(state, worldIn, pos, blockIn);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
+        super.neighborChanged(state, worldIn, pos, blockIn, neighbor);
         IBlockState newState = detectRedstoneState(state, worldIn, pos);
         if (state != newState)
             WorldPlugin.setBlockState(worldIn, pos, newState);
@@ -166,8 +167,8 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        IBlockState state = super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
         return detectRedstoneState(state, worldIn, pos);
     }
 

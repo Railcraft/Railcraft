@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
@@ -24,13 +25,13 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source == null || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
+        if (source.isEmpty() || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.getCount() > 1) {
             return false;
         }
         int numCopies = 0;
         for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (stack != null) {
+            if (!stack.isEmpty()) {
                 if (RailcraftItems.ROUTING_TABLE.isEqual(stack)) {
                     numCopies++;
                 } else {
@@ -44,7 +45,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source != null && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
+        if (source != null && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.getCount() == 1) {
             int copies = 0;
             for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
                 ItemStack stack = grid.getStackInSlot(slot);
@@ -54,7 +55,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
             }
             if (copies > 0) {
                 ItemStack dest = source.copy();
-                dest.stackSize = copies + 1;
+                dest.setCount(copies + 1);
                 return dest;
             }
         }
@@ -72,7 +73,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList getRemainingItems(InventoryCrafting inv) {
         return CraftingPlugin.emptyContainers(inv);
     }
 }

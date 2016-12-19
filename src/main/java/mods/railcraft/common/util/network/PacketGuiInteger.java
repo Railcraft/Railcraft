@@ -11,6 +11,8 @@ package mods.railcraft.common.util.network;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
@@ -39,13 +41,14 @@ public class PacketGuiInteger extends RailcraftPacket {
         data.writeInt(value);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         windowId = data.readByte();
         dataId = data.readByte();
         value = data.readInt();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer != null && player.openContainer.windowId == windowId)
             player.openContainer.updateProgressBar(dataId, value);

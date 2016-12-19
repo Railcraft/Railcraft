@@ -65,9 +65,9 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     @Override
-    public boolean processInitialInteract(@Nonnull EntityPlayer player, @Nullable ItemStack stack, @Nonnull EnumHand hand) {
-        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand))) return true;
-        if (doInteract(player, stack, hand)) return true;
+    public boolean processInitialInteract(@Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
+        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand))) return true;
+        if (doInteract(player, player.getHeldItem(hand), hand)) return true;
         return false;
     }
 
@@ -83,7 +83,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public void setDead() {
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 setInventorySlotContents(slot, null);
             }

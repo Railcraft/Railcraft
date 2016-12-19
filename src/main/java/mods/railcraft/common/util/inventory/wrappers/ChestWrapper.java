@@ -144,8 +144,8 @@ public class ChestWrapper extends InvWrapperBase {
      * with Container
      */
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return firstChest.isUseableByPlayer(player) && (secondChest == null || secondChest.isUseableByPlayer(player));
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return firstChest.isUsableByPlayer(player) && (secondChest == null || secondChest.isUsableByPlayer(player));
     }
 
     @Override

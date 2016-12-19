@@ -48,7 +48,7 @@ public class GeneratorGeode extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos pos, Biome biome) {
-        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.2;
+        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.2;
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {

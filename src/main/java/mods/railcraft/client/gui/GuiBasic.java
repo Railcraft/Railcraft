@@ -73,14 +73,14 @@ public abstract class GuiBasic extends GuiScreen {
     @Override
     protected void keyTyped(char c, int i) {
         if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
-            mc.thePlayer.closeScreen();
+            mc.player.closeScreen();
     }
 
     @Override
     public void updateScreen() {
         super.updateScreen();
-        if (!mc.thePlayer.isEntityAlive() || mc.thePlayer.isDead)
-            mc.thePlayer.closeScreen();
+        if (!mc.player.isEntityAlive() || mc.player.isDead)
+            mc.player.closeScreen();
     }
 
 }

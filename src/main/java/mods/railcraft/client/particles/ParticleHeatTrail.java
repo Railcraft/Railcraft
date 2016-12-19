@@ -101,7 +101,7 @@ public class ParticleHeatTrail extends ParticleBase {
             calculateVector();
         }
 
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
     }
 
 }

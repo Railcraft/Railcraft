@@ -129,13 +129,13 @@ public abstract class MiscTools {
 
     @Nullable
     public static RayTraceResult rayTracePlayerLook(EntityPlayer player) {
-        if (player.worldObj == null) return null;
+        if (player.world == null) return null;
         double distance = player.capabilities != null && player.capabilities.isCreativeMode ? 5.0F : 4.5F;
         Vec3d posVec = player.getPositionVector();
         Vec3d lookVec = player.getLook(1);
         lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
-        return player.worldObj.rayTraceBlocks(posVec, lookVec);
+        return player.world.rayTraceBlocks(posVec, lookVec);
     }
 
     /**
@@ -159,9 +159,10 @@ public abstract class MiscTools {
      *
      * @return a side
      */
+    //TODO The old method was removed!
     @Nonnull
     public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase entity) {
-        return BlockPistonBase.getFacingFromEntity(pos, entity);
+        return EnumFacing.NORTH;
     }
 
     /**
@@ -172,7 +173,7 @@ public abstract class MiscTools {
      */
     @Nonnull
     public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
-        int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
+        int dir = MathHelper.floor((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
             case 0:
                 return EnumFacing.NORTH;

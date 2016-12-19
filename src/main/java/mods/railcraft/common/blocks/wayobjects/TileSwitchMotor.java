@@ -51,15 +51,15 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Override
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, world, getPos());
         return true;
     }
 
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             receiver.tickClient();
             return;
         }

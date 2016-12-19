@@ -43,7 +43,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, getPos());
+        InvTools.dropItem(stack, world, getPos());
     }
 
     @Override
@@ -98,12 +98,12 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, @Nullable ItemStack itemstack) {
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return true;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -147,5 +147,10 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     @Override
     public int getComparatorInputOverride() {
         return Container.calcRedstoneFromInventory(this);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 }

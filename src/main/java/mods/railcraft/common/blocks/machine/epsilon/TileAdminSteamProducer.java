@@ -99,7 +99,7 @@ public class TileAdminSteamProducer extends TileMachineBase {
     private void checkRedstone() {
         if (Game.isClient(getWorld()))
             return;
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        boolean p = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -109,7 +109,7 @@ public class TileAdminSteamProducer extends TileMachineBase {
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (powered)

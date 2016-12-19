@@ -24,65 +24,66 @@ import java.util.function.Predicate;
  *
  * Created by CovertJaguar on 4/2/2015.
  */
+//TODO Fluid
 public class FluidItemHelper {
     /**
      * Fill a liquid container.
      *
      * @return The modified container and the amount of Fluid filled.
      */
-    public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
-        if (container == null)
-            return new FillReturn(null, 0);
-        container = container.copy();
-        if (fluidStack == null)
-            return new FillReturn(container, 0);
-        if (container.getItem() instanceof IFluidContainerItem) {
-            container.stackSize = 1;
-            IFluidContainerItem fluidCon = (IFluidContainerItem) container.getItem();
-            return new FillReturn(container, fluidCon.fill(container, fluidStack, true));
-        }
-        ItemStack filledCon = FluidContainerRegistry.fillFluidContainer(fluidStack, container);
-        if (filledCon != null)
-            return new FillReturn(filledCon, FluidContainerRegistry.getFluidForFilledItem(filledCon).amount);
-        return new FillReturn(container, 0);
-    }
+//    public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
+//        if (container == null)
+//            return new FillReturn(null, 0);
+//        container = container.copy();
+//        if (fluidStack == null)
+//            return new FillReturn(container, 0);
+//        if (container.getItem() instanceof IFluidContainerItem) {
+//            container.stackSize = 1;
+//            IFluidContainerItem fluidCon = (IFluidContainerItem) container.getItem();
+//            return new FillReturn(container, fluidCon.fill(container, fluidStack, true));
+//        }
+//        ItemStack filledCon = FluidContainerRegistry.fillFluidContainer(fluidStack, container);
+//        if (filledCon != null)
+//            return new FillReturn(filledCon, FluidContainerRegistry.getFluidForFilledItem(filledCon).amount);
+//        return new FillReturn(container, 0);
+//    }
 
-    public static FillReturn fillContainer(@Nullable ItemStack stackToFill, Fluid fluid) {
-        return fillContainer(stackToFill, new FluidStack(fluid, Integer.MAX_VALUE));
-    }
+//    public static FillReturn fillContainer(@Nullable ItemStack stackToFill, Fluid fluid) {
+//        return fillContainer(stackToFill, new FluidStack(fluid, Integer.MAX_VALUE));
+//    }
 
-    /**
-     * Drain a liquid container.
-     *
-     * @return The modified container and any fluid drained.
-     */
-    public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
-        if (container == null)
-            return new DrainReturn(null, null, false);
-        container = container.copy();
-        if (container.getItem() instanceof IFluidContainerItem) {
-            Item item = container.getItem();
-            container.stackSize = 1;
-            IFluidContainerItem fluidCon = (IFluidContainerItem) item;
-            FluidStack drained = fluidCon.drain(container, maxDrain, true);
-            ItemStack returnStack;
-            if (container.getItem().hasContainerItem(container)) {
-                returnStack = container.getItem().getContainerItem(container);
-            } else {
-                returnStack = container;
-            }
-            return new DrainReturn(returnStack, drained, false);
-        }
-        if (FluidContainerRegistry.isFilledContainer(container)) {
-            ItemStack emptyCon = container.getItem().getContainerItem(container);
-            return new DrainReturn(emptyCon, FluidContainerRegistry.getFluidForFilledItem(container), true);
-        }
-        return new DrainReturn(container, null, false);
-    }
+//    /**
+//     * Drain a liquid container.
+//     *
+//     * @return The modified container and any fluid drained.
+//     */
+//    public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
+//        if (container == null)
+//            return new DrainReturn(null, null, false);
+//        container = container.copy();
+//        if (container.getItem() instanceof IFluidContainerItem) {
+//            Item item = container.getItem();
+//            container.stackSize = 1;
+//            IFluidContainerItem fluidCon = (IFluidContainerItem) item;
+//            FluidStack drained = fluidCon.drain(container, maxDrain, true);
+//            ItemStack returnStack;
+//            if (container.getItem().hasContainerItem(container)) {
+//                returnStack = container.getItem().getContainerItem(container);
+//            } else {
+//                returnStack = container;
+//            }
+//            return new DrainReturn(returnStack, drained, false);
+//        }
+//        if (FluidContainerRegistry.isFilledContainer(container)) {
+//            ItemStack emptyCon = container.getItem().getContainerItem(container);
+//            return new DrainReturn(emptyCon, FluidContainerRegistry.getFluidForFilledItem(container), true);
+//        }
+//        return new DrainReturn(container, null, false);
+//    }
 
-    public static boolean isBucket(@Nullable ItemStack stack) {
-        return FluidContainerRegistry.isBucket(stack);
-    }
+//    public static boolean isBucket(@Nullable ItemStack stack) {
+//        return FluidContainerRegistry.isBucket(stack);
+//    }
 
     public static boolean isContainer(@Nullable ItemStack stack) {
         return FluidUtil.getFluidHandler(stack) != null;

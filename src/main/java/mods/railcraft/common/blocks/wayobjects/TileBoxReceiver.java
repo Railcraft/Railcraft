@@ -49,8 +49,8 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RECEIVER, player, worldObj, getPos());
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.BOX_RECEIVER, player, world, getPos());
         return true;
     }
 
@@ -86,7 +86,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
 
     @Override
     public int getPowerOutput(EnumFacing side) {
-        TileEntity tile = WorldPlugin.getBlockTile(worldObj, getPos().offset(side.getOpposite()));
+        TileEntity tile = WorldPlugin.getBlockTile(world, getPos().offset(side.getOpposite()));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;

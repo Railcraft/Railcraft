@@ -40,16 +40,16 @@ public class ChatPlugin {
      * Don't use this from the server thread! It will not translate stuff correctly!
      */
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
-        player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
+        player.sendMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
     public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
-        if (Game.isClient(player.worldObj))
+        if (Game.isClient(player.world))
             sendLocalizedChat(player, msg, args);
     }
 
     public static void sendLocalizedChatFromServer(EntityPlayer player, String msg, Object... args) {
-        if (Game.isHost(player.worldObj)) {
+        if (Game.isHost(player.world)) {
             for (int i = 0; i < args.length; i++) {
                 if (args[i] instanceof String) {
                     args[i] = chatComp((String) args[i]);
@@ -58,7 +58,7 @@ public class ChatPlugin {
                     args[i] = username != null ? username : "[unknown]";
                 }
             }
-            player.addChatMessage(chatComp(msg, args));
+            player.sendMessage(chatComp(msg, args));
         }
     }
 

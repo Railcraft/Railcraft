@@ -50,7 +50,7 @@ public class TileChestMetals extends TileChestRailcraft {
     public void update() {
         super.update();
 
-        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
+        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(world))
             if (!target.evaluate(this))
                 target = target.next();
     }

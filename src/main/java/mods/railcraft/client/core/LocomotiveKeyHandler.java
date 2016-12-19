@@ -22,11 +22,15 @@ import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.input.Keyboard;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class LocomotiveKeyHandler {
 
     public static final LocomotiveKeyHandler INSTANCE = new LocomotiveKeyHandler();
@@ -46,7 +50,7 @@ public class LocomotiveKeyHandler {
 
     @SubscribeEvent
     public void tick(InputEvent.KeyInputEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         if (player == null)
             return;
         if (!(player.getRidingEntity() instanceof EntityMinecart))

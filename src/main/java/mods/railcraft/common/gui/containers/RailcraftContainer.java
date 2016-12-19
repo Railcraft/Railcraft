@@ -9,22 +9,26 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.gui.widgets.Widget;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketBuilder;
-import mods.railcraft.common.util.network.RailcraftInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.widgets.Widget;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.network.RailcraftInputStream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -32,7 +36,7 @@ import java.util.List;
 public abstract class RailcraftContainer extends Container {
 
     private final IInventory callback;
-    private final List<Widget> widgets = new ArrayList<Widget>();
+    private final List<Widget> widgets = new ArrayList<>();
 
     protected RailcraftContainer(IInventory inv) {
         this.callback = inv;
@@ -91,11 +95,10 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return callback == null || callback.isUseableByPlayer(entityplayer);
+        return callback == null || callback.isUsableByPlayer(entityplayer);
     }
 
     //TODO: test new parameters
-    @Nullable
     @Override
     public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
         Slot slot = slotId < 0 ? null : inventorySlots.get(slotId);
@@ -104,28 +107,27 @@ public abstract class RailcraftContainer extends Container {
         return super.slotClick(slotId, mouseButton, clickType, player);
     }
 
-    @Nullable
     private ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
 
         if (mouseButton == 2) {
             if (slot.canAdjustPhantom())
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
         } else if (mouseButton == 0 || mouseButton == 1) {
             InventoryPlayer playerInv = player.inventory;
             slot.onSlotChanged();
             ItemStack stackSlot = slot.getStack();
             ItemStack stackHeld = playerInv.getItemStack();
 
-            if (stackSlot != null)
+            if (stackSlot != ItemStack.EMPTY)
                 stack = stackSlot.copy();
 
-            if (stackSlot == null) {
-                if (stackHeld != null && slot.isItemValid(stackHeld))
+            if (stackSlot.isEmpty()) {
+                if (stackHeld != ItemStack.EMPTY && slot.isItemValid(stackHeld))
                     fillPhantomSlot(slot, stackHeld, mouseButton);
-            } else if (stackHeld == null) {
+            } else if (stackHeld.isEmpty()) {
                 adjustPhantomSlot(slot, mouseButton, clickType);
-                slot.onPickupFromSlot(player, playerInv.getItemStack());
+                slot.onTake(player, playerInv.getItemStack());
             } else if (slot.isItemValid(stackHeld))
                 if (InvTools.isItemEqual(stackSlot, stackHeld))
                     adjustPhantomSlot(slot, mouseButton, clickType);
@@ -139,31 +141,31 @@ public abstract class RailcraftContainer extends Container {
         if (!slot.canAdjustPhantom())
             return;
         ItemStack stackSlot = slot.getStack();
-        if (stackSlot == null)
+        if (stackSlot.isEmpty())
             return;
         int stackSize;
         if (clickType == ClickType.QUICK_MOVE)
-            stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
+            stackSize = mouseButton == 0 ? (stackSlot.getCount() + 1) / 2 : stackSlot.getCount() * 2;
         else
-            stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
+            stackSize = mouseButton == 0 ? stackSlot.getCount() - 1 : stackSlot.getCount() + 1;
 
         if (stackSize > slot.getSlotStackLimit())
             stackSize = slot.getSlotStackLimit();
 
-        stackSlot.stackSize = stackSize;
+        stackSlot.setCount(stackSize);
 
-        if (stackSlot.stackSize <= 0)
-            slot.putStack(null);
+        if (stackSlot.getCount() <= 0)
+            slot.putStack(ItemStack.EMPTY);
     }
 
     private void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton) {
         if (!slot.canAdjustPhantom())
             return;
-        int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
+        int stackSize = mouseButton == 0 ? stackHeld.getCount() : 1;
         if (stackSize > slot.getSlotStackLimit())
             stackSize = slot.getSlotStackLimit();
         ItemStack phantomStack = stackHeld.copy();
-        phantomStack.stackSize = stackSize;
+        phantomStack.setCount(stackSize);
 
         slot.putStack(phantomStack);
     }
@@ -171,34 +173,34 @@ public abstract class RailcraftContainer extends Container {
     private boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
         boolean changed = false;
         if (stackToShift.isStackable())
-            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+            for (int slotIndex = start; stackToShift.getCount() > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot != null && InvTools.isItemEqual(stackInSlot, stackToShift)) {
-                    int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
+                if (stackInSlot != ItemStack.EMPTY && InvTools.isItemEqual(stackInSlot, stackToShift)) {
+                    int resultingStackSize = stackInSlot.getCount() + stackToShift.getCount();
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     if (resultingStackSize <= max) {
-                        stackToShift.stackSize = 0;
-                        stackInSlot.stackSize = resultingStackSize;
+                        stackToShift.setCount(0);
+                        stackInSlot.setCount(resultingStackSize);
                         slot.onSlotChanged();
                         changed = true;
-                    } else if (stackInSlot.stackSize < max) {
-                        stackToShift.stackSize -= max - stackInSlot.stackSize;
-                        stackInSlot.stackSize = max;
+                    } else if (stackInSlot.getCount() < max) {
+                        stackToShift.shrink(max - stackInSlot.getCount());
+                        stackInSlot.setCount(max);
                         slot.onSlotChanged();
                         changed = true;
                     }
                 }
             }
-        if (stackToShift.stackSize > 0)
-            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+        if (stackToShift.getCount() > 0)
+            for (int slotIndex = start; stackToShift.getCount() > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot == null) {
+                if (stackInSlot.isEmpty()) {
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     stackInSlot = stackToShift.copy();
-                    stackInSlot.stackSize = Math.min(stackToShift.stackSize, max);
-                    stackToShift.stackSize -= stackInSlot.stackSize;
+                    stackInSlot.setCount(Math.min(stackToShift.getCount(), max));
+                    stackToShift.shrink(stackInSlot.getCount());
                     slot.putStack(stackInSlot);
                     slot.onSlotChanged();
                     changed = true;
@@ -227,31 +229,31 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        ItemStack originalStack = null;
+        ItemStack originalStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotIndex);
         int numSlots = inventorySlots.size();
         if (slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();
-            assert stackInSlot != null;
+            assert !stackInSlot.isEmpty();
             originalStack = stackInSlot.copy();
             if (!(slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots))) {
                 if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
-                        return null;
+                        return ItemStack.EMPTY;
                 } else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
-                        return null;
+                        return ItemStack.EMPTY;
                 } else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))
-                    return null;
+                    return ItemStack.EMPTY;
             }
             slot.onSlotChange(stackInSlot, originalStack);
-            if (stackInSlot.stackSize <= 0)
-                slot.putStack(null);
+            if (stackInSlot.getCount() <= 0)
+                slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
-            if (stackInSlot.stackSize == originalStack.stackSize)
-                return null;
-            slot.onPickupFromSlot(player, stackInSlot);
+            if (stackInSlot.getCount() == originalStack.getCount())
+                return ItemStack.EMPTY;
+            slot.onTake(player, stackInSlot);
         }
         return originalStack;
     }

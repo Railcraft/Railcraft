@@ -9,6 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -22,15 +31,6 @@ import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -80,7 +80,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public void onUpdate() {
-//        if (Game.isHost(worldObj)) {
+//        if (Game.isHost(world)) {
 //            if (RailcraftConfig.printSignalDebug()) {
 //                if (outOfWater && !tankWater.isEmpty())
 //                    outOfWater = false;
@@ -92,9 +92,9 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 //        }
         super.onUpdate();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
-            InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
+            InvTools.moveOneItem(invBurn, invWaterOutput, FluidTools.EMPTY_BUCKET);
             if (InvTools.isEmptySlot(invStock)) {
                 ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
                 if (stack != null)
@@ -110,7 +110,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, worldObj, this);
+        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, world, this);
     }
 
     @Override

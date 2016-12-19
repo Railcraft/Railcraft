@@ -14,6 +14,7 @@ import mods.railcraft.common.util.misc.EntityIDs;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -23,7 +24,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class EntityItemFireproof extends EntityItem {
 
     public static void register() {
-        EntityRegistry.registerModEntity(EntityItemFireproof.class, "ItemFireproof", EntityIDs.ENTITY_ITEM_FIREPROOF, Railcraft.getMod(), 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Railcraft.MOD_ID, "item_fire_proof"), EntityItemFireproof.class, "ItemFireproof", EntityIDs.ENTITY_ITEM_FIREPROOF, Railcraft.getMod(), 64, 20, true);
     }
 
     public EntityItemFireproof(World world) {
@@ -53,7 +54,7 @@ public class EntityItemFireproof extends EntityItem {
 
     @Override
     public boolean isInLava() {
-        return worldObj.isMaterialInBB(getEntityBoundingBox(), Material.LAVA);
+        return world.isMaterialInBB(getEntityBoundingBox(), Material.LAVA);
     }
 
     @Override

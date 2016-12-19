@@ -33,7 +33,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     protected Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), PlayerPlugin.getUsername(worldObj, getOwner()), worldObj, Type.NORMAL);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), PlayerPlugin.getUsername(world, getOwner()), world, Type.NORMAL);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     public void update() {
-        if (Game.isHost(worldObj) && hasActiveTicket()) {
+        if (Game.isHost(world) && hasActiveTicket()) {
             if (PlayerPlugin.isPlayerConnected(getOwner()))
                 ticksSincePlayerLogged = 0;
             else

@@ -90,7 +90,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
-        GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, world, getPos());
         return true;
     }
 
@@ -98,7 +98,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (ticksPowered > 0) {
@@ -106,7 +106,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
             if (stateModeController.getButtonState().equals(EnumStateMode.DELAYED)) { //new behavior
                 SignalAspect tmpaspect = SignalAspect.GREEN;
                 Boolean hasInput = false;
-                if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos()))
+                if (PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos()))
                     hasInput = true;
                 for (int side = 2; side < 6; side++) { //get most restrictive aspect from adjacent (active) boxes
                     EnumFacing forgeSide = EnumFacing.VALUES[side];
@@ -136,9 +136,9 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
-        if (worldObj.isRemote)
+        if (world.isRemote)
             return;
-        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
+        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos());
         if (ticksPowered <= 0 && p) {
             ticksPowered = ticksToPower;
             if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))

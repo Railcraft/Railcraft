@@ -43,12 +43,12 @@ public class MinecartSound extends MovingSound {
             this.xPosF = (float) minecart.posX;
             this.yPosF = (float) minecart.posY;
             this.zPosF = (float) minecart.posZ;
-            float speedMaybe = MathHelper.sqrt_double(minecart.motionX * minecart.motionX + minecart.motionZ * minecart.motionZ);
+            float speedMaybe = MathHelper.sqrt(minecart.motionX * minecart.motionX + minecart.motionZ * minecart.motionZ);
 
             //TODO: this is wrong, its based on speed, normally we don't care about speed
             if (speedMaybe >= 0.01F) {
-                this.distance = MathHelper.clamp_float(distance + 0.0025F, 0.0F, 1.0F);
-                this.volume = 0.0F + MathHelper.clamp_float(speedMaybe, 0.0F, 0.5F) * 0.7F;
+                this.distance = MathHelper.clamp(distance + 0.0025F, 0.0F, 1.0F);
+                this.volume = 0.0F + MathHelper.clamp(speedMaybe, 0.0F, 0.5F) * 0.7F;
             } else {
                 this.distance = 0.0F;
                 this.volume = 0.0F;

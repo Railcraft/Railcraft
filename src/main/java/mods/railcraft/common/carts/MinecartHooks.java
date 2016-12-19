@@ -25,6 +25,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -77,7 +78,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @SubscribeEvent
     public void onItemUse(PlayerInteractEvent.RightClickBlock event) {
         EntityPlayer player = event.getEntityPlayer();
-        World world = player.worldObj;
+        World world = player.world;
         if (Game.isClient(world))
             return;
 
@@ -91,14 +92,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                         player.getGameProfile(), itemStack, world,
                         event.getPos());
                 if (placedCart != null && !player.capabilities.isCreativeMode)
-                    itemStack.stackSize--;
+                    itemStack.shrink(1);
             }
         }
     }
 
     @Override
     public void onEntityCollision(EntityMinecart cart, Entity other) {
-        if (Game.isClient(cart.worldObj) || cart.isPassenger(other) || !other.isEntityAlive() || !cart.isEntityAlive())
+        if (Game.isClient(cart.world) || cart.isPassenger(other) || !other.isEntityAlive() || !cart.isEntityAlive())
             return;
 
         ILinkageManager lm = LinkageManager.instance();
@@ -121,7 +122,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                 other.startRiding(cart);
         }
 
-        if (isLiving && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
+        if (isLiving && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
             return;
 
 //        System.out.println(cart.getClass().getSimpleName() + ": " + cart.entityId + " collided with " + other.getClass().getSimpleName() + ": " + other.entityId);
@@ -264,18 +265,18 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 // Code Added by Yopu to replace vanilla carts, deemed incomplete and unnecessary, pursuing other solutions
 //        if (classReplacements.containsKey(cart.getClass())) {
 //            cart.setDead();
-//            if (Game.isHost(cart.worldObj)) {
+//            if (Game.isHost(cart.world)) {
 //                EnumCart enumCart = classReplacements.get(cart.getClass());
 //                GameProfile cartOwner = CartTools.getCartOwner(cart);
 //                int x = MathHelper.floor_double(cart.posX);
 //                int y = MathHelper.floor_double(cart.posY);
 //                int z = MathHelper.floor_double(cart.posZ);
-//                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.worldObj, x, y, z);
+//                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.world, x, y, z);
 //            }
 //            return;
 //        }
 
-        Block block = WorldPlugin.getBlock(cart.worldObj, event.getPos());
+        Block block = WorldPlugin.getBlock(cart.world, event.getPos());
         int launched = data.getInteger("Launched");
         if (TrackTools.isRailBlock(block)) {
             cart.fallDistance = 0;
@@ -316,14 +317,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
             else if (data.getInteger("Launched") == 0)
-                HighSpeedTools.checkSafetyAndExplode(cart.worldObj, event.getPos(), cart);
+                HighSpeedTools.checkSafetyAndExplode(cart.world, event.getPos(), cart);
 
 
         cart.motionX = Math.copySign(Math.min(Math.abs(cart.motionX), 9.5), cart.motionX);
         cart.motionY = Math.copySign(Math.min(Math.abs(cart.motionY), 9.5), cart.motionY);
         cart.motionZ = Math.copySign(Math.min(Math.abs(cart.motionZ), 9.5), cart.motionZ);
 
-//        List entities = cart.worldObj.getEntitiesWithinAABB(EntityLiving.class, getMinecartCollisionBox(cart, COLLISION_EXPANSION));
+//        List entities = cart.world.getEntitiesWithinAABB(EntityLiving.class, getMinecartCollisionBox(cart, COLLISION_EXPANSION));
 //
 //        if (entities != null) {
 //            for (Entity entity : (List<Entity>) entities) {
@@ -348,14 +349,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         testHighSpeedCollision(cart, other);
 
         if (EntityMinecart.getCollisionHandler() != this)
-            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
+            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
                 if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
-                    other.moveEntity(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
+                    other.move(MoverType.SELF, 0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
 
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
-            List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(cart.worldObj, cart.getPosition(), 0);
+            List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(cart.world, cart.getPosition(), 0);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }

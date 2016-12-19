@@ -79,7 +79,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             return;
 
         if (clock % ARROW_UPDATE_INTERVAL == 0)
@@ -91,9 +91,9 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
             if (isSwitched)
-                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, world.rand.nextFloat() * 0.25F + 0.7F);
             else
-                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, world.rand.nextFloat() * 0.25F + 0.7F);
         }
     }
 
@@ -198,6 +198,6 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     protected boolean isBeingPoweredByRedstone() {
-        return PowerPlugin.isBlockBeingPowered(worldObj, getPos()) || PowerPlugin.isRedstonePowered(worldObj, getPos());
+        return PowerPlugin.isBlockBeingPowered(world, getPos()) || PowerPlugin.isRedstonePowered(world, getPos());
     }
 }

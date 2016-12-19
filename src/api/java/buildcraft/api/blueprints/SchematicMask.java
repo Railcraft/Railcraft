@@ -13,6 +13,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
@@ -54,7 +55,7 @@ public class SchematicMask extends SchematicBlockBase {
                     }
                 }
                 ItemBlock itemBlock = (ItemBlock) stack.getItem();
-                IBlockState state = itemBlock.block.onBlockPlaced(context.world(), pos, solidFace, 0, 0, 0, stack.getMetadata(), player);
+                IBlockState state = itemBlock.block.getStateForPlacement(context.world(), pos, solidFace, 0, 0, 0, stack.getMetadata(), player, EnumHand.MAIN_HAND);
                 itemBlock.placeBlockAt(stack, player, context.world(), pos, solidFace, 0, 0, 0, state);
 
             }

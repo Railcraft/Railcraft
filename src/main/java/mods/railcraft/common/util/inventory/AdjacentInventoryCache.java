@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
-    private final List<IInventoryObject> sortedInvs = new LinkedList<IInventoryObject>();
+    private final List<IInventoryObject> sortedInvs = new LinkedList<>();
     private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<EnumFacing, IInventoryObject>(EnumFacing.class);
     private final Comparator<IInventoryObject> sorter;
     private final Predicate<TileEntity> filter;
@@ -70,7 +70,7 @@ public final class AdjacentInventoryCache {
             sortedInvs.addAll(invs.values());
 
             if (sorter != null)
-                Collections.sort(sortedInvs, sorter);
+                sortedInvs.sort(sorter);
         }
 
         return sortedInvs;

@@ -9,14 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
+import mods.railcraft.common.items.ItemTicket;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,14 +31,12 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         int numTickets = 0;
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (stack != null) {
-                if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
-                    numTickets++;
-                } else if (stack.getItem() == Items.PAPER || RailcraftItems.TICKET.isEqual(stack)) {
-                    numPaper++;
-                } else {
-                    return false;
-                }
+            if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
+                numTickets++;
+            } else if (stack.getItem() == Items.PAPER || RailcraftItems.TICKET.isEqual(stack)) {
+                numPaper++;
+            } else {
+                return false;
             }
         }
         return numTickets == 1 && numPaper == 1;
@@ -69,7 +69,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         return CraftingPlugin.emptyContainers(inv);
     }
 }

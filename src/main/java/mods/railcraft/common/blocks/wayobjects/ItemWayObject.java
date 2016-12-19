@@ -47,6 +47,6 @@ public class ItemWayObject extends ItemBlockRailcraftSubtyped {
             pos = pos.offset(side);
         }
 
-        return worldIn.canBlockBePlaced(getBlock(), pos, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || worldIn.isSideSolid(pos.down(), EnumFacing.UP));
+        return worldIn.mayPlace(getBlock(), pos, false, side, null) && (!getStructureType(stack).needsSupport() || worldIn.isSideSolid(pos.down(), EnumFacing.UP));
     }
 }

@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -17,11 +16,14 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
+
+import mods.railcraft.common.core.Railcraft;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -58,7 +60,7 @@ public class Game {
     public static World getWorld() {
         Minecraft mc = FMLClientHandler.instance().getClient();
         if (mc != null)
-            return mc.theWorld;
+            return mc.world;
         return null;
     }
 

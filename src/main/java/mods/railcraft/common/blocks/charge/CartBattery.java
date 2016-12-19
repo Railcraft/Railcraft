@@ -164,7 +164,7 @@ public class CartBattery implements ICartBattery {
         if (drewFromTrack > 0)
             drewFromTrack--;
         else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
-            ILinkageManager lm = CartToolsAPI.getLinkageManager(owner.worldObj);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager(owner.world);
             for (EntityMinecart cart : lm.trainIterator(owner)) {
                 if (cart.hasCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null)) {
                     ICartBattery ch = cart.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
@@ -197,7 +197,7 @@ public class CartBattery implements ICartBattery {
     @Override
     public void tickOnTrack(EntityMinecart owner, BlockPos pos) {
         if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-            double drawnFromTrack = ChargeManager.getNetwork(owner.worldObj).getNode(pos).removeCharge(capacity - charge);
+            double drawnFromTrack = ChargeManager.getNetwork(owner.world).getNode(pos).removeCharge(capacity - charge);
             if (drawnFromTrack > 0.0)
                 drewFromTrack = DRAW_INTERVAL * 4;
             charge += drawnFromTrack;

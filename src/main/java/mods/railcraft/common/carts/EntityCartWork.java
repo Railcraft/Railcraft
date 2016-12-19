@@ -44,8 +44,8 @@ public class EntityCartWork extends CartBase {
 
     @Override
     public boolean doInteract(EntityPlayer entityplayer) {
-        if (Game.isHost(worldObj)) {
-            GuiHandler.openGui(EnumGui.CART_WORK, entityplayer, worldObj, this);
+        if (Game.isHost(world)) {
+            GuiHandler.openGui(EnumGui.CART_WORK, entityplayer, world, this);
         }
         return true;
     }

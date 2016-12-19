@@ -74,7 +74,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, world, mBlock.getPos());
             return true;
         }
         return false;

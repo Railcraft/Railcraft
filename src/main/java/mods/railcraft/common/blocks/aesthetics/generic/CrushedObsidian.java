@@ -76,7 +76,7 @@ public class CrushedObsidian extends SimpleCube {
             if (!BlockSand.fallInstantly && WorldPlugin.isAreaLoaded(world, pos.add(-size, -size, -size), pos.add(size, size, size))) {
                 if (!world.isRemote) {
                     EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world.getBlockState(pos));
-                    world.spawnEntityInWorld(entity);
+                    world.spawnEntity(entity);
                 }
             } else {
                 WorldPlugin.setBlockToAir(world, pos);

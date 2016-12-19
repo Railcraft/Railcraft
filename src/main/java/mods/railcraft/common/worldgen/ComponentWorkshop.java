@@ -45,6 +45,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
@@ -199,7 +200,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
         fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
         setBlockState(world, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), 4, 0, 3, sbb);
-        func_189927_a(world, boundingBox, random, 4, 1, 3, EnumFacing.NORTH);
+        generateDoor(world, boundingBox, random, 4, 1, 3, EnumFacing.NORTH, Blocks.OAK_DOOR);
 
         // hut windows
         fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, glassPane, glassPane, false);
@@ -299,8 +300,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     }
 
     @Override
-    protected void readStructureFromNBT(NBTTagCompound nbt) {
-        super.readStructureFromNBT(nbt);
+    protected void readStructureFromNBT(NBTTagCompound nbt, TemplateManager manager) {
+        super.readStructureFromNBT(nbt, manager);
         hasMadeChest = nbt.getBoolean("Chest");
     }
 

@@ -24,6 +24,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
     @Override
     public final void explode(float blastRadius) {
         super.explode(blastRadius);
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             spawnSurprises();
     }
 
@@ -158,7 +160,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             double x = cart.posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
             double y = cart.posY + 1 + rand.nextInt(3) - 1;
             double z = cart.posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-            InvTools.dropItem(getStack(rand), cart.worldObj, x, y, z);
+            InvTools.dropItem(getStack(rand), cart.world, x, y, z);
         }
 
         @Override
@@ -220,7 +222,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.worldObj.getDifficultyForLocation(new BlockPos(entity)), null), null);
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.world.getDifficultyForLocation(new BlockPos(entity)), null), null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
@@ -234,10 +236,10 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         @Override
         public void spawn(CartBaseSurprise cart) {
             Random rand = cart.rand;
-            World world = cart.worldObj;
+            World world = cart.world;
 
             for (int i = 0; i < numToSpawn; i++) {
-                Entity entity = EntityList.createEntityByName(EntityList.getEntityStringFromClass(entityType), world);
+                Entity entity = EntityList.newEntity(entityType, world);
 
                 if (entityType.isInstance(entity)) {
                     T living = entityType.cast(entity);
@@ -252,7 +254,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
 
                         setup.accept(cart, living);
 
-                        world.spawnEntityInWorld(living);
+                        world.spawnEntity(living);
                         world.playEvent(2004, new BlockPos(x, y, z), 0);
 
                         living.spawnExplosionParticle();

@@ -18,6 +18,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.input.Keyboard;
 
 import java.util.EnumMap;
@@ -27,6 +30,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class AuraKeyHandler {
     public static final AuraKeyHandler INSTANCE = new AuraKeyHandler();
     private static EnumSet<GoggleAura> activeAuras = EnumSet.noneOf(GoggleAura.class);
@@ -50,7 +54,7 @@ public class AuraKeyHandler {
     public void tick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen instanceof GuiChat)
             return;
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         for (Map.Entry<GoggleAura, KeyBinding> keyBinding : keyBindings.entrySet()) {
             if (keyBinding.getValue().isPressed()) {
                 GoggleAura aura = keyBinding.getKey();

@@ -50,10 +50,11 @@ public class FactoryContainer {
                     return new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
                     return new ContainerManipulatorCartFluid(inv, (TileFluidManipulator) obj);
-                case LOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileIC2Loader) obj);
-                case UNLOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileIC2Unloader) obj);
+                //TODO IC2
+//                case LOADER_ENERGY:
+//                    return new ContainerEnergyLoader(inv, (TileIC2Loader) obj);
+//                case UNLOADER_ENERGY:
+//                    return new ContainerEnergyLoader(inv, (TileIC2Unloader) obj);
                 case MANIPULATOR_RF:
                     return new ContainerManipulatorCartRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:

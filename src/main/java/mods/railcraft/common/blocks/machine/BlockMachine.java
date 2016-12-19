@@ -43,6 +43,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -157,10 +158,11 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         return getMetaFromState(state);
     }
 
+
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         return TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ)).orElse(false);
+                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, playerIn.getHeldItem(hand), facing, hitX, hitY, hitZ)).orElse(false);
     }
 
     @Override
@@ -281,7 +283,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos fromPos) {
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileMachineBase)
@@ -342,7 +344,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
 
     @SuppressWarnings("Convert2MethodRef")
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.addAll(
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 proxy.getCreativeList().stream()

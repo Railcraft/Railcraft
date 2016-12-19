@@ -45,22 +45,24 @@ public class BucketHandler {
         event.setResult(Result.ALLOW);
     }
 
+    //TODO Fluid
     @Nullable
     private ItemStack fillCustomBucket(World world, @Nullable RayTraceResult mop, ItemStack stack) {
-        if (mop == null)
-            return null;
-        BlockPos blockPos = mop.getBlockPos();
-        IBlockState state = WorldPlugin.getBlockState(world, blockPos);
-        FluidStack fluidStack = FluidTools.drainBlock(state, world, blockPos, false);
-        if (fluidStack == null)
-            return null;
+        throw new Error("Not implemented");
+//        if (mop == null)
+//            return null;
+//        BlockPos blockPos = mop.getBlockPos();
+//        IBlockState state = WorldPlugin.getBlockState(world, blockPos);
+//        FluidStack fluidStack = FluidTools.drainBlock(state, world, blockPos, false);
+//        if (fluidStack == null)
+//            return null;
 
-        if (!allowedFluids.contains(fluidStack.getFluid()))
-            return null;
+//        if (!allowedFluids.contains(fluidStack.getFluid()))
+//            return null;
 
-        FluidItemHelper.FillReturn filled = FluidItemHelper.fillContainer(stack, fluidStack);
-        if (filled.amount > 0)
-            FluidTools.drainBlock(state, world, blockPos, true);
-        return filled.container;
+//        FluidItemHelper.FillReturn filled = FluidItemHelper.fillContainer(stack, fluidStack);
+//        if (filled.amount > 0)
+//            FluidTools.drainBlock(state, world, blockPos, true);
+//        return filled.container;
     }
 }

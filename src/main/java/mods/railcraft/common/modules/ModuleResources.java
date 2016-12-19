@@ -9,6 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -18,20 +25,12 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.BallastRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @RailcraftModule(value = "railcraft:resources", description = "metals, fluids, raw materials")
 public class ModuleResources extends RailcraftModulePayload {
@@ -51,16 +50,16 @@ public class ModuleResources extends RailcraftModulePayload {
             public void preInit() {
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    //TODO: this is wrong, needs fluid stack recipe support
-                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
-                        CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
-                                "C",
-                                "W",
-                                "S",
-                                'C', container,
-                                'W', Blocks.WOOL,
-                                'S', "stickWood");
-                    }
+                    //TODO: Killed by new capabilities
+//                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
+//                        CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+//                                "C",
+//                                "W",
+//                                "S",
+//                                'C', container,
+//                                'W', Blocks.WOOL,
+//                                'S', "stickWood");
+//                    }
                 }
 
                 if (BlockGeneric.getBlock() != null) {
@@ -97,8 +96,8 @@ public class ModuleResources extends RailcraftModulePayload {
                         BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
 
                         if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
-                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
-                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
+//                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
+//                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }
                     }
 

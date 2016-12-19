@@ -36,8 +36,8 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader_item_advanced", TileItemUnloaderAdvanced.class),
     FLUID_LOADER(ModuleTransport.class, "loader_fluid", TileFluidLoader.class, true),
     FLUID_UNLOADER(ModuleTransport.class, "unloader_fluid", TileFluidUnloader.class),
-    ENERGY_LOADER(ModuleIC2.class, "loader_ic2", TileIC2Loader.class),
-    ENERGY_UNLOADER(ModuleIC2.class, "unloader_ic2", TileIC2Unloader.class),
+//    ENERGY_LOADER(ModuleIC2.class, "loader_ic2", TileIC2Loader.class),
+//    ENERGY_UNLOADER(ModuleIC2.class, "unloader_ic2", TileIC2Unloader.class),
     DISPENSER_CART(ModuleAutomation.class, "dispenser_cart", TileDispenserCart.class),
     DISPENSER_TRAIN(ModuleTrain.class, "dispenser_train", TileDispenserTrain.class),
     RF_LOADER(ModuleRF.class, "loader_rf", TileRFLoader.class),
@@ -53,8 +53,8 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
         creativeList.add(ITEM_UNLOADER_ADVANCED);
         creativeList.add(FLUID_LOADER);
         creativeList.add(FLUID_UNLOADER);
-        creativeList.add(ENERGY_LOADER);
-        creativeList.add(ENERGY_UNLOADER);
+//        creativeList.add(ENERGY_LOADER);
+//        creativeList.add(ENERGY_UNLOADER);
         creativeList.add(RF_LOADER);
         creativeList.add(RF_UNLOADER);
         creativeList.add(DISPENSER_CART);

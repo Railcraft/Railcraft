@@ -30,7 +30,7 @@ public class FirestoneTickHandler {
     @SubscribeEvent
     public void tick(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (Game.isClient(entity.worldObj))
+        if (Game.isClient(entity.world))
             return;
         clock++;
         if (clock % 4 != 0)
@@ -41,7 +41,7 @@ public class FirestoneTickHandler {
         if (inv != null) {
             for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
                 ItemStack stack = slot.getStack();
-                FirestoneTools.trySpawnFire(entity.worldObj, entity.getPosition(), stack);
+                FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack);
             }
         }
     }

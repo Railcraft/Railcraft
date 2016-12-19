@@ -97,7 +97,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, world, mBlock.getPos());
             return true;
         }
         return false;
@@ -115,7 +115,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
     public void update() {
         super.update();
 
-        if (worldObj.isRemote)
+        if (world.isRemote)
             return;
 
         if (isMaster && clock % 4 == 0)
@@ -164,5 +164,10 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
     @Override
     public boolean hasCustomName() {
         return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return invBurn.isEmpty() && invFuel.isEmpty() && invStock.isEmpty();
     }
 }

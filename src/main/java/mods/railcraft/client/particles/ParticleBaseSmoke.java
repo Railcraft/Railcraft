@@ -52,7 +52,7 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
         if (getFXLayer() == 0)
             setParticleTextureIndex(7 - particleAge * 8 / particleMaxAge);
         this.motionY -= 0.04D * particleGravity;
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
 
         if (posY == prevPosY) {
             this.motionX *= 1.1D;
@@ -63,7 +63,7 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
         this.motionY *= 0.96D;
         this.motionZ *= 0.96D;
 
-        if (isCollided) {
+        if (canCollide) {
             this.motionX *= 0.67D;
             this.motionZ *= 0.67D;
         }

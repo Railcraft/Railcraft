@@ -26,9 +26,11 @@ import javax.annotation.Nonnull;
  */
 @JEIPlugin
 public class RailcraftJEIPlugin extends BlankModPlugin {
+
     @Override
-    public void register(@Nonnull IModRegistry registry) {
-        ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
-        subtypeRegistry.registerNbtInterpreter(RailcraftBlocks.TRACK_OUTFITTED.item(), stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        if (RailcraftBlocks.TRACK_OUTFITTED.isEnabled())
+            subtypeRegistry.registerSubtypeInterpreter(RailcraftBlocks.TRACK_OUTFITTED.item(), stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
     }
+
 }

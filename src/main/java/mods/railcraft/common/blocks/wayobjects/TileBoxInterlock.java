@@ -49,7 +49,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     @Override
     public void update() {
         super.update();
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             controller.tickClient();
             receiver.tickClient();
             return;

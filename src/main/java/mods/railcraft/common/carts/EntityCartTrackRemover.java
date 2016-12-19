@@ -51,7 +51,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state){
         super.moveAlongTrack(pos, state);
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         for (BlockPos track : tracksBehind) {
@@ -72,12 +72,12 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     private void removeTrack(BlockPos track) {
         if (getDistanceSq(track) >= 9)
             tracksRemoved.add(track);
-        else if (!TrackTools.isRailBlockAt(worldObj, track))
+        else if (!TrackTools.isRailBlockAt(world, track))
             tracksRemoved.add(track);
-        else if (WorldPlugin.isBlockAt(worldObj, track, RailcraftBlocks.TRACK_FORCE.block()))
+        else if (WorldPlugin.isBlockAt(world, track, RailcraftBlocks.TRACK_FORCE.block()))
             tracksRemoved.add(track);
-        else if (!CartToolsAPI.isMinecartAt(worldObj, track, -0.2f)) {
-            Block block = WorldPlugin.getBlock(worldObj, track);
+        else if (!CartToolsAPI.isMinecartAt(world, track, -0.2f)) {
+            Block block = WorldPlugin.getBlock(world, track);
             removeOldTrack(track, block);
             blink();
             tracksRemoved.add(track);
