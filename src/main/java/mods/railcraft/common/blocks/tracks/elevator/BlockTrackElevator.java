@@ -34,6 +34,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -186,7 +187,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 
@@ -241,7 +242,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     //TODO: Test, this is probably completely wrong
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 //        if ((meta == 0 || facing == 2) && worldIn.isSideSolid(x, y, z + 1, EnumFacing.NORTH))
 //            meta = 2;
 //        if ((meta == 0 || facing == 3) && worldIn.isSideSolid(x, y, z - 1, EnumFacing.SOUTH))
@@ -250,13 +251,13 @@ public class BlockTrackElevator extends BlockRailcraft {
 //            meta = 4;
 //        if ((meta == 0 || facing == 5) && worldIn.isSideSolid(x - 1, y, z, EnumFacing.EAST))
 //            meta = 5;
-        EnumFacing placement = null;
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if ((placement == null || facing == side) && isSideFacingSolid(worldIn, pos, side))
-                placement = side;
-        }
-        assert placement != null;
-        return getDefaultState().withProperty(FACING, placement);
+//        EnumFacing placement = null;
+//        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+//            if ((placement == null || facing == side) && isSideFacingSolid(worldIn, pos, side))
+//                placement = side;
+//        }
+//        assert placement != null;
+        return getDefaultState().withProperty(FACING, facing);
     }
 
     private boolean isSideFacingSolid(World world, BlockPos pos, EnumFacing side) {
@@ -297,8 +298,8 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        super.neighborChanged(state, worldIn, pos, neighborBlock);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighbor) {
+        super.neighborChanged(state, worldIn, pos, neighborBlock, neighbor);
         EnumFacing facing = getFacing(state);
         boolean valid = false;
 

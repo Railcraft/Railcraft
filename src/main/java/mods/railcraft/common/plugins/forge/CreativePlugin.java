@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.function.Supplier;
+
+import mods.railcraft.common.items.RailcraftItems;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -34,20 +34,14 @@ public class CreativePlugin {
     private static class RailcraftTab extends CreativeTabs {
         private final Supplier<ItemStack> tabItem;
 
-        public RailcraftTab(String label, Supplier<ItemStack> tabItem) {
+        RailcraftTab(String label, Supplier<ItemStack> tabItem) {
             super(label);
             this.tabItem = tabItem;
         }
 
         @Override
-        public ItemStack getIconItemStack() {
+        public ItemStack getTabIconItem() {
             return tabItem.get();
         }
-
-        @Override
-        public Item getTabIconItem() {
-            return tabItem.get().getItem();
-        }
-
     }
 }

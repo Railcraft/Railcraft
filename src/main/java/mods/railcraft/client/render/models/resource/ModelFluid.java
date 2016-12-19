@@ -37,6 +37,8 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
@@ -46,6 +48,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 @SuppressWarnings("Guava")
+@SideOnly(Side.CLIENT)
 public final class ModelFluid implements IModel {
     public static final ModelFluid WATER = new ModelFluid(FluidRegistry.WATER, true);
     public static final ModelFluid LAVA = new ModelFluid(FluidRegistry.LAVA, true);
@@ -267,7 +270,7 @@ public final class ModelFluid implements IModel {
                 if (flow == null) flow = -1000f;
             }
             int flowRound = (int) Math.round(Math.toDegrees(flow));
-            flowRound = MathHelper.clamp_int(flowRound, -1000, 1000);
+            flowRound = MathHelper.clamp(flowRound, -1000, 1000);
             return flowRound;
         }
 

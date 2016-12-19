@@ -137,4 +137,9 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     public void clear() {
         inv.clear();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
 }

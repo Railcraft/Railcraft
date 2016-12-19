@@ -29,9 +29,9 @@ public abstract class TileChargeFeeder extends RailcraftTickingTileEntity {
     @Override
     public void update() {
         super.update();
-        int newComparatorOutput = ChargeManager.getNetwork(worldObj).getGraph(pos).getComparatorOutput();
+        int newComparatorOutput = ChargeManager.getNetwork(world).getGraph(pos).getComparatorOutput();
         if (prevComparatorOutput != newComparatorOutput)
-            worldObj.updateComparatorOutputLevel(pos, getBlockType());
+            world.updateComparatorOutputLevel(pos, getBlockType());
         prevComparatorOutput = newComparatorOutput;
     }
 

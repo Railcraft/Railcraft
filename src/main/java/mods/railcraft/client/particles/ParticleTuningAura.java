@@ -93,6 +93,6 @@ public class ParticleTuningAura extends ParticleBase {
             calculateVector();
         }
 
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
     }
 }

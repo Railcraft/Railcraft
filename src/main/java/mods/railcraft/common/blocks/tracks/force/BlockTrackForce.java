@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -58,7 +59,7 @@ public class BlockTrackForce extends BlockTrackTile {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
     }
 
     @Nullable
@@ -68,7 +69,7 @@ public class BlockTrackForce extends BlockTrackTile {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (Game.isHost(worldIn)) {
             TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
             if (tile instanceof TileTrackForce) {

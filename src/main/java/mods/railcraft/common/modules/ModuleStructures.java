@@ -68,7 +68,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
                         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
-                            stack.stackSize = 8;
+                            stack.setCount(8);
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
                                     "IWI",
@@ -77,7 +77,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                                     'I', RailcraftItems.REBAR,
                                     'S', RailcraftItems.CONCRETE);
                         } else {
-                            stack.stackSize = 4;
+                            stack.setCount(4);
                             CraftingPlugin.addRecipe(stack,
                                     " S ",
                                     "SIS",
@@ -93,9 +93,10 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
-                            CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
-                        }
+                        //TODO Fluid
+//                        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
+//                            CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+//                        }
                     }
                 }
 
@@ -257,9 +258,10 @@ public class ModuleStructures extends RailcraftModulePayload {
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();
-                    for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
-                        CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
-                    }
+                    //TODO Fluid
+//                    for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
+//                        CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+//                    }
                     ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
                 }
             }

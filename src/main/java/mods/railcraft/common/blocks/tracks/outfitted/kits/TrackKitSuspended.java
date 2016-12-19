@@ -36,7 +36,7 @@ public abstract class TrackKitSuspended extends TrackKitUnsupported {
         if (TrackSupportTools.isSupported(world, getPos())) {
             if (neighborBlock != getTile().getBlockType()) {
                 for (BlockPos connectedTrack : TrackTools.getConnectedTracks(world, getPos())) {
-                    world.notifyBlockOfStateChange(connectedTrack, getTile().getBlockType());
+                    world.notifyNeighborsOfStateChange(connectedTrack, getTile().getBlockType(), true);
                 }
             }
         } else

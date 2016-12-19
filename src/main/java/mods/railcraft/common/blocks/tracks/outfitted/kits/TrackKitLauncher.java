@@ -18,6 +18,8 @@ import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -75,7 +77,7 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
             cart.motionY = getLaunchForce() * 0.1;
             cart.getEntityData().setInteger("Launched", 1);
             cart.setCanUseRail(false);
-            cart.moveEntity(cart.motionX, 1.5, cart.motionZ);
+            cart.move(MoverType.SELF, cart.motionX, 1.5, cart.motionZ);
         }
     }
 

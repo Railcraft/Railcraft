@@ -40,7 +40,7 @@ public class GeneratorFirestone extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER) &&
+        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) &&
                 TerrainGen.generateOre(world, rand, generators[0], targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM) &&
                 rand.nextDouble() <= 0.1;
     }

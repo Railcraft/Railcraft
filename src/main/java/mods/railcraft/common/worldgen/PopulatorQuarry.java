@@ -51,7 +51,7 @@ public class PopulatorQuarry extends Populator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos chunkCenterPos, Biome biome) {
-        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST) && !BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SNOWY) && rand.nextDouble() <= 0.025;
+        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY) && rand.nextDouble() <= 0.025;
     }
 
 }

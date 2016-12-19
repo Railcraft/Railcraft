@@ -31,7 +31,7 @@ public class ItemStackSizeSorter implements Comparator<ItemStack> {
 
     @Override
     public int compare(ItemStack o1, ItemStack o2) {
-        return o1.stackSize - o2.stackSize;
+        return o1.getCount() - o2.getCount();
     }
 
 }

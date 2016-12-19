@@ -18,6 +18,7 @@ import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -96,7 +97,7 @@ public class CartFilterRecipe implements IRecipe {
         if (cartItem == null || filterItem == null)
             return null;
 
-        filterItem.stackSize = 1;
+        filterItem.setCount(1);
         return CartBaseFiltered.addFilterToCartItem(cartItem, filterItem);
     }
 
@@ -111,16 +112,16 @@ public class CartFilterRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
         for (IInvSlot slot : InventoryIterator.getVanilla(inv).notNull()) {
             ItemStack stack = slot.getStack();
             if (FilterType.fromCartType(RailcraftCarts.getCartType(stack)) == null) {
-                grid[slot.getIndex()] = stack.copy();
+                list.set(slot.getIndex(), stack.copy());
             }
         }
 
-        return grid;
+        return list;
     }
 }

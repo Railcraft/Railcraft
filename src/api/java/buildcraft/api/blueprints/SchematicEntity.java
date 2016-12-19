@@ -41,7 +41,7 @@ public class SchematicEntity extends Schematic {
 
     public void writeToWorld(IBuilderContext context) {
         Entity e = EntityList.createEntityFromNBT(entityNBT, context.world());
-        context.world().spawnEntityInWorld(e);
+        context.world().spawnEntity(e);
     }
 
     public void readFromWorld(IBuilderContext context, Entity entity) {
@@ -128,7 +128,7 @@ public class SchematicEntity extends Schematic {
                     // Maps the id in the blueprint to the id in the world
                     sub.setInteger("id", Item.REGISTRY.getIDForObject(registry.getItemForId(sub.getInteger("id"))));
 
-                    rqs.add(ItemStack.loadItemStackFromNBT(sub));
+                    rqs.add(new ItemStack(sub));
                 } else {
                     defaultPermission = BuildingPermission.CREATIVE_ONLY;
                 }

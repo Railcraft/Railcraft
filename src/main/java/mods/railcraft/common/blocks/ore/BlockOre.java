@@ -133,7 +133,7 @@ public class BlockOre extends RailcraftBlockSubtyped<EnumOre> {
             case DARK_DIAMOND:
             case DARK_EMERALD:
             case DARK_LAPIS: {
-                int xp = MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+                int xp = MathHelper.getInt(worldIn.rand, 2, 5);
                 dropXpOnBlockBreak(worldIn, pos, xp);
             }
         }

@@ -16,9 +16,14 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,14 +36,16 @@ public abstract class DetectorEntity<T> extends Detector {
     private Class<? extends T> currentEntity;
     private final Class<? extends T> defaultEntity;
 
+    // TODO: fix for new registry
     protected DetectorEntity(Class<? extends T> classObject, Class<? extends T> defaultEntity) {
         this.defaultEntity = defaultEntity;
-        Set<Class<? extends Entity>> entities = EntityList.CLASS_TO_NAME.keySet();
-        this.entities = entities.stream()
-                .filter(classObject::isAssignableFrom)
-                .<Class<? extends T>>map(e -> e.asSubclass(classObject))
-                .collect(Collectors.toList());
-        currentEntity = this.entities.stream().findAny().orElse(defaultEntity);
+//        Set<ResourceLocation> entities = ForgeRegistries.ENTITIES.getKeys();
+//        this.entities = entities.stream()
+//                .filter(classObject::isAssignableFrom)
+//                .<Class<? extends T>>map(e -> e.asSubclass(classObject))
+//                .collect(Collectors.toList());
+//        currentEntity = this.entities.stream().findAny().orElse(defaultEntity);
+        this.entities = Collections.emptyList();
     }
 
     public Class<? extends T> getCurrentEntity() {

@@ -16,6 +16,9 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -23,6 +26,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class CartContentRendererCargo extends CartContentRenderer<EntityCartCargo> {
 
     private Random rand = new Random();
@@ -37,9 +41,9 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         OpenGL.glDisable(GL11.GL_BLEND);
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        item.getEntityItem().stackSize = 1;
+        item.getEntityItem().setCount(1);
         item.hoverStart = 0.0F;
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.worldObj, null);
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.world, null);
 
         boolean renderIn3D = model.isGui3d();
 
@@ -57,7 +61,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
                 numIterations = 0;
             } else {
                 numIterations = (int) Math.ceil(slotsFilled / 2);
-                numIterations = MathHelper.clamp_int(numIterations, 1, 6);
+                numIterations = MathHelper.clamp(numIterations, 1, 6);
             }
             yOffset = -1.1F;
         } else {

@@ -10,7 +10,6 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.misc.Mod;
 
 /**
@@ -30,8 +29,8 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.CROWBAR_THAUMIUM,
-                        RailcraftItems.CROWBAR_VOID
+//                        RailcraftItems.CROWBAR_THAUMIUM,
+//                        RailcraftItems.CROWBAR_VOID
                 );
             }
 

@@ -73,7 +73,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
         if (current != null && current.getItem() instanceof ItemRoutingTable)
             if (inv.getStackInSlot(0) == null) {
                 ItemStack copy = current.copy();
-                copy.stackSize = 1;
+                copy.setCount(1);
                 inv.setInventorySlotContents(0, copy);
                 if (!player.capabilities.isCreativeMode) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));

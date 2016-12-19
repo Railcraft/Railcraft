@@ -167,7 +167,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_INPUT);
-        return fuel == null || fuel.stackSize < 8;
+        return fuel.getCount() < 8;
     }
 
     @Override
@@ -181,13 +181,13 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         setCooking(false);
 
                 ItemStack input = getStackInSlot(SLOT_INPUT);
-                if (input != null && input.stackSize > 0 && !InvTools.isSynthetic(input)) {
+                if (!input.isEmpty() && !InvTools.isSynthetic(input)) {
                     if (!paused && clock % COOK_STEP_LENGTH == 0) {
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
                         ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
 
                         if (recipe != null)
-                            if ((output == null || (output.isItemEqual(recipe.getOutput()) && output.stackSize + recipe.getOutput().stackSize <= output.getMaxStackSize()))
+                            if ((output.isEmpty() || (output.isItemEqual(recipe.getOutput()) && output.getCount() + recipe.getOutput().getCount() <= output.getMaxStackSize()))
                                     && tank.fill(recipe.getFluidOutput(), false) >= recipe.getFluidOutput().amount) {
                                 cookTimeTotal = recipe.getCookTime();
                                 cookTime += COOK_STEP_LENGTH;
@@ -200,7 +200,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                                     if (output == null)
                                         setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                                     else
-                                        output.stackSize += recipe.getOutput().stackSize;
+                                        output.grow(recipe.getOutput().getCount());
                                     tank.fill(recipe.getFluidOutput(), true);
                                     sendUpdateToClient();
                                 }
@@ -242,7 +242,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null && isStructureValid()) {
-            GuiHandler.openGui(EnumGui.COKE_OVEN, player, worldObj, masterBlock.getPos());
+            GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, masterBlock.getPos());
             return true;
         }
         return false;

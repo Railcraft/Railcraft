@@ -102,7 +102,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     public boolean openGui(EntityPlayer player) {
         if (player.getDistanceSq(getPos().add(0.5, 0.5, 0.5)) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ROLLING_MACHINE, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ROLLING_MACHINE, player, world, getPos());
         return true;
     }
 
@@ -114,7 +114,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     public int getProgress() {
@@ -137,7 +137,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         balanceSlots();
@@ -149,7 +149,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
             return;
 
         if (clock % 8 == 0) {
-            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
             if (currentRecipe != null)
                 findMoreStuff();
         }
@@ -158,7 +158,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
                 if (InvTools.isRoomForStack(currentRecipe, invResult)) {
-                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
                     if (currentRecipe != null) {
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                             craftMatrix.decrStackSize(i, 1);
@@ -200,9 +200,9 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
                 if (stackB == null)
                     continue;
                 if (InvTools.isItemEqual(stackA, stackB))
-                    if (stackA.stackSize > stackB.stackSize + 1) {
-                        stackA.stackSize--;
-                        stackB.stackSize++;
+                    if (stackA.getCount() > stackB.getCount() + 1) {
+                        stackA.shrink(1);
+                        stackB.grow(1);
                         return;
                     }
             }
@@ -213,13 +213,13 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         Collection<IInventoryObject> chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.isStackable() && stack.stackSize == 1) {
+            if (stack != null && stack.isStackable() && stack.getCount() == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
                 if (request != null) {
-                    stack.stackSize++;
+                    stack.grow(1);
                     break;
                 }
-                if (stack.stackSize > 1)
+                if (stack.getCount() > 1)
                     break;
             }
         }
@@ -245,13 +245,13 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj) == null)
+        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world) == null)
             return false;
         if (useLast)
             return true;
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
             ItemStack slot = craftMatrix.getStackInSlot(i);
-            if (slot != null && slot.stackSize <= 1)
+            if (slot != null && slot.getCount() <= 1)
                 return false;
         }
         return true;
@@ -264,27 +264,27 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn,  EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn,  EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack,  EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack,  EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
-        if (stack == null)
+        if (stack.isEmpty())
             return false;
         if (!stack.isStackable())
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        return getStackInSlot(slot) != null;
+        return !getStackInSlot(slot).isEmpty();
     }
 
     @Override
@@ -349,7 +349,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public boolean isUseableByPlayer( EntityPlayer player) {
+    public boolean isUsableByPlayer( EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -382,6 +382,11 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 
     private static class RollingContainer extends Container {

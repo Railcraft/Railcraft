@@ -43,7 +43,7 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             receiver.tickClient();
             return;
         }

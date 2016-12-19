@@ -57,13 +57,13 @@ public class EntityAIWatchBlock extends EntityAIBase {
 //                return false;
 
         if (watchedBlock == null || isBlockInvalid())
-            watchedBlock = WorldPlugin.findBlock(theWatcher.worldObj, theWatcher.getPosition(), maxDist, state -> Objects.equals(state, searchedState));
+            watchedBlock = WorldPlugin.findBlock(theWatcher.world, theWatcher.getPosition(), maxDist, state -> Objects.equals(state, searchedState));
 
         return watchedBlock != null;
     }
 
     private boolean isBlockInvalid() {
-        return searchedState != WorldPlugin.getBlockState(theWatcher.worldObj, watchedBlock) || theWatcher.getDistanceSq(watchedBlock) > maxDist * maxDist;
+        return searchedState != WorldPlugin.getBlockState(theWatcher.world, watchedBlock) || theWatcher.getDistanceSq(watchedBlock) > maxDist * maxDist;
     }
 
     /**

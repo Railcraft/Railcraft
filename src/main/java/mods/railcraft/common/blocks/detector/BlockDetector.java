@@ -37,6 +37,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -310,7 +311,8 @@ public class BlockDetector extends BlockContainerRailcraft {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
         if (playerIn.isSneaking())
             return false;
         if (heldItem != null) {
@@ -325,7 +327,7 @@ public class BlockDetector extends BlockContainerRailcraft {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
@@ -404,7 +406,7 @@ public class BlockDetector extends BlockContainerRailcraft {
         if (Game.isClient(worldIn))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {
-            worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock());
+            worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock(), true);
         }
     }
 
@@ -414,7 +416,7 @@ public class BlockDetector extends BlockContainerRailcraft {
         if (Game.isClient(worldIn))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {
-            worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock());
+            worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock(), true);
         }
     }
 
@@ -425,7 +427,7 @@ public class BlockDetector extends BlockContainerRailcraft {
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
                 list.add(detector.getItem());

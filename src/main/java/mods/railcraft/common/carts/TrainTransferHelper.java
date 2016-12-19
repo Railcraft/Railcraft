@@ -49,7 +49,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     public void offerOrDropItem(EntityMinecart cart, ItemStack stack) {
         stack = pushStack(cart, stack);
 
-        if (stack != null && stack.stackSize > 0)
+        if (!stack.isEmpty())
             cart.entityDropItem(stack, 1);
     }
 

@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -111,7 +112,7 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         Map<String, TrackKit> trackKits = TrackRegistry.TRACK_KIT.getVariants();
         list.addAll(trackKits.values().stream().filter(TrackKit::isVisible).map(this::getStack).collect(Collectors.toList()));
     }
@@ -126,10 +127,11 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         playerIn.swingArm(hand);
         if (Game.isClient(worldIn))
             return EnumActionResult.PASS;
+        ItemStack stack = playerIn.getHeldItem(hand);
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
         TrackType trackType = null;
         if (oldState.getBlock() instanceof BlockTrackFlex) {
@@ -145,7 +147,7 @@ public class ItemTrackKit extends ItemRailcraft {
                 if (!shape.isAscending() || trackKit.isAllowedOnSlopes()) {
                     if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
-                        stack.stackSize--;
+                        stack.shrink(1);
                         return EnumActionResult.SUCCESS;
                     }
                 }

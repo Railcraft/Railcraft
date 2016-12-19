@@ -18,7 +18,10 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 3/10/2016 for Railcraft.
@@ -62,16 +65,16 @@ public class CartDisassemblyRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+        NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
         for (IInvSlot slot : InventoryIterator.getVanilla(inv).notNull()) {
             ItemStack stack = slot.getStack();
             if (InvTools.isItemEqual(stack, fullCart))
-                grid[slot.getIndex()] = emptyCart.copy();
+                ret.set(slot.getIndex(), emptyCart.copy());
         }
 
-        return grid;
+        return ret;
     }
 
     public static class RailcraftVariant extends CartDisassemblyRecipe {

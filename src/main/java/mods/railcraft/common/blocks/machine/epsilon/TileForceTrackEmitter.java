@@ -106,7 +106,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
     private void checkRedstone() {
         if (Game.isClient(getWorld()))
             return;
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        boolean p = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -154,7 +154,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
     }
 
     private void spawnParticles(BlockPos pos) {
-        EffectManager.instance.forceTrackSpawnEffect(worldObj, pos);
+        EffectManager.instance.forceTrackSpawnEffect(world, pos);
     }
 
     private void extend() {
@@ -167,8 +167,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
             int oy = 1;
             int oz = (numTracks + 1) * facing.getFrontOffsetZ();
             BlockPos offset = getPos().add(ox, oy, oz);
-            if (WorldPlugin.isBlockLoaded(worldObj, offset)) {
-                IBlockState blockState = WorldPlugin.getBlockState(worldObj, offset);
+            if (WorldPlugin.isBlockLoaded(world, offset)) {
+                IBlockState blockState = WorldPlugin.getBlockState(world, offset);
                 EnumRailDirection direction;
                 if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
                     direction = EnumRailDirection.NORTH_SOUTH;
@@ -186,8 +186,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
         BlockTrackForce trackForce = (BlockTrackForce) RailcraftBlocks.TRACK_FORCE.block();
         if (trackForce != null && WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
             spawnParticles(pos);
-            WorldPlugin.setBlockState(worldObj, pos, TrackToolsAPI.makeTrackState(trackForce, direction));
-            TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
+            WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(trackForce, direction));
+            TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof TileTrackForce) {
                 ((TileTrackForce) tile).setEmitter(this);
                 numTracks++;
@@ -202,7 +202,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
             return false;
         if (TrackTools.getTrackDirectionRaw(state) != direction)
             return false;
-        TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackForce) {
             TileTrackForce track = (TileTrackForce) tile;
             TileForceTrackEmitter emitter = track.getEmitter();
@@ -230,9 +230,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
     }
 
     private void removeTrack(BlockPos pos) {
-        if (WorldPlugin.isBlockLoaded(worldObj, pos) && WorldPlugin.isBlockAt(worldObj, pos, RailcraftBlocks.TRACK_FORCE.block())) {
+        if (WorldPlugin.isBlockLoaded(world, pos) && WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.TRACK_FORCE.block())) {
             spawnParticles(pos);
-            WorldPlugin.setBlockToAir(worldObj, pos);
+            WorldPlugin.setBlockToAir(world, pos);
         }
         numTracks--;
     }
@@ -254,7 +254,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
 
     @Override
     public boolean rotateBlock(EnumFacing axis) {
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return false;
         if (state != State.RETRACTED)
             return false;

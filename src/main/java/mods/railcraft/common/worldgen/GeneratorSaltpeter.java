@@ -45,9 +45,9 @@ public class GeneratorSaltpeter extends Generator {
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
         if (world.provider.getDimension() != 0)
             return false;
-        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY))
+        if (!BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY))
             return false;
-        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DRY))
+        if (!BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY))
             return false;
         return !biome.canRain() && biome.getTemperature() >= 1.5f && biome.getRainfall() <= 0.1f;
     }

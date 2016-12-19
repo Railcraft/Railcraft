@@ -403,7 +403,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return WorldPlugin.setBlockState(world, pos, newState);
     }
 
-    @Override
+    //@Override TODO fix
     public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
         if (TrackTools.isRailBlockAt(worldIn, pos.up()) || TrackTools.isRailBlockAt(worldIn, pos.down()))
             return false;
@@ -421,7 +421,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
 
-    @Override
+    //@Override TODO fix
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return getDefaultState();
     }
@@ -455,7 +455,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbor) {
         try {
             if (Game.isClient(world))
                 return;
@@ -465,7 +465,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
                 tile.onNeighborBlockChange(state, neighborBlock);
                 tile.getTrackKitInstance().onNeighborBlockChange(state, neighborBlock);
             }
-            super.neighborChanged(state, world, pos, neighborBlock);
+            super.neighborChanged(state, world, pos, neighborBlock, neighbor);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
             if (Game.DEVELOPMENT_ENVIRONMENT)

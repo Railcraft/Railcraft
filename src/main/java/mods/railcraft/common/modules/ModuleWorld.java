@@ -120,7 +120,7 @@ public class ModuleWorld extends RailcraftModulePayload {
 
                     if (fertilizer != null) {
                         fertilizer = fertilizer.copy();
-                        fertilizer.stackSize = 2;
+                        fertilizer.setCount(2);
                         CraftingPlugin.addShapelessRecipe(fertilizer,
                                 "dustSaltpeter",
                                 "sand",

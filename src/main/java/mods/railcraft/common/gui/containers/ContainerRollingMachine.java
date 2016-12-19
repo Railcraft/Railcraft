@@ -9,6 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import cofh.api.energy.EnergyStorage;
 import mods.railcraft.common.blocks.machine.alpha.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
@@ -20,12 +30,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 public class ContainerRollingMachine extends RailcraftContainer {
 
@@ -42,9 +46,9 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftMatrix = tile.getCraftMatrix();
         craftResult = new InventoryCraftResult() {
             @Override
-            public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
+            public void setInventorySlotContents(int slot, ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
-                if (stack != null && Game.isClient(tile.getWorld()))
+                if (!stack.isEmpty() && Game.isClient(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tips.craft"));
             }
 
@@ -99,7 +103,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
         ItemStack output = tile.getStackInSlot(0);
         if (!InvTools.isItemEqualStrict(output, prevOutput)) {
             onCraftMatrixChanged(craftMatrix);
-            prevOutput = output != null ? output.copy() : null;
+            prevOutput = output.isEmpty() ? ItemStack.EMPTY : output.copy();
         }
 
         lastProgress = tile.getProgress();
@@ -126,7 +130,6 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftResult.setInventorySlotContents(0, output);
     }
 
-    @Nullable
     @Override
     public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
         ItemStack stack = super.slotClick(slotId, mouseButton, clickType, player);
@@ -136,13 +139,14 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     private class SlotRollingMachine extends SlotUntouchable {
 
-        public SlotRollingMachine(IInventory contents, int id, int x, int y) {
+        SlotRollingMachine(IInventory contents, int id, int x, int y) {
             super(contents, id, x, y);
         }
 
         @Override
-        public void onPickupFromSlot(EntityPlayer player, ItemStack itemstack) {
+        public ItemStack onTake(EntityPlayer player, ItemStack itemstack) {
             tile.useLast = true;
+            return itemstack;
         }
 
     }

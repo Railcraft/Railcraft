@@ -55,7 +55,7 @@ public final class ContainerCartWork extends RailcraftContainer {
      */
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory) {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, cart.worldObj));
+        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, cart.world));
     }
 
     /**
@@ -64,7 +64,7 @@ public final class ContainerCartWork extends RailcraftContainer {
     @Override
     public void onContainerClosed(EntityPlayer player) {
         super.onContainerClosed(player);
-        if (!cart.worldObj.isRemote) {
+        if (!cart.world.isRemote) {
             for (int i = 0; i < 9; ++i) {
                 ItemStack itemstack = craftMatrix.removeStackFromSlot(i);
 

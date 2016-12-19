@@ -143,7 +143,7 @@ public class SchematicBlock extends SchematicBlockBase {
                 try {
                     NBTTagCompound sub = rq.getCompoundTagAt(i);
                     registry.stackToWorld(sub);
-                    rqs.add(ItemStack.loadItemStackFromNBT(sub));
+                    rqs.add(new ItemStack(sub));
                 } catch (MappingNotFoundException e) {
                     defaultPermission = BuildingPermission.CREATIVE_ONLY;
                 } catch (Throwable t) {

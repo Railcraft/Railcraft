@@ -16,7 +16,7 @@ import java.util.UUID;
 
 /**
  * Identifies an in world tile entity or movable entity. Feel free to extend this class if your tile entity contains
- * multiple identifiable {@link IPowerConnection}. Just make sure to register it with
+ * multiple identifiable IPowerConnection. Just make sure to register it with
  * {@link #registerType(String, Supplier)} to make loading work.
  * <p>
  * Created on 1 Jan 2016 by AlexIIL
@@ -144,7 +144,7 @@ public abstract class Identifier {
         @Override
         @SideOnly(Side.CLIENT)
         public TileEntity getByIdentifierClient() {
-            World world = Minecraft.getMinecraft().theWorld;
+            World world = Minecraft.getMinecraft().world;
             if (world == null || world.provider.getDimension() != dimId) return null;
             return world.getTileEntity(pos);
         }
@@ -152,7 +152,7 @@ public abstract class Identifier {
         @Override
         @SideOnly(Side.CLIENT)
         public boolean isLoadedClient() {
-            World world = Minecraft.getMinecraft().theWorld;
+            World world = Minecraft.getMinecraft().world;
             if (world == null || world.provider.getDimension() != dimId) return false;
             return world.getTileEntity(pos) != null;
         }
@@ -201,7 +201,7 @@ public abstract class Identifier {
         @Override
         @SideOnly(Side.CLIENT)
         public Entity getByIdentifierClient() {
-            World world = Minecraft.getMinecraft().theWorld;
+            World world = Minecraft.getMinecraft().world;
             if (world == null || world.provider.getDimension() != dimId) return null;
             return get(world);
         }
@@ -209,7 +209,7 @@ public abstract class Identifier {
         @Override
         @SideOnly(Side.CLIENT)
         public boolean isLoadedClient() {
-            World world = Minecraft.getMinecraft().theWorld;
+            World world = Minecraft.getMinecraft().world;
             if (world == null || world.provider.getDimension() != dimId) return false;
             return get(world) != null;
         }

@@ -20,6 +20,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -41,7 +42,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
     private final InventoryPlayer playerInv;
 
     public GuiAnvil(InventoryPlayer playerInv, World world, BlockPos pos) {
-        super(new ContainerAnvil(playerInv, world, pos, Minecraft.getMinecraft().thePlayer));
+        super(new ContainerAnvil(playerInv, world, pos, Minecraft.getMinecraft().player));
         this.playerInv = playerInv;
         this.repairContainer = (ContainerRepair) inventorySlots;
     }
@@ -89,7 +90,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
             boolean flag = true;
             String s = I18n.format("container.repair.cost", repairContainer.maximumCost);
 
-            if (repairContainer.maximumCost >= 40 && !mc.thePlayer.capabilities.isCreativeMode) {
+            if (repairContainer.maximumCost >= 40 && !mc.player.capabilities.isCreativeMode) {
                 s = I18n.format("container.repair.expensive");
                 k = 16736352;
             } else if (!repairContainer.getSlot(2).getHasStack())
@@ -138,7 +139,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
             s = "";
 
         repairContainer.updateItemName(s);
-        mc.thePlayer.connection.sendPacket(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
+        mc.player.connection.sendPacket(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
     }
 
     /**
@@ -178,7 +179,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
     }
 
     @Override
-    public void updateCraftingInventory(Container container, List<ItemStack> itemStackList) {
+    public void updateCraftingInventory(Container container, NonNullList<ItemStack> itemStackList) {
         sendSlotContents(container, 0, container.getSlot(0).getStack());
     }
 

@@ -31,7 +31,7 @@ public class TileAnchorPassive extends TileAnchorWorld {
 
     @Override
     protected ForgeChunkManager.Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), PlayerPlugin.getUsername(worldObj, getOwner()), worldObj, ForgeChunkManager.Type.NORMAL);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), PlayerPlugin.getUsername(world, getOwner()), world, ForgeChunkManager.Type.NORMAL);
     }
 
 //    @Override

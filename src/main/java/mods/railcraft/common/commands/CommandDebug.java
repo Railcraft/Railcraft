@@ -48,7 +48,7 @@ public class CommandDebug extends SubCommand {
     private static void printLine(ICommandSender sender, String msg, Object... args) {
         Message msgObj = msgFactory.newMessage(msg, args);
         Game.log(DEBUG_LEVEL, msgObj);
-        sender.addChatMessage(ChatPlugin.getMessage(msgObj.getFormattedMessage()));
+        sender.sendMessage(ChatPlugin.getMessage(msgObj.getFormattedMessage()));
     }
 
     private static void printTarget(ICommandSender sender, World world, WorldCoordinate pos) {

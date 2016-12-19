@@ -9,11 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
+import com.google.common.base.Preconditions;
+
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -100,7 +103,7 @@ public class VillagerTrades {
         }
 
         @Override
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random rand) {
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random rand) {
             if (offers.length <= 0 || sale.obj == null)
                 return;
             for (Offer offer : offers) {
@@ -109,35 +112,34 @@ public class VillagerTrades {
             }
             ItemStack sellStack = prepareStack(rand, sale);
             ItemStack buyStack1 = prepareStack(rand, offers[0]);
-            ItemStack buyStack2 = null;
+            ItemStack buyStack2 = ItemStack.EMPTY;
             if (offers.length >= 2)
                 buyStack2 = prepareStack(rand, offers[1]);
-            if (sellStack != null && buyStack1 != null) {
+            if (!sellStack.isEmpty() && !buyStack1.isEmpty()) {
                 recipeList.add(new MerchantRecipe(buyStack1, buyStack2, sellStack));
             } else {
                 Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping", buyStack1, buyStack2, sellStack);
             }
         }
 
-        @Nullable
         private ItemStack prepareStack(Random rand, Offer offer) throws IllegalArgumentException {
             if (offer.obj instanceof RailcraftItems) {
-                return ((RailcraftItems) offer.obj).getStack(stackSize(rand, offer));
+                return Preconditions.checkNotNull(((RailcraftItems) offer.obj).getStack(stackSize(rand, offer)));
             }
             if (offer.obj instanceof ItemStack) {
                 ItemStack stack = (ItemStack) offer.obj;
-                stack.stackSize = stackSize(rand, offer);
+                stack.setCount(stackSize(rand, offer));
                 return stack;
             }
             if (offer.obj instanceof Item)
                 return new ItemStack((Item) offer.obj, stackSize(rand, offer));
             if (offer.obj instanceof Block)
                 return new ItemStack((Block) offer.obj, stackSize(rand, offer));
-            return null;
+            return ItemStack.EMPTY;
         }
 
         private int stackSize(Random rand, Offer offer) {
-            return MathHelper.getRandomIntegerInRange(rand, offer.min, offer.max);
+            return MathHelper.getInt(rand, offer.min, offer.max);
         }
     }
 }

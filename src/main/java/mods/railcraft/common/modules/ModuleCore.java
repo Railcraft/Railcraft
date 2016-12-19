@@ -287,13 +287,14 @@ public class ModuleCore extends RailcraftModulePayload {
             private void replaceVanillaCart(RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.register();
 
-                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
+//                TODO: Fix cart replacement
+//                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
-                CartTools.classReplacements.put(minecartClass, cartType);
-                CartTools.vanillaCartItemMap.put(original, cartType);
+//                CartTools.classReplacements.put(minecartClass, cartType);
+//                CartTools.vanillaCartItemMap.put(original, cartType);
 
-                EntityList.ID_TO_CLASS.remove(entityId);
-                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
+//                EntityList.ID_TO_CLASS.remove(entityId);
+//                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
