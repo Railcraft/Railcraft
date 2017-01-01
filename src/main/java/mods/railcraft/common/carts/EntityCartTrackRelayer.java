@@ -30,6 +30,8 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
+import javax.annotation.Nonnull;
+
 public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
     private static final int SLOT_STOCK = 0;
@@ -129,4 +131,9 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
         return InvTools.isItemEqual(stack, trackReplace);
     }
 
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_TRACK_RELAYER;
+    }
 }

@@ -32,6 +32,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nonnull;
+
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
     private final CartBattery cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
@@ -222,5 +224,11 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     @Override
     public EntityMinecart getEntity() {
         return this;
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_ENERGY;
     }
 }

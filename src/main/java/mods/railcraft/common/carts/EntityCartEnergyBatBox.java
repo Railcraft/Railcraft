@@ -9,9 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

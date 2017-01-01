@@ -53,6 +53,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
@@ -1107,5 +1108,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     @SuppressWarnings("UnusedParameters")
     public boolean attackEntityFromPart(EntityTunnelBorePart part, DamageSource damageSource, float damage) {
         return attackEntityFrom(damageSource, damage);
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_BORE;
     }
 }
