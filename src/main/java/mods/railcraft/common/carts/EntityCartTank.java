@@ -9,22 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.*;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.containers.FactoryContainer;
-import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -40,9 +26,26 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import java.lang.invoke.MethodHandles;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.invoke.MethodHandles;
+
+import mods.railcraft.api.carts.IFluidCart;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.OptionalFluidStack;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
     private static final DataParameter<OptionalFluidStack> FLUID_STACK = EntityDataManager.createKey(EntityCartTank.class, DataManagerPlugin.OPTIONAL_FLUID_STACK);
