@@ -162,7 +162,7 @@ public abstract class GeneratorMine extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        if (world.provider.getDimension() != 0)
+        if (!world.provider.isSurfaceWorld())
             return false;
         WorldGenerator gen = Arrays.stream(generators).filter(Predicates.nonNull()).findFirst().orElse(null);
         return TerrainGen.generateOre(world, rand, gen, targetPos, EventType.CUSTOM);
