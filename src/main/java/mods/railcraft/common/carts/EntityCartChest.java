@@ -47,11 +47,6 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    public EntityMinecart.Type getType() {
-        return EntityMinecart.Type.CHEST;
-    }
-
-    @Override
     public IBlockState getDefaultDisplayTile() {
         return Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH);
     }

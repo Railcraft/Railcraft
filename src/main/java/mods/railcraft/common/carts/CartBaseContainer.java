@@ -97,8 +97,13 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Nonnull
     @Override
-    public EntityMinecart.Type getType() {
-        return null;
+    public final EntityMinecart.Type getType() {
+        throw new Error("This should not be called");
+    }
+
+    @Override
+    public boolean canBeRidden() {
+        return false;
     }
 
     protected void updateTravelDirection(BlockPos pos, IBlockState state) {
