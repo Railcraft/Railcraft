@@ -95,10 +95,19 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         killAndDrop(this);
     }
 
+    /**
+     * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
+     */
     @Nonnull
     @Override
     public final EntityMinecart.Type getType() {
-        throw new Error("This should not be called");
+        return null; //TODO: Pull request to forge
+//        throw new Error("This should not be called");
+    }
+
+    @Override
+    public boolean isPoweredCart() {
+        return false;
     }
 
     @Override

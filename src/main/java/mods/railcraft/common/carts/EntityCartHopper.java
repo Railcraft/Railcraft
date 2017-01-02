@@ -35,8 +35,8 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
 
 public class EntityCartHopper extends CartBaseContainer implements IHopper {
-    private boolean blocked = true;
-    private int transferTicker = -1;
+    private boolean enabled = true;
+    private int transferCooldown = -1;
     private final BlockPos lastPos = BlockPos.ORIGIN;
 
     public EntityCartHopper(World world) {
@@ -112,20 +112,20 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     public void onUpdate() {
         super.onUpdate();
 
-        if (!this.worldObj.isRemote && this.isEntityAlive() && this.blocked) {
+        if (Game.isHost(worldObj) && !isDead && enabled) {
             BlockPos blockpos = new BlockPos(this);
 
             if (blockpos.equals(this.lastPos)) {
-                --this.transferTicker;
+                --this.transferCooldown;
             } else {
-                this.transferTicker = 0;
+                this.transferCooldown = 0;
             }
 
-            if (transferTicker < 0) {
-                this.transferTicker = 0;
+            if (transferCooldown <= 0) {
+                this.transferCooldown = 0;
 
                 if (this.captureDroppedItems()) {
-                    this.transferTicker = 4;
+                    this.transferCooldown = 4;
                     this.markDirty();
                 }
             }
@@ -169,14 +169,14 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("TransferCooldown", this.transferTicker);
-        compound.setBoolean("Enabled", this.blocked);
+        compound.setInteger("TransferCooldown", this.transferCooldown);
+        compound.setBoolean("Enabled", this.enabled);
     }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        this.transferTicker = compound.getInteger("TransferCooldown");
-        this.blocked = compound.hasKey("Enabled") || compound.getBoolean("Enabled");
+        this.transferCooldown = compound.getInteger("TransferCooldown");
+        this.enabled = !compound.hasKey("Enabled") || compound.getBoolean("Enabled");
     }
 }
