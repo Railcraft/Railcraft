@@ -1,3 +1,8 @@
+10.0.1:
+	NEW: Add DynamicLighting support to Locomotive (contribution by liach)
+	FIX: Fix config files not being generated correctly.
+	FIX: Various other minor fixes.
+
 10.0.0:
 	INFO: First official MC 1.10.2 release
 	NEW: Added in-game config editor support
