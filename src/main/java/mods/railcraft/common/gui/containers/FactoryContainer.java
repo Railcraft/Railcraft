@@ -18,6 +18,8 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.manipulator.*;
+import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;

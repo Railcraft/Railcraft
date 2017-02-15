@@ -16,12 +16,14 @@ import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.machine.manipulator.*;
+import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineTileRegistery {
+public class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha

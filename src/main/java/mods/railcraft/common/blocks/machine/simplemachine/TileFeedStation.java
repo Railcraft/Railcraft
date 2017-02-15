@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.simplemachine;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
@@ -38,7 +39,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -64,8 +64,8 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.FEED_STATION;
+    public SimpleMachineVariant getMachineType() {
+        return SimpleMachineVariant.FEED_STATION;
     }
 
     @Override

@@ -18,7 +18,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
-import mods.railcraft.common.blocks.machine.MachineTileRegistery;
+import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
@@ -281,7 +281,7 @@ public class ModuleCore extends RailcraftModulePayload {
                             Blocks.RAIL);
                 }
 
-                MachineTileRegistery.registerTileEntities();
+                MachineTileRegistry.registerTileEntities();
             }
 
             private void replaceVanillaCart(RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {

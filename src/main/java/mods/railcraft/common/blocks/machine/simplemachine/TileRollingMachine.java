@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.machine.simplemachine;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
@@ -66,8 +66,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ROLLING_MACHINE;
+    public SimpleMachineVariant getMachineType() {
+        return SimpleMachineVariant.ROLLING_MACHINE;
     }
 
 

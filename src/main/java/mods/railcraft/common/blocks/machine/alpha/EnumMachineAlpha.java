@@ -43,10 +43,8 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     SMOKER(ModuleStructures.class, "smoker", TileSmoker.class, 3, 1),
     TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
     COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
-    ROLLING_MACHINE(ModuleFactory.class, "rolling.machine", TileRollingMachine.class, 3, 1),
     STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
     STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1),
-    FEED_STATION(ModuleAutomation.class, "feed.station", TileFeedStation.class, 2, 1),
     BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1),
     ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1),
     TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1),
@@ -65,15 +63,13 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
         String axe1 = HarvestPlugin.ToolClass.AXE.getToolString(1);
         TANK_WATER.toolClass = axe1;
-        FEED_STATION.toolClass = axe1;
+//        FEED_STATION.toolClass = axe1;
 
         creativeList.add(COKE_OVEN);
         creativeList.add(BLAST_FURNACE);
         creativeList.add(STEAM_OVEN);
         creativeList.add(TANK_WATER);
-        creativeList.add(ROLLING_MACHINE);
         creativeList.add(ROCK_CRUSHER);
-        creativeList.add(FEED_STATION);
         creativeList.add(TRADE_STATION);
         creativeList.add(ANCHOR_WORLD);
         creativeList.add(ANCHOR_PERSONAL);
@@ -104,6 +100,11 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         if (id < 0 || id >= VALUES.length)
             id = 0;
         return VALUES[id];
+    }
+
+    @Override
+    public Definition getDef() {
+        return null;
     }
 
     @Override

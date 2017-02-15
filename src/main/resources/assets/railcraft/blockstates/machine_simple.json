@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_bottom_top"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "rolling_machine": {
+        "textures": {
+          "top": "railcraft:blocks/rolling_machine_top",
+          "bottom": "railcraft:blocks/rolling_machine_bottom",
+          "side": "railcraft:blocks/rolling_machine_side"
+        }
+      },
+      "feed_station": {
+        "textures": {
+          "top": "railcraft:blocks/feed_station_cap",
+          "bottom": "railcraft:blocks/feed_station_cap",
+          "side": "railcraft:blocks/feed_station_side"
+        }
+      }
+    }
+  }
+}

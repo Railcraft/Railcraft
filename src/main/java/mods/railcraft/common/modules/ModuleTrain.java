@@ -29,7 +29,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.MANIPULATOR,
+                        RailcraftBlocks.MACHINE_MANIPULATOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track
                 );

@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -35,7 +36,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.DETECTOR,
 //                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.MANIPULATOR,
+                        RailcraftBlocks.MACHINE_MANIPULATOR,
+                        RailcraftBlocks.MACHINE_SIMPLE,
 
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,
@@ -57,9 +59,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);
 
-                EnumMachineAlpha alpha = EnumMachineAlpha.FEED_STATION;
-                if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
+                SimpleMachineVariant feed = SimpleMachineVariant.FEED_STATION;
+                if (feed.isAvailable()) {
+                    ItemStack stack = feed.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "PCP",
                             "CSC",
@@ -71,7 +73,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                     MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
                 }
 
-                alpha = EnumMachineAlpha.TRADE_STATION;
+                EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
                 if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,

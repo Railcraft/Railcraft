@@ -27,7 +27,7 @@ public class GuiDispenserTrain extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, tile);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRendererObj.drawString("Pattern", 10, 20, 0x404040);
         fontRendererObj.drawString("Buffer", 10, 56, 0x404040);
     }

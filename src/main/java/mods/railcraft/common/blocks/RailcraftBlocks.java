@@ -42,6 +42,8 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
+import mods.railcraft.common.blocks.machine.simplemachine.BlockMachineSimple;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.blocks.ore.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -96,7 +98,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     LANTERN("lantern", BlockLantern::new, ItemMaterial::new),
     MACHINE_ALPHA("machine_alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new, EnumMachineAlpha.class),
     MACHINE_BETA("machine_beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
-    MANIPULATOR("manipulator", BlockMachineManipulator::new, ItemMachine::new, ManipulatorVariant.class),
+    MACHINE_MANIPULATOR("manipulator", BlockMachineManipulator::new, ItemMachine::new, ManipulatorVariant.class),
+    MACHINE_SIMPLE("machine_simple", BlockMachineSimple::new, ItemMachine::new, SimpleMachineVariant.class),
     MACHINE_EPSILON("machine_epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),
     ORE("ore", BlockOre::new, ItemBlockRailcraftSubtyped::new, EnumOre.class),
     ORE_MAGIC("ore_magic", BlockOreMagic::new, ItemOreMagic::new, EnumOreMagic.class),

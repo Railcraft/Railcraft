@@ -68,6 +68,11 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         this(RailcraftModuleManager.getModuleName(module), tag, tile, textureWidth, textureHeight);
     }
 
+    @Override
+    public Definition getDef() {
+        return null;
+    }
+
     public static EnumMachineEpsilon fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;

@@ -113,7 +113,7 @@ public class GuiRouting extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, router.getName(), 6);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.routing.slot.label"), 64, 29, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }

@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
@@ -48,6 +49,7 @@ public class ModuleFactory extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.ANVIL_STEEL,
+                        RailcraftBlocks.MACHINE_SIMPLE,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
                         RailcraftItems.COKE
@@ -284,9 +286,9 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                alpha = EnumMachineAlpha.ROLLING_MACHINE;
-                if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
+                SimpleMachineVariant rolling = SimpleMachineVariant.ROLLING_MACHINE;
+                if (rolling.isAvailable()) {
+                    ItemStack stack = rolling.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "IPI",
                             "PCP",
@@ -364,7 +366,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                if (!EnumMachineAlpha.ROLLING_MACHINE.isAvailable())
+                if (!SimpleMachineVariant.ROLLING_MACHINE.isAvailable())
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
                 if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                     registerAltSteelFurnaceRecipe();

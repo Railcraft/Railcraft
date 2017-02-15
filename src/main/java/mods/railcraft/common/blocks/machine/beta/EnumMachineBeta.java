@@ -92,6 +92,11 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         this.textureHeight = textureHeight;
     }
 
+    @Override
+    public Definition getDef() {
+        return null;
+    }
+
     public static EnumMachineBeta fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;
@@ -151,7 +156,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.MACHINE_BETA;
     }
-
 
     @Override
     public boolean isAvailable() {
