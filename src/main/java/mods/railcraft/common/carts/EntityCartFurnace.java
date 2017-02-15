@@ -9,19 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+
+import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 
 public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart {
 
@@ -64,20 +67,20 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
 
     @Override
     public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)))
+            return true;
         Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
-        if (fuel <= 0) {
-            if (stack != null) {
-                int burnTime = FuelPlugin.getBurnTime(stack);
+        if (stack != null) {
+            int burnTime = FuelPlugin.getBurnTime(stack);
 
-                if (burnTime > 0) {
-                    if (!player.capabilities.isCreativeMode)
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
-                    fuel += burnTime;
-                    ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 1);
+            if (burnTime > 0 && fuel + burnTime <= 32000) {
+                if (!player.capabilities.isCreativeMode)
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
+                fuel += burnTime;
+                ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 1);
 
-                    pushX = posX - player.posX;
-                    pushZ = posZ - player.posZ;
-                }
+                pushX = posX - player.posX;
+                pushZ = posZ - player.posZ;
             }
         }
 
