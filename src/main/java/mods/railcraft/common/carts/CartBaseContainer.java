@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -100,7 +101,8 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
      */
     @Nonnull
     @Override
-    public final EntityMinecart.Type getType() {
+    public EntityMinecart.Type getType() {
+        FMLLog.bigWarning("This method should NEVER be called");
         return null; //TODO: Pull request to forge
 //        throw new Error("This should not be called");
     }

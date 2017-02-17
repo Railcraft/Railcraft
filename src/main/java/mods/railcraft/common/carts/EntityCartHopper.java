@@ -179,4 +179,10 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         this.transferCooldown = compound.getInteger("TransferCooldown");
         this.enabled = !compound.hasKey("Enabled") || compound.getBoolean("Enabled");
     }
+
+    @Nonnull
+    @Override
+    public Type getType() {
+        return Type.HOPPER;
+    }
 }

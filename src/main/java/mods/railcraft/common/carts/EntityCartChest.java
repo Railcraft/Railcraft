@@ -104,4 +104,10 @@ public class EntityCartChest extends CartBaseContainer {
     protected EnumGui getGuiType() {
         throw new Error("Should not be called");
     }
+
+    @Nonnull
+    @Override
+    public Type getType() {
+        return Type.CHEST;
+    }
 }
