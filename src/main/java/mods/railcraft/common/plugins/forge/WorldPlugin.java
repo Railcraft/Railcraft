@@ -9,14 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -91,6 +97,21 @@ public class WorldPlugin {
 
     public static boolean destroyBlock(World world, BlockPos pos, boolean dropBlock) {
         return world.destroyBlock(pos, dropBlock);
+    }
+
+    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor, boolean dropBlock) {
+        if (actor == null)
+            actor = RailcraftFakePlayer.get((WorldServer) world, pos);
+
+        // Start of Event Fire
+        BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(world, pos, Blocks.AIR.getDefaultState(), actor);
+        MinecraftForge.EVENT_BUS.post(breakEvent);
+
+        if (breakEvent.isCanceled())
+            return false;
+        // End of Event Fire
+
+        return destroyBlock(world, pos, dropBlock);
     }
 
     public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {

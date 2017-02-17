@@ -12,14 +12,18 @@ package mods.railcraft.common.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -169,6 +173,17 @@ public class CartTools {
             } else
                 entity.setLocationAndAngles(resultingPosition.xCoord, resultingPosition.yCoord, resultingPosition.zCoord, entity.rotationYaw, entity.rotationPitch);
         }
+    }
+
+    @Nullable
+    public static EntityPlayer getCartOwnerEntity(EntityMinecart cart) {
+        GameProfile owner = CartToolsAPI.getCartOwner(cart);
+        EntityPlayer player = null;
+        if (!RailcraftConstantsAPI.UNKNOWN_PLAYER.equals(owner.getName()))
+            player = PlayerPlugin.getPlayer(cart.worldObj, owner);
+        if (player == null)
+            player = RailcraftFakePlayer.get((WorldServer) cart.worldObj, cart.posX, cart.posY, cart.posZ);
+        return player;
     }
 
     /**

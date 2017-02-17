@@ -47,6 +47,17 @@ public class PlayerPlugin {
         return new GameProfile(ownerUUID, ownerName);
     }
 
+    @Nullable
+    public static EntityPlayer getPlayer(@Nonnull World world, @Nonnull GameProfile gameProfile) {
+        UUID playerId = gameProfile.getId();
+        if (playerId != null) {
+            EntityPlayer player = world.getPlayerEntityByUUID(playerId);
+            if (player != null)
+                return player;
+        }
+        return null;
+    }
+
     public static String getUsername(@Nonnull World world, @Nonnull GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {

@@ -14,7 +14,6 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
-import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.Train.TrainState;
@@ -25,6 +24,8 @@ import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
@@ -673,16 +674,18 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
+        EntityPlayer owner = CartTools.getCartOwnerEntity(this);
+
         if (replaceableBlocks.contains(oldState.getBlock()))
-            worldObj.destroyBlock(targetPos, true);
+            WorldPlugin.destroyBlockSafe(worldObj, targetPos, owner, true);
 
         if (WorldPlugin.isBlockAir(worldObj, targetPos, oldState) && worldObj.isSideSolid(targetPos.down(), EnumFacing.UP))
-            for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
-                ItemStack stack = invRails.getStackInSlot(inv);
+            for (IInvSlot slot : InventoryIterator.getVanilla(invRails)) {
+                ItemStack stack = slot.getStack();
                 if (stack != null) {
                     boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) worldObj, targetPos, shape);
                     if (placed) {
-                        invRails.decrStackSize(inv, 1);
+                        slot.decreaseStack();
                     }
                     return placed;
                 }
@@ -775,7 +778,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
 
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ));
+        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, CartTools.getCartOwnerEntity(this));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
