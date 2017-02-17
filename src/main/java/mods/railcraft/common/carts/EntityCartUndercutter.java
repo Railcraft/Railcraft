@@ -37,6 +37,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
     public static final Set<Block> EXCLUDED_BLOCKS = new HashSet<Block>();
@@ -243,4 +245,9 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         return false;
     }
 
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_UNDERCUTTER;
+    }
 }

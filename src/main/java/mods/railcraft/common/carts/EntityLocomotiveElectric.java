@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
@@ -167,5 +168,11 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         if (capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY)
             return (T) cartBattery;
         return super.getCapability(capability, facing);
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.LOCO_ELECTRIC;
     }
 }

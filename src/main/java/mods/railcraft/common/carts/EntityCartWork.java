@@ -51,11 +51,6 @@ public class EntityCartWork extends CartBase {
     }
 
     @Override
-    public boolean canBeRidden() {
-        return false;
-    }
-
-    @Override
     public IBlockState getDefaultDisplayTile() {
         return Blocks.CRAFTING_TABLE.getDefaultState();
     }

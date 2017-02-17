@@ -27,6 +27,8 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -123,5 +125,11 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
             default:
                 return false;
         }
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.LOCO_CREATIVE;
     }
 }

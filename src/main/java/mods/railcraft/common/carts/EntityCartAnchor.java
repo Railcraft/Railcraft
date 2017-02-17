@@ -40,6 +40,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
@@ -318,5 +319,11 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             disabled = 10;
             releaseTicket();
         }
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_ANCHOR;
     }
 }
