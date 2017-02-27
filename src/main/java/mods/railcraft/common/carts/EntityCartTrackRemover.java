@@ -13,6 +13,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -22,6 +23,8 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 public class EntityCartTrackRemover extends CartBaseMaintenance {
 
@@ -84,4 +87,9 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
         }
     }
 
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        throw new Error("This does not have GUIs or containers");
+    }
 }

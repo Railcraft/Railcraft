@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -178,5 +180,11 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.LOCO_STEAM;
     }
 }

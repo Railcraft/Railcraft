@@ -108,11 +108,6 @@ public final class EntityCartRF extends CartBase {
     }
 
     @Override
-    public boolean canBeRidden() {
-        return false;
-    }
-
-    @Override
     public final float getMaxCartSpeedOnRail() {
         int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
         if (numLocomotives == 0)

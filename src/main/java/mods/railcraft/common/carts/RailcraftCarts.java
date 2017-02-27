@@ -57,7 +57,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     CHEST(0, "cart_chest", EntityCartChest.class, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
     COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),
     FURNACE(0, "cart_furnace", EntityCartFurnace.class, (c) -> Items.FURNACE_MINECART, from(Blocks.FURNACE)),
-    HOPPER(0, "cart_hopper", EntityMinecartHopper.class, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
+    HOPPER(0, "cart_hopper", EntityCartHopper.class, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts

@@ -27,6 +27,8 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.EssentiaFuelProvider;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -247,4 +249,9 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
         return 0;
     }
 
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        throw new Error("TODO"); //TODO not implemented
+    }
 }

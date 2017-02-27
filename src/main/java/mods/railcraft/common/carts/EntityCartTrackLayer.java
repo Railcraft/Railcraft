@@ -28,6 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 
+import javax.annotation.Nonnull;
+
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
@@ -126,5 +128,11 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         ItemStack trackReplace = patternInv.getStackInSlot(SLOT_REPLACE);
         return InvTools.isItemEqual(stack, trackReplace);
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_TRACK_LAYER;
     }
 }
