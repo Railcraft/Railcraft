@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -26,7 +27,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,9 +46,9 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implements IChargeBlock {
+@RailcraftBlockMetadata(variant = BlockChargeFeeder.FeederVariant.class)
+public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChargeFeeder.FeederVariant> implements IChargeBlock {
 
-    public static final PropertyEnum<FeederVariant> VARIANT = PropertyEnum.create("variant", FeederVariant.class);
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
     public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
@@ -61,8 +61,8 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     });
 
     public BlockChargeFeeder() {
-        super(Material.IRON, FeederVariant.class);
-        IBlockState defaultState = blockState.getBaseState().withProperty(VARIANT, FeederVariant.IC2).withProperty(REDSTONE, false);
+        super(Material.IRON);
+        IBlockState defaultState = blockState.getBaseState().withProperty(getVariantProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
         setDefaultState(defaultState);
         setResistance(10F);
         setHardness(5F);
@@ -102,7 +102,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(VARIANT, (FeederVariant) variant);
+            state = state.withProperty(getVariantProperty(), (FeederVariant) variant);
         }
         return state;
     }
@@ -114,7 +114,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
         state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
-        state = state.withProperty(VARIANT, EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
+        state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
         return state;
     }
 
@@ -123,7 +123,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = state.getValue(VARIANT).ordinal();
+        int meta = state.getValue(getVariantProperty()).ordinal();
         if (state.getValue(REDSTONE))
             meta |= 0x8;
         return meta;
@@ -131,7 +131,7 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT, REDSTONE);
+        return new BlockStateContainer(this, getVariantProperty(), REDSTONE);
     }
 
     @Override
@@ -142,16 +142,16 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped implement
     @SuppressWarnings("ConstantConditions")
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        if (state.getValue(VARIANT) == FeederVariant.IC2)
+        if (state.getValue(getVariantProperty()) == FeederVariant.IC2)
             return new TileChargeFeederIC2();
-        else if (state.getValue(VARIANT) == FeederVariant.ADMIN)
+        else if (state.getValue(getVariantProperty()) == FeederVariant.ADMIN)
             return new TileChargeFeederAdmin();
         return null;
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override

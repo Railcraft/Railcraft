@@ -10,14 +10,18 @@
 
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.api.core.IVariantEnum;
+import com.google.common.collect.BiMap;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -25,37 +29,62 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockContainerRailcraftSubtyped extends BlockContainerRailcraft {
-    private final Class<? extends IVariantEnum> variantClass;
-    private final IVariantEnum[] variantValues;
+public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVariantEnumBlock> extends BlockContainerRailcraft {
+    private RailcraftBlockMetadata annotation;
+    private Class<V> variantClass;
+    private V[] variantValues;
+    private PropertyEnum<V> variantProperty;
+    private BiMap<Integer, V> metaMap;
 
-    protected BlockContainerRailcraftSubtyped(Material materialIn, Class<? extends IVariantEnum> variantClass) {
-        this(materialIn, materialIn.getMaterialMapColor(), variantClass);
+    protected BlockContainerRailcraftSubtyped(Material materialIn) {
+        this(materialIn, materialIn.getMaterialMapColor());
     }
 
-    protected BlockContainerRailcraftSubtyped(Material material, MapColor mapColor, Class<? extends IVariantEnum> variantClass) {
+    protected BlockContainerRailcraftSubtyped(Material material, MapColor mapColor) {
         super(material, mapColor);
-        this.variantClass = variantClass;
-        this.variantValues = variantClass.getEnumConstants();
+        setup();
     }
 
-    @Nullable
+    private void setup() {
+        if (annotation == null) {
+            annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
+            //noinspection unchecked
+            variantClass = (Class<V>) annotation.variant();
+            variantValues = variantClass.getEnumConstants();
+            variantProperty = PropertyEnum.create("variant", variantClass);
+            metaMap = CollectionTools.createIndexedLookupTable(variantValues);
+        }
+    }
+
+    @Nonnull
+    public final IProperty<V> getVariantProperty() {
+        setup();
+        return variantProperty;
+    }
+
+    @Nonnull
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public final Class<? extends V> getVariantEnum() {
         return variantClass;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public IVariantEnum[] getVariants() {
+    public final V[] getVariants() {
         return variantValues;
+    }
+
+    @Nonnull
+    public final BiMap<Integer, V> getMetaMap() {
+        setup();
+        return metaMap;
     }
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        IVariantEnum[] variants = getVariants();
+        V[] variants = getVariants();
         if (variants != null) {
-            for (IVariantEnum variant : variants) {
+            for (V variant : variants) {
                 list.add(getStack(variant));
             }
         } else {

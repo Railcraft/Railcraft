@@ -12,8 +12,8 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.ActuatorVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
-import mods.railcraft.common.blocks.wayobjects.EnumWayObject;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RoutingTableCopyRecipe;
@@ -60,10 +60,10 @@ public class ModuleRouting extends RailcraftModulePayload {
 
                 }
 
-                if (RailcraftBlocks.WAY_OBJECT.isEnabled()) {
+                if (RailcraftBlocks.MACHINE_ACTUATOR.isEnabled()) {
                     // Define Switch Motor
-                    if (EnumWayObject.SWITCH_ROUTING.isEnabled() && EnumWayObject.SWITCH_MOTOR.isEnabled()) {
-                        CraftingPlugin.addShapelessRecipe(EnumWayObject.SWITCH_ROUTING.getItem(), EnumWayObject.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());
+                    if (ActuatorVariant.ROUTING.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getItem(), ActuatorVariant.MOTOR.getItem(), EnumDetector.ROUTING.getItem());
                     }
                 }
             }

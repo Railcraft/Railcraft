@@ -7,10 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackSwitchBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -36,10 +38,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileSwitchBase extends TileWayObject implements ISwitchDevice {
+public abstract class TileActuatorBase extends TileMachineBase implements ISwitchDevice, ITileShaped {
     private static final float BOUNDS = -0.2F;
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeiling(-0.2F).build();
-    private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeiling(-0.2F).build();
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-3).build();
+    private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-11).build();
 
     private byte facing = (byte) EnumFacing.NORTH.ordinal();
     private static final int ARROW_UPDATE_INTERVAL = 16;
@@ -67,7 +69,12 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean isSideSolid(EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         powered = !powered;
         sendUpdateToClient();
         return true;
@@ -142,7 +149,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("Powered", isPowered());
@@ -152,7 +159,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         powered = data.getBoolean("Powered");
@@ -161,7 +168,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(facing);
@@ -169,7 +176,7 @@ public abstract class TileSwitchBase extends TileWayObject implements ISwitchDev
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         byte f = data.readByte();

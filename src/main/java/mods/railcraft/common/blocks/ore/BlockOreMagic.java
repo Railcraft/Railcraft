@@ -9,14 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.RailcraftBlockSubtyped;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockRenderLayer;
@@ -32,21 +31,15 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOreMagic extends RailcraftBlockSubtyped<EnumOreMagic> {
-
-    public static final PropertyEnum<EnumOreMagic> VARIANT = PropertyEnum.create("variant", EnumOreMagic.class);
+@RailcraftBlockMetadata(variant = EnumOreMagic.class)
+public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
 
     public BlockOreMagic() {
-        super(Material.ROCK, EnumOreMagic.class);
-        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOreMagic.FIRESTONE));
+        super(Material.ROCK);
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOreMagic.FIRESTONE));
         setResistance(5);
         setHardness(3);
         setSoundType(SoundType.STONE);
-    }
-
-    @Override
-    public IProperty<EnumOreMagic> getVariantProperty() {
-        return VARIANT;
     }
 
     @Override

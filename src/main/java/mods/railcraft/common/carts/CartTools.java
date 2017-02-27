@@ -175,7 +175,6 @@ public class CartTools {
         }
     }
 
-    @Nullable
     public static EntityPlayer getCartOwnerEntity(EntityMinecart cart) {
         GameProfile owner = CartToolsAPI.getCartOwner(cart);
         EntityPlayer player = null;

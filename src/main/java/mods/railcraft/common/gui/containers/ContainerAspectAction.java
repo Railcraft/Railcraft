@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,13 +19,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerAspectAction extends RailcraftContainer {
 
-    private final IAspectActionManager actionManager;
+    private final ITileAspectResponder actionManager;
     private final EntityPlayer player;
     private int lastLockState;
     public boolean canLock;
     public String ownerName;
 
-    public ContainerAspectAction(EntityPlayer player, IAspectActionManager actionManager) {
+    public ContainerAspectAction(EntityPlayer player, ITileAspectResponder actionManager) {
         this.actionManager = actionManager;
         this.player = player;
     }

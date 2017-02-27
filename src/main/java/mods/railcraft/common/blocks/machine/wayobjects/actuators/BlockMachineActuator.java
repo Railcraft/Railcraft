@@ -8,23 +8,31 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.simplemachine;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = SimpleMachineVariant.class)
-public class BlockMachineSimple extends BlockMachine<SimpleMachineVariant> {
+@RailcraftBlockMetadata(variant = ActuatorVariant.class)
+public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
 
-    public BlockMachineSimple() {
-        super(true);
+    public BlockMachineActuator() {
+        super(false);
         setDefaultState(getDefaultState());
+    }
+
+    @Override
+    public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
+        return 8;
     }
 
     @Override

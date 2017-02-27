@@ -7,12 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -22,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiReturnHandler, ISecure<LockButtonState> {
+public abstract class TileActuatorSecured extends TileActuatorBase implements IGuiReturnHandler, ISecureObject<LockButtonState> {
 
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 

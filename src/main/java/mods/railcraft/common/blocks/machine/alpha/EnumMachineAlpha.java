@@ -13,7 +13,6 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -52,7 +51,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
     public static final EnumMachineAlpha[] VALUES = values();
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
-    public static final MachineProxy<EnumMachineAlpha> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         String pickaxe3 = HarvestPlugin.ToolClass.PICKAXE.getToolString(3);

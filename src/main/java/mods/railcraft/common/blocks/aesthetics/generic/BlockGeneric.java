@@ -10,8 +10,9 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -21,7 +22,6 @@ import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,13 +40,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockGeneric extends BlockRailcraft {
+@RailcraftBlockMetadata(variant = EnumGeneric.class)
+public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
-    public static final PropertyEnum<EnumGeneric> VARIANT = PropertyEnum.create("variant", EnumGeneric.class);
 
     public BlockGeneric() {
         super(Material.ROCK);
-        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumGeneric.BLOCK_COKE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumGeneric.BLOCK_COKE));
         setResistance(20);
         setHardness(5);
         setSoundType(SoundType.STONE);
@@ -90,18 +90,12 @@ public class BlockGeneric extends BlockRailcraft {
         }
     }
 
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumGeneric.class;
-    }
-
     @Override
     public IBlockState getState(@Nullable IVariantEnum variant) {
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(VARIANT, (EnumGeneric) variant);
+            state = state.withProperty(getVariantProperty(), (EnumGeneric) variant);
         }
         return state;
     }
@@ -116,7 +110,7 @@ public class BlockGeneric extends BlockRailcraft {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANT, EnumGeneric.fromOrdinal(meta));
+        return getDefaultState().withProperty(getVariantProperty(), EnumGeneric.fromOrdinal(meta));
     }
 
     /**
@@ -124,20 +118,16 @@ public class BlockGeneric extends BlockRailcraft {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
+        return new BlockStateContainer(this, getVariantProperty());
     }
 
     private EnumGeneric getVariant(IBlockAccess world, BlockPos pos) {
         return getVariant(WorldPlugin.getBlockState(world, pos));
-    }
-
-    private EnumGeneric getVariant(IBlockState state) {
-        return state.getValue(VARIANT);
     }
 
     @Override
@@ -147,7 +137,7 @@ public class BlockGeneric extends BlockRailcraft {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override

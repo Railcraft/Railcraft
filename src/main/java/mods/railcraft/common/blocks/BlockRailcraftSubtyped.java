@@ -11,10 +11,12 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,35 +36,47 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class RailcraftBlockSubtyped<T extends Enum<T> & IVariantEnum> extends BlockRailcraft {
-    private final Class<? extends T> variantClass;
-    private final T[] variantValues;
+public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnumBlock> extends BlockRailcraft {
+    private RailcraftBlockMetadata annotation;
+    private Class<V> variantClass;
+    private V[] variantValues;
+    private PropertyEnum<V> variantProperty;
 
-    protected RailcraftBlockSubtyped(Material materialIn, Class<? extends T> variantClass) {
-        this(materialIn, materialIn.getMaterialMapColor(), variantClass);
+    protected BlockRailcraftSubtyped(Material materialIn) {
+        this(materialIn, materialIn.getMaterialMapColor());
     }
 
-    protected RailcraftBlockSubtyped(Material material, MapColor mapColor, Class<? extends T> variantClass) {
+    protected BlockRailcraftSubtyped(Material material, MapColor mapColor) {
         super(material, mapColor);
-        this.variantClass = variantClass;
-        this.variantValues = variantClass.getEnumConstants();
+        setup();
     }
 
-    public abstract IProperty<T> getVariantProperty();
+    private void setup() {
+        if (annotation == null) {
+            annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
+            //noinspection unchecked
+            this.variantClass = (Class<V>) annotation.variant();
+            this.variantValues = variantClass.getEnumConstants();
+            this.variantProperty = PropertyEnum.create("variant", variantClass);
+        }
+    }
 
-    public T getVariant(IBlockState state) {
+    public final IProperty<V> getVariantProperty() {
+        setup();
+        return variantProperty;
+    }
+
+    public V getVariant(IBlockState state) {
         return state.getValue(getVariantProperty());
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public final Class<? extends V> getVariantEnum() {
         return variantClass;
     }
 
-    @Nullable
     @Override
-    public IVariantEnum[] getVariants() {
+    public final V[] getVariants() {
         return variantValues;
     }
 
@@ -71,16 +85,16 @@ public abstract class RailcraftBlockSubtyped<T extends Enum<T> & IVariantEnum> e
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (variant != null) {
             checkVariant(variant);
-            return getDefaultState().withProperty(getVariantProperty(), (T) variant);
+            return getDefaultState().withProperty(getVariantProperty(), (V) variant);
         }
         return getDefaultState();
     }
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        IVariantEnum[] variants = getVariants();
+        V[] variants = getVariants();
         if (variants != null) {
-            for (IVariantEnum variant : variants) {
+            for (V variant : variants) {
                 list.add(getStack(variant));
             }
         } else {

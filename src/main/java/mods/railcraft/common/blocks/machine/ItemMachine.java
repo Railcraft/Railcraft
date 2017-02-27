@@ -29,7 +29,7 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
     }
 
     private IEnumMachine<?> getMachine(ItemStack stack) {
-        return machineBlock.getMachineProxy().getMetaMap().get(stack.getItemDamage());
+        return machineBlock.getMetaMap().get(stack.getItemDamage());
     }
 
     @Override

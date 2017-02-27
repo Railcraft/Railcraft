@@ -18,6 +18,9 @@ import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
 import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -63,7 +66,13 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileChestMetals.class, "RCMetalsChestTile");
         GameRegistry.registerTileEntity(TileSawmill.class, "RCSawmillTile");
 
-        // Gamma
+        // Epsilon
+        GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
+        GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
+        GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
+        GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
+
+        // Manipulator
         GameRegistry.registerTileEntity(TileDispenserCart.class, "RCMinecartDispenserTile");
         GameRegistry.registerTileEntity(TileIC2Loader.class, "RCLoaderTileEnergy");
         GameRegistry.registerTileEntity(TileIC2Unloader.class, "RCUnloaderTileEnergy");
@@ -77,10 +86,9 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileRFLoader.class, "RCLoaderTileRF");
         GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
 
-        // Epsilon
-        GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
-        GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
-        GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
-        GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
+        // Actuator
+        GameRegistry.registerTileEntity(TileActuatorLever.class, "railcraft:actuator_lever");
+        GameRegistry.registerTileEntity(TileActuatorMotor.class, "railcraft:actuator_motor");
+        GameRegistry.registerTileEntity(TileActuatorRouting.class, "railcraft:actuator_router");
     }
 }

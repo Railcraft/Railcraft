@@ -23,6 +23,7 @@ public class ModuleTracks extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftItems.TRACK_KIT,
+                        RailcraftBlocks.MACHINE_ACTUATOR,
                         RailcraftBlocks.TRACK_OUTFITTED,
 //                        RailcraftBlocks.TRACK_JUNCTION_IRON,
                         TrackKits.ACTIVATOR,

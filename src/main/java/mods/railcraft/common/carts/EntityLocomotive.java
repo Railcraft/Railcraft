@@ -15,7 +15,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -33,6 +32,7 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -71,7 +71,7 @@ import java.util.Locale;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class EntityLocomotive extends CartBaseContainer implements IDirectionalCart, IGuiReturnHandler,
-        ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
+        ILinkableCart, IMinecart, ISecureObject<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
     private static final DataParameter<Byte> LOCOMOTIVE_SPEED = DataManagerPlugin.create(DataSerializers.BYTE);

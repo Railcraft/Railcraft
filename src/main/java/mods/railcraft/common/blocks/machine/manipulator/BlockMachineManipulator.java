@@ -13,8 +13,8 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.BlockMachine;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -30,29 +30,14 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@RailcraftBlockMetadata(variant = ManipulatorVariant.class)
 public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
-    public static final PropertyEnum<ManipulatorVariant> VARIANT = PropertyEnum.create("variant", ManipulatorVariant.class);
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockMachineManipulator() {
-        super(ManipulatorVariant.PROXY, true);
+        super(true);
         setDefaultState(getDefaultState().withProperty(FRONT, EnumFacing.DOWN).withProperty(ACTIVE, false));
-    }
-
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return ManipulatorVariant.class;
-    }
-
-    @Override
-    public IVariantEnum[] getVariants() {
-        return ManipulatorVariant.VALUES;
-    }
-
-    @Override
-    public IProperty<ManipulatorVariant> getVariantProperty() {
-        return VARIANT;
     }
 
     @Override

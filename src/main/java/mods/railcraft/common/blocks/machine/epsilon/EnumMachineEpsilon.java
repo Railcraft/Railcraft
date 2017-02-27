@@ -13,7 +13,6 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleCharge;
@@ -41,7 +40,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     public static final PropertyEnum<EnumMachineEpsilon> VARIANT = PropertyEnum.create("variant", EnumMachineEpsilon.class);
     public static final EnumMachineEpsilon[] VALUES = values();
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
-    public static final MachineProxy<EnumMachineEpsilon> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         creativeList.add(FLUX_TRANSFORMER);

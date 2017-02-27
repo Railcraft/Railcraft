@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.util.misc;
 
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -16,7 +16,7 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface ISecure<T extends IMultiButtonState> extends IOwnable {
+public interface ISecureObject<T extends IMultiButtonState> extends IOwnable {
 
     MultiButtonController<T> getLockController();
 

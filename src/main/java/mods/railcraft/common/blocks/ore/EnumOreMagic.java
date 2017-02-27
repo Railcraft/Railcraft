@@ -43,10 +43,10 @@ public enum EnumOreMagic implements IVariantEnumBlock {
     @Nullable
     @Override
     public IBlockState getDefaultState() {
-        Block block = block();
+        BlockOreMagic block = (BlockOreMagic) block();
         if (block == null)
             return null;
-        return block.getDefaultState().withProperty(BlockOreMagic.VARIANT, this);
+        return block.getDefaultState().withProperty(block.getVariantProperty(), this);
     }
 
     public String getTag() {

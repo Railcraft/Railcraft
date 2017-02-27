@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.detector;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class DetectorSecured extends Detector implements ISecure<LockButtonState> {
+public abstract class DetectorSecured extends Detector implements ISecureObject<LockButtonState> {
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override

@@ -7,16 +7,17 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.interfaces;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.gui.buttons.LockButtonState;
+import mods.railcraft.common.util.misc.ISecureObject;
 import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IAspectActionManager extends ISecure<LockButtonState> {
+public interface ITileAspectResponder extends ISecureObject<LockButtonState> {
 
     boolean doesActionOnAspect(SignalAspect aspect);
 

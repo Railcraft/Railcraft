@@ -18,7 +18,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +34,7 @@ import java.io.IOException;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxReceiver extends TileBoxActionManager implements IAspectActionManager, IGuiReturnHandler, IReceiverTile, IAspectProvider {
+public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTile, IAspectProvider {
 
     private static final int FORCED_UPDATE = 512;
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);

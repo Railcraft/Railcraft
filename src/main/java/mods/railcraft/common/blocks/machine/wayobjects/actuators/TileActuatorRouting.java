@@ -7,9 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.wayobjects.IRouter;
+import mods.railcraft.common.blocks.wayobjects.IRoutingTile;
+import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -31,7 +35,7 @@ import net.minecraft.util.EnumHand;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRoutingTile {
+public class TileActuatorRouting extends TileActuatorSecured implements IRouter, IRoutingTile {
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
@@ -42,13 +46,14 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
         return routingController;
     }
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.SWITCH_ROUTING;
+    public IEnumMachine<?> getMachineType() {
+        return ActuatorVariant.ROUTING;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldObj)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (current != null && current.getItem() instanceof ItemRoutingTable)
@@ -62,8 +67,13 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
                     }
                     return true;
                 }
-            GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, getPos());
         }
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
         return true;
     }
 
@@ -74,7 +84,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
@@ -82,7 +92,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLivingBase, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLivingBase, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLivingBase, stack);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
@@ -113,7 +123,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("inv", data);
         routingController.writeToNBT(data, "railwayType");
@@ -121,7 +131,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("inv", data);
         routingController.readFromNBT(data, "railwayType");

@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.ActuatorVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
@@ -45,9 +46,6 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         GameRegistry.registerTileEntity(TileBoxSequencer.class, "RCTileStructureSequencerBox");
         GameRegistry.registerTileEntity(TileBoxInterlock.class, "RCTileStructureInterlockBox");
         GameRegistry.registerTileEntity(TileBoxAnalogController.class, "RCTileStructureAnalogBox");
-        GameRegistry.registerTileEntity(TileSwitchMotor.class, "RCTileStructureSwitchMotor");
-        GameRegistry.registerTileEntity(TileSwitchLever.class, "RCTileStructureSwitchLever");
-        GameRegistry.registerTileEntity(TileSwitchRouting.class, "RCTileStructureSwitchRouting");
         GameRegistry.registerTileEntity(TileSignalDistantSignal.class, "RCTileStructureDistantSignal");
         GameRegistry.registerTileEntity(TileSignalDualHeadBlockSignal.class, "RCTileStructureDualHeadBlockSignal");
         GameRegistry.registerTileEntity(TileSignalBlockSignal.class, "RCTileStructureBlockSignal");
@@ -116,9 +114,9 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         }
 
         // Define Switch Lever
-        structure = EnumWayObject.SWITCH_LEVER;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            ItemStack stack = structure.getItem();
+        ActuatorVariant actuator = ActuatorVariant.LEVER;
+        if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
+            ItemStack stack = actuator.getItem();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PLI",
@@ -140,9 +138,9 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         }
 
         // Define Switch Motor
-        structure = EnumWayObject.SWITCH_MOTOR;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            ItemStack stack = structure.getItem();
+        actuator = ActuatorVariant.MOTOR;
+        if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
+            ItemStack stack = actuator.getItem();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PCI",

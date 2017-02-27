@@ -127,7 +127,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
 
             IBlockState state = worldObj.getBlockState(getPos());
             int meta = state.getBlock().getMetaFromState(state);
-            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMetaMap().get(meta).getTileClass()) {
+            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMetaMap().get(meta).getTileClass()) {
                 worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);

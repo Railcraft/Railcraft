@@ -11,10 +11,11 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -25,7 +26,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -43,6 +43,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -53,29 +54,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockContainerRailcraft implements IPostConnection, ColorPlugin.IColoredBlock {
+public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockContainerRailcraftSubtyped<V> implements IPostConnection, ColorPlugin.IColoredBlock {
 
-    protected final MachineProxy<M> proxy;
-
-    public BlockMachine(MachineProxy<M> proxy, Boolean opaque) {
+    public BlockMachine(Boolean opaque) {
         super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
         // TODO: This can't be right
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
-        this.proxy = proxy;
-        setDefaultState(getDefaultState().withProperty(getVariantProperty(), proxy.getMetaMap().get(0)));
+        setDefaultState(getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(0)));
         this.fullBlock = opaque;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
 
-        for (IEnumMachine<M> machine : proxy.getMetaMap().values()) {
+        for (IEnumMachine<V> machine : getMetaMap().values()) {
             HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
         }
     }
@@ -85,26 +85,22 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         ColorPlugin.instance.register(this, this);
     }
 
-    public IProperty<M> getVariantProperty() {
-        return null;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (variant == null)
             return getDefaultState();
-        return getDefaultState().withProperty(getVariantProperty(), (M) variant);
+        return getDefaultState().withProperty(getVariantProperty(), (V) variant);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return proxy.getMetaMap().inverse().get(state.getValue(getVariantProperty()));
+        return getMetaMap().inverse().get(state.getValue(getVariantProperty()));
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), proxy.getMetaMap().get(meta));
+        return getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(meta));
     }
 
     @Override
@@ -121,11 +117,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
 //        return 0.2F;
 //    }
 
-    public MachineProxy<M> getMachineProxy() {
-        return proxy;
-    }
-
-    public IEnumMachine<M> getMachineType(IBlockState state) {
+    public IEnumMachine<V> getMachineType(IBlockState state) {
         return state.getValue(getVariantProperty());
     }
 
@@ -326,6 +318,24 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
     }
 
     @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+    }
+
+    @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (pos.getY() < 0)
             return 0;
@@ -340,12 +350,22 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         return true;
     }
 
+    public final List<V> getCreativeList() {
+        try {
+            Method creativeList = getVariantEnum().getMethod("getCreativeList");
+            //noinspection unchecked
+            return (List<V>) creativeList.invoke(null);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings("Convert2MethodRef")
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         list.addAll(
                 // leave this as lambda's instead of method references, it breaks otherwise.
-                proxy.getCreativeList().stream()
+                getCreativeList().stream()
                         .filter(m -> m.isAvailable())
                         .map(m -> m.getItem())
                         .collect(Collectors.toList())

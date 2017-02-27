@@ -13,7 +13,6 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
@@ -44,7 +43,6 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     RF_UNLOADER(ModuleRF.class, "unloader_rf", TileRFUnloader.class);
     private static final List<ManipulatorVariant> creativeList = new ArrayList<ManipulatorVariant>();
     public static final ManipulatorVariant[] VALUES = values();
-    public static final MachineProxy<ManipulatorVariant> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         FLUID_LOADER.def.passesLight = true;

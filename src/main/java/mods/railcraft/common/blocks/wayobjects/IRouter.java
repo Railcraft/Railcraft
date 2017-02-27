@@ -12,13 +12,14 @@ package mods.railcraft.common.blocks.wayobjects;
 import mods.railcraft.common.gui.buttons.*;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.inventory.IInventory;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IRouter extends ISecure<LockButtonState>, IGuiReturnHandler {
+public interface IRouter extends ISecureObject<LockButtonState>, IGuiReturnHandler {
 
     enum RoutingButtonState implements IMultiButtonState {
 

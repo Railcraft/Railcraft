@@ -12,7 +12,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerAspectAction;
@@ -26,7 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiAspectAction extends GuiContainerRailcraft {
 
-    private final IAspectActionManager actionManager;
+    private final ITileAspectResponder actionManager;
     private final String title;
     private final EntityPlayer player;
     private final boolean[] aspects = new boolean[SignalAspect.values().length];
@@ -37,12 +37,12 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     private ToolTip notOwnedToolTips;
     public String ownerName = "[Unknown]";
 
-    public GuiAspectAction(EntityPlayer player, IAspectActionManager actionManager, String title) {
+    public GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title) {
         this(player, actionManager, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
         ySize = 88;
     }
 
-    protected GuiAspectAction(EntityPlayer player, IAspectActionManager actionManager, String title, String texture) {
+    protected GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title, String texture) {
         super(new ContainerAspectAction(player, actionManager), texture);
         this.player = player;
         this.actionManager = actionManager;

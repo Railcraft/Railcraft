@@ -30,6 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class AABBFactory {
 
     public static final AxisAlignedBB FULL_BOX = start().box().build();
+    public static final double PIXEL = 1.0 / 16.0;
 
     public double minX;
     public double minY;
@@ -154,6 +155,11 @@ public class AABBFactory {
 
     public AABBFactory raiseCeiling(double raise) {
         maxY += raise;
+        return this;
+    }
+
+    public AABBFactory raiseCeilingPixel(int raise) {
+        maxY += raise * PIXEL;
         return this;
     }
 

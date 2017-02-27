@@ -7,13 +7,15 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
@@ -24,35 +26,32 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionManager, IGuiReturnHandler, IReceiverTile {
+public class TileActuatorMotor extends TileActuatorSecured implements ITileAspectResponder, IGuiReturnHandler, IReceiverTile {
 
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean[] switchOnAspects = new boolean[SignalAspect.values().length];
     private boolean switchAspect;
     private boolean switchOnRedstone = true;
 
-    public TileSwitchMotor() {
+    public TileActuatorMotor() {
         switchOnAspects[SignalAspect.RED.ordinal()] = true;
     }
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.SWITCH_MOTOR;
+    public IEnumMachine<?> getMachineType() {
+        return ActuatorVariant.MOTOR;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
+    public boolean openGui(EntityPlayer player) {
+        GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
         return true;
     }
 
