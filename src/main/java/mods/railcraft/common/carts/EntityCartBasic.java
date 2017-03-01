@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCart {
@@ -28,6 +30,12 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 
     public EntityCartBasic(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Nonnull
+    @Override
+    public EntityMinecart.Type getType() {
+        return Type.RIDEABLE;
     }
 
     @Override

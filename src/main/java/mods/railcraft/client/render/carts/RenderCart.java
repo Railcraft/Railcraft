@@ -15,11 +15,14 @@ import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +54,106 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         shadowSize = 0.5F;
     }
 
+    // **********************************
+    // TODO: Fix Forge getRailDirection
+    // **********************************
+    private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
+
+    private Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
+        int i = MathHelper.floor_double(x);
+        int j = MathHelper.floor_double(y);
+        int k = MathHelper.floor_double(z);
+
+        if (BlockRailBase.isRailBlock(cart.worldObj, new BlockPos(i, j - 1, k))) {
+            --j;
+        }
+
+        IBlockState iblockstate = cart.worldObj.getBlockState(new BlockPos(i, j, k));
+
+        if (BlockRailBase.isRailBlock(iblockstate)) {
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.worldObj, new BlockPos(i, j, k), iblockstate, cart);
+            y = (double) j;
+
+            if (blockrailbase$enumraildirection.isAscending()) {
+                y = (double) (j + 1);
+            }
+
+            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
+            double d0 = (double) (aint[1][0] - aint[0][0]);
+            double d1 = (double) (aint[1][2] - aint[0][2]);
+            double d2 = Math.sqrt(d0 * d0 + d1 * d1);
+            d0 = d0 / d2;
+            d1 = d1 / d2;
+            x = x + d0 * offset;
+            z = z + d1 * offset;
+
+            if (aint[0][1] != 0 && MathHelper.floor_double(x) - i == aint[0][0] && MathHelper.floor_double(z) - k == aint[0][2]) {
+                y += (double) aint[0][1];
+            } else if (aint[1][1] != 0 && MathHelper.floor_double(x) - i == aint[1][0] && MathHelper.floor_double(z) - k == aint[1][2]) {
+                y += (double) aint[1][1];
+            }
+
+            return getPos(cart, x, y, z);
+        } else {
+            return null;
+        }
+    }
+
+    public Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
+        int i = MathHelper.floor_double(p_70489_1_);
+        int j = MathHelper.floor_double(p_70489_3_);
+        int k = MathHelper.floor_double(p_70489_5_);
+
+        if (BlockRailBase.isRailBlock(cart.worldObj, new BlockPos(i, j - 1, k))) {
+            --j;
+        }
+
+        IBlockState iblockstate = cart.worldObj.getBlockState(new BlockPos(i, j, k));
+
+        if (BlockRailBase.isRailBlock(iblockstate)) {
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.worldObj, new BlockPos(i, j, k), iblockstate, cart);
+            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
+            double d0 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
+            double d1 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;
+            double d2 = (double) k + 0.5D + (double) aint[0][2] * 0.5D;
+            double d3 = (double) i + 0.5D + (double) aint[1][0] * 0.5D;
+            double d4 = (double) j + 0.0625D + (double) aint[1][1] * 0.5D;
+            double d5 = (double) k + 0.5D + (double) aint[1][2] * 0.5D;
+            double d6 = d3 - d0;
+            double d7 = (d4 - d1) * 2.0D;
+            double d8 = d5 - d2;
+            double d9;
+
+            if (d6 == 0.0D) {
+                d9 = p_70489_5_ - (double) k;
+            } else if (d8 == 0.0D) {
+                d9 = p_70489_1_ - (double) i;
+            } else {
+                double d10 = p_70489_1_ - d0;
+                double d11 = p_70489_5_ - d2;
+                d9 = (d10 * d6 + d11 * d8) * 2.0D;
+            }
+
+            p_70489_1_ = d0 + d6 * d9;
+            p_70489_3_ = d1 + d7 * d9;
+            p_70489_5_ = d2 + d8 * d9;
+
+            if (d7 < 0.0D) {
+                ++p_70489_3_;
+            }
+
+            if (d7 > 0.0D) {
+                p_70489_3_ += 0.5D;
+            }
+
+            return new Vec3d(p_70489_1_, p_70489_3_, p_70489_5_);
+        } else {
+            return null;
+        }
+    }
+
+    // ********************** END
+
     @Override
     public void doRender(EntityMinecart cart, double x, double y, double z, float yaw, float partialTicks) {
         OpenGL.glPushMatrix();
@@ -63,13 +166,13 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         double mx = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * (double) partialTicks;
         double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
-        Vec3d vec3d = cart.getPos(mx, my, mz);
+        Vec3d vec3d = getPos(cart, mx, my, mz);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
         //noinspection ConstantConditions
         if (vec3d != null) {
             double offset = 0.3;
-            Vec3d vec3d1 = cart.getPosOffset(mx, my, mz, offset);
-            Vec3d vec3d2 = cart.getPosOffset(mx, my, mz, -offset);
+            Vec3d vec3d1 = getPosOffset(cart, mx, my, mz, offset);
+            Vec3d vec3d2 = getPosOffset(cart, mx, my, mz, -offset);
             if (vec3d1 == null)
                 vec3d1 = vec3d;
             if (vec3d2 == null)

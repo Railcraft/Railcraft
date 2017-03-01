@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -72,11 +73,11 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     /**
      * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
      */
-    @Nonnull
+    @Nullable
     @Override
-    public final EntityMinecart.Type getType() {
-        return null; //TODO: Pull request to forge
-//        throw new Error("This should not be called");
+    public EntityMinecart.Type getType() {
+        FMLLog.bigWarning("This method should NEVER be called");
+        return null;
     }
 
     @Override

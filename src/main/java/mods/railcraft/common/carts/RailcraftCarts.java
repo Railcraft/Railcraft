@@ -33,7 +33,6 @@ import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -52,7 +51,6 @@ import java.util.function.Supplier;
 public enum RailcraftCarts implements IRailcraftCartContainer {
 
     // Vanilla Carts
-    // TODO: listing vanilla classes here causes weird error messages, see hopper
     BASIC(0, "cart_basic", EntityCartBasic.class, (c) -> Items.MINECART),
     CHEST(0, "cart_chest", EntityCartChest.class, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
     COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),

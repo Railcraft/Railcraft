@@ -99,12 +99,11 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     /**
      * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
      */
-    @Nonnull
+    @Nullable
     @Override
     public EntityMinecart.Type getType() {
         FMLLog.bigWarning("This method should NEVER be called");
-        return null; //TODO: Pull request to forge
-//        throw new Error("This should not be called");
+        return null;
     }
 
     @Override

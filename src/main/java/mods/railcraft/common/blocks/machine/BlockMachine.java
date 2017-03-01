@@ -372,7 +372,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
         );
     }
 
-    //TODO: is this necessary?
     @Override
     public final boolean isOpaqueCube(IBlockState state) {
         return fullBlock;

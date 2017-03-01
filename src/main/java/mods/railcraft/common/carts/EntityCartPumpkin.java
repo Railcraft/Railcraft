@@ -28,7 +28,6 @@ import java.util.Random;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.MAINHAND;
 
-//TODO: Test this
 public class EntityCartPumpkin extends CartBaseSurprise {
     private static final CartBaseSurprise.SurpriseCategory MOBS = createSurpriseCategory(EntityCartPumpkin.class, 100);
     private static final CartBaseSurprise.SurpriseCategory POTIONS = createSurpriseCategory(EntityCartPumpkin.class, 100);

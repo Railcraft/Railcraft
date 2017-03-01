@@ -60,7 +60,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     PRIMING(ModuleExtras.class, 2, "priming", 8, TrackKitPriming.class, () -> recipe(Items.FLINT_AND_STEEL, Items.REDSTONE)),
     ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
-//    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
+    JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
 //    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
 //    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackKitWye.class),
     ;
@@ -84,6 +84,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 //        GATED_ONE_WAY.allowedOnSlopes = false;
         LAUNCHER.allowedOnSlopes = false;
         LOCKING.allowedOnSlopes = false;
+        JUNCTION.allowedOnSlopes = false;
 
         DUMPING.trackTypeFilter = NOT_HIGH_SPEED;
         GATED.trackTypeFilter = NOT_HIGH_SPEED;
@@ -94,13 +95,14 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         BUFFER_STOP.trackTypeFilter = NOT_HIGH_SPEED;
         HIGH_SPEED_TRANSITION.trackTypeFilter = IS_HIGH_SPEED;
 
+        JUNCTION.renderer = TrackKit.Renderer.UNIFIED;
+
         DUMPING.maxSupportDistance = 2;
     }
 
     public final int recipeOutput;
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
-    private final int numIcons;
     private final int states;
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private final Supplier<List<Object[]>> recipeSupplier;
@@ -110,6 +112,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private boolean requiresTicks;
     private int maxSupportDistance;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;
+    private TrackKit.Renderer renderer = TrackKit.Renderer.COMPOSITE;
 
     TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
         this(module, states, tag, recipeOutput, trackInstance, Collections::emptyList);
@@ -117,7 +120,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     TrackKits(Class<? extends IRailcraftModule> module, int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Supplier<List<Object[]>> recipeSupplier) {
         this.module = module;
-        this.numIcons = states;
         this.states = states;
         this.tag = tag;
         this.recipeOutput = recipeOutput;
@@ -157,6 +159,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         if (trackKit == null) {
             TrackKit.Builder builder = new TrackKit.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
             builder.setRequiresTicks(requiresTicks);
+            builder.setRenderer(renderer);
             builder.setRenderStates(states);
             builder.setAllowedOnSlopes(allowedOnSlopes);
             builder.setTrackTypeFilter(trackTypeFilter);
@@ -231,10 +234,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     public String getTag() {
         return RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag();
-    }
-
-    public int getNumIcons() {
-        return numIcons;
     }
 
     @Nullable

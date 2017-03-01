@@ -43,9 +43,11 @@ public class OutfittedTrackModel implements IModel {
     public static final OutfittedTrackModel INSTANCE = new OutfittedTrackModel();
     private static final String TRACK_TYPE_MODEL_FOLDER = "tracks/outfitted/type/";
     private static final String TRACK_KIT_MODEL_FOLDER = "tracks/outfitted/kit/";
+    private static final String UNIFIED_MODEL_FOLDER = "tracks/outfitted/unified/";
     private static final Set<ResourceLocation> models = new HashSet<>();
     private static final Set<ModelResourceLocation> trackTypeModelsLocations = new HashSet<>();
     private static final Set<ModelResourceLocation> trackKitModelsLocations = new HashSet<>();
+    private static final Set<ModelResourceLocation> unifiedModelsLocations = new HashSet<>();
 
     private ResourceLocation getModelLocation(String modelPrefix, ResourceLocation registryName) {
         return new ResourceLocation(
@@ -63,6 +65,17 @@ public class OutfittedTrackModel implements IModel {
         return new ModelResourceLocation(getModelLocation(TRACK_KIT_MODEL_FOLDER, trackKit.getRegistryName()), "shape=" + shape.getName() + ",state=" + state);
     }
 
+    @Nullable
+    private ModelResourceLocation getUnifiedModelLocation(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+        ResourceLocation trackTypeName = trackType.getRegistryName();
+        ResourceLocation trackKitName = trackKit.getRegistryName();
+        ResourceLocation modelLocation = new ResourceLocation(
+                trackTypeName.getResourceDomain(),
+                UNIFIED_MODEL_FOLDER + trackTypeName.getResourcePath() + "/" + trackKitName.getResourcePath()
+        );
+        return new ModelResourceLocation(modelLocation, "shape=" + shape.getName() + ",state=" + state);
+    }
+
     @Override
     public Collection<ResourceLocation> getDependencies() {
         if (trackTypeModelsLocations.isEmpty()) {
@@ -73,20 +86,40 @@ public class OutfittedTrackModel implements IModel {
             }
         }
         if (trackKitModelsLocations.isEmpty()) {
-            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
-                EnumSet<BlockRailBase.EnumRailDirection> shapes = EnumSet.copyOf(BlockTrackOutfitted.SHAPE.getAllowedValues());
-                if (!trackKit.isAllowedOnSlopes()) {
-                    shapes.removeIf(s -> !TrackShapeHelper.isLevelStraight(s));
-                }
-                for (BlockRailBase.EnumRailDirection shape : shapes) {
-                    for (int state = 0; state < trackKit.getRenderStates(); state++)
-                        trackKitModelsLocations.add(getTrackKitModelLocation(trackKit, shape, state));
-                }
-            }
+            TrackRegistry.TRACK_KIT.getVariants().values().stream()
+                    .filter(t -> t.getRenderer() == TrackKit.Renderer.COMPOSITE)
+                    .forEach(t -> {
+                                EnumSet<BlockRailBase.EnumRailDirection> shapes = EnumSet.copyOf(BlockTrackOutfitted.SHAPE.getAllowedValues());
+                                if (!t.isAllowedOnSlopes()) {
+                                    shapes.removeIf(s -> !TrackShapeHelper.isLevelStraight(s));
+                                }
+                                for (BlockRailBase.EnumRailDirection shape : shapes) {
+                                    for (int state = 0; state < t.getRenderStates(); state++)
+                                        trackKitModelsLocations.add(getTrackKitModelLocation(t, shape, state));
+                                }
+                            }
+                    );
+        }
+        if (unifiedModelsLocations.isEmpty()) {
+            TrackRegistry.TRACK_KIT.getVariants().values().stream()
+                    .filter(t -> t.getRenderer() == TrackKit.Renderer.UNIFIED)
+                    .forEach(trackKit -> {
+                                EnumSet<BlockRailBase.EnumRailDirection> shapes = EnumSet.copyOf(BlockTrackOutfitted.SHAPE.getAllowedValues());
+                                if (!trackKit.isAllowedOnSlopes()) {
+                                    shapes.removeIf(s -> !TrackShapeHelper.isLevelStraight(s));
+                                }
+                                for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values())
+                                    for (BlockRailBase.EnumRailDirection shape : shapes) {
+                                        for (int state = 0; state < trackKit.getRenderStates(); state++)
+                                            unifiedModelsLocations.add(getUnifiedModelLocation(trackType, trackKit, shape, state));
+                                    }
+                            }
+                    );
         }
         if (models.isEmpty()) {
             models.addAll(trackTypeModelsLocations);
             models.addAll(trackKitModelsLocations);
+            models.addAll(unifiedModelsLocations);
         }
         return models;
     }
@@ -100,17 +133,23 @@ public class OutfittedTrackModel implements IModel {
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         getDependencies();
-        Map<ModelResourceLocation, IBakedModel> trackTypeModels = new HashMap<>();
-        for (ModelResourceLocation modelLocation : trackTypeModelsLocations) {
+        return new CompositeModel(
+                bakeModels(format, bakedTextureGetter, trackTypeModelsLocations),
+                bakeModels(format, bakedTextureGetter, trackKitModelsLocations),
+                bakeModels(format, bakedTextureGetter, unifiedModelsLocations));
+    }
+
+    @SuppressWarnings("Guava")
+    private Map<ModelResourceLocation, IBakedModel> bakeModels(
+            VertexFormat format,
+            Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
+            Set<ModelResourceLocation> modelLocations) {
+        Map<ModelResourceLocation, IBakedModel> models = new HashMap<>();
+        for (ModelResourceLocation modelLocation : modelLocations) {
             IModel model = ModelManager.getModel(modelLocation);
-            trackTypeModels.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
+            models.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
-        Map<ModelResourceLocation, IBakedModel> trackKitModels = new HashMap<>();
-        for (ModelResourceLocation modelLocation : trackKitModelsLocations) {
-            IModel model = ModelManager.getModel(modelLocation);
-            trackKitModels.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
-        }
-        return new CompositeModel(trackTypeModels, trackKitModels);
+        return models;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -127,7 +166,7 @@ public class OutfittedTrackModel implements IModel {
 
             @Override
             public boolean accepts(ResourceLocation modelLocation) {
-                return modelLocation.getResourceDomain().equals("railcraft")
+                return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
                         && modelLocation.getResourcePath().contains("outfitted_rail");
             }
 
@@ -141,11 +180,16 @@ public class OutfittedTrackModel implements IModel {
     public class CompositeModel implements IBakedModel {
         private final Map<ModelResourceLocation, IBakedModel> trackTypeModels;
         private final Map<ModelResourceLocation, IBakedModel> trackKitModels;
+        private final Map<ModelResourceLocation, IBakedModel> unifiedModels;
         private final IBakedModel baseModel;
 
-        public CompositeModel(Map<ModelResourceLocation, IBakedModel> trackTypeModels, Map<ModelResourceLocation, IBakedModel> trackKitModels) {
+        public CompositeModel(
+                Map<ModelResourceLocation, IBakedModel> trackTypeModels,
+                Map<ModelResourceLocation, IBakedModel> trackKitModels,
+                Map<ModelResourceLocation, IBakedModel> unifiedModels) {
             this.trackTypeModels = trackTypeModels;
             this.trackKitModels = trackKitModels;
+            this.unifiedModels = unifiedModels;
             baseModel = trackTypeModels.get(getTrackTypeModelLocation(TrackTypes.IRON.getTrackType(), BlockRailBase.EnumRailDirection.NORTH_SOUTH));
         }
 
@@ -166,11 +210,19 @@ public class OutfittedTrackModel implements IModel {
                 trackType = TrackTypes.IRON.getTrackType();
                 trackKit = TrackRegistry.getMissingTrackKit();
             }
-            IBakedModel trackTypeModel = getTrackTypeModel(trackType, shape);
-            IBakedModel trackKitModel = getTrackKitModel(trackKit, shape, kitState);
             List<BakedQuad> quads = new ArrayList<>();
-            if (trackTypeModel != null) quads.addAll(trackTypeModel.getQuads(state, side, rand));
-            if (trackKitModel != null) quads.addAll(trackKitModel.getQuads(null, side, rand));
+            switch (trackKit.getRenderer()) {
+                case COMPOSITE:
+                    IBakedModel trackTypeModel = getTrackTypeModel(trackType, shape);
+                    IBakedModel trackKitModel = getTrackKitModel(trackKit, shape, kitState);
+                    if (trackTypeModel != null) quads.addAll(trackTypeModel.getQuads(state, side, rand));
+                    if (trackKitModel != null) quads.addAll(trackKitModel.getQuads(null, side, rand));
+                    break;
+                case UNIFIED:
+                    IBakedModel unifiedModel = getUnifiedModel(trackType, trackKit, shape, kitState);
+                    if (unifiedModel != null) quads.addAll(unifiedModel.getQuads(state, side, rand));
+                    break;
+            }
             return quads;
         }
 
@@ -182,6 +234,11 @@ public class OutfittedTrackModel implements IModel {
         @Nullable
         private IBakedModel getTrackKitModel(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
             return trackKitModels.get(getTrackKitModelLocation(trackKit, shape, state));
+        }
+
+        @Nullable
+        private IBakedModel getUnifiedModel(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+            return unifiedModels.get(getUnifiedModelLocation(trackType, trackKit, shape, state));
         }
 
         @Override

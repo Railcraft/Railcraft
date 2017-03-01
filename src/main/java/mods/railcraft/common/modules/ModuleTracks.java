@@ -36,7 +36,8 @@ public class ModuleTracks extends RailcraftModulePayload {
                         TrackKits.EMBARKING,
                         TrackKits.GATED,
                         TrackKits.LOCKING,
-                        TrackKits.ONE_WAY
+                        TrackKits.ONE_WAY,
+                        TrackKits.JUNCTION
                 );
             }
 

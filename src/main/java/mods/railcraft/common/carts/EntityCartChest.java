@@ -37,6 +37,12 @@ public class EntityCartChest extends CartBaseContainer {
         super(world, x, y, z);
     }
 
+    @Nonnull
+    @Override
+    public Type getType() {
+        return Type.CHEST;
+    }
+
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.CHEST;
@@ -105,9 +111,4 @@ public class EntityCartChest extends CartBaseContainer {
         throw new Error("Should not be called");
     }
 
-    @Nonnull
-    @Override
-    public Type getType() {
-        return Type.CHEST;
-    }
 }
