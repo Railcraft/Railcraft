@@ -138,8 +138,8 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
         if (!TrackTools.isRailBlock(oldState))
             return EnumActionResult.PASS;
-        TrackType trackType = TrackTools.getTrackTypeAt(worldIn, pos);
-        BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(worldIn, pos);
+        TrackType trackType = TrackTools.getTrackTypeAt(worldIn, pos, oldState);
+        BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(oldState);
         if (!TrackShapeHelper.isAscending(shape)) {
             Iterator<TrackTarget> it = Iterators.cycle(TrackTarget.values());
             Set<TrackTarget> tried = new HashSet<>();

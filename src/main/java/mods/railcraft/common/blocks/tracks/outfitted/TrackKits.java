@@ -96,6 +96,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         HIGH_SPEED_TRANSITION.trackTypeFilter = IS_HIGH_SPEED;
 
         JUNCTION.renderer = TrackKit.Renderer.UNIFIED;
+        JUNCTION.visible = false;
 
         DUMPING.maxSupportDistance = 2;
     }
@@ -108,6 +109,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private final Supplier<List<Object[]>> recipeSupplier;
     private TrackKit trackKit;
     private boolean depreciated;
+    private boolean visible = true;
     private boolean allowedOnSlopes = true;
     private boolean requiresTicks;
     private int maxSupportDistance;
@@ -161,6 +163,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
             builder.setRequiresTicks(requiresTicks);
             builder.setRenderer(renderer);
             builder.setRenderStates(states);
+            builder.setVisible(visible);
             builder.setAllowedOnSlopes(allowedOnSlopes);
             builder.setTrackTypeFilter(trackTypeFilter);
             builder.setMaxSupportDistance(maxSupportDistance);

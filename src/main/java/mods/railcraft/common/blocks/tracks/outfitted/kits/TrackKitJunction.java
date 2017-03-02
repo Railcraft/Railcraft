@@ -14,8 +14,11 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by CovertJaguar on 2/27/2017 for Railcraft.
@@ -42,5 +45,10 @@ public class TrackKitJunction extends TrackKitRailcraft {
         if ((yaw >= 45) && (yaw <= 135))
             return EnumRailDirection.NORTH_SOUTH;
         return EnumRailDirection.EAST_WEST;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(int fortune) {
+        return Collections.emptyList();
     }
 }
