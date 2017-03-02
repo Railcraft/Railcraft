@@ -91,6 +91,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     SIGNAL_LABEL(ItemSignalLabel::new, "tool_signal_label"),
     SIGNAL_LAMP(ItemSignalLamp::new, "signal_lamp", Blocks.REDSTONE_LAMP),
     SIGNAL_TUNER(ItemSignalTuner::new, "tool_signal_tuner"),
+    SPIKE_MAUL_IRON(ItemSpikeMaulIron::new, "tool_spike_maul_iron"),
+    SPIKE_MAUL_STEEL(ItemSpikeMaulSteel::new, "tool_spike_maul_steel"),
     STONE_CARVER(ItemStoneCarver::new, "tool_stone_carver"),
     SWORD_STEEL(ItemSteelSword::new, "tool_sword_steel", Items.IRON_SWORD),
     TICKET(ItemTicket::new, "routing_ticket", Items.PAPER),

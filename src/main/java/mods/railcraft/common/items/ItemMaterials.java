@@ -12,8 +12,9 @@ package mods.railcraft.common.items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.EnumHelper;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -25,7 +26,8 @@ import java.util.Map;
 public class ItemMaterials {
 
     enum Tool {
-        CROWBAR;
+        CROWBAR,
+        SPIKE_MAUL;
 
         static {
             CROWBAR.addAttribute(Material.IRON, Attribute.ATTACK_DAMAGE, 2.5F);
@@ -34,18 +36,23 @@ public class ItemMaterials {
             CROWBAR.addAttribute(Material.STEEL, Attribute.ATTACK_SPEED, -2.7F);
             CROWBAR.addAttribute(Material.THAUMIUM, Attribute.ATTACK_SPEED, -2.6F);
             CROWBAR.addAttribute(Material.VOID, Attribute.ATTACK_SPEED, -2.5F);
+
+            SPIKE_MAUL.addAttribute(Material.IRON, Attribute.ATTACK_DAMAGE, 11F);
+
+            SPIKE_MAUL.addAttribute(Material.IRON, Attribute.ATTACK_SPEED, -3.5F);
+            SPIKE_MAUL.addAttribute(Material.STEEL, Attribute.ATTACK_SPEED, -3.4F);
         }
 
-        private final Map<Tuple<Material, Attribute>, Float> floatAttributes = new HashMap<>();
+        private final Map<Pair<Material, Attribute>, Float> floatAttributes = new HashMap<>();
 
         void addAttribute(Material mat, Attribute at, float value) {
-            floatAttributes.put(new Tuple<>(mat, at), value);
+            floatAttributes.put(new ImmutablePair<>(mat, at), value);
         }
 
         public float getAttributeF(@Nullable Material mat, Attribute at) {
             if (mat == null)
                 return 0F;
-            Float f = floatAttributes.get(new Tuple<>(mat, at));
+            Float f = floatAttributes.get(new ImmutablePair<>(mat, at));
             if (f == null)
                 return getAttributeF(mat.previousTier, at);
             return f;

@@ -33,15 +33,7 @@ import net.minecraftforge.common.config.Property;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RailcraftConfig {
     public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
@@ -438,6 +430,7 @@ public class RailcraftConfig {
 
         loadLootProperty("steel.block", 5);
         loadLootProperty("tool_crowbar_iron", 10);
+        loadLootProperty("tool_spike_maul_iron", 10);
         loadLootProperty("tool_hoe_steel", 5);
         loadLootProperty("tool_shears_steel", 5);
         loadLootProperty("tool_sword_steel", 5);

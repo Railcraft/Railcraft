@@ -23,6 +23,8 @@ public class ModuleTracks extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftItems.TRACK_KIT,
+                        RailcraftItems.SPIKE_MAUL_IRON,
+                        RailcraftItems.SPIKE_MAUL_STEEL,
                         RailcraftBlocks.MACHINE_ACTUATOR,
                         RailcraftBlocks.TRACK_OUTFITTED,
 //                        RailcraftBlocks.TRACK_JUNCTION_IRON,

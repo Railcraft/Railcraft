@@ -11,33 +11,22 @@
 package mods.railcraft.common.items.enchantment;
 
 import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.ItemSpikeMaul;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentDestruction extends EnchantmentToolRailcraft {
+public class EnchantmentToolRailcraft extends Enchantment {
 
-    public EnchantmentDestruction(Rarity rarity) {
-        super("destruction", rarity, EntityEquipmentSlot.MAINHAND);
-    }
-
-    @Override
-    public int getMinEnchantability(int level) {
-        return 5 + (level - 1) * 10;
-    }
-
-    @Override
-    public int getMaxEnchantability(int level) {
-        return getMinEnchantability(level) + 10;
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 3;
+    public EnchantmentToolRailcraft(String tag, Rarity rarity, EntityEquipmentSlot... slots) {
+        super(rarity, EnumEnchantmentType.DIGGER, slots);
+        setName("railcraft." + tag);
     }
 
     @Override
     public boolean canApply(ItemStack stack) {
-        return stack.getItem() instanceof ItemCrowbar;
+        return stack.getItem() instanceof ItemCrowbar || stack.getItem() instanceof ItemSpikeMaul;
     }
 
 }
