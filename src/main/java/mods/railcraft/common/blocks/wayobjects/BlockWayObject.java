@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;

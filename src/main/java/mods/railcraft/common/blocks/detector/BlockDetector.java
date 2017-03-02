@@ -10,12 +10,12 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;

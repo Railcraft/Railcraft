@@ -13,6 +13,7 @@ import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -49,7 +50,7 @@ import java.util.Set;
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
         @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 })
-public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple, IActivationBlockingItem {
 
     private static final byte BOOST_DAMAGE = 3;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
