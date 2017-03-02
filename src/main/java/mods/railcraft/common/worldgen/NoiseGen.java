@@ -42,6 +42,10 @@ public abstract class NoiseGen {
         return noise(x, z) > level;
     }
 
+    public boolean isGreaterThan(double x, double y, double z, double level) {
+        return noise(x, y, z) > level;
+    }
+
     public static class NoiseGenSimplex extends NoiseGen {
 
         public NoiseGenSimplex(Random rand, double scale) {

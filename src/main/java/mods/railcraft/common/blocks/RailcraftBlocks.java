@@ -53,6 +53,7 @@ import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
+import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexElectric;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
@@ -115,7 +116,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemBlockRailcraft::new),
-    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
     TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
     TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
     TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
