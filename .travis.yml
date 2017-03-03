@@ -1,12 +1,13 @@
 language: java
-jdk:
-  - oraclejdk8
- 
-sudo: false
+sudo: required
+dist: trusty
+
 addons:
   apt:
     packages:
       - oracle-java8-installer
+jdk:
+  - oraclejdk8
 
 install: ./gradlew setupCiWorkspace -S
 script: ./gradlew build
