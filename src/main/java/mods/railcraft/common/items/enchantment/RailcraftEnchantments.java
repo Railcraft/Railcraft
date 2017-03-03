@@ -24,8 +24,8 @@ public class RailcraftEnchantments {
     public static Enchantment destruction;
 
     public static void registerEnchantment() {
-        wrecking = new EnchantmentDamageRailcraft("wrecking", Enchantment.Rarity.RARE, 1, 11, 20, null, 1.5f);
-        implosion = new EnchantmentDamageRailcraft("implosion", Enchantment.Rarity.RARE, 5, 8, 20, EntityCreeper.class, 3f);
+        wrecking = new EnchantmentDamageRailcraft("wrecking", Enchantment.Rarity.RARE, 1, 11, 20, null, 0.75f);
+        implosion = new EnchantmentDamageRailcraft("implosion", Enchantment.Rarity.RARE, 5, 8, 20, EntityCreeper.class, 2.5f);
         MinecraftForge.EVENT_BUS.register(implosion);
         destruction = new EnchantmentDestruction(Enchantment.Rarity.VERY_RARE);
 
