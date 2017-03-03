@@ -34,29 +34,6 @@ import java.io.IOException;
 public class DataManagerPlugin {
 
     public abstract static class DataSerializerIO<T> implements DataSerializer<T> {
-        @Override
-        public final void write(PacketBuffer buf, T value) {
-            try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
-                 RailcraftOutputStream data = new RailcraftOutputStream(out)) {
-                write(data, value);
-            } catch (IOException e) {
-                Game.logThrowable("Error syncing FluidStack", e);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
-                    throw new RuntimeException(e);
-            }
-        }
-
-        protected abstract void write(RailcraftOutputStream outputStream, T value) throws IOException;
-
-        @Override
-        public final T read(PacketBuffer buf) throws IOException {
-            try (ByteBufInputStream out = new ByteBufInputStream(buf);
-                 RailcraftInputStream data = new RailcraftInputStream(out)) {
-                return read(data);
-            }
-        }
-
-        protected abstract T read(RailcraftInputStream inputStream) throws IOException;
 
         @Override
         public DataParameter<T> createKey(int id) {
@@ -66,27 +43,57 @@ public class DataManagerPlugin {
 
     public static final DataSerializer<OptionalFluidStack> OPTIONAL_FLUID_STACK = new DataSerializerIO<OptionalFluidStack>() {
         @Override
-        public void write(RailcraftOutputStream outputStream, OptionalFluidStack value) throws IOException {
-            outputStream.writeFluidStack(value.orElse(null));
-//            Game.log(Level.INFO, "fluid write");
+        public final void write(PacketBuffer buf, OptionalFluidStack value) {
+            try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
+                 RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+                data.writeFluidStack(value.orElse(null));
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing Object", e);
+                if (Game.DEVELOPMENT_ENVIRONMENT)
+                    throw new RuntimeException(e);
+            }
         }
 
         @Override
-        public OptionalFluidStack read(RailcraftInputStream inputStream) throws IOException {
-//            Game.log(Level.INFO, "fluid read");
-            return OptionalFluidStack.of(inputStream.readFluidStack());
+        public final OptionalFluidStack read(PacketBuffer buf) {
+            try (ByteBufInputStream out = new ByteBufInputStream(buf);
+                 RailcraftInputStream data = new RailcraftInputStream(out)) {
+
+                return OptionalFluidStack.of(data.readFluidStack());
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing Object", e);
+                if (Game.DEVELOPMENT_ENVIRONMENT)
+                    throw new RuntimeException(e);
+            }
+            return OptionalFluidStack.empty();
         }
     };
 
     public static final DataSerializer<EnumColor> ENUM_COLOR = new DataSerializerIO<EnumColor>() {
         @Override
-        public void write(RailcraftOutputStream outputStream, EnumColor value) throws IOException {
-            outputStream.writeEnum(value);
+        public final void write(PacketBuffer buf, EnumColor value) {
+            try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
+                 RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+                data.writeEnum(value);
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing Object", e);
+                if (Game.DEVELOPMENT_ENVIRONMENT)
+                    throw new RuntimeException(e);
+            }
         }
 
         @Override
-        public EnumColor read(RailcraftInputStream inputStream) throws IOException {
-            return inputStream.readEnum(EnumColor.VALUES);
+        public final EnumColor read(PacketBuffer buf) {
+            try (ByteBufInputStream out = new ByteBufInputStream(buf);
+                 RailcraftInputStream data = new RailcraftInputStream(out)) {
+
+                return data.readEnum(EnumColor.VALUES);
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing Object", e);
+                if (Game.DEVELOPMENT_ENVIRONMENT)
+                    throw new RuntimeException(e);
+            }
+            return EnumColor.WHITE;
         }
     };
 
