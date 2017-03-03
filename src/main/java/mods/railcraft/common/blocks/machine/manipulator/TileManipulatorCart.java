@@ -55,7 +55,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     private boolean sendCartGateAction;
     private boolean processing;
     private int pause;
-    private int resetTimer;
+    protected int resetTimer;
 
     public EnumRedstoneMode[] getValidRedstoneModes() {
         return EnumRedstoneMode.values();
@@ -96,6 +96,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     }
 
     protected void reset() {
+        resetTimer = 0;
     }
 
     protected final void setProcessing(boolean processing) {

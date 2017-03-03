@@ -58,7 +58,6 @@ public class ItemTunnelBore extends ItemCart {
             if (Game.isHost(world) && !CartToolsAPI.isMinecartAt(world, pos, 0)) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, existingState);
                 if (TrackShapeHelper.isLevelStraight(trackShape)) {
-                    // TODO: test Bore placement
                     EnumFacing playerFacing = MiscTools.getHorizontalSideFacingPlayer(player).getOpposite();
 
                     if (trackShape == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {

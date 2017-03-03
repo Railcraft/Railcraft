@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemRailcraft extends Item implements IRailcraftItem {
+public class ItemRailcraft extends Item implements IRailcraftItemSimple {
     private float smeltingExperience = -1;
     private int rarity;
     private static final IItemPropertyGetter HELD_GETTER = new IItemPropertyGetter() {
@@ -61,9 +61,6 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
         return EnumRarity.values()[rarity];
     }
 
-    public int getHeatValue(ItemStack stack) {
-        return 0;
-    }
 
     public ItemRailcraft setSmeltingExperience(float smeltingExperience) {
         this.smeltingExperience = smeltingExperience;
@@ -97,6 +94,16 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
         ToolTip toolTip = getToolTip(stack, player, adv);
         if (toolTip != null)
             info.addAll(toolTip.convertToStrings());
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

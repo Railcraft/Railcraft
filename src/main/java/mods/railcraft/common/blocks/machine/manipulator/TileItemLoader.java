@@ -11,37 +11,29 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.inventory.*;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class TileItemLoader extends TileItemManipulator {
-
-    private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
-    private final Set<ItemStack> checkedItems = new ItemStackSet();
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !(tile instanceof TileItemLoader), InventorySorter.SIZE_DESCENDING);
-    private final InventoryMapper invBuffer;
-    private final LinkedList<IInventoryObject> chests = new LinkedList<IInventoryObject>();
-
-    public TileItemLoader() {
-        setInventorySize(9);
-        invBuffer = new InventoryMapper(this, false);
-    }
 
     @Override
     public ManipulatorVariant getMachineType() {
         return ManipulatorVariant.ITEM_LOADER;
+    }
+
+    @Override
+    public List<IInventoryObject> getSource() {
+        return chests;
+    }
+
+    @Override
+    public List<IInventoryObject> getDestination() {
+        return Collections.singletonList(cart);
     }
 
     @Override
@@ -52,228 +44,6 @@ public class TileItemLoader extends TileItemManipulator {
     @Override
     public EnumFacing[] getValidRotations() {
         return new EnumFacing[]{EnumFacing.DOWN};
-    }
-
-    @Override
-    protected void reset() {
-        transferredItems.clear();
-    }
-
-    @Override
-    public void processCart(EntityMinecart cart) {
-
-        chests.clear();
-        chests.addAll(invCache.getAdjacentInventories());
-        chests.addFirst(invBuffer);
-
-        checkedItems.clear();
-
-        IInventoryObject cartInv = InvTools.getInventory(cart, getFacing().getOpposite());
-        if (cartInv == null) {
-            sendCart(cart);
-            return;
-        }
-
-        switch (getMode()) {
-            case TRANSFER: {
-                boolean hasFilter = false;
-                for (ItemStack filter : getItemFilters().getContents()) {
-                    if (filter == null) {
-                        continue;
-                    }
-                    if (!checkedItems.add(filter)) {
-                        continue;
-                    }
-                    hasFilter = true;
-                    Short numMoved = transferredItems.get(filter);
-                    if (numMoved == null) {
-                        numMoved = 0;
-                    }
-                    if (numMoved < InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(chests, cartInv, filter);
-                        if (moved != null) {
-                            setProcessing(true);
-                            numMoved++;
-                            transferredItems.put(moved, numMoved);
-                            break;
-                        }
-                    }
-                }
-                if (!hasFilter) {
-                    ItemStack moved = InvTools.moveOneItem(chests, cartInv);
-                    if (moved != null) {
-                        setProcessing(true);
-                        break;
-                    }
-                }
-                break;
-            }
-            case STOCK: {
-                for (ItemStack filter : getItemFilters().getContents()) {
-                    if (filter == null) {
-                        continue;
-                    }
-                    if (!checkedItems.add(filter)) {
-                        continue;
-                    }
-                    int stocked = InvTools.countItems(cartInv, filter);
-                    if (stocked < InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(chests, cartInv, filter);
-                        if (moved != null) {
-                            setProcessing(true);
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-            case EXCESS: {
-                for (ItemStack filter : getItemFilters().getContents()) {
-                    if (filter == null) {
-                        continue;
-                    }
-                    if (!checkedItems.add(filter)) {
-                        continue;
-                    }
-                    int stocked = InvTools.countItems(chests, filter);
-                    if (stocked > InvTools.countItems(getItemFilters(), filter)) {
-                        ItemStack moved = InvTools.moveOneItem(chests, cartInv, filter);
-                        if (moved != null) {
-                            setProcessing(true);
-                            break;
-                        }
-                    }
-                }
-                if (!isProcessing()) {
-                    setProcessing(InvTools.moveOneItemExcept(chests, cartInv, StackFilters.containedIn(getItemFilters())) != null);
-                }
-                break;
-            }
-            case ALL: {
-                boolean hasFilter = false;
-                for (ItemStack filter : getItemFilters().getContents()) {
-                    if (filter == null) {
-                        continue;
-                    }
-                    if (!checkedItems.add(filter)) {
-                        continue;
-                    }
-                    hasFilter = true;
-                    ItemStack moved = InvTools.moveOneItem(chests, cartInv, filter);
-                    if (moved != null) {
-                        setProcessing(true);
-                        break;
-                    }
-                }
-                if (!hasFilter) {
-                    ItemStack moved = InvTools.moveOneItem(chests, cartInv);
-                    if (moved != null) {
-                        setProcessing(true);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    @Override
-    protected boolean hasWorkForCart(EntityMinecart cart) {
-        IInventoryObject cartInv = InvTools.getInventory(cart, getFacing().getOpposite());
-        if (cartInv == null)
-            return false;
-        EnumRedstoneMode state = redstoneController().getButtonState();
-        if (!isProcessing() && state != EnumRedstoneMode.COMPLETE) {
-            if (state == EnumRedstoneMode.PARTIAL) {
-                if (!InvTools.isInventoryEmpty(cartInv)) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else if (getMode() == EnumTransferMode.TRANSFER && isTransferComplete(getItemFilters().getContents())) {
-            return false;
-        } else if (getMode() == EnumTransferMode.STOCK && isStockComplete(cartInv, getItemFilters().getContents())) {
-            return false;
-        } else if (getMode() == EnumTransferMode.EXCESS && isExcessComplete(chests, getItemFilters().getContents())) {
-            return false;
-        } else if (getMode() == EnumTransferMode.ALL && isAllComplete(cartInv, getItemFilters().getContents())) {
-            return false;
-        }
-        return !InvTools.isInventoryFull(cartInv);
-    }
-
-    private boolean isTransferComplete(ItemStack[] filters) {
-        checkedItems.clear();
-        boolean hasFilter = false;
-        for (ItemStack filter : filters) {
-            if (filter == null) {
-                continue;
-            }
-            if (!checkedItems.add(filter)) {
-                continue;
-            }
-            hasFilter = true;
-            Short numMoved = transferredItems.get(filter);
-            if (numMoved == null || numMoved < InvTools.countItems(getItemFilters(), filter)) {
-                return false;
-            }
-        }
-        return hasFilter;
-    }
-
-    private boolean isStockComplete(IInventoryObject cart, ItemStack[] filters) {
-        checkedItems.clear();
-        for (ItemStack filter : filters) {
-            if (filter == null) {
-                continue;
-            }
-            if (!checkedItems.add(filter)) {
-                continue;
-            }
-            int stocked = InvTools.countItems(cart, filter);
-            if (stocked < InvTools.countItems(getItemFilters(), filter)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isExcessComplete(List<IInventoryObject> chests, ItemStack[] filters) {
-        checkedItems.clear();
-        int max = 0;
-        for (ItemStack filter : filters) {
-            if (filter == null) {
-                continue;
-            }
-            if (!checkedItems.add(filter)) {
-                continue;
-            }
-            int stocked = InvTools.countItems(chests, filter);
-            max += filter.stackSize;
-            if (stocked > InvTools.countItems(getItemFilters(), filter)) {
-                return false;
-            }
-        }
-        return InvTools.countItems(chests) <= max;
-    }
-
-    private boolean isAllComplete(IInventoryObject cart, ItemStack[] filters) {
-        checkedItems.clear();
-        boolean hasFilter = false;
-        for (ItemStack filter : filters) {
-            if (filter == null) {
-                continue;
-            }
-            if (!checkedItems.add(filter)) {
-                continue;
-            }
-            hasFilter = true;
-            if (InvTools.countItems(cart, filter) > 0) {
-                return false;
-            }
-        }
-        return hasFilter;
     }
 
     @Override

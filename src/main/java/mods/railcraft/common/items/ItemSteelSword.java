@@ -9,15 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class ItemSteelSword extends ItemSword implements IRailcraftItem {
+public class ItemSteelSword extends ItemSword implements IRailcraftItemSimple {
 
     public ItemSteelSword() {
         super(ItemMaterials.STEEL_TOOL);
@@ -32,6 +29,16 @@ public class ItemSteelSword extends ItemSword implements IRailcraftItem {
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(RailcraftItems.SHEARS_STEEL, 1, 1, LootPlugin.Type.WARRIOR);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

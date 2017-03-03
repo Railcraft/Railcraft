@@ -9,22 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.models.programmatic.carts.ModelMaintanceLampOff;
+import mods.railcraft.client.render.models.programmatic.carts.ModelMaintenanceLamp;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.carts.CartBaseMaintenance;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartContentRendererMaintenance extends CartContentRenderer<CartBaseMaintenance> {
 
-    // TODO: fix this correctly
-//    private static final ModelBase LAMP_ON = new ModelMaintanceLampOn();
-    private static final ModelBase LAMP_OFF = new ModelMaintanceLampOff();
+    private static final ModelBase LAMP = new ModelMaintenanceLamp();
     private static final ResourceLocation LAMP_ON_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_on.png");
     private static final ResourceLocation LAMP_OFF_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_off.png");
 
@@ -34,13 +32,16 @@ public class CartContentRendererMaintenance extends CartContentRenderer<CartBase
         int blockOffset = cart.getDisplayTileOffset();
         OpenGL.glPushMatrix();
         OpenGL.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
-        if (cart.isBlinking()) {
+        boolean bright = cart.isBlinking();
+        if (bright) {
+            RenderTools.setBrightness(1F);
             renderer.bindTex(LAMP_ON_TEX);
-//            LAMP_ON.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         } else {
             renderer.bindTex(LAMP_OFF_TEX);
-            LAMP_OFF.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
+        LAMP.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        if (bright)
+            RenderTools.resetBrightness();
         OpenGL.glPopMatrix();
     }
 

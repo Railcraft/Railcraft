@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
 import com.google.common.collect.Iterators;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,7 +22,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Creates a standalone instance of IInventory.
@@ -69,6 +74,14 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     public StandaloneInventory(int size) {
         this(size, null, (RailcraftTileEntity) null);
+    }
+
+    public Stream<ItemStack> stream() {
+        return Arrays.stream(contents);
+    }
+
+    public Predicate<ItemStack> precenseTest() {
+        return StackFilters.containedIn(this);
     }
 
     @Override

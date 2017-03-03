@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
@@ -25,6 +26,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public class EntityCartChest extends CartBaseContainer {
     public EntityCartChest(World world) {
         super(world);
@@ -32,6 +35,12 @@ public class EntityCartChest extends CartBaseContainer {
 
     public EntityCartChest(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Nonnull
+    @Override
+    public Type getType() {
+        return Type.CHEST;
     }
 
     @Override
@@ -44,11 +53,6 @@ public class EntityCartChest extends CartBaseContainer {
         if (Game.isHost(worldObj))
             player.displayGUIChest(this);
         return true;
-    }
-
-    @Override
-    public EntityMinecart.Type getType() {
-        return EntityMinecart.Type.CHEST;
     }
 
     @Override
@@ -100,4 +104,11 @@ public class EntityCartChest extends CartBaseContainer {
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
         return new ContainerChest(playerInventory, this, playerIn);
     }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        throw new Error("Should not be called");
+    }
+
 }

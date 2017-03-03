@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IItemCart;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,7 +43,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Nonnull
     @Override
     public String getName() {
-        return hasCustomName() ? getCustomNameTag() : getCartType().getEntityLocalizationTag();
+        return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
     }
 
     @Override
@@ -68,9 +70,24 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         killAndDrop(this);
     }
 
+    /**
+     * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
+     */
+    @Nullable
     @Override
     public EntityMinecart.Type getType() {
+        FMLLog.bigWarning("This method should NEVER be called");
         return null;
+    }
+
+    @Override
+    public boolean isPoweredCart() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeRidden() {
+        return false;
     }
 
     @Override

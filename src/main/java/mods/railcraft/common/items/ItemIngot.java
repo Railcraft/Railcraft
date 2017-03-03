@@ -31,4 +31,9 @@ public class ItemIngot extends ItemMetal {
             LootPlugin.addLootUnique(RailcraftItems.INGOT, m, 5, 9, LootPlugin.Type.TOOL);
         }
     }
+
+    @Override
+    public void finalizeDefinition() {
+        ItemMaterials.STEEL_TOOL.setRepairItem(Metal.STEEL.getStack(Form.INGOT));
+    }
 }

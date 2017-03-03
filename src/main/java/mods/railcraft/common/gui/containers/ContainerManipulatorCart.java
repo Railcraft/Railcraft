@@ -22,16 +22,20 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ContainerManipulatorCart extends RailcraftContainer {
-    public TileManipulatorCart tile;
+public abstract class ContainerManipulatorCart<T extends TileManipulatorCart> extends RailcraftContainer {
+    public T tile;
+    public final boolean hasCartFilter;
 
-    public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile) {
-        this(inventoryplayer, tile, false);
+    protected ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, T tile) {
+        this(inventoryplayer, tile, true);
     }
 
-    public ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, TileManipulatorCart tile, boolean hasCartFilter) {
+    protected ContainerManipulatorCart(@Nullable InventoryPlayer inventoryplayer, T tile, boolean hasCartFilter) {
         super(tile);
         this.tile = tile;
+        this.hasCartFilter = hasCartFilter;
+
+        addSlots(tile);
 
         if (hasCartFilter) {
             addSlot(new SlotMinecartFilter(this.tile.getCartFilters(), 0, 71, 26));
@@ -49,5 +53,8 @@ public class ContainerManipulatorCart extends RailcraftContainer {
                 addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
             }
         }
+    }
+
+    protected void addSlots(T tile) {
     }
 }

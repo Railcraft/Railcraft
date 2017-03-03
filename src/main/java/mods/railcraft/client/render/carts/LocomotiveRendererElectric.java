@@ -13,6 +13,7 @@ import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.models.programmatic.ModelSimple;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveElectric;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
@@ -27,8 +28,7 @@ import javax.annotation.Nullable;
  */
 public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
 
-    private static final ModelBase LAMP_OFF = new ModelLampOff();
-//    private static final ModelBase LAMP_ON = new ModelLampOn();
+    private static final ModelBase LAMP = new ModelLamp();
     private final ResourceLocation LAMP_TEX_ON;
     private final ResourceLocation LAMP_TEX_OFF;
 
@@ -49,21 +49,24 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
         OpenGL.glScalef(-1F, -1F, 1.0F);
         OpenGL.glTranslatef(0.05F, 0.0F, 0.0F);
 
-        if (((EntityLocomotive) cart).getMode() == EntityLocomotive.LocoMode.RUNNING) {
+        boolean bright = ((EntityLocomotive) cart).getMode() == EntityLocomotive.LocoMode.RUNNING;
+        if (bright) {
+            RenderTools.setBrightness(1F);
             renderer.bindTex(LAMP_TEX_ON);
-//            LAMP_ON.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         } else {
             renderer.bindTex(LAMP_TEX_OFF);
-            LAMP_OFF.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
+        LAMP.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        if (bright)
+            RenderTools.resetBrightness();
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
     }
 
-    private static class ModelLampOff extends ModelSimple {
+    private static class ModelLamp extends ModelSimple {
 
-        public ModelLampOff() {
+        public ModelLamp() {
             super("lamp");
             renderer.setTextureSize(16, 16);
             setTextureOffset("lamp.bulb", 1, 1);
@@ -75,23 +78,5 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
         }
 
     }
-
-    //TODO: render this differently
-//    private static class ModelLampOn extends ModelLampOff {
-//
-//        public ModelLampOn() {
-//            for (Object box : renderer.cubeList) {
-//                TexturedQuadAdv[] quadsNew = new TexturedQuadAdv[6];
-//                TexturedQuad[] quadsOld = ObfuscationReflectionHelper.getPrivateValue(ModelBox.class, (ModelBox) box, 1);
-//                for (int i = 0; i < 6; i++) {
-//                    quadsNew[i] = new TexturedQuadAdv(quadsOld[i].vertexPositions);
-//                    quadsNew[i].setBrightness(210);
-//                    quadsNew[i].setColorRGBA(255, 255, 255, 255);
-//                }
-//                ObfuscationReflectionHelper.setPrivateValue(ModelBox.class, (ModelBox) box, quadsNew, 1);
-//            }
-//        }
-//
-//    }
 
 }

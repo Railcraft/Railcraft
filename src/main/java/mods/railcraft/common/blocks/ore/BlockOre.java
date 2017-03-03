@@ -9,7 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.RailcraftBlockSubtyped;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
@@ -19,8 +20,6 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -39,27 +38,22 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOre extends RailcraftBlockSubtyped<EnumOre> {
+@RailcraftBlockMetadata(variant = EnumOre.class)
+public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
 
-    public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
     private final Random rand = new Random();
 
     public BlockOre() {
-        super(Material.ROCK, EnumOre.class);
-        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
+        super(Material.ROCK);
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOre.SULFUR));
         setResistance(5);
         setHardness(3);
         setSoundType(SoundType.STONE);
     }
 
     @Override
-    public IProperty<EnumOre> getVariantProperty() {
-        return VARIANT;
-    }
-
-    @Override
     public void defineRecipes() {
-        registerOreRecipe(Metal.IRON);
+        registerOreRecipe(Metal.COPPER);
         registerOreRecipe(Metal.TIN);
         registerOreRecipe(Metal.LEAD);
         registerOreRecipe(Metal.SILVER);

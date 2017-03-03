@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.plugins.misc;
 
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleSeasonal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.entity.item.EntityMinecart;
@@ -45,7 +46,6 @@ public class SeasonPlugin {
     }
 
     public static boolean isGhostTrain(EntityMinecart cart) {
-//        return true;
-        return HALLOWEEN || (cart.hasCustomName() && GHOST_TRAIN.equals(cart.getCustomNameTag()));
+        return RailcraftConfig.isGhostTrainEnabled() && (cart.hasCustomName() && GHOST_TRAIN.equals(cart.getCustomNameTag()) || HALLOWEEN);
     }
 }

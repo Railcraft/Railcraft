@@ -36,6 +36,8 @@ public enum Remapper {
         private final Map<String, IRailcraftObjectContainer<?>> names = new HashMap<>();
 
         {
+            names.put("manipulator", RailcraftBlocks.MACHINE_MANIPULATOR);
+
             names.put("track_abandoned", RailcraftBlocks.TRACK_FLEX_ABANDONED);
             names.put("track_electric", RailcraftBlocks.TRACK_FLEX_ELECTRIC);
             names.put("track_high_speed", RailcraftBlocks.TRACK_FLEX_HIGH_SPEED);

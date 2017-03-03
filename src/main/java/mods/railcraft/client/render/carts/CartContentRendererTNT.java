@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.CartBaseExplosive;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -39,10 +41,10 @@ public class CartContentRendererTNT extends CartContentRenderer<CartBaseExplosiv
         super.render(renderer, cart, light, partialTicks);
         if (cart.isPrimed() && (cart.getFuse() / 5) % 2 == 0) {
             OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-            OpenGL.glDisable(GL11.GL_TEXTURE_2D);
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
             OpenGL.glDisable(GL11.GL_LIGHTING);
-            OpenGL.glEnable(GL11.GL_BLEND);
-            OpenGL.glBlendFunc(770, 772);
+            OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             float alpha = (1.0F - (((float) cart.getFuse() - partialTicks) + 1.0F) / 100F) * 0.8F;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, alpha);
             OpenGL.glScalef(1.01f, 1.01f, 1.01f);

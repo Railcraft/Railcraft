@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.items.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
@@ -10,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.ref.WeakReference;
 
-public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
+public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
 
     private final int baseEnchantability, levelEnchantability, thresholdEnchantability;
     private final Class<? extends EntityLivingBase> targetType;

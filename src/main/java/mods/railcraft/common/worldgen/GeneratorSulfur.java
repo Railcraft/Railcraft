@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 
 import java.util.Random;
 
@@ -25,16 +24,16 @@ public class GeneratorSulfur extends Generator {
     //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SULFUR", new Class[0], new Object[0]);
 
     public GeneratorSulfur() {
-        super(EventType.CUSTOM, new WorldGenSulfur());
+        super(new WorldGenSulfur());
     }
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN);
+        return world.provider.getDimension() == 0 && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN);
     }
 
     @Override
-    public void generate(World world, Random rand, BlockPos targetPos) {
+    public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
         for (int i = 0; i < 90; i++) {
             int x = targetPos.getX() + rand.nextInt(16);
             int y = 6 + rand.nextInt(10);

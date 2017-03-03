@@ -15,9 +15,9 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -32,6 +32,7 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -70,7 +71,7 @@ import java.util.Locale;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class EntityLocomotive extends CartBaseContainer implements IDirectionalCart, IGuiReturnHandler,
-        ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
+        ILinkableCart, IMinecart, ISecureObject<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
     private static final DataParameter<Byte> LOCOMOTIVE_SPEED = DataManagerPlugin.create(DataSerializers.BYTE);
@@ -86,7 +87,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private static final int WHISTLE_INTERVAL = 256;
     private static final int WHISTLE_DELAY = 160;
     private static final int WHISTLE_CHANCE = 4;
-    private static final int IS_REVERSED_INDEX = 6;
     private final MultiButtonController<LocoLockButtonState> lockController = MultiButtonController.create(0, LocoLockButtonState.VALUES);
     public LocoMode clientMode = LocoMode.SHUTDOWN;
     public LocoSpeed clientSpeed = LocoSpeed.MAX;
@@ -98,6 +98,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
+    private boolean preReverse;
 
     private EnumSet<LocoMode> allowedModes = EnumSet.allOf(LocoMode.class);
     private LocoSpeed maxReverseSpeed = LocoSpeed.NORMAL;
@@ -356,6 +357,14 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isClient(worldObj))
             return;
 
+//        {
+//            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
+//            if (reverse != preReverse || prevRotationYaw != rotationYaw) {
+//                preReverse = reverse;
+//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", worldObj.getTotalWorldTime(), reverse, rotationYaw);
+//            }
+//        }
+
         processTicket();
         updateFuel();
 
@@ -369,21 +378,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         if (update % WHISTLE_INTERVAL == 0 && isRunning() && rand.nextInt(WHISTLE_CHANCE) == 0)
             whistle();
-
-        if (isShutdown()) {
-            double yaw = rotationYaw * Math.PI / 180D;
-            double cos = Math.cos(yaw);
-            double sin = Math.sin(yaw);
-            float limit = 0.05f;
-            if (motionX > limit && cos < 0)
-                rotationYaw += 180;
-            else if (motionX < -limit && cos > 0)
-                rotationYaw += 180;
-            else if (motionZ > limit && sin < 0)
-                rotationYaw += 180;
-            else if (motionZ < -limit && sin > 0)
-                rotationYaw += 180;
-        }
     }
 
     @Override
@@ -577,7 +571,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
+        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         data.setBoolean("isInReverse", isInReverse);
 
@@ -604,7 +598,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
-        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), IS_REVERSED_INDEX);
+        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         model = data.getString("model");
 

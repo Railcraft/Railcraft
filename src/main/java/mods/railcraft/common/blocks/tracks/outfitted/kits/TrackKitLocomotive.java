@@ -30,7 +30,7 @@ import java.io.IOException;
 
 public class TrackKitLocomotive extends TrackKitPowered {
 
-    private LocoMode mode = LocoMode.RUNNING;
+    private LocoMode mode = LocoMode.SHUTDOWN;
 
     @Override
     public TrackKits getTrackKitContainer() {

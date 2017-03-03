@@ -10,9 +10,20 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.EntityLocomotive;
+import mods.railcraft.common.carts.EntityLocomotiveCreative;
+import mods.railcraft.common.carts.EntityLocomotiveElectric;
+import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.dynamiclights.DynamicLightsPlugin;
+import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.util.function.ToIntFunction;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -21,7 +32,6 @@ import mods.railcraft.common.items.RailcraftItems;
 public class ModuleLocomotives extends RailcraftModulePayload {
     public ModuleLocomotives() {
         setEnabledEventHandler(new ModuleEventHandler() {
-
             @Override
             public void construction() {
                 add(
@@ -32,8 +42,27 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         RailcraftCarts.LOCO_STEAM_SOLID,
                         RailcraftCarts.LOCO_ELECTRIC,
                         RailcraftCarts.LOCO_CREATIVE
-//                        RailcraftBlocks.track
+//                        RailcraftBlocks.TRACK_OUTFITTED
                 );
+            }
+
+            @Override
+            public void postInit() {
+                if (FMLCommonHandler.instance().getSide().isClient()) {
+                    int lightLevel = RailcraftConfig.locomotiveLightLevel();
+                    if (lightLevel >= 0) {
+                        registerDynamicLights(lightLevel);
+                    }
+                }
+            }
+
+            private void registerDynamicLights(int lightLevel) {
+                DynamicLightsPlugin plugin = DynamicLightsPlugin.getInstance();
+                ToIntFunction<Entity> lightCalculator = entity -> (entity == null || entity.isDead
+                        || !(entity instanceof EntityLocomotive) || ((EntityLocomotive) entity).isShutdown()) ? 0 : lightLevel;
+                plugin.registerEntityLightSource(EntityLocomotiveSteamSolid.class, lightCalculator);
+                plugin.registerEntityLightSource(EntityLocomotiveElectric.class, lightCalculator);
+                plugin.registerEntityLightSource(EntityLocomotiveCreative.class, lightCalculator);
             }
         });
     }

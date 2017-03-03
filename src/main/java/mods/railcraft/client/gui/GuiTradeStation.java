@@ -127,10 +127,7 @@ public class GuiTradeStation extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        int sWidth = fontRendererObj.getStringWidth(label);
-        int sPos = xSize / 4 - sWidth / 2;
-        fontRendererObj.drawString(label, sPos, 6, 0x404040);
-//        fontRendererObj.drawString(feed, 85, 29, 0x404040);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
         GuiTools.drawVillager(villager, 141, 79, 30, (float) (guiLeft + 87) - mouseX, (float) (guiTop + 91 - 50) - mouseY);
     }

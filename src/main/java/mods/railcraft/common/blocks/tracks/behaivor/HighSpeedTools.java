@@ -42,6 +42,8 @@ public class HighSpeedTools {
     }
 
     public static boolean isTrackSafeForHighSpeed(World world, BlockPos pos, EntityMinecart cart) {
+        if (!isHighSpeedTrackAt(world, pos))
+            return false;
         BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
         if (!TrackShapeHelper.isStraight(dir)) {
             return false;

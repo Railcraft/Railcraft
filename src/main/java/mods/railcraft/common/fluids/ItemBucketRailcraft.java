@@ -16,6 +16,7 @@ public class ItemBucketRailcraft extends ItemFluidContainer {
     public ItemBucketRailcraft(Fluids fluid) {
         super(fluid, Items.BUCKET);
         setMaxStackSize(1);
+        setContainerItem(Items.BUCKET);
     }
 
 }

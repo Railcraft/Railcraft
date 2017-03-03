@@ -129,7 +129,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     @Nullable
     @Override
     public IVariantEnum[] getVariants() {
-        return EnumColor.VALUES_INVERTED;
+        return EnumColor.VALUES;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
     @Override
     public int damageDropped(IBlockState state) {
-        return getColor(state).inverse().ordinal();
+        return getColor(state).ordinal();
     }
 
     @Override
@@ -197,31 +197,6 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         return state;
     }
 
-    //    @Override
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//        if (renderingHighlight)
-//            return icons[4];
-//        if (side <= 1)
-//            return icons[0];
-//        int meta = world.getBlockMetadata(x, y, z);
-//
-//        EnumSet neighbors = EnumSet.noneOf(Neighbors.class);
-//
-//        if (WorldPlugin.getBlock(world, x, y + 1, z) == this && world.getBlockMetadata(x, y + 1, z) == meta)
-//            neighbors.add(Neighbors.TOP);
-//
-//        if (WorldPlugin.getBlock(world, x, y - 1, z) == this && world.getBlockMetadata(x, y - 1, z) == meta)
-//            neighbors.add(Neighbors.BOTTOM);
-//        return patterns.get(neighbors);
-//    }
-//
-//    @Override
-//    public IIcon getIcon(int side, int meta) {
-//        if (renderingHighlight)
-//            return icons[4];
-//        return icons[0];
-//    }
-
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (int meta = 0; meta < 16; meta++) {
@@ -262,7 +237,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta).inverse());
+        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
     }
 
     /**
@@ -270,7 +245,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return getColor(state).inverse().ordinal();
+        return getColor(state).ordinal();
     }
 
     @Override

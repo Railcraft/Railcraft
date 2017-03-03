@@ -18,13 +18,20 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
+import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.blocks.wayobjects.*;
+import mods.railcraft.common.blocks.wayobjects.IRouter;
+import mods.railcraft.common.blocks.wayobjects.TileBoxAnalogController;
+import mods.railcraft.common.blocks.wayobjects.TileBoxCapacitor;
+import mods.railcraft.common.blocks.wayobjects.TileBoxController;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -116,11 +123,11 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
-                    return new GuiSwitchMotor(inv.player, (TileSwitchMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
+                    return new GuiSwitchMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
                 case BOX_RECEIVER:
-                    return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
                 case BOX_RELAY:
-                    return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:

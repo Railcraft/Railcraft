@@ -100,9 +100,9 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     @Override
     protected void reset() {
+        super.reset();
         if (currentCart instanceof IFluidCart)
             ((IFluidCart) currentCart).setFilling(false);
-        setResetTimer(0);
     }
 
     @Override

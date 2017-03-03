@@ -26,6 +26,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -38,6 +39,8 @@ public class ModuleWorld extends RailcraftModulePayload {
     public static final String VILLAGER_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/trackman.png";
     public static final String ZOMBIE_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/zombie_trackman.png";
     public static final String VILLAGER_ID = RailcraftConstants.RESOURCE_DOMAIN + ":trackman";
+
+    public static VillagerRegistry.VillagerProfession villagerTrackman;
 
     public ModuleWorld() {
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -53,7 +56,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     VillagerRegistry villagerRegistry = VillagerRegistry.instance();
                     villagerRegistry.registerVillageCreationHandler(workshop);
 
-                    VillagerRegistry.VillagerProfession villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
+                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
                     villagerRegistry.register(villagerTrackman);
 
                     VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
@@ -82,29 +85,29 @@ public class ModuleWorld extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorSaltpeter());
+                    GameRegistry.registerWorldGenerator(new GeneratorSaltpeter(), 100);
                 if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorSulfur());
+                    GameRegistry.registerWorldGenerator(new GeneratorSulfur(), 100);
                 if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOreMagic.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
-                    MinecraftForge.EVENT_BUS.register(new DecoratorFirestone());
+                    GameRegistry.registerWorldGenerator(new GeneratorFirestone(), 100);
                 if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumGeneric.STONE_ABYSSAL.isEnabled())
-                    MinecraftForge.EVENT_BUS.register(PopulatorGeode.instance());
+                    GameRegistry.registerWorldGenerator(new GeneratorGeode(), 0);
                 if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumGeneric.STONE_QUARRIED.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
 
                 if (RailcraftBlocks.ORE.isEnabled()) {
                     if (RailcraftConfig.isWorldGenEnabled("iron"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineIron());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineIron(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("gold"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineGold());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineGold(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("copper"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineCopper());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineCopper(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("tin"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineTin());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineTin(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("lead"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineLead());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineLead(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("silver"))
-                        MinecraftForge.ORE_GEN_BUS.register(new GeneratorMineSilver());
+                        GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {

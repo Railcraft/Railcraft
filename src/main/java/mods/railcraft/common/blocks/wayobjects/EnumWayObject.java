@@ -14,7 +14,6 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleRouting;
 import mods.railcraft.common.modules.ModuleSignals;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
@@ -29,10 +28,10 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
     // Name (module, hardness, needsSupport, tag, tile)
     BOX_INTERLOCK(ModuleSignals.class, 3, true, "box.interlock", TileBoxInterlock.class),
     DUAL_HEAD_BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal.dual", TileSignalDualHeadBlockSignal.class),
-    SWITCH_MOTOR(ModuleSignals.class, 8, true, "switch.motor", TileSwitchMotor.class),
+    //    SWITCH_MOTOR(ModuleSignals.class, 8, true, "switch.motor", TileActuatorMotor.class),
     BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal", TileSignalBlockSignal.class),
-    SWITCH_LEVER(ModuleSignals.class, 8, true, "switch.lever", TileSwitchLever.class),
-    SWITCH_ROUTING(ModuleRouting.class, 8, true, "switch.routing", TileSwitchRouting.class),
+    //    SWITCH_LEVER(ModuleSignals.class, 8, true, "switch.lever", TileActuatorLever.class),
+//    SWITCH_ROUTING(ModuleRouting.class, 8, true, "switch.routing", TileActuatorRouting.class),
     BOX_SEQUENCER(ModuleSignals.class, 3, true, "box.sequencer", TileBoxSequencer.class),
     BOX_CAPACITOR(ModuleSignals.class, 3, true, "box.capacitor", TileBoxCapacitor.class),
     BOX_RECEIVER(ModuleSignals.class, 3, true, "box.receiver", TileBoxReceiver.class),
@@ -50,9 +49,9 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
     public static final EnumWayObject[] VALUES = values();
 
     static {
-        creativeList.add(SWITCH_LEVER);
-        creativeList.add(SWITCH_MOTOR);
-        creativeList.add(SWITCH_ROUTING);
+//        creativeList.add(SWITCH_LEVER);
+//        creativeList.add(SWITCH_MOTOR);
+//        creativeList.add(SWITCH_ROUTING);
         creativeList.add(BLOCK_SIGNAL);
         creativeList.add(DISTANT_SIGNAL);
         creativeList.add(DUAL_HEAD_BLOCK_SIGNAL);
@@ -113,7 +112,7 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
 
     public static EnumWayObject fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
-            return SWITCH_LEVER;
+            return BLOCK_SIGNAL;
         return VALUES[id];
     }
 

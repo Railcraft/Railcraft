@@ -17,14 +17,14 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerManipulatorCartRF extends ContainerManipulatorCart {
+public class ContainerManipulatorCartRF extends ContainerManipulatorCart<TileRFManipulator> {
 
     private TileRFManipulator device;
     private final RFEnergyIndicator energyIndicator;
     private int lastEnergy;
 
     public ContainerManipulatorCartRF(TileRFManipulator device) {
-        super(null, device);
+        super(null, device, false);
         this.device = device;
         energyIndicator = new RFEnergyIndicator(device.getMaxRF());
         addWidget(new IndicatorWidget(energyIndicator, 57, 38, 176, 0, 62, 8, false));

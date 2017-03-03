@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,6 +71,21 @@ public class TrackKitControl extends TrackKitPowered implements ITrackKitReversi
                 } else {
                     cart.motionX -= SLOW_AMOUNT;
                 }
+            }
+        }
+
+        if (cart instanceof EntityLocomotive && ((EntityLocomotive) cart).isShutdown()) {
+            double yaw = cart.rotationYaw * Math.PI / 180D;
+            double cos = Math.cos(yaw);
+            double sin = Math.sin(yaw);
+            float limit = 0.01f;
+            if ((cart.motionX > limit && cos < 0)
+                    || (cart.motionX < -limit && cos > 0)
+                    || (cart.motionZ > limit && sin < 0)
+                    || (cart.motionZ < -limit && sin > 0)) {
+                cart.rotationYaw += 180D;
+                cart.rotationYaw = cart.rotationYaw % 360.0F;
+                cart.prevRotationYaw = cart.rotationYaw;
             }
         }
     }

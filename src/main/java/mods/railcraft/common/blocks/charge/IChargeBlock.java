@@ -13,7 +13,6 @@ package mods.railcraft.common.blocks.charge;
 import com.google.common.collect.ForwardingMap;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -227,15 +226,6 @@ public interface IChargeBlock {
             charge = 0.0;
 //            lastTickDraw += ret;
             return ret;
-        }
-
-        public void writeToNBT(NBTTagCompound nbt) {
-
-            nbt.setDouble(NBT_CHARGE_TAG, charge);
-        }
-
-        public void readFromNBT(NBTTagCompound nbt) {
-            charge = nbt.getDouble(NBT_CHARGE_TAG);
         }
     }
 }

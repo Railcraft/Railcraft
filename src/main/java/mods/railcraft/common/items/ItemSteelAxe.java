@@ -17,7 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelAxe extends ItemAxe implements IRailcraftItem {
+public class ItemSteelAxe extends ItemAxe implements IRailcraftItemSimple {
 
     public ItemSteelAxe() {
         super(ItemMaterials.STEEL_TOOL, 8F, -3F);
@@ -33,6 +33,16 @@ public class ItemSteelAxe extends ItemAxe implements IRailcraftItem {
     public void initializeDefinintion() {
         HarvestPlugin.setToolClass(this, "axe", 2);
         LootPlugin.addLoot(RailcraftItems.AXE_STEEL, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

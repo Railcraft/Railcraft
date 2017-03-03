@@ -71,10 +71,6 @@ public class GuiManipulatorCartIC2Loader extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        int sWidth = fontRendererObj.getStringWidth(tile.getName());
-        int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(tile.getName(), sPos, 6, 0x404040);
-
         fontRendererObj.drawString(Integer.toString((int) tile.getEnergy()), 30, 55, 0x404040);
 
         String capacity = "/" + tile.getCapacity();

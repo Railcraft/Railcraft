@@ -18,6 +18,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
+
 public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
 
     @Override
@@ -47,7 +49,14 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
             }
         }
 
-        if (isProcessing())
+//        if (!isProcessing())
+//            setResetTimer(TRANSFER_FADE);
+    }
+
+    @Override
+    protected void sendCart(@Nullable EntityMinecart cart) {
+        super.sendCart(cart);
+        if (resetTimer == 0)
             setResetTimer(TRANSFER_FADE);
     }
 

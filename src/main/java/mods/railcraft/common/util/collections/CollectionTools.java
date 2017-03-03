@@ -13,8 +13,7 @@ package mods.railcraft.common.util.collections;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by CovertJaguar on 3/25/2016 for Railcraft.
@@ -36,5 +35,13 @@ public class CollectionTools {
             biMap.put(i, elements.get(i));
         }
         return biMap;
+    }
+
+    public static <V> Map<StackKey, V> createItemStackMap() {
+        return new HashMap<StackKey, V>();
+    }
+
+    public static Set<StackKey> createItemStackSet() {
+        return new HashSet<StackKey>();
     }
 }

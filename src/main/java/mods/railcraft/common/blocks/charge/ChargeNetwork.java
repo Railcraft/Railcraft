@@ -91,6 +91,12 @@ public class ChargeNetwork {
 
     private void insertNode(BlockPos pos, ChargeNode node) {
         ChargeNode oldNode = chargeNodes.put(pos, node);
+
+        if (node.chargeBattery != null)
+            batterySaveData.initBattery(pos, node.chargeBattery);
+        else
+            batterySaveData.removeBattery(pos);
+
         if (oldNode != null) {
             oldNode.invalid = true;
             if (oldNode.chargeGraph.isActive()) {
@@ -227,8 +233,9 @@ public class ChargeNetwork {
                 Game.log(Level.INFO, "Destroying graph: {0}", this);
                 invalid = true;
                 totalMaintenanceCost = 0.0;
-                if (touchNodes)
+                if (touchNodes) {
                     forEach(n -> n.chargeGraph = NULL_GRAPH);
+                }
                 chargeBatteries.clear();
                 super.clear();
                 chargeGraphs.remove(this);
@@ -372,8 +379,6 @@ public class ChargeNetwork {
             this.pos = pos;
             this.chargeDef = chargeDef;
             this.chargeBattery = chargeBattery;
-            if (chargeBattery != null)
-                batterySaveData.initBattery(pos, chargeBattery);
         }
 
         public IChargeBlock.ChargeDef getChargeDef() {
@@ -494,7 +499,7 @@ public class ChargeNetwork {
                 chargeGraphs.add(chargeGraph);
             }
             if (chargeGraph.isActive()) {
-                int originalSize = chargeGraph.size();
+//                int originalSize = chargeGraph.size();
                 chargeGraph.addAll(nullNodes);
                 for (ChargeGraph graph : graphs) {
                     chargeGraph.addAll(graph);

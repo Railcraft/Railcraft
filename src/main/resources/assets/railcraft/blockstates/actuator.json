@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:actuator_base",
+    "textures": {
+      "cap": "railcraft:blocks/actuator_cap",
+      "side_long": "railcraft:blocks/actuator_side_long",
+      "side_short": "railcraft:blocks/actuator_side_short"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "lever": {},
+      "motor": {},
+      "routing": {}
+    }
+  }
+}

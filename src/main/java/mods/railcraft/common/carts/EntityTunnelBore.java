@@ -14,7 +14,6 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
-import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.Train.TrainState;
@@ -25,6 +24,8 @@ import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
@@ -53,6 +54,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
@@ -73,7 +75,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final int BALLAST_DELAY = 10;
     public static final int FUEL_CONSUMPTION = 12;
     public static final float HARDNESS_MULTIPLIER = 8;
-    public static final BlockSet mineableBlocks = new BlockSet();
+    public static final BlockSet mineableStates = new BlockSet();
+    public static final Set<Block> mineableBlocks = new HashSet<>();
     public static final Set<Block> replaceableBlocks = new HashSet<Block>();
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
@@ -147,9 +150,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             Blocks.DOUBLE_PLANT};
 
     static {
-        for (Block block : mineable) {
-            addMineableBlock(block);
-        }
+        mineableBlocks.addAll(Arrays.asList(mineable));
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
@@ -209,7 +210,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     public static void addMineableBlock(IBlockState blockState) {
-        mineableBlocks.add(blockState);
+        mineableStates.add(blockState);
     }
 
     public static boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
@@ -255,7 +256,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     private boolean isMineableBlock(IBlockState blockState) {
-        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState);
+        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState.getBlock()) || mineableStates.contains(blockState);
     }
 
     @Override
@@ -674,16 +675,18 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
+        EntityPlayer owner = CartTools.getCartOwnerEntity(this);
+
         if (replaceableBlocks.contains(oldState.getBlock()))
-            worldObj.destroyBlock(targetPos, true);
+            WorldPlugin.destroyBlockSafe(worldObj, targetPos, owner, true);
 
         if (WorldPlugin.isBlockAir(worldObj, targetPos, oldState) && worldObj.isSideSolid(targetPos.down(), EnumFacing.UP))
-            for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
-                ItemStack stack = invRails.getStackInSlot(inv);
+            for (IInvSlot slot : InventoryIterator.getVanilla(invRails)) {
+                ItemStack stack = slot.getStack();
                 if (stack != null) {
                     boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) worldObj, targetPos, shape);
                     if (placed) {
-                        invRails.decrStackSize(inv, 1);
+                        slot.decreaseStack();
                     }
                     return placed;
                 }
@@ -776,7 +779,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
 
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ));
+        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, CartTools.getCartOwnerEntity(this));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
@@ -1108,5 +1111,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     @SuppressWarnings("UnusedParameters")
     public boolean attackEntityFromPart(EntityTunnelBorePart part, DamageSource damageSource, float damage) {
         return attackEntityFrom(damageSource, damage);
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_BORE;
     }
 }

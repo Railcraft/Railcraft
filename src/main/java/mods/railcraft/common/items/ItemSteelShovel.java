@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelShovel extends ItemSpade implements IRailcraftItem {
+public class ItemSteelShovel extends ItemSpade implements IRailcraftItemSimple {
 
     public ItemSteelShovel() {
         super(ItemMaterials.STEEL_TOOL);
@@ -33,6 +33,16 @@ public class ItemSteelShovel extends ItemSpade implements IRailcraftItem {
     public void initializeDefinintion() {
         HarvestPlugin.setToolClass(this, "shovel", 2);
         LootPlugin.addLoot(RailcraftItems.SHOVEL_STEEL, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

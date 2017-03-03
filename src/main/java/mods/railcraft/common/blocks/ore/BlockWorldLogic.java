@@ -57,44 +57,48 @@ public class BlockWorldLogic extends BlockRailcraft {
         Block blockOre = RailcraftBlocks.ORE.block();
         if (blockOre == null || !EnumOre.SALTPETER.isEnabled() || !RailcraftConfig.isWorldGenEnabled("saltpeter"))
             return;
-        int surfaceY = world.getTopSolidOrLiquidBlock(pos).getY() - 2;
 
-        if (surfaceY < 50 || surfaceY > 100)
+        boolean genSurface = rand.nextInt(25) == 0;
+
+        int belowSurfaceY = world.getTopSolidOrLiquidBlock(pos).getY() - 2;
+
+        if (belowSurfaceY < 50 || belowSurfaceY > 100)
             return;
 
-        BlockPos surfacePos = new BlockPos(pos.getX(), surfaceY, pos.getZ());
+        BlockPos belowSurface = new BlockPos(pos.getX(), belowSurfaceY, pos.getZ());
 
-        Block block = WorldPlugin.getBlock(world, surfacePos);
+        Block block = WorldPlugin.getBlock(world, belowSurface);
         if (block != Blocks.SAND)
             return;
 
-        Block above = WorldPlugin.getBlock(world, surfacePos.up());
+        Block above = WorldPlugin.getBlock(world, belowSurface.up());
         if (above != Blocks.SAND)
             return;
 
-        Block below = WorldPlugin.getBlock(world, surfacePos.down());
-        if (below != Blocks.SAND && below != Blocks.SANDSTONE)
-            return;
-
-        int airCount = 0;
-        Block ore = RailcraftBlocks.ORE.block();
-        for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
-            boolean isAir = world.isAirBlock(surfacePos.offset(side));
-            if (isAir)
-                airCount++;
-
-            if (airCount > 1)
+        if (!genSurface) {
+            Block below = WorldPlugin.getBlock(world, belowSurface.down());
+            if (below != Blocks.SAND && below != Blocks.SANDSTONE)
                 return;
 
-            if (isAir)
-                continue;
+            int airCount = 0;
+            for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
+                boolean isAir = world.isAirBlock(belowSurface.offset(side));
+                if (isAir)
+                    airCount++;
 
-            block = WorldPlugin.getBlock(world, surfacePos.offset(side));
-            if (block != Blocks.SAND && block != Blocks.SANDSTONE && block != ore)
-                return;
+                if (airCount > 1)
+                    return;
+
+                if (isAir)
+                    continue;
+
+                block = WorldPlugin.getBlock(world, belowSurface.offset(side));
+                if (block != Blocks.SAND && block != Blocks.SANDSTONE && block != blockOre)
+                    return;
+            }
         }
 
-        world.setBlockState(surfacePos, EnumOre.SALTPETER.getDefaultState());
+        world.setBlockState(genSurface ? belowSurface.up() : belowSurface, EnumOre.SALTPETER.getDefaultState());
 //        System.out.println("saltpeter spawned");
     }
 

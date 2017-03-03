@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -34,7 +35,7 @@ public final class StackFilters {
      * Matches against the provided ItemStack.
      */
     public static Predicate<ItemStack> of(@Nonnull final ItemStack stack) {
-        return stack1 -> InvTools.isItemEqual(stack1, stack1);
+        return stack1 -> InvTools.isItemEqual(stack1, stack);
     }
 
     /**
@@ -58,7 +59,7 @@ public final class StackFilters {
      *
      * If no ItemStacks are provided to match against, it returns true.
      */
-    public static Predicate<ItemStack> anyOf(@Nonnull final Collection<ItemStack> stacks) {
+    public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
         return stack -> stacks.isEmpty() || stacks.stream().allMatch(s -> s == null) || InvTools.isItemEqual(stack, stacks);
     }
 

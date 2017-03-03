@@ -41,17 +41,6 @@ public class TileChargeFeederAdmin extends TileChargeFeeder {
             return 0.0;
         }
 
-        @Override
-        public void writeToNBT(NBTTagCompound nbt) {
-            super.writeToNBT(nbt);
-            nbt.setBoolean("enabled", enabled);
-        }
-
-        @Override
-        public void readFromNBT(NBTTagCompound nbt) {
-            super.readFromNBT(nbt);
-            enabled = nbt.getBoolean("enabled");
-        }
     }
 
     @Override
@@ -62,5 +51,18 @@ public class TileChargeFeederAdmin extends TileChargeFeeder {
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         chargeBattery.enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setBoolean("enabled", chargeBattery.enabled);
+        return nbt;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        chargeBattery.enabled = nbt.getBoolean("enabled");
     }
 }

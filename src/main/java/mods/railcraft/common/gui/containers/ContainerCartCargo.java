@@ -21,7 +21,7 @@ public class ContainerCartCargo extends RailcraftContainer {
     public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
 
-        SlotFilter filter = new SlotFilter(cart.getFilterInv(), 0, 25, 35, () -> InvTools.isInventoryEmpty(cart));
+        SlotFilter filter = new SlotFilter(cart.getFilterInv(), 0, 26, 36, () -> InvTools.isInventoryEmpty(cart));
         filter.setStackLimit(1);
         addSlot(filter);
 

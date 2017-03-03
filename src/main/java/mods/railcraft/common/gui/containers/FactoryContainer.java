@@ -17,10 +17,12 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
+import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.blocks.wayobjects.IAspectActionManager;
 import mods.railcraft.common.blocks.wayobjects.IRouter;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -129,11 +131,11 @@ public class FactoryContainer {
                 case LOCO_CREATIVE:
                     return ContainerLocomotive.make(inv, (EntityLocomotiveCreative) obj);
                 case SWITCH_MOTOR:
-                    return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
+                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case BOX_RECEIVER:
-                    return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
+                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case BOX_RELAY:
-                    return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
+                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case ROUTING:
                     return new ContainerRouting(inv, (IRouter) obj);
                 case TRACK_ROUTING:

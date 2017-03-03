@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import cofh.api.energy.EnergyStorage;
-import mods.railcraft.common.blocks.machine.alpha.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
 import mods.railcraft.common.gui.slots.SlotUntouchable;

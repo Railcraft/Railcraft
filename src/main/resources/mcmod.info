@@ -1,7 +1,7 @@
 {
   "modListVersion": 2,
   "modList": [{
-    "modid": "Railcraft",
+    "modid": "railcraft",
     "name": "Railcraft",
     "description": "Redefine your rails",
     "version": "${version}",

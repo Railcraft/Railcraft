@@ -29,7 +29,7 @@ public class GuiDispenserCart extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, tile);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRendererObj.drawString(inv.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
     }
 }

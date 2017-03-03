@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
+import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -127,7 +127,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
 
             IBlockState state = worldObj.getBlockState(getPos());
             int meta = state.getBlock().getMetaFromState(state);
-            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMetaMap().get(meta).getTileClass()) {
+            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMetaMap().get(meta).getTileClass()) {
                 worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);

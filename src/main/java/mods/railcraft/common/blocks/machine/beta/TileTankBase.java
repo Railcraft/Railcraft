@@ -440,7 +440,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean recolourBlock(EnumDyeColor cID) {
-        EnumColor c = EnumColor.fromOrdinal(15 - cID.getMetadata());
+        EnumColor c = EnumColor.fromDye(cID);
         if (color != c) {
             color = c;
             markBlockForUpdate();

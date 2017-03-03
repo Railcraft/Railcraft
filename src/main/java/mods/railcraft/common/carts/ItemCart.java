@@ -14,7 +14,7 @@ import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockDispenser;
@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItem {
+public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItemSimple {
 
     private final IRailcraftCartContainer type;
     private int rarity;

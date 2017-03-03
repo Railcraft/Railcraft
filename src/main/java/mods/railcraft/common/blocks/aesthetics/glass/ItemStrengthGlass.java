@@ -33,7 +33,7 @@ public class ItemStrengthGlass extends ItemBlockRailcraftSubtyped {
     @Override
     @SideOnly(Side.CLIENT)
     public IItemColor colorHandler() {
-        return (stack, tintIndex) -> EnumColor.fromOrdinal(stack.getItemDamage()).inverse().getHexColor();
+        return (stack, tintIndex) -> EnumColor.fromOrdinal(stack.getItemDamage()).getHexColor();
     }
 
     @Override

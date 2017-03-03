@@ -25,15 +25,47 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IVariantEnumBlock {
-    String getBaseTag();
+    class Definition {
+        @Nullable
+        public final Class<? extends IRailcraftModule> module;
+        public final String tag;
+        public final Class<? extends TileMachineBase> tile;
+        public boolean passesLight;
+        public ToolTip tip;
+
+        public Definition(@Nullable Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
+            this.module = module;
+            this.tag = tag;
+            this.tile = tile;
+        }
+    }
+
+    Definition getDef();
+
+    default String getBaseTag() {
+        return getDef().tag;
+    }
 
     String getTag();
+
+    @Override
+    default String getName() {
+        return getBaseTag();
+    }
 
     default String getLocalizationTag() {
         return getTag().replace("_", ".");
     }
 
-    Class<? extends IRailcraftModule> getModule();
+    @Override
+    default String getResourcePathSuffix() {
+        return getBaseTag();
+    }
+
+    @Nullable
+    default Class<? extends IRailcraftModule> getModule() {
+        return getDef().module;
+    }
 
     /**
      * Block is enabled, but may not be defined yet.
@@ -43,9 +75,13 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
         return RailcraftModuleManager.isModuleEnabled(getModule()) && getContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
-    boolean isAvailable();
+    default boolean isAvailable() {
+        return block() != null && isEnabled();
+    }
 
-    boolean isDepreciated();
+    default boolean isDepreciated() {
+        return getDef().module == null;
+    }
 
     @SuppressWarnings("unchecked")
     @Nullable
@@ -76,15 +112,25 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
         return getContainer().block();
     }
 
-    Class<? extends TileMachineBase> getTileClass();
+    default Class<? extends TileMachineBase> getTileClass() {
+        return getDef().tile;
+    }
+
+    default TileMachineBase getTileEntity() {
+        try {
+            return getTileClass().newInstance();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     default String getToolClass() {
         return "pickaxe:2";
     }
 
-    boolean passesLight();
-
-    TileMachineBase getTileEntity();
+    default boolean passesLight() {
+        return getDef().passesLight;
+    }
 
     @Nullable
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);

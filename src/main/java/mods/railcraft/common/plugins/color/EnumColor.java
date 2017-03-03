@@ -20,11 +20,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,29 +35,26 @@ import java.util.Map;
  */
 public enum EnumColor implements IVariantEnum {
 
-    BLACK(0x2D2D2D, "dyeBlack", "black"),
-    RED(0xA33835, "dyeRed", "red"),
-    GREEN(0x394C1E, "dyeGreen", "green"),
-    BROWN(0x5C3A24, "dyeBrown", "brown"),
-    BLUE(0x3441A2, "dyeBlue", "blue"),
-    PURPLE(0x843FBF, "dyePurple", "purple"),
-    CYAN(0x36809E, "dyeCyan", "cyan"),
-    SILVER(0x888888, "dyeLightGray", "silver", "light_gray", "lightGray"),
-    GRAY(0x444444, "dyeGray", "gray"),
-    PINK(0xE585A0, "dyePink", "pink"),
-    LIME(0x3FAA36, "dyeLime", "lime"),
-    YELLOW(0xFFC700, "dyeYellow", "yellow"),
-    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "light_blue", "lightBlue"),
-    MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
+    WHITE(0xFFFFFF, "dyeWhite", "white"),
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
-    WHITE(0xFFFFFF, "dyeWhite", "white");
+    MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
+    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "light_blue", "lightBlue"),
+    YELLOW(0xFFC700, "dyeYellow", "yellow"),
+    LIME(0x3FAA36, "dyeLime", "lime"),
+    PINK(0xE585A0, "dyePink", "pink"),
+    GRAY(0x444444, "dyeGray", "gray"),
+    SILVER(0x888888, "dyeLightGray", "silver", "light_gray", "lightGray"),
+    CYAN(0x36809E, "dyeCyan", "cyan"),
+    PURPLE(0x843FBF, "dyePurple", "purple"),
+    BLUE(0x3441A2, "dyeBlue", "blue"),
+    BROWN(0x5C3A24, "dyeBrown", "brown"),
+    GREEN(0x394C1E, "dyeGreen", "green"),
+    RED(0xA33835, "dyeRed", "red"),
+    BLACK(0x2D2D2D, "dyeBlack", "black"),;
     public static final EnumColor[] VALUES = values();
     public static final EnumColor[] VALUES_INVERTED = values();
     public static final String DEFAULT_COLOR_TAG = "color";
     public static final Map<String, EnumColor> nameMap = new HashMap<>();
-    private final int hexColor;
-    private final String oreTagDyeName;
-    private final String[] names;
 
     static {
         ArrayUtils.reverse(VALUES_INVERTED);
@@ -65,6 +65,11 @@ public enum EnumColor implements IVariantEnum {
         }
     }
 
+    private final int hexColor;
+    private final String oreTagDyeName;
+    private final String[] names;
+    private List<ItemStack> dyes;
+
     EnumColor(int hexColor, String oreTagDyeName, String... names) {
         this.hexColor = hexColor;
         this.oreTagDyeName = oreTagDyeName;
@@ -73,7 +78,7 @@ public enum EnumColor implements IVariantEnum {
     }
 
     public static EnumColor fromDye(EnumDyeColor dyeColor) {
-        return fromOrdinal(dyeColor.getDyeDamage());
+        return fromOrdinal(dyeColor.getMetadata());
     }
 
     public static EnumColor fromOrdinal(int id) {
@@ -101,7 +106,7 @@ public enum EnumColor implements IVariantEnum {
         return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
     }
 
-    public static EnumColor readFromNBT(NBTTagCompound nbt, String tag) {
+    public static EnumColor readFromNBT(@Nullable NBTTagCompound nbt, String tag) {
         if (nbt != null) {
             if (nbt.hasKey(tag, 8))
                 return EnumColor.fromName(nbt.getString(tag));
@@ -127,15 +132,15 @@ public enum EnumColor implements IVariantEnum {
         if (stack == null)
             return EnumColor.WHITE;
         if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
-            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
-        if (stack.getItem() == Items.DYE)
             return EnumColor.fromOrdinal(stack.getItemDamage());
+        if (stack.getItem() == Items.DYE)
+            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
         NBTTagCompound nbt = stack.getTagCompound();
         return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
     }
 
     public EnumDyeColor getDye() {
-        return EnumDyeColor.byDyeDamage(ordinal());
+        return EnumDyeColor.byMetadata(ordinal());
     }
 
     public MapColor getMapColor() {
@@ -210,5 +215,11 @@ public enum EnumColor implements IVariantEnum {
         return null;
     }
 
-
+    public List<ItemStack> getDyesStacks() {
+        if (dyes == null) {
+            dyes = new ArrayList<>();
+            dyes.addAll(OreDictionary.getOres(getDyeOreDictTag()));
+        }
+        return dyes;
+    }
 }

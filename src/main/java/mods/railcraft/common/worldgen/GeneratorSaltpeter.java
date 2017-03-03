@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 
 import java.util.Random;
 
@@ -25,11 +24,11 @@ public class GeneratorSaltpeter extends Generator {
 //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SALTPETER", new Class[0], new Object[0]);
 
     public GeneratorSaltpeter() {
-        super(EventType.CUSTOM, new WorldGenSaltpeter());
+        super(new WorldGenSaltpeter());
     }
 
     @Override
-    public void generate(World world, Random rand, BlockPos targetPos) {
+    public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
         int worldX = targetPos.getX();
         int worldZ = targetPos.getZ();
         for (int i = 0; i < 64; i++) {
@@ -44,6 +43,8 @@ public class GeneratorSaltpeter extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
+        if (world.provider.getDimension() != 0)
+            return false;
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY))
             return false;
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DRY))

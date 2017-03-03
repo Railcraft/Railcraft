@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.stream.Stream;
 
-//TODO: dual welding breaks this
 public class PacketCurrentItemNBT extends RailcraftPacket {
 
     private final EntityPlayer player;
@@ -41,19 +41,26 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
         try {
             ItemStack stack = data.readItemStack();
 
-            if (stack == null || currentItem == null)
+            if (stack == null)
                 return;
 
-            if (stack.getItem() != currentItem.getItem())
-                return;
+            // Since dual wielding was introduced, the server may have "lost"
+            // the active item by the time it gets this packet. In this case,
+            // check the player's hands as well.
+            ItemStack targetItem = Stream
+                    .of(currentItem, player.getHeldItemMainhand(), player.getHeldItemOffhand())
+                    .filter(ci -> ci != null
+                            && ci.getItem() == stack.getItem()
+                            && ci.getItem() instanceof IEditableItem)
+                    .findFirst().orElse(null);
 
-            if (!(currentItem.getItem() instanceof IEditableItem))
+            if (targetItem == null)
                 return;
 
             IEditableItem eItem = (IEditableItem) stack.getItem();
 
-            if (!eItem.canPlayerEdit(player, currentItem)) {
-                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), currentItem.getItem().getUnlocalizedName());
+            if (!eItem.canPlayerEdit(player, targetItem)) {
+                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetItem.getItem().getUnlocalizedName());
                 return;
             }
 
@@ -63,7 +70,7 @@ public class PacketCurrentItemNBT extends RailcraftPacket {
                 return;
             }
 
-            currentItem.setTagCompound(stack.getTagCompound());
+            targetItem.setTagCompound(stack.getTagCompound());
         } catch (Exception exception) {
             Game.logThrowable("Error reading Item NBT packet", exception);
         }

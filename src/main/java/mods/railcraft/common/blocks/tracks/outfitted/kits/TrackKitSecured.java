@@ -11,10 +11,10 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.wayobjects.ISecure;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -28,7 +28,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiReturnHandler, ISecure<LockButtonState> {
+public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiReturnHandler, ISecureObject<LockButtonState> {
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Nullable

@@ -10,11 +10,12 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -49,11 +50,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.util.EnumFacing.*;
+import static net.minecraft.util.EnumFacing.NORTH;
 
-public class BlockDetector extends BlockContainerRailcraft {
+@RailcraftBlockMetadata(variant = EnumDetector.class)
+public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector> {
 
-    public static final PropertyEnum<EnumDetector> VARIANT = PropertyEnum.create("variant", EnumDetector.class);
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -63,17 +64,11 @@ public class BlockDetector extends BlockContainerRailcraft {
         setResistance(4.5F);
         setHardness(2.0F);
         setSoundType(SoundType.STONE);
-        setDefaultState(blockState.getBaseState().withProperty(FRONT, NORTH).withProperty(POWERED, false).withProperty(VARIANT, EnumDetector.ANY));
+        setDefaultState(blockState.getBaseState().withProperty(FRONT, NORTH).withProperty(POWERED, false).withProperty(getVariantProperty(), EnumDetector.ANY));
 
         setCreativeTab(CreativeTabs.TRANSPORTATION);
 
         RailcraftRegistry.register(TileDetector.class, "detector", "RCDetectorTile");
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumDetector.class;
     }
 
     @Override
@@ -197,7 +192,7 @@ public class BlockDetector extends BlockContainerRailcraft {
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(BlockDetector.VARIANT, (EnumDetector) variant);
+            state = state.withProperty(getVariantProperty(), (EnumDetector) variant);
         }
         return state;
     }
@@ -220,7 +215,7 @@ public class BlockDetector extends BlockContainerRailcraft {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT, FRONT, POWERED);
+        return new BlockStateContainer(this, getVariantProperty(), FRONT, POWERED);
     }
 
     @Override
@@ -229,7 +224,7 @@ public class BlockDetector extends BlockContainerRailcraft {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
-            state = state.withProperty(VARIANT, detector.getDetector().getType()).withProperty(POWERED, detector.powerState > PowerPlugin.NO_POWER);
+            state = state.withProperty(getVariantProperty(), detector.getDetector().getType()).withProperty(POWERED, detector.powerState > PowerPlugin.NO_POWER);
         }
         return state;
     }
@@ -418,17 +413,10 @@ public class BlockDetector extends BlockContainerRailcraft {
         }
     }
 
-    // TODO: wtf? test this
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         EnumFacing front = state.getValue(FRONT);
-        if (side == UP && front == EAST)
-            return true;
-        if (side == SOUTH && front == WEST)
-            return true;
-        if (side == NORTH && front == SOUTH)
-            return true;
-        return side == DOWN && front == NORTH;
+        return side == front.getOpposite();
     }
 
     @Override

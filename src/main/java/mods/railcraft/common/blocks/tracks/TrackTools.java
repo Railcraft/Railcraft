@@ -122,6 +122,10 @@ public class TrackTools {
 
     public static TrackType getTrackTypeAt(IBlockAccess world, BlockPos pos) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return getTrackTypeAt(world, pos, state);
+    }
+
+    public static TrackType getTrackTypeAt(IBlockAccess world, BlockPos pos, IBlockState state) {
         if (state.getBlock() instanceof IRailcraftTrack) {
             return ((IRailcraftTrack) state.getBlock()).getTrackType(world, pos);
         }

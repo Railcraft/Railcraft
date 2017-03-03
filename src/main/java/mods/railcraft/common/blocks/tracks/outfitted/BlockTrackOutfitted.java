@@ -334,15 +334,23 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrackOutfitted)
-            ((TileTrackOutfitted) tile).getTrackKitInstance().onMinecartPass(cart);
+        if (tile instanceof TileTrackOutfitted) {
+            TileTrackOutfitted track = (TileTrackOutfitted) tile;
+            getTrackType(world, pos).getEventHandler().onMinecartPass(world, cart, pos, track.getTrackKitInstance().getTrackKit());
+            track.getTrackKitInstance().onMinecartPass(cart);
+        }
     }
 
     @Override
     public EnumRailDirection getRailDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrackOutfitted)
-            return ((TileTrackOutfitted) tile).getTrackKitInstance().getRailDirection(state, cart);
+        if (tile instanceof TileTrackOutfitted) {
+            TileTrackOutfitted track = (TileTrackOutfitted) tile;
+            EnumRailDirection shape = track.getTrackType().getEventHandler().getRailDirectionOverride(world, pos, state, cart);
+            if (shape != null)
+                return shape;
+            return track.getTrackKitInstance().getRailDirection(state, cart);
+        }
         return state.getValue(getShapeProperty());
     }
 

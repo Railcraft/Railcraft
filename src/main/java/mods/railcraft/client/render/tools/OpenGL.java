@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.render.tools;
 
@@ -244,16 +244,6 @@ public class OpenGL {
 
     public static void glBegin(int mode) {
         GL11.glBegin(mode);
-    }
-
-    public static void glBindTexture(int target, int texture) {
-        switch (target) {
-            case GL11.GL_TEXTURE_2D:
-                GlStateManager.bindTexture(texture);
-                break;
-            default:
-                GL11.glBindTexture(target, texture);
-        }
     }
 
     public static void glEnd() {

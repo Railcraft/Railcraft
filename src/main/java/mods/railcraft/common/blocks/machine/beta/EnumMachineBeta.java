@@ -13,7 +13,6 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleChunkLoading;
@@ -52,7 +51,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     public static final PropertyEnum<EnumMachineBeta> VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
-    public static final MachineProxy<EnumMachineBeta> PROXY = MachineProxy.create(VALUES, creativeList);
 
     static {
         SENTINEL.toolClass = "pickaxe:3";
@@ -90,6 +88,11 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         this.passesLight = passesLight;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
+    }
+
+    @Override
+    public Definition getDef() {
+        return null;
     }
 
     public static EnumMachineBeta fromId(int id) {
@@ -151,7 +154,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.MACHINE_BETA;
     }
-
 
     @Override
     public boolean isAvailable() {

@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItem {
+public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimple {
 
     public ItemSteelPickaxe() {
         super(ItemMaterials.STEEL_TOOL);
@@ -30,6 +30,16 @@ public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItem {
     public void initializeDefinintion() {
         HarvestPlugin.setToolClass(this, "pickaxe", 2);
         LootPlugin.addLoot(RailcraftItems.PICKAXE_STEEL, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

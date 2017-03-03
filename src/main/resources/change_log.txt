@@ -1,6 +1,27 @@
+10.0.1:
+	NEW: Add DynamicLighting support to Locomotive (contribution by liach)
+	FIX: Fix config files not being generated correctly.
+	FIX: Various other minor fixes.
+
+10.0.0:
+	INFO: First official MC 1.10.2 release
+	NEW: Added in-game config editor support
+	FIX: Fix various GUI issues
+	FIX: Render Locomotive and Maintenance Cart Lamps
+	FIX: Add Steam Locomotive Fluid Container handling
+	FIX: Fix Locomotives flipping when reversing on a corner
+	FIX: Fix Item Loader/Unloader item handling
+	FIX: Various other fixes
+
+10.0.0-beta-4:
+    NEW: Updated monster spawn list for Pumpkin Cart
+    NEW: Ores and Geodes are now SimpleRetrogen compatible
+    CHANGE: Mines are richer in Mountain, Mesa, and Hills types of biomes
+    FIX: Various other fixes
+
 10.0.0-beta-3:
 	CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.
-	CHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should unaffected.
+	CHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should be unaffected.
 	CONFIG: Added config option to reduce/eliminate vanilla Gold/Iron Ore generation.
 	FIX: Fix Geode generation.
 	FIX: Various other fixes.

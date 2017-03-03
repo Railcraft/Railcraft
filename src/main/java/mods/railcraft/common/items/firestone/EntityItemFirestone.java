@@ -14,9 +14,12 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.EntityIDs;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,9 +30,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
  */
 public class EntityItemFirestone extends EntityItemFireproof {
 
-    public static void register() {
-        EntityRegistry.registerModEntity(EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
-    }
+    private int clock = MiscTools.RANDOM.nextInt(100);
+    private boolean refined;
 
     public EntityItemFirestone(World world) {
         super(world);
@@ -43,11 +45,25 @@ public class EntityItemFirestone extends EntityItemFireproof {
         super(world, x, y, z, stack);
     }
 
+    public static void register() {
+        EntityRegistry.registerModEntity(EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (Game.isHost(worldObj)) {
+            clock++;
+            if (clock % 4 != 0)
+                return;
+            ItemStack stack = getEntityItem();
+            FirestoneTools.trySpawnFire(worldObj, getPosition(), stack);
+        }
+    }
+
     @Override
     protected void setOnFireFromLava() {
-        if (isDead)
-            return;
-        if (worldObj.isRemote)
+        if (!refined || isDead || worldObj.isRemote)
             return;
         IBlockState firestoneBlock = RailcraftBlocks.RITUAL.getDefaultState();
         if (firestoneBlock == null)
@@ -73,4 +89,23 @@ public class EntityItemFirestone extends EntityItemFireproof {
             }
     }
 
+    public boolean isRefined() {
+        return refined;
+    }
+
+    public void setRefined(boolean refined) {
+        this.refined = refined;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setBoolean("refined", refined);
+        return super.writeToNBT(compound);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        refined = compound.getBoolean("refined");
+        super.readFromNBT(compound);
+    }
 }

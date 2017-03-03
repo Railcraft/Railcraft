@@ -19,6 +19,7 @@ import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -67,7 +68,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
+                        if (SimpleMachineVariant.ROLLING_MACHINE.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",

@@ -11,6 +11,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +23,7 @@ import net.minecraftforge.common.IShearable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemSteelShears extends ItemShears implements IRailcraftItem {
+public class ItemSteelShears extends ItemShears implements IRailcraftItemSimple {
 
     public ItemSteelShears() {
         setMaxDamage(500);
@@ -37,6 +38,16 @@ public class ItemSteelShears extends ItemShears implements IRailcraftItem {
     @Override
     public void initializeDefinintion() {
         LootPlugin.addLoot(RailcraftItems.SHEARS_STEEL, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return getUnlocalizedName();
     }
 
     @Override

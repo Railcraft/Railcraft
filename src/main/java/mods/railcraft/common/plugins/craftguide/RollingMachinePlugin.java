@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import uristqwerty.CraftGuide.api.*;
@@ -35,7 +36,7 @@ public class RollingMachinePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack machine = EnumMachineAlpha.ROLLING_MACHINE.getItem();
+        ItemStack machine = SimpleMachineVariant.ROLLING_MACHINE.getItem();
         if(machine != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, machine, "/gui/CraftGuideRecipe.png", 163, 1, 163, 61);
 

@@ -98,9 +98,9 @@ public class BlockBrick extends BlockRailcraft {
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         if (variant != null) {
             checkVariant(variant);
-            return theme.getStack(variant);
+            return theme.getStack(qty, variant);
         }
-        return new ItemStack(this);
+        return new ItemStack(this, qty);
     }
 
     @Override

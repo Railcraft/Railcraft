@@ -57,10 +57,10 @@ public enum EnumOre implements IVariantEnumBlock {
     @Nullable
     @Override
     public IBlockState getDefaultState() {
-        Block block = block();
+        BlockOre block = (BlockOre) block();
         if (block == null)
             return null;
-        return block.getDefaultState().withProperty(BlockOre.VARIANT, this);
+        return block.getDefaultState().withProperty(block.getVariantProperty(), this);
     }
 
     public String getTag() {

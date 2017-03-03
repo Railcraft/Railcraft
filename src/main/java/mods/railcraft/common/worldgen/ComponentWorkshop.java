@@ -14,9 +14,9 @@ import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
@@ -215,12 +215,12 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         setBlockState(world, torch, 2, 3, 4, sbb);
 
         // machines
-        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable()) {
-            setBlockState(world, EnumMachineAlpha.ROLLING_MACHINE.getDefaultState(), 9, 1, 5, sbb);
+        if (SimpleMachineVariant.ROLLING_MACHINE.isAvailable()) {
+            //noinspection ConstantConditions
+            setBlockState(world, SimpleMachineVariant.ROLLING_MACHINE.getDefaultState(), 9, 1, 5, sbb);
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
-
 
         // foundation
         for (int k = 0; k < 11; ++k) {

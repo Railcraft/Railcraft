@@ -33,7 +33,7 @@ public class GuiLocomotiveSteamSolid extends GuiLocomotive {
 
         if (loco.boiler.hasFuel()) {
             int scale = loco.boiler.getBurnProgressScaled(12);
-            drawTexturedModalRect(x + 62, y + 34 - scale, 176, 59 - scale, 14, scale + 2);
+            drawTexturedModalRect(x + 99, y + 33 - scale, 176, 59 - scale, 14, scale + 2);
         }
     }
 

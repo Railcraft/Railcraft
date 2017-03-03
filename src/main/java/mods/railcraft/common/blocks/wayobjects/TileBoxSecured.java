@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -25,7 +26,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileBoxSecured extends TileBoxBase implements IAspectActionManager, IGuiReturnHandler {
+public abstract class TileBoxSecured extends TileBoxBase implements ITileAspectResponder, IGuiReturnHandler {
 
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 

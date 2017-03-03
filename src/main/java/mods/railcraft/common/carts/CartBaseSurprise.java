@@ -208,20 +208,27 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         public final int weight;
         public final int numToSpawn;
         private final BiConsumer<CartBaseSurprise, T> setup;
+        @Nullable
+        private final BiConsumer<CartBaseSurprise, T> postSpawn;
 
-        protected SurpriseEntity(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
+        protected SurpriseEntity(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, @Nullable BiConsumer<CartBaseSurprise, T> postSpawn) {
             this.entityType = entityType;
             this.weight = weight;
             this.numToSpawn = numToSpawn;
             this.setup = setup;
+            this.postSpawn = postSpawn;
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.worldObj.getDifficultyForLocation(new BlockPos(entity)), null));
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.worldObj.getDifficultyForLocation(new BlockPos(entity)), null), null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup);
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, null);
+        }
+
+        public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, BiConsumer<CartBaseSurprise, T> postSpawn) {
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, postSpawn);
         }
 
         @Override
@@ -249,6 +256,9 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
                         world.playEvent(2004, new BlockPos(x, y, z), 0);
 
                         living.spawnExplosionParticle();
+
+                        if (postSpawn != null)
+                            postSpawn.accept(cart, living);
                     }
                 }
             }

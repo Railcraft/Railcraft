@@ -39,7 +39,7 @@ import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
 import mods.railcraft.common.util.misc.Game;
@@ -121,11 +121,11 @@ public class ClientProxy extends CommonProxy {
             }
         });
 
-        Set<IRailcraftObjectContainer<IRailcraftItem>> items = new HashSet<>();
+        Set<IRailcraftObjectContainer<IRailcraftItemSimple>> items = new HashSet<>();
         items.addAll(Arrays.asList(RailcraftItems.VALUES));
         items.addAll(Arrays.asList(RailcraftCarts.VALUES));
-        for (IRailcraftObjectContainer<IRailcraftItem> itemContainer : items) {
-            itemContainer.getObject().ifPresent(IRailcraftItem::initializeClient);
+        for (IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer : items) {
+            itemContainer.getObject().ifPresent(IRailcraftItemSimple::initializeClient);
         }
 
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
@@ -160,8 +160,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void finalizeClient() {
-        MinecraftForge.EVENT_BUS.register(new LatestVersionMessage());
-
         SoundRegistry.setupBlockSounds();
 
         MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
@@ -210,20 +208,12 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileWayObject.class, TESRSignals::new);
 
-        //TODO: this needs a smart model or something
-//        if (RailcraftBlocks.track.block() != null)
-//            RenderingRegistry.registerBlockHandler(new RenderTrack());
-
-//        if (RailcraftBlocksOld.getBlockElevator() != null)
-//            RenderingRegistry.registerBlockHandler(new RenderElevator());
-
 //        registerBlockRenderer(new RenderBlockMachineBeta());
 //        registerBlockRenderer(new RenderBlockMachineDelta());
 //        registerBlockRenderer(new RenderBlockSignal());
 //        registerBlockRenderer(RenderBlockPost.make());
 //        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.post));
 //        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.platform));
-//        registerBlockRenderer(new RenderBlockOre());
 //        registerBlockRenderer(new RenderBlockFrame());
 //        registerBlockRenderer(new RenderBlockStrengthGlass());
 //        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockStone()));
@@ -233,6 +223,7 @@ public class ClientProxy extends CommonProxy {
 //        registerBlockRenderer(new RenderStair());
 //        registerBlockRenderer(new RenderSlab());
 
+        // TODO: these carts still need custom item models
 //        stack = EnumCart.TANK.getCartItem();
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));

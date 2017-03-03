@@ -11,7 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * Defines a cart.
  * Created by CovertJaguar on 9/19/2015.
  */
-public interface IRailcraftCartContainer extends IRailcraftObjectContainer<IRailcraftItem> {
+public interface IRailcraftCartContainer extends IRailcraftObjectContainer<IRailcraftItemSimple> {
     String getEntityLocalizationTag();
 
     String getEntityTag();

@@ -39,7 +39,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         RailcraftCarts.ENERGY_BATBOX,
                         RailcraftCarts.ENERGY_MFE,
                         RailcraftCarts.ENERGY_CESU,
-                        RailcraftBlocks.MANIPULATOR
+                        RailcraftBlocks.MACHINE_MANIPULATOR
                 );
                 if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
             }

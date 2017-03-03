@@ -18,7 +18,7 @@ import mods.railcraft.common.core.InitializationConditional;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.IRailcraftItem;
+import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
@@ -33,7 +33,6 @@ import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -52,12 +51,11 @@ import java.util.function.Supplier;
 public enum RailcraftCarts implements IRailcraftCartContainer {
 
     // Vanilla Carts
-    // TODO: listing vanilla classes here causes weird error messages, see hopper
     BASIC(0, "cart_basic", EntityCartBasic.class, (c) -> Items.MINECART),
     CHEST(0, "cart_chest", EntityCartChest.class, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
     COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),
     FURNACE(0, "cart_furnace", EntityCartFurnace.class, (c) -> Items.FURNACE_MINECART, from(Blocks.FURNACE)),
-    HOPPER(0, "cart_hopper", EntityMinecartHopper.class, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
+    HOPPER(0, "cart_hopper", EntityCartHopper.class, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
@@ -187,13 +185,15 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             return RailcraftCarts.FURNACE;
         if (cart.getItem() == Items.HOPPER_MINECART)
             return RailcraftCarts.HOPPER;
+        if (cart.getItem() == Items.COMMAND_BLOCK_MINECART)
+            return RailcraftCarts.COMMAND_BLOCK;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();
         return null;
     }
 
     public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItem::finalizeDefinition));
+        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition));
     }
 
     @Override
@@ -233,7 +233,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    public Optional<IRailcraftItem> getObject() {
+    public Optional<IRailcraftItemSimple> getObject() {
         return Optional.ofNullable(item instanceof ItemCart ? (ItemCart) item : null);
     }
 
@@ -323,7 +323,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + getEntityTag());
                     itemCart.setUnlocalizedName("railcraft.entity." + tag.replace("_", "."));
                     itemCart.setRarity(rarity);
-                    RailcraftRegistry.register((IRailcraftItem) itemCart);
+                    RailcraftRegistry.register((IRailcraftItemSimple) itemCart);
 
                     itemCart.initializeDefinintion();
                     itemCart.defineRecipes();

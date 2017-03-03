@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleFactory;
+import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -32,16 +32,17 @@ import java.util.List;
  */
 public enum EnumGeneric implements IVariantEnumBlock {
 
-    BLOCK_COPPER(ModuleFactory.class, "copper", new SimpleCube(), 3f, 10f),
-    BLOCK_TIN(ModuleFactory.class, "tin", new SimpleCube(), 3f, 10f),
-    BLOCK_LEAD(ModuleFactory.class, "lead", new SimpleCube(), 2f, 20f),
-    BLOCK_STEEL(ModuleFactory.class, "steel", new SimpleCube(), 5f, 15f),
+    BLOCK_COPPER(ModuleResources.class, "copper", new SimpleCube(), 3f, 10f),
+    BLOCK_TIN(ModuleResources.class, "tin", new SimpleCube(), 3f, 10f),
+    BLOCK_LEAD(ModuleResources.class, "lead", new SimpleCube(), 2f, 20f),
+    BLOCK_STEEL(ModuleResources.class, "steel", new SimpleCube(), 5f, 15f),
     BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
     BLOCK_CREOSOTE(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
-    BLOCK_COKE(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
-    CRUSHED_OBSIDIAN(ModuleFactory.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
+    BLOCK_COKE(ModuleResources.class, "coke", new FlammableCube(5, 10), 2f, 10f),
+    CRUSHED_OBSIDIAN(ModuleResources.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
-    STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),;
+    STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),
+    BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),;
     public static final EnumGeneric[] VALUES = values();
     private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
@@ -49,6 +50,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
         creativeList.add(BLOCK_COPPER);
         creativeList.add(BLOCK_TIN);
         creativeList.add(BLOCK_LEAD);
+        creativeList.add(BLOCK_SILVER);
         creativeList.add(BLOCK_STEEL);
         creativeList.add(BLOCK_CONCRETE);
         creativeList.add(BLOCK_CREOSOTE);

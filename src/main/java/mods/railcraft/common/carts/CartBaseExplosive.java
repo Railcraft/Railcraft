@@ -167,11 +167,6 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     }
 
     @Override
-    public boolean canBeRidden() {
-        return false;
-    }
-
-    @Override
     public boolean isPrimed() {
         return dataManager.get(PRIMED);
     }

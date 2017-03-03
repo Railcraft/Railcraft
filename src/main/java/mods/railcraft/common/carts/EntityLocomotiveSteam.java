@@ -16,6 +16,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -45,9 +46,10 @@ import javax.annotation.Nullable;
  */
 public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidCart, IBoilerContainer {
     @SuppressWarnings("WeakerAccess")
-    public static final int SLOT_LIQUID_INPUT = 0;
+    public static final int SLOT_WATER_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
-    public static final int SLOT_LIQUID_OUTPUT = 1;
+    public static final int SLOT_WATER_PROCESSING = 1;
+    public static final int SLOT_WATER_OUTPUT = 2;
     private static final DataParameter<Boolean> SMOKE = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> STEAM = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
@@ -59,9 +61,11 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
-    protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
+    protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_WATER_OUTPUT, 1);
+    protected InventoryMapper invWaterContainers = new InventoryMapper(this, SLOT_WATER_INPUT, 3);
     private TankManager tankManager = new TankManager();
     private int update = rand.nextInt();
+    private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     @SuppressWarnings("WeakerAccess")
     protected EntityLocomotiveSteam(World world) {
@@ -93,7 +97,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         tankManager.add(tankWater);
         tankManager.add(tankSteam);
 
-        invWaterInput = new InventoryMapper(this, SLOT_LIQUID_INPUT, 1);
+        invWaterInput = new InventoryMapper(this, SLOT_WATER_INPUT, 1);
         invWaterInput.setStackSizeLimit(4);
 
         boiler = new SteamBoiler(tankWater, tankSteam);
@@ -162,9 +166,9 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                     ventSteam();
             }
 
-            //FIXME
-//            if (update % FluidTools.BUCKET_FILL_TIME == 0)
-//                FluidTools.drainContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+            if (update % FluidTools.BUCKET_FILL_TIME == 0)
+                processState = FluidTools.processContainer(invWaterContainers, tankWater, false, processState);
+
         } else {
             if (isSmoking()) {
                 double rads = renderYaw * Math.PI / 180D;
@@ -225,6 +229,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         super.writeEntityToNBT(data);
         tankManager.writeTanksToNBT(data);
         boiler.writeToNBT(data);
+        NBTPlugin.writeEnumOrdinal(data, "processState", processState);
     }
 
     @Override
@@ -232,6 +237,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         super.readEntityFromNBT(data);
         tankManager.readTanksFromNBT(data);
         boiler.readFromNBT(data);
+        processState = NBTPlugin.readEnumOrdinal(data, "processState", FluidTools.ProcessState.values(), FluidTools.ProcessState.RESET);
     }
 
     public boolean isSafeToFill() {

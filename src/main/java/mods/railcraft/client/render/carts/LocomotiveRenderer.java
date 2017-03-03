@@ -30,8 +30,8 @@ public class LocomotiveRenderer extends CartModelRenderer {
     public boolean render(ICartRenderer renderer, EntityMinecart cart, float light, float time) {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
-        EnumColor pColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.WHITE : EnumColor.fromDye(loco.getPrimaryColor());
-        EnumColor sColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.WHITE : EnumColor.fromDye(loco.getSecondaryColor());
+        EnumColor pColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.SILVER : EnumColor.fromDye(loco.getPrimaryColor());
+        EnumColor sColor = SeasonPlugin.isGhostTrain(cart) ? EnumColor.SILVER : EnumColor.fromDye(loco.getSecondaryColor());
 
         int primaryColor = pColor.getHexColor();
         int secondaryColor = sColor.getHexColor();
@@ -44,7 +44,7 @@ public class LocomotiveRenderer extends CartModelRenderer {
         LocomotiveRenderType renderType = loco.getRenderType();
         mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer locoRenderer = renderType.getRenderer(loco.getModel());
 
-        locoRenderer.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
+        locoRenderer.renderLocomotive(renderer, loco, primaryColor, secondaryColor, emblemTexture, light, time);
         return false;
     }
 

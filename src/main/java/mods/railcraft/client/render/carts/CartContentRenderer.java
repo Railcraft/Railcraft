@@ -9,9 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.client.render.models.programmatic.ModelTextured;
-import mods.railcraft.client.render.tools.CubeRenderer;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.block.state.IBlockState;
@@ -33,27 +31,13 @@ public class CartContentRenderer<T extends EntityMinecart> {
     public void render(RenderCart renderer, T cart, float light, float partialTicks) {
         int blockOffset = cart.getDisplayTileOffset();
 
-        if (cart instanceof ICartContentsTextureProvider) {
-            ICartContentsTextureProvider texInterface = (ICartContentsTextureProvider) cart;
-            renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            info.setTextures(texInterface.getTextures());
-            info.lightSource = light;
-            OpenGL.glPushMatrix();
-            OpenGL.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
-            CubeRenderer.render(info);
-
-            OpenGL.glPopMatrix();
-            return;
-        }
-
         IBlockState blockState = cart.getDisplayTile();
         if (blockState.getRenderType() != EnumBlockRenderType.INVISIBLE) {
             GlStateManager.pushMatrix();
             renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
             OpenGL.glTranslatef(-0.5F, (float) (blockOffset - 8) / 16.0F, 0.5F);
             Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(blockState, cart.getBrightness(light));
-            OpenGL.glPopMatrix();
-            OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.popMatrix();
             renderer.bindTex(cart);
             return;
         }

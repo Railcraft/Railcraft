@@ -38,6 +38,6 @@ public abstract class TileChargeFeeder extends RailcraftTickingTileEntity {
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
-                && oldState.getValue(BlockChargeFeeder.VARIANT) == newSate.getValue(BlockChargeFeeder.VARIANT));
+                && oldState.getValue(((BlockChargeFeeder) getBlockType()).getVariantProperty()) == newSate.getValue(((BlockChargeFeeder) getBlockType()).getVariantProperty()));
     }
 }

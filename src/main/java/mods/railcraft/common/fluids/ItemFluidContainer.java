@@ -41,11 +41,6 @@ public class ItemFluidContainer extends ItemRailcraft {
     }
 
     @Override
-    public ItemStack getContainerItem(ItemStack stack) {
-        return new ItemStack(empty);
-    }
-
-    @Override
     public void initializeDefinintion() {
         FluidStack fluidStack = fluid.get(FluidTools.BUCKET_VOLUME);
         if (fluidStack != null)

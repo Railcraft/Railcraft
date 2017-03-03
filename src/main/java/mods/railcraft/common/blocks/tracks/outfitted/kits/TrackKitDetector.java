@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.plugins.forge.EntitySearcher;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
@@ -134,15 +135,17 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
-        super.writeToNBT(nbttagcompound);
-        nbttagcompound.setByte("delay", delay);
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setByte("delay", delay);
+        NBTPlugin.writeEnumOrdinal(nbt, "mode", mode);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
-        super.readFromNBT(nbttagcompound);
-        delay = nbttagcompound.getByte("delay");
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        delay = nbt.getByte("delay");
+        mode = NBTPlugin.readEnumOrdinal(nbt, "mode", Mode.VALUES, Mode.BI_DIRECTIONAL);
     }
 
     @Override

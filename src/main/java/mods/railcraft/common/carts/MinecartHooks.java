@@ -17,8 +17,8 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MathTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.block.Block;
@@ -39,11 +39,14 @@ import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static mods.railcraft.common.core.RailcraftConstants.IS_REVERSED_VARIABLE_INDEX;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_GROUND = 0.5f;
@@ -238,10 +241,22 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
 
-        if (SeasonPlugin.isGhostTrain(cart)) {
-            cart.setGlowing(true);
-            data.setBoolean("ghost", true);
-        } else if (data.getBoolean("ghost")) {
+        // Fix flip
+        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
+        float cutoff = 120F;
+        if (distance < -cutoff || distance >= cutoff) {
+            cart.rotationYaw += 180.0F;
+            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
+            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
+            cart.rotationYaw = cart.rotationYaw % 360.0F;
+        }
+
+
+//        if (SeasonPlugin.isGhostTrain(cart)) {
+//            cart.setGlowing(true);
+//            data.setBoolean("ghost", true);
+//        } else
+        if (data.getBoolean("ghost")) {
             cart.setGlowing(false);
             data.setBoolean("ghost", false);
         }
@@ -265,7 +280,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (TrackTools.isRailBlock(block)) {
             cart.fallDistance = 0;
             if (cart.isBeingRidden())
-                cart.getPassengers().stream().forEach(p -> p.fallDistance = 0);
+                cart.getPassengers().forEach(p -> p.fallDistance = 0);
             if (launched > 1)
                 land(cart);
         } else if (launched == 1) {
@@ -286,6 +301,12 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             data.setByte("elevator", elevator);
         }
 
+        byte derail = data.getByte("derail");
+        if (derail > 0) {
+            derail--;
+            data.setByte("derail", derail);
+        }
+
         if (data.getBoolean("explode")) {
             cart.getEntityData().setBoolean("explode", false);
             CartTools.explodeCart(cart);
@@ -294,7 +315,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
             if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
-            else
+            else if (data.getInteger("Launched") == 0)
                 HighSpeedTools.checkSafetyAndExplode(cart.worldObj, event.getPos(), cart);
 
 

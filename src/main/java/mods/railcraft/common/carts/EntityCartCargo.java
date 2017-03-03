@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 
@@ -112,5 +113,11 @@ public class EntityCartCargo extends CartBaseFiltered {
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return true;
+    }
+
+    @Nonnull
+    @Override
+    protected EnumGui getGuiType() {
+        return EnumGui.CART_CARGO;
     }
 }

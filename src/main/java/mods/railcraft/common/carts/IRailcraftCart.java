@@ -51,6 +51,8 @@ public interface IRailcraftCart {
 
     default void killAndDrop(EntityMinecart cart) {
         cart.setDead();
+        if (!cart.worldObj.getGameRules().getBoolean("doEntityDrops"))
+            return;
         ItemStack[] drops = getItemsDropped(cart);
         if (!RailcraftConfig.doCartsBreakOnDrop() && cart.hasCustomName() && !ArrayUtils.isEmpty(drops))
             drops[0].setStackDisplayName(cart.getCustomNameTag());
