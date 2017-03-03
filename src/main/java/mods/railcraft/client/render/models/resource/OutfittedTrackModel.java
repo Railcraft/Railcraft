@@ -199,7 +199,7 @@ public class OutfittedTrackModel implements IModel {
             TrackKit trackKit;
             BlockRailBase.EnumRailDirection shape;
             int kitState;
-            if (state != null) {
+            if (state instanceof IExtendedBlockState) {
                 shape = state.getValue(BlockTrackOutfitted.SHAPE);
                 kitState = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.STATE);
                 trackType = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.TRACK_TYPE);
