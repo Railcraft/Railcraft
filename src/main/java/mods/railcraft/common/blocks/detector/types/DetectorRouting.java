@@ -101,14 +101,14 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     public int testCarts(List<EntityMinecart> carts) {
         if (logic == null || !logic.isValid())
             return NO_POWER;
+        int value = NO_POWER;
         for (EntityMinecart cart : carts) {
             if (routingController.getButtonState() == RoutingButtonState.PRIVATE)
                 if (!getOwner().equals(CartToolsAPI.getCartOwner(cart)))
                     continue;
-            if (logic.matches(this, cart))
-                return FULL_POWER;
+            value = Math.max(value, logic.evaluate(this, cart));
         }
-        return NO_POWER;
+        return value;
     }
 
     @Override

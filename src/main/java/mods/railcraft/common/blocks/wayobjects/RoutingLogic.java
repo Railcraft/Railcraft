@@ -33,6 +33,9 @@ import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -40,7 +43,7 @@ public class RoutingLogic {
 
     private static final String REGEX_SYMBOL = "\\?";
 
-    private Deque<Condition> conditions;
+    private Deque<Expression> expressions;
     private RoutingLogicException error;
 
     private RoutingLogic(@Nullable Deque<String> data) {
@@ -63,17 +66,17 @@ public class RoutingLogic {
     }
 
     public boolean isValid() {
-        return conditions != null;
+        return expressions != null;
     }
 
     private void parseTable(Deque<String> data) throws RoutingLogicException {
-        Deque<Condition> stack = new LinkedList<Condition>();
+        Deque<Expression> stack = new LinkedList<Expression>();
         Iterator<String> it = data.descendingIterator();
         while (it.hasNext()) {
             String line = it.next().trim();
             stack.push(parseLine(line, stack));
         }
-        conditions = stack;
+        expressions = stack;
     }
 
     private EntityMinecart getRoutableCart(EntityMinecart cart) {
@@ -94,19 +97,24 @@ public class RoutingLogic {
     }
 
     public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-        if (conditions == null)
-            return false;
-        EntityMinecart controllingCart = getRoutableCart(cart);
-        if (controllingCart == null)
-            return false;
-        for (Condition condition : conditions) {
-            if (condition.matches(tile, controllingCart))
-                return true;
-        }
-        return false;
+        return evaluate(tile, cart) != NO_POWER;
     }
 
-    private Condition parseLine(String line, Deque<Condition> stack) throws RoutingLogicException {
+    public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+        if (expressions == null)
+            return NO_POWER;
+        EntityMinecart controllingCart = getRoutableCart(cart);
+        if (controllingCart == null)
+            return NO_POWER;
+        for (Expression expression : expressions) {
+            int value = expression.evaluate(tile, controllingCart);
+            if (value != NO_POWER)
+                return value;
+        }
+        return NO_POWER;
+    }
+
+    private Expression parseLine(String line, Deque<Expression> stack) throws RoutingLogicException {
         try {
             if (line.startsWith("Dest"))
                 return new DestCondition(line);
@@ -133,15 +141,30 @@ public class RoutingLogic {
         } catch (Exception ex) {
             throw new RoutingLogicException("railcraft.gui.routing.logic.malformed.syntax", line);
         }
+        if (line.equals("TRUE"))
+            return new ConstantCondition(true);
+        if (line.equals("FALSE"))
+            return new ConstantCondition(false);
+        try {
+            return new ConstantExpression(Integer.parseInt(line));
+        } catch (NumberFormatException ignored) {
+            // not an integer; pass through
+        } catch (IllegalArgumentException ex) {
+            throw new RoutingLogicException("railcraft.gui.routing.logic.constant.invalid", line);
+        }
         try {
             if (line.equals("NOT"))
-                return new NOT(stack.pop());
+                return new NOT((Condition)stack.pop());
             if (line.equals("AND"))
-                return new AND(stack.pop(), stack.pop());
+                return new AND((Condition)stack.pop(), (Condition)stack.pop());
             if (line.equals("OR"))
-                return new OR(stack.pop(), stack.pop());
+                return new OR((Condition)stack.pop(), (Condition)stack.pop());
+            if (line.equals("IF"))
+                return new IF((Condition)stack.pop(), stack.pop(), stack.pop());
         } catch (NoSuchElementException ex) {
             throw new RoutingLogicException("railcraft.gui.routing.logic.insufficient.operands", line);
+        } catch (ClassCastException ex) {
+            throw new RoutingLogicException("railcraft.gui.routing.logic.operand.invalid", line);
         }
         throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
     }
@@ -162,7 +185,18 @@ public class RoutingLogic {
 
     }
 
-    private abstract class Condition {
+    private abstract class Expression {
+
+        public abstract int evaluate(IRoutingTile tile, EntityMinecart cart);
+
+    }
+
+    private abstract class Condition extends Expression {
+
+        @Override
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return matches(tile, cart) ? FULL_POWER : NO_POWER;
+        }
 
         public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
 
@@ -192,6 +226,24 @@ public class RoutingLogic {
 
         @Override
         public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
+
+    }
+
+    private class IF extends Expression {
+
+        private final Condition cond;
+        private final Expression then, else_;
+
+        public IF(Condition cond, Expression then, Expression else_) {
+            this.cond = cond;
+            this.then = then;
+            this.else_ = else_;
+        }
+
+        @Override
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return (cond.matches(tile, cart) ? then : else_).evaluate(tile, cart);
+        }
 
     }
 
@@ -238,6 +290,38 @@ public class RoutingLogic {
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             return a.matches(tile, cart) || b.matches(tile, cart);
+        }
+
+    }
+
+    private class ConstantExpression extends Expression {
+
+        private final int value;
+
+        public ConstantExpression(int value) {
+            if (value < NO_POWER || value > FULL_POWER)
+                throw new IllegalArgumentException("Illegal constant value");
+            this.value = value;
+        }
+
+        @Override
+        public int evaluate(IRoutingTile tile, EntityMinecart cart) {
+            return value;
+        }
+
+    }
+
+    private class ConstantCondition extends Condition {
+
+        private final boolean value;
+
+        public ConstantCondition(boolean value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+            return value;
         }
 
     }
