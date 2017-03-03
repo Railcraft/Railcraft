@@ -43,7 +43,10 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API")
@@ -142,7 +145,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(oldState);
         if (!TrackShapeHelper.isAscending(shape)) {
             Iterator<TrackTarget> it = Iterators.cycle(TrackTarget.values());
-            Set<TrackTarget> tried = new HashSet<>();
+            EnumSet<TrackTarget> tried = EnumSet.noneOf(TrackTarget.class);
             while (true) {
                 TrackTarget target = it.next();
                 if (tried.contains(target))

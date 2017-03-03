@@ -9,6 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.item.ItemStack;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -20,13 +23,13 @@ public class ItemSpikeMaulSteel extends ItemSpikeMaul {
 
     @Override
     public void defineRecipes() {
-        // TODO: Add recipe
-//        CraftingPlugin.addRecipe(new ItemStack(this),
-//                " RI",
-//                "RIR",
-//                "IR ",
-//                'I', "ingotIron",
-//                'R', "dyeRed");
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "IBI",
+                " S ",
+                " S ",
+                'I', "ingotSteel",
+                'B', "blockSteel",
+                'S', "stickWood");
     }
 
 }
