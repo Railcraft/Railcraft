@@ -15,3 +15,7 @@ script: ./gradlew build
 env:
   global:
     TERM=dumb
+    
+notifications:
+  email: false
+  
