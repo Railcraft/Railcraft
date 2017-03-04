@@ -11,17 +11,13 @@ package mods.railcraft.common.blocks.tracks.outfitted;
 
 import com.google.common.collect.ObjectArrays;
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.core.*;
 import mods.railcraft.common.items.ItemRail.EnumRail;
-import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
-import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.*;
@@ -61,9 +57,10 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
-//    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
-//    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackKitWye.class),
+    //    SWITCH(ModuleSignals.class, 4, "switch", 8, TrackKitSwitchTurnout.class),
+    WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
     ;
+
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
     private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);
@@ -75,6 +72,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
         DETECTOR.requiresTicks = true;
         LOCKING.requiresTicks = true;
+        WYE.requiresTicks = true;
 
         BUFFER_STOP.allowedOnSlopes = false;
         DISEMBARK.allowedOnSlopes = false;
@@ -85,6 +83,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         LAUNCHER.allowedOnSlopes = false;
         LOCKING.allowedOnSlopes = false;
         JUNCTION.allowedOnSlopes = false;
+        WYE.allowedOnSlopes = false;
 
         DUMPING.trackTypeFilter = NOT_HIGH_SPEED;
         GATED.trackTypeFilter = NOT_HIGH_SPEED;
@@ -97,6 +96,9 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
         JUNCTION.renderer = TrackKit.Renderer.UNIFIED;
         JUNCTION.visible = false;
+
+        WYE.renderer = TrackKit.Renderer.UNIFIED;
+        WYE.visible = false;
 
         DUMPING.maxSupportDistance = 2;
     }
@@ -239,6 +241,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         return RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag();
     }
 
+    /*
     @Nullable
     private ItemStack registerRecipe() {
         if (getStack() == null)
@@ -627,5 +630,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         }
         return output;
     }
+    */
 
 }

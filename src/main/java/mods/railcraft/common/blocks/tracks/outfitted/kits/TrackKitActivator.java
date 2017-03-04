@@ -19,7 +19,7 @@ public class TrackKitActivator extends TrackKitPowered {
 
     @Override
     public TrackKits getTrackKitContainer() {
-        return TrackKits.BOOSTER;
+        return TrackKits.ACTIVATOR;
     }
 
     @Override

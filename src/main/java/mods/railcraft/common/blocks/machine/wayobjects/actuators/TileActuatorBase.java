@@ -11,16 +11,23 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackSwitchBase;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitSwitch;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -38,12 +45,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileActuatorBase extends TileMachineBase implements ISwitchDevice, ITileShaped {
+public abstract class TileActuatorBase extends TileMachineBase implements ISwitchDevice, ITileShaped, ITileRotate {
     private static final float BOUNDS = -0.2F;
     private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-3).build();
     private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-11).build();
 
-    private byte facing = (byte) EnumFacing.NORTH.ordinal();
+    private EnumFacing facing = EnumFacing.NORTH;
     private static final int ARROW_UPDATE_INTERVAL = 16;
     private boolean powered;
     private boolean lastSwitchState;
@@ -81,6 +88,18 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     @Override
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
+        determineOrientation();
+    }
+
+    @Override
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
+        determineOrientation();
+    }
+
+    @Override
     public abstract boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart);
 
     @Override
@@ -109,7 +128,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         ArrowDirection redArrow = null;
         ArrowDirection whiteArrow = null;
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            TrackSwitchBase trackSwitch = TrackTools.getTrackInstance(tileCache.getTileOnSide(side), TrackSwitchBase.class);
+            TrackKitSwitch trackSwitch = TrackTools.getTrackInstance(tileCache.getTileOnSide(side), TrackKitSwitch.class);
             if (trackSwitch != null) {
                 redArrow = mergeArrowDirection(redArrow, trackSwitch.getRedSignDirection());
                 whiteArrow = mergeArrowDirection(whiteArrow, trackSwitch.getWhiteSignDirection());
@@ -154,7 +173,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
         data.setBoolean("Powered", isPowered());
         data.setBoolean("lastSwitchState", lastSwitchState);
-        data.setByte("Facing", facing);
+        NBTPlugin.writeEnumOrdinal(data, "facing", facing);
         return data;
     }
 
@@ -164,14 +183,14 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
         powered = data.getBoolean("Powered");
         lastSwitchState = data.getBoolean("lastSwitchState");
-        facing = data.getByte("Facing");
+        facing = NBTPlugin.readEnumOrdinal(data, "facing", EnumFacing.VALUES, EnumFacing.NORTH);
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeByte(facing);
+        data.writeByte(facing.ordinal());
         data.writeBoolean(powered);
     }
 
@@ -180,19 +199,45 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         super.readPacketData(data);
 
         byte f = data.readByte();
-        if (facing != f) {
-            facing = f;
+        if (facing.ordinal() != f) {
+            facing = EnumFacing.getFront(f);
             markBlockForUpdate();
         }
         powered = data.readBoolean();
     }
 
-    public byte getFacing() {
+    @Override
+    public EnumFacing getFacing() {
         return facing;
     }
 
-    public void setFacing(byte facing) {
-        this.facing = facing;
+    @Override
+    public void setFacing(EnumFacing facing) {
+        if (this.facing != facing) {
+            this.facing = facing;
+            sendUpdateToClient();
+        }
+    }
+
+    @Nullable
+    @Override
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.HORIZONTALS;
+    }
+
+    @Override
+    public boolean rotateBlock(EnumFacing axis) {
+        return false;
+    }
+
+    private void determineOrientation() {
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            TrackKit kit = TrackTools.getTrackKitAt(worldObj, getPos().offset(side));
+            if (kit == TrackKits.WYE.getTrackKit()) {
+                setFacing(side);
+                break;
+            }
+        }
     }
 
     public boolean isPowered() {

@@ -26,8 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class TrackSwitch extends TrackSwitchBase implements ITrackKitReversible {
-    //    private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
+public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitReversible {
     private boolean reversed;
 
 //    @Override

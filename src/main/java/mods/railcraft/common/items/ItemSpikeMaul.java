@@ -111,6 +111,23 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
                 return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, TrackKits.JUNCTION.getTrackKit());
             }
         },
+        WYE {
+            @Override
+            public boolean matches(World world, BlockPos pos, IBlockState state) {
+                return state.getBlock() instanceof BlockTrackOutfitted
+                        && ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == TrackKits.WYE.getTrackKit();
+            }
+
+            @Override
+            public boolean setToTarget(World world,
+                                       BlockPos pos,
+                                       IBlockState state,
+                                       EntityPlayer player,
+                                       BlockRailBase.EnumRailDirection shape,
+                                       TrackType trackType) {
+                return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, TrackKits.WYE.getTrackKit());
+            }
+        },
         FLEX {
             @Override
             public boolean matches(World world, BlockPos pos, IBlockState state) {
@@ -155,6 +172,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
                     target = it.next();
                     if (Game.isClient(worldIn))
                         return EnumActionResult.SUCCESS;
+                    WorldPlugin.setBlockToAir(worldIn, pos);
                     if (target.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
                         stack.damageItem(1, playerIn);

@@ -39,7 +39,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TrackSwitchBase extends TrackKitRailcraft implements ITrackKitSwitch {
+public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrackKitSwitch {
     private static final int SPRING_DURATION = 30;
     protected boolean mirrored;
     protected boolean shouldSwitch;
@@ -52,12 +52,10 @@ public abstract class TrackSwitchBase extends TrackKitRailcraft implements ITrac
     private ISwitchDevice switchDevice;
     private boolean clientSwitched;
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(SWITCHED, isVisuallySwitched());
-//        return state;
-//    }
+    @Override
+    public List<ItemStack> getDrops(int fortune) {
+        return Collections.emptyList();
+    }
 
     @Override
     public boolean isMirrored() {
