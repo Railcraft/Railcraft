@@ -18,4 +18,4 @@ env:
     
 notifications:
   email: false
-  
+  irc: "irc.esper.net#railcraft"
