@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/strap_iron/wye_0"}
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/strap_iron/wye_0"}
+      },
+      "1": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/strap_iron/wye_1"}
+      },
+      "2": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/strap_iron/wye_2"}
+      },
+      "3": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/strap_iron/wye_3"}
+      }
+    },
+    "shape": {
+      "north_south": {},
+      "east_west": {"model": "railcraft:rail_flat_mirrored", "y": -90}
+    }
+  }
+}

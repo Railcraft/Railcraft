@@ -31,10 +31,11 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
         return TrackKits.WYE;
     }
 
+    // This is wonky as shit, but it works
     @Override
     public int getRenderState() {
         int state = 0;
-        if (isVisuallySwitched())
+        if (isMirrored() != isVisuallySwitched())
             state += 1;
         if (isMirrored() != (getTrackShape() == EAST_WEST))
             state += 2;
@@ -48,9 +49,9 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
             if (dir == NORTH_SOUTH) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        dir = SOUTH_WEST;
-                    } else {
                         dir = NORTH_WEST;
+                    } else {
+                        dir = SOUTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
@@ -62,9 +63,9 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
             } else if (dir == EAST_WEST) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        dir = NORTH_WEST;
-                    } else {
                         dir = NORTH_EAST;
+                    } else {
+                        dir = NORTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
@@ -83,9 +84,17 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
         EnumRailDirection dir = getRailDirection();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.EAST_WEST) {
-            offset = offset.east();
+            if (isMirrored()) {
+                offset = offset.west();
+            } else {
+                offset = offset.east();
+            }
         } else if (dir == EnumRailDirection.NORTH_SOUTH) {
-            offset = offset.north();
+            if (isMirrored()) {
+                offset = offset.south();
+            } else {
+                offset = offset.north();
+            }
         }
         return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
@@ -115,14 +124,21 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
         EnumRailDirection dir = getRailDirection();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.EAST_WEST) {
-            offset = offset.west();
+            if (isMirrored()) {
+                offset = offset.east();
+            } else {
+                offset = offset.west();
+            }
         } else if (dir == EnumRailDirection.NORTH_SOUTH) {
-            offset = offset.south();
+            if (isMirrored()) {
+                offset = offset.north();
+            } else {
+                offset = offset.south();
+            }
         }
         return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
-    //TODO: these are wrong
     @Override
     public ArrowDirection getRedSignDirection() {
         EnumRailDirection dir = getRailDirection();
@@ -150,7 +166,6 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
         return ArrowDirection.NORTH;
     }
 
-    //TODO: these are wrong
     @Override
     public ArrowDirection getWhiteSignDirection() {
         EnumRailDirection dir = getRailDirection();
