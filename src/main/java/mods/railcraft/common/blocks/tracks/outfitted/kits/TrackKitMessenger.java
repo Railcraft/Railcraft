@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -22,7 +23,7 @@ import java.lang.ref.WeakReference;
 import javax.annotation.Nullable;
 
 public class TrackKitMessenger extends TrackKitRailcraft {
-    
+
     ITextComponent text = new TextComponentString("");
     WeakReference<EntityMinecart> lastCart;
     long lastTime;
@@ -54,6 +55,16 @@ public class TrackKitMessenger extends TrackKitRailcraft {
             lastCart = new WeakReference<>(cart);
         }
         lastTime = time;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound data) {
+        data.setString("Message", ITextComponent.Serializer.componentToJson(text));
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        text = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
     }
 
     void sendMessage(EntityMinecart cart) {
