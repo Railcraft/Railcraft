@@ -17,11 +17,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
+import java.lang.ref.WeakReference;
+
 import javax.annotation.Nullable;
 
 public class TrackKitMessenger extends TrackKitRailcraft {
-
+    
     ITextComponent text = new TextComponentString("");
+    WeakReference<EntityMinecart> lastCart;
+    long lastTime;
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -40,6 +44,19 @@ public class TrackKitMessenger extends TrackKitRailcraft {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
+        long time = cart.worldObj.getWorldTime();
+        if (lastCart != null && lastCart.get() == cart) {
+            if (time - lastTime > 1) {
+                sendMessage(cart);
+            }
+        } else {
+            sendMessage(cart);
+            lastCart = new WeakReference<>(cart);
+        }
+        lastTime = time;
+    }
+
+    void sendMessage(EntityMinecart cart) {
         cart.addChatMessage(text);
         cart.getRecursivePassengers().forEach(e -> e.addChatMessage(text));
     }
