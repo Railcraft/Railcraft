@@ -59,6 +59,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
     //    SWITCH(ModuleSignals.class, 4, "switch", 8, TrackKitSwitchTurnout.class),
     WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
+    MESSENGER(ModuleTracks.class, 1, "messenger", 8, TrackKitMessenger.class), //TODO: add recipe
     ;
 
     public static final TrackKits[] VALUES = values();
