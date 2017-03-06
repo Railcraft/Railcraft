@@ -28,10 +28,16 @@ import org.apache.logging.log4j.message.SimpleMessage;
  */
 public class Game {
     public static final boolean OBFUSCATED = !World.class.getSimpleName().equals("World");
-    public static final boolean DEVELOPMENT_ENVIRONMENT = !Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
+    public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
 
     static {
+        boolean dev = false;
+        try {
+            dev = Entity.class.getDeclaredField("worldObj") != null;
+        } catch (NoSuchFieldException | SecurityException ignored) {
+        }
+        DEVELOPMENT_ENVIRONMENT = dev;
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
