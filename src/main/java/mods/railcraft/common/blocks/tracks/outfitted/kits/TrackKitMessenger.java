@@ -9,7 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
+import com.google.gson.JsonParseException;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,11 +26,15 @@ import java.lang.ref.WeakReference;
 
 import javax.annotation.Nullable;
 
-public class TrackKitMessenger extends TrackKitRailcraft {
+public class TrackKitMessenger extends TrackKitPowered {
 
-    ITextComponent text = new TextComponentString("");
-    WeakReference<EntityMinecart> lastCart;
-    long lastTime;
+    protected ITextComponent text;
+    protected WeakReference<EntityMinecart> lastCart;
+    protected long lastTime;
+
+    public TrackKitMessenger() {
+        this.text = new TextComponentString("");
+    }
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -37,7 +45,7 @@ public class TrackKitMessenger extends TrackKitRailcraft {
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (heldItem != null) {
             if (heldItem.hasDisplayName()) {
-                text = new TextComponentString(heldItem.getDisplayName());
+                this.text = new TextComponentString(heldItem.getDisplayName());
             }
         }
         return super.blockActivated(player, hand, heldItem);
@@ -45,30 +53,42 @@ public class TrackKitMessenger extends TrackKitRailcraft {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
+        if (!isPowered()) {
+            return;
+        }
         long time = cart.worldObj.getWorldTime();
-        if (lastCart != null && lastCart.get() == cart) {
-            if (time - lastTime > 1) {
+        if (this.lastCart != null && this.lastCart.get() == cart) {
+            if (time - this.lastTime > 1) {
                 sendMessage(cart);
             }
         } else {
             sendMessage(cart);
-            lastCart = new WeakReference<>(cart);
+            this.lastCart = new WeakReference<>(cart);
         }
-        lastTime = time;
+        this.lastTime = time;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
-        data.setString("Message", ITextComponent.Serializer.componentToJson(text));
+        data.setString("Message", ITextComponent.Serializer.componentToJson(this.text));
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
-        text = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
+        try {
+            this.text = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
+        } catch (JsonParseException ex) {
+            Game.logThrowable("Problem deserializing text message", ex);
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
     }
 
     void sendMessage(EntityMinecart cart) {
-        cart.addChatMessage(text);
-        cart.getRecursivePassengers().forEach(e -> e.addChatMessage(text));
+        cart.addChatMessage(this.text);
+        cart.getRecursivePassengers().forEach(e -> e.addChatMessage(this.text));
     }
 }

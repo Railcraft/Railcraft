@@ -8,6 +8,9 @@
         "state": {
             "0": {
                 "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/messenger_0"}
+            },
+            "1": {
+                "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/messenger_1"}
             }
         },
         "shape": {
