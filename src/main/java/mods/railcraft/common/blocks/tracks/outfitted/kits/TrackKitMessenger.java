@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.google.gson.JsonParseException;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.lang.ref.WeakReference;
 
@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 public class TrackKitMessenger extends TrackKitPowered {
 
+    protected static final TextComponentTranslation SUCCESS_MESSAGE = new TextComponentTranslation("railcraft.gui.message.set");
     protected ITextComponent text;
     protected WeakReference<EntityMinecart> lastCart;
     protected long lastTime;
@@ -44,8 +45,12 @@ public class TrackKitMessenger extends TrackKitPowered {
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (heldItem != null) {
-            if (heldItem.hasDisplayName()) {
-                this.text = new TextComponentString(heldItem.getDisplayName());
+            if (heldItem.hasTagCompound() && loadfrom(heldItem.getTagCompound())) {
+                notifySuccessfulSet(player);
+            } else if (heldItem.hasDisplayName()) {
+                String name = heldItem.getDisplayName();
+                this.text = new TextComponentString(name);
+                notifySuccessfulSet(player);
             }
         }
         return super.blockActivated(player, hand, heldItem);
@@ -75,23 +80,35 @@ public class TrackKitMessenger extends TrackKitPowered {
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
+        loadfrom(data);
+    }
+
+    protected boolean loadfrom(NBTTagCompound data) {
         try {
-            this.text = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
+            this.text = ITextComponent.Serializer.fromJsonLenient(data.getString("Message"));
         } catch (JsonParseException ex) {
-            Game.logThrowable("Problem deserializing text message", ex);
+            return false;
         }
+        return true;
     }
 
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         if (stack.hasTagCompound()) {
-            readFromNBT(stack.getTagCompound());
+            if (loadfrom(stack.getTagCompound()) && placer != null) {
+                notifySuccessfulSet(placer);
+            }
         }
     }
 
-    void sendMessage(EntityMinecart cart) {
+    protected void sendMessage(EntityMinecart cart) {
         cart.addChatMessage(this.text);
         cart.getRecursivePassengers().forEach(e -> e.addChatMessage(this.text));
+    }
+
+    protected void notifySuccessfulSet(EntityLivingBase setter) {
+        setter.addChatMessage(SUCCESS_MESSAGE);
+        setter.addChatMessage(this.text);
     }
 }
