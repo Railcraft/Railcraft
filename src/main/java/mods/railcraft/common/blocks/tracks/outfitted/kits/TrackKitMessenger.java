@@ -85,6 +85,9 @@ public class TrackKitMessenger extends TrackKitPowered {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
+        if (stack.hasTagCompound()) {
+            readFromNBT(stack.getTagCompound());
+        }
     }
 
     void sendMessage(EntityMinecart cart) {
