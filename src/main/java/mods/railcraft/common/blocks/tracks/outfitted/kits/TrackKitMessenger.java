@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.google.gson.JsonParseException;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -85,7 +86,11 @@ public class TrackKitMessenger extends TrackKitPowered {
 
     protected boolean loadfrom(NBTTagCompound data) {
         try {
-            this.text = ITextComponent.Serializer.fromJsonLenient(data.getString("Message"));
+            ITextComponent result = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
+            if (result == null) {
+                return false;
+            }
+            text = result;
         } catch (JsonParseException ex) {
             return false;
         }
@@ -108,6 +113,9 @@ public class TrackKitMessenger extends TrackKitPowered {
     }
 
     protected void notifySuccessfulSet(EntityLivingBase setter) {
+        if (Game.isClient(setter.worldObj)) {
+            return;
+        }
         setter.addChatMessage(SUCCESS_MESSAGE);
         setter.addChatMessage(this.text);
     }
