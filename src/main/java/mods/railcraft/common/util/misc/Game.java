@@ -11,6 +11,7 @@ package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
