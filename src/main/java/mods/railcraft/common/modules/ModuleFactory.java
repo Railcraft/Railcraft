@@ -286,18 +286,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                SimpleMachineVariant rolling = SimpleMachineVariant.ROLLING_MACHINE;
-                if (rolling.isAvailable()) {
-                    ItemStack stack = rolling.getItem();
-                    CraftingPlugin.addRecipe(stack,
-                            "IPI",
-                            "PCP",
-                            "IPI",
-                            'I', "ingotIron",
-                            'P', Blocks.PISTON,
-                            'C', "workbench");
-                }
-
                 EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
                 if (metalsChest.isAvailable())
                     CraftingPlugin.addRecipe(metalsChest.getItem(),
