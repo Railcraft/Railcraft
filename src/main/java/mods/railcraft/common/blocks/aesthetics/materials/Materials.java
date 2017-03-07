@@ -348,7 +348,7 @@ public enum Materials implements IVariantEnum {
             case CONCRETE:
                 return EnumGeneric.BLOCK_CONCRETE.getHardness();
             case CREOSOTE:
-                return EnumGeneric.BLOCK_CONCRETE.getHardness();
+                return EnumGeneric.BLOCK_CREOSOTE.getHardness();
             case OBSIDIAN_CRUSHED:
                 return EnumGeneric.CRUSHED_OBSIDIAN.getHardness();
             case COPPER:
