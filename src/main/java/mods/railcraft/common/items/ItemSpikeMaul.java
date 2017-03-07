@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 import com.google.common.collect.Iterators;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.items.ISpikeMaulTarget;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.charge.ChargeManager;
@@ -43,10 +44,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API")
@@ -93,65 +91,6 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         return true;
     }
 
-    enum TrackTarget {
-        JUNCTION {
-            @Override
-            public boolean matches(World world, BlockPos pos, IBlockState state) {
-                return state.getBlock() instanceof BlockTrackOutfitted
-                        && ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == TrackKits.JUNCTION.getTrackKit();
-            }
-
-            @Override
-            public boolean setToTarget(World world,
-                                       BlockPos pos,
-                                       IBlockState state,
-                                       EntityPlayer player,
-                                       BlockRailBase.EnumRailDirection shape,
-                                       TrackType trackType) {
-                return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, TrackKits.JUNCTION.getTrackKit());
-            }
-        },
-        WYE {
-            @Override
-            public boolean matches(World world, BlockPos pos, IBlockState state) {
-                return state.getBlock() instanceof BlockTrackOutfitted
-                        && ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == TrackKits.WYE.getTrackKit();
-            }
-
-            @Override
-            public boolean setToTarget(World world,
-                                       BlockPos pos,
-                                       IBlockState state,
-                                       EntityPlayer player,
-                                       BlockRailBase.EnumRailDirection shape,
-                                       TrackType trackType) {
-                return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, TrackKits.WYE.getTrackKit());
-            }
-        },
-        FLEX {
-            @Override
-            public boolean matches(World world, BlockPos pos, IBlockState state) {
-                return state.getBlock() instanceof BlockTrackFlex || state.getBlock() == Blocks.RAIL;
-            }
-
-            @Override
-            public boolean setToTarget(World world,
-                                       BlockPos pos,
-                                       IBlockState state,
-                                       EntityPlayer player,
-                                       BlockRailBase.EnumRailDirection shape,
-                                       TrackType trackType) {
-                IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-                ChargeManager.getNetwork(world).deregisterChargeNode(pos);
-                return WorldPlugin.setBlockState(world, pos, newState);
-            }
-        };
-
-        public abstract boolean matches(World world, BlockPos pos, IBlockState state);
-
-        public abstract boolean setToTarget(World world, BlockPos pos, IBlockState state, EntityPlayer player, BlockRailBase.EnumRailDirection shape, TrackType trackType);
-    }
-
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         playerIn.swingArm(hand);
@@ -161,10 +100,10 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         TrackType trackType = TrackTools.getTrackTypeAt(worldIn, pos, oldState);
         BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(oldState);
         if (!TrackShapeHelper.isAscending(shape)) {
-            Iterator<TrackTarget> it = Iterators.cycle(TrackTarget.values());
-            EnumSet<TrackTarget> tried = EnumSet.noneOf(TrackTarget.class);
+            Iterator<ISpikeMaulTarget> it = Iterators.cycle(ISpikeMaulTarget.spikeMaulTargets);
+            Set<ISpikeMaulTarget> tried = new HashSet<>();
             while (true) {
-                TrackTarget target = it.next();
+                ISpikeMaulTarget target = it.next();
                 if (tried.contains(target))
                     break;
                 tried.add(target);
@@ -212,5 +151,55 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     @Override
     public void initializeDefinintion() {
         OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
+    }
+
+    static {
+        ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.JUNCTION));
+        ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.TURNOUT));
+        ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.WYE));
+        ISpikeMaulTarget.spikeMaulTargets.add(new FlexTarget());
+    }
+
+    private static class FlexTarget implements ISpikeMaulTarget {
+        @Override
+        public boolean matches(World world, BlockPos pos, IBlockState state) {
+            return state.getBlock() instanceof BlockTrackFlex || state.getBlock() == Blocks.RAIL;
+        }
+
+        @Override
+        public boolean setToTarget(World world,
+                                   BlockPos pos,
+                                   IBlockState state,
+                                   EntityPlayer player,
+                                   BlockRailBase.EnumRailDirection shape,
+                                   TrackType trackType) {
+            IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
+            ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+            return WorldPlugin.setBlockState(world, pos, newState);
+        }
+    }
+
+    private static class TrackKitTarget implements ISpikeMaulTarget {
+        private final TrackKits trackKit;
+
+        public TrackKitTarget(TrackKits trackKit) {
+            this.trackKit = trackKit;
+        }
+
+        @Override
+        public boolean matches(World world, BlockPos pos, IBlockState state) {
+            return state.getBlock() instanceof BlockTrackOutfitted
+                    && ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == trackKit.getTrackKit();
+        }
+
+        @Override
+        public boolean setToTarget(World world,
+                                   BlockPos pos,
+                                   IBlockState state,
+                                   EntityPlayer player,
+                                   BlockRailBase.EnumRailDirection shape,
+                                   TrackType trackType) {
+            return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, trackKit.getTrackKit());
+        }
     }
 }
