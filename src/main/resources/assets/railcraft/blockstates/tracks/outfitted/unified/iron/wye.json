@@ -21,7 +21,7 @@
     },
     "shape": {
       "north_south": {},
-      "east_west": {"model": "railcraft:rail_flat_mirrored", "y": -90}
+      "east_west": {"model": "railcraft:rail_flat_mirrored_vertically", "y": -90}
     }
   }
 }

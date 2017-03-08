@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitReversible;
+import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -26,16 +27,26 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitReversible {
+public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitReversible {
     private boolean reversed;
 
-//    @Override
-//    public IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-//        state = super.getExtendedState(state);
-////        state = state.withProperty(MIRRORED, mirrored);
-////        state = state.withProperty(REVERSED, reversed);
-//        return state;
-//    }
+    @Override
+    public TrackKits getTrackKitContainer() {
+        return TrackKits.TURNOUT;
+    }
+
+    // This is wonky as shit, but it works
+    @Override
+    public int getRenderState() {
+        int state = 0;
+        if (isVisuallySwitched())
+            state += 1;
+        if (isReversed())
+            state += 2;
+        if (isMirrored())
+            state += 4;
+        return state;
+    }
 
     @Override
     public EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
@@ -43,31 +54,15 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
         if (cart != null && shouldSwitchForCart(cart)) {
             if (current == EnumRailDirection.NORTH_SOUTH) {
                 if (isMirrored()) {
-                    if (reversed) {
-                        return EnumRailDirection.SOUTH_WEST;
-                    } else {
-                        return EnumRailDirection.NORTH_WEST;
-                    }
+                    return reversed ? EnumRailDirection.SOUTH_WEST : EnumRailDirection.NORTH_WEST;
                 } else {
-                    if (reversed) {
-                        return EnumRailDirection.NORTH_EAST;
-                    } else {
-                        return EnumRailDirection.SOUTH_EAST;
-                    }
+                    return reversed ? EnumRailDirection.NORTH_EAST : EnumRailDirection.SOUTH_EAST;
                 }
             } else if (current == EnumRailDirection.EAST_WEST) {
                 if (isMirrored()) {
-                    if (reversed) {
-                        return EnumRailDirection.NORTH_WEST;
-                    } else {
-                        return EnumRailDirection.NORTH_EAST;
-                    }
+                    return reversed ? EnumRailDirection.NORTH_WEST : EnumRailDirection.NORTH_EAST;
                 } else {
-                    if (reversed) {
-                        return EnumRailDirection.SOUTH_EAST;
-                    } else {
-                        return EnumRailDirection.SOUTH_WEST;
-                    }
+                    return reversed ? EnumRailDirection.SOUTH_EAST : EnumRailDirection.SOUTH_WEST;
                 }
             }
         }
@@ -79,17 +74,9 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
         EnumRailDirection dir = getRailDirection();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
-            if (isReversed() != isMirrored()) {
-                offset = offset.south();
-            } else {
-                offset = offset.north();
-            }
+            offset = isReversed() != isMirrored() ? offset.south() : offset.north();
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (isReversed() == isMirrored()) {
-                offset = offset.east();
-            } else {
-                offset = offset.west();
-            }
+            offset = isReversed() == isMirrored() ? offset.east() : offset.west();
         }
         return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
@@ -99,17 +86,9 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
         EnumRailDirection dir = getRailDirection();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
-            if (isReversed() != isMirrored()) {
-                offset = offset.north();
-            } else {
-                offset = offset.south();
-            }
+            offset = isReversed() != isMirrored() ? offset.north() : offset.south();
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (isReversed() == isMirrored()) {
-                offset = offset.west();
-            } else {
-                offset = offset.east();
-            }
+            offset = isReversed() == isMirrored() ? offset.west() : offset.east();
         }
         return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
@@ -119,17 +98,9 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
         EnumRailDirection dir = getRailDirection();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
-            if (isMirrored()) {
-                offset = offset.west();
-            } else {
-                offset = offset.east();
-            }
+            offset = isMirrored() ? offset.west() : offset.east();
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (isMirrored()) {
-                offset = offset.north();
-            } else {
-                offset = offset.south();
-            }
+            offset = isMirrored() ? offset.north() : offset.south();
         }
         return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
@@ -172,40 +143,22 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
     public ArrowDirection getRedSignDirection() {
         if (getTile().getBlockMetadata() == 1) {
             if (isVisuallySwitched()) {
-                if (isMirrored()) {
-                    return ArrowDirection.NORTH;
-                }
-                return ArrowDirection.SOUTH;
+                return isMirrored() ? ArrowDirection.NORTH : ArrowDirection.SOUTH;
             }
-            if (isReversed() != isMirrored()) {
-                return ArrowDirection.WEST;
-            }
-            return ArrowDirection.EAST;
+            return isReversed() != isMirrored() ? ArrowDirection.WEST : ArrowDirection.EAST;
         }
         if (isVisuallySwitched()) {
-            if (isMirrored()) {
-                return ArrowDirection.EAST;
-            }
-            return ArrowDirection.WEST;
+            return isMirrored() ? ArrowDirection.EAST : ArrowDirection.WEST;
         }
-        if (isReversed() != isMirrored()) {
-            return ArrowDirection.NORTH;
-        }
-        return ArrowDirection.SOUTH;
+        return isReversed() != isMirrored() ? ArrowDirection.NORTH : ArrowDirection.SOUTH;
     }
 
     @Override
     public ArrowDirection getWhiteSignDirection() {
         if (getTile().getBlockMetadata() == 1) {
-            if (isVisuallySwitched()) {
-                return ArrowDirection.EAST_WEST;
-            }
-            return ArrowDirection.NORTH_SOUTH;
+            return isVisuallySwitched() ? ArrowDirection.EAST_WEST : ArrowDirection.NORTH_SOUTH;
         }
-        if (isVisuallySwitched()) {
-            return ArrowDirection.NORTH_SOUTH;
-        }
-        return ArrowDirection.EAST_WEST;
+        return isVisuallySwitched() ? ArrowDirection.NORTH_SOUTH : ArrowDirection.EAST_WEST;
     }
 
     @Override
@@ -214,17 +167,9 @@ public abstract class TrackKitSwitchTurnout extends TrackKitSwitch implements IT
         EnumRailDirection dir = getRailDirection();
 
         if (dir == EnumRailDirection.NORTH_SOUTH) {
-            if (isMirrored()) {
-                face = EnumFacing.EAST;
-            } else {
-                face = EnumFacing.WEST;
-            }
+            face = isMirrored() ? EnumFacing.EAST : EnumFacing.WEST;
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (isMirrored()) {
-                face = EnumFacing.SOUTH;
-            } else {
-                face = EnumFacing.NORTH;
-            }
+            face = isMirrored() ? EnumFacing.SOUTH : EnumFacing.NORTH;
         }
         return face;
     }
