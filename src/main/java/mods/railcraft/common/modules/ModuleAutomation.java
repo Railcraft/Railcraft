@@ -12,9 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -58,20 +56,6 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "ML",
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);
-
-                SimpleMachineVariant feed = SimpleMachineVariant.FEED_STATION;
-                if (feed.isAvailable()) {
-                    ItemStack stack = feed.getItem();
-                    CraftingPlugin.addRecipe(stack,
-                            "PCP",
-                            "CSC",
-                            "PCP",
-                            'P', "plankWood",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron",
-                            'C', new ItemStack(Items.GOLDEN_CARROT));
-
-                    MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
-                }
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
                 if (alpha.isAvailable()) {

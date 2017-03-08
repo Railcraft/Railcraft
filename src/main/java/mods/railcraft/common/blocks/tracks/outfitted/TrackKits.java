@@ -57,9 +57,8 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
-    //    SWITCH(ModuleSignals.class, 4, "switch", 8, TrackKitSwitchTurnout.class),
-    WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
-    ;
+    TURNOUT(ModuleTracks.class, 8, "turnout", 8, TrackKitSwitchTurnout.class),
+    WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class);
 
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
@@ -72,6 +71,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
         DETECTOR.requiresTicks = true;
         LOCKING.requiresTicks = true;
+        TURNOUT.requiresTicks = true;
         WYE.requiresTicks = true;
 
         BUFFER_STOP.allowedOnSlopes = false;
@@ -83,6 +83,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         LAUNCHER.allowedOnSlopes = false;
         LOCKING.allowedOnSlopes = false;
         JUNCTION.allowedOnSlopes = false;
+        TURNOUT.allowedOnSlopes = false;
         WYE.allowedOnSlopes = false;
 
         DUMPING.trackTypeFilter = NOT_HIGH_SPEED;
@@ -96,6 +97,9 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
         JUNCTION.renderer = TrackKit.Renderer.UNIFIED;
         JUNCTION.visible = false;
+
+        TURNOUT.renderer = TrackKit.Renderer.UNIFIED;
+        TURNOUT.visible = false;
 
         WYE.renderer = TrackKit.Renderer.UNIFIED;
         WYE.visible = false;

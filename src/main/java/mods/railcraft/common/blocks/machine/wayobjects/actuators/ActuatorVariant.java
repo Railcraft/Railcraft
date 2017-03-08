@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleRouting;
-import mods.railcraft.common.modules.ModuleSignals;
+import mods.railcraft.common.modules.ModuleTracks;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,8 +28,8 @@ import java.util.List;
  * @author CovertJaguar
  */
 public enum ActuatorVariant implements IEnumMachine<ActuatorVariant> {
-    LEVER(ModuleSignals.class, "lever", TileActuatorLever.class),
-    MOTOR(ModuleSignals.class, "motor", TileActuatorMotor.class),
+    LEVER(ModuleTracks.class, "lever", TileActuatorLever.class),
+    MOTOR(ModuleTracks.class, "motor", TileActuatorMotor.class),
     ROUTING(ModuleRouting.class, "routing", TileActuatorRouting.class);
 
     private static final List<ActuatorVariant> creativeList = new ArrayList<ActuatorVariant>();

@@ -1,3 +1,10 @@
+10.1.0-alpha-1
+	NEW: Ported the Junction and Wye Tracks.
+	NEW: Spike Maul is used to swap between Flex, Junction, Wye.
+	NEW: Rolling Machine has been ported. Should fix most recipe issues.
+	NEW: Feed Station has been ported.
+	INFO: Turnout still needs to be ported and the Switch Actuators are a WIP.
+
 10.0.1:
 	NEW: Add DynamicLighting support to Locomotive (contribution by liach)
 	FIX: Fix config files not being generated correctly.

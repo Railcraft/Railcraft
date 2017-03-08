@@ -27,20 +27,21 @@ public class ItemGear extends ItemRailcraftSubtyped {
 
     @Override
     public void initializeDefinintion() {
-        for (EnumGear gear : EnumGear.values()) {
+        for (EnumGear gear : EnumGear.VALUES) {
             ItemStack stack = new ItemStack(this, 1, gear.ordinal());
             RailcraftRegistry.register(this, gear, stack);
         }
 
         OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));
+        OreDictionary.registerOre("gearSteel", RailcraftItems.GEAR.getStack(1, EnumGear.STEEL));
+        OreDictionary.registerOre("gearGoldPlate", RailcraftItems.GEAR.getStack(1, EnumGear.GOLD_PLATE));
+        OreDictionary.registerOre("gearBushing", RailcraftItems.GEAR.getStack(1, EnumGear.BUSHING));
 
         LootPlugin.addLootUnique(RailcraftItems.GEAR, EnumGear.BUSHING, 1, 8, LootPlugin.Type.RAILWAY);
     }
 
     @Override
     public void defineRecipes() {
-        ItemStack bushing = RailcraftItems.GEAR.getStack(EnumGear.BUSHING);
-
         RailcraftItems gear = RailcraftItems.GEAR;
 
         CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
@@ -53,21 +54,21 @@ public class ItemGear extends ItemRailcraftSubtyped {
                 "GBG",
                 " G ",
                 'G', "nuggetGold",
-                'B', bushing);
+                'B', "gearBushing");
 
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.IRON),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotIron",
-                'B', bushing);
+                'B', "gearBushing");
 
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.STEEL),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotSteel",
-                'B', bushing);
+                'B', "gearBushing");
     }
 
     public enum EnumGear implements IVariantEnum {
