@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "variant": {
+      "brick": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_0"}
+      },
+      "fitted": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_1"}
+      },
+      "block": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_2"}
+      },
+      "ornate": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_3"}
+      },
+      "etched": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_4"}
+      },
+      "cobble": {
+        "textures": {"all": "railcraft:blocks/brick_rednether_5"}
+      }
+    }
+  }
+}

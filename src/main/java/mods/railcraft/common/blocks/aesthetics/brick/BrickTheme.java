@@ -146,6 +146,37 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             if (variant != BrickVariant.BRICK)
                 super.initVariant(block, variant);
         }
+
+
+    },
+    REDNETHER(RailcraftBlocks.BRICK_REDNETHER, MapColor.NETHERRACK) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BRICK)
+                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
+                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
+            return super.getStack(qty, meta);
+        }
+
+        @Override
+        public void initRecipes(BlockBrick block) {
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.RED_NETHER_BRICK), getStack(1, BLOCK), 0);
+        }
+
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BRICK)
+                super.initVariant(block, variant);
+        }
+
+
     },;
     public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;

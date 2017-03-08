@@ -94,6 +94,11 @@ public enum Materials implements IVariantEnum {
     NETHER_COBBLE(37, "nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
     NETHER_FITTED(21, "nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
 
+    REDNETHER_BLOCK(29, "rednether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
+    REDNETHER_BRICK("rednether_brick", Blocks.RED_NETHER_BRICK::getDefaultState),
+    REDNETHER_COBBLE(37, "rednether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
+    REDNETHER_FITTED(21, "rednether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
+
     QUARRIED_BLOCK(25, "quarried_block", () -> BrickTheme.QUARRIED.getState(BrickVariant.BLOCK)),
     QUARRIED_BRICK(10, "quarried_brick", () -> BrickTheme.QUARRIED.getState(BrickVariant.BRICK)),
     QUARRIED_COBBLE(33, "quarried_cobble", () -> BrickTheme.QUARRIED.getState(BrickVariant.COBBLE)),
