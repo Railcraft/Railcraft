@@ -57,7 +57,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     ROUTING(ModuleRouting.class, 2, "routing", 8, TrackKitRouting.class, () -> recipes(craft(RailcraftItems.TICKET, Items.REDSTONE), craft(RailcraftItems.TICKET_GOLD, Items.REDSTONE))),
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
-    TURNOUT(ModuleTracks.class, 4, "turnout", 8, TrackKitSwitchTurnout.class),
+    TURNOUT(ModuleTracks.class, 8, "turnout", 8, TrackKitSwitchTurnout.class),
     WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
     MESSENGER(ModuleTracks.class, 2, "messenger", 8, TrackKitMessenger.class), //TODO: add recipe
     ;
