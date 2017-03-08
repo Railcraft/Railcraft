@@ -11,12 +11,10 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
-import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitSwitch;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -232,10 +230,9 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
     private void determineOrientation() {
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            TrackKit kit = TrackTools.getTrackKitAt(worldObj, getPos().offset(side));
-            if (kit == TrackKits.WYE.getTrackKit()) {
+            if (TrackTools.isTrackInstanceAt(worldObj, getPos().offset(side), ITrackKitSwitch.class)) {
                 setFacing(side);
-                break;
+                return;
             }
         }
     }

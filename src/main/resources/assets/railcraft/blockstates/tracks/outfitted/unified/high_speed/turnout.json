@@ -1,0 +1,43 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_0"}
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_0"}
+      },
+      "1": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_1"}
+      },
+      "2": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_2"}
+      },
+      "3": {
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_3"}
+      },
+      "4": {
+        "model": "railcraft:rail_flat_mirrored_horizontally",
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_2"}
+      },
+      "5": {
+        "model": "railcraft:rail_flat_mirrored_horizontally",
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_3"}
+      },
+      "6": {
+        "model": "railcraft:rail_flat_mirrored_horizontally",
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_0"}
+      },
+      "7": {
+        "model": "railcraft:rail_flat_mirrored_horizontally",
+        "textures": {"rail": "railcraft:blocks/tracks/outfitted/unified/high_speed/turnout_1"}
+      }
+    },
+    "shape": {
+      "north_south": {},
+      "east_west": {"y": 90}
+    }
+  }
+}

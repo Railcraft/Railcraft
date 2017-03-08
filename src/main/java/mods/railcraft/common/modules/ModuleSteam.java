@@ -13,7 +13,6 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -49,7 +48,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             'P', new ItemStack(Blocks.PISTON),
                             'N', "nuggetGold",
                             'C', "blockGlassColorless",
-                            'G', RailcraftItems.GEAR.getRecipeObject(EnumGear.GOLD_PLATE));
+                            'G', "gearGoldPlate");
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_LOW;
@@ -75,7 +74,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             'P', new ItemStack(Blocks.PISTON),
                             'I', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
                             'C', "blockGlassColorless",
-                            'G', RailcraftItems.GEAR.getRecipeObject(EnumGear.STEEL));
+                            'G', "gearSteel");
                 }
 
                 beta = EnumMachineBeta.BOILER_FIREBOX_SOLID;
