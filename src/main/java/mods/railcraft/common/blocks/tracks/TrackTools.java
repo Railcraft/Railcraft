@@ -142,6 +142,27 @@ public class TrackTools {
     }
 
     @Nullable
+    public static <T extends ITrackKitInstance> boolean isTrackInstanceAt(IBlockAccess world, BlockPos pos, Class<T> instanceClass) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
+            return instanceClass.isAssignableFrom(trackInstance.getClass());
+        }
+        return false;
+    }
+
+    @Nullable
+    public static <T extends ITrackKitInstance> T getTrackInstance(IBlockAccess world, BlockPos pos, Class<T> instanceClass) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
+            if (instanceClass.isAssignableFrom(trackInstance.getClass()))
+                return instanceClass.cast(trackInstance);
+        }
+        return null;
+    }
+
+    @Nullable
     public static <T extends ITrackKitInstance> T getTrackInstance(@Nullable TileEntity tile, Class<T> instanceClass) {
         if (tile instanceof TileTrackOutfitted) {
             ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
