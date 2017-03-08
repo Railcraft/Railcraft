@@ -28,7 +28,7 @@ import org.apache.logging.log4j.message.SimpleMessage;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Game {
-    public static final boolean OBFUSCATED = !World.class.getSimpleName().equals("World");
+    public static final boolean OBFUSCATED;
     public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
 
@@ -38,7 +38,8 @@ public class Game {
             dev = Entity.class.getDeclaredField("worldObj") != null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
-        DEVELOPMENT_ENVIRONMENT = dev;
+        OBFUSCATED = dev;
+        DEVELOPMENT_ENVIRONMENT = !Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
