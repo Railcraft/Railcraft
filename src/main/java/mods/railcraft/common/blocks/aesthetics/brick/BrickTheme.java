@@ -209,6 +209,22 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 4);
             return super.getStack(qty, meta);
         }
+    },
+    GRANITE(RailcraftBlocks.BRICK_GRANITE, MapColor.DIRT) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 2);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 2);
+            return super.getStack(qty, meta);
+        }
     },;
     public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;

@@ -126,6 +126,11 @@ public enum Materials implements IVariantEnum {
     DIORITE_COBBLE(37, "diorite_cobble", () -> BrickTheme.DIORITE.getState(BrickVariant.COBBLE)),
     DIORITE_FITTED(21, "diorite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.FITTED)),
 
+    GRANITE_BLOCK("granite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.GRANITE_SMOOTH)),
+    GRANITE_BRICK(29, "granite_brick", () -> BrickTheme.DIORITE.getState(BrickVariant.BRICK)),
+    GRANITE_COBBLE(37, "granite_cobble", () -> BrickTheme.DIORITE.getState(BrickVariant.COBBLE)),
+    GRANITE_FITTED(21, "granite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.FITTED)),
+
     SNOW(3, "snow", Blocks.SNOW::getDefaultState),
     ICE(4, "ice", Blocks.ICE::getDefaultState),
     PACKED_ICE(5, "packed_ice", Blocks.PACKED_ICE::getDefaultState),
