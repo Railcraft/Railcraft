@@ -39,7 +39,7 @@ public class Game {
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
         OBFUSCATED = dev;
-        DEVELOPMENT_ENVIRONMENT = !Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
+        DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
