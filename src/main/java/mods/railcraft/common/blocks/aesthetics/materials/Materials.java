@@ -104,6 +104,11 @@ public enum Materials implements IVariantEnum {
     SANDY_COBBLE(30, "sandy_cobble", () -> BrickTheme.SANDY.getState(BrickVariant.COBBLE)),
     SANDY_FITTED(14, "sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.FITTED)),
 
+    REDSANDY_BLOCK(22, "redsandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.BLOCK)),
+    REDSANDY_BRICK(0, "redsandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
+    REDSANDY_COBBLE(30, "redsandy_cobble", () -> BrickTheme.REDSANDY.getState(BrickVariant.COBBLE)),
+    REDSANDY_FITTED(14, "redsandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.FITTED)),
+
     SNOW(3, "snow", Blocks.SNOW::getDefaultState),
     ICE(4, "ice", Blocks.ICE::getDefaultState),
     PACKED_ICE(5, "packed_ice", Blocks.PACKED_ICE::getDefaultState),

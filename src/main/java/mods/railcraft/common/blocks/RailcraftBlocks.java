@@ -93,6 +93,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BRICK_NETHER("brick_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
     BRICK_QUARRIED("brick_quarried", BlockBrick.class, () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
     BRICK_SANDY("brick_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
+    BRICK_REDSANDY("brick_redsandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDSANDY), ItemBrick::new),
     CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, BlockChargeFeeder::new, ItemBlockRailcraftSubtyped::new),
     CHARGE_TRAP("charge_trap", BlockChargeTrap.class, BlockChargeTrap::new, ItemBlockRailcraft::new),
     GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
