@@ -33,12 +33,12 @@ public class Game {
     public static final boolean BUKKIT;
 
     static {
-        boolean dev = false;
+        boolean obfuscated = true;
         try {
-            dev = Entity.class.getDeclaredField("worldObj") != null;
+            obfuscated = Entity.class.getDeclaredField("worldObj") == null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
-        OBFUSCATED = dev;
+        OBFUSCATED = obfuscated;
         DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
