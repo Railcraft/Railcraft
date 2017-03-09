@@ -109,6 +109,16 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     'M', new ItemStack(Blocks.SAND));
         }
     },
+    REDSANDY(RailcraftBlocks.BRICK_RED_SANDY, MapColor.DIRT) {
+        @Override
+        public void initRecipes(BlockBrick block) {
+            CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+                    "BM",
+                    "MB",
+                    'B', "ingotBrick",
+                    'M', new ItemStack(Blocks.SAND, 1, 1));
+        }
+    },
     NETHER(RailcraftBlocks.BRICK_NETHER, MapColor.NETHERRACK) {
         @Override
         public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
@@ -133,6 +143,100 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         protected void initVariant(BlockBrick block, BrickVariant variant) {
             if (variant != BrickVariant.BRICK)
+                super.initVariant(block, variant);
+        }
+
+
+    },
+    REDNETHER(RailcraftBlocks.BRICK_RED_NETHER, MapColor.NETHERRACK) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BRICK)
+                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
+                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
+            return super.getStack(qty, meta);
+        }
+
+        @Override
+        public void initRecipes(BlockBrick block) {
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.RED_NETHER_BRICK), getStack(1, BLOCK), 0);
+        }
+
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BRICK)
+                super.initVariant(block, variant);
+        }
+
+
+    },
+    ANDESITE(RailcraftBlocks.BRICK_ANDESITE, MapColor.STONE) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 6);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 6);
+            return super.getStack(qty, meta);
+        }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
+                super.initVariant(block, variant);
+        }
+    },
+    DIORITE(RailcraftBlocks.BRICK_DIORITE, MapColor.QUARTZ) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 4);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 4);
+            return super.getStack(qty, meta);
+        }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
+                super.initVariant(block, variant);
+        }
+    },
+    GRANITE(RailcraftBlocks.BRICK_GRANITE, MapColor.DIRT) {
+        @Override
+        public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+            if (variant == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 2);
+            return super.getStack(qty, variant);
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getStack(int qty, int meta) {
+            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+                return new ItemStack(Blocks.STONE, qty, 2);
+            return super.getStack(qty, meta);
+        }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
                 super.initVariant(block, variant);
         }
     },;
