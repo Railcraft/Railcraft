@@ -192,6 +192,11 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 6);
             return super.getStack(qty, meta);
         }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
+                super.initVariant(block, variant);
+        }
     },
     DIORITE(RailcraftBlocks.BRICK_DIORITE, MapColor.QUARTZ) {
         @Override
@@ -208,6 +213,11 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 4);
             return super.getStack(qty, meta);
         }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
+                super.initVariant(block, variant);
+        }
     },
     GRANITE(RailcraftBlocks.BRICK_GRANITE, MapColor.DIRT) {
         @Override
@@ -223,6 +233,11 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
                 return new ItemStack(Blocks.STONE, qty, 2);
             return super.getStack(qty, meta);
+        }
+        @Override
+        protected void initVariant(BlockBrick block, BrickVariant variant) {
+            if (variant != BrickVariant.BLOCK)
+                super.initVariant(block, variant);
         }
     },;
     public static final BrickTheme[] VALUES = values();
