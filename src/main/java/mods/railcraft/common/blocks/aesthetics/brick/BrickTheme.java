@@ -112,7 +112,6 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     REDSANDY(RailcraftBlocks.BRICK_RED_SANDY, MapColor.DIRT) {
         @Override
         public void initRecipes(BlockBrick block) {
-//            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
             CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
                     "BM",
                     "MB",
