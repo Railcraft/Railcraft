@@ -109,7 +109,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     'M', new ItemStack(Blocks.SAND));
         }
     },
-    REDSANDY(RailcraftBlocks.BRICK_REDSANDY, MapColor.DIRT) {
+    REDSANDY(RailcraftBlocks.BRICK_RED_SANDY, MapColor.DIRT) {
         @Override
         public void initRecipes(BlockBrick block) {
 //            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
@@ -149,7 +149,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 
 
     },
-    REDNETHER(RailcraftBlocks.BRICK_REDNETHER, MapColor.NETHERRACK) {
+    REDNETHER(RailcraftBlocks.BRICK_RED_NETHER, MapColor.NETHERRACK) {
         @Override
         public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
             if (variant == BrickVariant.BRICK)

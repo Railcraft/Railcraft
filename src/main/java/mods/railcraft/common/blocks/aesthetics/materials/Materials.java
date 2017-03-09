@@ -96,10 +96,10 @@ public enum Materials implements IVariantEnum {
     NETHER_COBBLE(37, "nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
     NETHER_FITTED(21, "nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
 
-    REDNETHER_BLOCK(29, "rednether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
-    REDNETHER_BRICK("rednether_brick", Blocks.RED_NETHER_BRICK::getDefaultState),
-    REDNETHER_COBBLE(37, "rednether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
-    REDNETHER_FITTED(21, "rednether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
+    REDNETHER_BLOCK(29, "red_nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
+    REDNETHER_BRICK("red_nether_brick", Blocks.RED_NETHER_BRICK::getDefaultState),
+    REDNETHER_COBBLE(37, "red_nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
+    REDNETHER_FITTED(21, "red_nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
 
     QUARRIED_BLOCK(25, "quarried_block", () -> BrickTheme.QUARRIED.getState(BrickVariant.BLOCK)),
     QUARRIED_BRICK(10, "quarried_brick", () -> BrickTheme.QUARRIED.getState(BrickVariant.BRICK)),
@@ -111,10 +111,10 @@ public enum Materials implements IVariantEnum {
     SANDY_COBBLE(30, "sandy_cobble", () -> BrickTheme.SANDY.getState(BrickVariant.COBBLE)),
     SANDY_FITTED(14, "sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.FITTED)),
 
-    REDSANDY_BLOCK(22, "redsandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.BLOCK)),
-    REDSANDY_BRICK(0, "redsandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
-    REDSANDY_COBBLE(30, "redsandy_cobble", () -> BrickTheme.REDSANDY.getState(BrickVariant.COBBLE)),
-    REDSANDY_FITTED(14, "redsandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.FITTED)),
+    REDSANDY_BLOCK(22, "red_sandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.BLOCK)),
+    REDSANDY_BRICK(0, "red_sandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
+    REDSANDY_COBBLE(30, "red_sandy_cobble", () -> BrickTheme.REDSANDY.getState(BrickVariant.COBBLE)),
+    REDSANDY_FITTED(14, "red_sandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.FITTED)),
 
     ANDESITE_BLOCK("andesite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH)),
     ANDESITE_BRICK(29, "andesite_brick", () -> BrickTheme.ANDESITE.getState(BrickVariant.BRICK)),
