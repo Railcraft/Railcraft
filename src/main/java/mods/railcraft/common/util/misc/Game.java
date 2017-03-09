@@ -11,6 +11,7 @@ package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -27,11 +28,18 @@ import org.apache.logging.log4j.message.SimpleMessage;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Game {
-    public static final boolean OBFUSCATED = !World.class.getSimpleName().equals("World");
-    public static final boolean DEVELOPMENT_ENVIRONMENT = !Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
+    public static final boolean OBFUSCATED;
+    public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
 
     static {
+        boolean dev = false;
+        try {
+            dev = Entity.class.getDeclaredField("worldObj") != null;
+        } catch (NoSuchFieldException | SecurityException ignored) {
+        }
+        OBFUSCATED = dev;
+        DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
