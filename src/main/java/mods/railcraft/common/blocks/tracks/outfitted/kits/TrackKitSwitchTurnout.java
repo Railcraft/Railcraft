@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
+import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
@@ -71,7 +71,7 @@ public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitRe
 
     @Override
     protected List<UUID> getCartsAtLockEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             offset = isReversed() != isMirrored() ? offset.south() : offset.north();
@@ -83,7 +83,7 @@ public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitRe
 
     @Override
     protected List<UUID> getCartsAtDecisionEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             offset = isReversed() != isMirrored() ? offset.north() : offset.south();
@@ -95,7 +95,7 @@ public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitRe
 
     @Override
     protected List<UUID> getCartsAtSpringEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             offset = isMirrored() ? offset.west() : offset.east();
@@ -141,21 +141,21 @@ public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitRe
 
     @Override
     public ArrowDirection getRedSignDirection() {
-        if (getTile().getBlockMetadata() == 1) {
+        if (getRailDirectionRaw() == EnumRailDirection.EAST_WEST) {
             if (isVisuallySwitched()) {
                 return isMirrored() ? ArrowDirection.NORTH : ArrowDirection.SOUTH;
             }
-            return isReversed() != isMirrored() ? ArrowDirection.WEST : ArrowDirection.EAST;
+            return isReversed() != isMirrored() ? ArrowDirection.EAST : ArrowDirection.WEST;
         }
         if (isVisuallySwitched()) {
-            return isMirrored() ? ArrowDirection.EAST : ArrowDirection.WEST;
+            return isMirrored() ? ArrowDirection.WEST : ArrowDirection.EAST;
         }
         return isReversed() != isMirrored() ? ArrowDirection.NORTH : ArrowDirection.SOUTH;
     }
 
     @Override
     public ArrowDirection getWhiteSignDirection() {
-        if (getTile().getBlockMetadata() == 1) {
+        if (getRailDirectionRaw() == EnumRailDirection.EAST_WEST) {
             return isVisuallySwitched() ? ArrowDirection.EAST_WEST : ArrowDirection.NORTH_SOUTH;
         }
         return isVisuallySwitched() ? ArrowDirection.NORTH_SOUTH : ArrowDirection.EAST_WEST;
@@ -164,7 +164,7 @@ public class TrackKitSwitchTurnout extends TrackKitSwitch implements ITrackKitRe
     @Override
     public EnumFacing getActuatorLocation() {
         EnumFacing face = EnumFacing.NORTH;
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
 
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             face = isMirrored() ? EnumFacing.EAST : EnumFacing.WEST;

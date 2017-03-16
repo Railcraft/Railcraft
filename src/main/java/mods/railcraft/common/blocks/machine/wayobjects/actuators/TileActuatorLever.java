@@ -9,9 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import net.minecraft.entity.item.EntityMinecart;
+
+import javax.annotation.Nullable;
 
 public class TileActuatorLever extends TileActuatorBase {
 
@@ -21,7 +22,7 @@ public class TileActuatorLever extends TileActuatorBase {
     }
 
     @Override
-    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(@Nullable EntityMinecart cart) {
         return isPowered();
     }
 }

@@ -61,7 +61,7 @@ public class FluidModelRenderer {
      * @param level Ranges from 1 to 16 inclusively, 0 will crash
      */
     public void renderFluid(FluidStack fluidStack, int level) {
-        IBakedModel bakedModel = new ModelFluid(fluidStack, false).bake(TRSRTransformation.identity(),
+        IBakedModel bakedModel = new FluidModel(fluidStack, false).bake(TRSRTransformation.identity(),
                 DefaultVertexFormats.BLOCK, RenderTools::getTexture);
         Minecraft mc = Minecraft.getMinecraft();
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

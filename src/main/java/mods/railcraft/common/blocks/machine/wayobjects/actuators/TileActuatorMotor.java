@@ -13,7 +13,6 @@ import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
-import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.gui.EnumGui;
@@ -30,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileActuatorMotor extends TileActuatorSecured implements ITileAspectResponder, IGuiReturnHandler, IReceiverTile {
@@ -184,7 +184,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(@Nullable EntityMinecart cart) {
         return switchAspect || (shouldSwitchOnRedstone() && isPowered());
     }
 

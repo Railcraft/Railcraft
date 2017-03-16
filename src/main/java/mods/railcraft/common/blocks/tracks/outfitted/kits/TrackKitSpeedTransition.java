@@ -52,7 +52,7 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
         if (isPowered()) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
             if (speed > BOOST_THRESHOLD) {
-                BlockRailBase.EnumRailDirection trackShape = getTrackShape();
+                BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
                 boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
                 if (TrackShapeHelper.isNorthSouth(trackShape)) {
                     if (reversed ^ cart.motionZ < 0) {

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
+import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase;
@@ -37,7 +37,7 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
         int state = 0;
         if (isMirrored() != isVisuallySwitched())
             state += 1;
-        if (isMirrored() != (getTrackShape() == EAST_WEST))
+        if (isMirrored() != (getRailDirectionRaw() == EAST_WEST))
             state += 2;
         return state;
     }
@@ -81,7 +81,7 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
 
     @Override
     protected List<UUID> getCartsAtLockEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
@@ -101,7 +101,7 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
 
     @Override
     protected List<UUID> getCartsAtDecisionEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
@@ -121,7 +121,7 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
 
     @Override
     protected List<UUID> getCartsAtSpringEntrance() {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         BlockPos offset = getPos();
         if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
@@ -141,57 +141,42 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
 
     @Override
     public ArrowDirection getRedSignDirection() {
-        EnumRailDirection dir = getRailDirection();
-        if (dir == EnumRailDirection.EAST_WEST) {
+        if (getRailDirectionRaw() == EnumRailDirection.EAST_WEST) {
             if (isVisuallySwitched()) {
-                if (isMirrored()) {
-                    return ArrowDirection.WEST;
-                }
-                return ArrowDirection.EAST;
+                return isMirrored() ? ArrowDirection.EAST : ArrowDirection.WEST;
             }
-            if (isMirrored()) {
-                return ArrowDirection.EAST;
-            }
-            return ArrowDirection.WEST;
+            return isMirrored() ? ArrowDirection.WEST : ArrowDirection.EAST;
         }
         if (isVisuallySwitched()) {
-            if (isMirrored()) {
-                return ArrowDirection.NORTH;
-            }
-            return ArrowDirection.SOUTH;
+            return isMirrored() ? ArrowDirection.NORTH : ArrowDirection.SOUTH;
         }
-        if (isMirrored()) {
-            return ArrowDirection.SOUTH;
-        }
-        return ArrowDirection.NORTH;
+        return isMirrored() ? ArrowDirection.SOUTH : ArrowDirection.NORTH;
     }
 
     @Override
     public ArrowDirection getWhiteSignDirection() {
-        EnumRailDirection dir = getRailDirection();
-        if (dir == EnumRailDirection.EAST_WEST) {
+        if (getRailDirectionRaw() == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
                 return ArrowDirection.NORTH;
             }
             return ArrowDirection.SOUTH;
         }
         if (isMirrored()) {
-            return ArrowDirection.EAST;
+            return ArrowDirection.WEST;
         }
-        return ArrowDirection.WEST;
+        return ArrowDirection.EAST;
     }
 
     @Override
     public EnumFacing getActuatorLocation() {
-        EnumFacing face = EnumFacing.NORTH;
-        EnumRailDirection dir = getRailDirection();
-        if (dir == EAST_WEST) {
+        EnumFacing face;
+        if (getRailDirectionRaw() == EAST_WEST) {
             if (isMirrored()) {
                 face = EnumFacing.SOUTH;
             } else {
                 face = EnumFacing.NORTH;
             }
-        } else if (dir == NORTH_SOUTH) {
+        } else {
             if (isMirrored()) {
                 face = EnumFacing.EAST;
             } else {

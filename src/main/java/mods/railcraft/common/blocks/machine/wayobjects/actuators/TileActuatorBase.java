@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.api.tracks.ISwitchDevice;
+import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
@@ -26,7 +26,6 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -43,7 +42,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public abstract class TileActuatorBase extends TileMachineBase implements ISwitchDevice, ITileShaped, ITileRotate {
+public abstract class TileActuatorBase extends TileMachineBase implements ISwitchActuator, ITileShaped, ITileRotate {
     private static final float BOUNDS = -0.2F;
     private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-3).build();
     private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeilingPixel(-11).build();
@@ -96,9 +95,6 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         super.onNeighborBlockChange(state, neighborBlock);
         determineOrientation();
     }
-
-    @Override
-    public abstract boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart);
 
     @Override
     public void update() {

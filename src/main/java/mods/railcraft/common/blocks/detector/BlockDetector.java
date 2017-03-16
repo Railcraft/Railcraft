@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -80,12 +79,6 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
             RailcraftRegistry.register(this, d, stack);
         }
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void initializeClient() {
-//        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(POWERED).build());
     }
 
     @Override
@@ -185,16 +178,6 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
                     "XXX",
                     'X', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
                     'P', Blocks.STONE_PRESSURE_PLATE);
-    }
-
-    @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        IBlockState state = getDefaultState();
-        if (variant != null) {
-            checkVariant(variant);
-            state = state.withProperty(getVariantProperty(), (EnumDetector) variant);
-        }
-        return state;
     }
 
     /**

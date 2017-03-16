@@ -201,7 +201,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
         protected void updatePowerState(TrackKitDetector detector, boolean reversed) {
             List<EntityMinecart> carts = detector.findCarts();
             if (!carts.isEmpty()) {
-                BlockRailBase.EnumRailDirection shape = detector.getRailDirection();
+                BlockRailBase.EnumRailDirection shape = detector.getRailDirectionRaw();
                 Predicate<EntityMinecart> isTravelling;
                 if (TrackShapeHelper.isEastWest(shape))
                     isTravelling = cart -> reversed ? cart.motionX < 0.0D : cart.motionX > 0.0D;

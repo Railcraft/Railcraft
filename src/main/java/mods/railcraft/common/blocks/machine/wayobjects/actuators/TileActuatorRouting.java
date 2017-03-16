@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.wayobjects.IRouter;
 import mods.railcraft.common.blocks.wayobjects.IRoutingTile;
@@ -143,8 +142,8 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     }
 
     @Override
-    public boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart) {
+    public boolean shouldSwitch(@Nullable EntityMinecart cart) {
         RoutingLogic logic = getLogic();
-        return logic != null && logic.isValid() && logic.matches(this, cart);
+        return logic != null && cart != null && logic.isValid() && logic.matches(this, cart);
     }
 }

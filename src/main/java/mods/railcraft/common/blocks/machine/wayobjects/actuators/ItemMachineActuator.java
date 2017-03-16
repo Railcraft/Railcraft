@@ -8,28 +8,36 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.tracks;
+package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.ItemMachine;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Created by CovertJaguar on 8/2/2016 for Railcraft.
+ * Created by CovertJaguar on 3/15/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemTrack extends ItemBlockRailcraft {
-    public ItemTrack(Block block) {
+public class ItemMachineActuator extends ItemMachine {
+    public ItemMachineActuator(Block block) {
         super(block);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public ModelResourceLocation getModelLocation(IBlockState state) {
-        return new ModelResourceLocation(state.getBlock().getRegistryName(), "inventory");
+        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.MACHINE_ACTUATOR.block();
+        if (block != null) {
+            ActuatorVariant variant = block.getVariant(state);
+            return new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, variant.getName()), "inventory");
+        }
+        return super.getModelLocation(state);
     }
 }
