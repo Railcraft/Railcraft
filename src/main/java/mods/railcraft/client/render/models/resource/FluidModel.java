@@ -46,18 +46,18 @@ import java.util.EnumMap;
 import java.util.List;
 
 @SuppressWarnings("Guava")
-public final class ModelFluid implements IModel {
-    public static final ModelFluid WATER = new ModelFluid(FluidRegistry.WATER, true);
-    public static final ModelFluid LAVA = new ModelFluid(FluidRegistry.LAVA, true);
+public final class FluidModel implements IModel {
+    public static final FluidModel WATER = new FluidModel(FluidRegistry.WATER, true);
+    public static final FluidModel LAVA = new FluidModel(FluidRegistry.LAVA, true);
     private final FluidStack fluidStack;
     private final boolean sideFlowing;
 
-    public ModelFluid(FluidStack fluidStack, boolean sideFlowing) {
+    public FluidModel(FluidStack fluidStack, boolean sideFlowing) {
         this.fluidStack = fluidStack.copy();
         this.sideFlowing = sideFlowing;
     }
 
-    public ModelFluid(Fluid fluid, boolean sideFlowing) {
+    public FluidModel(Fluid fluid, boolean sideFlowing) {
         this(new FluidStack(fluid, FluidTools.BUCKET_VOLUME), sideFlowing);
     }
 
@@ -372,7 +372,7 @@ public final class ModelFluid implements IModel {
     }
 
 //    @Override
-//    public ModelFluid process(ImmutableMap<String, String> customData) {
+//    public FluidModel process(ImmutableMap<String, String> customData) {
 //        if (!customData.containsKey("fluid")) return this;
 //
 //        int amount = 1;
@@ -386,6 +386,6 @@ public final class ModelFluid implements IModel {
 //            FMLLog.severe("fluid '%s' not found", fluid);
 //            return WATER;
 //        }
-//        return new ModelFluid(new FluidStack(FluidRegistry.getFluid(fluid), amount));
+//        return new FluidModel(new FluidStack(FluidRegistry.getFluid(fluid), amount));
 //    }
 }

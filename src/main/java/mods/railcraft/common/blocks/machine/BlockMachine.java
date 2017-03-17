@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
@@ -26,7 +25,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
@@ -85,14 +83,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
         ColorPlugin.instance.register(this, this);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        if (variant == null)
-            return getDefaultState();
-        return getDefaultState().withProperty(getVariantProperty(), (V) variant);
-    }
-
     @Override
     public int getMetaFromState(IBlockState state) {
         return getMetaMap().inverse().get(state.getValue(getVariantProperty()));
@@ -101,11 +91,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(meta));
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
     }
 
 //    /**

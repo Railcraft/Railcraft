@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
@@ -95,16 +94,6 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChar
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
-    }
-
-    @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        IBlockState state = getDefaultState();
-        if (variant != null) {
-            checkVariant(variant);
-            state = state.withProperty(getVariantProperty(), (FeederVariant) variant);
-        }
-        return state;
     }
 
     /**

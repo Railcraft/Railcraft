@@ -50,7 +50,7 @@ public class TrackKitBooster extends TrackKitPowered {
     }
 
     private void onMinecartPassStandard(EntityMinecart cart, double boostFactor) {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
         if (isPowered()) {
             World world = theWorldAsserted();

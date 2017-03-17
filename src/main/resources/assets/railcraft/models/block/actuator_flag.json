@@ -1,0 +1,67 @@
+{
+  "__comment": "Designed by CovertJaguar with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
+  "parent": "block/block",
+  "textures": {
+    "particle": "#texture"
+  },
+  "elements": [
+    {
+      "from": [7, 8, 4],
+      "to": [8, 11, 8],
+      "faces": {
+        "down": {"uv": [9, 8, 8, 4], "texture": "#texture"},
+        "up": {"uv": [7, 4, 8, 8], "texture": "#texture"},
+        "north": {"uv": [8, 5, 9, 8], "texture": "#texture"},
+        "west": {"uv": [4, 5, 8, 8], "texture": "#texture"},
+        "east": {"uv": [8, 5, 12, 8], "texture": "#texture"}
+      }
+    },
+    {
+      "from": [8, 8, 8],
+      "to": [9, 11, 12],
+      "faces": {
+        "down": {"uv": [8, 12, 7, 8], "texture": "#texture"},
+        "up": {"uv": [8, 8, 9, 12], "texture": "#texture"},
+        "south": {"uv": [8, 5, 9, 8], "texture": "#texture"},
+        "west": {"uv": [8, 5, 12, 8], "texture": "#texture"},
+        "east": {"uv": [4, 5, 8, 8], "texture": "#texture"}
+      }
+    },
+    {
+      "__comment": "tip",
+      "from": [7, 9, 3],
+      "to": [8, 10, 4],
+      "faces": {
+        "down": {"uv": [7, 12, 8, 13], "texture": "#texture"},
+        "up": {"uv": [7, 3, 8, 4], "texture": "#texture"},
+        "north": {"uv": [8, 6, 9, 7], "texture": "#texture"},
+        "west": {"uv": [3, 6, 4, 7], "texture": "#texture"},
+        "east": {"uv": [12, 6, 13, 7], "texture": "#texture"}
+      }
+    },
+    {
+      "__comment": "tail1",
+      "from": [8, 8, 12],
+      "to": [9, 9, 13],
+      "faces": {
+        "down": {"uv": [8, 3, 9, 4], "texture": "#texture"},
+        "up": {"uv": [8, 12, 9, 13], "texture": "#texture"},
+        "south": {"uv": [8, 7, 9, 8], "texture": "#texture"},
+        "west": {"uv": [12, 7, 13, 8], "texture": "#texture"},
+        "east": {"uv": [3, 7, 4, 8], "texture": "#texture"}
+      }
+    },
+    {
+      "__comment": "tail2",
+      "from": [8, 10, 12],
+      "to": [9, 11, 13],
+      "faces": {
+        "down": {"uv": [8, 3, 9, 4], "texture": "#texture"},
+        "up": {"uv": [8, 12, 9, 13], "texture": "#texture"},
+        "south": {"uv": [8, 5, 9, 6], "texture": "#texture"},
+        "west": {"uv": [12, 5, 13, 6], "texture": "#texture"},
+        "east": {"uv": [3, 5, 4, 6], "texture": "#texture"}
+      }
+    }
+  ]
+}

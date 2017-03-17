@@ -1,0 +1,23 @@
+{
+  "__comment": "Designed by CovertJaguar with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
+  "textures": {
+    "particle": "#texture",
+    "texture": "railcraft:blocks/actuator_lever"
+  },
+  "elements": [
+    {
+      "__comment": "lever",
+      "from": [7, 0.5, 13],
+      "to": [9, 10.5, 15],
+      "rotation": {"origin": [8, 1.5, 14], "axis": "z", "angle": -45},
+      "faces": {
+        "down": {"uv": [7, 7, 9, 9], "texture": "#texture"},
+        "up": {"uv": [7, 7, 9, 9], "texture": "#texture"},
+        "north": {"uv": [7, 6, 9, 16], "texture": "#texture"},
+        "south": {"uv": [7, 6, 9, 16], "texture": "#texture"},
+        "west": {"uv": [7, 6, 9, 16], "texture": "#texture"},
+        "east": {"uv": [7, 6, 9, 16], "texture": "#texture"}
+      }
+    }
+  ]
+}

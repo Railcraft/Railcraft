@@ -36,6 +36,7 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -54,7 +55,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -166,10 +166,11 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         TrackKit.blockTrackOutfitted = this;
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
-    public void initializeClient() {
-        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(getShapeProperty()).ignore(TICKING).build());
+    @Nullable
+    @Override
+    public StateMapperBase getStateMapper() {
+        return new StateMap.Builder().ignore(getShapeProperty()).ignore(TICKING).build();
     }
 
     @Override

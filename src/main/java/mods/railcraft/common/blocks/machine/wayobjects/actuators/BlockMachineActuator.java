@@ -10,22 +10,26 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Optional;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -35,10 +39,19 @@ import net.minecraft.world.World;
 @RailcraftBlockMetadata(variant = ActuatorVariant.class)
 public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
+    public static final PropertyEnum<ISwitchActuator.ArrowDirection> RED_FLAG = PropertyEnum.create("red_flag", ISwitchActuator.ArrowDirection.class);
+    public static final PropertyEnum<ISwitchActuator.ArrowDirection> WHITE_FLAG = PropertyEnum.create("white_flag", ISwitchActuator.ArrowDirection.class);
+    public static final PropertyBool THROWN = PropertyBool.create("thrown");
 
     public BlockMachineActuator() {
         super(false);
-        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getDefaultState()
+                .withProperty(FACING, EnumFacing.NORTH)
+                .withProperty(RED_FLAG, ISwitchActuator.ArrowDirection.NORTH_SOUTH)
+                .withProperty(WHITE_FLAG, ISwitchActuator.ArrowDirection.EAST_WEST)
+                .withProperty(THROWN, false)
+        );
+        setCreativeTab(CreativeTabs.TRANSPORTATION);
     }
 
     @Override
@@ -46,16 +59,26 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         return 8;
     }
 
+//    @SideOnly(Side.CLIENT)
+//    @Nullable
+//    @Override
+//    public StateMapperBase getStateMapper() {
+//        return new StateMap.Builder().withName(getVariantProperty()).build();
+//    }
+
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), FACING);
+        return new BlockStateContainer(this, getVariantProperty(), FACING, THROWN, RED_FLAG, WHITE_FLAG);
     }
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
-        state = state.withProperty(FACING, TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(ITileRotate.class, ITileRotate::getFacing).orElse(EnumFacing.NORTH));
+        Optional<TileActuatorBase> tile = WorldPlugin.getTileEntity(worldIn, pos, TileActuatorBase.class);
+        state = state.withProperty(FACING, tile.map(TileActuatorBase::getFacing).orElse(EnumFacing.NORTH));
+        state = state.withProperty(RED_FLAG, tile.map(TileActuatorBase::getRedArrowRenderState).orElse(ISwitchActuator.ArrowDirection.NORTH_SOUTH));
+        state = state.withProperty(WHITE_FLAG, tile.map(TileActuatorBase::getWhiteArrowRenderState).orElse(ISwitchActuator.ArrowDirection.EAST_WEST));
+        state = state.withProperty(THROWN, tile.map(t -> t.shouldSwitch(null)).orElse(false));
         return state;
     }
 

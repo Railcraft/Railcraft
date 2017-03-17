@@ -43,7 +43,7 @@ public class TrackKitControl extends TrackKitPowered implements ITrackKitReversi
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        BlockRailBase.EnumRailDirection trackShape = getTrackShape();
+        BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
         if (TrackShapeHelper.isNorthSouth(trackShape)) {
             if (cart.motionZ <= 0) {
                 if (isPowered() ^ !reversed) {

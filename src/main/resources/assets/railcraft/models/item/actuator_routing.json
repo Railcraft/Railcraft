@@ -1,0 +1,111 @@
+{
+  "__comment": "Designed by CovertJaguar with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
+  "parent": "block/block",
+  "textures": {
+    "side_long": "railcraft:blocks/actuator_routing_side_long",
+    "side_short": "railcraft:blocks/actuator_side_short",
+    "cap": "railcraft:blocks/actuator_cap",
+    "particle": "railcraft:blocks/actuator_cap",
+    "red": "railcraft:blocks/actuator_flag_red",
+    "white": "railcraft:blocks/actuator_flag_white"
+  },
+  "elements": [
+    {
+      "__comment": "base",
+      "from": [4, 0, 4],
+      "to": [12, 5, 12],
+      "faces": {
+        "down": {"uv": [12, 12, 4, 4], "texture": "#cap", "cullface": "down"},
+        "up": {"uv": [4, 4, 12, 12], "texture": "#cap"},
+        "north": {"uv": [4, 11, 12, 16], "texture": "#side_short"},
+        "south": {"uv": [4, 11, 12, 16], "texture": "#side_short"},
+        "west": {"uv": [4, 11, 12, 16], "texture": "#side_long"},
+        "east": {"uv": [4, 11, 12, 16], "texture": "#side_long"}
+      }
+    },
+    {
+      "__comment": "wings",
+      "from": [6, 0, 0],
+      "to": [10, 3, 16],
+      "faces": {
+        "down": {"uv": [10, 16, 6, 0], "texture": "#cap", "cullface": "down"},
+        "up": {"uv": [6, 0, 10, 16], "texture": "#cap"},
+        "north": {"uv": [6, 13, 10, 16], "texture": "#side_short", "cullface": "north"},
+        "south": {"uv": [6, 13, 10, 16], "texture": "#side_short", "cullface": "south"},
+        "west": {"uv": [0, 13, 16, 16], "texture": "#side_long"},
+        "east": {"uv": [0, 13, 16, 16], "texture": "#side_long"}
+      }
+    },
+    {
+      "__comment": "post",
+      "from": [7, 5, 7],
+      "to": [9, 8, 9],
+      "faces": {
+        "north": {"uv": [7, 8, 9, 11], "texture": "#side_short"},
+        "south": {"uv": [7, 8, 9, 11], "texture": "#side_short"},
+        "west": {"uv": [7, 8, 9, 11], "texture": "#side_long"},
+        "east": {"uv": [7, 8, 9, 11], "texture": "#side_long"}
+      }
+    },
+    {
+      "__comment": "cap",
+      "from": [7, 11, 7],
+      "to": [9, 12, 9],
+      "faces": {
+        "up": {"uv": [7, 7, 9, 9], "texture": "#cap"},
+        "north": {"uv": [7, 4, 9, 5], "texture": "#side_short"},
+        "south": {"uv": [7, 4, 9, 5], "texture": "#side_short"},
+        "west": {"uv": [7, 4, 9, 5], "texture": "#side_long"},
+        "east": {"uv": [7, 4, 9, 5], "texture": "#side_long"}
+      }
+    },
+    {
+      "__comment": "red_north",
+      "from": [7, 8, 4],
+      "to": [8, 11, 8],
+      "faces": {
+        "down": {"uv": [9, 8, 8, 4], "texture": "#red"},
+        "up": {"uv": [7, 4, 8, 8], "texture": "#red"},
+        "north": {"uv": [8, 5, 9, 8], "texture": "#red"},
+        "west": {"uv": [4, 5, 8, 8], "texture": "#red"},
+        "east": {"uv": [8, 5, 12, 8], "texture": "#red"}
+      }
+    },
+    {
+      "__comment": "red_south",
+      "from": [8, 8, 8],
+      "to": [9, 11, 12],
+      "faces": {
+        "down": {"uv": [8, 12, 7, 8], "texture": "#red"},
+        "up": {"uv": [8, 8, 9, 12], "texture": "#red"},
+        "south": {"uv": [8, 5, 9, 8], "texture": "#red"},
+        "west": {"uv": [8, 5, 12, 8], "texture": "#red"},
+        "east": {"uv": [4, 5, 8, 8], "texture": "#red"}
+      }
+    },
+    {
+      "__comment": "white_west",
+      "from": [4, 8, 8],
+      "to": [8, 11, 9],
+      "faces": {
+        "down": {"uv": [4, 7, 8, 8], "texture": "#white"},
+        "up": {"uv": [4, 8, 8, 9], "texture": "#white"},
+        "north": {"uv": [8, 5, 12, 8], "texture": "#white"},
+        "south": {"uv": [4, 5, 8, 8], "texture": "#white"},
+        "west": {"uv": [8, 5, 9, 8], "texture": "#white"}
+      }
+    },
+    {
+      "__comment": "white_east",
+      "from": [8, 8, 7],
+      "to": [12, 11, 8],
+      "faces": {
+        "down": {"uv": [8, 8, 12, 9], "texture": "#white"},
+        "up": {"uv": [8, 7, 12, 8], "texture": "#white"},
+        "north": {"uv": [4, 5, 8, 8], "texture": "#white"},
+        "south": {"uv": [8, 5, 12, 8], "texture": "#white"},
+        "east": {"uv": [8, 5, 9, 8], "texture": "#white"}
+      }
+    }
+  ]
+}

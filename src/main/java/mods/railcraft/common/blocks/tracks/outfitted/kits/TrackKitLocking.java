@@ -194,7 +194,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
             currentCart.motionZ = 0.0D;
-            BlockRailBase.EnumRailDirection trackShape = getTrackShape();
+            BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
             if (TrackShapeHelper.isNorthSouth(trackShape))
                 currentCart.posZ = getTile().getPos().getZ() + 0.5D;
             else

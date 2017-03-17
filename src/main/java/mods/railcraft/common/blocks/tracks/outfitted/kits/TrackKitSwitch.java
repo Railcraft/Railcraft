@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.tracks.ISwitchDevice;
-import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
+import mods.railcraft.api.tracks.ISwitchActuator;
+import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -31,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     private byte sprung;
     private byte locked;
     private UUID currentCart;
-    private ISwitchDevice switchDevice;
+    private ISwitchActuator switchDevice;
     private boolean clientSwitched;
 
     @Override
@@ -88,7 +89,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
         boolean sameTrain = Train.areInSameTrain(LinkageManager.instance().getCartFromUUID(currentCart), cart);
 
-        boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(this, cart) : false;
+        boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(cart) : false;
 
         if (isSprung()) {
             if (shouldSwitch || sameTrain) {
@@ -305,7 +306,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         updateSet(decidingCarts, getCartsAtDecisionEntrance(), lockingCarts, springingCarts);
 
         // We only set sprung/locked when a cart enters our track, this is
-        // mainly for visual purposes as the subclass's getRailDirection()
+        // mainly for visual purposes as the subclass's getRailDirectionRaw()
         // determines which direction the carts actually take.
         List<UUID> cartsOnTrack = CartTools.getMinecartUUIDsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
 
@@ -316,7 +317,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         if (switchDevice == null) {
             shouldSwitch = false;
         } else {
-            shouldSwitch = switchDevice.shouldSwitch(this, bestCart);
+            shouldSwitch = switchDevice.shouldSwitch(bestCart);
         }
 
         // Only allow cartsOnTrack to actually spring or lock the track
@@ -385,10 +386,11 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
     public abstract ArrowDirection getWhiteSignDirection();
 
-    public ISwitchDevice getSwitchDevice() {
-        TileEntity entity = ((RailcraftTileEntity) this.getTile()).getTileCache().getTileOnSide(getActuatorLocation());
-        if (entity instanceof ISwitchDevice) {
-            return (ISwitchDevice) entity;
+    @Nullable
+    public ISwitchActuator getSwitchDevice() {
+        TileEntity entity = ((RailcraftTileEntity) getTile()).getTileCache().getTileOnSide(getActuatorLocation());
+        if (entity instanceof ISwitchActuator) {
+            return (ISwitchActuator) entity;
         }
         return null;
     }

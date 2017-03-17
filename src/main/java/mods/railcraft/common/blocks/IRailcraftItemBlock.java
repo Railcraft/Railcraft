@@ -14,8 +14,11 @@ import mods.railcraft.common.items.IRailcraftItem;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Map;
 
 /**
  * Created by CovertJaguar on 7/20/2016 for Railcraft.
@@ -25,12 +28,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IRailcraftItemBlock extends IRailcraftItem {
 
     @SideOnly(Side.CLIENT)
-    default String getPropertyString(IBlockState state) {
-        return new DefaultStateMapper().getPropertyString(state.getProperties());
-    }
-
-    @SideOnly(Side.CLIENT)
     default ModelResourceLocation getModelLocation(IBlockState state) {
-        return new ModelResourceLocation(state.getBlock().getRegistryName(), getPropertyString(state));
+        StateMapperBase stateMapper = null;
+
+        if (state.getBlock() instanceof IRailcraftBlock)
+            stateMapper = ((IRailcraftBlock) state.getBlock()).getStateMapper();
+
+        if (stateMapper == null)
+            return new ModelResourceLocation(state.getBlock().getRegistryName(), new DefaultStateMapper().getPropertyString(state.getProperties()));
+
+        Map<IBlockState, ModelResourceLocation> stateMap = stateMapper.putStateModelLocations(state.getBlock());
+        return stateMap.get(state);
     }
 }

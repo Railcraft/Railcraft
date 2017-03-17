@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,12 +21,6 @@ public class ItemStrengthGlass extends ItemBlockRailcraftSubtyped {
 
     public ItemStrengthGlass(Block block) {
         super(block);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getPropertyString(IBlockState state) {
-        return super.getPropertyString(state).replaceAll("color=.*,", "");
     }
 
     @Override

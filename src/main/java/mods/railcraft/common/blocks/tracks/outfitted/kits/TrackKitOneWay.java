@@ -40,7 +40,7 @@ public class TrackKitOneWay extends TrackKitPowered implements ITrackKitReversib
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        EnumRailDirection dir = getRailDirection();
+        EnumRailDirection dir = getRailDirectionRaw();
         if (isPowered()) {
             if (TrackShapeHelper.isEastWest(dir)) {
                 if (isReversed() ? cart.motionX > 0.0D : cart.motionX < 0.0D) {

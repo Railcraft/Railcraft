@@ -51,6 +51,6 @@ public abstract class LockingProfile {
     }
 
     protected BlockRailBase.EnumRailDirection getTrackShape() {
-        return track.getTrackShape();
+        return track.getRailDirectionRaw();
     }
 }

@@ -15,9 +15,11 @@ import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,6 +38,20 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
 
     default IBlockState getItemRenderState(@Nullable IVariantEnum variant) {
         return getState(variant);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Nullable
+    default StateMapperBase getStateMapper() {
+        return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    default void initializeClient() {
+        StateMapperBase stateMapper = getStateMapper();
+        if (stateMapper != null)
+            ModelLoader.setCustomStateMapper(getObject(), stateMapper);
     }
 
     @SideOnly(Side.CLIENT)

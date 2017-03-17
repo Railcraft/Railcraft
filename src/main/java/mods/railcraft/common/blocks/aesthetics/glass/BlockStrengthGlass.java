@@ -30,6 +30,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -42,7 +43,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -82,9 +82,10 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @SideOnly(Side.CLIENT)
+    @Nullable
     @Override
-    public void initializeClient() {
-        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(COLOR).build());
+    public StateMapperBase getStateMapper() {
+        return new StateMap.Builder().ignore(COLOR).build();
     }
 
     @Override

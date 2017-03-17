@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:actuator_base",
+    "textures": {
+      "particle": "#cap",
+      "cap": "railcraft:blocks/actuator_cap",
+      "side_long": "railcraft:blocks/actuator_routing_side_long",
+      "side_short": "railcraft:blocks/actuator_side_short"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "thrown": {
+      "true": {},
+      "false": {}
+    },
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90}
+    }
+  }
+}

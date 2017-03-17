@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:actuator_flag",
+    "textures": {
+      "particle": "#texture",
+      "texture": "railcraft:blocks/actuator_flag_red"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "red_flag": {
+      "north": {
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "east": {
+        "y": 90
+      },
+      "north_south": {
+        "model": "railcraft:actuator_flag_neutral"
+      },
+      "east_west": {
+        "model": "railcraft:actuator_flag_neutral",
+        "y": 90
+      }
+    }
+  }
+}

@@ -73,6 +73,11 @@ public enum ActuatorVariant implements IEnumMachine<ActuatorVariant> {
     }
 
     @Override
+    public String getName() {
+        return "actuator_" + getBaseTag();
+    }
+
+    @Override
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.MACHINE_ACTUATOR;
     }

@@ -11,17 +11,21 @@
 package mods.railcraft.common.blocks;
 
 import com.google.common.collect.BiMap;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -56,10 +60,28 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
         }
     }
 
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, getVariantProperty());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        if (variant == null)
+            return getDefaultState();
+        checkVariant(variant);
+        return getDefaultState().withProperty(getVariantProperty(), (V) variant);
+    }
+
     @Nonnull
     public final IProperty<V> getVariantProperty() {
         setup();
         return variantProperty;
+    }
+
+    public final V getVariant(IBlockState state) {
+        return state.getValue(getVariantProperty());
     }
 
     @Nonnull
