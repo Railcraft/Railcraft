@@ -25,10 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -43,7 +40,7 @@ public enum EnumColor implements IVariantEnum {
     LIME(0x3FAA36, "dyeLime", "lime"),
     PINK(0xE585A0, "dyePink", "pink"),
     GRAY(0x444444, "dyeGray", "gray"),
-    SILVER(0x888888, "dyeLightGray", "silver", "light_gray", "lightGray"),
+    SILVER(0x888888, "dyeLightGray", "light_gray", "silver", "lightGray"),
     CYAN(0x36809E, "dyeCyan", "cyan"),
     PURPLE(0x843FBF, "dyePurple", "purple"),
     BLUE(0x3441A2, "dyeBlue", "blue"),
@@ -87,12 +84,9 @@ public enum EnumColor implements IVariantEnum {
         return VALUES[id];
     }
 
+    @Nullable
     public static EnumColor fromDyeOreDictTag(String dyeTag) {
-        for (EnumColor color : VALUES) {
-            if (color.getDyeOreDictTag().equalsIgnoreCase(dyeTag))
-                return color;
-        }
-        return null;
+        return Arrays.stream(VALUES).filter(color -> color.getDyeOreDictTag().equalsIgnoreCase(dyeTag)).findFirst().orElse(null);
     }
 
     public static EnumColor fromName(String name) {
@@ -116,7 +110,7 @@ public enum EnumColor implements IVariantEnum {
         return EnumColor.WHITE;
     }
 
-    public static boolean isColored(ItemStack stack) {
+    public static boolean isColored(@Nullable ItemStack stack) {
         if (stack == null)
             return false;
         if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
@@ -124,11 +118,11 @@ public enum EnumColor implements IVariantEnum {
         if (stack.getItem() == Items.DYE)
             return true;
         NBTTagCompound nbt = stack.getTagCompound();
-        return nbt.hasKey(DEFAULT_COLOR_TAG);
+        return nbt != null && nbt.hasKey(DEFAULT_COLOR_TAG);
     }
 
     @Nonnull
-    public static EnumColor fromItemStack(ItemStack stack) {
+    public static EnumColor fromItemStack(@Nullable ItemStack stack) {
         if (stack == null)
             return EnumColor.WHITE;
         if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
@@ -193,11 +187,13 @@ public enum EnumColor implements IVariantEnum {
         return names[0];
     }
 
+    @Nullable
     public ItemStack setItemColor(ItemStack stack) {
         return setItemColor(stack, DEFAULT_COLOR_TAG);
     }
 
-    public ItemStack setItemColor(ItemStack stack, String tag) {
+    @Nullable
+    public ItemStack setItemColor(@Nullable ItemStack stack, String tag) {
         if (stack == null)
             return null;
         NBTTagCompound nbt = InvTools.getItemData(stack);
@@ -205,7 +201,7 @@ public enum EnumColor implements IVariantEnum {
         return stack;
     }
 
-    public boolean isEqual(EnumDyeColor dye) {
+    public boolean isEqual(@Nullable EnumDyeColor dye) {
         return dye != null && getDye() == dye;
     }
 

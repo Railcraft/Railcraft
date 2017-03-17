@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiToggleButtonSmall;
@@ -35,7 +36,7 @@ public class GuiDetectorVillager extends GuiBasic {
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
 
     public GuiDetectorVillager(TileDetector t) {
-        super(t.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_villager.png", 176, 105);
+        super(LocalizationPlugin.translate(t.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_villager.png", 176, 105);
         this.tile = t;
         this.detector = (DetectorVillager) tile.getDetector();
         villager = new EntityVillager(tile.getWorld());

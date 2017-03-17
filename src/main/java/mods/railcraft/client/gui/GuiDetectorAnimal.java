@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorAnimal;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
@@ -22,7 +24,7 @@ public class GuiDetectorAnimal extends GuiBasic {
     private final DetectorAnimal detector;
 
     protected GuiDetectorAnimal(TileDetector tile) {
-        super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_long.png", 256, 88);
+        super(LocalizationPlugin.translate(tile.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_long.png", 256, 88);
         this.tile = tile;
         this.detector = (DetectorAnimal) tile.getDetector();
     }

@@ -1,0 +1,32 @@
+<root>
+    <item name='mods.railcraft.common.plugins.color.EnumColor boolean isColored(net.minecraft.item.ItemStack)'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+    <item name='mods.railcraft.common.plugins.color.EnumColor mods.railcraft.common.plugins.color.EnumColor fromDyeOreDictTag(java.lang.String)'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+    <item name='mods.railcraft.common.plugins.color.EnumColor mods.railcraft.common.plugins.color.EnumColor getRand()'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+    <item name='mods.railcraft.common.plugins.color.EnumColor mods.railcraft.common.plugins.color.EnumColor inverse()'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+    <item name='mods.railcraft.common.plugins.color.EnumColor mods.railcraft.common.plugins.color.EnumColor next()'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+    <item name='mods.railcraft.common.plugins.color.EnumColor mods.railcraft.common.plugins.color.EnumColor previous()'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;unused&quot;"/>
+        </annotation>
+    </item>
+</root>
