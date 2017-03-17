@@ -1,3 +1,9 @@
+10.1.0-alpha-2
+	NEW: Ported the Turnout Track.
+	NEW: Added Messenger Track Kit, a track that sends a chat message when passed, WIP. (contribution by liach)
+	NEW: Added Brick variants of the new vanilla stone types. (contribution by GeneralCamo)
+	FIX: Actuators now render properly.
+
 10.1.0-alpha-1
 	NEW: Ported the Junction and Wye Tracks.
 	NEW: Spike Maul is used to swap between Flex, Junction, Wye.
