@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "railcraft:items/track_kits/base",
+        "layer1": "railcraft:blocks/tracks/outfitted/kit/messenger_1"
+    }
+}

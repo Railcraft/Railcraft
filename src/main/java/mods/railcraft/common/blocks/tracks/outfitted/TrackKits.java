@@ -58,8 +58,10 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     WHISTLE(ModuleLocomotives.class, 2, "whistle", 8, TrackKitWhistle.class, () -> recipe("dyeYellow", "dyeBlack", Blocks.NOTEBLOCK, Items.REDSTONE)),
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
     TURNOUT(ModuleTracks.class, 8, "turnout", 8, TrackKitSwitchTurnout.class),
-    WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class);
-
+    WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
+    MESSENGER(ModuleTracks.class, 2, "messenger", 8, TrackKitMessenger.class), //TODO: add recipe
+    ;
+  
     public static final TrackKits[] VALUES = values();
     private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
     private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);

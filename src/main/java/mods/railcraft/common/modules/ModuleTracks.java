@@ -41,7 +41,8 @@ public class ModuleTracks extends RailcraftModulePayload {
                         TrackKits.ONE_WAY,
                         TrackKits.JUNCTION,
                         TrackKits.TURNOUT,
-                        TrackKits.WYE
+                        TrackKits.WYE,
+                        TrackKits.MESSENGER
                 );
             }
 
