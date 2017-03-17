@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
+import mods.railcraft.api.tracks.ITrackKitComparator;
 import mods.railcraft.api.tracks.ITrackKitEmitter;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
@@ -39,7 +40,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmitter {
+public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmitter, ITrackKitComparator {
     private byte delay;
     private Mode mode = Mode.BI_DIRECTIONAL;
 

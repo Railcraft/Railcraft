@@ -326,9 +326,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return WorldPlugin.getTileEntity(worldIn, pos, TileTrackOutfitted.class)
-                .filter(t -> t.getTrackKitInstance() instanceof ITrackKitEmitter)
-                .map(t -> (ITrackKitEmitter) t.getTrackKitInstance())
-                .map(ITrackKitEmitter::getComparatorInputOverride)
+                .filter(t -> t.getTrackKitInstance() instanceof ITrackKitComparator)
+                .map(t -> (ITrackKitComparator) t.getTrackKitInstance())
+                .map(ITrackKitComparator::getComparatorInputOverride)
                 .orElse(0);
     }
 

@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -80,6 +81,18 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         state = state.withProperty(WHITE_FLAG, tile.map(TileActuatorBase::getWhiteArrowRenderState).orElse(ISwitchActuator.ArrowDirection.EAST_WEST));
         state = state.withProperty(THROWN, tile.map(t -> t.shouldSwitch(null)).orElse(false));
         return state;
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
+        Optional<TileActuatorBase> tile = WorldPlugin.getTileEntity(worldIn, pos, TileActuatorBase.class);
+        boolean thrown = tile.map(t -> t.shouldSwitch(null)).orElse(false);
+        return thrown ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
     }
 
     @Override

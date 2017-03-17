@@ -18,12 +18,14 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitSwitch;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -114,6 +116,12 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
                 SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
             else
                 SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+
+            WorldPlugin.neighborAction(getPos(), EnumFacing.HORIZONTALS, pos -> {
+                if (WorldPlugin.isBlockAt(worldObj, pos, BlockRedstoneComparator.class)) {
+                    WorldPlugin.notifyBlockOfStateChange(worldObj, pos, getBlockType());
+                }
+            });
         }
     }
 

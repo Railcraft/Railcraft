@@ -26,6 +26,7 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -83,6 +84,10 @@ public class WorldPlugin {
         return block != null && block == getBlock(world, pos);
     }
 
+    public static boolean isBlockAt(IBlockAccess world, BlockPos pos, Class<? extends Block> blockClass) {
+        return blockClass.isInstance(getBlock(world, pos));
+    }
+
     public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState) {
         return world.setBlockState(pos, blockState);
     }
@@ -112,6 +117,17 @@ public class WorldPlugin {
         // End of Event Fire
 
         return destroyBlock(world, pos, dropBlock);
+    }
+
+    public static void neighborAction(BlockPos pos, EnumFacing[] sides, Consumer<BlockPos> action) {
+        for (EnumFacing side : sides) {
+            action.accept(pos.offset(side));
+        }
+    }
+
+    public static void notifyBlockOfStateChange(World world, BlockPos pos, Block block) {
+        if (world != null && block != null)
+            world.notifyBlockOfStateChange(pos, block);
     }
 
     public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {

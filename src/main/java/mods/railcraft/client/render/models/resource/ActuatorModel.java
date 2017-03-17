@@ -48,32 +48,32 @@ public class ActuatorModel implements IModel {
         if (block == null)
             return Collections.emptyList();
 
-        StateMapperBase baseStateMapper = new StateMap.Builder()
-                .withName(block.getVariantProperty())
-                .ignore(BlockMachineActuator.RED_FLAG)
-                .ignore(BlockMachineActuator.WHITE_FLAG)
-                .build();
-        baseModelLocations.putAll(baseStateMapper.putStateModelLocations(block));
-
-        StateMapperBase redFlagStateMapper = new StateMap.Builder()
-                .withSuffix("_flag_red")
-                .ignore(block.getVariantProperty())
-                .ignore(BlockMachineActuator.THROWN)
-                .ignore(BlockMachineActuator.FACING)
-                .ignore(BlockMachineActuator.WHITE_FLAG)
-                .build();
-        redFlagModelLocations.putAll(redFlagStateMapper.putStateModelLocations(block));
-
-        StateMapperBase whiteFlagStateMapper = new StateMap.Builder()
-                .withSuffix("_flag_white")
-                .ignore(block.getVariantProperty())
-                .ignore(BlockMachineActuator.THROWN)
-                .ignore(BlockMachineActuator.FACING)
-                .ignore(BlockMachineActuator.RED_FLAG)
-                .build();
-        whiteFlagModelLocations.putAll(whiteFlagStateMapper.putStateModelLocations(block));
-
         if (models.isEmpty()) {
+            StateMapperBase baseStateMapper = new StateMap.Builder()
+                    .withName(block.getVariantProperty())
+                    .ignore(BlockMachineActuator.RED_FLAG)
+                    .ignore(BlockMachineActuator.WHITE_FLAG)
+                    .build();
+            baseModelLocations.putAll(baseStateMapper.putStateModelLocations(block));
+
+            StateMapperBase redFlagStateMapper = new StateMap.Builder()
+                    .withSuffix("_flag_red")
+                    .ignore(block.getVariantProperty())
+                    .ignore(BlockMachineActuator.THROWN)
+                    .ignore(BlockMachineActuator.FACING)
+                    .ignore(BlockMachineActuator.WHITE_FLAG)
+                    .build();
+            redFlagModelLocations.putAll(redFlagStateMapper.putStateModelLocations(block));
+
+            StateMapperBase whiteFlagStateMapper = new StateMap.Builder()
+                    .withSuffix("_flag_white")
+                    .ignore(block.getVariantProperty())
+                    .ignore(BlockMachineActuator.THROWN)
+                    .ignore(BlockMachineActuator.FACING)
+                    .ignore(BlockMachineActuator.RED_FLAG)
+                    .build();
+            whiteFlagModelLocations.putAll(whiteFlagStateMapper.putStateModelLocations(block));
+
             models.addAll(baseModelLocations.values());
             models.addAll(redFlagModelLocations.values());
             models.addAll(whiteFlagModelLocations.values());
