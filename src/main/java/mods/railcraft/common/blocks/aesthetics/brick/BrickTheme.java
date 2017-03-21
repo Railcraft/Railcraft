@@ -52,8 +52,6 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     BLEACHEDBONE(RailcraftBlocks.BRICK_BLEACHED_BONE, MapColor.ADOBE) {
         @Override
         public void initRecipes(BlockBrick block) {
-// Deprecated, possible usage in the future? ~~~GeneralCamo
-//            CraftingPlugin.addShapelessRecipe(RailcraftItems.BLEACHED_CLAY.getStack(), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15));
             CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.BONE_BLOCK), new ItemStack(block, 1, 2), 0.3F);
         }
     },
