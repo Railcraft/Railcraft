@@ -59,13 +59,12 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     JUNCTION(ModuleTracks.class, 1, "junction", 8, TrackKitJunction.class),
     TURNOUT(ModuleTracks.class, 8, "turnout", 8, TrackKitSwitchTurnout.class),
     WYE(ModuleTracks.class, 4, "wye", 8, TrackKitSwitchWye.class),
-    MESSENGER(ModuleTracks.class, 2, "messenger", 8, TrackKitMessenger.class), //TODO: add recipe
+    MESSENGER(ModuleTracks.class, 2, "messenger", 8, TrackKitMessenger.class, () -> recipe(Items.SIGN, Items.REDSTONE)),
     ;
   
     public static final TrackKits[] VALUES = values();
-    private static final List<TrackKits> creativeList = new ArrayList<TrackKits>(50);
     private static final Set<TrackKit> TRACK_KITS = new HashSet<TrackKit>(50);
-    private static final Predicate<TrackType> IS_HIGH_SPEED = trackType -> trackType.getName().contains("high_speed");
+    private static final Predicate<TrackType> IS_HIGH_SPEED = TrackType::isHighSpeed;
     private static final Predicate<TrackType> NOT_HIGH_SPEED = IS_HIGH_SPEED.negate();
 
     static {
@@ -76,17 +75,14 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         TURNOUT.requiresTicks = true;
         WYE.requiresTicks = true;
 
-        BUFFER_STOP.allowedOnSlopes = false;
-        DISEMBARK.allowedOnSlopes = false;
-        DUMPING.allowedOnSlopes = false;
-        EMBARKING.allowedOnSlopes = false;
-        GATED.allowedOnSlopes = false;
-//        GATED_ONE_WAY.allowedOnSlopes = false;
-        LAUNCHER.allowedOnSlopes = false;
-        LOCKING.allowedOnSlopes = false;
-        JUNCTION.allowedOnSlopes = false;
-        TURNOUT.allowedOnSlopes = false;
-        WYE.allowedOnSlopes = false;
+        ACTIVATOR.allowedOnSlopes = true;
+        BOOSTER.allowedOnSlopes = true;
+        CONTROL.allowedOnSlopes = true;
+        COUPLER.allowedOnSlopes = true;
+        DETECTOR.allowedOnSlopes = true;
+        HIGH_SPEED_TRANSITION.allowedOnSlopes = true;
+        LOCOMOTIVE.allowedOnSlopes = true;
+        PRIMING.allowedOnSlopes = true;
 
         DUMPING.trackTypeFilter = NOT_HIGH_SPEED;
         GATED.trackTypeFilter = NOT_HIGH_SPEED;
@@ -95,6 +91,9 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         COUPLER.trackTypeFilter = NOT_HIGH_SPEED;
         CONTROL.trackTypeFilter = NOT_HIGH_SPEED;
         BUFFER_STOP.trackTypeFilter = NOT_HIGH_SPEED;
+        EMBARKING.trackTypeFilter = NOT_HIGH_SPEED;
+        DISEMBARK.trackTypeFilter = NOT_HIGH_SPEED;
+        ROUTING.trackTypeFilter = NOT_HIGH_SPEED;
         HIGH_SPEED_TRANSITION.trackTypeFilter = IS_HIGH_SPEED;
 
         JUNCTION.renderer = TrackKit.Renderer.UNIFIED;
@@ -118,7 +117,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private TrackKit trackKit;
     private boolean depreciated;
     private boolean visible = true;
-    private boolean allowedOnSlopes = true;
+    private boolean allowedOnSlopes;
     private boolean requiresTicks;
     private int maxSupportDistance;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;

@@ -98,7 +98,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     public static boolean placeTrack(World world, BlockPos pos, EntityLivingBase placer, EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {
-        if (trackKit == TrackRegistry.getMissingTrackKit())
+        if (trackKit == TrackRegistry.getMissingTrackKit() || !trackKit.isAllowedTrackType(trackType))
             return false;
         Block block = RailcraftBlocks.TRACK_OUTFITTED.block();
         if (block != null) {

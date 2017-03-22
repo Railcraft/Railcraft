@@ -24,6 +24,7 @@ import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
+import mods.railcraft.common.commands.CommandTrack;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
@@ -83,6 +84,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 Railcraft.rootCommand.addChildCommand(new CommandDebug());
                 Railcraft.rootCommand.addChildCommand(new CommandAdmin());
+                Railcraft.rootCommand.addChildCommand(new CommandTrack());
 
                 RailcraftCraftingManager.cokeOven = new CokeOvenCraftingManager();
                 RailcraftCraftingManager.blastFurnace = new BlastFurnaceCraftingManager();

@@ -1,17 +1,20 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.commands;
 
+import com.google.gson.JsonParseException;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +24,9 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.util.Objects;
 
 /**
  * Command utilities.
@@ -99,7 +105,8 @@ public class CommandHelpers {
 
     public static boolean executeStandardCommands(MinecraftServer server, ICommandSender sender, IModCommand command, String[] args) throws CommandException {
         if (args.length >= 1) {
-            if (args[0].equals("help")) {
+            if (Objects.equals(args[0], "help")
+                    || Objects.equals(args[0], "?")) {
                 command.printHelp(sender);
                 return true;
             }
@@ -114,13 +121,10 @@ public class CommandHelpers {
     }
 
     public static boolean matches(String commandName, IModCommand command) {
-        if (commandName.equals(command.getCommandName()))
+        if (Objects.equals(commandName, command.getCommandName()))
             return true;
         else if (command.getCommandAliases() != null)
-            for (String alias : command.getCommandAliases()) {
-                if (commandName.equals(alias))
-                    return true;
-            }
+            return command.getCommandAliases().stream().anyMatch(alias -> Objects.equals(commandName, alias));
         return false;
     }
 
@@ -138,5 +142,20 @@ public class CommandHelpers {
         }
 
         return new BlockPos(x, y, z);
+    }
+
+    public static SyntaxErrorException toSyntaxException(JsonParseException e) {
+        Throwable throwable = ExceptionUtils.getRootCause(e);
+        String s = "";
+
+        if (throwable != null) {
+            s = throwable.getMessage();
+
+            if (s.contains("setLenient")) {
+                s = s.substring(s.indexOf("to accept ") + 10);
+            }
+        }
+
+        return new SyntaxErrorException("commands.tellraw.jsonException", s);
     }
 }

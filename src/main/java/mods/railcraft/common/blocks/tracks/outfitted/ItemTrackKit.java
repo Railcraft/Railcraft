@@ -21,6 +21,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -131,6 +132,9 @@ public class ItemTrackKit extends ItemRailcraft {
         if (Game.isClient(worldIn))
             return EnumActionResult.PASS;
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
+        if (!TrackTools.isRailBlock(oldState)) {
+            return EnumActionResult.PASS;
+        }
         TrackType trackType = null;
         if (oldState.getBlock() instanceof BlockTrackFlex) {
             BlockTrackFlex track = (BlockTrackFlex) oldState.getBlock();
@@ -143,13 +147,23 @@ public class ItemTrackKit extends ItemRailcraft {
             if (TrackShapeHelper.isStraight(shape)) {
                 TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
                 if (!shape.isAscending() || trackKit.isAllowedOnSlopes()) {
+                    if (!trackKit.isAllowedTrackType(trackType)) {
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track_type");
+                        return EnumActionResult.PASS;
+                    }
                     if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
                         stack.stackSize--;
                         return EnumActionResult.SUCCESS;
                     }
+                } else {
+                    ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.slope");
                 }
+            } else {
+                ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.curve");
             }
+        } else {
+            ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track");
         }
         return EnumActionResult.PASS;
     }
