@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -51,7 +52,7 @@ public class RailcraftDamageSource extends DamageSource {
     @Override
     public ITextComponent getDeathMessage(EntityLivingBase entity) {
         String locTag = "death.railcraft." + damageType + "." + (MiscTools.RANDOM.nextInt(numMessages) + 1);
-        return ChatPlugin.chatComp(locTag, entity.getName());
+        return ChatPlugin.translateMessage(locTag, entity.getName());
     }
 
     public static final EventHandler EVENT_HANDLER = new EventHandler();
