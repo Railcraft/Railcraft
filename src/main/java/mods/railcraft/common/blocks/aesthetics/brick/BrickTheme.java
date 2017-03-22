@@ -52,8 +52,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     BLEACHEDBONE(RailcraftBlocks.BRICK_BLEACHED_BONE, MapColor.ADOBE) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addShapelessRecipe(RailcraftItems.BLEACHED_CLAY.getStack(), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15));
-            CraftingPlugin.addFurnaceRecipe(RailcraftItems.BLEACHED_CLAY.getStack(), new ItemStack(block, 1, 2), 0.3F);
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.BONE_BLOCK), new ItemStack(block, 2, 2), 0.3F);
         }
     },
     BLOODSTAINED(RailcraftBlocks.BRICK_BLOOD_STAINED, MapColor.RED) {
@@ -71,6 +70,12 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     "ILI",
                     "III",
                     'I', new ItemStack(Blocks.ICE),
+                    'L', "gemLapis");
+            CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
+                    "III",
+                    "ILI",
+                    "III",
+                    'I', new ItemStack(Blocks.PACKED_ICE),
                     'L', "gemLapis");
         }
     },
