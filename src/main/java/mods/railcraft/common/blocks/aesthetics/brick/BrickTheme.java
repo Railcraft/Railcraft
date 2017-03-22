@@ -52,7 +52,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     BLEACHEDBONE(RailcraftBlocks.BRICK_BLEACHED_BONE, MapColor.ADOBE) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.BONE_BLOCK), new ItemStack(block, 1, 2), 0.3F);
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.BONE_BLOCK), new ItemStack(block, 2, 2), 0.3F);
         }
     },
     BLOODSTAINED(RailcraftBlocks.BRICK_BLOOD_STAINED, MapColor.RED) {
