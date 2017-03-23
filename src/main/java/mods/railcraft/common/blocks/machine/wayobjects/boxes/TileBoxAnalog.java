@@ -8,11 +8,12 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -28,32 +29,34 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class TileBoxAnalogController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
+public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private int strongestSignal;
 
     public EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
 
-    public TileBoxAnalogController() {
+    public TileBoxAnalog() {
         for (SignalAspect aspect : SignalAspect.VALUES) {
             aspects.put(aspect, new BitSet());
         }
     }
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_ANALOG_CONTROLLER;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.ANALOG;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, getPos());

@@ -7,9 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.*;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
@@ -31,18 +33,19 @@ import java.io.IOException;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectProvider {
+public class TileBoxRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectProvider, ITileRedstoneEmitter {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_BLOCK_RELAY;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.RELAY;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
@@ -93,11 +96,6 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     @Override
     public boolean isEmittingRedstone(EnumFacing side) {
         return doesActionOnAspect(getBoxSignalAspect(side));
-    }
-
-    @Override
-    public boolean canEmitRedstone(EnumFacing side) {
-        return true;
     }
 
     @Nonnull

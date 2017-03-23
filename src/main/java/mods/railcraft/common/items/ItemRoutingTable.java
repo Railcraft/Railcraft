@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.gui.GuiRoutingTable;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -20,6 +19,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

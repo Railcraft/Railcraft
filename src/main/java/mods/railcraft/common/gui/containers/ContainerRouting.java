@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.gui.slots.SlotSecure;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.routing.IRouter;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;

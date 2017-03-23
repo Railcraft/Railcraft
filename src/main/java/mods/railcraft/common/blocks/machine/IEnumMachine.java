@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -77,6 +78,11 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     default boolean isAvailable() {
         return block() != null && isEnabled();
+    }
+
+    default void ifAvailable(Consumer<IEnumMachine<M>> action) {
+        if (isAvailable())
+            action.accept(this);
     }
 
     default boolean isDepreciated() {

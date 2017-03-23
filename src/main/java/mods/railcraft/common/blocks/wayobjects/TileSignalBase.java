@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.wayobjects;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.interfaces.ITileSignalLamp;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -32,7 +33,7 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileWayObject implements IAspectProvider, ILampTile {
+public abstract class TileSignalBase extends TileWayObject implements IAspectProvider, ITileSignalLamp {
 
     protected static final float BOUNDS = 0.15f;
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};

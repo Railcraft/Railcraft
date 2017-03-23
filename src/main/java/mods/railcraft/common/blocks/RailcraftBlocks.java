@@ -46,6 +46,7 @@ import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.simplemachine.BlockMachineSimple;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockOreMagic;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
@@ -85,6 +86,7 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
+    ACTUATOR("actuator", BlockMachineActuator.class, BlockMachineActuator::new, ItemMachineActuator::new),
     ANVIL_STEEL("anvil", BlockRCAnvil.class, BlockRCAnvil::new, ItemAnvil::new),
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
     BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
@@ -109,7 +111,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
     MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
     MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
-    MACHINE_ACTUATOR("actuator", BlockMachineActuator.class, BlockMachineActuator::new, ItemMachineActuator::new),
     MACHINE_MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     MACHINE_SIMPLE("machine_simple", BlockMachineSimple.class, BlockMachineSimple::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
@@ -119,6 +120,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetal.class, () -> new BlockPostMetal(true), ItemPostMetal::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
     WAY_OBJECT("wayobject", BlockWayObjectRailcraft.class, BlockWayObjectRailcraft::new, ItemWayObject::new),
+    SIGNAL_BOX("signal_box", BlockMachineSignalBoxRailcraft.class, BlockMachineSignalBoxRailcraft::new, ItemMachine::new),
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemBlockRailcraft::new),

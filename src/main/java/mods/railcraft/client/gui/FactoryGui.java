@@ -23,19 +23,19 @@ import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
 import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.TileBoxAnalogController;
-import mods.railcraft.common.blocks.wayobjects.TileBoxCapacitor;
-import mods.railcraft.common.blocks.wayobjects.TileBoxController;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -131,7 +131,7 @@ public class FactoryGui {
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:
-                    return new GuiBoxAnalogController((TileBoxAnalogController) obj);
+                    return new GuiBoxAnalogController((TileBoxAnalog) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:

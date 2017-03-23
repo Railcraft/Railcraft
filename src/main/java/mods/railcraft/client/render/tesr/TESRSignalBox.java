@@ -10,7 +10,7 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.wayobjects.TileBoxBase;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import net.minecraft.util.EnumFacing;
 
 public class TESRSignalBox extends TESRSignals<TileBoxBase> {

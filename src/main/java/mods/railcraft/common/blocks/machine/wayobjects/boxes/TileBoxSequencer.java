@@ -7,9 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -30,19 +32,17 @@ import java.util.Set;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxSequencer extends TileBoxBase {
+public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitter {
 
     private static final int MAX_ITERATIONS = 64;
     private EnumFacing sideOutput = EnumFacing.NORTH;
     private boolean powerState;
     private boolean neighborState;
 
-    public TileBoxSequencer() {
-    }
-
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_SEQUENCER;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.SEQUENCER;
     }
 
     @Override

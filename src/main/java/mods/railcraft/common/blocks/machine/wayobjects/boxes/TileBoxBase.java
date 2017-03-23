@@ -7,9 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
+import mods.railcraft.common.blocks.machine.interfaces.ITileSignalLamp;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +22,7 @@ import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
 
-public abstract class TileBoxBase extends TileWayObject implements ILampTile {
+public abstract class TileBoxBase extends TileMachineBase implements ITileSignalLamp, ITileShaped {
 
     private static final float BOUND = -0.1f;
     private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
@@ -29,14 +32,17 @@ public abstract class TileBoxBase extends TileWayObject implements ILampTile {
         return BOUNDING_BOX;
     }
 
+    @Deprecated
     public abstract boolean isConnected(EnumFacing side);
 
     public abstract SignalAspect getBoxSignalAspect(@Nullable EnumFacing side);
 
+    @Deprecated
     public boolean canTransferAspect() {
         return false;
     }
 
+    @Deprecated
     public boolean canReceiveAspect() {
         return false;
     }
@@ -55,16 +61,14 @@ public abstract class TileBoxBase extends TileWayObject implements ILampTile {
         }
     }
 
+    //TODO: remove this
+    @Deprecated
     public boolean isEmittingRedstone(EnumFacing side) {
         return false;
     }
 
-    public boolean canEmitRedstone(EnumFacing side) {
-        return false;
-    }
-
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(EnumFacing side) {
         return side == EnumFacing.UP;
     }
 

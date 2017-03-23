@@ -7,9 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -35,11 +37,12 @@ import net.minecraft.util.EnumHand;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
+public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, ITileRedstoneEmitter {
 
     private short ticksPowered;
     public short ticksToPower = 200;
@@ -81,13 +84,14 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
         return stateModeController;
     }
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_CAPACITOR;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.CAPACITOR;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, getPos());
@@ -103,7 +107,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
         if (ticksPowered > 0) {
             ticksPowered--;
-            if (stateModeController.getButtonState().equals(EnumStateMode.DELAYED)) { //new behavior
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.DELAYED)) { //new behavior
                 SignalAspect tmpaspect = SignalAspect.GREEN;
                 Boolean hasInput = false;
                 if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos()))
@@ -121,7 +125,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
                 }
                 if (hasInput) {
                     ticksPowered = ticksToPower; //undo any previous decrements
-                    if (!aspect.equals(tmpaspect)) {
+                    if (!Objects.equals(aspect, tmpaspect)) {
                         aspect = tmpaspect; //change to the most restrictive aspect found above.
                         updateNeighbors();
                     }
@@ -141,7 +145,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
         if (ticksPowered <= 0 && p) {
             ticksPowered = ticksToPower;
-            if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.IMMEDIATE))
                 aspect = SignalAspect.GREEN;
             updateNeighbors();
         }
@@ -151,7 +155,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
         if (neighbor.isEmittingRedstone(side)) {
             ticksPowered = ticksToPower;
-            if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.IMMEDIATE))
                 aspect = neighbor.getBoxSignalAspect(side);
             updateNeighbors();
         }

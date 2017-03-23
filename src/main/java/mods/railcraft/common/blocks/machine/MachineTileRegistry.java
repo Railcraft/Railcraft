@@ -21,6 +21,7 @@ import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -90,5 +91,14 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileActuatorLever.class, "railcraft:actuator_lever");
         GameRegistry.registerTileEntity(TileActuatorMotor.class, "railcraft:actuator_motor");
         GameRegistry.registerTileEntity(TileActuatorRouting.class, "railcraft:actuator_router");
+
+        // Signal Boxes
+        GameRegistry.registerTileEntity(TileBoxAnalog.class, "railcraft:signal_box_analog");
+        GameRegistry.registerTileEntity(TileBoxRelay.class, "railcraft:signal_box_relay");
+        GameRegistry.registerTileEntity(TileBoxCapacitor.class, "railcraft:signal_box_capacitor");
+        GameRegistry.registerTileEntity(TileBoxController.class, "railcraft:signal_box_controller");
+        GameRegistry.registerTileEntity(TileBoxInterlock.class, "railcraft:signal_box_interlock");
+        GameRegistry.registerTileEntity(TileBoxReceiver.class, "railcraft:signal_box_receiver");
+        GameRegistry.registerTileEntity(TileBoxSequencer.class, "railcraft:signal_box_sequencer");
     }
 }

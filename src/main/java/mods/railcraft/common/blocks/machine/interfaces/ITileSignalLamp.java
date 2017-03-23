@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.interfaces;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.tools.RenderTools;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ILampTile {
+public interface ITileSignalLamp {
 
     @SideOnly(Side.CLIENT)
     default TextureAtlasSprite getLampTexture(SignalAspect aspect) {

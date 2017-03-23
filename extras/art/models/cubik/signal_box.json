@@ -1,0 +1,64 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "blocks/e_particle",
+    "down": "blocks/signal_box_bottom",
+    "up": "blocks/e_texture",
+    "north": "blocks/e_texture",
+    "south": "blocks/e_texture",
+    "west": "blocks/e_texture",
+    "east": "blocks/e_texture",
+    "cap": "blocks/signal_box_cap",
+    "connection": "blocks/signal_box_connection"
+  },
+  "elements": [
+    {
+      "__comment": "box",
+      "from": [2, 0, 2],
+      "to": [14, 15, 14],
+      "faces": {
+        "down": {"uv": [2, 2, 14, 14], "texture": "#down", "cullface": "down"},
+        "up": {"uv": [2, 2, 14, 14], "texture": "#up"},
+        "north": {"uv": [2, 1, 14, 16], "texture": "#north"},
+        "south": {"uv": [2, 1, 14, 16], "texture": "#south"},
+        "west": {"uv": [2, 1, 14, 16], "texture": "#west"},
+        "east": {"uv": [2, 1, 14, 16], "texture": "#east"}
+      }
+    },
+    {
+      "__comment": "cap",
+      "from": [5, 15, 5],
+      "to": [11, 16, 11],
+      "faces": {
+        "up": {"uv": [5, 5, 11, 11], "texture": "#cap", "cullface": "up"},
+        "north": {"uv": [5, 0, 11, 1], "texture": "#cap"},
+        "south": {"uv": [5, 0, 11, 1], "texture": "#cap"},
+        "west": {"uv": [5, 0, 11, 1], "texture": "#cap"},
+        "east": {"uv": [5, 0, 11, 1], "texture": "#cap"}
+      }
+    },
+    {
+      "__comment": "upper_connection",
+      "from": [7, 10, 0],
+      "to": [9, 12, 2],
+      "faces": {
+        "down": {"uv": [7, 14, 9, 16], "texture": "#connection"},
+        "up": {"uv": [7, 0, 9, 2], "texture": "#connection"},
+        "west": {"uv": [0, 4, 2, 6], "texture": "#connection"},
+        "east": {"uv": [14, 4, 16, 6], "texture": "#connection"}
+      }
+    },
+    {
+      "__comment": "lower_connection",
+      "from": [7, 5, 0],
+      "to": [9, 7, 2],
+      "faces": {
+        "down": {"uv": [7, 14, 9, 16], "texture": "#connection"},
+        "up": {"uv": [7, 0, 9, 2], "texture": "#connection"},
+        "west": {"uv": [0, 9, 2, 11], "texture": "#connection"},
+        "east": {"uv": [14, 9, 16, 11], "texture": "#connection"}
+      }
+    }
+  ]
+}

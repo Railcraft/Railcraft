@@ -60,7 +60,7 @@ public class ModuleRouting extends RailcraftModulePayload {
 
                 }
 
-                if (RailcraftBlocks.MACHINE_ACTUATOR.isEnabled()) {
+                if (RailcraftBlocks.ACTUATOR.isEnabled()) {
                     // Define Switch Motor
                     if (ActuatorVariant.ROUTING.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
                         CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getItem(), ActuatorVariant.MOTOR.getItem(), EnumDetector.ROUTING.getItem());

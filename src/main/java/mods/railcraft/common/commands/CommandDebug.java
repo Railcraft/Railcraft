@@ -12,7 +12,7 @@ package mods.railcraft.common.commands;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.wayobjects.TileBoxBase;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;

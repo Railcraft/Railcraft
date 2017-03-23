@@ -28,12 +28,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -77,13 +75,6 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     @Override
     public boolean isSideSolid(EnumFacing side) {
         return false;
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        powered = !powered;
-        sendUpdateToClient();
-        return true;
     }
 
     @Override

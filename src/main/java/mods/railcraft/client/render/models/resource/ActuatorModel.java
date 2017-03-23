@@ -45,7 +45,7 @@ public class ActuatorModel implements IModel {
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
-        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.MACHINE_ACTUATOR.block();
+        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.ACTUATOR.block();
         if (block == null)
             return Collections.emptyList();
 
@@ -150,7 +150,7 @@ public class ActuatorModel implements IModel {
             this.baseModels = baseModels;
             this.redFlagModels = redFlagModels;
             this.whiteFlagModels = whiteFlagModels;
-            baseModel = baseModels.get(baseModelLocations.get(RailcraftBlocks.MACHINE_ACTUATOR.getDefaultState()));
+            baseModel = baseModels.get(baseModelLocations.get(RailcraftBlocks.ACTUATOR.getDefaultState()));
         }
 
         @Override

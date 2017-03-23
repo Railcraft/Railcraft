@@ -10,7 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.wayobjects.TileBoxController;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;

@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;

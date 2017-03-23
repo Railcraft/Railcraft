@@ -33,7 +33,7 @@ public class ItemMachineActuator extends ItemMachine {
     @SideOnly(Side.CLIENT)
     @Override
     public ModelResourceLocation getModelLocation(IBlockState state) {
-        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.MACHINE_ACTUATOR.block();
+        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.ACTUATOR.block();
         if (block != null) {
             ActuatorVariant variant = block.getVariant(state);
             return new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, variant.getName()), "inventory");

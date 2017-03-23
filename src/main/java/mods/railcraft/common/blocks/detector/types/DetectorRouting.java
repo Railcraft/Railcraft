@@ -13,15 +13,15 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.IRoutingTile;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.routing.IRouter;
+import mods.railcraft.common.util.routing.IRoutingTile;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +32,6 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.List;
 
-import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**

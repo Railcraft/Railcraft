@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -90,7 +91,10 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(meta));
+        V variant = getMetaMap().get(meta);
+        if (variant == null)
+            return getDefaultState();
+        return getDefaultState().withProperty(getVariantProperty(), variant);
     }
 
 //    /**
@@ -230,10 +234,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).isPoweringTo(side) ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
-        return PowerPlugin.NO_POWER;
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileRedstoneEmitter.class, t -> t.getPowerOutput(side)).orElse(PowerPlugin.NO_POWER);
     }
 
     @Override

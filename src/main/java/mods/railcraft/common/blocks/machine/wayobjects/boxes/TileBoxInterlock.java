@@ -7,9 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.*;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -37,9 +38,10 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     public TileBoxInterlock() {
     }
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_INTERLOCK;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.INTERLOCK;
     }
 
     @Override

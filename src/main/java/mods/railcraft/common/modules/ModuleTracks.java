@@ -25,7 +25,7 @@ public class ModuleTracks extends RailcraftModulePayload {
                         RailcraftItems.TRACK_KIT,
                         RailcraftItems.SPIKE_MAUL_IRON,
                         RailcraftItems.SPIKE_MAUL_STEEL,
-                        RailcraftBlocks.MACHINE_ACTUATOR,
+                        RailcraftBlocks.ACTUATOR,
                         RailcraftBlocks.TRACK_OUTFITTED,
 //                        RailcraftBlocks.TRACK_JUNCTION_IRON,
                         TrackKits.ACTIVATOR,

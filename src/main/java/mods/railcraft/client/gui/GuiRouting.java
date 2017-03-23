@@ -11,8 +11,6 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerRouting;
@@ -20,6 +18,8 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.routing.IRouter;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

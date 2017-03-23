@@ -7,11 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -41,13 +42,14 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public SignalAspect poweredAspect = SignalAspect.RED;
     private boolean powered;
 
+    @Nonnull
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BOX_CONTROLLER;
+    public IEnumMachine<?> getMachineType() {
+        return SignalBoxVariant.CONTROLLER;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_CONTROLLER, player, worldObj, getPos());

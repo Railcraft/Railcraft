@@ -10,7 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
-import mods.railcraft.common.blocks.wayobjects.TileBoxCapacitor;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;

@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -23,6 +24,7 @@ import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasCart;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
@@ -45,7 +47,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileManipulatorCart extends TileManipulator implements IHasCart, IHasWork, IGuiReturnHandler {
+public abstract class TileManipulatorCart extends TileManipulator implements IHasCart, IHasWork, IGuiReturnHandler, ITileRedstoneEmitter {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
@@ -252,12 +254,13 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     }
 
     @Override
-    public final boolean isPoweringTo(EnumFacing side) {
+    public final int getPowerOutput(EnumFacing side) {
+        boolean emit = false;
         if (isPowered()) {
             Block block = WorldPlugin.getBlock(worldObj, getPos().offset(side.getOpposite()));
-            return TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
+            emit = TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
         }
-        return false;
+        return emit ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
     }
 
     @Override
