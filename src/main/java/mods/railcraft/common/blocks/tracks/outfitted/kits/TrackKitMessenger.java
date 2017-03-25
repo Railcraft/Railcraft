@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,6 +74,14 @@ public class TrackKitMessenger extends TrackKitPowered {
             subtitle = ITextComponent.Serializer.jsonToComponent(data.getString("subtitle"));
         } catch (JsonParseException ignored) {
         }
+    }
+
+    public ITextComponent getTitle() {
+        return title;
+    }
+
+    public ITextComponent getSubtitle() {
+        return subtitle;
     }
 
     public void setTitle(ICommandSender setter, ITextComponent title) {
