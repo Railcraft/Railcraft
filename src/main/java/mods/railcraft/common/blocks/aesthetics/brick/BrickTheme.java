@@ -253,7 +253,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     "SPS",
                     "SSS",
                     'S', new ItemStack(Blocks.END_STONE),
-                    'P', new ItemStack(Items.ENDER_PEARL));
+                    'P', Items.ENDER_PEARL);
         }
     },;
     public static final BrickTheme[] VALUES = values();
