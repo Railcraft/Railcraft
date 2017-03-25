@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import com.google.common.collect.MapMaker;
@@ -109,7 +110,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                         setTarget(this, player);
                     else if (worldObj.provider.getDimension() != target.getDim())
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
-                    else if (new WorldCoordinate(this).equals(target)) {
+                    else if (Objects.equals(new WorldCoordinate(this), target)) {
                         removeTarget(player);
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                     } else
@@ -154,11 +155,11 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     @Nullable
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
-        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord)) {
+        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord.getPos())) {
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }
-        return WorldPlugin.getBlockTile(searcher.getWorld(), coord);
+        return WorldPlugin.getBlockTile(searcher.getWorld(), coord.getPos());
     }
 
     public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {

@@ -1,12 +1,12 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.api.core.WorldCoordinate;
@@ -40,7 +40,7 @@ public class PacketDispatcher {
     }
 
     public static TargetPoint targetPoint(WorldCoordinate point, double range) {
-        return targetPoint(point.getDim(), point, range);
+        return targetPoint(point.getDim(), point.getPos(), range);
     }
 
     public static TargetPoint targetPoint(int dim, BlockPos pos, double range) {

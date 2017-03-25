@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,9 +19,7 @@ import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomot
 import mods.railcraft.client.render.models.resource.*;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.IRailcraftBlock;
-import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -29,7 +27,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
-import mods.railcraft.common.blocks.wayobjects.TileWayObject;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.CommonProxy;
@@ -104,16 +102,7 @@ public class ClientProxy extends CommonProxy {
                     Block block = blockContainer.block();
                     if (block instanceof IRailcraftBlock) {
                         IRailcraftBlock railcraftBlock = (IRailcraftBlock) block;
-                        TextureAtlasSheet.unstitchIcons(event.getMap(), railcraftBlock.getBlockTexture(), railcraftBlock.getTextureDimensions());
-                        IVariantEnum[] variants = railcraftBlock.getVariants();
-                        if (variants != null) {
-                            for (IVariantEnum variant : variants) {
-                                if (variant instanceof IVariantEnumBlock)
-                                    TextureAtlasSheet.unstitchIcons(event.getMap(),
-                                            new ResourceLocation(block.getRegistryName() + "_" + variant.getResourcePathSuffix()),
-                                            ((IVariantEnumBlock) variant).getTextureDimensions());
-                            }
-                        }
+                        railcraftBlock.registerTextures(event.getMap());
                     }
                 }
             }
@@ -204,7 +193,7 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileRitual.class, TESRFirestone::new);
 
-        bindTESR(TileWayObject.class, TESRSignals::new);
+        bindTESR(TileBoxBase.class, TESRSignalBox::new);
 
 //        registerBlockRenderer(new RenderBlockMachineBeta());
 //        registerBlockRenderer(new RenderBlockMachineDelta());

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,7 +38,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
  */
 public abstract class GeneratorMine extends Generator {
     private static final EnumSet<BiomeDictionary.Type> RICH_BIOMES = EnumSet.of(MOUNTAIN, MESA, HILLS);
-    private static final boolean SKY_GEN = false;
+    private static final boolean SKY_GEN = true;
     private static final Predicate<IBlockState> STONE_TEST = SKY_GEN ? Predicates.alwaysTrue() : GenTools.STONE;
     @Nullable
     private final WorldGenerator poorGen;
@@ -88,8 +88,8 @@ public abstract class GeneratorMine extends Generator {
     }
 
     private NoiseGen getCloudNoise(World world) {
-//        NoiseGen noise = cloudMap.get(world);
-        NoiseGen noise = null;
+        NoiseGen noise = cloudMap.get(world);
+//        NoiseGen noise = null;
         if (noise == null) {
             noise = new NoiseGenSimplex(new Random(getNoiseSeed(world)), 0.0018);
             cloudMap.put(world, noise);

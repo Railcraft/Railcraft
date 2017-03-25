@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.util.effects;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
@@ -133,7 +132,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             if (isGoggleAuraActive(GoggleAura.SIGNALLING))
                 colorProfile = TESRSignals.ColorProfile.ASPECT;
 
-            int color = colorProfile.getColor(start, new WorldCoordinate(start), new WorldCoordinate(dest));
+            int color = colorProfile.getColor(start, start.getPos(), dest.getPos());
 
             Particle particle = new ParticleTuningAura(start.getWorld(), new Vec3d(px, py, pz), EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);

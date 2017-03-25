@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,6 +50,12 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalBlockTi
             return false;
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getX(), getY(), getZ());
+        return true;
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getX(), getY(), getZ());
         return true;
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,6 +29,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.Objects;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable {
@@ -76,9 +78,9 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.begin");
                         setPairData(stack, tile);
                         signalBlock.startPairing();
-                    } else if (!pos.equals(signalPos)) {
+                    } else if (!Objects.equals(pos, signalPos.getPos())) {
 //                System.out.println("attempt pairing");
-                        tile = WorldPlugin.getBlockTile(worldIn, signalPos);
+                        tile = WorldPlugin.getBlockTile(worldIn, signalPos.getPos());
                         if (tile instanceof ISignalBlockTile) {
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
@@ -87,7 +89,7 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
                                 clearPairData(stack);
                             } else
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.invalid");
-                        } else if (WorldPlugin.isBlockLoaded(worldIn, signalPos)) {
+                        } else if (WorldPlugin.isBlockLoaded(worldIn, signalPos.getPos())) {
                             ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.lost");
                             signalBlock.endPairing();
                             clearPairData(stack);
