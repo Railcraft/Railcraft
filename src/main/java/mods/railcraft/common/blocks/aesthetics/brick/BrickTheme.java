@@ -244,6 +244,17 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             if (variant != BrickVariant.BLOCK)
                 super.initVariant(block, variant);
         }
+    },
+    PEARLIZED(RailcraftBlocks.BRICK_PEARLIZED, MapColor.GREEN) {
+        @Override
+        public void initRecipes(BlockBrick block) {
+            CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
+                    "SSS",
+                    "SPS",
+                    "SSS",
+                    'S', new ItemStack(Blocks.END_STONE),
+                    'P', new ItemStack(Items.ENDER_PEARL));
+        }
     },;
     public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;
