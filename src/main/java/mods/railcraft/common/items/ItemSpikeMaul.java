@@ -154,8 +154,6 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     }
 
     static {
-        if (TrackKits.JUNCTION.isEnabled())
-            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.JUNCTION));
         if (TrackKits.TURNOUT.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.TURNOUT));
         if (TrackKits.WYE.isEnabled())
