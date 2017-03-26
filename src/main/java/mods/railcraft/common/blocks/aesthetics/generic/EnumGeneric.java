@@ -34,7 +34,6 @@ public enum EnumGeneric implements IVariantEnumBlock {
 
     BLOCK_COPPER(ModuleResources.class, "copper", new SimpleCube(), 3f, 10f),
     BLOCK_TIN(ModuleResources.class, "tin", new SimpleCube(), 3f, 10f),
-    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),
     BLOCK_LEAD(ModuleResources.class, "lead", new SimpleCube(), 2f, 20f),
     BLOCK_STEEL(ModuleResources.class, "steel", new SimpleCube(), 5f, 15f),
     BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
@@ -43,7 +42,8 @@ public enum EnumGeneric implements IVariantEnumBlock {
     CRUSHED_OBSIDIAN(ModuleResources.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
     STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),
-    BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),;
+    BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),
+    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),;
     public static final EnumGeneric[] VALUES = values();
     private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
