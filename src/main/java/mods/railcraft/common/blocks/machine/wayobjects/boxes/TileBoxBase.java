@@ -85,6 +85,7 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return super.getRenderBoundingBox();
+        return TileEntity.INFINITE_EXTENT_AABB;
     }
+
 }

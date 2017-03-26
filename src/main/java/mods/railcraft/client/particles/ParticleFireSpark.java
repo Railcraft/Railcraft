@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,7 +39,7 @@ public class ParticleFireSpark extends ParticleBase {
         this.particleScale *= rand.nextFloat() * 2.0F + 0.2F;
         this.lavaParticleScale = particleScale;
         this.particleMaxAge = 2000;
-        this.noClip = true;
+        this.canCollide = false;
         setParticleTextureIndex(49);
     }
 

@@ -164,7 +164,8 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         final float depth = 1.95F * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();
-        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glColor3f(1, 1, 1);
         OpenGL.glTranslated(x, y, z);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 

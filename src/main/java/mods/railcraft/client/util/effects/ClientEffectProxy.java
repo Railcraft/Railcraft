@@ -134,7 +134,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
             int color = colorProfile.getColor(start, start.getPos(), dest.getPos());
 
-            Particle particle = new ParticleTuningAura(start.getWorld(), new Vec3d(px, py, pz), EffectManager.getEffectSource(dest), color);
+            Particle particle = new ParticleTuningAura(start.getWorld(), new Vec3d(px, py, pz), EffectManager.getEffectSource(start), EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);
         }
     }

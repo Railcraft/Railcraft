@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,6 +29,7 @@ public class ParticleForceSpawn extends ParticleBaseSmokeShrinking {
         this.particleBlue = 0.86F;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.particleMaxAge = (int) ((float) particleMaxAge * scale);
+        this.canCollide = false;
     }
 
 }
