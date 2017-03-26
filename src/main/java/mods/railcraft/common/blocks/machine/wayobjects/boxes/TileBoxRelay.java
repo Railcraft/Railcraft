@@ -20,11 +20,9 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,15 +40,6 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalBlockTi
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.RELAY;
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
-            return false;
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getX(), getY(), getZ());
-        return true;
     }
 
     @Override
