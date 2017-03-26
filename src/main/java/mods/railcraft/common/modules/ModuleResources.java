@@ -82,6 +82,10 @@ public class ModuleResources extends RailcraftModulePayload {
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.TIN);
 
+                    type = EnumGeneric.BLOCK_BRONZE;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.BRONZE);
+
                     type = EnumGeneric.BLOCK_LEAD;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.LEAD);

@@ -34,6 +34,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
 
     BLOCK_COPPER(ModuleResources.class, "copper", new SimpleCube(), 3f, 10f),
     BLOCK_TIN(ModuleResources.class, "tin", new SimpleCube(), 3f, 10f),
+    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),
     BLOCK_LEAD(ModuleResources.class, "lead", new SimpleCube(), 2f, 20f),
     BLOCK_STEEL(ModuleResources.class, "steel", new SimpleCube(), 5f, 15f),
     BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
@@ -49,6 +50,7 @@ public enum EnumGeneric implements IVariantEnumBlock {
     static {
         creativeList.add(BLOCK_COPPER);
         creativeList.add(BLOCK_TIN);
+        creativeList.add(BLOCK_BRONZE);
         creativeList.add(BLOCK_LEAD);
         creativeList.add(BLOCK_SILVER);
         creativeList.add(BLOCK_STEEL);

@@ -335,6 +335,7 @@ public class RailcraftConfig {
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
+        loadRecipeProperty("railcraft.bronze", "enableAltBronze", false, "change to '{t}=true' to enable a recipe to craft Bronze Ingots from Tin and Copper Ingots");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
@@ -424,6 +425,7 @@ public class RailcraftConfig {
 
         loadLootProperty("ingot_copper", 10);
         loadLootProperty("ingot_lead", 10);
+        loadLootProperty("ingot_bronze", 10);
         loadLootProperty("ingot_steel", 10);
         loadLootProperty("ingot_tin", 10);
         loadLootProperty("ingot_silver", 5);
