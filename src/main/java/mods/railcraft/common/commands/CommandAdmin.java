@@ -1,5 +1,6 @@
 /*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
+ * Copyright (c) CovertJaguar, 2011-2017
+ * http://railcraft.info
  *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
