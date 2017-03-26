@@ -35,7 +35,7 @@ import java.util.Objects;
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable {
     public ItemSignalBlockSurveyor() {
-        super("railcraft.gui.surveyor");
+        super("gui.railcraft.surveyor");
     }
 
     @Override
@@ -73,9 +73,9 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
                     WorldCoordinate signalPos = getPairData(stack);
                     SignalBlock.Status trackStatus = signalBlock.getTrackStatus();
                     if (trackStatus == SignalBlock.Status.INVALID)
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.track", signalTile.getDisplayName());
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.track", signalTile.getDisplayName());
                     else if (signalPos == null) {
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.begin");
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.begin");
                         setPairData(stack, tile);
                         signalBlock.startPairing();
                     } else if (!Objects.equals(pos, signalPos.getPos())) {
@@ -85,25 +85,25 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
                             if (signalBlock.createSignalBlock(otherSignal)) {
-                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.success");
+                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.success");
                                 clearPairData(stack);
                             } else
-                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.invalid");
+                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.invalid");
                         } else if (WorldPlugin.isBlockLoaded(worldIn, signalPos.getPos())) {
-                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.lost");
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.lost");
                             signalBlock.endPairing();
                             clearPairData(stack);
                         } else
-                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.unloaded");
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.unloaded");
                     } else {
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.abandon");
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.abandon");
                         signalBlock.endPairing();
                         clearPairData(stack);
                     }
                 }
                 return EnumActionResult.SUCCESS;
             } else if (Game.isHost(worldIn))
-                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.wrong");
+                ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.wrong");
         return EnumActionResult.PASS;
     }
 

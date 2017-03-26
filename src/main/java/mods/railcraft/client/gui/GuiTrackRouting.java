@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,9 +39,9 @@ public class GuiTrackRouting extends TileGui {
         ySize = 140;
         this.track = track;
         this.player = inv.player;
-        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + ownerName);
-        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + ownerName);
-        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + ownerName);
+        lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
+        unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + ownerName);
     }
 
     @Override
@@ -76,9 +76,9 @@ public class GuiTrackRouting extends TileGui {
         String username = ((ContainerTrackRouting) container).ownerName;
         if (username != null && !username.equals(ownerName)) {
             ownerName = username;
-            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + username);
-            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + username);
-            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + username);
+            lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + username);
+            unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + username);
         }
         lockButton.setToolTip(track.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
     }
@@ -95,7 +95,7 @@ public class GuiTrackRouting extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.routing.track.slot.label"), 64, 29, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.routing.track.slot.label"), 64, 29, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 

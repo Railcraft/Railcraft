@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.WorldCoordinate;
@@ -41,16 +42,16 @@ public class TileSentinel extends TileMachineBase {
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
                 else if (worldObj.provider.getDimension() != target.getDim())
-                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.dimension", getLocalizationTag());
                 else if (new WorldCoordinate(this).equals(target)) {
                     TileAnchorWorld.removeTarget(player);
-                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.cancel", getLocalizationTag());
                 } else {
                     TileEntity tile = TileAnchorWorld.getTargetAt(player, this, target);
                     if (tile instanceof TileAnchorWorld)
                         ((TileAnchorWorld) tile).setSentinel(player, new WorldCoordinate(this));
                     else if (tile != null)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.invalid", getLocalizationTag());
                 }
                 crowbar.onWhack(player, hand, heldItem, getPos());
                 return true;

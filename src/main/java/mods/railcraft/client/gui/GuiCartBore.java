@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityTunnelBore;
@@ -16,10 +17,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCartBore extends EntityGui {
 
-    private final String HEAD = LocalizationPlugin.translate("railcraft.gui.bore.head");
-    private final String FUEL = LocalizationPlugin.translate("railcraft.gui.bore.fuel");
-    private final String BALLAST = LocalizationPlugin.translate("railcraft.gui.bore.ballast");
-    private final String TRACK = LocalizationPlugin.translate("railcraft.gui.bore.track");
+    private final String HEAD = LocalizationPlugin.translate("gui.railcraft.bore.head");
+    private final String FUEL = LocalizationPlugin.translate("gui.railcraft.bore.fuel");
+    private final String BALLAST = LocalizationPlugin.translate("gui.railcraft.bore.ballast");
+    private final String TRACK = LocalizationPlugin.translate("gui.railcraft.bore.track");
     private EntityTunnelBore cart;
 
     public GuiCartBore(InventoryPlayer inv, EntityTunnelBore cart) {

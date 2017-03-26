@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -197,7 +197,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         ToolTip toolTip = new ToolTip();
         long fuel = ItemCartAnchor.getFuel(stack);
         double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
-        String format = LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining");
+        String format = LocalizationPlugin.translate("gui.railcraft.anchor.fuel.remaining");
         toolTip.add(String.format(format, hours));
         return toolTip;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,14 +26,14 @@ public class GuiTurbine extends TileGui
         xSize = 176;
         ySize = 140;
 
-        label = LocalizationPlugin.translate("railcraft.gui.turbine");
+        label = LocalizationPlugin.translate("gui.railcraft.turbine");
         this.tile = tile;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.turbine.rotor"), 20, 29, 0x404040);
-        fontRendererObj.drawString(String.format(LocalizationPlugin.translate("railcraft.gui.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.turbine.rotor"), 20, 29, 0x404040);
+        fontRendererObj.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,11 +45,11 @@ public class GuiRouting extends TileGui {
         this.tile = tile;
         this.router = router;
         this.player = inv.player;
-        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + ownerName);
-        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + ownerName);
-        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + ownerName);
-        privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tips", "{owner}=" + ownerName);
-        publicToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.public.tips");
+        lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
+        unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + ownerName);
+        privateToolTips = ToolTip.buildToolTip("gui.railcraft.routing.type.private.tips", "{owner}=" + ownerName);
+        publicToolTips = ToolTip.buildToolTip("gui.railcraft.routing.type.public.tips");
     }
 
     @Override
@@ -93,10 +93,10 @@ public class GuiRouting extends TileGui {
         String username = ((ContainerRouting) container).ownerName;
         if (username != null && !username.equals(ownerName)) {
             ownerName = username;
-            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.locked", "{owner}=" + username);
-            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.unlocked", "{owner}=" + username);
-            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tips.button.lock.notowner", "{owner}=" + username);
-            privateToolTips = ToolTip.buildToolTip("railcraft.gui.routing.type.private.tips", "{owner}=" + username);
+            lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + username);
+            unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + username);
+            privateToolTips = ToolTip.buildToolTip("gui.railcraft.routing.type.private.tips", "{owner}=" + username);
         }
         lockButton.setToolTip(router.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
         routingButton.setToolTip(router.getRoutingController().getButtonState() == IRouter.RoutingButtonState.PRIVATE ? privateToolTips : publicToolTips);
@@ -114,7 +114,7 @@ public class GuiRouting extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.routing.slot.label"), 64, 29, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.routing.slot.label"), 64, 29, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 

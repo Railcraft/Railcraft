@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -59,7 +59,7 @@ public class TrackKitCoupler extends TrackKitPowered {
                 if (Game.isHost(theWorldAsserted()))
                     setMode(m);
                 else
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.coupler.mode." + m.getName()));
+                    ChatPlugin.sendLocalizedChat(player, "gui.railcraft.track.mode.change", "\u00A75" + LocalizationPlugin.translate("gui.railcraft.track.coupler.mode." + m.getName()));
                 return true;
             }
         }

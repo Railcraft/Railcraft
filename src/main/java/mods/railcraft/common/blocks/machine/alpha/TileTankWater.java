@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -130,7 +130,7 @@ public class TileTankWater extends TileTank {
 
     @Override
     public String getTitle() {
-        return LocalizationPlugin.translate("railcraft.gui.tank.water");
+        return LocalizationPlugin.translate("gui.railcraft.tank.water");
     }
 
     @Override

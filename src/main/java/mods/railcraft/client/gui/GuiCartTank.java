@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartTank;
@@ -38,7 +39,7 @@ public class GuiCartTank extends EntityGui
         int sWidth = fontRendererObj.getStringWidth(label);
         int sPos = xSize / 2 - sWidth / 2;
         fontRendererObj.drawString(label, sPos, 6, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.filter"), 67, 27, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.filter"), 67, 27, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

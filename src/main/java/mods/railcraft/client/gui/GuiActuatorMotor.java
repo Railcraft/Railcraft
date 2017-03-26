@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,13 +17,13 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class GuiSwitchMotor extends GuiAspectAction {
+public class GuiActuatorMotor extends GuiAspectAction {
 
     private final TileActuatorMotor switchMotor;
     private boolean shouldSwitchOnRedstone;
     private GuiToggleButton redstoneButton;
 
-    public GuiSwitchMotor(EntityPlayer player, TileActuatorMotor switchMotor, String title) {
+    public GuiActuatorMotor(EntityPlayer player, TileActuatorMotor switchMotor, String title) {
         super(player, switchMotor, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png");
         this.switchMotor = switchMotor;
         this.shouldSwitchOnRedstone = switchMotor.shouldSwitchOnRedstone();
@@ -35,7 +35,7 @@ public class GuiSwitchMotor extends GuiAspectAction {
         super.initGui();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        redstoneButton = new GuiToggleButton(6, w + 43, h + 80, 100, LocalizationPlugin.translate("railcraft.gui.switch.motor.redstone"), !shouldSwitchOnRedstone);
+        redstoneButton = new GuiToggleButton(6, w + 43, h + 80, 100, LocalizationPlugin.translate("gui.railcraft.actuator.motor.redstone"), !shouldSwitchOnRedstone);
         GuiTools.newButtonRowAuto(buttonList, w + 3, 171, Lists.newArrayList(redstoneButton));
     }
 

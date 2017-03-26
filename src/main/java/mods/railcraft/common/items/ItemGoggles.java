@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -108,7 +108,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
         incrementAura(stack);
         if (Game.isClient(world)) {
             GoggleAura aura = getCurrentAura(stack);
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.goggles.mode", "\u00A75" + aura);
+            ChatPlugin.sendLocalizedChat(player, "gui.railcraft.goggles.mode", "\u00A75" + aura);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
     }
@@ -126,8 +126,8 @@ public class ItemGoggles extends ItemRailcraftArmor {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
         GoggleAura aura = getCurrentAura(stack);
-        String mode = LocalizationPlugin.translate("railcraft.gui.goggles.mode");
-        String tip = LocalizationPlugin.translate("railcraft.gui.goggles.tips");
+        String mode = LocalizationPlugin.translate("gui.railcraft.goggles.mode");
+        String tip = LocalizationPlugin.translate("gui.railcraft.goggles.tips");
 
         list.add(String.format(mode, "\u00A75" + aura));
         list.add(tip);
@@ -140,12 +140,12 @@ public class ItemGoggles extends ItemRailcraftArmor {
 
     public enum GoggleAura {
 
-        NONE("railcraft.gui.goggles.aura.none"),
-        ANCHOR("railcraft.gui.goggles.aura.anchor"),
-        TRACKING("railcraft.gui.goggles.aura.tracking"),
-        TUNING("railcraft.gui.goggles.aura.tuning"),
-        SURVEYING("railcraft.gui.goggles.aura.surveying"),
-        SIGNALLING("railcraft.gui.goggles.aura.signalling");
+        NONE("gui.railcraft.goggles.aura.none"),
+        ANCHOR("gui.railcraft.goggles.aura.anchor"),
+        TRACKING("gui.railcraft.goggles.aura.tracking"),
+        TUNING("gui.railcraft.goggles.aura.tuning"),
+        SURVEYING("gui.railcraft.goggles.aura.surveying"),
+        SIGNALLING("gui.railcraft.goggles.aura.signalling");
         public static final GoggleAura[] VALUES = values();
         private final String locTag;
 

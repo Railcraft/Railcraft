@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.CartBaseExplosive;
@@ -16,8 +17,8 @@ import net.minecraft.client.gui.GuiButton;
 
 public class GuiCartTNTFuse extends GuiBasic {
 
-    private final String FUSE = LocalizationPlugin.translate("railcraft.gui.cart.tnt.fuse") + " = ";
-    private final String TICKS = " " + LocalizationPlugin.translate("railcraft.gui.ticks");
+    private final String FUSE = LocalizationPlugin.translate("gui.railcraft.cart.tnt.fuse") + " = ";
+    private final String TICKS = " " + LocalizationPlugin.translate("gui.railcraft.ticks");
     protected int fuse = 80;
     CartBaseExplosive cart;
 

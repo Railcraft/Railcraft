@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,10 +27,6 @@ public class ModuleSignals extends RailcraftModulePayload {
                         RailcraftItems.SIGNAL_TUNER,
                         RailcraftItems.SIGNAL_LABEL
                 );
-            }
-
-            @Override
-            public void preInit() {
             }
         });
     }

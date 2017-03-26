@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,7 +67,7 @@ public class GuiTradeStation extends TileGui {
 
         GuiSimpleButton[] dice = new GuiSimpleButton[3];
 
-        ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tips");
+        ToolTip tip = ToolTip.buildToolTip("gui.railcraft.trade.station.dice.tips");
         if (tip != null)
             tip.get(0).format = TextFormatting.YELLOW;
 
