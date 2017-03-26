@@ -280,10 +280,8 @@ task wrapper(type: Wrapper) {
 }
 
 license {
-    matching('**/mods/railcraft/**') {
-        include '**/*.java'
-        header = project.file('extras/HEADER')
-        style.java = BLOCK_COMMENT
-        newLine = false
-    }
+    header = project.file('extras/HEADER')
+    style.java = BLOCK_COMMENT
+    newLine = false
+    include '**/mods/railcraft/**'
 }
