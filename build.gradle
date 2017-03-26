@@ -281,7 +281,7 @@ task wrapper(type: Wrapper) {
 
 license {
     header = project.file('extras/HEADER')
-    style.java = BLOCK_COMMENT
-    newLine = false
     include '**/mods/railcraft/**'
+    style.java = 'BLOCK_COMMENT'
+    newLine = false
 }
