@@ -86,15 +86,8 @@ public class ModuleResources extends RailcraftModulePayload {
                     type = EnumGeneric.BLOCK_BRONZE;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.BRONZE);
-                    if ((RailcraftConfig.forceEnableBronzeRecipe() && RailcraftItems.INGOT.isEnabled())) {
-                        int amount;
-                        if (RailcraftConfig.enableHarderBronze()) {
-                            amount = 3;
-                        }
-                        else {
-                            amount = 4;
-                        }
-                        CraftingPlugin.addShapelessRecipe(Metal.BRONZE.getStack(Metal.Form.INGOT, amount), "ingotTin", "ingotCopper", "ingotCopper","ingotCopper");
+                    if ((RailcraftConfig.forceEnableBronzeRecipe() || !OreDictPlugin.oreExists("dustBronze")) && RailcraftItems.INGOT.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(Metal.BRONZE.getStack(Metal.Form.INGOT, RailcraftConfig.enableHarderBronze() ? 3 : 4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
                     }
 
                     type = EnumGeneric.BLOCK_LEAD;
