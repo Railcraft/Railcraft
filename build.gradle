@@ -1,5 +1,3 @@
-evaluationDependsOn(':version')
-
 buildscript {
     repositories {
         jcenter()
@@ -17,6 +15,12 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
+
+plugins {
+    id 'net.minecrell.licenser' version '0.3'
+}
+
+evaluationDependsOn(':version')
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -272,5 +276,12 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "2.7"
+    gradleVersion = "2.12"
+}
+
+license {
+    header = project.file('extras/HEADER')
+    include '**/mods/railcraft/**'
+    style.java = 'BLOCK_COMMENT'
+    newLine = false
 }
