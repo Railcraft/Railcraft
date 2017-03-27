@@ -48,7 +48,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
         CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
                 "TT",
                 "TT",
-                'T', "ingotTin");
+                'T', "ingotBronze");
 
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.GOLD_PLATE),
                 " G ",
