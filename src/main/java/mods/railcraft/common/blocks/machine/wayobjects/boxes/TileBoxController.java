@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -23,11 +22,9 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,12 +45,10 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         return SignalBoxVariant.CONTROLLER;
     }
 
+    @Nullable
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
-            return false;
-        GuiHandler.openGui(EnumGui.BOX_CONTROLLER, player, worldObj, getPos());
-        return true;
+    public EnumGui getGui() {
+        return EnumGui.BOX_CONTROLLER;
     }
 
     @Override
@@ -136,13 +131,6 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         poweredAspect = SignalAspect.values()[data.getInteger("PoweredAspect")];
 
         controller.readFromNBT(data);
-
-        if (data.hasKey("ReceiverX")) {
-            int x = data.getInteger("ReceiverX");
-            int y = data.getInteger("ReceiverY");
-            int z = data.getInteger("ReceiverZ");
-            controller.registerLegacyReceiver(x, y, z);
-        }
     }
 
     @Override

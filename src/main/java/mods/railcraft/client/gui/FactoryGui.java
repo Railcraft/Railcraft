@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -123,11 +123,11 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
-                    return new GuiSwitchMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
+                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.switch.motor.action"));
                 case BOX_RECEIVER:
-                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_RELAY:
-                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:

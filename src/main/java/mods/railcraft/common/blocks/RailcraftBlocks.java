@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -190,7 +190,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             RailcraftRegistry.register(block, item);
 
             if (!(block instanceof IRailcraftBlock))
-                throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
+                throw new RuntimeException("Railcraft Blocks must implement IRailcraftBlock");
             IRailcraftBlock blockObject = (IRailcraftBlock) block;
             blockObject.initializeDefinintion();
             blockObject.defineRecipes();

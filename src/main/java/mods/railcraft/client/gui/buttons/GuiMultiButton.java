@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nullable;
@@ -71,7 +72,7 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
         drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
         mouseDragged(minecraft, x, y);
         displayString = state.getLabel();
-        if (!displayString.equals("")) {
+        if (!Strings.isEmpty(displayString)) {
             if (!enabled) {
                 drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, 0xffa0a0a0);
             } else if (flag) {

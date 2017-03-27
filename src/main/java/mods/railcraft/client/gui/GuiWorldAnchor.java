@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,8 +32,8 @@ public class GuiWorldAnchor extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel"), 85, 24, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining", (double) container.minutesRemaining / 60), 85, 35, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.anchor.fuel"), 85, 24, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.anchor.fuel.remaining", (double) container.minutesRemaining / 60), 85, 35, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 

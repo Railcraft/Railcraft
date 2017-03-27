@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -83,7 +83,7 @@ public class GuiTicket extends GuiScreen {
 
         List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
         buttons.add(buttonDone = new GuiSimpleButton(0, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.done")));
-        buttons.add(buttonHelp = new GuiSimpleButton(1, 0, IMAGE_HEIGHT + 25, 65, LocalizationPlugin.translate("railcraft.gui.help")));
+        buttons.add(buttonHelp = new GuiSimpleButton(1, 0, IMAGE_HEIGHT + 25, 65, LocalizationPlugin.translate("gui.railcraft.help")));
         buttons.add(buttonCancel = new GuiSimpleButton(2, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.cancel")));
         GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
         updateButtons();
@@ -99,7 +99,7 @@ public class GuiTicket extends GuiScreen {
     }
 
     private void updateButtons() {
-        buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("railcraft.gui.help");
+        buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("gui.railcraft.help");
     }
 
     private void sendToServer() {
@@ -175,19 +175,19 @@ public class GuiTicket extends GuiScreen {
         drawTexturedModalRect(xOffset, yOffset, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (readingManual) {
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.manual.title"), yOffset + 14, width);
+            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.manual.title"), yOffset + 14, width);
 
-            String text = LocalizationPlugin.translate("railcraft.gui.routing.ticket.manual");
+            String text = LocalizationPlugin.translate("gui.railcraft.routing.ticket.manual");
             fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 30, WRAP_WIDTH, 0);
         } else {
             OpenGL.glPushMatrix();
             OpenGL.glScalef(2F, 2F, 2F);
-            GuiTools.drawCenteredString(fontRendererObj, TextFormatting.BOLD + LocalizationPlugin.translate("railcraft.gui.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
+            GuiTools.drawCenteredString(fontRendererObj, TextFormatting.BOLD + LocalizationPlugin.translate("gui.railcraft.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
             OpenGL.glPopMatrix();
 
 
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.line1"), yOffset + 50, width);
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.line2"), yOffset + 65, width);
+            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line1"), yOffset + 50, width);
+            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line2"), yOffset + 65, width);
             String text = TextFormatting.BLACK + "Dest=" + dest;
             if (fontRendererObj.getBidiFlag()) {
                 text = text + "_";

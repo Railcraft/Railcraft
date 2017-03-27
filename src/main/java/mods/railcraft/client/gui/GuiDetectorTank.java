@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class GuiDetectorTank extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.filter"), 50, 29, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.filter"), 50, 29, 0x404040);
     }
 
     @Override

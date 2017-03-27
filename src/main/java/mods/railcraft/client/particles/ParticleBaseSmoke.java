@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,7 +33,6 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
         this.particleScale *= scale;
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));
         this.particleMaxAge = (int) (particleMaxAge * scale);
-        this.noClip = true;
     }
 
     /**

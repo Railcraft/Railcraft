@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.misc.Game;
@@ -26,7 +26,6 @@ public class PacketPairUpdate extends RailcraftPacket {
     private PacketType packetType;
 
     public PacketPairUpdate(PacketType packetType) {
-        super();
         this.packetType = packetType;
     }
 
@@ -41,9 +40,9 @@ public class PacketPairUpdate extends RailcraftPacket {
         data.writeInt(pos.getY());
         data.writeInt(pos.getZ());
 
-        Collection<WorldCoordinate> pairs = pairing.getPairs();
+        Collection<BlockPos> pairs = pairing.getPairs();
         data.writeByte(pairs.size());
-        for (WorldCoordinate coord : pairs) {
+        for (BlockPos coord : pairs) {
             data.writeInt(coord.getX());
             data.writeInt(coord.getY());
             data.writeInt(coord.getZ());
@@ -80,7 +79,7 @@ public class PacketPairUpdate extends RailcraftPacket {
             }
             int size = data.readByte();
             for (int i = 0; i < size; i++) {
-                pairing.addPair(data.readInt(), data.readInt(), data.readInt());
+                pairing.addPair(new BlockPos(data.readInt(), data.readInt(), data.readInt()));
             }
         }
     }

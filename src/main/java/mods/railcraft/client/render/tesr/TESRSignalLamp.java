@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,10 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBox;
 import mods.railcraft.common.blocks.wayobjects.TileSignalBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
 public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
@@ -20,7 +23,8 @@ public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
         EnumFacing side = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
-        lampInfo.setTexture(side, tile.getLampTexture(aspect));
+        TextureAtlasSprite texture = RenderTools.getTexture(BlockMachineSignalBox.lampTextures[aspect.getTextureIndex()]);
+        lampInfo.setTexture(side, texture);
         lampInfo.lightSource = aspect.getTextureBrightness();
         doRenderAspect(x, y, z);
     }

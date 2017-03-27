@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ public class GuiBoxCapacitor extends GuiBasic {
     private GuiMultiButton<TileBoxCapacitor.EnumStateMode> stateMode;
 
     public GuiBoxCapacitor(TileBoxCapacitor tile) {
-        super(tile.getName());
+        super(LocalizationPlugin.translate(tile.getName()));
         this.tile = tile;
         this.ticksToPower = tile.ticksToPower;
     }
@@ -47,7 +47,7 @@ public class GuiBoxCapacitor extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.box.capacitor.duration", ticksToPower / 20), 25);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.capacitor.duration", ticksToPower / 20), 25);
     }
 
     @Override

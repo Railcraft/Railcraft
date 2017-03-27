@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,24 +12,30 @@ package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
-import mods.railcraft.common.blocks.machine.interfaces.ITileSignalLamp;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class TileBoxBase extends TileMachineBase implements ITileSignalLamp, ITileShaped {
+public abstract class TileBoxBase extends TileMachineBase implements ITileShaped {
 
-    private static final float BOUND = -0.1f;
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
+    private static final float PIXEL = 1F / 16F;
+    private static final AxisAlignedBB SELECTION_BOX = AABBFactory.start().box().expandHorizontally(-PIXEL * 2).raiseCeiling(-PIXEL).build();
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().raiseCeiling(-PIXEL).build();
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
         return BOUNDING_BOX;
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+        return SELECTION_BOX.offset(pos);
     }
 
     @Deprecated
@@ -76,4 +82,10 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileSignal
     public boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return TileEntity.INFINITE_EXTENT_AABB;
+    }
+
 }

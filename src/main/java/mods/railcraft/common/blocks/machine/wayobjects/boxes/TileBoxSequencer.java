@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,7 +17,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -113,9 +113,8 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
         if (block == Blocks.REDSTONE_WIRE)
             return true;
         if (block == Blocks.UNPOWERED_REPEATER || block == Blocks.POWERED_REPEATER) {
-            EnumFacing inputSide = state.getValue(BlockDirectional.FACING);
-            // TODO: Test this!
-            return side == inputSide;
+            EnumFacing inputSide = state.getValue(BlockHorizontal.FACING);
+            return side.getOpposite() == inputSide;
         }
         return false;
     }

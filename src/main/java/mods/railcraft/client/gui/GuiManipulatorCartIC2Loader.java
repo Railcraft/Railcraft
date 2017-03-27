@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,8 +23,8 @@ import net.minecraft.tileentity.TileEntity;
 
 public class GuiManipulatorCartIC2Loader extends TileGui {
 
-    private final String BUTTON1 = LocalizationPlugin.translate("railcraft.gui.energy.loader.empty");
-    private final String BUTTON2 = LocalizationPlugin.translate("railcraft.gui.energy.loader.fill");
+    private final String BUTTON1 = LocalizationPlugin.translate("gui.railcraft.energy.loader.empty");
+    private final String BUTTON2 = LocalizationPlugin.translate("gui.railcraft.energy.loader.fill");
     private TileIC2Loader tile;
     private boolean waitIfEmpty;
     private boolean waitTillFull;
@@ -76,7 +76,7 @@ public class GuiManipulatorCartIC2Loader extends TileGui {
         String capacity = "/" + tile.getCapacity();
         fontRendererObj.drawString(capacity, 28, 65, 0x404040);
 
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.ic2.energy.rate", tile.getTransferRate()), 80, 67, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.ic2.energy.rate", tile.getTransferRate()), 80, 67, 0x404040);
     }
 
     @Override

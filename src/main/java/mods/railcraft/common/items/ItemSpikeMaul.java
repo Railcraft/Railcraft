@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -154,12 +154,12 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     }
 
     static {
-        if (TrackKits.JUNCTION.isEnabled())
-            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.JUNCTION));
         if (TrackKits.TURNOUT.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.TURNOUT));
         if (TrackKits.WYE.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.WYE));
+        if (TrackKits.JUNCTION.isEnabled())
+            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.JUNCTION));
         ISpikeMaulTarget.spikeMaulTargets.add(new FlexTarget());
     }
 

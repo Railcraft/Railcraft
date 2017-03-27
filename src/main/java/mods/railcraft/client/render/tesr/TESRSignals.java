@@ -1,23 +1,22 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.render.tesr;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -28,6 +27,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -101,7 +101,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         OpenGL.glLineWidth(5F);
 
         OpenGL.glBegin(GL11.GL_LINES);
-        for (WorldCoordinate target : pair.getPairs()) {
+        for (BlockPos target : pair.getPairs()) {
             int color = colorProfile.getColor(tile, pair.getCoords(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
             float c2 = (float) (color >> 8 & 255) / 255.0F;
@@ -109,7 +109,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
             OpenGL.glColor3f(c1, c2, c3);
 
             OpenGL.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
-            Vec3d vec = new Vec3d(x, y, z).add(CENTER).add(new Vec3d(target)).subtract(new Vec3d(tile.getPos()));
+            Vec3d vec = new Vec3d(x, y, z).add(CENTER).add(new Vec3d(target).subtract(new Vec3d(tile.getPos())));
             OpenGL.glVertex(vec);
         }
         OpenGL.glEnd();
@@ -120,10 +120,10 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
 
     public enum ColorProfile {
         RAINBOW {
-            private final WorldCoordinate[] coords = new WorldCoordinate[2];
+            private final BlockPos[] coords = new BlockPos[2];
 
             @Override
-            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+            public int getColor(TileEntity tile, BlockPos source, BlockPos target) {
                 coords[0] = source;
                 coords[1] = target;
                 Arrays.sort(coords);
@@ -132,13 +132,13 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         },
         BLUE {
             @Override
-            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+            public int getColor(TileEntity tile, BlockPos source, BlockPos target) {
                 return EnumColor.BLUE.getHexColor();
             }
         },
         ASPECT {
             @Override
-            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+            public int getColor(TileEntity tile, BlockPos source, BlockPos target) {
                 if (tile instanceof IControllerTile) {
                     SignalAspect aspect = ((IControllerTile) tile).getController().getAspectFor(target);
                     switch (aspect) {
@@ -155,15 +155,17 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
             }
         };
 
-        public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
+        public abstract int getColor(TileEntity tile, BlockPos source, BlockPos target);
     }
 
     protected void doRenderAspect(double x, double y, double z) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
-        final float depth = 2 * RenderTools.PIXEL;
+        final float depth = 1.95F * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glColor3f(1, 1, 1);
         OpenGL.glTranslated(x, y, z);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
@@ -187,7 +189,8 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
 //            vertexBuffer.setBrightness(info.brightness);
 //        }
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
+        if (lampInfo.glow)
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

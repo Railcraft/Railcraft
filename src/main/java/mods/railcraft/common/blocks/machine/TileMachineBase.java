@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,8 @@ import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -97,6 +99,20 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         return openGui(player);
     }
 
+    public boolean openGui(EntityPlayer player) {
+        EnumGui gui = getGui();
+        if (gui != null) {
+            GuiHandler.openGui(gui, player, worldObj, getX(), getY(), getZ());
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    public EnumGui getGui() {
+        return null;
+    }
+
     public boolean isSideSolid(EnumFacing side) {
         return true;
     }
@@ -135,10 +151,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
                 updateContainingBlockInfo();
             }
         }
-    }
-
-    public boolean openGui(EntityPlayer player) {
-        return false;
     }
 
     public int getLightValue() {
