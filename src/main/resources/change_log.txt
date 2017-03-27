@@ -1,3 +1,10 @@
+10.1.0-alpha-3
+	NEW: Signal Boxes restored.
+	NEW: Pearlized Brick an Ender Pearl themed Brick added. (contribution by GeneralCamo)
+	CHANGED: Some of Brick recipes have been Tweaked to reflect various changes in Vanilla.  (contribution by GeneralCamo)
+	CHANGED: Messenger Track improvements and tweaks regarding display of the message and how you set it, WIP.
+	FIX: Fixed Actuators not rendering when Chisel(?) was installed.
+
 10.1.0-alpha-2
 	NEW: Ported the Turnout Track.
 	NEW: Added Messenger Track Kit, a track that sends a chat message when passed, WIP. (contribution by liach)
