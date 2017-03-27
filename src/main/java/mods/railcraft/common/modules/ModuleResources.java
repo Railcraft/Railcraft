@@ -94,7 +94,7 @@ public class ModuleResources extends RailcraftModulePayload {
                         else {
                             amount = 4;
                         }
-                        CraftingPlugin.addShapelessRecipe(Metal.BRONZE.getStack(Metal.Form.INGOT, amount), "IngotTin", "ingotCopper", "ingotCopper","ingotCopper");
+                        CraftingPlugin.addShapelessRecipe(Metal.BRONZE.getStack(Metal.Form.INGOT, amount), "ingotTin", "ingotCopper", "ingotCopper","ingotCopper");
                     }
 
                     type = EnumGeneric.BLOCK_LEAD;
