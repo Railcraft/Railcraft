@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,6 +49,7 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
         creativeList.add(CAPACITOR);
         creativeList.add(INTERLOCK);
         creativeList.add(SEQUENCER);
+        creativeList.add(RELAY);
 
         BlockMachineSignalBox.connectionsSenders.add(RECEIVER);
         BlockMachineSignalBox.connectionsSenders.add(RELAY);

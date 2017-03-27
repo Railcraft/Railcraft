@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.core;
 
 import mods.railcraft.common.core.Railcraft;
@@ -56,10 +57,10 @@ public class AuraKeyHandler {
                 GoggleAura aura = keyBinding.getKey();
                 if (isAuraEnabled(aura)) {
                     activeAuras.remove(aura);
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.disable", "\u00A75" + aura + "\u00A77");
+                    ChatPlugin.sendLocalizedChat(player, "gui.railcraft.aura.disable", "\u00A75" + aura + "\u00A77");
                 } else {
                     activeAuras.add(aura);
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.enable", "\u00A75" + aura + "\u00A77");
+                    ChatPlugin.sendLocalizedChat(player, "gui.railcraft.aura.enable", "\u00A75" + aura + "\u00A77");
                 }
             }
         }

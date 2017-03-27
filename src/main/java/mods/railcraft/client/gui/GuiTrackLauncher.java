@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,7 +60,7 @@ public class GuiTrackLauncher extends GuiBasic {
     @Override
     public void drawExtras(int x, int y, float f) {
         if (track != null)
-            fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.track.launcher.force", force), 61, 25, 0x404040);
+            fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.track.launcher.force", force), 61, 25, 0x404040);
     }
 
     @Override

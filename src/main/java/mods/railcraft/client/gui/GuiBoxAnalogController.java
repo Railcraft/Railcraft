@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,7 +39,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     private final EnumMap<SignalAspect, GuiTextField> textBox = new EnumMap<SignalAspect, GuiTextField>(SignalAspect.class);
 
     public GuiBoxAnalogController(TileBoxAnalog tile) {
-        super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
+        super(LocalizationPlugin.translate(tile.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
         this.tile = tile;
         for (Map.Entry<SignalAspect, BitSet> entry : tile.aspects.entrySet()) {
             aspects.put(entry.getKey(), (BitSet) entry.getValue().clone());

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,10 +31,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.Objects;
+
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
+    private static final String LOC_PREFIX = "gui.railcraft.tuner.";
+
     public ItemSignalTuner() {
-        super("railcraft.gui.tuner");
+        super(LOC_PREFIX);
     }
 
     @Override
@@ -61,26 +65,26 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
         }
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile != null) {
-            WorldCoordinate cPos = getPairData(stack);
-            if (tile instanceof IReceiverTile && cPos != null) {
+            WorldCoordinate previousTarget = getPairData(stack);
+            if (tile instanceof IReceiverTile && previousTarget != null) {
                 if (Game.isHost(worldIn)) {
                     SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
-                    if (!pos.equals(cPos)) {
-                        tile = worldIn.getTileEntity(cPos);
+                    if (!Objects.equals(pos, previousTarget.getPos())) {
+                        tile = worldIn.getTileEntity(previousTarget.getPos());
                         if (tile instanceof IControllerTile) {
                             SignalController controller = ((IControllerTile) tile).getController();
                             if (receiver.getTile() != controller.getTile()) {
                                 controller.registerReceiver(receiver);
                                 controller.endPairing();
-                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.success", controller.getLocalizationTag(), receiver.getLocalizationTag());
+                                ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "success", controller.getLocalizationTag(), receiver.getLocalizationTag());
                                 clearPairData(stack);
                                 return EnumActionResult.SUCCESS;
                             }
-                        } else if (WorldPlugin.isBlockLoaded(worldIn, cPos)) {
-                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.abandon.gone");
+                        } else if (WorldPlugin.isBlockLoaded(worldIn, previousTarget.getPos())) {
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "abandon.gone");
                             clearPairData(stack);
                         } else {
-                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.abandon.chunk");
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "abandon.chunk");
                             clearPairData(stack);
                         }
                     }
@@ -88,12 +92,12 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
             } else if (tile instanceof IControllerTile) {
                 if (Game.isHost(worldIn)) {
                     SignalController controller = ((IControllerTile) tile).getController();
-                    if (cPos == null || !pos.equals(cPos)) {
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.start", controller.getLocalizationTag());
+                    if (previousTarget == null || !Objects.equals(pos, previousTarget.getPos())) {
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "start", controller.getLocalizationTag());
                         setPairData(stack, tile);
                         controller.startPairing();
                     } else {
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.stop", controller.getLocalizationTag());
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "stop", controller.getLocalizationTag());
                         controller.endPairing();
                         clearPairData(stack);
                     }

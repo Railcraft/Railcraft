@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,8 +54,8 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
 
     public void setPairData(ItemStack stack, TileEntity tile) {
         NBTTagCompound pairData = new NBTTagCompound();
-        WorldCoordinate cpos = new WorldCoordinate(tile);
-        cpos.writeToNBT(pairData, COORD_TAG);
+        WorldCoordinate pos = new WorldCoordinate(tile);
+        pos.writeToNBT(pairData, COORD_TAG);
         InvTools.setItemDataRailcraft(stack, PAIR_DATA_TAG, pairData);
     }
 
@@ -63,19 +63,28 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
         InvTools.clearItemDataRailcraft(stack, PAIR_DATA_TAG);
     }
 
-    public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer playerIn, World worldIn, Class<? extends T> clazz, Function<T, AbstractPair> transform) {
-        if (Game.isHost(worldIn) && playerIn.isSneaking()) {
+    public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer player, World worldIn, Class<? extends T> clazz, Function<T, AbstractPair> transform) {
+        if (Game.isHost(worldIn)) {
             WorldCoordinate signalPos = getPairData(stack);
             if (signalPos != null) {
-                TileEntity tile = DimensionManager.getWorld(signalPos.getDim()).getTileEntity(signalPos);
-                if (clazz.isInstance(tile)) {
-                    transform.apply(clazz.cast(tile)).endPairing();
+                if (signalPos.getDim() != worldIn.provider.getDimension()) {
+                    abandonPairing(stack, player);
+                    return true;
+                } else if (player.isSneaking()) {
+                    TileEntity tile = DimensionManager.getWorld(signalPos.getDim()).getTileEntity(signalPos.getPos());
+                    if (clazz.isInstance(tile)) {
+                        transform.apply(clazz.cast(tile)).endPairing();
+                    }
+                    abandonPairing(stack, player);
+                    return true;
                 }
             }
-            ChatPlugin.sendLocalizedChatFromServer(playerIn, guiTagPrefix + ".abandon");
-            clearPairData(stack);
-            return true;
         }
         return false;
+    }
+
+    private void abandonPairing(ItemStack stack, EntityPlayer playerIn) {
+        ChatPlugin.sendLocalizedChatFromServer(playerIn, guiTagPrefix + "abandon");
+        clearPairData(stack);
     }
 }

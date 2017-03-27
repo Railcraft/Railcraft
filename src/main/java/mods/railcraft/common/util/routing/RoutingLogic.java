@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,7 @@ public class RoutingLogic {
             if (data != null)
                 parseTable(data);
             else
-                throw new RoutingLogicException("railcraft.gui.routing.logic.blank", null);
+                throw new RoutingLogicException("gui.railcraft.routing.logic.blank", null);
         } catch (RoutingLogicException ex) {
             error = ex;
         }
@@ -139,7 +139,7 @@ public class RoutingLogic {
         } catch (RoutingLogicException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new RoutingLogicException("railcraft.gui.routing.logic.malformed.syntax", line);
+            throw new RoutingLogicException("gui.railcraft.routing.logic.malformed.syntax", line);
         }
         if (line.equals("TRUE"))
             return new ConstantCondition(true);
@@ -150,7 +150,7 @@ public class RoutingLogic {
         } catch (NumberFormatException ignored) {
             // not an integer; pass through
         } catch (IllegalArgumentException ex) {
-            throw new RoutingLogicException("railcraft.gui.routing.logic.constant.invalid", line);
+            throw new RoutingLogicException("gui.railcraft.routing.logic.constant.invalid", line);
         }
         try {
             if (line.equals("NOT"))
@@ -162,11 +162,11 @@ public class RoutingLogic {
             if (line.equals("IF"))
                 return new IF((Condition)stack.pop(), stack.pop(), stack.pop());
         } catch (NoSuchElementException ex) {
-            throw new RoutingLogicException("railcraft.gui.routing.logic.insufficient.operands", line);
+            throw new RoutingLogicException("gui.railcraft.routing.logic.insufficient.operands", line);
         } catch (ClassCastException ex) {
-            throw new RoutingLogicException("railcraft.gui.routing.logic.operand.invalid", line);
+            throw new RoutingLogicException("gui.railcraft.routing.logic.operand.invalid", line);
         }
-        throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
+        throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", line);
     }
 
     public class RoutingLogicException extends Exception {
@@ -210,17 +210,17 @@ public class RoutingLogic {
         private ParsedCondition(String keyword, boolean supportsRegex, String line) throws RoutingLogicException {
             String keywordMatch = keyword + REGEX_SYMBOL + "?=";
             if (!line.matches(keywordMatch + ".*"))
-                throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
+                throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", line);
             this.isRegex = line.matches(keyword + REGEX_SYMBOL + "=.*");
             if (!supportsRegex && isRegex)
-                throw new RoutingLogicException("railcraft.gui.routing.logic.regex.unsupported", line);
+                throw new RoutingLogicException("gui.railcraft.routing.logic.regex.unsupported", line);
             this.value = line.replaceFirst(keywordMatch, "");
             if (isRegex)
                 try {
                     //noinspection ResultOfMethodCallIgnored
                     Pattern.compile(value);
                 } catch (PatternSyntaxException ex) {
-                    throw new RoutingLogicException("railcraft.gui.routing.logic.regex.invalid", line);
+                    throw new RoutingLogicException("gui.railcraft.routing.logic.regex.invalid", line);
                 }
         }
 
@@ -482,14 +482,14 @@ public class RoutingLogic {
             else {
                 primary = EnumColor.fromName(colors[0]);
                 if (primary == null)
-                    throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", colors[0]);
+                    throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", colors[0]);
             }
             if (colors.length == 1 || colors[1].equals("Any") || colors[1].equals("*"))
                 secondary = null;
             else {
                 secondary = EnumColor.fromName(colors[1]);
                 if (secondary == null)
-                    throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", colors[1]);
+                    throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", colors[1]);
             }
         }
 

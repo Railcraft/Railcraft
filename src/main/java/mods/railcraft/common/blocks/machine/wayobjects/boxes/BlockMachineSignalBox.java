@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -17,11 +19,16 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -41,6 +48,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     public static final PropertyBool CONNECTION_SOUTH = PropertyBool.create("connection_south");
     public static final PropertyBool CONNECTION_EAST = PropertyBool.create("connection_east");
     public static final PropertyBool CONNECTION_WEST = PropertyBool.create("connection_west");
+    public static ResourceLocation[] lampTextures = new ResourceLocation[4];
 
     protected BlockMachineSignalBox() {
         super(false);
@@ -56,6 +64,18 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         setSoundType(SoundType.METAL);
         setResistance(50);
     }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerTextures(TextureMap textureMap) {
+        super.registerTextures(textureMap);
+        lampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_box"), new Tuple<>(4, 1));
+    }
+
+//    @Override
+//    public BlockRenderLayer getBlockLayer() {
+//        return BlockRenderLayer.CUTOUT_MIPPED;
+//    }
 
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {

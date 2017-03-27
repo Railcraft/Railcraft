@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,7 +45,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
                 if (stack != null && Game.isClient(tile.getWorld()))
-                    InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tips.craft"));
+                    InvTools.addItemToolTip(stack, LocalizationPlugin.translate("gui.railcraft.rolling.machine.tips.craft"));
             }
 
         };

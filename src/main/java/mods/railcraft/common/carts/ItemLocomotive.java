@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -118,7 +118,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         super.addInformation(stack, player, info, adv);
         GameProfile owner = getOwner(stack);
         if (owner.getName() != null && !owner.getName().equals("[Unknown]")) {
-            String format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.owner");
+            String format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.owner");
             info.add(String.format(format, owner.getName()));
         }
 
@@ -128,27 +128,27 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         if (renderer != null)
             modelName = renderer.getDisplayName();
         else
-            modelName = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.model.default");
-        String format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.model");
+            modelName = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.model.default");
+        String format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.model");
         info.add(String.format(format, modelName));
 
         EnumColor primary = getPrimaryColor(stack);
-        format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.primary");
+        format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.primary");
         info.add(String.format(format, primary.getTranslatedName()));
 
         EnumColor secondary = getSecondaryColor(stack);
-        format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.secondary");
+        format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.secondary");
         info.add(String.format(format, secondary.getTranslatedName()));
 
         float whistle = getWhistlePitch(stack);
-        format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.whistle");
+        format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.whistle");
         info.add(String.format(format, whistle < 0 ? "???" : String.format("%.2f", whistle)));
 
         String emblemIdent = getEmblem(stack);
         if (emblemIdent != null && !emblemIdent.isEmpty() && EmblemToolsClient.packageManager != null) {
             Emblem emblem = EmblemToolsClient.packageManager.getEmblem(emblemIdent);
             if (emblem != null) {
-                format = LocalizationPlugin.translate("railcraft.gui.locomotive.tips.item.emblem");
+                format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.emblem");
                 info.add(String.format(format, emblem.displayName));
             }
         }

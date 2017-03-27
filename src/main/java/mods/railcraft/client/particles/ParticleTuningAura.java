@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
 import mods.railcraft.common.util.effects.EffectManager;
@@ -22,10 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleTuningAura extends ParticleBase {
     private final IEffectSource source;
+    private final IEffectSource dest;
 
-    public ParticleTuningAura(World world, Vec3d start, IEffectSource source, int colorSeed) {
+    public ParticleTuningAura(World world, Vec3d start, IEffectSource source, IEffectSource dest, int colorSeed) {
         super(world, start);
         this.source = source;
+        this.dest = dest;
 
         calculateVector();
 
@@ -41,16 +44,16 @@ public class ParticleTuningAura extends ParticleBase {
         this.particleGreen = c2 * variant;
         this.particleBlue = c3 * variant;
         this.particleMaxAge = 2000;
-        this.noClip = true;
+        this.canCollide = false;
         this.dimAsAge = true;
         setParticleTextureIndex((int) (Math.random() * 8.0D));
     }
 
     private void calculateVector() {
-        Vec3d endPoint = source.getPos();
+        Vec3d endPoint = dest.getPos();
         Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
-        Vec3d vel = vecParticle.subtract(endPoint);
+        Vec3d vel = endPoint.subtract(vecParticle);
         vel = vel.normalize();
 
         float velScale = 0.1f;
@@ -68,7 +71,7 @@ public class ParticleTuningAura extends ParticleBase {
         this.prevPosY = posY;
         this.prevPosZ = posZ;
 
-        if (source.isDead()) {
+        if (source.isDead() || dest.isDead()) {
             setExpired();
             return;
         }
@@ -84,12 +87,12 @@ public class ParticleTuningAura extends ParticleBase {
         }
         this.particleAge++;
 
-        if (getPos().squareDistanceTo(source.getPos()) <= 0.3) {
+        if (getPos().squareDistanceTo(dest.getPos()) <= 0.3) {
             setExpired();
             return;
         }
 
-        if (source instanceof EffectSourceEntity) {
+        if (dest instanceof EffectSourceEntity) {
             calculateVector();
         }
 

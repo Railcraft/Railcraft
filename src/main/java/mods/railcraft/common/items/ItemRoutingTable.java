@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -217,7 +217,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             NBTTagString author = (NBTTagString) nbt.getTag("author");
 
             if (author != null)
-                list.add(TextFormatting.GRAY + String.format(LocalizationPlugin.translate("railcraft.gui.routing.table.editor"), author.getString()));
+                list.add(TextFormatting.GRAY + String.format(LocalizationPlugin.translate("gui.railcraft.routing.table.editor"), author.getString()));
         }
     }
 

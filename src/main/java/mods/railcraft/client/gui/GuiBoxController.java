@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ public class GuiBoxController extends GuiBasic {
     private SignalAspect poweredAspect;
 
     public GuiBoxController(TileBoxController t) {
-        super(t.getName());
+        super(LocalizationPlugin.translate(t.getName()));
         tile = t;
         defaultAspect = t.defaultAspect;
         poweredAspect = t.poweredAspect;
@@ -47,9 +47,9 @@ public class GuiBoxController extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.box.controller.aspect.default"), 25);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.default"), 25);
         GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(defaultAspect.getLocalizationTag()), 35);
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.box.controller.aspect.redstone"), 60);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.redstone"), 60);
         GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(poweredAspect.getLocalizationTag()), 70);
     }
 

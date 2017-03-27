@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,7 @@ import mods.railcraft.common.util.network.PacketBuilder;
 
 public class GuiManipulatorCart extends TileGui {
 
-    private final String CART_FILTER_LABEL = LocalizationPlugin.translate("railcraft.gui.filters.carts");
+    private final String CART_FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters.carts");
     private GuiMultiButton transferMode;
     private GuiMultiButton redstoneMode;
     private final TileManipulatorCart tile;

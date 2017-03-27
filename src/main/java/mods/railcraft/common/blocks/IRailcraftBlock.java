@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,10 +12,12 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.render.models.resource.ModelManager;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -59,10 +61,26 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
         ModelManager.registerBlockItemModel(stack, getItemRenderState(variant));
     }
 
+    @SideOnly(Side.CLIENT)
     default ResourceLocation getBlockTexture() {
         return ((Block) this).getRegistryName();
     }
 
+    @SideOnly(Side.CLIENT)
+    default void registerTextures(TextureMap textureMap) {
+        TextureAtlasSheet.unstitchIcons(textureMap, getBlockTexture(), getTextureDimensions());
+        IVariantEnum[] variants = getVariants();
+        if (variants != null) {
+            for (IVariantEnum variant : variants) {
+                if (variant instanceof IVariantEnumBlock)
+                    TextureAtlasSheet.unstitchIcons(textureMap,
+                            new ResourceLocation(getRegistryName() + "_" + variant.getResourcePathSuffix()),
+                            ((IVariantEnumBlock) variant).getTextureDimensions());
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
     default Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(1, 1);
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -28,11 +27,9 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,19 +44,19 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     private short ticksPowered;
     public short ticksToPower = 200;
     private SignalAspect aspect = SignalAspect.OFF;
-    private final MultiButtonController<EnumStateMode> stateModeController = MultiButtonController.create(EnumStateMode.IMMEDIATE.ordinal(), EnumStateMode.values());
+    private final MultiButtonController<EnumStateMode> stateModeController = MultiButtonController.create(EnumStateMode.RISING_EDGE.ordinal(), EnumStateMode.values());
 
     public TileBoxCapacitor() {
     }
 
     public enum EnumStateMode implements IMultiButtonState {
-        IMMEDIATE("railcraft.gui.box.capacitor.immediate"),
-        DELAYED("railcraft.gui.box.capacitor.delayed");
+        RISING_EDGE("rising"),
+        FALLING_EDGE("falling");
         private final String label;
         private final ToolTip tip;
 
         EnumStateMode(String label) {
-            this.label = label;
+            this.label = "gui.railcraft.box.capacitor." + label + ".name";
             this.tip = ToolTip.buildToolTip(label + ".tips");
         }
 
@@ -90,12 +87,10 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         return SignalBoxVariant.CAPACITOR;
     }
 
+    @Nullable
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
-            return false;
-        GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, getPos());
-        return true;
+    public EnumGui getGui() {
+        return EnumGui.BOX_CAPACITOR;
     }
 
     @Override
@@ -107,7 +102,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
 
         if (ticksPowered > 0) {
             ticksPowered--;
-            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.DELAYED)) { //new behavior
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.FALLING_EDGE)) { //new behavior
                 SignalAspect tmpaspect = SignalAspect.GREEN;
                 Boolean hasInput = false;
                 if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos()))
@@ -145,7 +140,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
         if (ticksPowered <= 0 && p) {
             ticksPowered = ticksToPower;
-            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.IMMEDIATE))
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.RISING_EDGE))
                 aspect = SignalAspect.GREEN;
             updateNeighbors();
         }
@@ -155,7 +150,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
         if (neighbor.isEmittingRedstone(side)) {
             ticksPowered = ticksToPower;
-            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.IMMEDIATE))
+            if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.RISING_EDGE))
                 aspect = neighbor.getBoxSignalAspect(side);
             updateNeighbors();
         }
@@ -197,7 +192,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         if (data.hasKey("mode"))
             stateModeController.readFromNBT(data, "mode");
         else //set old boxes to immediate mode to retain old behavior
-            stateModeController.setCurrentState(EnumStateMode.IMMEDIATE.ordinal());
+            stateModeController.setCurrentState(EnumStateMode.RISING_EDGE.ordinal());
 
     }
 

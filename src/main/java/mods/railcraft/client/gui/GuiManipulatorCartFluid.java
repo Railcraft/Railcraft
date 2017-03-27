@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,7 +17,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiManipulatorCartFluid extends GuiManipulatorCart {
 
-    private final String FILTER_LABEL = LocalizationPlugin.translate("railcraft.gui.filters");
+    private final String FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters");
     private final TileFluidManipulator tile;
     private final InventoryPlayer inv;
 

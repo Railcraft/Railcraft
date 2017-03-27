@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -78,18 +78,18 @@ public class CrowbarHandler {
                         if (lm.areLinked(cart, last, false)) {
                             lm.breakLink(cart, last);
                             used = true;
-                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.broken");
+                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.broken");
                             LinkageManager.printDebug("Reason For Broken Link: User removed link.");
                         } else {
                             used = lm.createLink(last, (EntityMinecart) entity);
                             if (used)
-                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.created");
+                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.created");
                         }
                         if (!used)
-                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.failed");
+                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.failed");
                     } else {
                         linkMap.put(thePlayer, (EntityMinecart) entity);
-                        ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.started");
+                        ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.started");
                     }
                 }
                 if (used)

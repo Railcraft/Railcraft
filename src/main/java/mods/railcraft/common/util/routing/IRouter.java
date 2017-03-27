@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,8 +23,8 @@ public interface IRouter extends ISecureObject<LockButtonState>, IGuiReturnHandl
 
     enum RoutingButtonState implements IMultiButtonState {
 
-        PUBLIC("railcraft.gui.routing.type.public"),
-        PRIVATE("railcraft.gui.routing.type.private");
+        PUBLIC("gui.railcraft.routing.type.public"),
+        PRIVATE("gui.railcraft.routing.type.private");
         private final String labelTag;
 
         RoutingButtonState(String labelTag) {

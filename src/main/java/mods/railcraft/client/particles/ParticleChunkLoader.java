@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
 import mods.railcraft.common.items.ItemGoggles;
@@ -36,7 +37,7 @@ public class ParticleChunkLoader extends ParticleBase {
         this.particleGreen *= 0.3F;
         this.particleRed *= 0.9F;
         this.particleMaxAge = 250;
-        this.noClip = true;
+        this.canCollide = false;
         this.dimAsAge = true;
         setParticleTextureIndex((int) (Math.random() * 8.0D));
     }
