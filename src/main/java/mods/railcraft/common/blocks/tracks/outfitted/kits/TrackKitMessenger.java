@@ -91,7 +91,7 @@ public class TrackKitMessenger extends TrackKitPowered {
         setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.set", title));
     }
 
-    public void setSubTitle(ICommandSender setter, ITextComponent subtitle) {
+    public void setSubtitle(ICommandSender setter, ITextComponent subtitle) {
         this.subtitle = subtitle;
         subtitleSet = true;
         setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set", subtitle));
