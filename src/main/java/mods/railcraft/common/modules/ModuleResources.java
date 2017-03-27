@@ -86,7 +86,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     type = EnumGeneric.BLOCK_BRONZE;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.BRONZE);
-                    if ((RailcraftConfig.forceEnableBronzeRecipe() || !OreDictPlugin.oreExists("dustBronze")) && RailcraftItems.INGOT.isEnabled()) {
+                    if ((RailcraftConfig.forceEnableBronzeRecipe() && RailcraftItems.INGOT.isEnabled())) {
                         int amount;
                         if (RailcraftConfig.enableHarderBronze()) {
                             amount = 3;
