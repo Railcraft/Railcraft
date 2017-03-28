@@ -50,10 +50,10 @@ public enum EnumGeneric implements IVariantEnumBlock {
     static {
         creativeList.add(BLOCK_COPPER);
         creativeList.add(BLOCK_TIN);
-        creativeList.add(BLOCK_BRONZE);
         creativeList.add(BLOCK_LEAD);
         creativeList.add(BLOCK_SILVER);
         creativeList.add(BLOCK_STEEL);
+        creativeList.add(BLOCK_BRONZE);
         creativeList.add(BLOCK_CONCRETE);
         creativeList.add(BLOCK_CREOSOTE);
         creativeList.add(BLOCK_COKE);

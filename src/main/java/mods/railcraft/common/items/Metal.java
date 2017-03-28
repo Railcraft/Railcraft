@@ -39,9 +39,9 @@ public enum Metal implements IVariantEnum {
     GOLD("Gold"),
     COPPER("Copper"),
     TIN("Tin"),
-    BRONZE("Bronze"),
     LEAD("Lead"),
-    SILVER("Silver");
+    SILVER("Silver"),
+    BRONZE("Bronze");
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     //    private static final EnumBiMap<Metal, EnumIngot> ingotMap = EnumBiMap.create(Metal.class, EnumIngot.class);
@@ -77,11 +77,11 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(SILVER, EnumOre.POOR_SILVER);
 
         blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
-        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
         blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
+        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
 
     }
 
