@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public class CommandTrack extends SubCommand {
                 String message = CommandBase.buildString(args, 3);
 
                 try {
-                    track.setSubTitle(sender, ITextComponent.Serializer.jsonToComponent(message));
+                    track.setSubtitle(sender, ITextComponent.Serializer.jsonToComponent(message));
                 } catch (JsonParseException ex) {
                     throw CommandHelpers.toSyntaxException(ex);
                 }
