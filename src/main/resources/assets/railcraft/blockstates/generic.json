@@ -15,10 +15,10 @@
       "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
       "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
-      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}},
       "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
       "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
-      "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}}
+      "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},
+      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}}
     }
   }
 }
