@@ -84,16 +84,24 @@ public class TrackKitMessenger extends TrackKitPowered {
         return subtitle;
     }
 
-    public void setTitle(ICommandSender setter, ITextComponent title) {
+    public void setTitle(ITextComponent title) {
         this.title = title;
         if (!subtitleSet)
             this.subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.standard");
+    }
+
+    public void setSubtitle(ITextComponent subtitle) {
+        this.subtitle = subtitle;
+        subtitleSet = true;
+    }
+
+    public void setTitle(ICommandSender setter, ITextComponent title) {
+        setTitle(title);
         setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.set", title));
     }
 
-    public void setSubTitle(ICommandSender setter, ITextComponent subtitle) {
-        this.subtitle = subtitle;
-        subtitleSet = true;
+    public void setSubtitle(ICommandSender setter, ITextComponent subtitle) {
+        setSubtitle(subtitle);
         setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set", subtitle));
     }
 

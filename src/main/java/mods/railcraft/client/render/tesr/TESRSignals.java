@@ -18,7 +18,6 @@ import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -90,7 +89,6 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
             return;
         }
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib();
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -114,7 +112,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         }
         OpenGL.glEnd();
 
-        OpenGL.glPopAttrib();
+        OpenGL.glEnable(GL11.GL_TEXTURE_2D);
         OpenGL.glPopMatrix();
     }
 
@@ -164,33 +162,17 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         final float depth = 1.95F * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();
+
+        // no idea why this is necessary, but without it the texture brightness varies depending on what is on screen
+        GL11.glNormal3f(0.0F, 0.0F, 1.0F);
+
         OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glColor3f(1, 1, 1);
         OpenGL.glTranslated(x, y, z);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-//        if (info.brightness < 0) {
-//            float light;
-//            float lightBottom = 0.5F;
-//            if (info.light < 0) {
-//                light = 1;
-//            } else {
-//                light = info.light;
-//            }
-//            int br;
-//            if (info.brightness < 0) {
-//                br = info.template.getMixedBrightnessForBlock(tile.getWorld(), tile.getPos());
-//            } else {
-//                br = info.brightness;
-//            }
-//            vertexBuffer.setBrightness(br);
-//            vertexBuffer.putColorRGB_F(lightBottom * light, lightBottom * light, lightBottom * light, 0);
-//        } else {
-//            vertexBuffer.setBrightness(info.brightness);
-//        }
-
         if (lampInfo.glow)
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
+            RenderTools.setBrightness(0.875F);
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
@@ -224,6 +206,9 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         }
 
         tessellator.draw();
+
+        if (lampInfo.glow)
+            RenderTools.resetBrightness();
 
         lampInfo.resetSidesAndLight();
 

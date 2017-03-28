@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -287,6 +287,6 @@ public class OpenGL {
     }
 
     public static void glLineWidth(float width) {
-        GL11.glLineWidth(width);
+        GlStateManager.glLineWidth(width);
     }
 }
