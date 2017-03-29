@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.plugins.jei;
+package mods.railcraft.common.plugins.jei.rolling;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
@@ -17,6 +17,7 @@ import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeHandler;
 import mezz.jei.plugins.vanilla.crafting.ShapedRecipesHandler;
 import mezz.jei.plugins.vanilla.crafting.ShapelessOreRecipeHandler;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipesHandler;
+import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;

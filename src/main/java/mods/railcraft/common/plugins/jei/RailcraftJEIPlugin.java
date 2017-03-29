@@ -19,6 +19,9 @@ import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
+import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeHandler;
+import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

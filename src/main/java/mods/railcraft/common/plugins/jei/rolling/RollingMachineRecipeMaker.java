@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.plugins.jei;
+package mods.railcraft.common.plugins.jei.rolling;
 
 import mezz.jei.api.IJeiHelpers;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
