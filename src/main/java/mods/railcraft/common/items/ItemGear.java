@@ -34,6 +34,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
 
         OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));
         OreDictionary.registerOre("gearSteel", RailcraftItems.GEAR.getStack(1, EnumGear.STEEL));
+        OreDictionary.registerOre("gearBronze", RailcraftItems.GEAR.getStack(1, EnumGear.BRONZE));
         OreDictionary.registerOre("gearGoldPlate", RailcraftItems.GEAR.getStack(1, EnumGear.GOLD_PLATE));
         OreDictionary.registerOre("gearBushing", RailcraftItems.GEAR.getStack(1, EnumGear.BUSHING));
 
@@ -47,7 +48,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
         CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
                 "TT",
                 "TT",
-                'T', "ingotTin");
+                'T', "ingotBronze");
 
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.GOLD_PLATE),
                 " G ",
@@ -69,6 +70,12 @@ public class ItemGear extends ItemRailcraftSubtyped {
                 " I ",
                 'I', "ingotSteel",
                 'B', "gearBushing");
+        CraftingPlugin.addRecipe(gear.getStack(EnumGear.BRONZE),
+                " I ",
+                "IBI",
+                " I ",
+                'I', "ingotBronze",
+                'B', "gearBushing");
     }
 
     public enum EnumGear implements IVariantEnum {
@@ -76,7 +83,8 @@ public class ItemGear extends ItemRailcraftSubtyped {
         GOLD_PLATE("ingotGold"),
         IRON("blockIron"),
         STEEL("blockSteel"),
-        BUSHING("ingotTin");
+        BUSHING("ingotBronze"),
+        BRONZE("blockBronze");
         public static final EnumGear[] VALUES = values();
         private Object alternate;
 

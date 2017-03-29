@@ -21,7 +21,7 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemPlate extends ItemMetal {
 
     public ItemPlate() {
-        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD, SILVER));
+        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD, SILVER, BRONZE, GOLD));
     }
 
     @Override

@@ -25,6 +25,7 @@ import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
@@ -355,7 +356,7 @@ public class ModuleFactory extends RailcraftModulePayload {
             public void postInit() {
                 if (!SimpleMachineVariant.ROLLING_MACHINE.isAvailable())
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
-                if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable())
+                if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
                 List<ItemStack> logs = new ArrayList<ItemStack>(25);

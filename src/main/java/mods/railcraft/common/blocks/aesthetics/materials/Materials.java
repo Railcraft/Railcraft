@@ -141,6 +141,7 @@ public enum Materials implements IVariantEnum {
     TIN("tin", EnumGeneric.BLOCK_TIN::getDefaultState),
     LEAD("lead", EnumGeneric.BLOCK_LEAD::getDefaultState),
     GOLD("gold", Blocks.GOLD_BLOCK::getDefaultState),
+    BRONZE("bronze", EnumGeneric.BLOCK_BRONZE::getDefaultState),
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
@@ -241,6 +242,7 @@ public enum Materials implements IVariantEnum {
         TIN.oreTag = "blockTin";
         LEAD.oreTag = "blockLead";
         STEEL.oreTag = "blockSteel";
+        BRONZE.oreTag = "blockBronze";
 
         CONCRETE.sound = SoundType.STONE;
 
@@ -252,6 +254,7 @@ public enum Materials implements IVariantEnum {
         TIN.sound = SoundType.METAL;
         LEAD.sound = SoundType.METAL;
         STEEL.sound = SoundType.METAL;
+        BRONZE.sound = SoundType.METAL;
 
         for (Materials mat : VALUES) {
             NAMES.put(mat.name(), mat);
@@ -386,6 +389,8 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_LEAD.getHardness();
             case STEEL:
                 return EnumGeneric.BLOCK_STEEL.getHardness();
+            case BRONZE:
+                return EnumGeneric.BLOCK_BRONZE.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -410,6 +415,8 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_LEAD.getResistance() * 3f / 5f;
             case STEEL:
                 return EnumGeneric.BLOCK_STEEL.getResistance() * 3f / 5f;
+            case BRONZE:
+                return EnumGeneric.BLOCK_BRONZE.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)
