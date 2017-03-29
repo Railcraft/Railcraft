@@ -83,8 +83,8 @@ public class ItemGear extends ItemRailcraftSubtyped {
         GOLD_PLATE("ingotGold"),
         IRON("blockIron"),
         STEEL("blockSteel"),
-        BRONZE("blockBronze"),
-        BUSHING("ingotBronze");
+        BUSHING("ingotBronze"),
+        BRONZE("blockBronze");
         public static final EnumGear[] VALUES = values();
         private Object alternate;
 
