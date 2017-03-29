@@ -39,7 +39,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
     public ContainerRollingMachine(final InventoryPlayer inventoryplayer, final TileRollingMachine tile) {
         super(tile);
         this.tile = tile;
-        craftMatrix = tile.getCraftMatrix();
+        craftMatrix = tile.getCraftMatrix(this);
         craftResult = new InventoryCraftResult() {
             @Override
             public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {

@@ -36,12 +36,12 @@ public class RollingMachineRecipeHandler implements IRecipeHandler<RollingMachin
 
     @Override
     public String getRecipeCategoryUid() {
-        return RollingMachineRecipeCategory.CATEGORY_UID;
+        return RailcraftJEIPlugin.ROLLING;
     }
 
     @Override
     public String getRecipeCategoryUid(RollingMachineRecipeWrapper recipe) {
-        return RollingMachineRecipeCategory.CATEGORY_UID;
+        return RailcraftJEIPlugin.ROLLING;
     }
 
     @Override

@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import java.util.List;
 
 public class RollingMachineRecipeCategory extends BlankRecipeCategory<RollingMachineRecipeWrapper> {
-    public static final String CATEGORY_UID = "railcraft.rolling";
 
     private static final int craftOutputSlot = 0;
     private static final int craftInputSlot1 = 1;
@@ -45,7 +44,7 @@ public class RollingMachineRecipeCategory extends BlankRecipeCategory<RollingMac
 
     @Override
     public String getUid() {
-        return CATEGORY_UID;
+        return RailcraftJEIPlugin.ROLLING;
     }
 
     @Override

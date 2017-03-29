@@ -11,14 +11,18 @@
 package mods.railcraft.common.plugins.jei;
 
 import mezz.jei.api.*;
+import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mods.railcraft.client.gui.GuiRollingMachine;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
-import net.minecraft.client.gui.inventory.GuiCrafting;
+import mods.railcraft.common.core.RailcraftObjects;
+import mods.railcraft.common.gui.containers.ContainerRollingMachine;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 10/7/2016 for Railcraft.
@@ -27,8 +31,10 @@ import javax.annotation.Nonnull;
  */
 @JEIPlugin
 public class RailcraftJEIPlugin extends BlankModPlugin {
+    public static final String ROLLING = "railcraft.rolling";
+
     @Override
-    public void register(@Nonnull IModRegistry registry) {
+    public void register(IModRegistry registry) {
         ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
         Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
         if (trackOutfitted != null)
@@ -40,13 +46,26 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
 
         registry.addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
 
+        registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
+
+        IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
+        recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachine.class, ROLLING, 2, 9, 11, 36);
+
         ItemStack rollingMachine = RailcraftBlocks.MACHINE_SIMPLE.getStack(SimpleMachineVariant.ROLLING_MACHINE);
         if (rollingMachine != null) {
-            registry.addRecipeClickArea(GuiCrafting.class, 88, 32, 28, 23, RollingMachineRecipeCategory.CATEGORY_UID);
-
-            registry.addRecipeCategoryCraftingItem(rollingMachine, RollingMachineRecipeCategory.CATEGORY_UID);
-
+            registry.addRecipeCategoryCraftingItem(rollingMachine, ROLLING);
             registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()));
+        }
+
+        RailcraftObjects.processBlockVariants((block, variant) -> addDescription(registry, block.getStack(variant)));
+        RailcraftObjects.processItemVariants((item, variant) -> addDescription(registry, item.getStack(variant)));
+    }
+
+    private void addDescription(IModRegistry registry, @Nullable ItemStack stack) {
+        if (stack != null) {
+            String locTag = stack.getUnlocalizedName() + ".desc";
+            if (LocalizationPlugin.hasTag(locTag))
+                registry.addDescription(stack, locTag);
         }
     }
 }
