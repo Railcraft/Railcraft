@@ -40,7 +40,8 @@ public enum Metal implements IVariantEnum {
     COPPER("Copper"),
     TIN("Tin"),
     LEAD("Lead"),
-    SILVER("Silver");
+    SILVER("Silver"),
+    BRONZE("Bronze");
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     //    private static final EnumBiMap<Metal, EnumIngot> ingotMap = EnumBiMap.create(Metal.class, EnumIngot.class);
@@ -80,6 +81,7 @@ public enum Metal implements IVariantEnum {
         blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
+        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
 
     }
 
@@ -209,6 +211,8 @@ public enum Metal implements IVariantEnum {
                     case GOLD:
                         return Blocks.GOLD_ORE.getDefaultState();
                     case STEEL:
+                        return null;
+                    case BRONZE:
                         return null;
                 }
                 return super.getState(metal);

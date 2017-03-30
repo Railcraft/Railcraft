@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -113,7 +113,7 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
         if (oreTag != null)
             return oreTag;
         if (variant != null && getHasSubtypes())
-            return new ItemStack(this, 1, variant.ordinal());
+            return getStack(variant);
         return this;
     }
 

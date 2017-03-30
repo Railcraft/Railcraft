@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     private static final int MAX_ENERGY = ACTIVATION_POWER * PROCESS_TIME;
     private static final int SLOT_RESULT = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 10);
-    private final InventoryCrafting craftMatrix = new InventoryCrafting(new RollingContainer(), 3, 3);
+    private final RollingContainer matrixListener = new RollingContainer();
+    private final InventoryCrafting craftMatrix = new InventoryCrafting(matrixListener, 3, 3);
     private final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", (IInventory) this);
     private final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
@@ -70,9 +71,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return SimpleMachineVariant.ROLLING_MACHINE;
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("progress", progress);
@@ -86,7 +86,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         progress = data.getInteger("progress");
@@ -129,7 +129,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return (progress * i) / PROCESS_TIME;
     }
 
-    public InventoryCrafting getCraftMatrix() {
+    public InventoryCrafting getCraftMatrix(Container listener) {
+        matrixListener.listener = listener;
         return craftMatrix;
     }
 
@@ -257,19 +258,18 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return true;
     }
 
-
     @Override
-    public int[] getSlotsForFace( EnumFacing side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn,  EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack,  EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nullable ItemStack stack, EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
@@ -308,11 +308,11 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void openInventory( EntityPlayer player) {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory( EntityPlayer player) {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
@@ -349,7 +349,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public boolean isUseableByPlayer( EntityPlayer player) {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -386,10 +386,17 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
 
     private static class RollingContainer extends Container {
 
+        public Container listener;
+
         @Override
-        public boolean canInteractWith( EntityPlayer entityplayer) {
+        public boolean canInteractWith(EntityPlayer entityplayer) {
             return true;
         }
 
+        @Override
+        public void onCraftMatrixChanged(IInventory inventoryIn) {
+            if (listener != null)
+                listener.onCraftMatrixChanged(inventoryIn);
+        }
     }
 }

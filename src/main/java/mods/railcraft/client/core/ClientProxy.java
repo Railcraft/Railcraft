@@ -10,7 +10,6 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
@@ -29,11 +28,9 @@ import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.CommonProxy;
-import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
@@ -43,7 +40,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -57,9 +53,6 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -108,34 +101,48 @@ public class ClientProxy extends CommonProxy {
             }
         });
 
-        Set<IRailcraftObjectContainer<IRailcraftItemSimple>> items = new HashSet<>();
-        items.addAll(Arrays.asList(RailcraftItems.VALUES));
-        items.addAll(Arrays.asList(RailcraftCarts.VALUES));
-        for (IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer : items) {
-            itemContainer.getObject().ifPresent(IRailcraftItemSimple::initializeClient);
-        }
+//        Set<IRailcraftObjectContainer<IRailcraftItemSimple>> items = new HashSet<>();
+//        items.addAll(Arrays.asList(RailcraftItems.VALUES));
+//        items.addAll(Arrays.asList(RailcraftCarts.VALUES));
+//        for (IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer : items) {
+//            itemContainer.getObject().ifPresent(IRailcraftItemSimple::initializeClient);
+//        }
 
-        for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
-            ItemBlock item = blockContainer.item();
-            blockContainer.getObject().ifPresent(block -> {
-                block.initializeClient();
-                if (item != null) {
-                    ((IRailcraftObject) item).initializeClient();
-                    IVariantEnum[] variants = block.getVariants();
-                    if (variants != null) {
-                        for (IVariantEnum variant : variants) {
-                            ItemStack stack = blockContainer.getStack(variant);
-                            if (stack != null)
-                                block.registerItemModel(stack, variant);
-                        }
-                    } else {
-                        ItemStack stack = blockContainer.getStack();
-                        if (stack != null)
-                            block.registerItemModel(stack, null);
-                    }
-                }
-            });
-        }
+        RailcraftObjects.processItems(IRailcraftItemSimple::initializeClient);
+
+//        for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
+//            ItemBlock item = blockContainer.item();
+//            blockContainer.getObject().ifPresent(block -> {
+//                block.initializeClient();
+//                if (item != null) {
+//                    ((IRailcraftObject) item).initializeClient();
+//                    IVariantEnum[] variants = block.getVariants();
+//                    if (variants != null) {
+//                        for (IVariantEnum variant : variants) {
+//                            ItemStack stack = blockContainer.getStack(variant);
+//                            if (stack != null)
+//                                block.registerItemModel(stack, variant);
+//                        }
+//                    } else {
+//                        ItemStack stack = blockContainer.getStack();
+//                        if (stack != null)
+//                            block.registerItemModel(stack, null);
+//                    }
+//                }
+//            });
+//        }
+
+        RailcraftObjects.processBlocks(
+                (block, item) -> {
+                    block.initializeClient();
+                    if (item != null)
+                        item.initializeClient();
+                },
+                (block, variant) -> {
+                    ItemStack stack = block.getStack(variant);
+                    if (stack != null)
+                        block.registerItemModel(stack, variant);
+                });
 
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);
