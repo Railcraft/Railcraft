@@ -39,7 +39,7 @@ public class RollingMachineRecipeCategory extends BlankRecipeCategory<RollingMac
     public RollingMachineRecipeCategory(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation("minecraft", "textures/gui/container/crafting_table.png");
         background = guiHelper.createDrawable(location, 29, 16, width, height);
-        localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.rollingMachine");
+        localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.rolling");
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot1, craftOutputSlot);
     }
 
