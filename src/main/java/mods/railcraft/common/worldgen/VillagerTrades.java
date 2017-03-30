@@ -9,11 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.api.tracks.TrackKit;
+import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -25,44 +27,49 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.ToIntFunction;
+
+import javax.annotation.Nullable;
 
 public class VillagerTrades {
 
     public static void define(VillagerRegistry.VillagerCareer career) {
-        career.addTrade(1, new GenericTrade(offer(Items.COAL, 16, 24), offer(Items.EMERALD)));
-        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(Items.COAL, 24, 32)));
+        BiFunction<ItemStack, Random, ItemStack> enchanter = (stack, rand) -> {
+            EnchantmentHelper.addRandomEnchantment(rand, stack, 15 + rand.nextInt(16), true);
+            return stack;
+        };
+        career.addTrade(1, new GenericTrade(offer(Items.COAL, 12, 16), offer(Items.EMERALD)));
+        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(Items.COAL, 16, 24)));
 
         career.addTrade(1, new GenericTrade(offer(RailcraftItems.COKE, 8, 12), offer(Items.EMERALD)));
-        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(RailcraftItems.COKE, 12, 16)));
+        career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(RailcraftItems.COKE, 8, 12)));
 
         career.addTrade(1, new GenericTrade(offer(Blocks.RAIL, 30, 34), offer(Items.EMERALD, 2, 3)));
 
-
-        career.addTrade(2, new GenericTrade(offer(Blocks.ACTIVATOR_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
-        career.addTrade(2, new GenericTrade(offer(Blocks.GOLDEN_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
-        career.addTrade(2, new GenericTrade(offer(Blocks.DETECTOR_RAIL, 14, 18), offer(Items.EMERALD, 2, 3)));
-
-        for (TrackKits track : TrackKits.VALUES) {
-            if (track.isEnabled())
-                career.addTrade(2, new GenericTrade(offer(track.getStack(), track.recipeOutput - 2, track.recipeOutput + 2), offer(Items.EMERALD, 2, 3)));
+        for (Map.Entry<String, TrackKit> track : TrackRegistry.TRACK_KIT.getVariants().entrySet()) {
+            TrackKit kit = track.getValue();
+            if (kit != TrackRegistry.getMissingTrackKit() && kit.isEnabled()) {
+                career.addTrade(2, new GenericTrade(offer(kit.getTrackKitItem(), 2), offer(Items.EMERALD, 1, 3)));
+            }
         }
 
-        career.addTrade(2, new GenericTrade(offer(Items.MINECART), offer(Items.EMERALD, 8, 10)));
-        career.addTrade(2, new GenericTrade(offer(Items.EMERALD, 6, 8), offer(Items.MINECART)));
+        career.addTrade(2, new GenericTrade(offer(Items.MINECART), offer(Items.EMERALD, 2, 5)));
 
         career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getStack()), offer(Items.EMERALD, 32, 40)));
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_IRON), offer(Items.EMERALD, 7, 9)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 14, 18)));
+        career.addTrade(3,
+            new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 24, 54)).setEnchanter(enchanter).setUse((t) -> 1));
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.WHISTLE_TUNER), offer(Items.EMERALD, 1, 2)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.MAG_GLASS), offer(Items.EMERALD, 1, 2)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.SIGNAL_BLOCK_SURVEYOR), offer(Items.EMERALD, 6, 8)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.SIGNAL_TUNER), offer(Items.EMERALD, 6, 8)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.GOGGLES), offer(Items.EMERALD, 4, 8)));
-        career.addTrade(3, new GenericTrade(offer(RailcraftItems.OVERALLS), offer(Items.EMERALD, 2, 4)));
+        career.addTrade(3, new GenericTrade(offer(RailcraftItems.OVERALLS), offer(Items.EMERALD, 19, 32)).setEnchanter(enchanter).setUse((t) -> 1));
     }
 
     //    private float baseChance;
@@ -79,6 +86,7 @@ public class VillagerTrades {
     }
 
     private static class Offer {
+
         @Nullable
         public final Object obj;
         public final int min, max;
@@ -90,32 +98,44 @@ public class VillagerTrades {
         }
     }
 
-    public static class GenericTrade implements EntityVillager.ITradeList {
+    private static class GenericTrade implements EntityVillager.ITradeList {
+
+        private static final BiFunction<ItemStack, Random, ItemStack> DEFAULT_ENCHANTER = (stack, rand) -> stack;
+        private static final ToIntFunction<GenericTrade> USE_SETTER = (t) -> 7;
+
         private final Offer sale;
         private final Offer[] offers;
+        private ToIntFunction<GenericTrade> maxUseSetter;
+        private BiFunction<ItemStack, Random, ItemStack> enchanter;
 
         public GenericTrade(Offer sale, Offer... offers) {
             this.sale = sale;
             this.offers = offers;
+            this.maxUseSetter = USE_SETTER;
+            this.enchanter = DEFAULT_ENCHANTER;
         }
 
         @Override
         public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random rand) {
-            if (offers.length <= 0 || sale.obj == null)
+            if (offers.length <= 0 || sale.obj == null) {
                 return;
+            }
             for (Offer offer : offers) {
-                if (offer.obj == null)
+                if (offer.obj == null) {
                     return;
+                }
             }
             ItemStack sellStack = prepareStack(rand, sale);
             ItemStack buyStack1 = prepareStack(rand, offers[0]);
             ItemStack buyStack2 = null;
-            if (offers.length >= 2)
+            if (offers.length >= 2) {
                 buyStack2 = prepareStack(rand, offers[1]);
+            }
             if (sellStack != null && buyStack1 != null) {
-                recipeList.add(new MerchantRecipe(buyStack1, buyStack2, sellStack));
+                recipeList.add(new MerchantRecipe(buyStack1, buyStack2, enchanter.apply(sellStack, rand), 0, maxUseSetter.applyAsInt(this)));
             } else {
-                Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping", buyStack1, buyStack2, sellStack);
+                Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping",
+                    buyStack1, buyStack2, sellStack);
             }
         }
 
@@ -129,11 +149,23 @@ public class VillagerTrades {
                 stack.stackSize = stackSize(rand, offer);
                 return stack;
             }
-            if (offer.obj instanceof Item)
+            if (offer.obj instanceof Item) {
                 return new ItemStack((Item) offer.obj, stackSize(rand, offer));
-            if (offer.obj instanceof Block)
+            }
+            if (offer.obj instanceof Block) {
                 return new ItemStack((Block) offer.obj, stackSize(rand, offer));
+            }
             return null;
+        }
+
+        GenericTrade setUse(ToIntFunction<GenericTrade> f) {
+            this.maxUseSetter = f;
+            return this;
+        }
+
+        GenericTrade setEnchanter(BiFunction<ItemStack, Random, ItemStack> enchanter) {
+            this.enchanter = enchanter;
+            return this;
         }
 
         private int stackSize(Random rand, Offer offer) {
