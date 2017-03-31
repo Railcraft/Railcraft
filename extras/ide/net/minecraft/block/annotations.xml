@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.block.Block net.minecraft.block.state.IBlockState getDefaultState()'>
+        <annotation name='javax.annotation.Nonnull'/>
+    </item>
+</root>

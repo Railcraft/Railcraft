@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,9 +16,9 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -140,6 +140,14 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, meta);
         }
 
+        @Nullable
+        @Override
+        public IBlockState getState(@Nullable BrickVariant variant) {
+            if (variant == BrickVariant.BRICK)
+                return Blocks.NETHER_BRICK.getDefaultState();
+            return super.getState(variant);
+        }
+
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.NETHER_BRICK), getStack(1, BLOCK), 0);
@@ -150,7 +158,6 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             if (variant != BrickVariant.BRICK)
                 super.initVariant(block, variant);
         }
-
 
     },
     REDNETHER(RailcraftBlocks.BRICK_RED_NETHER, MapColor.NETHERRACK) {
@@ -169,6 +176,14 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, meta);
         }
 
+        @Nullable
+        @Override
+        public IBlockState getState(@Nullable BrickVariant variant) {
+            if (variant == BrickVariant.BRICK)
+                return Blocks.RED_NETHER_BRICK.getDefaultState();
+            return super.getState(variant);
+        }
+
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.RED_NETHER_BRICK), getStack(1, BLOCK), 0);
@@ -179,7 +194,6 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             if (variant != BrickVariant.BRICK)
                 super.initVariant(block, variant);
         }
-
 
     },
     ANDESITE(RailcraftBlocks.BRICK_ANDESITE, MapColor.STONE) {
@@ -197,6 +211,15 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 6);
             return super.getStack(qty, meta);
         }
+
+        @Nullable
+        @Override
+        public IBlockState getState(@Nullable BrickVariant variant) {
+            if (variant == BrickVariant.BLOCK)
+                return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
+            return super.getState(variant);
+        }
+
         @Override
         protected void initVariant(BlockBrick block, BrickVariant variant) {
             if (variant != BrickVariant.BLOCK)
@@ -218,6 +241,15 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 4);
             return super.getStack(qty, meta);
         }
+
+        @Nullable
+        @Override
+        public IBlockState getState(@Nullable BrickVariant variant) {
+            if (variant == BrickVariant.BLOCK)
+                return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE_SMOOTH);
+            return super.getState(variant);
+        }
+
         @Override
         protected void initVariant(BlockBrick block, BrickVariant variant) {
             if (variant != BrickVariant.BLOCK)
@@ -239,6 +271,15 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 return new ItemStack(Blocks.STONE, qty, 2);
             return super.getStack(qty, meta);
         }
+
+        @Nullable
+        @Override
+        public IBlockState getState(@Nullable BrickVariant variant) {
+            if (variant == BrickVariant.BLOCK)
+                return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE_SMOOTH);
+            return super.getState(variant);
+        }
+
         @Override
         protected void initVariant(BlockBrick block, BrickVariant variant) {
             if (variant != BrickVariant.BLOCK)
