@@ -321,7 +321,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 
     @Nullable
     public IBlockState getState(@Nullable BrickVariant variant) {
-        return container.getState(variant);
+        BlockBrick block = getBlock();
+        if (block != null) {
+            block.checkVariant(variant);
+            if (variant != null)
+                return block.getDefaultState().withProperty(block.getVariantProperty(), variant);
+        }
+        return null;
     }
 
     protected void initBlock(BlockBrick block) {
