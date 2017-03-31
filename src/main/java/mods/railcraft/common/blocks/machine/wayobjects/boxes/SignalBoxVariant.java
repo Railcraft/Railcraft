@@ -88,11 +88,6 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
     }
 
     @Override
-    public String getName() {
-        return getBaseTag();
-    }
-
-    @Override
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.SIGNAL_BOX;
     }

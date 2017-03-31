@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -87,17 +86,6 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     default boolean isDepreciated() {
         return getDef().module == null;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nullable
-    @Override
-    default IBlockState getDefaultState() {
-        IBlockState state = getContainer().getDefaultState();
-        BlockMachine<M> block = (BlockMachine<M>) block();
-        if (state != null && block != null)
-            return state.withProperty(block.getVariantProperty(), (M) this);
-        return null;
     }
 
     @Nullable

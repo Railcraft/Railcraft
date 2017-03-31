@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnumBlock> extends BlockRailcraft {
+public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> extends BlockRailcraft {
     private RailcraftBlockMetadata annotation;
     private Class<V> variantClass;
     private V[] variantValues;
