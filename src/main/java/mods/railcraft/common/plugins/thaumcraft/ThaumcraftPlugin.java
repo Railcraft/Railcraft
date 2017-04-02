@@ -219,8 +219,8 @@ public class ThaumcraftPlugin {
             addItemAspect(EquipmentVariant.ROLLING_MACHINE_POWERED.getItem(), new AspectList().add(Aspect.CRAFT, 6).add(Aspect.MECHANISM, 2));
             addItemAspect(EnumMachineAlpha.ROCK_CRUSHER.getItem(), new AspectList().add(Aspect.CRAFT, 2).add(Aspect.MECHANISM, 4).add(Aspect.EARTH, 4).add(Aspect.EARTH, 4));
             addItemAspect(EquipmentVariant.FEED_STATION.getItem(), new AspectList().add(Aspect.PLANT, 4).add(Aspect.BEAST, 4).add(Aspect.MECHANISM, 2));
-            addItemAspect(EnumMachineAlpha.SMOKER.getItem(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
-            addItemAspect(EnumMachineAlpha.SMOKER.getItem(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
+            addItemAspect(EquipmentVariant.SMOKER.getItem(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
+            addItemAspect(EquipmentVariant.SMOKER.getItem(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
 
             addItemAspect(EnumMachineAlpha.STEAM_TRAP_MANUAL.getItem(), steamAspects.copy().add(Aspect.TRAP, 4));
             addItemAspect(EnumMachineAlpha.STEAM_TRAP_AUTO.getItem(), steamAspects.copy().add(Aspect.TRAP, 4).add(Aspect.MIND, 2));

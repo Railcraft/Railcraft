@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.equipment.TileSmoker;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -40,7 +39,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
     STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
     ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
-    SMOKER(ModuleStructures.class, "smoker", TileSmoker.class, 3, 1),
     TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
     COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
     STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
@@ -75,7 +73,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         creativeList.add(ANCHOR_PASSIVE);
         creativeList.add(ANCHOR_ADMIN);
         creativeList.add(TURBINE);
-        creativeList.add(SMOKER);
         creativeList.add(STEAM_TRAP_MANUAL);
         creativeList.add(STEAM_TRAP_AUTO);
     }

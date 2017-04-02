@@ -84,5 +84,16 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> {
                     'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron",
                     'C', new ItemStack(Items.GOLDEN_CARROT));
         }
+
+        EquipmentVariant alpha = EquipmentVariant.SMOKER;
+        if (alpha.isAvailable()) {
+            ItemStack stack = alpha.getItem();
+            CraftingPlugin.addRecipe(stack,
+                    " N ",
+                    "RCR",
+                    'N', new ItemStack(Blocks.NETHERRACK),
+                    'C', new ItemStack(Items.CAULDRON),
+                    'R', "dustRedstone");
+        }
     }
 }

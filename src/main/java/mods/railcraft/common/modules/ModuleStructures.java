@@ -18,7 +18,6 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
@@ -29,7 +28,6 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -98,17 +96,6 @@ public class ModuleStructures extends RailcraftModulePayload {
                             CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                         }
                     }
-                }
-
-                EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
-                if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
-                    CraftingPlugin.addRecipe(stack,
-                            " N ",
-                            "RCR",
-                            'N', new ItemStack(Blocks.NETHERRACK),
-                            'C', new ItemStack(Items.CAULDRON),
-                            'R', "dustRedstone");
                 }
 
 //        cubeType = EnumCube.BANDED_PLANKS;
