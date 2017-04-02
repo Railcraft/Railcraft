@@ -18,10 +18,11 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
@@ -98,8 +99,10 @@ public class FactoryGui {
                     return new GuiTank(inv, (ITankTile) obj);
                 case ROCK_CRUSHER:
                     return new GuiRockCrusher(inv, (TileRockCrusher) obj);
-                case ROLLING_MACHINE:
+                case ROLLING_MACHINE_MANUAL:
                     return new GuiRollingMachine(inv, (TileRollingMachine) obj);
+                case ROLLING_MACHINE_POWERED:
+                    return new GuiRollingMachinePowered(inv, (TileRollingMachinePowered) obj);
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:

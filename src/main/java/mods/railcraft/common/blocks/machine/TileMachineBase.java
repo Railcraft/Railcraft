@@ -134,21 +134,24 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             }
 
             if (getBlockType() != getMachineType().block()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
+                Game.log(Level.INFO, "Updating Machine Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
                 worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
             }
 
-            IBlockState state = worldObj.getBlockState(getPos());
-            int meta = state.getBlock().getMetaFromState(state);
-            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMetaMap().get(meta).getTileClass()) {
-                worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
-                validate();
-                worldObj.setTileEntity(getPos(), this);
-                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), meta, getId(), getPos());
-                updateContainingBlockInfo();
+            IBlockState oldState = worldObj.getBlockState(getPos());
+            IEnumMachine variant = (IEnumMachine) ((BlockMachine) oldState.getBlock()).getVariant(oldState);
+            if (getMachineType() != variant) {
+                IBlockState newState = getMachineType().getDefaultState();
+                if (newState != null) {
+                    worldObj.setBlockState(getPos(), newState, 3);
+                    validate();
+                    worldObj.setTileEntity(getPos(), this);
+                    Game.log(Level.INFO, "Updating Machine State: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), oldState, newState, getPos());
+                    updateContainingBlockInfo();
+                }
             }
         }
     }

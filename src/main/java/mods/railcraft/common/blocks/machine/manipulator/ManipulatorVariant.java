@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -102,7 +102,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.MACHINE_MANIPULATOR;
+        return RailcraftBlocks.MANIPULATOR;
     }
 
     @Override

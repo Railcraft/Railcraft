@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,7 +40,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                         RailcraftCarts.TANK,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
-                        RailcraftBlocks.MACHINE_MANIPULATOR
+                        RailcraftBlocks.MANIPULATOR
                 );
             }
 

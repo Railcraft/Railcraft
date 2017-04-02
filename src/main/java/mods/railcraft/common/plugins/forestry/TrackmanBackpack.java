@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -81,7 +81,7 @@ public class TrackmanBackpack extends BaseBackpack {
         add(RailcraftItems.GOGGLES);
         add(RailcraftItems.OVERALLS);
 
-        add(RailcraftBlocks.MACHINE_MANIPULATOR);
+        add(RailcraftBlocks.MANIPULATOR);
         add(RailcraftBlocks.TRACK_ELEVATOR);
         add(RailcraftBlocks.WAY_OBJECT);
         add(RailcraftBlocks.DETECTOR);

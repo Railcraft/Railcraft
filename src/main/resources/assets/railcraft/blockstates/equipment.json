@@ -1,0 +1,40 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_bottom_top"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "rolling_manual": {
+        "textures": {
+          "top": "railcraft:blocks/rolling_machine_manual_top",
+          "bottom": "railcraft:blocks/rolling_machine_manual_bottom",
+          "side": "railcraft:blocks/rolling_machine_manual_side"
+        }
+      },
+      "rolling_powered": {
+        "textures": {
+          "top": "railcraft:blocks/rolling_machine_powered_top",
+          "bottom": "railcraft:blocks/rolling_machine_powered_bottom",
+          "side": "railcraft:blocks/rolling_machine_powered_side"
+        }
+      },
+      "feed_station": {
+        "textures": {
+          "top": "railcraft:blocks/feed_station_cap",
+          "bottom": "railcraft:blocks/feed_station_cap",
+          "side": "railcraft:blocks/feed_station_side"
+        }
+      },
+      "smoker": {
+        "textures": {
+          "top": "railcraft:blocks/feed_station_cap",
+          "bottom": "railcraft:blocks/feed_station_cap",
+          "side": "railcraft:blocks/feed_station_side"
+        }
+      }
+    }
+  }
+}

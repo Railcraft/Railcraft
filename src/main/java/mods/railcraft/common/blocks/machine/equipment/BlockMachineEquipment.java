@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.simplemachine;
+package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
@@ -29,10 +29,10 @@ import net.minecraftforge.common.MinecraftForge;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = SimpleMachineVariant.class)
-public class BlockMachineSimple extends BlockMachine<SimpleMachineVariant> {
+@RailcraftBlockMetadata(variant = EquipmentVariant.class)
+public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> {
 
-    public BlockMachineSimple() {
+    public BlockMachineEquipment() {
         super(true);
         setDefaultState(getDefaultState());
     }
@@ -49,19 +49,31 @@ public class BlockMachineSimple extends BlockMachine<SimpleMachineVariant> {
 
     @Override
     public void defineRecipes() {
-        SimpleMachineVariant rolling = SimpleMachineVariant.ROLLING_MACHINE;
-        if (rolling.isAvailable()) {
-            ItemStack stack = rolling.getItem();
+        EquipmentVariant rollingManual = EquipmentVariant.ROLLING_MACHINE_MANUAL;
+        if (rollingManual.isAvailable()) {
+            ItemStack stack = rollingManual.getItem();
             CraftingPlugin.addRecipe(stack,
                     "IPI",
                     "PCP",
                     "IPI",
-                    'I', "ingotIron",
+                    'I', "gearBronze",
                     'P', Blocks.PISTON,
                     'C', "workbench");
         }
 
-        SimpleMachineVariant feed = SimpleMachineVariant.FEED_STATION;
+        EquipmentVariant rollingPowered = EquipmentVariant.ROLLING_MACHINE_POWERED;
+        if (rollingPowered.isAvailable()) {
+            ItemStack stack = rollingPowered.getItem();
+            CraftingPlugin.addRecipe(stack,
+                    "IPI",
+                    "PCP",
+                    "IPI",
+                    'I', "gearSteel",
+                    'P', Blocks.PISTON,
+                    'C', "workbench");
+        }
+
+        EquipmentVariant feed = EquipmentVariant.FEED_STATION;
         if (feed.isAvailable()) {
             ItemStack stack = feed.getItem();
             CraftingPlugin.addRecipe(stack,

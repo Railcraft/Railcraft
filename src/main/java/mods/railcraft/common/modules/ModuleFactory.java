@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,14 +18,13 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
+import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
@@ -49,7 +48,7 @@ public class ModuleFactory extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.ANVIL_STEEL,
-                        RailcraftBlocks.MACHINE_SIMPLE,
+                        RailcraftBlocks.EQUIPMENT,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
                         RailcraftItems.COKE
@@ -354,7 +353,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                if (!SimpleMachineVariant.ROLLING_MACHINE.isAvailable())
+                if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
                 if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();

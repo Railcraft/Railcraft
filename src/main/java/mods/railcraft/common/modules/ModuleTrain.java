@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.MACHINE_MANIPULATOR,
+                        RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track
                 );

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,8 +34,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.DETECTOR,
 //                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.MACHINE_MANIPULATOR,
-                        RailcraftBlocks.MACHINE_SIMPLE,
+                        RailcraftBlocks.MANIPULATOR,
+                        RailcraftBlocks.EQUIPMENT,
 
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,

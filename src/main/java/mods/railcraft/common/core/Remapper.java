@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,7 @@ public enum Remapper {
         private final Map<String, IRailcraftObjectContainer<?>> names = new HashMap<>();
 
         {
-            names.put("manipulator", RailcraftBlocks.MACHINE_MANIPULATOR);
+            names.put("manipulator", RailcraftBlocks.MANIPULATOR);
 
             names.put("track_abandoned", RailcraftBlocks.TRACK_FLEX_ABANDONED);
             names.put("track_electric", RailcraftBlocks.TRACK_FLEX_ELECTRIC);

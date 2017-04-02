@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,13 +20,12 @@ public class GuiRollingMachine extends TileGui {
     private final TileRollingMachine tile;
 
     public GuiRollingMachine(InventoryPlayer inventoryplayer, TileRollingMachine tile) {
-        super(tile, new ContainerRollingMachine(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling.png");
-        this.tile = tile;
+        this(tile, new ContainerRollingMachine(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_manual.png");
     }
 
-    @Override
-    public void onGuiClosed() {
-        super.onGuiClosed();
+    protected GuiRollingMachine(TileRollingMachine tile, ContainerRollingMachine container, String texture) {
+        super(tile, container, texture);
+        this.tile = tile;
     }
 
     @Override

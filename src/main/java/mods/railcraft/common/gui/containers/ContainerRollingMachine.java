@@ -9,13 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import cofh.api.energy.EnergyStorage;
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
 import mods.railcraft.common.gui.slots.SlotUntouchable;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -34,10 +32,8 @@ public class ContainerRollingMachine extends RailcraftContainer {
     private final IInventory craftResult;
     private int lastProgress;
     private ItemStack prevOutput;
-    private final RFEnergyIndicator energyIndicator;
 
     public ContainerRollingMachine(final InventoryPlayer inventoryplayer, final TileRollingMachine tile) {
-        super(tile);
         this.tile = tile;
         craftMatrix = tile.getCraftMatrix(this);
         craftResult = new InventoryCraftResult() {
@@ -50,11 +46,8 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
         };
 
-        energyIndicator = new RFEnergyIndicator(tile);
-        addWidget(new IndicatorWidget(energyIndicator, 157, 19, 176, 12, 6, 48));
-
         addSlot(new SlotRollingMachine(craftResult, 0, 93, 27));
-        addSlot(new SlotOutput(tile, 0, 124, 35));
+        addSlot(new SlotOutput(tile.getInvResult(), 0, 124, 35));
 
         for (int l = 0; l < 3; l++) {
             for (int k1 = 0; k1 < 3; k1++) {
@@ -79,24 +72,18 @@ public class ContainerRollingMachine extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
         listener.sendProgressBarUpdate(this, 0, tile.getProgress());
-        EnergyStorage storage = tile.getEnergyStorage();
-        if (storage != null)
-            listener.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        EnergyStorage storage = tile.getEnergyStorage();
         for (Object crafter : listeners) {
             IContainerListener listener = (IContainerListener) crafter;
             if (lastProgress != tile.getProgress())
                 listener.sendProgressBarUpdate(this, 0, tile.getProgress());
-            if (storage != null)
-                listener.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
         }
 
-        ItemStack output = tile.getStackInSlot(0);
+        ItemStack output = tile.getInvResult().getStackInSlot(0);
         if (!InvTools.isItemEqualStrict(output, prevOutput)) {
             onCraftMatrixChanged(craftMatrix);
             prevOutput = output != null ? output.copy() : null;
@@ -111,12 +98,6 @@ public class ContainerRollingMachine extends RailcraftContainer {
             case 0:
                 tile.setProgress(data);
                 break;
-            case 1:
-                energyIndicator.setEnergy(data);
-                break;
-            case 2:
-                energyIndicator.updateEnergy(data);
-                break;
         }
     }
 
@@ -126,12 +107,15 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftResult.setInventorySlotContents(0, output);
     }
 
-    @Nullable
     @Override
-    public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
-        ItemStack stack = super.slotClick(slotId, mouseButton, clickType, player);
-        onCraftMatrixChanged(craftMatrix);
-        return stack;
+    public boolean canInteractWith(EntityPlayer player) {
+        return RailcraftTileEntity.isUsableByPlayerHelper(tile, player);
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer playerIn) {
+        super.onContainerClosed(playerIn);
+        tile.onGuiClosed(playerIn);
     }
 
     private class SlotRollingMachine extends SlotUntouchable {

@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -22,7 +23,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Random;
 
@@ -36,8 +36,8 @@ public class TileSmoker extends TileMachineBase {
     private boolean powered;
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.SMOKER;
+    public EquipmentVariant getMachineType() {
+        return EquipmentVariant.SMOKER;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void onNeighborBlockChange( IBlockState state,  Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         sendUpdateToClient();
@@ -73,14 +73,13 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
@@ -88,19 +87,14 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData( RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData( RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         powered = data.readBoolean();
     }
-
-//    @Override
-//    public int getLightValue() {
-//        return 12;
-//    }
 }

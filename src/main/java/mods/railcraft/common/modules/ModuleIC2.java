@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,7 +39,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         RailcraftCarts.ENERGY_BATBOX,
                         RailcraftCarts.ENERGY_MFE,
                         RailcraftCarts.ENERGY_CESU,
-                        RailcraftBlocks.MACHINE_MANIPULATOR
+                        RailcraftBlocks.MANIPULATOR
                 );
                 if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
             }

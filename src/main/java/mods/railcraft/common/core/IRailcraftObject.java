@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -88,7 +88,10 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     default void checkVariant(@Nullable IVariantEnum variant) {
-        if (getVariantEnum() != (variant == null ? null : variant.getClass()))
+        Class clazz = variant == null ? null : variant.getClass();
+        if (clazz != null && clazz.isAnonymousClass())
+            clazz = clazz.getEnclosingClass();
+        if (getVariantEnum() != clazz)
             throw new RuntimeException("Incorrect Variant object used.");
     }
 

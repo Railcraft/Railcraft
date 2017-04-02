@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
+import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
@@ -215,9 +215,9 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         setBlockState(world, torch, 2, 3, 4, sbb);
 
         // machines
-        if (SimpleMachineVariant.ROLLING_MACHINE.isAvailable()) {
+        if (EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable()) {
             //noinspection ConstantConditions
-            setBlockState(world, SimpleMachineVariant.ROLLING_MACHINE.getDefaultState(), 9, 1, 5, sbb);
+            setBlockState(world, EquipmentVariant.ROLLING_MACHINE_POWERED.getDefaultState(), 9, 1, 5, sbb);
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }

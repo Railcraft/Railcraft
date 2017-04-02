@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -106,12 +106,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 //        return 0.2F;
 //    }
 
-    public IEnumMachine<V> getMachineType(IBlockState state) {
-        return state.getValue(getVariantProperty());
-    }
-
     public Class<? extends TileMachineBase> getTileClass(IBlockState state) {
-        return getMachineType(state).getTileClass();
+        return getVariant(state).getTileClass();
     }
 
     @Override
@@ -295,7 +291,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return getMachineType(state).getTileEntity();
+        return getVariant(state).getTileEntity();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -366,7 +362,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return getMachineType(state).passesLight() ? 0 : 255;
+        return getVariant(state).passesLight() ? 0 : 255;
     }
 
     @Override

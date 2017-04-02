@@ -13,11 +13,13 @@ package mods.railcraft.common.plugins.jei;
 import mezz.jei.api.*;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import mods.railcraft.client.gui.GuiRollingMachine;
+import mods.railcraft.client.gui.GuiRollingMachinePowered;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
+import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
+import mods.railcraft.common.gui.containers.ContainerRollingMachinePowered;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeHandler;
@@ -50,15 +52,26 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
         registry.addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
 
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
+        registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 45, 23, 9, ROLLING);
 
         IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
         recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachine.class, ROLLING, 2, 9, 11, 36);
+        recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachinePowered.class, ROLLING, 2, 9, 11, 36);
 
-        ItemStack rollingMachine = RailcraftBlocks.MACHINE_SIMPLE.getStack(SimpleMachineVariant.ROLLING_MACHINE);
-        if (rollingMachine != null) {
-            registry.addRecipeCategoryCraftingItem(rollingMachine, ROLLING);
-            registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()));
+        boolean rolling = false;
+        ItemStack stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_MANUAL);
+        if (stack != null) {
+            registry.addRecipeCategoryCraftingItem(stack, ROLLING);
+            rolling = true;
         }
+        stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_POWERED);
+        if (stack != null) {
+            registry.addRecipeCategoryCraftingItem(stack, ROLLING);
+            rolling = true;
+        }
+
+        if (rolling)
+            registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()));
 
         RailcraftObjects.processBlockVariants((block, variant) -> addDescription(registry, block.getStack(variant)));
         RailcraftObjects.processItemVariants((item, variant) -> addDescription(registry, item.getStack(variant)));

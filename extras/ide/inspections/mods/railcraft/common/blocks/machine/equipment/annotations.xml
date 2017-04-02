@@ -1,0 +1,7 @@
+<root>
+    <item name='mods.railcraft.common.blocks.machine.equipment.TileRollingMachine int getProgressScaled(int) 0'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;SameParameterValue&quot;"/>
+        </annotation>
+    </item>
+</root>
