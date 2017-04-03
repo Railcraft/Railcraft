@@ -475,10 +475,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
                     if (boreLayer) {
                         boolean bored = boreLayer(targetPos, dir);
-                        if (bored) {
-                            int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, getStackInSlot(0));
-                            setDelay(LAYER_DELAY / (int)(efficiency * .2 + 1));
-                        } else {
+                        if (bored)
+                            setDelay(LAYER_DELAY);
+                        else {
                             setDelay(FAIL_DELAY);
                             setActive(false);
                         }
@@ -866,6 +865,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             IBoreHead head = (IBoreHead) boreSlot.getItem();
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
+            hardness /= (1 + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, boreSlot));
         }
 
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();
