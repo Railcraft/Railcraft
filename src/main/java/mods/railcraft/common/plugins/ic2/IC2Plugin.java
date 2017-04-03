@@ -37,7 +37,7 @@ import java.util.Iterator;
  */
 public class IC2Plugin {
     public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
-        String[] tokens = s.split(":");
+        String[] tokens = s.split("#");
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
 
