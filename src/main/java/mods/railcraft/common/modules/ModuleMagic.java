@@ -12,6 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.items.firestone.FirestoneTickHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -39,6 +40,8 @@ public class ModuleMagic extends RailcraftModulePayload {
             @Override
             public void preInit() {
                 EntityItemFirestone.register();
+
+                RailcraftEnchantments.registerEnchantment();
 
                 FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
             }

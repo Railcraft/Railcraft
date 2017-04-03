@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,7 @@ public class DetectorAnimal extends DetectorEntity<EntityAnimal> {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean openGui(EntityPlayer player) {
         openGui(EnumGui.DETECTOR_ANIMAL, player);
         return true;
     }

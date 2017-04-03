@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,8 +36,10 @@ import java.util.Iterator;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC), IC2Items::getItem);
-    public static final int[] POWER_TIERS = {1, 6, 32, 512, 2048, 8192};
+    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
+        String[] tokens = s.split("#");
+        return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
+    });
 
     @Nullable
     public static ItemStack getItem(String tag) {
