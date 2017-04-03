@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,10 +18,12 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import mods.railcraft.common.util.routing.ITileRouting;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,7 +32,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
-public class TileDetector extends RailcraftTickingTileEntity implements IGuiReturnHandler {
+public class TileDetector extends RailcraftTickingTileEntity implements IGuiReturnHandler, ITileRouting {
 
     public static final float SENSITIVITY = 0.2f;
     public int powerState;
@@ -50,6 +52,24 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
             markBlockForUpdate();
             notifyBlocksOfNeighborChange();
         }
+    }
+
+    @Override
+    public ItemStack getRoutingTable() {
+        if (detector instanceof ITileRouting)
+            return ((ITileRouting) detector).getRoutingTable();
+        return null;
+    }
+
+    @Override
+    public void setRoutingTable(ItemStack stack) {
+        if (detector instanceof ITileRouting)
+            ((ITileRouting) detector).setRoutingTable(stack);
+    }
+
+    @Override
+    public boolean isPowered() {
+        return detector instanceof ITileRouting && ((ITileRouting) detector).isPowered();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,8 @@ public abstract class RailcraftPacket {
         CONTROLLER_REQUEST, CONTROLLER_UPDATE,
         RECEIVER_REQUEST, RECEIVER_UPDATE,
         SIGNAL_REQUEST, SIGNAL_UPDATE,
-        ITEM_NBT,
+        ITEM_NBT_HAND,
+        ITEM_NBT_TILE,
         KEY_PRESS,
         GOLDEN_TICKET_GUI,
     }

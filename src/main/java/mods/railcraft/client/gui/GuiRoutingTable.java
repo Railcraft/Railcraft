@@ -17,21 +17,25 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketCurrentItemNBT;
 import mods.railcraft.common.util.network.PacketDispatcher;
+import mods.railcraft.common.util.network.PacketItemNBT;
+import mods.railcraft.common.util.routing.ITileRouting;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -50,6 +54,8 @@ public class GuiRoutingTable extends GuiScreen {
      * The player editing the book
      */
     private final EntityPlayer player;
+    @Nullable
+    private final TileEntity tile;
     private final ItemStack bookStack;
     /**
      * Whether the book is signed or can still be edited
@@ -75,7 +81,13 @@ public class GuiRoutingTable extends GuiScreen {
     private GuiSimpleButton buttonHelp;
 
     public GuiRoutingTable(EntityPlayer player, ItemStack stack) {
+        this(player, null, stack);
+
+    }
+
+    public GuiRoutingTable(EntityPlayer player, @Nullable TileEntity tile, ItemStack stack) {
         this.player = player;
+        this.tile = tile;
         this.bookStack = stack;
 
         LinkedList<LinkedList<String>> pages = ItemRoutingTable.getPages(stack);
@@ -178,10 +190,15 @@ public class GuiRoutingTable extends GuiScreen {
             NBTTagCompound nbt = InvTools.getItemData(bookStack);
 
             nbt.setString("author", Railcraft.proxy.getPlayerUsername(player));
-            if (!bookTitle.equals(""))
+            if (!Strings.isEmpty(bookTitle))
                 nbt.setString("title", bookTitle);
 
-            PacketCurrentItemNBT pkt = new PacketCurrentItemNBT(player, bookStack);
+            PacketItemNBT pkt;
+            if (tile instanceof ITileRouting) {
+                pkt = new PacketItemNBT.RoutableTile(player, tile, bookStack);
+            } else {
+                pkt = new PacketItemNBT.CurrentItem(player, bookStack);
+            }
             PacketDispatcher.sendToServer(pkt);
         }
     }
