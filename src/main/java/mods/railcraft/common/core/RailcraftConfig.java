@@ -105,9 +105,9 @@ public class RailcraftConfig {
     private static int creosoteTorchOutput;
     private static int coalcokeTorchOutput;
     private static int villagerID;
-    private static int wreckingID;
-    private static int implosionID;
-    private static int destructionID;
+    private static boolean wreckingEnabled;
+    private static boolean implosionEnabled;
+    private static boolean destructionEnabled;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -203,10 +203,10 @@ public class RailcraftConfig {
     }
 
     private static void loadEnchantment() {
-        configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantment ids are defined here.\n");
-        wreckingID = get(CAT_ENCHANTMENTS, "ench_wrecking", 190);
-        implosionID = get(CAT_ENCHANTMENTS, "ench_implosion", 191);
-        destructionID = get(CAT_ENCHANTMENTS, "ench_destruction", 192);
+        configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantments can be disabled here.\n");
+        wreckingEnabled = get(CAT_ENCHANTMENTS, true, "ench_wrecking");
+        implosionEnabled = get(CAT_ENCHANTMENTS, true, "ench_implosion");
+        destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
     }
 
     private static void loadAnchorSettings() {
@@ -894,16 +894,16 @@ public class RailcraftConfig {
         return villagerID;
     }
 
-    public static int wreckingID() {
-        return wreckingID;
+    public static boolean wreckingEnabled() {
+        return wreckingEnabled;
     }
 
-    public static int implosionID() {
-        return implosionID;
+    public static boolean implosionEnabled() {
+        return implosionEnabled;
     }
 
-    public static int destructionID() {
-        return destructionID;
+    public static boolean destructionEnabled() {
+        return destructionEnabled;
     }
 
     public static boolean isItemEnabled(String tag) {
