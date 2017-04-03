@@ -35,7 +35,6 @@ import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -141,8 +140,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 NetworkRegistry.INSTANCE.registerGuiHandler(Railcraft.getMod(), new GuiHandler());
 
                 LootPlugin.init();
-
-                RailcraftEnchantments.registerEnchantment();
 
                 EntityEnderman.setCarriable(Blocks.GRAVEL, false);
 
