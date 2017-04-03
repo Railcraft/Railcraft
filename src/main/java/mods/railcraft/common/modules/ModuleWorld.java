@@ -18,6 +18,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.worldgen.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -108,6 +109,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                         GameRegistry.registerWorldGenerator(new GeneratorMineLead(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("silver"))
                         GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
+                    if (RailcraftConfig.isWorldGenEnabled("uranium") && (Mod.IC2.isLoaded() || Mod.IC2_CLASSIC.isLoaded()))
+                        GameRegistry.registerWorldGenerator(new GeneratorMineUranium(), 100);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {

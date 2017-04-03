@@ -23,19 +23,16 @@ import javax.annotation.Nullable;
  */
 public enum ModItems {
 
-    CELL_EMPTY(Mod.IC2, "cell"),
-    BAT_BOX(Mod.IC2, "batBox"),
-    MFE(Mod.IC2, "mfeUnit"),
-    CESU(Mod.IC2, "cesuUnit"),
-    MFSU(Mod.IC2, "mfsUnit"),
-    BATTERY(Mod.IC2, "reBattery"),
-    IC2_MACHINE(Mod.IC2, "machine"),
-    CAN_EMPTY(Mod.FORESTRY, "canEmpty"),
-    WAX_CAPSULE(Mod.FORESTRY, "waxCapsule"),
-    REFRACTORY_EMPTY(Mod.FORESTRY, "refractoryEmpty"),
-    REFRACTORY_WAX(Mod.FORESTRY, "refractoryWax"),
-    INGOT_TIN(Mod.FORESTRY, "ingotTin"),
-    BEESWAX(Mod.FORESTRY, "beeswax");
+    BAT_BOX(Mod.IC2, "te#batbox"),
+    MFE(Mod.IC2, "te#mfe"),
+    CESU(Mod.IC2, "te#cesu"),
+    MFSU(Mod.IC2, "te#mfsu"),
+    BATTERY(Mod.IC2, "re_Battery"),
+    IC2_MACHINE(Mod.IC2, "resource#machine"),
+    URANIUM_ORE(Mod.IC2, "resource#uranium_ore"),
+    URANIUM_BLOCK(Mod.IC2, "resource#uranium_block"),
+    URANIUM_INGOT(Mod.IC2, "nuclear,uranium_238"),
+    URANIUM_NUGGET(Mod.IC2, "nuclear,small_uranium_238");
     private final Mod mod;
     public final String itemTag;
     private boolean init;

@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -41,7 +42,8 @@ public enum Metal implements IVariantEnum {
     TIN("Tin"),
     LEAD("Lead"),
     SILVER("Silver"),
-    BRONZE("Bronze");
+    BRONZE("Bronze"),
+    URANIUM("Uranium");
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     //    private static final EnumBiMap<Metal, EnumIngot> ingotMap = EnumBiMap.create(Metal.class, EnumIngot.class);
@@ -153,6 +155,8 @@ public enum Metal implements IVariantEnum {
                 switch (metal) {
                     case GOLD:
                         return new ItemStack(Items.GOLD_NUGGET, qty);
+                    case URANIUM:
+                        return ModItems.URANIUM_NUGGET.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -166,6 +170,8 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Items.IRON_INGOT, qty);
                     case GOLD:
                         return new ItemStack(Items.GOLD_INGOT, qty);
+                    case URANIUM:
+                        return ModItems.URANIUM_INGOT.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -197,6 +203,8 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Blocks.IRON_BLOCK, qty);
                     case GOLD:
                         return new ItemStack(Blocks.GOLD_BLOCK, qty);
+                    case URANIUM:
+                        return ModItems.URANIUM_BLOCK.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -226,11 +234,23 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Blocks.IRON_ORE, qty);
                     case GOLD:
                         return new ItemStack(Blocks.GOLD_ORE, qty);
+                    case URANIUM:
+                        return ModItems.URANIUM_ORE.get();
                 }
                 return super.getStack(metal, qty);
             }
         },
-        POOR_ORE("poorOre", RailcraftBlocks.ORE, poorOreMap);
+        POOR_ORE("poorOre", RailcraftBlocks.ORE, poorOreMap) {
+            @Nullable
+            @Override
+            public ItemStack getStack(Metal metal, int qty) {
+                switch (metal) {
+                    case URANIUM:
+                        return ModItems.URANIUM_ORE.get();
+                }
+                return super.getStack(metal, qty);
+            }
+        };
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;
