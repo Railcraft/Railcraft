@@ -49,6 +49,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.ORE,
                         RailcraftBlocks.ORE_MAGIC,
+                        RailcraftBlocks.ORE_EXTRA,
                         RailcraftBlocks.WORLD_LOGIC
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {

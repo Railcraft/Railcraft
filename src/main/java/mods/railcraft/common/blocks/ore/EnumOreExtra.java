@@ -1,12 +1,3 @@
-/*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
- -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
@@ -23,48 +14,38 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nullable;
 
 /**
- * @author CovertJaguar <http://www.railcraft.info>
+ * Created by GeneralCamo on 4/4/2017.
+ *
+ * @author GeneralCamo
+ *         Created for Railcraft <http://www.railcraft.info>
  */
-public enum EnumOre implements IVariantEnumBlock {
+public enum EnumOreExtra implements IVariantEnumBlock {
 
-    SULFUR("sulfur"),
-    SALTPETER("saltpeter"),
-    DARK_DIAMOND("dark_diamond"),
-    DARK_EMERALD("dark_emerald"),
-    DARK_LAPIS("dark_lapis"),
-    POOR_IRON("poor_iron"),
-    POOR_GOLD("poor_gold"),
-    POOR_COPPER("poor_copper"),
-    POOR_TIN("poor_tin"),
-    POOR_LEAD("poor_lead"),
-    POOR_SILVER("poor_silver"),
-    COPPER("copper"),
-    TIN("tin"),
-    LEAD("lead"),
-    SILVER("silver");
-    public static final EnumOre[] VALUES = values();
+    NICKEL("nickel"),
+    POOR_NICKEL("poor_nickel");
+    public static final EnumOreExtra[] VALUES = values();
     private final String tag;
 
-    EnumOre(String tag) {
+    EnumOreExtra(String tag) {
         this.tag = tag;
     }
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.ORE;
+        return RailcraftBlocks.ORE_EXTRA;
     }
 
     @Nullable
     @Override
     public IBlockState getDefaultState() {
-        BlockOre block = (BlockOre) block();
+        BlockOreExtra block = (BlockOreExtra) block();
         if (block == null)
             return null;
         return block.getDefaultState().withProperty(block.getVariantProperty(), this);
     }
 
     public String getTag() {
-        return "tile.railcraft.ore_" + tag;
+        return "tile.railcraft.ore_extra_" + tag;
     }
 
     @Nullable
@@ -85,9 +66,9 @@ public enum EnumOre implements IVariantEnumBlock {
         return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && block() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
-    public static EnumOre fromOrdinal(int meta) {
+    public static EnumOreExtra fromOrdinal(int meta) {
         if (meta < 0 || meta >= values().length)
-            return SULFUR;
+            return NICKEL;
         return values()[meta];
     }
 

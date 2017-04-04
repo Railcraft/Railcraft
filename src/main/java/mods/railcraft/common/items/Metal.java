@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreExtra;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -69,7 +70,7 @@ public enum Metal implements IVariantEnum {
         oreMap.put(TIN, EnumOre.TIN);
         oreMap.put(LEAD, EnumOre.LEAD);
         oreMap.put(SILVER, EnumOre.SILVER);
-        oreMap.put(NICKEL, EnumOre.NICKEL);
+        oreMap.put(NICKEL, EnumOreExtra.NICKEL);
 
         poorOreMap.put(IRON, EnumOre.POOR_IRON);
         poorOreMap.put(GOLD, EnumOre.POOR_GOLD);
@@ -77,7 +78,7 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(TIN, EnumOre.POOR_TIN);
         poorOreMap.put(LEAD, EnumOre.POOR_LEAD);
         poorOreMap.put(SILVER, EnumOre.POOR_SILVER);
-        poorOreMap.put(NICKEL, EnumOre.POOR_NICKEL);
+        poorOreMap.put(NICKEL, EnumOreExtra.POOR_NICKEL);
 
         blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
