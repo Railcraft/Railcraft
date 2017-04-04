@@ -57,6 +57,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
         registerOreRecipe(Metal.TIN);
         registerOreRecipe(Metal.LEAD);
         registerOreRecipe(Metal.SILVER);
+        registerOreRecipe(Metal.NICKEL);
 
         registerPoorOreRecipe(Metal.COPPER);
         registerPoorOreRecipe(Metal.GOLD);
@@ -64,6 +65,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
         registerPoorOreRecipe(Metal.TIN);
         registerPoorOreRecipe(Metal.LEAD);
         registerPoorOreRecipe(Metal.SILVER);
+        registerPoorOreRecipe(Metal.NICKEL);
     }
 
     private static void registerPoorOreRecipe(Metal metal) {

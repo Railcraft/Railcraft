@@ -41,7 +41,9 @@ public enum EnumOre implements IVariantEnumBlock {
     COPPER("copper"),
     TIN("tin"),
     LEAD("lead"),
-    SILVER("silver"),;
+    SILVER("silver"),
+    NICKEL("nickel"),
+    POOR_NICKEL("poor_nickel");
     public static final EnumOre[] VALUES = values();
     private final String tag;
 

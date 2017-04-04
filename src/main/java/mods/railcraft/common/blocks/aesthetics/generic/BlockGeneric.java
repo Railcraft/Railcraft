@@ -67,6 +67,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_TIN);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COPPER);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_BRONZE);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_NICKEL);
 
         HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
@@ -80,6 +81,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_TIN.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_SILVER.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_BRONZE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_NICKEL.getStack());
 
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CONCRETE.getStack());
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
@@ -209,6 +211,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
             case BLOCK_TIN:
             case BLOCK_SILVER:
             case BLOCK_BRONZE:
+            case BLOCK_NICKEL:
                 return SoundType.METAL;
             case BLOCK_CREOSOTE:
                 return SoundType.WOOD;

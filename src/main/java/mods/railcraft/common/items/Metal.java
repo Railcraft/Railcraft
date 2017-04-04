@@ -41,9 +41,10 @@ public enum Metal implements IVariantEnum {
     TIN("Tin"),
     LEAD("Lead"),
     SILVER("Silver"),
-    BRONZE("Bronze");
+    BRONZE("Bronze"),
+    NICKEL("Nickel"),;
     public static final Metal[] VALUES = values();
-    public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
+    public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER, NICKEL};
     //    private static final EnumBiMap<Metal, EnumIngot> ingotMap = EnumBiMap.create(Metal.class, EnumIngot.class);
 //    private static final EnumBiMap<Metal, EnumNugget> nuggetMap = EnumBiMap.create(Metal.class, EnumNugget.class);
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
@@ -68,6 +69,7 @@ public enum Metal implements IVariantEnum {
         oreMap.put(TIN, EnumOre.TIN);
         oreMap.put(LEAD, EnumOre.LEAD);
         oreMap.put(SILVER, EnumOre.SILVER);
+        oreMap.put(NICKEL, EnumOre.NICKEL);
 
         poorOreMap.put(IRON, EnumOre.POOR_IRON);
         poorOreMap.put(GOLD, EnumOre.POOR_GOLD);
@@ -75,6 +77,7 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(TIN, EnumOre.POOR_TIN);
         poorOreMap.put(LEAD, EnumOre.POOR_LEAD);
         poorOreMap.put(SILVER, EnumOre.POOR_SILVER);
+        poorOreMap.put(NICKEL, EnumOre.POOR_NICKEL);
 
         blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
@@ -82,6 +85,7 @@ public enum Metal implements IVariantEnum {
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
         blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
+        blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
 
     }
 
