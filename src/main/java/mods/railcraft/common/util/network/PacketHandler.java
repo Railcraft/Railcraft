@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,8 +96,11 @@ public class PacketHandler {
                 case SIGNAL_REQUEST:
                     pkt = new PacketPairRequest(player, type);
                     break;
-                case ITEM_NBT:
-                    pkt = new PacketCurrentItemNBT(player, player.getActiveItemStack());
+                case ITEM_NBT_HAND:
+                    pkt = new PacketItemNBT.CurrentItem(player);
+                    break;
+                case ITEM_NBT_TILE:
+                    pkt = new PacketItemNBT.RoutableTile(player);
                     break;
                 case KEY_PRESS:
                     pkt = new PacketKeyPress(player);

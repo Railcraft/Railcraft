@@ -62,10 +62,10 @@ public class GuiRouting extends TileGui {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + 8, 16, router.getLockController()));
+        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + 16, 16, router.getLockController()));
         lockButton.enabled = ((ContainerRouting) container).canLock;
 
-        buttonList.add(routingButton = GuiMultiButton.create(8, w + 65, h + 50, 100, router.getRoutingController()));
+        buttonList.add(routingButton = GuiMultiButton.create(8, w + 68, h + 50, 100, router.getRoutingController()));
         routingButton.canChange = false;
     }
 

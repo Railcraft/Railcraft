@@ -155,7 +155,7 @@ public class DetectorItem extends DetectorFilter {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean openGui(EntityPlayer player) {
         openGui(EnumGui.DETECTOR_ITEM, player);
         return true;
     }
