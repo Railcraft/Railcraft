@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
+import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -17,11 +18,14 @@ import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.routing.IRouter;
-import mods.railcraft.common.util.routing.IRoutingTile;
+import mods.railcraft.common.util.routing.ITileRouting;
 import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,8 +37,9 @@ import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 
-public class TileActuatorRouting extends TileActuatorSecured implements IRouter, IRoutingTile {
+public class TileActuatorRouting extends TileActuatorSecured implements IRouter, ITileRouting {
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
@@ -53,6 +58,15 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (player.isSneaking()) {
+            ItemStack table = inv.getStackInSlot(0);
+            if (table != null) {
+                if (Game.isClient(theWorld()))
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, this, table));
+                return true;
+            }
+            return false;
+        }
         if (Game.isHost(worldObj)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (current != null && current.getItem() instanceof ItemRoutingTable)
@@ -72,8 +86,19 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, getPos());
         return true;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getRoutingTable() {
+        return inv.getStackInSlot(0);
+    }
+
+    @Override
+    public void setRoutingTable(ItemStack stack) {
+        inv.setInventorySlotContents(0, stack);
     }
 
     @Override
@@ -102,6 +127,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     public void markDirty() {
         super.markDirty();
         resetLogic();
+        sendUpdateToClient();
     }
 
     @Override
@@ -134,6 +160,18 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         super.readFromNBT(data);
         inv.readFromNBT("inv", data);
         routingController.readFromNBT(data, "railwayType");
+    }
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeItemStack(inv.getStackInSlot(0));
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        inv.setInventorySlotContents(0, data.readItemStack());
     }
 
     @Override

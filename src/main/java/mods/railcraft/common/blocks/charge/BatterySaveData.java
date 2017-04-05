@@ -89,5 +89,6 @@ public class BatterySaveData extends WorldSavedData {
 
     public void removeBattery(BlockPos pos) {
         chargeLevels.remove(pos);
+        markDirty();
     }
 }
