@@ -14,11 +14,7 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleSignals;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +57,9 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
     }
 
     private final Definition def;
-    private ToolTip tip;
 
     SignalBoxVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
-        this.def = new Definition(module, tag, tile);
+        this.def = new Definition(tag, tile, module);
     }
 
     public static SignalBoxVariant fromId(int id) {
@@ -90,15 +85,5 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
     @Override
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.SIGNAL_BOX;
-    }
-
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        if (tip != null)
-            return tip;
-        String tipTag = getLocalizationTag() + ".tips";
-        if (LocalizationPlugin.hasTag(tipTag))
-            tip = ToolTip.buildToolTip(tipTag);
-        return tip;
     }
 }

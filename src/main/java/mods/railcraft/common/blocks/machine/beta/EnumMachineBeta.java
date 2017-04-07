@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -143,11 +143,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    @Override
-    public Class<? extends IRailcraftModule> getModule() {
-        return module;
     }
 
     @Override

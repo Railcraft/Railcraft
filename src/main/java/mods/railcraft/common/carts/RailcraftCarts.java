@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -216,13 +216,13 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return "entity_" + tag;
     }
 
-    @Override
-    @Nullable
-    public ItemStack getStack(int qty, int meta) {
-        if (item != null)
-            return new ItemStack(item, qty, meta);
-        return null;
-    }
+//    @Override
+//    @Nullable
+//    public ItemStack getStack(int qty, int meta) {
+//        if (item != null)
+//            return new ItemStack(item, qty, meta);
+//        return null;
+//    }
 
     @Override
     @Nullable
