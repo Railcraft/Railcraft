@@ -1,18 +1,19 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.util.network;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -70,7 +71,7 @@ public class RailcraftInputStream extends DataInputStream {
         if (b != 0) {
             reset();
             try (DataInputStream nbtStream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(this)))) {
-                nbt = CompressedStreamTools.read(nbtStream);
+                nbt = CompressedStreamTools.read(nbtStream, new NBTSizeTracker(2097152L));
             }
         }
         return nbt;

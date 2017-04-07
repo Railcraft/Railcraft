@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
+import mods.railcraft.common.blocks.machine.charge.FeederVariant;
 import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -43,7 +43,7 @@ public class ItemLocoElectric extends ItemLocomotive {
     public void finalizeDefinition() {
         super.finalizeDefinition();
         //TODO: Change to battery
-        Object feederUnit = RailcraftBlocks.CHARGE_FEEDER.getStack(BlockChargeFeeder.FeederVariant.IC2);
+        Object feederUnit = RailcraftBlocks.CHARGE_FEEDER.getStack(FeederVariant.IC2);
         if (feederUnit == null) feederUnit = "blockCopper";
         ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getStack();
         ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);

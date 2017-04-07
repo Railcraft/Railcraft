@@ -16,8 +16,8 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketCurrentItemNBT;
 import mods.railcraft.common.util.network.PacketDispatcher;
+import mods.railcraft.common.util.network.PacketItemNBT;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -109,7 +109,7 @@ public class GuiTicket extends GuiScreen {
             if (!nbt.hasKey("owner")) {
                 nbt.setString("owner", Railcraft.proxy.getPlayerUsername(player));
             }
-            PacketCurrentItemNBT pkt = new PacketCurrentItemNBT(player, ticket);
+            PacketItemNBT pkt = new PacketItemNBT.CurrentItem(player, ticket);
             PacketDispatcher.sendToServer(pkt);
         }
     }

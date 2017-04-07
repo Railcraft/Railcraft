@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,19 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.routing;
 
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IRoutingTile {
+public interface ITileRouting {
+
+    @Nullable
+    ItemStack getRoutingTable();
+
+    void setRoutingTable(ItemStack stack);
 
     boolean isPowered();
 

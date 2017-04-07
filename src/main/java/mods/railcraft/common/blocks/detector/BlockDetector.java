@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -289,8 +289,6 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (playerIn.isSneaking())
-            return false;
         if (heldItem != null) {
             Item item = heldItem.getItem();
             if (item instanceof IActivationBlockingItem)

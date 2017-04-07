@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
@@ -30,7 +31,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
             @Override
             public void construction() {
-                MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
+                if (!RailcraftConfig.boreMinesAllBlocks())
+                    MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
                         RailcraftBlocks.DETECTOR,
 //                        RailcraftBlocks.machine_alpha,
