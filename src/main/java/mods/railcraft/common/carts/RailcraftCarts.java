@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -193,7 +193,11 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition));
+        Arrays.stream(VALUES).forEach(cart -> {
+            cart.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition);
+            if (cart.contentsSupplier != null)
+                CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(cart));
+        });
     }
 
     @Override
@@ -328,9 +332,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     itemCart.initializeDefinintion();
                     itemCart.defineRecipes();
                 }
-
-                if (contentsSupplier != null)
-                    CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
             } else {
                 conditions.printFailureReason(this);
             }

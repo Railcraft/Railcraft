@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,8 +35,8 @@ public enum Mod {
         return Loader.isModLoaded(modId);
     }
 
-    public static boolean areLoaded(Mod... mods) {
-        return Arrays.stream(mods).allMatch(m -> Loader.isModLoaded(m.modId));
+    public static boolean anyLoaded(Mod... mods) {
+        return Arrays.stream(mods).anyMatch(Mod::isLoaded);
     }
 
 }
