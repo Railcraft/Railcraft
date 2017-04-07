@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
@@ -35,7 +36,7 @@ public enum ModItems {
     URANIUM_NUGGET(Mod.IC2, "nuclear,small_uranium_238");
     private final Mod mod;
     public final String itemTag;
-    private boolean init;
+    private boolean init = true;
     private ItemStack stack;
 
     ModItems(Mod mod, String itemTag) {
@@ -45,10 +46,13 @@ public enum ModItems {
 
     @Nullable
     public ItemStack get() {
+        RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
+        if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
+            throw new RuntimeException("Don't call this function before POST_INIT");
         if (!mod.isLoaded())
             return null;
         if (init) {
-            init = true;
+            init = false;
             init();
         }
         if (stack != null)

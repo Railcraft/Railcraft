@@ -27,10 +27,10 @@ import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
-import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -75,7 +75,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     FIRESTONE_REFINED(ItemFirestoneRefined::new, "firestone_refined"),
     HOE_STEEL(ItemSteelHoe::new, "tool_hoe_steel", Items.IRON_HOE),
     INGOT(ItemIngot::new, "ingot"),
-    LAPOTRON_UPGRADE(ItemLapotronUpgrade::new, "ic2_upgrade_lapotron", null, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)),
+    LAPOTRON_UPGRADE(ItemLapotronUpgrade::new, "ic2_upgrade_lapotron", null, () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)),
     MAG_GLASS(ItemMagnifyingGlass::new, "tool_magnifying_glass"),
     NOTEPAD(ItemNotepad::new, "tool_notepad"),
     NUGGET(ItemNugget::new, "nugget"),
