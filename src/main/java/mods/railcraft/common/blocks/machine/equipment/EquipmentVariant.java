@@ -14,13 +14,9 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleAutomation;
 import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.ModuleStructures;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +42,9 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     }
 
     private final Definition def;
-    private ToolTip tip;
 
     EquipmentVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
-        this.def = new Definition(module, tag, tile);
+        this.def = new Definition(tag, tile, module);
     }
 
     public static EquipmentVariant fromId(int id) {
@@ -75,15 +70,5 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     @Override
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.EQUIPMENT;
-    }
-
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        if (tip != null)
-            return tip;
-        String tipTag = getLocalizationTag() + ".tips";
-        if (LocalizationPlugin.hasTag(tipTag))
-            tip = ToolTip.buildToolTip(tipTag);
-        return tip;
     }
 }

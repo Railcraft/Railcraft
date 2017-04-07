@@ -132,13 +132,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, variant);
         }
 
-        @Nullable
-        @Override
-        public ItemStack getStack(int qty, int meta) {
-            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
-                return new ItemStack(Blocks.NETHER_BRICK, qty);
-            return super.getStack(qty, meta);
-        }
+//        @Nullable
+//        @Override
+//        public ItemStack getStack(int qty, int meta) {
+//            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
+//                return new ItemStack(Blocks.NETHER_BRICK, qty);
+//            return super.getStack(qty, meta);
+//        }
 
         @Nullable
         @Override
@@ -168,13 +168,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, variant);
         }
 
-        @Nullable
-        @Override
-        public ItemStack getStack(int qty, int meta) {
-            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
-                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
-            return super.getStack(qty, meta);
-        }
+//        @Nullable
+//        @Override
+//        public ItemStack getStack(int qty, int meta) {
+//            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BRICK)
+//                return new ItemStack(Blocks.RED_NETHER_BRICK, qty);
+//            return super.getStack(qty, meta);
+//        }
 
         @Nullable
         @Override
@@ -204,13 +204,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, variant);
         }
 
-        @Nullable
-        @Override
-        public ItemStack getStack(int qty, int meta) {
-            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
-                return new ItemStack(Blocks.STONE, qty, 6);
-            return super.getStack(qty, meta);
-        }
+//        @Nullable
+//        @Override
+//        public ItemStack getStack(int qty, int meta) {
+//            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+//                return new ItemStack(Blocks.STONE, qty, 6);
+//            return super.getStack(qty, meta);
+//        }
 
         @Nullable
         @Override
@@ -234,13 +234,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, variant);
         }
 
-        @Nullable
-        @Override
-        public ItemStack getStack(int qty, int meta) {
-            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
-                return new ItemStack(Blocks.STONE, qty, 4);
-            return super.getStack(qty, meta);
-        }
+//        @Nullable
+//        @Override
+//        public ItemStack getStack(int qty, int meta) {
+//            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+//                return new ItemStack(Blocks.STONE, qty, 4);
+//            return super.getStack(qty, meta);
+//        }
 
         @Nullable
         @Override
@@ -264,13 +264,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
             return super.getStack(qty, variant);
         }
 
-        @Nullable
-        @Override
-        public ItemStack getStack(int qty, int meta) {
-            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
-                return new ItemStack(Blocks.STONE, qty, 2);
-            return super.getStack(qty, meta);
-        }
+//        @Nullable
+//        @Override
+//        public ItemStack getStack(int qty, int meta) {
+//            if (BrickVariant.fromOrdinal(meta) == BrickVariant.BLOCK)
+//                return new ItemStack(Blocks.STONE, qty, 2);
+//            return super.getStack(qty, meta);
+//        }
 
         @Nullable
         @Override
@@ -356,14 +356,14 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         return null;
     }
 
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty, int meta) {
-        BlockBrick blockBrick = getBlock();
-        if (blockBrick != null)
-            return new ItemStack(blockBrick, qty, meta);
-        return null;
-    }
+//    @Nullable
+//    @Override
+//    public ItemStack getStack(int qty, int meta) {
+//        BlockBrick blockBrick = getBlock();
+//        if (blockBrick != null)
+//            return new ItemStack(blockBrick, qty, meta);
+//        return null;
+//    }
 
     @Override
     public boolean isEqual(ItemStack stack) {

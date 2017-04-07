@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,8 @@ package mods.railcraft.common.core;
 
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -33,7 +35,13 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 
     @Nullable
     default ItemStack getWildcard() {
-        return getStack(1, OreDictionary.WILDCARD_VALUE);
+        return getObject().map(o -> {
+            if (o instanceof Item)
+                return new ItemStack((Item) o, 1, OreDictionary.WILDCARD_VALUE);
+            if (o instanceof Block)
+                return new ItemStack((Block) o, 1, OreDictionary.WILDCARD_VALUE);
+            return null;
+        }).orElse(null);
     }
 
     @Nullable
@@ -43,13 +51,13 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 
     @Nullable
     default ItemStack getStack(int qty) {
-        return getStack(qty, 0);
+        return getStack(qty, null);
     }
 
-    @Nullable
-    default ItemStack getStack(int qty, int meta) {
-        return getObject().map(o -> o.getStack(qty, meta)).orElse(null);
-    }
+//    @Nullable
+//    default ItemStack getStack(int qty, int meta) {
+//        return getObject().map(o -> o.getStack(qty, meta)).orElse(null);
+//    }
 
     @Nullable
     default ItemStack getStack(@Nullable IVariantEnum variant) {

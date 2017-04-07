@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
+import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
+import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
 import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
 import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
@@ -24,6 +26,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLev
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -73,15 +76,19 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
 
         // Actuator
-        GameRegistry.registerTileEntity(TileActuatorLever.class, "railcraft:actuator_lever");
-        GameRegistry.registerTileEntity(TileActuatorMotor.class, "railcraft:actuator_motor");
-        GameRegistry.registerTileEntity(TileActuatorRouting.class, "railcraft:actuator_router");
+        RailcraftRegistry.register(TileActuatorLever.class, "actuator_lever");
+        RailcraftRegistry.register(TileActuatorMotor.class, "actuator_motor");
+        RailcraftRegistry.register(TileActuatorRouting.class, "actuator_router");
+
+        // Charge Feeders
+        RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");
+        RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
 
         // Equipment
-        GameRegistry.registerTileEntity(TileRollingMachineManual.class, "railcraft:equipment_rolling_manual");
-        GameRegistry.registerTileEntity(TileRollingMachinePowered.class, "railcraft:equipment_rolling_powered");
-        GameRegistry.registerTileEntity(TileFeedStation.class, "railcraft:equipment_feed_station");
-        GameRegistry.registerTileEntity(TileSmoker.class, "railcraft:equipment_smoker");
+        RailcraftRegistry.register(TileRollingMachineManual.class, "equipment_rolling_manual");
+        RailcraftRegistry.register(TileRollingMachinePowered.class, "equipment_rolling_powered");
+        RailcraftRegistry.register(TileFeedStation.class, "equipment_feed_station");
+        RailcraftRegistry.register(TileSmoker.class, "equipment_smoker");
 
         // Manipulator
         GameRegistry.registerTileEntity(TileDispenserCart.class, "RCMinecartDispenserTile");
@@ -98,12 +105,12 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
 
         // Signal Boxes
-        GameRegistry.registerTileEntity(TileBoxAnalog.class, "railcraft:signal_box_analog");
-        GameRegistry.registerTileEntity(TileBoxRelay.class, "railcraft:signal_box_relay");
-        GameRegistry.registerTileEntity(TileBoxCapacitor.class, "railcraft:signal_box_capacitor");
-        GameRegistry.registerTileEntity(TileBoxController.class, "railcraft:signal_box_controller");
-        GameRegistry.registerTileEntity(TileBoxInterlock.class, "railcraft:signal_box_interlock");
-        GameRegistry.registerTileEntity(TileBoxReceiver.class, "railcraft:signal_box_receiver");
-        GameRegistry.registerTileEntity(TileBoxSequencer.class, "railcraft:signal_box_sequencer");
+        RailcraftRegistry.register(TileBoxAnalog.class, "signal_box_analog");
+        RailcraftRegistry.register(TileBoxRelay.class, "signal_box_relay");
+        RailcraftRegistry.register(TileBoxCapacitor.class, "signal_box_capacitor");
+        RailcraftRegistry.register(TileBoxController.class, "signal_box_controller");
+        RailcraftRegistry.register(TileBoxInterlock.class, "signal_box_interlock");
+        RailcraftRegistry.register(TileBoxReceiver.class, "signal_box_receiver");
+        RailcraftRegistry.register(TileBoxSequencer.class, "signal_box_sequencer");
     }
 }

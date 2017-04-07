@@ -83,8 +83,7 @@ public class GuiRouting extends TileGui {
         super.updateScreen();
         updateButtons();
         ContainerRouting con = (ContainerRouting) container;
-        RoutingLogic logic = router.getLogic();
-        con.errorElement.hidden = logic == null || logic.isValid();
+        con.errorElement.hidden = router.getLogic().map(RoutingLogic::isValid).orElse(true);
     }
 
     private void updateButtons() {
