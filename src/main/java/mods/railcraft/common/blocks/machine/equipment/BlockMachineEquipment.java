@@ -12,12 +12,12 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.ai.TamingInteractHandler;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

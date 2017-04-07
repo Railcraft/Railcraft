@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -92,7 +92,7 @@ public class BlockPostMetal extends BlockPostBase {
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumColor color : EnumColor.VALUES) {
-            list.add(getStack(1, color.ordinal()));
+            list.add(getStack(1, color));
         }
     }
 

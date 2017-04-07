@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,8 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.charge;
+package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
@@ -25,6 +27,11 @@ public class TileChargeFeederIC2 extends TileChargeFeeder implements ISinkDelega
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
     public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery();
+
+    @Override
+    public IEnumMachine<?> getMachineType() {
+        return FeederVariant.IC2;
+    }
 
     @Override
     public IChargeBlock.ChargeBattery getChargeBattery() {

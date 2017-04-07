@@ -16,6 +16,8 @@ import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.inventory.IInventory;
 
+import java.util.Optional;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -54,6 +56,10 @@ public interface IRouter extends ISecureObject<LockButtonState>, IGuiReturnHandl
 
     void resetLogic();
 
-    RoutingLogic getLogic();
+    Optional<RoutingLogic> getLogic();
+
+    default boolean isLogicValid() {
+        return getLogic().map(RoutingLogic::isValid).orElse(false);
+    }
 
 }

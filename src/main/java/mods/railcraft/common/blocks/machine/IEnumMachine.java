@@ -14,11 +14,14 @@ import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -26,15 +29,16 @@ import java.util.function.Consumer;
  */
 public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IVariantEnumBlock {
     class Definition {
-        @Nullable
-        public final Class<? extends IRailcraftModule> module;
+        public final Class<? extends IRailcraftModule>[] modules;
         public final String tag;
         public final Class<? extends TileMachineBase> tile;
         public boolean passesLight;
         public ToolTip tip;
+        private Boolean enabled = null;
 
-        public Definition(@Nullable Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
-            this.module = module;
+        @SafeVarargs
+        public Definition(String tag, Class<? extends TileMachineBase> tile, Class<? extends IRailcraftModule>... modules) {
+            this.modules = modules;
             this.tag = tag;
             this.tile = tile;
         }
@@ -62,17 +66,15 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
         return getBaseTag();
     }
 
-    @Nullable
-    default Class<? extends IRailcraftModule> getModule() {
-        return getDef().module;
-    }
-
     /**
      * Block is enabled, but may not be defined yet.
      */
     @Override
     default boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && getContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+        Definition def = getDef();
+        if (def.enabled == null)
+            def.enabled = Arrays.stream(getDef().modules).allMatch(RailcraftModuleManager::isModuleEnabled) && getContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+        return def.enabled;
     }
 
     default boolean isAvailable() {
@@ -85,7 +87,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     }
 
     default boolean isDepreciated() {
-        return getDef().module == null;
+        return ArrayUtils.isEmpty(getDef().modules);
     }
 
     @Nullable
@@ -127,7 +129,15 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     }
 
     @Nullable
-    ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
+    default ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
+        Definition def = getDef();
+        if (def.tip != null)
+            return def.tip;
+        String tipTag = getLocalizationTag() + ".tips";
+        if (LocalizationPlugin.hasTag(tipTag))
+            def.tip = ToolTip.buildToolTip(tipTag);
+        return def.tip;
+    }
 
     @Override
     int ordinal();

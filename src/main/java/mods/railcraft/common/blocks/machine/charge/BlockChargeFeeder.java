@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,36 +8,34 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.charge;
+package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
-import mods.railcraft.common.blocks.IRailcraftBlockContainer;
-import mods.railcraft.common.blocks.IVariantEnumBlock;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -45,8 +43,8 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = BlockChargeFeeder.FeederVariant.class)
-public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChargeFeeder.FeederVariant> implements IChargeBlock {
+@RailcraftBlockMetadata(variant = FeederVariant.class)
+public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IChargeBlock {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
@@ -60,34 +58,29 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChar
     });
 
     public BlockChargeFeeder() {
-        super(Material.IRON);
+        super(true);
         IBlockState defaultState = blockState.getBaseState().withProperty(getVariantProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
         setDefaultState(defaultState);
         setResistance(10F);
         setHardness(5F);
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
-
-        RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");
-        RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
     }
 
     @Override
     public void initializeDefinintion() {
-//                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
-        HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
-
         ForestryPlugin.addBackpackItem("builder", this);
     }
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(1, FeederVariant.IC2),
-                "PCP",
-                "CCC",
-                "PCP",
-                'P', RailcraftItems.PLATE, Metal.TIN,
-                'C', "ingotCopper");
+        FeederVariant.IC2.ifAvailable(v ->
+                CraftingPlugin.addRecipe(getStack(v),
+                        "PCP",
+                        "CCC",
+                        "PCP",
+                        'P', RailcraftItems.PLATE, Metal.TIN,
+                        'C', "ingotCopper"));
     }
 
     @Nullable
@@ -121,26 +114,6 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChar
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty(), REDSTONE);
-    }
-
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        if (state.getValue(getVariantProperty()) == FeederVariant.IC2)
-            return new TileChargeFeederIC2();
-        else if (state.getValue(getVariantProperty()) == FeederVariant.ADMIN)
-            return new TileChargeFeederAdmin();
-        return null;
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override
@@ -198,32 +171,5 @@ public class BlockChargeFeeder extends BlockContainerRailcraftSubtyped<BlockChar
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
-    }
-
-    public enum FeederVariant implements IVariantEnumBlock {
-
-        IC2,
-        ADMIN;
-        public static final FeederVariant[] VALUES = values();
-        private final String name;
-
-        FeederVariant() {
-            name = name().toLowerCase(Locale.ROOT);
-        }
-
-        @Override
-        public IRailcraftBlockContainer getContainer() {
-            return RailcraftBlocks.CHARGE_FEEDER;
-        }
-
-        @Override
-        public Tuple<Integer, Integer> getTextureDimensions() {
-            return new Tuple<>(2, 1);
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
     }
 }

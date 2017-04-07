@@ -11,10 +11,10 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMateBreeding;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.ai.EntityAIMateBreeding;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
