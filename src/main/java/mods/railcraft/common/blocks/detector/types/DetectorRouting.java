@@ -37,6 +37,7 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
@@ -94,7 +95,11 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
                     player.inventory.markDirty();
                 }
-                return true;
+                if (Game.isHost(theWorld())) {
+                    if (isLogicValid())
+                        return true;
+                } else
+                    return true;
             }
         return openGui(player);
     }
@@ -123,8 +128,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
 
     @Override
     protected boolean shouldTest() {
-        refreshLogic();
-        return logic != null && logic.isValid();
+        return isLogicValid();
     }
 
     @Override
@@ -165,9 +169,9 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     }
 
     @Override
-    public RoutingLogic getLogic() {
+    public Optional<RoutingLogic> getLogic() {
         refreshLogic();
-        return logic;
+        return Optional.ofNullable(logic);
     }
 
     @Override

@@ -180,7 +180,6 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     @Nullable
-    @Override
     public ItemStack getStack(int qty, int meta) {
         register();
         if (item == null)

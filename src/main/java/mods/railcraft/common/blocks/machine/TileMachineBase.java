@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -28,6 +29,8 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
@@ -192,5 +195,11 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         if (isSideSolid(side.getOpposite()))
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
+                && ((BlockChargeFeeder) getBlockType()).getVariant(oldState) == ((BlockChargeFeeder) getBlockType()).getVariant(newSate));
     }
 }

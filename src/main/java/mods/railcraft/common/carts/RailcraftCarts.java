@@ -220,13 +220,13 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return "entity_" + tag;
     }
 
-    @Override
-    @Nullable
-    public ItemStack getStack(int qty, int meta) {
-        if (item != null)
-            return new ItemStack(item, qty, meta);
-        return null;
-    }
+//    @Override
+//    @Nullable
+//    public ItemStack getStack(int qty, int meta) {
+//        if (item != null)
+//            return new ItemStack(item, qty, meta);
+//        return null;
+//    }
 
     @Override
     @Nullable

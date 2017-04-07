@@ -147,10 +147,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         }
     }
 
-    @Override
-    public Class<? extends IRailcraftModule> getModule() {
-        return module;
-    }
 
     @Override
     public IRailcraftBlockContainer getContainer() {

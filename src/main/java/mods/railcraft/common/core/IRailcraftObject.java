@@ -55,6 +55,8 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         int meta;
         if (variant != null) {
             checkVariant(variant);
+            if (!variant.isEnabled())
+                return null;
             meta = variant.ordinal();
         } else
             meta = 0;
@@ -65,14 +67,14 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
-    @Nullable
-    default ItemStack getStack(int qty, int meta) {
-        if (this instanceof Item)
-            return new ItemStack((Item) this, qty, meta);
-        if (this instanceof Block)
-            return new ItemStack((Block) this, qty, meta);
-        return null;
-    }
+//    @Nullable
+//    default ItemStack getStack(int qty, int meta) {
+//        if (this instanceof Item)
+//            return new ItemStack((Item) this, qty, meta);
+//        if (this instanceof Block)
+//            return new ItemStack((Block) this, qty, meta);
+//        return null;
+//    }
 
     default void defineRecipes() {
     }

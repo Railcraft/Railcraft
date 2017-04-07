@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -88,7 +88,7 @@ public class BatterySaveData extends WorldSavedData {
     }
 
     public void removeBattery(BlockPos pos) {
-        chargeLevels.remove(pos);
-        markDirty();
+        if (chargeLevels.remove(pos) != null)
+            markDirty();
     }
 }
