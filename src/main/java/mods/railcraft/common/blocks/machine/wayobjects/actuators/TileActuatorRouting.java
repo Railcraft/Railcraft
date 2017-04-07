@@ -38,6 +38,7 @@ import net.minecraft.util.EnumHand;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 
 public class TileActuatorRouting extends TileActuatorSecured implements IRouter, ITileRouting {
 
@@ -78,7 +79,11 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
                         player.inventory.markDirty();
                     }
-                    return true;
+                    if (Game.isHost(theWorld())) {
+                        if (isLogicValid())
+                            return true;
+                    } else
+                        return true;
                 }
         }
         return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
@@ -131,9 +136,9 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     }
 
     @Override
-    public RoutingLogic getLogic() {
+    public Optional<RoutingLogic> getLogic() {
         refreshLogic();
-        return logic;
+        return Optional.ofNullable(logic);
     }
 
     @Override
@@ -181,7 +186,6 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
 
     @Override
     public boolean shouldSwitch(@Nullable EntityMinecart cart) {
-        RoutingLogic logic = getLogic();
-        return logic != null && cart != null && logic.isValid() && logic.matches(this, cart);
+        return getLogic().map(l -> cart != null && l.isValid() && l.matches(this, cart)).orElse(false);
     }
 }

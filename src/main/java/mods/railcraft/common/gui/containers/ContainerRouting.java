@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,9 +43,7 @@ public class ContainerRouting extends RailcraftContainer {
         errorElement = new Widget(16, 24, 176, 0, 16, 16) {
             @Override
             public ToolTip getToolTip() {
-                if (router.getLogic() != null && router.getLogic().getError() != null)
-                    return router.getLogic().getError().getToolTip();
-                return null;
+                return router.getLogic().map(RoutingLogic::getError).map(RoutingLogic.RoutingLogicException::getToolTip).orElse(null);
             }
 
         };

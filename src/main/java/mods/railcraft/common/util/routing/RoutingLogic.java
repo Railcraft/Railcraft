@@ -63,6 +63,7 @@ public class RoutingLogic {
         return new RoutingLogic(data);
     }
 
+    @Nullable
     public RoutingLogicException getError() {
         return error;
     }
