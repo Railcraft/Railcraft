@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -58,7 +59,8 @@ public final class EntityCartEnergyMFE extends CartBaseEnergy {
     }
 
     @Override
-    public ItemStack getIC2Item() {
-        return IC2Plugin.getItem("mfeUnit");
+    public IBlockState getDefaultDisplayTile() {
+        return IC2Plugin.getBlockState("te","mfe");
     }
+
 }
