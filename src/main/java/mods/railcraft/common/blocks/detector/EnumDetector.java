@@ -88,7 +88,7 @@ public enum EnumDetector implements IVariantEnumBlock<EnumDetector> {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.detector." + getBaseTag();
+        return "tile.railcraft.detector_" + getBaseTag();
     }
 
     @Override

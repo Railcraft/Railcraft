@@ -12,19 +12,27 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.ModuleWorld;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOreMagic implements IVariantEnumBlock<EnumOreMagic> {
+public enum EnumOreMetal implements IVariantEnumBlock<EnumOreMetal> {
 
-    FIRESTONE("firestone");
-    public static final EnumOreMagic[] VALUES = values();
+    COPPER(Metal.COPPER),
+    TIN(Metal.TIN),
+    LEAD(Metal.LEAD),
+    SILVER(Metal.SILVER),;
+    public static final EnumOreMetal[] VALUES = values();
     private final Definition def;
+    private final Metal metal;
 
-    EnumOreMagic(String tag) {
-        this.def = new Definition(tag, ModuleWorld.class);
+    EnumOreMetal(Metal metal) {
+        this.def = new Definition(metal.getName(), ModuleWorld.class);
+        this.metal = metal;
     }
 
     @Override
@@ -34,17 +42,23 @@ public enum EnumOreMagic implements IVariantEnumBlock<EnumOreMagic> {
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.ORE_MAGIC;
+        return RailcraftBlocks.ORE_METAL;
     }
 
     @Override
     public String getTag() {
-        return "tile.railcraft.ore_magic_" + getBaseTag();
+        return "tile.railcraft.ore_metal_" + getBaseTag();
     }
 
-    public static EnumOreMagic fromOrdinal(int meta) {
+    public static EnumOreMetal fromOrdinal(int meta) {
         if (meta < 0 || meta >= VALUES.length)
-            return FIRESTONE;
+            return COPPER;
         return VALUES[meta];
+    }
+
+    @Nullable
+    @Override
+    public String getOreTag() {
+        return metal.getOreTag(Metal.Form.ORE);
     }
 }

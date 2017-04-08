@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -22,26 +21,38 @@ import javax.annotation.Nullable;
  */
 public enum EnumOre implements IVariantEnumBlock<EnumOre> {
 
-    SULFUR("sulfur"),
-    SALTPETER("saltpeter"),
-    DARK_DIAMOND("dark_diamond"),
-    DARK_EMERALD("dark_emerald"),
-    DARK_LAPIS("dark_lapis"),
-    POOR_IRON("poor_iron"),
-    POOR_GOLD("poor_gold"),
-    POOR_COPPER("poor_copper"),
-    POOR_TIN("poor_tin"),
-    POOR_LEAD("poor_lead"),
-    POOR_SILVER("poor_silver"),
-    COPPER("copper"),
-    TIN("tin"),
-    LEAD("lead"),
-    SILVER("silver"),;
+    SULFUR("sulfur", "oreSulfur"),
+    SALTPETER("saltpeter", "oreSaltpeter"),
+    DARK_DIAMOND("dark_diamond", "oreDiamond"),
+    DARK_EMERALD("dark_emerald", "oreEmerald"),
+    DARK_LAPIS("dark_lapis", "oreLapis"),
+    @Deprecated
+    POOR_IRON("poor_iron", "orePoorIron"),
+    @Deprecated
+    POOR_GOLD("poor_gold", "orePoorGold"),
+    @Deprecated
+    POOR_COPPER("poor_copper", "orePoorCopper"),
+    @Deprecated
+    POOR_TIN("poor_tin", "orePoorTin"),
+    @Deprecated
+    POOR_LEAD("poor_lead", "orePoorLead"),
+    @Deprecated
+    POOR_SILVER("poor_silver", "orePoorSilver"),
+    @Deprecated
+    COPPER("copper", "oreCopper"),
+    @Deprecated
+    TIN("tin", "oreTin"),
+    @Deprecated
+    LEAD("lead", "oreLead"),
+    @Deprecated
+    SILVER("silver", "oreSilver"),;
     public static final EnumOre[] VALUES = values();
     private final Definition def;
+    private final String oreTag;
 
-    EnumOre(String tag) {
+    EnumOre(String tag, String oreTag) {
         this.def = new Definition(tag, ModuleWorld.class);
+        this.oreTag = oreTag;
     }
 
     @Override
@@ -60,14 +71,14 @@ public enum EnumOre implements IVariantEnumBlock<EnumOre> {
     }
 
     public static EnumOre fromOrdinal(int meta) {
-        if (meta < 0 || meta >= values().length)
+        if (meta < 0 || meta >= VALUES.length)
             return SULFUR;
-        return values()[meta];
+        return VALUES[meta];
     }
 
     @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
+    public String getOreTag() {
+        return oreTag;
     }
 }
