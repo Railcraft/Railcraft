@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
         EntityTunnelBore.addMineableBlock(this);
 
         for (EnumOre ore : EnumOre.VALUES) {
-            ForestryPlugin.addBackpackItem("forestry.miner", ore.getItem());
+            ForestryPlugin.addBackpackItem("forestry.miner", ore.getStack());
 
             switch (ore) {
                 case DARK_DIAMOND:
@@ -114,7 +114,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
 
     private static void registerOre(String name, EnumOre ore) {
         if (ore.isEnabled())
-            OreDictionary.registerOre(name, ore.getItem());
+            OreDictionary.registerOre(name, ore.getStack());
     }
 
     @Override

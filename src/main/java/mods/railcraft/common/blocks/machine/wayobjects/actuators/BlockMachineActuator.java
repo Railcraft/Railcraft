@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,7 +96,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         // Define Switch Lever
         ActuatorVariant actuator = ActuatorVariant.LEVER;
         if (actuator.isAvailable()) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PLI",
@@ -120,7 +120,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         // Define Switch Motor
         actuator = ActuatorVariant.MOTOR;
         if (actuator.isAvailable()) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PCI",

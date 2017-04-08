@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,19 +13,14 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre implements IVariantEnumBlock {
+public enum EnumOre implements IVariantEnumBlock<EnumOre> {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),
@@ -43,10 +38,15 @@ public enum EnumOre implements IVariantEnumBlock {
     LEAD("lead"),
     SILVER("silver"),;
     public static final EnumOre[] VALUES = values();
-    private final String tag;
+    private final Definition def;
 
     EnumOre(String tag) {
-        this.tag = tag;
+        this.def = new Definition(tag, ModuleWorld.class);
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     @Override
@@ -54,46 +54,15 @@ public enum EnumOre implements IVariantEnumBlock {
         return RailcraftBlocks.ORE;
     }
 
-    @Nullable
     @Override
-    public IBlockState getDefaultState() {
-        BlockOre block = (BlockOre) block();
-        if (block == null)
-            return null;
-        return block.getDefaultState().withProperty(block.getVariantProperty(), this);
-    }
-
     public String getTag() {
-        return "tile.railcraft.ore_" + tag;
-    }
-
-    @Nullable
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Nullable
-    public ItemStack getItem(int qty) {
-        Block block = block();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && block() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+        return "tile.railcraft.ore_" + getBaseTag();
     }
 
     public static EnumOre fromOrdinal(int meta) {
         if (meta < 0 || meta >= values().length)
             return SULFUR;
         return values()[meta];
-    }
-
-    @Override
-    public String getName() {
-        return tag;
     }
 
     @Nullable

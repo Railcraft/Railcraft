@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -18,12 +17,8 @@ import mods.railcraft.common.blocks.detector.types.*;
 import mods.railcraft.common.modules.ModuleAutomation;
 import mods.railcraft.common.modules.ModuleRouting;
 import mods.railcraft.common.modules.ModuleTrain;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -31,19 +26,16 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum EnumDetector implements IVariantEnumBlock {
+public enum EnumDetector implements IVariantEnumBlock<EnumDetector> {
 
     ITEM(ModuleAutomation.class, DetectorItem.class),
     ANY(ModuleAutomation.class, Detector.class),
     EMPTY(ModuleAutomation.class, DetectorEmpty.class),
     MOB(ModuleAutomation.class, DetectorEnemy.class),
-    //    POWERED(ModuleAutomation.class, DetectorPowered.class),
     PLAYER(ModuleAutomation.class, DetectorPlayer.class),
-    //    EXPLOSIVE(ModuleAutomation.class, DetectorExplosive.class),
     ANIMAL(ModuleAutomation.class, DetectorAnimal.class),
     TANK(ModuleAutomation.class, DetectorTank.class),
     ADVANCED(ModuleAutomation.class, DetectorAdvanced.class),
-    //    ENERGY(ModuleIC2.class, DetectorEnergy.class),
     AGE(ModuleAutomation.class, DetectorAge.class),
     TRAIN(ModuleTrain.class, DetectorTrain.class),
     SHEEP(ModuleAutomation.class, DetectorSheep.class),
@@ -60,11 +52,16 @@ public enum EnumDetector implements IVariantEnumBlock {
     }
 
     private final Class<? extends Detector> handler;
-    private final Class<? extends IRailcraftModule> module;
+    private final Definition def;
 
     EnumDetector(Class<? extends IRailcraftModule> module, Class<? extends Detector> handler) {
         this.handler = handler;
-        this.module = module;
+        this.def = new Definition(name().toLowerCase(Locale.ENGLISH), module);
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public static EnumDetector fromOrdinal(int meta) {
@@ -89,23 +86,9 @@ public enum EnumDetector implements IVariantEnumBlock {
         throw new RuntimeException("Failed to create Detector!");
     }
 
-    public String getTag() {
-        return "tile.railcraft.detector." + getName();
-    }
-
     @Override
-    public String getName() {
-        return name().toLowerCase(Locale.ENGLISH);
-    }
-
-    @Nullable
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Nullable
-    public ItemStack getItem(int qty) {
-        return RailcraftBlocks.DETECTOR.getStack(qty, this);
+    public String getTag() {
+        return "tile.railcraft.detector." + getBaseTag();
     }
 
     @Override
@@ -113,29 +96,8 @@ public enum EnumDetector implements IVariantEnumBlock {
         return RailcraftBlocks.DETECTOR;
     }
 
-    @Nullable
-    @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return block() != null && RailcraftModuleManager.isModuleEnabled(module);
-    }
-
     @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(2, 1);
-    }
-
-    /**
-     * Careful with this one, Detectors store the type and facing in the Tile Entity.
-     */
-    @Nullable
-    @Override
-    public IBlockState getDefaultState() {
-        if (block() == null) return null;
-        return block().getDefaultState();
     }
 }

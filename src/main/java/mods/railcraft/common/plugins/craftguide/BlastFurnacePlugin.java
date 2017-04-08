@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
@@ -31,7 +32,7 @@ public class BlastFurnacePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack furnace = EnumMachineAlpha.BLAST_FURNACE.getItem();
+        ItemStack furnace = EnumMachineAlpha.BLAST_FURNACE.getStack();
         if(furnace != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, furnace, "/gui/CraftGuideRecipe.png", 1, 181, 82, 181);
 
