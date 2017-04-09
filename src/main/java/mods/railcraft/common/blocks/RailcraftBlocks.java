@@ -49,6 +49,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActu
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockOreMagic;
+import mods.railcraft.common.blocks.ore.BlockOreExtra;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.ItemOreMagic;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -116,6 +117,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
     ORE_MAGIC("ore_magic", BlockOreMagic.class, BlockOreMagic::new, ItemOreMagic::new),
+    ORE_EXTRA("ore_extra", BlockOreExtra.class, BlockOreExtra::new, ItemBlockRailcraftSubtyped::new),
     POST("post", BlockPost.class, BlockPost::new, ItemPost::new),
     POST_METAL("post_metal", BlockPostMetal.class, () -> new BlockPostMetal(false), ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetal.class, () -> new BlockPostMetal(true), ItemPostMetal::new),

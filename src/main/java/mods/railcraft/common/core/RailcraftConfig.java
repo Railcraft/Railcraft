@@ -431,6 +431,7 @@ public class RailcraftConfig {
         loadLootProperty("ingot_steel", 10);
         loadLootProperty("ingot_tin", 10);
         loadLootProperty("ingot_silver", 5);
+        loadLootProperty("ingot_nickel", 10);
 
         loadLootProperty("steel.block", 5);
         loadLootProperty("tool_crowbar_iron", 10);

@@ -49,6 +49,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.ORE,
                         RailcraftBlocks.ORE_MAGIC,
+                        RailcraftBlocks.ORE_EXTRA,
                         RailcraftBlocks.WORLD_LOGIC
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {
@@ -108,6 +109,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                         GameRegistry.registerWorldGenerator(new GeneratorMineLead(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("silver"))
                         GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
+                    if (RailcraftConfig.isWorldGenEnabled("nickel"))
+                        GameRegistry.registerWorldGenerator(new GeneratorMineNickel(), 100);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
