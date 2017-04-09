@@ -40,7 +40,7 @@ public final class EntityCartEnergyMFSU extends CartBaseEnergy {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return IC2Plugin.getBlockState("te","mfe");
+        return IC2Plugin.getBlockState("te","mfsu");
     }
 
     @Override
