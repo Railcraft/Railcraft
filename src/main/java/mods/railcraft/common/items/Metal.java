@@ -186,9 +186,7 @@ public enum Metal implements IVariantEnum {
                     case GOLD:
                         return Blocks.GOLD_ORE.getDefaultState();
                     case STEEL:
-                        return null;
                     case BRONZE:
-                        return null;
                     case INVAR:
                         return null;
                 }
