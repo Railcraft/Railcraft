@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,7 @@ public class ModuleRouting extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
 
                 if (EnumDetector.ROUTING.isEnabled()) {
-                    CraftingPlugin.addRecipe(EnumDetector.ROUTING.getItem(),
+                    CraftingPlugin.addRecipe(EnumDetector.ROUTING.getStack(),
                             "XXX",
                             "XPX",
                             "XXX",
@@ -63,7 +63,7 @@ public class ModuleRouting extends RailcraftModulePayload {
                 if (RailcraftBlocks.ACTUATOR.isEnabled()) {
                     // Define Switch Motor
                     if (ActuatorVariant.ROUTING.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
-                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getItem(), ActuatorVariant.MOTOR.getItem(), EnumDetector.ROUTING.getItem());
+                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getStack(), ActuatorVariant.MOTOR.getStack(), EnumDetector.ROUTING.getStack());
                     }
                 }
             }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,30 +9,27 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOreMagic implements IVariantEnumBlock {
+public enum EnumOreMagic implements IVariantEnumBlock<EnumOreMagic> {
 
     FIRESTONE("firestone");
     public static final EnumOreMagic[] VALUES = values();
-    private final String tag;
+    private final Definition def;
 
     EnumOreMagic(String tag) {
-        this.tag = tag;
+        this.def = new Definition(tag, ModuleWorld.class);
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     @Override
@@ -40,51 +37,14 @@ public enum EnumOreMagic implements IVariantEnumBlock {
         return RailcraftBlocks.ORE_MAGIC;
     }
 
-    @Nullable
     @Override
-    public IBlockState getDefaultState() {
-        BlockOreMagic block = (BlockOreMagic) block();
-        if (block == null)
-            return null;
-        return block.getDefaultState().withProperty(block.getVariantProperty(), this);
-    }
-
     public String getTag() {
-        return "tile.railcraft.ore_magic_" + tag;
-    }
-
-    @Nullable
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Nullable
-    public ItemStack getItem(int qty) {
-        Block block = block();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && block() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+        return "tile.railcraft.ore_magic_" + getBaseTag();
     }
 
     public static EnumOreMagic fromOrdinal(int meta) {
-        if (meta < 0 || meta >= values().length)
+        if (meta < 0 || meta >= VALUES.length)
             return FIRESTONE;
-        return values()[meta];
-    }
-
-    @Override
-    public String getName() {
-        return tag;
-    }
-
-    @Nullable
-    @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
+        return VALUES[meta];
     }
 }

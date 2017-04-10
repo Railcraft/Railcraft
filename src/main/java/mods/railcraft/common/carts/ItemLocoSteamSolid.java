@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,11 +36,11 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
         super.defineRecipes();
         Object tank;
         if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
-            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getItem();
+            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
         else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
-            tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
+            tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack();
         else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
-            tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
+            tank = EnumMachineBeta.TANK_IRON_WALL.getStack();
         else if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
             tank = Metal.STEEL.getStack(Metal.Form.PLATE);
         else if (OreDictPlugin.oreExists("ingotSteel"))
@@ -50,9 +50,9 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
 
         ItemStack firebox;
         if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
-            firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getItem();
+            firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack();
         else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-            firebox = EnumMachineAlpha.BLAST_FURNACE.getItem();
+            firebox = EnumMachineAlpha.BLAST_FURNACE.getStack();
         else
             firebox = new ItemStack(Blocks.FURNACE);
 

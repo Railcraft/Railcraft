@@ -350,7 +350,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 getCreativeList().stream()
                         .filter(m -> m.isAvailable())
-                        .map(m -> m.getItem())
+                        .map(m -> m.getStack())
                         .collect(Collectors.toList())
         );
     }

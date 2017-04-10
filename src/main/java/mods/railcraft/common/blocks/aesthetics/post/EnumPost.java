@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,23 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.RailcraftConfig;
-import net.minecraft.block.Block;
+import mods.railcraft.common.modules.ModuleStructures;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumPost implements IVariantEnumBlock {
+public enum EnumPost implements IVariantEnumBlock<EnumPost> {
 
     WOOD(MapColor.BROWN),
     STONE(MapColor.STONE),
@@ -36,9 +31,11 @@ public enum EnumPost implements IVariantEnumBlock {
     METAL_PLATFORM_UNPAINTED(MapColor.NETHERRACK);
     public static final EnumPost[] VALUES = values();
     private final MapColor mapColor;
+    private final Definition def;
 
     EnumPost(MapColor mapColor) {
         this.mapColor = mapColor;
+        this.def = new Definition(name().toLowerCase(Locale.ROOT), ModuleStructures.class);
     }
 
     public static EnumPost fromId(int id) {
@@ -47,50 +44,22 @@ public enum EnumPost implements IVariantEnumBlock {
         return EnumPost.values()[id];
     }
 
+    @Override
+    public Definition getDef() {
+        return def;
+    }
+
     public final MapColor getMapColor() {
         return mapColor;
-    }
-
-    @Nullable
-    public ItemStack getStack() {
-        return getStack(1);
-    }
-
-    @Nullable
-    public ItemStack getStack(int qty) {
-        Block block = block();
-        if (!isEnabled() || block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     public boolean canBurn() {
         return this == WOOD || this == WOOD_PLATFORM;
     }
 
+    @Override
     public String getTag() {
         return "tile.railcraft.post." + getBaseTag();
-    }
-
-    public String getBaseTag() {
-        return name().toLowerCase(Locale.ROOT).replace("_", ".");
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return name().toLowerCase(Locale.ROOT);
-    }
-
-    @Nullable
-    @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
     }
 
     @Override

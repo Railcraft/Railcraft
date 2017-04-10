@@ -36,7 +36,7 @@ public class RollingMachinePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack machine = EquipmentVariant.ROLLING_MACHINE_POWERED.getItem();
+        ItemStack machine = EquipmentVariant.ROLLING_MACHINE_POWERED.getStack();
         if(machine != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, machine, "/gui/CraftGuideRecipe.png", 163, 1, 163, 61);
 
