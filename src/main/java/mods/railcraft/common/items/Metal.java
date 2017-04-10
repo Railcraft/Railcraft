@@ -43,7 +43,8 @@ public enum Metal implements IVariantEnum {
     LEAD("Lead"),
     SILVER("Silver"),
     BRONZE("Bronze"),
-    NICKEL("Nickel");
+    NICKEL("Nickel"),
+    INVAR("Invar");
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
@@ -72,6 +73,7 @@ public enum Metal implements IVariantEnum {
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
         blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
         blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
+        blockMap.put(INVAR, EnumGeneric.BLOCK_INVAR);
     }
 
     public final Predicate<ItemStack> nuggetFilter;
@@ -186,6 +188,8 @@ public enum Metal implements IVariantEnum {
                     case STEEL:
                         return null;
                     case BRONZE:
+                        return null;
+                    case INVAR:
                         return null;
                 }
                 return super.getState(metal);
