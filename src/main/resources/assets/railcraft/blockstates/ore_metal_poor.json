@@ -12,7 +12,8 @@
       "copper": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_copper"}},
       "tin": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_tin"}},
       "lead": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_lead"}},
-      "silver": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_silver"}}
+      "silver": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_silver"}},
+	  "nickel": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_nickel"}}
     }
   }
 }

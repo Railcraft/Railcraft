@@ -37,7 +37,8 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
     STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),
     BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),
-    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),;
+    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),
+    BLOCK_NICKEL(ModuleResources.class, "nickel", new SimpleCube(), 3f, 10f),;
     public static final EnumGeneric[] VALUES = values();
     private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
@@ -48,6 +49,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
         creativeList.add(BLOCK_SILVER);
         creativeList.add(BLOCK_STEEL);
         creativeList.add(BLOCK_BRONZE);
+        creativeList.add(BLOCK_NICKEL);
         creativeList.add(BLOCK_CONCRETE);
         creativeList.add(BLOCK_CREOSOTE);
         creativeList.add(BLOCK_COKE);

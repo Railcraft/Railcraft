@@ -42,7 +42,8 @@ public enum Metal implements IVariantEnum {
     TIN("Tin"),
     LEAD("Lead"),
     SILVER("Silver"),
-    BRONZE("Bronze");
+    BRONZE("Bronze"),
+    NICKEL("Nickel");
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
@@ -54,6 +55,7 @@ public enum Metal implements IVariantEnum {
         oreMap.put(TIN, EnumOreMetal.TIN);
         oreMap.put(LEAD, EnumOreMetal.LEAD);
         oreMap.put(SILVER, EnumOreMetal.SILVER);
+        oreMap.put(NICKEL, EnumOreMetal.NICKEL);
 
         poorOreMap.put(IRON, EnumOreMetalPoor.IRON);
         poorOreMap.put(GOLD, EnumOreMetalPoor.GOLD);
@@ -61,6 +63,7 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(TIN, EnumOreMetalPoor.TIN);
         poorOreMap.put(LEAD, EnumOreMetalPoor.LEAD);
         poorOreMap.put(SILVER, EnumOreMetalPoor.SILVER);
+        poorOreMap.put(NICKEL, EnumOreMetalPoor.NICKEL);
 
         blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
@@ -68,6 +71,7 @@ public enum Metal implements IVariantEnum {
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
         blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
+        blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
     }
 
     public final Predicate<ItemStack> nuggetFilter;

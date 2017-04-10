@@ -142,6 +142,8 @@ public enum Materials implements IVariantEnum {
     LEAD("lead", EnumGeneric.BLOCK_LEAD::getDefaultState),
     GOLD("gold", Blocks.GOLD_BLOCK::getDefaultState),
     BRONZE("bronze", EnumGeneric.BLOCK_BRONZE::getDefaultState),
+    NICKEL("nickel", EnumGeneric.BLOCK_NICKEL::getDefaultState),
+
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
@@ -391,6 +393,8 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_STEEL.getHardness();
             case BRONZE:
                 return EnumGeneric.BLOCK_BRONZE.getHardness();
+            case NICKEL:
+                return EnumGeneric.BLOCK_NICKEL.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -417,6 +421,8 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_STEEL.getResistance() * 3f / 5f;
             case BRONZE:
                 return EnumGeneric.BLOCK_BRONZE.getResistance() * 3f / 5f;
+            case NICKEL:
+                return EnumGeneric.BLOCK_NICKEL.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)

@@ -28,7 +28,8 @@ public enum EnumOreMetalPoor implements IVariantEnumBlock<EnumOreMetalPoor> {
     COPPER(Metal.COPPER),
     TIN(Metal.TIN),
     LEAD(Metal.LEAD),
-    SILVER(Metal.SILVER),;
+    SILVER(Metal.SILVER),
+    NICKEL(Metal.NICKEL),;
     public static final EnumOreMetalPoor[] VALUES = values();
     private final Definition def;
     private final Metal metal;
