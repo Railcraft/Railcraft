@@ -24,15 +24,8 @@ public class BlockOreMetalPoor extends BlockOreMetalBase<EnumOreMetalPoor> {
 
     @Override
     public void defineRecipes() {
-        registerPoorOreRecipe(Metal.COPPER);
-        registerPoorOreRecipe(Metal.GOLD);
-        registerPoorOreRecipe(Metal.IRON);
-        registerPoorOreRecipe(Metal.TIN);
-        registerPoorOreRecipe(Metal.LEAD);
-        registerPoorOreRecipe(Metal.SILVER);
-    }
-
-    private static void registerPoorOreRecipe(Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(Metal.Form.POOR_ORE.getStack(metal), metal.getStack(Metal.Form.NUGGET, 2), 0.1F);
+        for (EnumOreMetalPoor ore : EnumOreMetalPoor.VALUES) {
+            CraftingPlugin.addFurnaceRecipe(ore.getStack(), ore.getMetal().getStack(Metal.Form.NUGGET, 2), 0.1F);
+        }
     }
 }

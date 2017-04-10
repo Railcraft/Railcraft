@@ -57,6 +57,10 @@ public enum EnumOreMetal implements IVariantEnumBlock<EnumOreMetal> {
         return VALUES[meta];
     }
 
+    public Metal getMetal() {
+        return metal;
+    }
+
     @Nullable
     @Override
     public String getOreTag() {

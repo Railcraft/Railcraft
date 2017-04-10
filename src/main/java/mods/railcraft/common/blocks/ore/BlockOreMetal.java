@@ -24,13 +24,8 @@ public class BlockOreMetal extends BlockOreMetalBase<EnumOreMetal> {
 
     @Override
     public void defineRecipes() {
-        registerOreRecipe(Metal.COPPER);
-        registerOreRecipe(Metal.TIN);
-        registerOreRecipe(Metal.LEAD);
-        registerOreRecipe(Metal.SILVER);
-    }
-
-    private static void registerOreRecipe(Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(Metal.Form.ORE.getStack(metal), metal.getStack(Metal.Form.INGOT), 0.7F);
+        for (EnumOreMetal ore : EnumOreMetal.VALUES) {
+            CraftingPlugin.addFurnaceRecipe(ore.getStack(), ore.getMetal().getStack(Metal.Form.INGOT), 0.7F);
+        }
     }
 }
