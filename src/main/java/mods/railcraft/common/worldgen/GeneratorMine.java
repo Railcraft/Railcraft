@@ -38,7 +38,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
  */
 public abstract class GeneratorMine extends Generator {
     private static final EnumSet<BiomeDictionary.Type> RICH_BIOMES = EnumSet.of(MOUNTAIN, MESA, HILLS);
-    private static final boolean SKY_GEN = true;
+    private static final boolean SKY_GEN = false;
     private static final Predicate<IBlockState> STONE_TEST = SKY_GEN ? GenTools.AIR : GenTools.STONE;
     @Nullable
     private final WorldGenerator poorGen;
