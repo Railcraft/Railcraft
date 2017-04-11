@@ -21,7 +21,6 @@ import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -46,7 +45,6 @@ public enum Metal implements IVariantEnum {
     BRONZE("Bronze"),
     NICKEL("Nickel"),
     INVAR("Invar"),;
-  
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
