@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
@@ -43,7 +44,7 @@ public class ParticleHeatTrail extends ParticleBase {
         this.particleGreen *= variant;
         this.particleBlue *= variant;
         this.particleMaxAge = 2000;
-        this.noClip = true;
+        this.canCollide = false;
         this.dimAsAge = true;
         setParticleTextureIndex((int) (Math.random() * 8.0D));
     }

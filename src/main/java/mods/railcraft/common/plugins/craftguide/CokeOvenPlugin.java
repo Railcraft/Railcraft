@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
@@ -32,7 +33,7 @@ public class CokeOvenPlugin implements RecipeProvider {
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack oven = EnumMachineAlpha.COKE_OVEN.getItem();
+        ItemStack oven = EnumMachineAlpha.COKE_OVEN.getStack();
         if (oven != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, oven, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_craft_guide.png", 1, 1, 82, 1);
 

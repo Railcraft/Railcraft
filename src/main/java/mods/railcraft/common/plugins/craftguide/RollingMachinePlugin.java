@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
+import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import uristqwerty.CraftGuide.api.*;
@@ -36,7 +36,7 @@ public class RollingMachinePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack machine = SimpleMachineVariant.ROLLING_MACHINE.getItem();
+        ItemStack machine = EquipmentVariant.ROLLING_MACHINE_POWERED.getStack();
         if(machine != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, machine, "/gui/CraftGuideRecipe.png", 163, 1, 163, 61);
 

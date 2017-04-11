@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,16 +17,17 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.blocks.wayobjects.IRouter;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
@@ -84,8 +85,10 @@ public class FactoryContainer {
                     return new ContainerRockCrusher(inv, (TileRockCrusher) obj);
                 case TANK:
                     return new ContainerTank(inv, (ITankTile) obj);
-                case ROLLING_MACHINE:
+                case ROLLING_MACHINE_MANUAL:
                     return new ContainerRollingMachine(inv, (TileRollingMachine) obj);
+                case ROLLING_MACHINE_POWERED:
+                    return new ContainerRollingMachinePowered(inv, (TileRollingMachinePowered) obj);
                 case FEED_STATION:
                     return new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:

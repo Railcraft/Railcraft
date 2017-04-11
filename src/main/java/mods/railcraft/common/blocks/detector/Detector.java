@@ -1,12 +1,12 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.gui.EnumGui;
@@ -58,6 +58,10 @@ public class Detector implements IGuiReturnHandler {
     }
 
     public boolean blockActivated(EntityPlayer player) {
+        return !player.isSneaking() && openGui(player);
+    }
+
+    public boolean openGui(EntityPlayer player) {
         return false;
     }
 

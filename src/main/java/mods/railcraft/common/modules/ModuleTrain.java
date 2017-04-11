@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.MACHINE_MANIPULATOR,
+                        RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
 //                        RailcraftBlocks.track
                 );
@@ -38,7 +38,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void preInit() {
                 if (RailcraftBlocks.DETECTOR.isLoaded()) {
-                    CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),
+                    CraftingPlugin.addRecipe(EnumDetector.TRAIN.getStack(),
                             "XXX",
                             "XPX",
                             "XXX",
@@ -51,11 +51,11 @@ public class ModuleTrain extends RailcraftModulePayload {
             public void init() {
                 ManipulatorVariant type = ManipulatorVariant.DISPENSER_TRAIN;
                 if (type.isAvailable() && ManipulatorVariant.DISPENSER_CART.isAvailable()) {
-                    CraftingPlugin.addRecipe(type.getItem(),
+                    CraftingPlugin.addRecipe(type.getStack(),
                             "rcr",
                             "cdc",
                             "rcr",
-                            'd', ManipulatorVariant.DISPENSER_CART.getItem(),
+                            'd', ManipulatorVariant.DISPENSER_CART.getStack(),
                             'c', IToolCrowbar.ORE_TAG,
                             'r', "dustRedstone");
                 }

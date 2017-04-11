@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class GuiDetectorTrain extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.detector.train.size", trainSize), 25);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.detector.train.size", trainSize), 25);
     }
 
     @Override

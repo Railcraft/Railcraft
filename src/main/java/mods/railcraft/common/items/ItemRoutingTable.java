@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.gui.GuiRoutingTable;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -20,6 +19,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -217,7 +217,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             NBTTagString author = (NBTTagString) nbt.getTag("author");
 
             if (author != null)
-                list.add(TextFormatting.GRAY + String.format(LocalizationPlugin.translate("railcraft.gui.routing.table.editor"), author.getString()));
+                list.add(TextFormatting.GRAY + String.format(LocalizationPlugin.translate("gui.railcraft.routing.table.editor"), author.getString()));
         }
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailcraftContainer extends Container {
-
+    @Nullable
     private final IInventory callback;
     private final List<Widget> widgets = new ArrayList<Widget>();
 

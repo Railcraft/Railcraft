@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -83,7 +83,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
-                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
+                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
                 event.setCanceled(true);
             }
     }
@@ -96,7 +96,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         EnumActionResult returnValue = EnumActionResult.PASS;
         if (t instanceof IOwnable) {
             IOwnable ownable = (IOwnable) t;
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.placedby", ownable.getDisplayName(), ownable.getOwner());
+            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.placedby", ownable.getDisplayName(), ownable.getOwner());
             returnValue = EnumActionResult.SUCCESS;
         }
         if (t instanceof TileMultiBlock) {
@@ -115,10 +115,10 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             IDualHeadSignal signal = (IDualHeadSignal) t;
             SignalAspect top = signal.getSignalAspect(DualLamp.TOP);
             SignalAspect bottom = signal.getSignalAspect(DualLamp.BOTTOM);
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
+            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
             returnValue = EnumActionResult.SUCCESS;
         } else if (t instanceof TileSignalBase) {
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
+            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = EnumActionResult.SUCCESS;
         }
         return returnValue;

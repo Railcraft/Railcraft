@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:ore"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "copper": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_copper"}},
+      "tin": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_tin"}},
+      "lead": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_lead"}},
+      "silver": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_silver"}},
+	  "nickel": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_nickel"}}
+    }
+  }
+}

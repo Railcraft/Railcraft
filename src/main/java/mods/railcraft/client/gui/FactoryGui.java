@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,24 +18,25 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.TileBoxAnalogController;
-import mods.railcraft.common.blocks.wayobjects.TileBoxCapacitor;
-import mods.railcraft.common.blocks.wayobjects.TileBoxController;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -98,8 +99,10 @@ public class FactoryGui {
                     return new GuiTank(inv, (ITankTile) obj);
                 case ROCK_CRUSHER:
                     return new GuiRockCrusher(inv, (TileRockCrusher) obj);
-                case ROLLING_MACHINE:
+                case ROLLING_MACHINE_MANUAL:
                     return new GuiRollingMachine(inv, (TileRollingMachine) obj);
+                case ROLLING_MACHINE_POWERED:
+                    return new GuiRollingMachinePowered(inv, (TileRollingMachinePowered) obj);
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
@@ -123,15 +126,15 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
-                    return new GuiSwitchMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
+                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.switch.motor.action"));
                 case BOX_RECEIVER:
-                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_RELAY:
-                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
+                    return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:
-                    return new GuiBoxAnalogController((TileBoxAnalogController) obj);
+                    return new GuiBoxAnalogController((TileBoxAnalog) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:

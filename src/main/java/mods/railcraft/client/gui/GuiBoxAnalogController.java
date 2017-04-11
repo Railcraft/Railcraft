@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.wayobjects.TileBoxAnalogController;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -31,15 +31,15 @@ import java.util.regex.Pattern;
 
 public class GuiBoxAnalogController extends GuiBasic {
 
-    private final TileBoxAnalogController tile;
+    private final TileBoxAnalog tile;
     private static final Pattern patternRange = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
     //When doing Pattern.matcher, these are the groups:           ^ 1    ^ 2    ^ 3
 
     private final EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
     private final EnumMap<SignalAspect, GuiTextField> textBox = new EnumMap<SignalAspect, GuiTextField>(SignalAspect.class);
 
-    public GuiBoxAnalogController(TileBoxAnalogController tile) {
-        super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
+    public GuiBoxAnalogController(TileBoxAnalog tile) {
+        super(LocalizationPlugin.translate(tile.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
         this.tile = tile;
         for (Map.Entry<SignalAspect, BitSet> entry : tile.aspects.entrySet()) {
             aspects.put(entry.getKey(), (BitSet) entry.getValue().clone());

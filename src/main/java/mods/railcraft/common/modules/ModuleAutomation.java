@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
@@ -30,12 +31,13 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
             @Override
             public void construction() {
-                MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
+                if (!RailcraftConfig.boreMinesAllBlocks())
+                    MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
                         RailcraftBlocks.DETECTOR,
 //                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.MACHINE_MANIPULATOR,
-                        RailcraftBlocks.MACHINE_SIMPLE,
+                        RailcraftBlocks.MANIPULATOR,
+                        RailcraftBlocks.EQUIPMENT,
 
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,
@@ -52,14 +54,14 @@ public class ModuleAutomation extends RailcraftModulePayload {
             public void preInit() {
                 ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
-                    CraftingPlugin.addRecipe(gamma.getItem(),
+                    CraftingPlugin.addRecipe(gamma.getStack(),
                             "ML",
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
                 if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
+                    ItemStack stack = alpha.getStack();
                     CraftingPlugin.addRecipe(stack,
                             "SGS",
                             "EDE",

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.gui.slots.SlotFeed;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;

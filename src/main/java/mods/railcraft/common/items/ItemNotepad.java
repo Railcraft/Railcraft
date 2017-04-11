@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
@@ -48,7 +49,7 @@ import java.util.*;
  *
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
-public class ItemNotepad extends ItemRailcraft {
+public class ItemNotepad extends ItemRailcraft implements IActivationBlockingItem {
     public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_filled"), "inventory");
     public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_empty"), "inventory");
 
@@ -169,14 +170,11 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return EnumActionResult.PASS;
-    }
-
-    @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (Game.isClient(world))
+            return EnumActionResult.SUCCESS;
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity != null && Game.isHost(world)) {
+        if (tileEntity != null) {
             if (player.isSneaking()) // COPY
             {
                 EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);

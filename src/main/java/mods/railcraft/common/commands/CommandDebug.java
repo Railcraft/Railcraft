@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.commands;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.wayobjects.TileBoxBase;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -48,10 +47,10 @@ public class CommandDebug extends SubCommand {
     private static void printLine(ICommandSender sender, String msg, Object... args) {
         Message msgObj = msgFactory.newMessage(msg, args);
         Game.log(DEBUG_LEVEL, msgObj);
-        sender.addChatMessage(ChatPlugin.getMessage(msgObj.getFormattedMessage()));
+        sender.addChatMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
     }
 
-    private static void printTarget(ICommandSender sender, World world, WorldCoordinate pos) {
+    private static void printTarget(ICommandSender sender, World world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
         printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(pos), block.getClass(), block.getUnlocalizedName());
         TileEntity t = world.getTileEntity(pos);
@@ -61,8 +60,8 @@ public class CommandDebug extends SubCommand {
             printLine(sender, "Target tile [{0}, {1}, {2}] = null", pos.getY(), pos.getY(), pos.getZ());
     }
 
-    private static String shortCoords(WorldCoordinate coord) {
-        return String.format("[%d; %d, %d, %d]", coord.getDim(), coord.getX(), coord.getY(), coord.getZ());
+    private static String shortCoords(BlockPos coord) {
+        return String.format("[%d, %d, %d]", coord.getX(), coord.getY(), coord.getZ());
     }
 
     public static class CommandDebugTile extends SubCommand {
@@ -113,7 +112,7 @@ public class CommandDebug extends SubCommand {
                 SignalController con = conTile.getController();
                 printLine(sender, "Railcraft Controller Debug Start");
                 printLine(sender, "Target: {0} = {1}, {2}", shortCoords(con.getCoords()), conTile, con);
-                for (WorldCoordinate pair : con.getPairs()) {
+                for (BlockPos pair : con.getPairs()) {
                     printLine(sender, "Rec at {0}", shortCoords(pair));
                     printLine(sender, "Con Aspect for Rec = {0}", con.getAspectFor(pair));
                     SignalReceiver rec = con.getReceiverAt(pair);
@@ -159,7 +158,7 @@ public class CommandDebug extends SubCommand {
                 if (recTile instanceof TileBoxBase) {
                     printLine(sender, "Rec Tile Aspect = {0}", ((TileBoxBase) recTile).getBoxSignalAspect(EnumFacing.NORTH));
                 }
-                for (WorldCoordinate pair : rec.getPairs()) {
+                for (BlockPos pair : rec.getPairs()) {
                     printLine(sender, "Con at {0}", shortCoords(pair));
                     SignalController con = rec.getControllerAt(pair);
                     if (con != null) {

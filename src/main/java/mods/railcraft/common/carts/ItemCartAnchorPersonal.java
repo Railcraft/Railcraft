@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ public class ItemCartAnchorPersonal extends ItemCartAnchor {
             CraftingPlugin.addRecipe(getStack(),
                     "A",
                     "M",
-                    'A', EnumMachineAlpha.ANCHOR_PERSONAL.getItem(),
+                    'A', EnumMachineAlpha.ANCHOR_PERSONAL.getStack(),
                     'M', Items.MINECART);
         }
     }

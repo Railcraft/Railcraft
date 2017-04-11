@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -39,13 +38,6 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
     public BlockWayObjectRailcraft() {
         setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumWayObject.BLOCK_SIGNAL));
 
-        GameRegistry.registerTileEntity(TileBoxController.class, "RCTileStructureControllerBox");
-        GameRegistry.registerTileEntity(TileBoxReceiver.class, "RCTileStructureReceiverBox");
-        GameRegistry.registerTileEntity(TileBoxCapacitor.class, "RCTileStructureCapacitorBox");
-        GameRegistry.registerTileEntity(TileBoxBlockRelay.class, "RCTileStructureSignalBox");
-        GameRegistry.registerTileEntity(TileBoxSequencer.class, "RCTileStructureSequencerBox");
-        GameRegistry.registerTileEntity(TileBoxInterlock.class, "RCTileStructureInterlockBox");
-        GameRegistry.registerTileEntity(TileBoxAnalogController.class, "RCTileStructureAnalogBox");
         GameRegistry.registerTileEntity(TileSignalDistantSignal.class, "RCTileStructureDistantSignal");
         GameRegistry.registerTileEntity(TileSignalDualHeadBlockSignal.class, "RCTileStructureDualHeadBlockSignal");
         GameRegistry.registerTileEntity(TileSignalBlockSignal.class, "RCTileStructureBlockSignal");
@@ -116,7 +108,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         // Define Switch Lever
         ActuatorVariant actuator = ActuatorVariant.LEVER;
         if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PLI",
@@ -140,7 +132,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         // Define Switch Motor
         actuator = ActuatorVariant.MOTOR;
         if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PCI",
@@ -159,85 +151,6 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
                     'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                     'B', "dyeBlack",
                     'R', "dyeRed");
-        }
-
-        // Define Receiver Box
-        structure = EnumWayObject.BOX_RECEIVER;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER);
-        }
-
-        // Define Controller Box
-        structure = EnumWayObject.BOX_CONTROLLER;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
-        }
-
-        // Define Analog Controller Box
-        structure = EnumWayObject.BOX_ANALOG_CONTROLLER;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    "ICI",
-                    "IQI",
-                    'I', "ingotIron",
-                    'Q', Items.COMPARATOR,
-                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
-        }
-
-        // Define Capacitor Box
-        structure = EnumWayObject.BOX_CAPACITOR;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'C', Items.REPEATER);
-        }
-
-        // Define Signal Block Box
-        structure = EnumWayObject.BOX_BLOCK_RELAY;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    " C ",
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL);
-        }
-
-        // Define Signal Sequencer Box
-        structure = EnumWayObject.BOX_SEQUENCER;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'C', Items.COMPARATOR);
-        }
-        // Define Signal Interlock Box
-        structure = EnumWayObject.BOX_INTERLOCK;
-        if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
-            CraftingPlugin.addRecipe(structure.getItem(),
-                    " L ",
-                    "ICI",
-                    "IRI",
-                    'I', "ingotIron",
-                    'R', "dustRedstone",
-                    'L', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
-                    'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER);
         }
     }
 

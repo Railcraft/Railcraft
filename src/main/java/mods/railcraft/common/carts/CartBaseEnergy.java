@@ -183,19 +183,6 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         return provide;
     }
 
-    public abstract ItemStack getIC2Item();
-
-    @Override
-    public IBlockState getDefaultDisplayTile() {
-        ItemStack stack = getIC2Item();
-        if (stack != null) {
-            Block block = InvTools.getBlockFromStack(stack);
-            if (block != null)
-                return block.getStateFromMeta(stack.getItemDamage());
-        }
-        return super.getDefaultDisplayTile();
-    }
-
     @Override
     public int getEnergyBarScaled(int scale) {
         return ((int) getEnergy() * scale) / getCapacity();

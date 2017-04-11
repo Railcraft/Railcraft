@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerFeedStation;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -17,7 +17,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiFeedStation extends TileGui {
 
-    private final String feed = LocalizationPlugin.translate("railcraft.gui.feed.station.feed");
+    private final String feed = LocalizationPlugin.translate("gui.railcraft.feed.station.feed");
     private final TileFeedStation tile;
 
     public GuiFeedStation(InventoryPlayer playerInv, TileFeedStation tile) {

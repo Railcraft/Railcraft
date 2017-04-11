@@ -26,4 +26,5 @@ public class GenTools {
     public static final Predicate<IBlockState> DIRT = input -> input.getBlock() == Blocks.DIRT;
     public static final Predicate<IBlockState> SAND = input -> input.getBlock() == Blocks.SAND;
     public static final Predicate<IBlockState> NETHERRACK = input -> input.getBlock() == Blocks.NETHERRACK;
+    public static final Predicate<IBlockState> AIR = input -> input.getBlock() == Blocks.AIR;
 }

@@ -1,0 +1,80 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:signal_box",
+    "textures": {
+      "up": "railcraft:blocks/signal_box_bottom"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "analog": {
+        "textures": {"up": "railcraft:blocks/signal_box_analog"}
+      },
+      "capacitor": {
+        "textures": {"up": "railcraft:blocks/signal_box_capacitor"}
+      },
+      "controller": {
+        "textures": {"up": "railcraft:blocks/signal_box_controller"}
+      },
+      "interlock": {
+        "textures": {"up": "railcraft:blocks/signal_box_interlock"}
+      },
+      "receiver": {
+        "textures": {"up": "railcraft:blocks/signal_box_receiver"}
+      },
+      "relay": {
+        "textures": {"up": "railcraft:blocks/signal_box_relay"}
+      },
+      "sequencer": {
+        "textures": {"up": "railcraft:blocks/signal_box_sequencer"}
+      }
+    },
+    "cap": {
+      "true": {
+        "submodel": {
+          "cap": {"model": "railcraft:signal_box_cap"}
+        }
+      },
+      "false": {}
+    },
+    "connection_north": {
+      "true": {
+        "textures": {"north": "railcraft:blocks/signal_box_side_connection"},
+        "submodel": {
+          "con_north": {"model": "railcraft:signal_box_connection"}
+        }
+      },
+      "false": {}
+    },
+    "connection_east": {
+      "true": {
+        "textures": {"east": "railcraft:blocks/signal_box_side_connection"},
+        "submodel": {
+          "con_east": {"model": "railcraft:signal_box_connection", "y": 90}
+        }
+      },
+      "false": {}
+    },
+    "connection_south": {
+      "true": {
+        "textures": {"south": "railcraft:blocks/signal_box_side_connection"},
+        "submodel": {
+          "con_south": {"model": "railcraft:signal_box_connection", "y": 180}
+        }
+      },
+      "false": {}
+    },
+    "connection_west": {
+      "true": {
+        "textures": {"west": "railcraft:blocks/signal_box_side_connection"},
+        "submodel": {
+          "con_west": {"model": "railcraft:signal_box_connection", "y": 270}
+        }
+      },
+      "false": {}
+    }
+  }
+}

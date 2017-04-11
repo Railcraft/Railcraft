@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,6 +55,8 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         int meta;
         if (variant != null) {
             checkVariant(variant);
+            if (!variant.isEnabled())
+                return null;
             meta = variant.ordinal();
         } else
             meta = 0;
@@ -65,14 +67,14 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
-    @Nullable
-    default ItemStack getStack(int qty, int meta) {
-        if (this instanceof Item)
-            return new ItemStack((Item) this, qty, meta);
-        if (this instanceof Block)
-            return new ItemStack((Block) this, qty, meta);
-        return null;
-    }
+//    @Nullable
+//    default ItemStack getStack(int qty, int meta) {
+//        if (this instanceof Item)
+//            return new ItemStack((Item) this, qty, meta);
+//        if (this instanceof Block)
+//            return new ItemStack((Block) this, qty, meta);
+//        return null;
+//    }
 
     default void defineRecipes() {
     }
@@ -88,7 +90,10 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     default void checkVariant(@Nullable IVariantEnum variant) {
-        if (getVariantEnum() != (variant == null ? null : variant.getClass()))
+        Class clazz = variant == null ? null : variant.getClass();
+        if (clazz != null && clazz.isAnonymousClass())
+            clazz = clazz.getEnclosingClass();
+        if (getVariantEnum() != clazz)
             throw new RuntimeException("Incorrect Variant object used.");
     }
 

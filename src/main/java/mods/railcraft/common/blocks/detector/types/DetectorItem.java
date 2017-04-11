@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -155,7 +155,7 @@ public class DetectorItem extends DetectorFilter {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean openGui(EntityPlayer player) {
         openGui(EnumGui.DETECTOR_ITEM, player);
         return true;
     }
@@ -187,7 +187,7 @@ public class DetectorItem extends DetectorFilter {
 
         @Override
         public String toString() {
-            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
+            return LocalizationPlugin.translate("gui.railcraft.detector.item." + name().toLowerCase(Locale.ENGLISH));
         }
 
     }
@@ -198,7 +198,7 @@ public class DetectorItem extends DetectorFilter {
 
         @Override
         public String toString() {
-            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
+            return LocalizationPlugin.translate("gui.railcraft.detector.item." + name().toLowerCase(Locale.ENGLISH));
         }
 
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -53,19 +54,14 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                 .withProperty(THROWN, false)
         );
         setCreativeTab(CreativeTabs.TRANSPORTATION);
+        setSoundType(SoundType.METAL);
+        setResistance(50);
     }
 
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         return 8;
     }
-
-//    @SideOnly(Side.CLIENT)
-//    @Nullable
-//    @Override
-//    public StateMapperBase getStateMapper() {
-//        return new StateMap.Builder().withName(getVariantProperty()).build();
-//    }
 
     @Override
     protected BlockStateContainer createBlockState() {
@@ -100,7 +96,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         // Define Switch Lever
         ActuatorVariant actuator = ActuatorVariant.LEVER;
         if (actuator.isAvailable()) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PLI",
@@ -124,7 +120,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         // Define Switch Motor
         actuator = ActuatorVariant.MOTOR;
         if (actuator.isAvailable()) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PCI",

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,7 +40,7 @@ public class ItemCartAnchor extends ItemCart {
         if ((getCartType() == RailcraftCarts.ANCHOR_WORLD && !RailcraftConfig.anchorFuelWorld.isEmpty()) || (getCartType() == RailcraftCarts.ANCHOR_PERSONAL && !RailcraftConfig.anchorFuelPersonal.isEmpty())) {
             long fuel = getFuel(stack);
             double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
-            String format = LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining");
+            String format = LocalizationPlugin.translate("gui.railcraft.anchor.fuel.remaining");
             info.add(String.format(format, hours));
         }
     }

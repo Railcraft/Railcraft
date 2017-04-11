@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,10 @@ import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -26,6 +29,8 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
@@ -57,7 +62,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
 
     public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getMachineType().getItem());
+        items.add(getMachineType().getStack());
         return items;
     }
 
@@ -97,6 +102,20 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         return openGui(player);
     }
 
+    public boolean openGui(EntityPlayer player) {
+        EnumGui gui = getGui();
+        if (gui != null) {
+            GuiHandler.openGui(gui, player, worldObj, getX(), getY(), getZ());
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    public EnumGui getGui() {
+        return null;
+    }
+
     public boolean isSideSolid(EnumFacing side) {
         return true;
     }
@@ -118,27 +137,26 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             }
 
             if (getBlockType() != getMachineType().block()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
+                Game.log(Level.INFO, "Updating Machine Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
                 worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
             }
 
-            IBlockState state = worldObj.getBlockState(getPos());
-            int meta = state.getBlock().getMetaFromState(state);
-            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMetaMap().get(meta).getTileClass()) {
-                worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
-                validate();
-                worldObj.setTileEntity(getPos(), this);
-                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), meta, getId(), getPos());
-                updateContainingBlockInfo();
+            IBlockState oldState = worldObj.getBlockState(getPos());
+            IEnumMachine variant = (IEnumMachine) ((BlockMachine) oldState.getBlock()).getVariant(oldState);
+            if (getMachineType() != variant) {
+                IBlockState newState = getMachineType().getDefaultState();
+                if (newState != null) {
+                    worldObj.setBlockState(getPos(), newState, 3);
+                    validate();
+                    worldObj.setTileEntity(getPos(), this);
+                    Game.log(Level.INFO, "Updating Machine State: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), oldState, newState, getPos());
+                    updateContainingBlockInfo();
+                }
             }
         }
-    }
-
-    public boolean openGui(EntityPlayer player) {
-        return false;
     }
 
     public int getLightValue() {
@@ -177,5 +195,11 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         if (isSideSolid(side.getOpposite()))
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
+                && ((BlockChargeFeeder) getBlockType()).getVariant(oldState) == ((BlockChargeFeeder) getBlockType()).getVariant(newSate));
     }
 }

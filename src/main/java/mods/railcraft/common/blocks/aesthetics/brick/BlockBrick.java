@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,15 +12,14 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -35,14 +34,14 @@ import java.util.List;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
-public class BlockBrick extends BlockRailcraft {
-    public static final PropertyEnum<BrickVariant> VARIANT = PropertyEnum.create("variant", BrickVariant.class);
+@RailcraftBlockMetadata(variant = BrickVariant.class)
+public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     private final BrickTheme theme;
 
     public BlockBrick(BrickTheme theme) {
         super(Material.ROCK);
         this.theme = theme;
-        setDefaultState(blockState.getBaseState().withProperty(VARIANT, BrickVariant.BRICK));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), BrickVariant.BRICK));
         setResistance(15);
         setHardness(5);
         setSoundType(SoundType.STONE);
@@ -78,18 +77,14 @@ public class BlockBrick extends BlockRailcraft {
         theme.initRecipes(this);
     }
 
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return BrickVariant.class;
-    }
-
     @Override
     public IBlockState getState(@Nullable IVariantEnum variant) {
         IBlockState state = getDefaultState();
-        if (variant != null) {
+        if (variant instanceof BrickVariant) {
             checkVariant(variant);
-            state = state.withProperty(VARIANT, (BrickVariant) variant);
+            IBlockState newState = theme.getState((BrickVariant) variant);
+            if (newState != null)
+                state = newState;
         }
         return state;
     }
@@ -126,27 +121,6 @@ public class BlockBrick extends BlockRailcraft {
     @Override
     public MapColor getMapColor(IBlockState state) {
         return theme.getMapColor();
-    }
-
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANT, BrickVariant.fromOrdinal(meta));
-    }
-
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override

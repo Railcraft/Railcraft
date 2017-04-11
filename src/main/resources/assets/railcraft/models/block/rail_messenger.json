@@ -1,0 +1,36 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "blocks/e_particle",
+    "texture": "blocks/e_texture"
+  },
+  "elements": [
+    {
+      "__comment": "Cube1",
+      "from": [-5, 5, 7.5],
+      "to": [-2, 14, 8.5],
+      "faces": {
+        "down": {"uv": [11, 7.5, 14, 8.5], "texture": "#texture"},
+        "up": {"uv": [11, 7.5, 14, 8.5], "texture": "#texture"},
+        "north": {"uv": [2, 2, 5, 11], "texture": "#texture"},
+        "south": {"uv": [11, 2, 14, 11], "texture": "#texture"},
+        "west": {"uv": [7.5, 2, 8.5, 11], "texture": "#texture"},
+        "east": {"uv": [7.5, 2, 8.5, 11], "texture": "#texture"}
+      }
+    },
+    {
+      "__comment": "Cube2",
+      "from": [-4, 0, 7.5],
+      "to": [-3, 5, 8.5],
+      "faces": {
+        "down": {"uv": [12, 7.5, 13, 8.5], "texture": "#texture"},
+        "up": {"uv": [12, 7.5, 13, 8.5], "texture": "#texture"},
+        "north": {"uv": [3, 11, 4, 16], "texture": "#texture"},
+        "south": {"uv": [12, 11, 13, 16], "texture": "#texture"},
+        "west": {"uv": [7.5, 11, 8.5, 16], "texture": "#texture"},
+        "east": {"uv": [7.5, 11, 8.5, 16], "texture": "#texture"}
+      }
+    }
+  ]
+}

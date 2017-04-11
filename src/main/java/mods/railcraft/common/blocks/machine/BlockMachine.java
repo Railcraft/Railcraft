@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -90,7 +91,10 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(meta));
+        V variant = getMetaMap().get(meta);
+        if (variant == null)
+            return getDefaultState();
+        return getDefaultState().withProperty(getVariantProperty(), variant);
     }
 
 //    /**
@@ -102,12 +106,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 //        return 0.2F;
 //    }
 
-    public IEnumMachine<V> getMachineType(IBlockState state) {
-        return state.getValue(getVariantProperty());
-    }
-
     public Class<? extends TileMachineBase> getTileClass(IBlockState state) {
-        return getMachineType(state).getTileClass();
+        return getVariant(state).getTileClass();
     }
 
     @Override
@@ -230,10 +230,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).isPoweringTo(side) ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
-        return PowerPlugin.NO_POWER;
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileRedstoneEmitter.class, t -> t.getPowerOutput(side)).orElse(PowerPlugin.NO_POWER);
     }
 
     @Override
@@ -293,7 +291,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return getMachineType(state).getTileEntity();
+        return getVariant(state).getTileEntity();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -352,7 +350,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 getCreativeList().stream()
                         .filter(m -> m.isAvailable())
-                        .map(m -> m.getItem())
+                        .map(m -> m.getStack())
                         .collect(Collectors.toList())
         );
     }
@@ -364,7 +362,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return getMachineType(state).passesLight() ? 0 : 255;
+        return getVariant(state).passesLight() ? 0 : 255;
     }
 
     @Override

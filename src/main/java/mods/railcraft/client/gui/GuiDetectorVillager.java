@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,10 +60,10 @@ public class GuiDetectorVillager extends GuiBasic {
         buttonList.add(new GuiButton(0, w + 10, h + 25, 30, 20, "<"));
         buttonList.add(new GuiButton(1, w + 135, h + 25, 30, 20, ">"));
 
-        buttonList.add(any = new GuiToggleButtonSmall(2, w + 10, h + 55, 45, LocalizationPlugin.translate("railcraft.gui.detector.villager.any"), mode == Mode.ANY));
-        buttonList.add(none = new GuiToggleButtonSmall(3, w + 10, h + 75, 45, LocalizationPlugin.translate("railcraft.gui.detector.villager.none"), mode == Mode.NONE));
-        buttonList.add(equals = new GuiToggleButtonSmall(4, w + 122, h + 55, 45, LocalizationPlugin.translate("railcraft.gui.detector.villager.equals"), mode == Mode.EQUALS));
-        buttonList.add(not = new GuiToggleButtonSmall(5, w + 122, h + 75, 45, LocalizationPlugin.translate("railcraft.gui.detector.villager.not"), mode == Mode.NOT));
+        buttonList.add(any = new GuiToggleButtonSmall(2, w + 10, h + 55, 45, LocalizationPlugin.translate("gui.railcraft.detector.villager.any"), mode == Mode.ANY));
+        buttonList.add(none = new GuiToggleButtonSmall(3, w + 10, h + 75, 45, LocalizationPlugin.translate("gui.railcraft.detector.villager.none"), mode == Mode.NONE));
+        buttonList.add(equals = new GuiToggleButtonSmall(4, w + 122, h + 55, 45, LocalizationPlugin.translate("gui.railcraft.detector.villager.equals"), mode == Mode.EQUALS));
+        buttonList.add(not = new GuiToggleButtonSmall(5, w + 122, h + 75, 45, LocalizationPlugin.translate("gui.railcraft.detector.villager.not"), mode == Mode.NOT));
     }
 
     @Override

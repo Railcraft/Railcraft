@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,7 @@ public class ModuleRF extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftCarts.REDSTONE_FLUX,
-                        RailcraftBlocks.MACHINE_MANIPULATOR
+                        RailcraftBlocks.MANIPULATOR
                 );
             }
 
@@ -40,10 +40,10 @@ public class ModuleRF extends RailcraftModulePayload {
             public void preInit() {
                 ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;
                 if (gamma.isAvailable()) {
-                    ItemStack detector = EnumDetector.ADVANCED.getItem();
+                    ItemStack detector = EnumDetector.ADVANCED.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(gamma.getItem(),
+                    CraftingPlugin.addRecipe(gamma.getStack(),
                             "RLR",
                             "LRL",
                             "RDR",
@@ -54,10 +54,10 @@ public class ModuleRF extends RailcraftModulePayload {
 
                 gamma = ManipulatorVariant.RF_UNLOADER;
                 if (gamma.isAvailable()) {
-                    ItemStack detector = EnumDetector.ADVANCED.getItem();
+                    ItemStack detector = EnumDetector.ADVANCED.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(gamma.getItem(),
+                    CraftingPlugin.addRecipe(gamma.getStack(),
                             "RDR",
                             "LRL",
                             "RLR",

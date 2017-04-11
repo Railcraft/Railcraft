@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,7 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileWayObject implements IAspectProvider, ILampTile {
+public abstract class TileSignalBase extends TileWayObject implements IAspectProvider {
 
     protected static final float BOUNDS = 0.15f;
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};

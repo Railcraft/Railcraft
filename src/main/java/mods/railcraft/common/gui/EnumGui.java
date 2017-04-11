@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,8 @@ public enum EnumGui {
     BLAST_FURNACE(true),
     TANK(true),
     ROCK_CRUSHER(true),
-    ROLLING_MACHINE(true),
+    ROLLING_MACHINE_MANUAL(true),
+    ROLLING_MACHINE_POWERED(true),
     ENGRAVING_BENCH(true),
     ENGRAVING_BENCH_UNLOCK(true),
     CART_DISPENSER(true),

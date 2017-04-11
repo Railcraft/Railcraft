@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,23 +16,18 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.simplemachine.SimpleMachineVariant;
+import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @RailcraftModule(value = "railcraft:structures", description = "glass, posts, stairs, slabs, lanterns, walls")
 public class ModuleStructures extends RailcraftModulePayload {
@@ -68,7 +63,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        if (SimpleMachineVariant.ROLLING_MACHINE.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
+                        if (EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
@@ -98,17 +93,6 @@ public class ModuleStructures extends RailcraftModulePayload {
                             CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                         }
                     }
-                }
-
-                EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
-                if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
-                    CraftingPlugin.addRecipe(stack,
-                            " N ",
-                            "RCR",
-                            'N', new ItemStack(Blocks.NETHERRACK),
-                            'C', new ItemStack(Items.CAULDRON),
-                            'R', "dustRedstone");
                 }
 
 //        cubeType = EnumCube.BANDED_PLANKS;
@@ -210,47 +194,47 @@ public class ModuleStructures extends RailcraftModulePayload {
                             'I', "ingotRefinedIron");
                 }
 
-                if (blockPost != null && BlockPostMetal.post != null) {
-                    ItemStack stackColored = BlockPostMetal.post.getStack(1, OreDictionary.WILDCARD_VALUE);
-                    ItemStack stackRaw = EnumPost.METAL_UNPAINTED.getStack();
-
-                    for (EnumColor color : EnumColor.values()) {
-                        ItemStack outputStack = new ItemStack(BlockPostMetal.post, 8, color.ordinal());
-                        CraftingPlugin.addRecipe(outputStack,
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', stackRaw,
-                                'D', color.getDyeOreDictTag());
-                        CraftingPlugin.addRecipe(outputStack,
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', stackColored,
-                                'D', color.getDyeOreDictTag());
-                    }
-                }
-
-                if (BlockPostMetal.post != null && BlockPostMetal.platform != null) {
-                    ItemStack stackColored = BlockPostMetal.platform.getStack(1, OreDictionary.WILDCARD_VALUE);
-                    ItemStack stackRaw = EnumPost.METAL_PLATFORM_UNPAINTED.getStack();
-
-                    for (EnumColor color : EnumColor.values()) {
-                        ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
-                        CraftingPlugin.addRecipe(outputStack,
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', stackRaw,
-                                'D', color.getDyeOreDictTag());
-                        CraftingPlugin.addRecipe(outputStack,
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', stackColored,
-                                'D', color.getDyeOreDictTag());
-                    }
-                }
+//                if (blockPost != null && BlockPostMetal.post != null) {
+//                    ItemStack stackColored = BlockPostMetal.post.getStack(1, OreDictionary.WILDCARD_VALUE);
+//                    ItemStack stackRaw = EnumPost.METAL_UNPAINTED.getStack();
+//
+//                    for (EnumColor color : EnumColor.values()) {
+//                        ItemStack outputStack = new ItemStack(BlockPostMetal.post, 8, color.ordinal());
+//                        CraftingPlugin.addRecipe(outputStack,
+//                                "III",
+//                                "IDI",
+//                                "III",
+//                                'I', stackRaw,
+//                                'D', color.getDyeOreDictTag());
+//                        CraftingPlugin.addRecipe(outputStack,
+//                                "III",
+//                                "IDI",
+//                                "III",
+//                                'I', stackColored,
+//                                'D', color.getDyeOreDictTag());
+//                    }
+//                }
+//
+//                if (BlockPostMetal.post != null && BlockPostMetal.platform != null) {
+//                    ItemStack stackColored = BlockPostMetal.platform.getStack(1, OreDictionary.WILDCARD_VALUE);
+//                    ItemStack stackRaw = EnumPost.METAL_PLATFORM_UNPAINTED.getStack();
+//
+//                    for (EnumColor color : EnumColor.values()) {
+//                        ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
+//                        CraftingPlugin.addRecipe(outputStack,
+//                                "III",
+//                                "IDI",
+//                                "III",
+//                                'I', stackRaw,
+//                                'D', color.getDyeOreDictTag());
+//                        CraftingPlugin.addRecipe(outputStack,
+//                                "III",
+//                                "IDI",
+//                                "III",
+//                                'I', stackColored,
+//                                'D', color.getDyeOreDictTag());
+//                    }
+//                }
             }
 
             @Override

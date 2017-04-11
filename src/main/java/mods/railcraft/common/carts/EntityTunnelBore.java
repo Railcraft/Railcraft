@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,6 +37,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -77,6 +78,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final float HARDNESS_MULTIPLIER = 8;
     public static final BlockSet mineableStates = new BlockSet();
     public static final Set<Block> mineableBlocks = new HashSet<>();
+    public static final Set<String> mineableOreTags = new HashSet<>();
     public static final Set<Block> replaceableBlocks = new HashSet<Block>();
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
@@ -148,9 +150,16 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             Blocks.YELLOW_FLOWER,
             Blocks.RED_FLOWER,
             Blocks.DOUBLE_PLANT};
+    private static final String[] oreTags = {
+            "stone",
+            "cobblestone",
+            "logWood",
+            "treeSapling",
+            "treeLeaves"};
 
     static {
         mineableBlocks.addAll(Arrays.asList(mineable));
+        mineableOreTags.addAll(Arrays.asList(oreTags));
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
@@ -256,7 +265,17 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     private boolean isMineableBlock(IBlockState blockState) {
-        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState.getBlock()) || mineableStates.contains(blockState);
+        if (RailcraftConfig.boreMinesAllBlocks())
+            return true;
+        if (mineableBlocks.contains(blockState.getBlock()) || mineableStates.contains(blockState))
+            return true;
+        Block block = blockState.getBlock();
+        Item item = block.getItemDropped(blockState, MiscTools.RANDOM, 0);
+        if (item != null) {
+            ItemStack blockStack = new ItemStack(item, 1, block.damageDropped(blockState));
+            return mineableOreTags.stream().anyMatch(s -> OreDictPlugin.isOreType(s, blockStack));
+        }
+        return false;
     }
 
     @Override

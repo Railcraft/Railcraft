@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.ANCHOR_WORLD;
                 if (alpha.isAvailable() && RailcraftConfig.canCraftAnchors()) {
-                    CraftingPlugin.addRecipe(alpha.getItem(),
+                    CraftingPlugin.addRecipe(alpha.getStack(),
                             "gog",
                             "dpd",
                             "gog",
@@ -61,7 +61,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 alpha = EnumMachineAlpha.ANCHOR_PERSONAL;
                 if (alpha.isAvailable() && RailcraftConfig.canCraftPersonalAnchors()) {
-                    CraftingPlugin.addRecipe(alpha.getItem(),
+                    CraftingPlugin.addRecipe(alpha.getStack(),
                             "gog",
                             "dpd",
                             "gog",
@@ -73,7 +73,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 alpha = EnumMachineAlpha.ANCHOR_PASSIVE;
                 if (alpha.isAvailable() && RailcraftConfig.canCraftPassiveAnchors()) {
-                    CraftingPlugin.addRecipe(alpha.getItem(),
+                    CraftingPlugin.addRecipe(alpha.getStack(),
                             "gog",
                             "dpd",
                             "gog",
@@ -85,7 +85,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 EnumMachineBeta beta = EnumMachineBeta.SENTINEL;
                 if (beta.isAvailable()) {
-                    ItemStack stack = beta.getItem();
+                    ItemStack stack = beta.getStack();
                     if (RailcraftConfig.canCraftAnchors()) {
                         CraftingPlugin.addRecipe(stack,
                                 " p ",

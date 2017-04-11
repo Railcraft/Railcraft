@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,16 +11,22 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
+import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
+import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
 import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
 import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
+import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachineManual;
+import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
+import mods.railcraft.common.blocks.machine.equipment.TileSmoker;
 import mods.railcraft.common.blocks.machine.manipulator.*;
-import mods.railcraft.common.blocks.machine.simplemachine.TileFeedStation;
-import mods.railcraft.common.blocks.machine.simplemachine.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -33,16 +39,13 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileAnchorWorld.class, "RCWorldAnchorTile");
         GameRegistry.registerTileEntity(TileAnchorPersonal.class, "RCPersonalAnchorTile");
         GameRegistry.registerTileEntity(TileAnchorAdmin.class, "RCAdminAnchorTile");
-        GameRegistry.registerTileEntity(TileFeedStation.class, "RCFeedStationTile");
         GameRegistry.registerTileEntity(TileTradeStation.class, "RCTradeStationTile");
         GameRegistry.registerTileEntity(TileSteamTurbine.class, "RCSteamTurbineTile");
         GameRegistry.registerTileEntity(TileBlastFurnace.class, "RCBlastFurnaceTile");
         GameRegistry.registerTileEntity(TileCokeOven.class, "RCCokeOvenTile");
         GameRegistry.registerTileEntity(TileRockCrusher.class, "RCRockCrusherTile");
-        GameRegistry.registerTileEntity(TileRollingMachine.class, "RCRollingMachineTile");
         GameRegistry.registerTileEntity(TileTankWater.class, "RCWaterTankTile");
         GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
-        GameRegistry.registerTileEntity(TileSmoker.class, "RCSmokerTile");
         GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
         GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
         GameRegistry.registerTileEntity(TileAnchorPassive.class, "RCPassiveAnchorTile");
@@ -72,6 +75,21 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
         GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
 
+        // Actuator
+        RailcraftRegistry.register(TileActuatorLever.class, "actuator_lever");
+        RailcraftRegistry.register(TileActuatorMotor.class, "actuator_motor");
+        RailcraftRegistry.register(TileActuatorRouting.class, "actuator_router");
+
+        // Charge Feeders
+        RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");
+        RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
+
+        // Equipment
+        RailcraftRegistry.register(TileRollingMachineManual.class, "equipment_rolling_manual");
+        RailcraftRegistry.register(TileRollingMachinePowered.class, "equipment_rolling_powered");
+        RailcraftRegistry.register(TileFeedStation.class, "equipment_feed_station");
+        RailcraftRegistry.register(TileSmoker.class, "equipment_smoker");
+
         // Manipulator
         GameRegistry.registerTileEntity(TileDispenserCart.class, "RCMinecartDispenserTile");
         GameRegistry.registerTileEntity(TileIC2Loader.class, "RCLoaderTileEnergy");
@@ -86,9 +104,13 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileRFLoader.class, "RCLoaderTileRF");
         GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
 
-        // Actuator
-        GameRegistry.registerTileEntity(TileActuatorLever.class, "railcraft:actuator_lever");
-        GameRegistry.registerTileEntity(TileActuatorMotor.class, "railcraft:actuator_motor");
-        GameRegistry.registerTileEntity(TileActuatorRouting.class, "railcraft:actuator_router");
+        // Signal Boxes
+        RailcraftRegistry.register(TileBoxAnalog.class, "signal_box_analog");
+        RailcraftRegistry.register(TileBoxRelay.class, "signal_box_relay");
+        RailcraftRegistry.register(TileBoxCapacitor.class, "signal_box_capacitor");
+        RailcraftRegistry.register(TileBoxController.class, "signal_box_controller");
+        RailcraftRegistry.register(TileBoxInterlock.class, "signal_box_interlock");
+        RailcraftRegistry.register(TileBoxReceiver.class, "signal_box_receiver");
+        RailcraftRegistry.register(TileBoxSequencer.class, "signal_box_sequencer");
     }
 }

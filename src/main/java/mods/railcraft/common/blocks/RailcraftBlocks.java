@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,6 @@ import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
 import mods.railcraft.common.blocks.aesthetics.post.ItemPostMetal;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
-import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.charge.BlockChargeTrap;
 import mods.railcraft.common.blocks.charge.BlockFrame;
 import mods.railcraft.common.blocks.charge.BlockWire;
@@ -41,15 +40,14 @@ import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
+import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
-import mods.railcraft.common.blocks.machine.simplemachine.BlockMachineSimple;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
-import mods.railcraft.common.blocks.ore.BlockOre;
-import mods.railcraft.common.blocks.ore.BlockOreMagic;
-import mods.railcraft.common.blocks.ore.BlockWorldLogic;
-import mods.railcraft.common.blocks.ore.ItemOreMagic;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
+import mods.railcraft.common.blocks.ore.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -85,6 +83,7 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
+    ACTUATOR("actuator", BlockMachineActuator.class, BlockMachineActuator::new, ItemMachineActuator::new),
     ANVIL_STEEL("anvil", BlockRCAnvil.class, BlockRCAnvil::new, ItemAnvil::new),
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
     BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
@@ -95,30 +94,32 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BRICK_GRANITE("brick_granite", BlockBrick.class, () -> new BlockBrick(BrickTheme.GRANITE), ItemBrick::new),
     BRICK_INFERNAL("brick_infernal", BlockBrick.class, () -> new BlockBrick(BrickTheme.INFERNAL), ItemBrick::new),
     BRICK_NETHER("brick_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
+    BRICK_PEARLIZED("brick_pearlized", BlockBrick.class, () -> new BlockBrick(BrickTheme.PEARLIZED), ItemBrick::new),
     BRICK_QUARRIED("brick_quarried", BlockBrick.class, () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
     BRICK_RED_NETHER("brick_red_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDNETHER), ItemBrick::new),
     BRICK_RED_SANDY("brick_red_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDSANDY), ItemBrick::new),
     BRICK_SANDY("brick_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, BlockChargeFeeder::new, ItemBlockRailcraftSubtyped::new),
+    CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, BlockChargeFeeder::new, ItemMachine::new),
     CHARGE_TRAP("charge_trap", BlockChargeTrap.class, BlockChargeTrap::new, ItemBlockRailcraft::new),
-    GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
     DETECTOR("detector", BlockDetector.class, BlockDetector::new, ItemDetector::new),
+    EQUIPMENT("equipment", BlockMachineEquipment.class, BlockMachineEquipment::new, ItemMachine::new),
     FRAME("frame", BlockFrame.class, BlockFrame::new, ItemBlockRailcraft::new),
+    GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
     MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
     MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
-    MACHINE_ACTUATOR("actuator", BlockMachineActuator.class, BlockMachineActuator::new, ItemMachineActuator::new),
-    MACHINE_MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
-    MACHINE_SIMPLE("machine_simple", BlockMachineSimple.class, BlockMachineSimple::new, ItemMachine::new),
+    MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
     ORE_MAGIC("ore_magic", BlockOreMagic.class, BlockOreMagic::new, ItemOreMagic::new),
+    ORE_METAL("ore_metal", BlockOreMetal.class, BlockOreMetal::new, ItemBlockRailcraftSubtyped::new),
+    ORE_METAL_POOR("ore_metal_poor", BlockOreMetalPoor.class, BlockOreMetalPoor::new, ItemBlockRailcraftSubtyped::new),
     POST("post", BlockPost.class, BlockPost::new, ItemPost::new),
     POST_METAL("post_metal", BlockPostMetal.class, () -> new BlockPostMetal(false), ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetal.class, () -> new BlockPostMetal(true), ItemPostMetal::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
-    WAY_OBJECT("wayobject", BlockWayObjectRailcraft.class, BlockWayObjectRailcraft::new, ItemWayObject::new),
+    SIGNAL_BOX("signal_box", BlockMachineSignalBoxRailcraft.class, BlockMachineSignalBoxRailcraft::new, ItemMachine::new),
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemBlockRailcraft::new),
@@ -129,16 +130,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
     TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     TRACK_FORCE("track_force", BlockTrackForce.class, BlockTrackForce::new, ItemTrack::new),
-    //    TRACK_JUNCTION_ELECTRIC("track_junction_electric", () -> new BlockTrackJunction(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
-//    TRACK_JUNCTION_HIGH_SPEED("track_junction_high_speed", () -> new BlockTrackJunction(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-//    TRACK_JUNCTION_HS_ELECTRIC("track_junction_hs_electric", () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
-//    TRACK_JUNCTION_IRON("track_junction_iron", () -> new BlockTrackJunction(TrackTypes.IRON.getTrackType()), ItemTrack::new),
-//    TRACK_JUNCTION_REINFORCED("track_junction_reinforced", () -> new BlockTrackJunction(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-//    TRACK_JUNCTION_STRAP_IRON("track_junction_strap_iron", () -> new BlockTrackJunction(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, BlockRailcraftWall::new, ItemMaterial::new),
+    WAY_OBJECT("wayobject", BlockWayObjectRailcraft.class, BlockWayObjectRailcraft::new, ItemWayObject::new),
     WIRE("wire", BlockWire.class, BlockWire::new, ItemBlockRailcraft::new),
-    WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new);
+    WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new),;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;
@@ -187,7 +183,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             RailcraftRegistry.register(block, item);
 
             if (!(block instanceof IRailcraftBlock))
-                throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
+                throw new RuntimeException("Railcraft Blocks must implement IRailcraftBlock");
             IRailcraftBlock blockObject = (IRailcraftBlock) block;
             blockObject.initializeDefinintion();
             blockObject.defineRecipes();

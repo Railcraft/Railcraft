@@ -55,7 +55,6 @@ public final class FluidTools {
     private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
 
     static {
-        adapters.add(ForestryFluidRegistrar.INSTANCE);
         adapters.add(ForgeFluidRegistrar.INSTANCE);
     }
 
@@ -286,26 +285,6 @@ public final class FluidTools {
 
     public static boolean registerBottle(FluidStack liquid, ItemStack filled) {
         ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerWax(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.WAX_CAPSULE.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerRefactory(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.REFRACTORY_EMPTY.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerCan(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.CAN_EMPTY.get();
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerCell(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = ModItems.CELL_EMPTY.get();
         return registerContainer(liquid, filled, empty);
     }
 

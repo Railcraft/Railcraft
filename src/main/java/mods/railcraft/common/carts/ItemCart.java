@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -103,7 +103,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
             info.addAll(tip.convertToStrings());
         ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         if (filter != null) {
-            info.add(TextFormatting.BLUE + LocalizationPlugin.translate("railcraft.gui.filter") + ": " + filter.getDisplayName());
+            info.add(TextFormatting.BLUE + LocalizationPlugin.translate("gui.railcraft.filter") + ": " + filter.getDisplayName());
         }
     }
 

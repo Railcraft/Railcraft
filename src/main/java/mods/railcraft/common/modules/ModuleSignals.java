@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.RailcraftItems;
 
 @RailcraftModule(value = "railcraft:signals", description = "signals, signal boxes")
@@ -21,14 +22,11 @@ public class ModuleSignals extends RailcraftModulePayload {
             public void construction() {
                 add(
 //                        RailcraftBlocks.signal,
+                        RailcraftBlocks.SIGNAL_BOX,
                         RailcraftItems.SIGNAL_BLOCK_SURVEYOR,
                         RailcraftItems.SIGNAL_TUNER,
                         RailcraftItems.SIGNAL_LABEL
                 );
-            }
-
-            @Override
-            public void preInit() {
             }
         });
     }

@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class ActuatorModel implements IModel {
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
-        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.MACHINE_ACTUATOR.block();
+        BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.ACTUATOR.block();
         if (block == null)
             return Collections.emptyList();
 
@@ -149,11 +150,13 @@ public class ActuatorModel implements IModel {
             this.baseModels = baseModels;
             this.redFlagModels = redFlagModels;
             this.whiteFlagModels = whiteFlagModels;
-            baseModel = baseModels.get(baseModelLocations.get(RailcraftBlocks.MACHINE_ACTUATOR.getDefaultState()));
+            baseModel = baseModels.get(baseModelLocations.get(RailcraftBlocks.ACTUATOR.getDefaultState()));
         }
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+            if (state instanceof IExtendedBlockState)
+                state = ((IExtendedBlockState) state).getClean();
             List<BakedQuad> quads = new ArrayList<>();
             IBakedModel baseModel = baseModels.get(baseModelLocations.get(state));
             IBakedModel redFlagModel = redFlagModels.get(redFlagModelLocations.get(state));

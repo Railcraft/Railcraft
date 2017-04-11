@@ -105,9 +105,9 @@ public class RailcraftConfig {
     private static int creosoteTorchOutput;
     private static int coalcokeTorchOutput;
     private static int villagerID;
-    private static int wreckingID;
-    private static int implosionID;
-    private static int destructionID;
+    private static boolean wreckingEnabled;
+    private static boolean implosionEnabled;
+    private static boolean destructionEnabled;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -203,10 +203,10 @@ public class RailcraftConfig {
     }
 
     private static void loadEnchantment() {
-        configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantment ids are defined here.\n");
-        wreckingID = get(CAT_ENCHANTMENTS, "ench_wrecking", 190);
-        implosionID = get(CAT_ENCHANTMENTS, "ench_implosion", 191);
-        destructionID = get(CAT_ENCHANTMENTS, "ench_destruction", 192);
+        configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantments can be disabled here.\n");
+        wreckingEnabled = get(CAT_ENCHANTMENTS, true, "ench_wrecking");
+        implosionEnabled = get(CAT_ENCHANTMENTS, true, "ench_implosion");
+        destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
     }
 
     private static void loadAnchorSettings() {
@@ -335,6 +335,10 @@ public class RailcraftConfig {
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
+        loadRecipeProperty("railcraft.alloy", "enableAltBronze", false, "change to '{t}=true' to forcibly enable a recipe to craft Bronze Ingots from Tin and Copper Ingots, regardless of whether the Factory Module is enabled");
+        loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze recipes to supply 3 Bronze instead of 4");
+        loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
+        loadRecipeProperty("railcraft.alloy", "enableAltInvar", false, "change to '{t}=true' to forcibly enable a recipe to craft Invar Ingots from Iron and Nickel Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
@@ -381,6 +385,7 @@ public class RailcraftConfig {
         worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "mineTin", true, "Tin Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
 
         mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
         vanillaOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "vanillaOreGenChance", 0, 100, 100, "chance that vanilla ore gen (Iron, Gold) will spawn ore uniformly throughout the world, set to zero to disable, min=0, default=100, max=100");
@@ -424,9 +429,12 @@ public class RailcraftConfig {
 
         loadLootProperty("ingot_copper", 10);
         loadLootProperty("ingot_lead", 10);
+        loadLootProperty("ingot_bronze", 10);
         loadLootProperty("ingot_steel", 10);
         loadLootProperty("ingot_tin", 10);
         loadLootProperty("ingot_silver", 5);
+        loadLootProperty("ingot_nickel", 5);
+        loadLootProperty("ingot_invar", 5);
 
         loadLootProperty("steel.block", 5);
         loadLootProperty("tool_crowbar_iron", 10);
@@ -702,6 +710,22 @@ public class RailcraftConfig {
         return getRecipeConfig("ic2.macerator.obsidian");
     }
 
+    public static boolean forceEnableBronzeRecipe() {
+        return getRecipeConfig("railcraft.alloy.enableAltBronze");
+    }
+
+    public static boolean forceEnableInvarRecipe() {
+        return getRecipeConfig("railcraft.alloy.enableAltInvar");
+    }
+
+    public static boolean enableHarderBronze() {
+        return getRecipeConfig("railcraft.alloy.enableHarderBronze");
+    }
+
+    public static boolean forceEnableSteelRecipe() {
+        return getRecipeConfig("railcraft.alloy.enableAltSteel");
+    }
+
     public static boolean useCreosoteFurnaceRecipes() {
         return getRecipeConfig("minecraft.furnace.creosote");
     }
@@ -878,16 +902,16 @@ public class RailcraftConfig {
         return villagerID;
     }
 
-    public static int wreckingID() {
-        return wreckingID;
+    public static boolean wreckingEnabled() {
+        return wreckingEnabled;
     }
 
-    public static int implosionID() {
-        return implosionID;
+    public static boolean implosionEnabled() {
+        return implosionEnabled;
     }
 
-    public static int destructionID() {
-        return destructionID;
+    public static boolean destructionEnabled() {
+        return destructionEnabled;
     }
 
     public static boolean isItemEnabled(String tag) {

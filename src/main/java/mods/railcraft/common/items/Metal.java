@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,8 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.blocks.ore.EnumOreMetal;
+import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -40,47 +41,39 @@ public enum Metal implements IVariantEnum {
     COPPER("Copper"),
     TIN("Tin"),
     LEAD("Lead"),
-    SILVER("Silver");
+    SILVER("Silver"),
+    BRONZE("Bronze"),
+    NICKEL("Nickel"),
+    INVAR("Invar"),;
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
-    //    private static final EnumBiMap<Metal, EnumIngot> ingotMap = EnumBiMap.create(Metal.class, EnumIngot.class);
-//    private static final EnumBiMap<Metal, EnumNugget> nuggetMap = EnumBiMap.create(Metal.class, EnumNugget.class);
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
     private static final BiMap<Metal, IVariantEnum> poorOreMap = HashBiMap.create();
     private static final BiMap<Metal, IVariantEnum> blockMap = HashBiMap.create();
 
-    static {
-//        metalObjects.add(BlockMetal.class);
+    public static void init() {
+        oreMap.put(COPPER, EnumOreMetal.COPPER);
+        oreMap.put(TIN, EnumOreMetal.TIN);
+        oreMap.put(LEAD, EnumOreMetal.LEAD);
+        oreMap.put(SILVER, EnumOreMetal.SILVER);
+        oreMap.put(NICKEL, EnumOreMetal.NICKEL);
 
-//        ingotMap.put(STEEL, EnumIngot.STEEL);
-//        ingotMap.put(COPPER, EnumIngot.COPPER);
-//        ingotMap.put(TIN, EnumIngot.TIN);
-//        ingotMap.put(LEAD, EnumIngot.LEAD);
-//
-//        nuggetMap.put(IRON, EnumNugget.IRON);
-//        nuggetMap.put(STEEL, EnumNugget.STEEL);
-//        nuggetMap.put(COPPER, EnumNugget.COPPER);
-//        nuggetMap.put(TIN, EnumNugget.TIN);
-//        nuggetMap.put(LEAD, EnumNugget.LEAD);
-
-        oreMap.put(COPPER, EnumOre.COPPER);
-        oreMap.put(TIN, EnumOre.TIN);
-        oreMap.put(LEAD, EnumOre.LEAD);
-        oreMap.put(SILVER, EnumOre.SILVER);
-
-        poorOreMap.put(IRON, EnumOre.POOR_IRON);
-        poorOreMap.put(GOLD, EnumOre.POOR_GOLD);
-        poorOreMap.put(COPPER, EnumOre.POOR_COPPER);
-        poorOreMap.put(TIN, EnumOre.POOR_TIN);
-        poorOreMap.put(LEAD, EnumOre.POOR_LEAD);
-        poorOreMap.put(SILVER, EnumOre.POOR_SILVER);
+        poorOreMap.put(IRON, EnumOreMetalPoor.IRON);
+        poorOreMap.put(GOLD, EnumOreMetalPoor.GOLD);
+        poorOreMap.put(COPPER, EnumOreMetalPoor.COPPER);
+        poorOreMap.put(TIN, EnumOreMetalPoor.TIN);
+        poorOreMap.put(LEAD, EnumOreMetalPoor.LEAD);
+        poorOreMap.put(SILVER, EnumOreMetalPoor.SILVER);
+        poorOreMap.put(NICKEL, EnumOreMetalPoor.NICKEL);
 
         blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
         blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
         blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
         blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
-
+        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
+        blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
+        blockMap.put(INVAR, EnumGeneric.BLOCK_INVAR);
     }
 
     public final Predicate<ItemStack> nuggetFilter;
@@ -96,22 +89,6 @@ public enum Metal implements IVariantEnum {
         ingotFilter = StackFilters.ofOreType("ingot" + oreSuffix);
         blockFilter = StackFilters.ofOreType("block" + oreSuffix);
     }
-
-//    public static Metal get(EnumNugget nugget) {
-//        return nuggetMap.inverse().get(nugget);
-//    }
-//
-//    public static Metal get(EnumIngot ingot) {
-//        return ingotMap.inverse().get(ingot);
-//    }
-
-//    public static Metal get(EnumOre ore) {
-//        return poorOreMap.inverse().get(ore);
-//    }
-
-//    public static Metal get(EnumGeneric ore) {
-//        return blockMap.inverse().get(ore);
-//    }
 
     @Nullable
     @Override
@@ -199,7 +176,7 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        ORE("ore", RailcraftBlocks.ORE, oreMap) {
+        ORE("ore", RailcraftBlocks.ORE_METAL, oreMap) {
             @Nullable
             @Override
             public IBlockState getState(Metal metal) {
@@ -209,6 +186,8 @@ public enum Metal implements IVariantEnum {
                     case GOLD:
                         return Blocks.GOLD_ORE.getDefaultState();
                     case STEEL:
+                    case BRONZE:
+                    case INVAR:
                         return null;
                 }
                 return super.getState(metal);
@@ -226,7 +205,8 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        POOR_ORE("poorOre", RailcraftBlocks.ORE, poorOreMap);
+        POOR_ORE("poorOre", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
+        };
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;

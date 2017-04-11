@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import com.google.common.collect.MapMaker;
@@ -108,10 +109,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     if (target == null)
                         setTarget(this, player);
                     else if (worldObj.provider.getDimension() != target.getDim())
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
-                    else if (new WorldCoordinate(this).equals(target)) {
+                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.dimension", getLocalizationTag());
+                    else if (Objects.equals(new WorldCoordinate(this), target)) {
                         removeTarget(player);
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.cancel", getLocalizationTag());
                     } else
                         setSentinel(player, target);
                     crowbar.onWhack(player, hand, heldItem, getPos());
@@ -129,7 +130,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public static void setTarget(RailcraftTileEntity tile, EntityPlayer player) {
         sentinelPairingMap.put(player, new WorldCoordinate(tile));
-        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.start", tile.getLocalizationTag());
+        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.start", tile.getLocalizationTag());
     }
 
     public static void removeTarget(EntityPlayer player) {
@@ -154,11 +155,11 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     @Nullable
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
-        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord)) {
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
+        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord.getPos())) {
+            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }
-        return WorldPlugin.getBlockTile(searcher.getWorld(), coord);
+        return WorldPlugin.getBlockTile(searcher.getWorld(), coord.getPos());
     }
 
     public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {
@@ -173,13 +174,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             int zSentinelChunk = tile.getPos().getZ() >> 4;
 
             if (xChunk != xSentinelChunk && zChunk != zSentinelChunk) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.alignment", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
+                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.alignment", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
                 return false;
             }
 
             int max = getMaxSentinelChunks();
             if (Math.abs(xChunk - xSentinelChunk) >= max || Math.abs(zChunk - zSentinelChunk) >= max) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.distance", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
+                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.distance", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
                 return false;
             }
 
@@ -190,10 +191,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             requestTicket();
             sendUpdateToClient();
             removeTarget(player);
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.success", getLocalizationTag());
+            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.success", getLocalizationTag());
             return true;
         }
-        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
+        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.anchor.pair.fail.invalid", getLocalizationTag());
         return false;
     }
 
@@ -220,7 +221,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     @Override
     public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack drop = getMachineType().getItem();
+        ItemStack drop = getMachineType().getStack();
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setLong("fuel", fuel);

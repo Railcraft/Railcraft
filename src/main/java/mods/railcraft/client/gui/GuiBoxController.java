@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.wayobjects.TileBoxController;
+import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -24,7 +24,7 @@ public class GuiBoxController extends GuiBasic {
     private SignalAspect poweredAspect;
 
     public GuiBoxController(TileBoxController t) {
-        super(t.getName());
+        super(LocalizationPlugin.translate(t.getName()));
         tile = t;
         defaultAspect = t.defaultAspect;
         poweredAspect = t.poweredAspect;
@@ -47,9 +47,9 @@ public class GuiBoxController extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.box.controller.aspect.default"), 25);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.default"), 25);
         GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(defaultAspect.getLocalizationTag()), 35);
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.box.controller.aspect.redstone"), 60);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.redstone"), 60);
         GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(poweredAspect.getLocalizationTag()), 70);
     }
 

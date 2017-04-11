@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -92,7 +92,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                 if (entity.hasCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null)) {
                     ICartBattery battery = entity.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
                     if (battery != null) {
-                        sendChat(player, "railcraft.gui.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
+                        sendChat(player, "gui.railcraft.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
                         event.setCanceled(true);
                     }
                 }
@@ -109,15 +109,15 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         EnumActionResult returnValue = EnumActionResult.PASS;
         ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
         if (!node.isNull() && !node.isGraphNull()) {
-            sendChat(player, "railcraft.gui.charge.meter.start", SECONDS_TO_RECORD);
+            sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
             node.startRecordingUsage(SECONDS_TO_RECORD * 20, (n, avg) -> {
                 ChargeNetwork.ChargeGraph graph = n.getChargeGraph();
-                sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaintenanceCost());
+                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaintenanceCost());
                 if (n.getBattery() == null)
-                    sendChat(player, "railcraft.gui.charge.meter.node", avg, n.getChargeDef().getMaintenanceCost());
+                    sendChat(player, "gui.railcraft.charge.meter.node", avg, n.getChargeDef().getMaintenanceCost());
                 else {
                     boolean infiniteBat = n.getBattery().isInfinite();
-                    sendChat(player, "railcraft.gui.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0);
+                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0);
                 }
             });
             returnValue = EnumActionResult.SUCCESS;

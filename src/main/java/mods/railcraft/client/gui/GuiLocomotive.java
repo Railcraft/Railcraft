@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,9 +54,9 @@ public abstract class GuiLocomotive extends EntityGui {
         this.typeTag = typeTag;
         loco.clientMode = loco.getMode();
         loco.clientSpeed = loco.getSpeed();
-        lockedToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.locked", "{owner}=[Unknown]");
-        unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.unlocked", "{owner}=[Unknown]");
-        privateToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.private", "{owner}=[Unknown]");
+        lockedToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.locked", "{owner}=[Unknown]");
+        unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.unlocked", "{owner}=[Unknown]");
+        privateToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.private", "{owner}=[Unknown]");
     }
 
     @Override
@@ -71,10 +71,10 @@ public abstract class GuiLocomotive extends EntityGui {
         int id = 0;
 
         for (LocoMode mode : loco.getAllowedModes()) {
-            GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 129, 55, LocalizationPlugin.translate("railcraft.gui.locomotive.mode." + mode.getName()), loco.clientMode == mode);
+            GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 129, 55, LocalizationPlugin.translate("gui.railcraft.locomotive.mode." + mode.getName()), loco.clientMode == mode);
             button.setClickConsumer(b -> loco.clientMode = mode);
             button.setStatusUpdater(b -> b.active = loco.clientMode == mode);
-            button.setToolTip(ToolTip.buildToolTip("railcraft.gui.locomotive." + typeTag + ".tips.button.mode." + mode.getName()));
+            button.setToolTip(ToolTip.buildToolTip("gui.railcraft.locomotive." + typeTag + ".tips.button.mode." + mode.getName()));
             modeButtons.put(mode, button);
         }
         GuiTools.newButtonRowAuto(buttonList, w + 3, 171, modeButtons.values());
@@ -120,9 +120,9 @@ public abstract class GuiLocomotive extends EntityGui {
         String ownerName = ((ContainerLocomotive) container).ownerName;
         if (ownerName != null && !ownerName.equals(locoOwner)) {
             locoOwner = ownerName;
-            lockedToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.locked", "{owner}=" + ownerName);
-            unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.unlocked", "{owner}=" + ownerName);
-            privateToolTips = ToolTip.buildToolTip("railcraft.gui.locomotive.tips.button.private", "{owner}=" + ownerName);
+            lockedToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.locked", "{owner}=" + ownerName);
+            unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.unlocked", "{owner}=" + ownerName);
+            privateToolTips = ToolTip.buildToolTip("gui.railcraft.locomotive.tips.button.private", "{owner}=" + ownerName);
         }
     }
 

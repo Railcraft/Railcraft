@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.wayobjects.IRouter;
-import mods.railcraft.common.blocks.wayobjects.RoutingLogic;
 import mods.railcraft.common.gui.slots.SlotSecure;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.routing.IRouter;
+import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
@@ -43,9 +43,7 @@ public class ContainerRouting extends RailcraftContainer {
         errorElement = new Widget(16, 24, 176, 0, 16, 16) {
             @Override
             public ToolTip getToolTip() {
-                if (router.getLogic() != null && router.getLogic().getError() != null)
-                    return router.getLogic().getError().getToolTip();
-                return null;
+                return router.getLogic().map(RoutingLogic::getError).map(RoutingLogic.RoutingLogicException::getToolTip).orElse(null);
             }
 
         };

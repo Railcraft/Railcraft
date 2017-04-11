@@ -24,6 +24,7 @@ import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.commands.CommandDebug;
+import mods.railcraft.common.commands.CommandTrack;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
@@ -34,7 +35,6 @@ import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -83,6 +83,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 Railcraft.rootCommand.addChildCommand(new CommandDebug());
                 Railcraft.rootCommand.addChildCommand(new CommandAdmin());
+                Railcraft.rootCommand.addChildCommand(new CommandTrack());
 
                 RailcraftCraftingManager.cokeOven = new CokeOvenCraftingManager();
                 RailcraftCraftingManager.blastFurnace = new BlastFurnaceCraftingManager();
@@ -139,8 +140,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 NetworkRegistry.INSTANCE.registerGuiHandler(Railcraft.getMod(), new GuiHandler());
 
                 LootPlugin.init();
-
-                RailcraftEnchantments.registerEnchantment();
 
                 EntityEnderman.setCarriable(Blocks.GRAVEL, false);
 

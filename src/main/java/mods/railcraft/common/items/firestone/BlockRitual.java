@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -104,11 +104,11 @@ public class BlockRitual extends BlockContainerRailcraft {
         return 0;
     }
 
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty, int meta) {
-        return null;
-    }
+//    @Nullable
+//    @Override
+//    public ItemStack getStack(int qty, int meta) {
+//        return null;
+//    }
 
     @Nullable
     @Override

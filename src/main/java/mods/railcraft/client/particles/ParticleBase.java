@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ParticleBase extends Particle {
-    protected boolean noClip;
     protected boolean dimAsAge;
 
     public ParticleBase(World par1World, Vec3d start) {
@@ -57,15 +56,5 @@ public class ParticleBase extends Particle {
             return var4 | var5 << 16;
         }
         return super.getBrightnessForRender(par1);
-    }
-
-    @Override
-    public void moveEntity(double x, double y, double z) {
-        if (noClip) {
-            setEntityBoundingBox(getEntityBoundingBox().offset(x, y, z));
-            resetPositionToBB();
-        } else {
-            super.moveEntity(x, y, z);
-        }
     }
 }

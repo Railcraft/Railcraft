@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,7 +40,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                         RailcraftCarts.TANK,
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
-                        RailcraftBlocks.MACHINE_MANIPULATOR
+                        RailcraftBlocks.MANIPULATOR
                 );
             }
 
@@ -48,7 +48,7 @@ public class ModuleTransport extends RailcraftModulePayload {
             public void preInit() {
                 EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
                 if (alpha.isAvailable())
-                    CraftingPlugin.addRecipe(alpha.getItem(6),
+                    CraftingPlugin.addRecipe(alpha.getStack(6),
                             "WWW",
                             "ISI",
                             "WWW",
@@ -61,7 +61,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
                 if (voidChest.isAvailable())
-                    CraftingPlugin.addRecipe(voidChest.getItem(),
+                    CraftingPlugin.addRecipe(voidChest.getStack(),
                             "OOO",
                             "OPO",
                             "OOO",
@@ -70,8 +70,8 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 ManipulatorVariant itemLoader = ManipulatorVariant.ITEM_LOADER;
                 if (itemLoader.isAvailable()) {
-                    ItemStack stack = itemLoader.getItem();
-                    ItemStack detector = EnumDetector.ITEM.getItem();
+                    ItemStack stack = itemLoader.getStack();
+                    ItemStack detector = EnumDetector.ITEM.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(stack,
@@ -84,7 +84,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                     itemLoader = ManipulatorVariant.ITEM_LOADER_ADVANCED;
                     if (itemLoader.isAvailable())
-                        CraftingPlugin.addRecipe(itemLoader.getItem(),
+                        CraftingPlugin.addRecipe(itemLoader.getStack(),
                                 "IRI",
                                 "RLR",
                                 "ISI",
@@ -96,8 +96,8 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 ManipulatorVariant itemUnloader = ManipulatorVariant.ITEM_UNLOADER;
                 if (itemUnloader.isAvailable()) {
-                    ItemStack stack = itemUnloader.getItem();
-                    ItemStack detector = EnumDetector.ITEM.getItem();
+                    ItemStack stack = itemUnloader.getStack();
+                    ItemStack detector = EnumDetector.ITEM.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(stack,
@@ -110,7 +110,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                     itemUnloader = ManipulatorVariant.ITEM_UNLOADER_ADVANCED;
                     if (itemUnloader.isAvailable())
-                        CraftingPlugin.addRecipe(itemUnloader.getItem(),
+                        CraftingPlugin.addRecipe(itemUnloader.getStack(),
                                 "IRI",
                                 "RLR",
                                 "ISI",
@@ -123,10 +123,10 @@ public class ModuleTransport extends RailcraftModulePayload {
                 ManipulatorVariant liquidLoader = ManipulatorVariant.FLUID_LOADER;
 
                 if (liquidLoader.isAvailable()) {
-                    ItemStack detector = EnumDetector.TANK.getItem();
+                    ItemStack detector = EnumDetector.TANK.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(liquidLoader.getItem(),
+                    CraftingPlugin.addRecipe(liquidLoader.getStack(),
                             "GLG",
                             "G G",
                             "GDG",
@@ -137,10 +137,10 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 ManipulatorVariant liquidUnloader = ManipulatorVariant.FLUID_UNLOADER;
                 if (liquidUnloader.isAvailable()) {
-                    ItemStack detector = EnumDetector.TANK.getItem();
+                    ItemStack detector = EnumDetector.TANK.getStack();
                     if (detector == null)
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(liquidUnloader.getItem(),
+                    CraftingPlugin.addRecipe(liquidUnloader.getStack(),
                             "GDG",
                             "G G",
                             "GLG",
@@ -165,7 +165,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                         CraftingPlugin.addRecipe(cart.getStack(),
                                 "T",
                                 "M",
-                                'T', EnumMachineBeta.TANK_IRON_GAUGE.getItem(),
+                                'T', EnumMachineBeta.TANK_IRON_GAUGE.getStack(),
                                 'M', Items.MINECART);
                     } else {
                         CraftingPlugin.addRecipe(cart.getStack(),
@@ -186,13 +186,13 @@ public class ModuleTransport extends RailcraftModulePayload {
                             "OOO",
                             "ODO",
                             "OOO",
-                            'O', type.getItem(),
+                            'O', type.getStack(),
                             'D', color.getDyeOreDictTag());
                 }
             }
 
             private ItemStack getColorTank(EnumMachineBeta type, EnumColor color, int qty) {
-                ItemStack stack = type.getItem(qty);
+                ItemStack stack = type.getStack(qty);
                 color.setItemColor(stack);
                 return stack;
             }
@@ -208,7 +208,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
             private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
                 if (defineTank(type, recipe)) {
-                    RailcraftCraftingManager.blastFurnace.addRecipe(type.getItem(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(type.getStack(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
                     return true;
                 }
                 return false;

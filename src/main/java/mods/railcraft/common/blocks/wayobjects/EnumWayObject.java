@@ -26,20 +26,21 @@ import java.util.List;
 public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
 
     // Name (module, hardness, needsSupport, tag, tile)
-    BOX_INTERLOCK(ModuleSignals.class, 3, true, "box.interlock", TileBoxInterlock.class),
+//    BOX_INTERLOCK(ModuleSignals.class, 3, true, "box.interlock", TileBoxInterlock.class),
     DUAL_HEAD_BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal.dual", TileSignalDualHeadBlockSignal.class),
     //    SWITCH_MOTOR(ModuleSignals.class, 8, true, "switch.motor", TileActuatorMotor.class),
     BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal", TileSignalBlockSignal.class),
     //    SWITCH_LEVER(ModuleSignals.class, 8, true, "switch.lever", TileActuatorLever.class),
 //    SWITCH_ROUTING(ModuleRouting.class, 8, true, "switch.routing", TileActuatorRouting.class),
-    BOX_SEQUENCER(ModuleSignals.class, 3, true, "box.sequencer", TileBoxSequencer.class),
-    BOX_CAPACITOR(ModuleSignals.class, 3, true, "box.capacitor", TileBoxCapacitor.class),
-    BOX_RECEIVER(ModuleSignals.class, 3, true, "box.receiver", TileBoxReceiver.class),
-    BOX_CONTROLLER(ModuleSignals.class, 3, true, "box.controller", TileBoxController.class),
-    BOX_ANALOG_CONTROLLER(ModuleSignals.class, 3, true, "box.analog", TileBoxAnalogController.class),
+//    BOX_SEQUENCER(ModuleSignals.class, 3, true, "box.sequencer", TileBoxSequencer.class),
+//    BOX_CAPACITOR(ModuleSignals.class, 3, true, "box.capacitor", TileBoxCapacitor.class),
+//    BOX_RECEIVER(ModuleSignals.class, 3, true, "box.receiver", TileBoxReceiver.class),
+//    BOX_CONTROLLER(ModuleSignals.class, 3, true, "box.controller", TileBoxController.class),
+//    BOX_ANALOG_CONTROLLER(ModuleSignals.class, 3, true, "box.analog", TileBoxAnalogController.class),
     DISTANT_SIGNAL(ModuleSignals.class, 8, false, "distant", TileSignalDistantSignal.class),
     DUAL_HEAD_DISTANT_SIGNAL(ModuleSignals.class, 8, false, "distant.dual", TileSignalDualHeadDistantSignal.class),
-    BOX_BLOCK_RELAY(ModuleSignals.class, 3, true, "box.block.relay", TileBoxBlockRelay.class),;
+//    BOX_BLOCK_RELAY(ModuleSignals.class, 3, true, "box.block.relay", TileBoxBlockRelay.class),
+    ;
     private final Class<? extends IRailcraftModule> module;
     private final float hardness;
     private final boolean needsSupport;
@@ -56,13 +57,13 @@ public enum EnumWayObject implements IWayObjectDefinition, IVariantEnum {
         creativeList.add(DISTANT_SIGNAL);
         creativeList.add(DUAL_HEAD_BLOCK_SIGNAL);
         creativeList.add(DUAL_HEAD_DISTANT_SIGNAL);
-        creativeList.add(BOX_BLOCK_RELAY);
-        creativeList.add(BOX_RECEIVER);
-        creativeList.add(BOX_CONTROLLER);
-        creativeList.add(BOX_ANALOG_CONTROLLER);
-        creativeList.add(BOX_CAPACITOR);
-        creativeList.add(BOX_SEQUENCER);
-        creativeList.add(BOX_INTERLOCK);
+//        creativeList.add(BOX_BLOCK_RELAY);
+//        creativeList.add(BOX_RECEIVER);
+//        creativeList.add(BOX_CONTROLLER);
+//        creativeList.add(BOX_ANALOG_CONTROLLER);
+//        creativeList.add(BOX_CAPACITOR);
+//        creativeList.add(BOX_SEQUENCER);
+//        creativeList.add(BOX_INTERLOCK);
     }
 
     EnumWayObject(Class<? extends IRailcraftModule> module, float hardness, boolean needsSupport, String tag, Class<? extends TileWayObject> tile) {

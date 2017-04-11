@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class ModuleCharge extends RailcraftModulePayload {
             public void preInit() {
                 EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
                 if (alpha.isAvailable()) {
-                    CraftingPlugin.addRecipe(alpha.getItem(3),
+                    CraftingPlugin.addRecipe(alpha.getStack(3),
                             "BPB",
                             "P P",
                             "BPB",
@@ -67,7 +67,7 @@ public class ModuleCharge extends RailcraftModulePayload {
 
                 EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
                 if (epsilon.isAvailable()) {
-                    CraftingPlugin.addRecipe(epsilon.getItem(),
+                    CraftingPlugin.addRecipe(epsilon.getStack(),
                             "PCP",
                             "CDC",
                             "PCP",
@@ -78,7 +78,7 @@ public class ModuleCharge extends RailcraftModulePayload {
 
                 epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
                 if (epsilon.isAvailable())
-                    CraftingPlugin.addRecipe(epsilon.getItem(2),
+                    CraftingPlugin.addRecipe(epsilon.getStack(2),
                             "PGP",
                             "GRG",
                             "PGP",

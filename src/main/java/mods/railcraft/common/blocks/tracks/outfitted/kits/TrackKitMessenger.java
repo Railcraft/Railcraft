@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,31 +11,30 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.google.gson.JsonParseException;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.util.misc.Timer;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
+import net.minecraft.network.play.server.SPacketTitle;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentUtils;
 
 import java.lang.ref.WeakReference;
 
-import javax.annotation.Nullable;
-
 public class TrackKitMessenger extends TrackKitPowered {
 
-    protected static final TextComponentTranslation SUCCESS_MESSAGE = new TextComponentTranslation("railcraft.gui.message.set");
-    protected ITextComponent text;
-    protected WeakReference<EntityMinecart> lastCart;
-    protected long lastTime;
+    private ITextComponent title;
+    private ITextComponent subtitle;
+    private boolean subtitleSet;
+    private WeakReference<EntityMinecart> lastCart;
+    private Timer timer = new Timer();
 
     public TrackKitMessenger() {
-        this.text = new TextComponentString("");
+        this.title = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.default");
+        this.subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.default");
     }
 
     @Override
@@ -44,79 +43,78 @@ public class TrackKitMessenger extends TrackKitPowered {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null) {
-            if (heldItem.hasTagCompound() && loadfrom(heldItem.getTagCompound())) {
-                notifySuccessfulSet(player);
-            } else if (heldItem.hasDisplayName()) {
-                String name = heldItem.getDisplayName();
-                this.text = new TextComponentString(name);
-                notifySuccessfulSet(player);
-            }
-        }
-        return super.blockActivated(player, hand, heldItem);
-    }
-
-    @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (!isPowered()) {
+        if (!isPowered())
             return;
-        }
-        long time = cart.worldObj.getWorldTime();
-        if (this.lastCart != null && this.lastCart.get() == cart) {
-            if (time - this.lastTime > 1) {
+        if (lastCart != null && lastCart.get() == cart) {
+            if (timer.hasTriggered(cart.worldObj, 100)) {
                 sendMessage(cart);
             }
         } else {
             sendMessage(cart);
-            this.lastCart = new WeakReference<>(cart);
+            lastCart = new WeakReference<>(cart);
+            timer.reset();
         }
-        this.lastTime = time;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
-        data.setString("Message", ITextComponent.Serializer.componentToJson(this.text));
+        super.writeToNBT(data);
+        data.setString("title", ITextComponent.Serializer.componentToJson(title));
+        data.setString("subtitle", ITextComponent.Serializer.componentToJson(subtitle));
+        data.setBoolean("subtitleSet", subtitleSet);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
-        loadfrom(data);
-    }
-
-    protected boolean loadfrom(NBTTagCompound data) {
+        super.readFromNBT(data);
+        subtitleSet = data.getBoolean("subtitleSet");
         try {
-            ITextComponent result = ITextComponent.Serializer.jsonToComponent(data.getString("Message"));
-            if (result == null) {
-                return false;
-            }
-            text = result;
-        } catch (JsonParseException ex) {
-            return false;
+            title = ITextComponent.Serializer.jsonToComponent(data.getString("title"));
+            subtitle = ITextComponent.Serializer.jsonToComponent(data.getString("subtitle"));
+        } catch (JsonParseException ignored) {
         }
-        return true;
     }
 
-    @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        super.onBlockPlacedBy(state, placer, stack);
-        if (stack.hasTagCompound()) {
-            if (loadfrom(stack.getTagCompound()) && placer != null) {
-                notifySuccessfulSet(placer);
-            }
-        }
+    public ITextComponent getTitle() {
+        return title;
+    }
+
+    public ITextComponent getSubtitle() {
+        return subtitle;
+    }
+
+    public void setTitle(ITextComponent title) {
+        this.title = title;
+        if (!subtitleSet)
+            this.subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.standard");
+    }
+
+    public void setSubtitle(ITextComponent subtitle) {
+        this.subtitle = subtitle;
+        subtitleSet = true;
+    }
+
+    public void setTitle(ICommandSender setter, ITextComponent title) {
+        setTitle(title);
+        setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.set", title));
+    }
+
+    public void setSubtitle(ICommandSender setter, ITextComponent subtitle) {
+        setSubtitle(subtitle);
+        setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set", subtitle));
     }
 
     protected void sendMessage(EntityMinecart cart) {
-        cart.addChatMessage(this.text);
-        cart.getRecursivePassengers().forEach(e -> e.addChatMessage(this.text));
-    }
+        cart.getRecursivePassengersByType(EntityPlayerMP.class).forEach(e -> {
+            try {
+                SPacketTitle pkt = new SPacketTitle(SPacketTitle.Type.SUBTITLE, TextComponentUtils.processComponent(cart, subtitle, e));
+                e.connection.sendPacket(pkt);
+                pkt = new SPacketTitle(SPacketTitle.Type.TITLE, TextComponentUtils.processComponent(cart, title, e));
+                e.connection.sendPacket(pkt);
+            } catch (CommandException ignored) {
+            }
+        });
 
-    protected void notifySuccessfulSet(EntityLivingBase setter) {
-        if (Game.isClient(setter.worldObj)) {
-            return;
-        }
-        setter.addChatMessage(SUCCESS_MESSAGE);
-        setter.addChatMessage(this.text);
     }
 }

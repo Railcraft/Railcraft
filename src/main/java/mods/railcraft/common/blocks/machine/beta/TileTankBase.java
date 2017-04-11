@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -417,7 +417,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack drop = getMachineType().getItem();
+        ItemStack drop = getMachineType().getStack();
         if (drop != null) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
@@ -429,7 +429,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public ArrayList<ItemStack> getBlockDroppedSilkTouch(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack drop = getMachineType().getItem();
+        ItemStack drop = getMachineType().getStack();
         if (drop != null) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) color.ordinal());

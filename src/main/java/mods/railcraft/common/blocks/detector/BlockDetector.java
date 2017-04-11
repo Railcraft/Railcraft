@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -218,7 +218,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
-            return detector.getDetector().getType().getItem();
+            return detector.getDetector().getType().getStack();
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
@@ -250,7 +250,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileDetector)
-            items.add(((TileDetector) tile).getDetector().getType().getItem());
+            items.add(((TileDetector) tile).getDetector().getType().getStack());
         return items;
     }
 
@@ -289,8 +289,6 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (playerIn.isSneaking())
-            return false;
         if (heldItem != null) {
             Item item = heldItem.getItem();
             if (item instanceof IActivationBlockingItem)
@@ -406,7 +404,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
-                list.add(detector.getItem());
+                list.add(detector.getStack());
         }
     }
 }
