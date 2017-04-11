@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimpl
     @Override
     public void initializeDefinintion() {
         HarvestPlugin.setToolClass(this, "pickaxe", 2);
-        LootPlugin.addLoot(RailcraftItems.PICKAXE_STEEL, 1, 1, LootPlugin.Type.TOOL);
     }
 
     @Override

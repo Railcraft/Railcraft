@@ -17,7 +17,6 @@ import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SignalReceiver;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,11 +38,6 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
 
     public ItemSignalTuner() {
         super(LOC_PREFIX);
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.SIGNAL_TUNER, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

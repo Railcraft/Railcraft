@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.Entity;
@@ -54,11 +53,6 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         setFull3D();
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.CHARGE_METER, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

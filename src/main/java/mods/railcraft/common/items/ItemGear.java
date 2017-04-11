@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -38,8 +37,6 @@ public class ItemGear extends ItemRailcraftSubtyped {
         OreDictionary.registerOre("gearGoldPlate", RailcraftItems.GEAR.getStack(1, EnumGear.GOLD_PLATE));
         OreDictionary.registerOre("gearInvar", RailcraftItems.GEAR.getStack(1, EnumGear.INVAR));
         OreDictionary.registerOre("gearBushing", RailcraftItems.GEAR.getStack(1, EnumGear.BUSHING));
-
-        LootPlugin.addLootUnique(RailcraftItems.GEAR, EnumGear.BUSHING, 1, 8, LootPlugin.Type.RAILWAY);
     }
 
     @Override

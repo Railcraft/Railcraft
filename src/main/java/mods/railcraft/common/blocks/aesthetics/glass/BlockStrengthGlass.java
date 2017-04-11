@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
     @Override
     public void initializeDefinintion() {
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         for (int meta = 0; meta < 16; meta++) {
             MicroBlockPlugin.addMicroBlockCandidate(this, meta);
@@ -92,7 +92,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
 
-        Object[] frameTypes = {"ingotTin", "ingotNickel", Items.IRON_INGOT};
+        Object[] frameTypes = {"ingotTin", "ingotNickel", "ingotInvar", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         // TODO: this is bogus, waiting on FluidStacks as ingredients
         for (ItemStack container : FluidTools.getContainersFilledWith(water)) {

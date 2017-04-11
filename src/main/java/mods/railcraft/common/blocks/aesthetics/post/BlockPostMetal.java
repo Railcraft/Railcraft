@@ -55,7 +55,7 @@ public class BlockPostMetal extends BlockPostBase {
     public void initializeDefinintion() {
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
 
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack stack = getStack(1, color);

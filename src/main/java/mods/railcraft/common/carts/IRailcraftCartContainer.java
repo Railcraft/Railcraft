@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,8 +24,6 @@ import javax.annotation.Nullable;
  */
 public interface IRailcraftCartContainer extends IRailcraftObjectContainer<IRailcraftItemSimple> {
     String getEntityLocalizationTag();
-
-    String getEntityTag();
 
     Class<? extends EntityMinecart> getCartClass();
 

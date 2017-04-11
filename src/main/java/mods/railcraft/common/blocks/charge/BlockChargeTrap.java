@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 
     @Override
