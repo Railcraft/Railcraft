@@ -32,7 +32,7 @@ public enum ModItems {
     IC2_MACHINE(Mod.IC2, "resource#machine");
     private final Mod mod;
     public final String itemTag;
-    private boolean init = true;
+    private boolean needsInit = true;
     private ItemStack stack;
 
     ModItems(Mod mod, String itemTag) {
@@ -47,8 +47,8 @@ public enum ModItems {
             throw new RuntimeException("Don't call this function before POST_INIT");
         if (!mod.isLoaded())
             return null;
-        if (init) {
-            init = false;
+        if (needsInit) {
+            needsInit = false;
             init();
         }
         if (stack != null)
