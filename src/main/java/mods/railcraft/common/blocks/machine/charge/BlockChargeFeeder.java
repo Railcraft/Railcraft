@@ -69,7 +69,7 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
 
     @Override
     public void initializeDefinintion() {
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 
     @Override

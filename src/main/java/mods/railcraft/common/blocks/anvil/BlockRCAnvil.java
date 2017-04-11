@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -87,7 +87,7 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftBlock {
 
     @Override
     public void initializeDefinintion() {
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
     }
