@@ -26,13 +26,13 @@ import net.minecraftforge.fluids.FluidRegistry;
  */
 public enum RailcraftFluids {
 
-    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500) {
+    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500, false) {
         @Override
         public Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluid(fluid, Material.WATER).setFlammable(true).setFlammability(10);
         }
     },
-    STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
+    STEAM("fluid.steam", Fluids.STEAM, -1000, 500, true) {
         @Override
         Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow();
@@ -42,14 +42,16 @@ public enum RailcraftFluids {
     public final String tag;
     public final Fluids standardFluid;
     public final int density, viscosity;
+    public final boolean isGaseous;
     protected Fluid railcraftFluid;
     protected Block railcraftBlock;
 
-    RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity) {
+    RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity, boolean isGaseous) {
         this.tag = tag;
         this.standardFluid = standardFluid;
         this.density = density;
         this.viscosity = viscosity;
+        this.isGaseous = isGaseous;
     }
 
     public static void preInitFluids() {
@@ -82,14 +84,15 @@ public enum RailcraftFluids {
             String fluidName = standardFluid.getTag();
             ResourceLocation stillTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_still");
             ResourceLocation flowTexture;
-            if (this == STEAM)
+            if (isGaseous)
                 flowTexture = stillTexture;
             else
                 flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
-            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
+            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(isGaseous);
 //            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
-            FluidRegistry.addBucketForFluid(railcraftFluid);
+            if (!(isGaseous))
+                FluidRegistry.addBucketForFluid(railcraftFluid);
 //            else {
 //                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
 //                        + "this may cause issues if the server/client have different mod load orders, "
