@@ -28,8 +28,8 @@ public class ItemLapotronUpgrade extends ItemRailcraft {
     @Override
     public void defineRecipes() {
         ItemStack lapotron = IC2Plugin.getItem("lapotron_crystal");
-        ItemStack glassCable = IC2Plugin.getItem("crafting#advanced_circuit");
-        ItemStack circuit = IC2Plugin.getItem("cable#type:glass#insulation:0");
+        ItemStack glassCable = IC2Plugin.getItem("cable#type:glass,insulation:0");
+        ItemStack circuit = IC2Plugin.getItem("crafting#advanced_circuit");
 
         if (lapotron != null && glassCable != null && circuit != null) {
             lapotron.copy();

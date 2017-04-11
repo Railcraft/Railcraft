@@ -59,7 +59,7 @@ public final class EntityCartEnergyBatBox extends CartBaseEnergy {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return IC2Plugin.getBlockState("te","batbox");
+        return IC2Plugin.getBlockState("te", "batbox");
     }
 
 }

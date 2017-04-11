@@ -42,6 +42,7 @@ public class IC2Plugin {
         String[] tokens = s.split("#");
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
+
     @Nullable
     public static ItemStack getItem(String tag) {
         return ITEMS.get(tag);

@@ -57,7 +57,7 @@ public final class EntityCartEnergyCESU extends CartBaseEnergy {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return IC2Plugin.getBlockState("te","cesu");
+        return IC2Plugin.getBlockState("te", "cesu");
     }
 
 }
