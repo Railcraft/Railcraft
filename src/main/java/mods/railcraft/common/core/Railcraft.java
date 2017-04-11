@@ -58,7 +58,7 @@ import java.io.File;
                 + "after:BuildCraftAPI|transport[1.0,);"
                 + "after:forestry[5.2.15,);"
                 + "after:Thaumcraft;"
-                + "after:IC2@[2.6.9-ex110,)")
+                + "after:IC2@[2.6.192-ex110,)")
 public final class Railcraft {
     public static final String NAME = "Railcraft";
     public static final String MOD_ID = "railcraft";

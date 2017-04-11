@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,7 +43,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
 
     @Override
     public void finalizeDefinition() {
-        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
+        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
             IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
         }
     }
