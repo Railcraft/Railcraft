@@ -29,11 +29,7 @@ public enum ModItems {
     CESU(Mod.IC2, "te#cesu"),
     MFSU(Mod.IC2, "te#mfsu"),
     BATTERY(Mod.IC2, "re_Battery"),
-    IC2_MACHINE(Mod.IC2, "resource#machine"),
-    URANIUM_ORE(Mod.IC2, "resource#uranium_ore"),
-    URANIUM_BLOCK(Mod.IC2, "resource#uranium_block"),
-    URANIUM_INGOT(Mod.IC2, "nuclear,uranium_238"),
-    URANIUM_NUGGET(Mod.IC2, "nuclear,small_uranium_238");
+    IC2_MACHINE(Mod.IC2, "resource#machine");
     private final Mod mod;
     public final String itemTag;
     private boolean init = true;

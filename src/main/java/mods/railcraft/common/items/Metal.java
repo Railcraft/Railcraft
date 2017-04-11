@@ -45,8 +45,7 @@ public enum Metal implements IVariantEnum {
     SILVER("Silver"),
     BRONZE("Bronze"),
     NICKEL("Nickel"),
-    INVAR("Invar"),
-    URANIUM("Uranium");
+    INVAR("Invar"),;
   
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
@@ -131,8 +130,6 @@ public enum Metal implements IVariantEnum {
                 switch (metal) {
                     case GOLD:
                         return new ItemStack(Items.GOLD_NUGGET, qty);
-                    case URANIUM:
-                        return ModItems.URANIUM_NUGGET.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -146,8 +143,6 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Items.IRON_INGOT, qty);
                     case GOLD:
                         return new ItemStack(Items.GOLD_INGOT, qty);
-                    case URANIUM:
-                        return ModItems.URANIUM_INGOT.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -179,8 +174,6 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Blocks.IRON_BLOCK, qty);
                     case GOLD:
                         return new ItemStack(Blocks.GOLD_BLOCK, qty);
-                    case URANIUM:
-                        return ModItems.URANIUM_BLOCK.get();
                 }
                 return super.getStack(metal, qty);
             }
@@ -210,22 +203,11 @@ public enum Metal implements IVariantEnum {
                         return new ItemStack(Blocks.IRON_ORE, qty);
                     case GOLD:
                         return new ItemStack(Blocks.GOLD_ORE, qty);
-                    case URANIUM:
-                        return ModItems.URANIUM_ORE.get();
                 }
                 return super.getStack(metal, qty);
             }
         },
         POOR_ORE("poorOre", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
-            @Nullable
-            @Override
-            public ItemStack getStack(Metal metal, int qty) {
-                switch (metal) {
-                    case URANIUM:
-                        return ModItems.URANIUM_ORE.get();
-                }
-                return super.getStack(metal, qty);
-            }
         };
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
