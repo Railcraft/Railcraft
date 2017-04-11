@@ -92,7 +92,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
 
-        Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
+        Object[] frameTypes = {"ingotTin", "ingotNickel", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         // TODO: this is bogus, waiting on FluidStacks as ingredients
         for (ItemStack container : FluidTools.getContainersFilledWith(water)) {

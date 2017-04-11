@@ -59,7 +59,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
-    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getItem) {
+    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getStack) {
         {
             conditions.add(RailcraftBlocks.MACHINE_ALPHA);
             conditions.add(EnumMachineAlpha.ANCHOR_WORLD);
@@ -71,7 +71,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             conditions.add(EnumMachineAlpha.ANCHOR_ADMIN);
         }
     },
-    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getItem) {
+    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getStack) {
         {
             conditions.add(RailcraftBlocks.MACHINE_ALPHA);
             conditions.add(EnumMachineAlpha.ANCHOR_PERSONAL);
@@ -91,7 +91,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     PUMPKIN(3, "cart_pumpkin", EntityCartPumpkin.class, ItemCartPumpkin::new),
     REDSTONE_FLUX(0, "cart_redstone_flux", EntityCartRF.class, ItemCartRF::new),
     TANK(0, "cart_tank", EntityCartTank.class, ItemCart::new, () -> {
-        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getItem();
+        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
         return stack != null ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
     TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCart::new),
@@ -264,7 +264,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         switch (this) {
             case TANK:
                 if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable())
-                    return EnumMachineBeta.TANK_IRON_GAUGE.getItem();
+                    return EnumMachineBeta.TANK_IRON_GAUGE.getStack();
             default: {
                 if (contentsSupplier == null)
                     return null;

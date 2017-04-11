@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,6 +49,8 @@ public class ModuleWorld extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.ORE,
+                        RailcraftBlocks.ORE_METAL,
+                        RailcraftBlocks.ORE_METAL_POOR,
                         RailcraftBlocks.ORE_MAGIC,
                         RailcraftBlocks.WORLD_LOGIC
                 );
@@ -109,6 +111,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                         GameRegistry.registerWorldGenerator(new GeneratorMineLead(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("silver"))
                         GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
+                    if (RailcraftConfig.isWorldGenEnabled("nickel"))
+                        GameRegistry.registerWorldGenerator(new GeneratorMineNickel(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("uranium") && (Mod.IC2.isLoaded() || Mod.IC2_CLASSIC.isLoaded()))
                         GameRegistry.registerWorldGenerator(new GeneratorMineUranium(), 100);
                 }

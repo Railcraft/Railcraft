@@ -18,7 +18,9 @@
       "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
       "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
       "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},
-      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}}
+      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}},
+	  "nickel": {"textures": {"all": "railcraft:blocks/metal_nickel"}},
+	  "invar": {"textures": {"all": "railcraft:blocks/metal_invar"}}
     }
   }
 }

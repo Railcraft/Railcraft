@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,10 +46,6 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
     }
 
     @Override
-    public void defineRecipes() {
-    }
-
-    @Override
     public void initializeDefinintion() {
         EntityTunnelBore.addMineableBlock(this);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 3, this);
@@ -59,7 +55,7 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
 
     private static void registerOre(String name, EnumOreMagic ore) {
         if (ore.isEnabled())
-            OreDictionary.registerOre(name, ore.getItem());
+            OreDictionary.registerOre(name, ore.getStack());
     }
 
     @Override

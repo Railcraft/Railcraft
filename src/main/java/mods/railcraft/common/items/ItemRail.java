@@ -54,6 +54,12 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "I I",
                 'I', "ingotBronze");
 
+        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(12, EnumRail.STANDARD),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotInvar");
+
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(16, EnumRail.STANDARD),
                 "I I",
                 "I I",
@@ -86,6 +92,13 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "IDI",
                 "IDI",
                 'I', "ingotSteel",
+                'D', "dustObsidian");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(4, EnumRail.REINFORCED),
+                "IDI",
+                "IDI",
+                "IDI",
+                'I', "ingotInvar",
                 'D', "dustObsidian");
 
         // Electric
