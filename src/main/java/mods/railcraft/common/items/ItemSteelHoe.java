@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
@@ -24,11 +27,6 @@ public class ItemSteelHoe extends ItemHoe implements IRailcraftItemSimple {
     @Override
     public Item getObject() {
         return this;
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.HOE_STEEL, 1, 1, LootPlugin.Type.TOOL);
     }
 
     @Override

@@ -18,7 +18,10 @@ import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.blocks.wayobjects.IDualHeadSignal;
 import mods.railcraft.common.blocks.wayobjects.TileSignalBase;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -45,7 +48,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     public ItemMagnifyingGlass() {
         setMaxDamage(0);
         setMaxStackSize(1);
-        setUnlocalizedName("railcraft.tool.magnifying.glass");
         setFull3D();
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -54,7 +56,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     @Override
     public void initializeDefinintion() {
         MinecraftForge.EVENT_BUS.register(this);
-        LootPlugin.addLoot(RailcraftItems.MAG_GLASS, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

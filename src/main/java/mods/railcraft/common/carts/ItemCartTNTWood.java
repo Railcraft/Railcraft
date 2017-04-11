@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.init.Blocks;
 
 /**
@@ -31,10 +30,5 @@ public class ItemCartTNTWood extends ItemCart {
                 "WWW",
                 'T', Blocks.TNT,
                 'W', "slabWood");
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(getCartType(), 1, 3, LootPlugin.Type.RAILWAY);
     }
 }

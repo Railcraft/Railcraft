@@ -9,25 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.api.tracks.ITrackKitReversible;
-import mods.railcraft.api.tracks.TrackKit;
-import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.api.tracks.TrackToolsAPI;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
-import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
-import mods.railcraft.common.blocks.tracks.outfitted.TrackTileFactory;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStoneBrick;
@@ -37,21 +20,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-//TODO: Test extensively
 public class ComponentWorkshop extends StructureVillagePieces.Village {
 
     private int averageGroundLevel = -1;
@@ -107,8 +86,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // track
         fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL.getDefaultState(), Blocks.RAIL.getDefaultState(), false);
-        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, true);
-        placeTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, false);
+//        placeOutfittedTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
+//        placeOutfittedTrack(TrackTypes.IRON, TrackKits.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
 
 
         // hall walls
@@ -145,7 +124,6 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithBlocks(world, sbb, 10, 4, 0, 10, 4, 10, roofWest, roofWest, false);
         fillWithBlocks(world, sbb, 9, 5, 0, 9, 5, 10, roofWest, roofWest, false);
 
-        // TODO: This is reported as being broken
         // hall roof
         BlockSelector roofSelector = new BlockSelector() {
             @Override
@@ -215,11 +193,9 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         setBlockState(world, torch, 2, 3, 4, sbb);
 
         // machines
-        if (EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable()) {
+        if (EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) {
             //noinspection ConstantConditions
-            setBlockState(world, EquipmentVariant.ROLLING_MACHINE_POWERED.getDefaultState(), 9, 1, 5, sbb);
-            if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
-                placeEngine(world, 9, 1, 6, sbb);
+            setBlockState(world, EquipmentVariant.ROLLING_MACHINE_MANUAL.getDefaultState(), 9, 1, 5, sbb);
         }
 
         // foundation
@@ -236,61 +212,45 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             }
         }
 
-        placeChest(world, 9, 1, 4, random, sbb);
+        generateChest(world, sbb, random, 1, 1, 3, LootPlugin.CHESTS_VILLAGE_WORKSHOP);
 
-        //TODO: implement forge compatible version
+//        generateChest(world, sbb, random, 1, 1, 6, LootTableList.CHESTS_VILLAGE_BLACKSMITH);
+
+//        generateChest(world, sbb, random, 1, 1, 8, LootTableList.CHESTS_ABANDONED_MINESHAFT);
+//
+//        generateChest(world, sbb, random, 1, 1, 10, LootTableList.CHESTS_STRONGHOLD_CORRIDOR);
+
         spawnVillagers(world, sbb, 0, 0, 0, 2);
         return true;
     }
 
-    private BlockPos getPosWithOffset(int x, int y, int z) {
-        return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
-    }
+//    private BlockPos getPosWithOffset(int x, int y, int z) {
+//        return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
+//    }
 
-    private void placeTrack(TrackTypes trackType, TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
-        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK_OUTFITTED.block();
-        // TODO: place vanilla tracks?
-        if (blockTrack == null)
-            return;
-
-        TrackKit trackKit;
-        if (track.isEnabled()) {
-            trackKit = track.getTrackKit();
-        } else
-            trackKit = TrackRegistry.getMissingTrackKit();
-
-        BlockPos pos = getPosWithOffset(x, y, z);
-
-        if (!sbb.isVecInside(pos))
-            return;
-
-        setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape).withProperty(BlockTrackOutfitted.TICKING, trackKit.requiresTicks()), x, y, z, sbb);
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrackOutfitted) {
-            TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, trackType.getTrackType(), trackKit);
-            EnumFacing facing = getCoordBaseMode();
-            boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
-            ((ITrackKitReversible) ((TileTrackOutfitted) tile).getTrackKitInstance()).setReversed(r != reversed);
-        }
-    }
-
-    private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {
-        BlockPos pos = getPosWithOffset(x, y, z);
-
-        if (!sbb.isVecInside(pos))
-            return;
-
-        setBlockState(world, EnumMachineBeta.ENGINE_STEAM_HOBBY.getDefaultState(), x, y, z, sbb);
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileEngineSteamHobby) {
-            TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;
-            engine.switchOrientation();
-            IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, engine);
-            assert fluidHandler != null;
-            fluidHandler.fill(Fluids.WATER.getB(4), true);
-//            engine.setInventorySlotContents(TileEngineSteamHobby.SLOT_FUEL, new ItemStack(Items.COAL, 16));
-        }
-    }
+//    private void placeOutfittedTrack(TrackTypes trackType, TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
+//        BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK_OUTFITTED.block();
+//        if (blockTrack == null)
+//            return;
+//
+//        TrackKit trackKit;
+//        if (track.isEnabled()) {
+//            trackKit = track.getTrackKit();
+//        } else
+//            trackKit = TrackRegistry.getMissingTrackKit();
+//
+//        BlockPos pos = getPosWithOffset(x, y, z);
+//
+//        if (!sbb.isVecInside(pos))
+//            return;
+//
+//        setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape).withProperty(BlockTrackOutfitted.TICKING, trackKit.requiresTicks()), x, y, z, sbb);
+//        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+//        if (tile instanceof TileTrackOutfitted) {
+//            TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, trackType.getTrackType(), trackKit);
+//            ((ITrackKitReversible) ((TileTrackOutfitted) tile).getTrackKitInstance()).setReversed(reversed);
+//        }
+//    }
 
     @Override
     protected void writeStructureToNBT(NBTTagCompound nbt) {
@@ -302,10 +262,6 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     protected void readStructureFromNBT(NBTTagCompound nbt) {
         super.readStructureFromNBT(nbt);
         hasMadeChest = nbt.getBoolean("Chest");
-    }
-
-    private void placeChest(World world, int x, int y, int z, Random rand, StructureBoundingBox sbb) {
-        generateChest(world, sbb, rand, x, y, z, LootPlugin.CHESTS_VILLAGE_WORKSHOP);
     }
 
 }

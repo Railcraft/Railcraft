@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,6 @@ public class ItemSteelShovel extends ItemSpade implements IRailcraftItemSimple {
     @Override
     public void initializeDefinintion() {
         HarvestPlugin.setToolClass(this, "shovel", 2);
-        LootPlugin.addLoot(RailcraftItems.SHOVEL_STEEL, 1, 1, LootPlugin.Type.TOOL);
     }
 
     @Override

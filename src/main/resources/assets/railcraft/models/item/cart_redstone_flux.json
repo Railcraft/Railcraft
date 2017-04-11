@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "railcraft:items/entity_cart_gift"
+    "layer0": "railcraft:items/cart_redstone_flux"
   }
 }

@@ -1,0 +1,68 @@
+{
+  "pools": [
+    {
+      "name": "railcraft_general",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "railcraft:tool_sword_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:tool_axe_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:tool_pickaxe_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:armor_boots_steel",
+          "weight": 1
+        }, {
+          "type": "item",
+          "name": "railcraft:armor_helmet_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:armor_leggings_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:armor_chestplate_steel",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "railcraft:ingot",
+          "functions": [
+            {
+              "function": "set_data",
+              "data": {
+                "min": 0,
+                "max": 7
+              }
+            },
+            {
+              "function": "set_count",
+              "count": {
+                "min": 3,
+                "max": 8
+              }
+            }
+          ],
+          "weight": 7
+        }
+      ]
+    }
+  ]
+}

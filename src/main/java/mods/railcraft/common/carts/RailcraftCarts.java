@@ -211,11 +211,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return "entity.railcraft." + tag + ".name";
     }
 
-    @Override
-    public String getEntityTag() {
-        return "entity_" + tag;
-    }
-
 //    @Override
 //    @Nullable
 //    public ItemStack getStack(int qty, int meta) {
@@ -320,7 +315,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 item = itemSupplier.apply(this);
                 if (item instanceof ItemCart) {
                     ItemCart itemCart = (ItemCart) item;
-                    itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + getEntityTag());
+                    itemCart.setRegistryName(RailcraftConstants.RESOURCE_DOMAIN + ":" + tag);
                     itemCart.setUnlocalizedName("railcraft.entity." + tag.replace("_", "."));
                     itemCart.setRarity(rarity);
                     RailcraftRegistry.register((IRailcraftItemSimple) itemCart);

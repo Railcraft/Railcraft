@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -33,8 +32,6 @@ public class ItemTie extends ItemRailcraftSubtyped {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(this, tie, new ItemStack(this, 1, tie.ordinal()));
         }
-        LootPlugin.addLootUnique(RailcraftItems.TIE, EnumTie.WOOD, 4, 16, LootPlugin.Type.RAILWAY);
-        LootPlugin.addLootUnique(RailcraftItems.TIE, EnumTie.STONE, 4, 16, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

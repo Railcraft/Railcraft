@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,6 +96,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 // TODO: do we need a bucket handler still?
 //                MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
+                MinecraftForge.EVENT_BUS.register(LootPlugin.INSTANCE);
 
                 Helpers.structures = new MultiBlockHelper();
 
@@ -138,8 +139,6 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void preInit() {
                 NetworkRegistry.INSTANCE.registerGuiHandler(Railcraft.getMod(), new GuiHandler());
-
-                LootPlugin.init();
 
                 EntityEnderman.setCarriable(Blocks.GRAVEL, false);
 
@@ -204,12 +203,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 replaceVanillaCart(RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
                 replaceVanillaCart(RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
                 replaceVanillaCart(RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
-
-                LootPlugin.addLoot(RailcraftCarts.BASIC.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_basic");
-                LootPlugin.addLoot(RailcraftCarts.CHEST.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_chest");
-                LootPlugin.addLoot(RailcraftCarts.TNT.getStack(), 1, 3, LootPlugin.Type.RAILWAY, "cart_tnt");
-                LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track_flex_iron");
-                LootPlugin.addLoot(RailcraftCarts.HOPPER.getStack(), 1, 1, LootPlugin.Type.RAILWAY, "cart_hopper");
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
