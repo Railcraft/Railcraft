@@ -89,6 +89,7 @@ public enum RailcraftFluids {
             railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
 //            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
+            FluidRegistry.addBucketForFluid(railcraftFluid);
 //            else {
 //                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
 //                        + "this may cause issues if the server/client have different mod load orders, "
