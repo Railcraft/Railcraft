@@ -1,3 +1,15 @@
+10.1.0-alpha-5
+    NEW: Added Bronze, Nickel, and Invar ores and metals. (contribution by GeneralCamo)
+    NEW: Added Manual Rolling Machine, it requires no power, but requires the player's presence to craft. Does not interact with pipes.
+    NEW: Riding and Ridden Routing conditionals replaced with the Rider conditional. See GitHub Issue #844 for details.
+    NEW: Placing a malformed Routing Table into device will now pop up the GUI to tell you it is erroring.
+    NEW: Sneak clicking with an empty hand on Routing device will now allow you to edit the contained Routing Table directly.
+    NEW: You can now disable Railcraft enchantments, and moved to Magic module.
+    FIX: Various IC2 integration fixes. (contribution by GeneralCamo)
+    FIX: Notepad should now interact with the world properly.
+    FIX: Charge Feeders should now properly respond to Redstone under all conditions.
+    FIX: Reduced Tunnel Bore log spam.
+
 10.1.0-alpha-3
 	NEW: Signal Boxes restored.
 	NEW: Sounds restored.
