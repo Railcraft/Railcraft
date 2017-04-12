@@ -42,8 +42,7 @@ public class ModuleResources extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.GENERIC,
                         RailcraftItems.BOTTLE_CREOSOTE,
-                        RailcraftItems.BOTTLE_STEAM,
-                        RailcraftItems.BUCKET_CREOSOTE
+                        RailcraftItems.BOTTLE_STEAM
                 );
             }
 

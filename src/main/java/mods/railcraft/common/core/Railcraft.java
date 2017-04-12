@@ -85,6 +85,10 @@ public final class Railcraft {
         return VERSION;
     }
 
+    static{
+        FluidRegistry.enableUniversalBucket();
+    }
+
     public File getConfigFolder() {
         return configFolder;
     }
