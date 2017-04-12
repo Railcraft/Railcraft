@@ -63,7 +63,6 @@ public class TrackmanBackpack extends BaseBackpack {
         add(EnumMachineAlpha.ANCHOR_PASSIVE.getStack());
         add(EnumMachineBeta.SENTINEL.getStack());
 
-        add(RailcraftItems.BUCKET_CREOSOTE);
         add(RailcraftItems.BOTTLE_CREOSOTE);
 
         add(RailcraftItems.CROWBAR_IRON);
