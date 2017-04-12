@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
+import ic2.api.item.IC2Items;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.inventory.IInventory;
@@ -29,9 +30,9 @@ public class SlotUpgrade extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        ItemStack storage = IC2Plugin.getItem("energyStorageUpgrade");
-        ItemStack overclocker = IC2Plugin.getItem("overclockerUpgrade");
-        ItemStack transformer = IC2Plugin.getItem("transformerUpgrade");
+        ItemStack storage = IC2Plugin.getItem("upgrade#energy_storage");
+        ItemStack overclocker = IC2Plugin.getItem("upgrade#overclocker");
+        ItemStack transformer = IC2Plugin.getItem("upgrade#transformer");
         Item lapotron = RailcraftItems.LAPOTRON_UPGRADE.item();
 
         if (stack != null)

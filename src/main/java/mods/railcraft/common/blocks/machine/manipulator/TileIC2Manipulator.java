@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import ic2.api.item.IC2Items;
 
 import java.io.IOException;
 
@@ -69,9 +70,9 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
     }
 
     protected void countUpgrades() {
-        ItemStack storage = IC2Plugin.getItem("energyStorageUpgrade");
-        ItemStack overclocker = IC2Plugin.getItem("overclockerUpgrade");
-        ItemStack transformer = IC2Plugin.getItem("transformerUpgrade");
+        ItemStack storage = IC2Plugin.getItem("upgrade#energy_storage");
+        ItemStack overclocker = IC2Plugin.getItem("upgrade#overclocker");
+        ItemStack transformer = IC2Plugin.getItem("upgrade#transformer");
         Item lapotron = RailcraftItems.LAPOTRON_UPGRADE.item();
 
         storageUpgrades = 0;
@@ -197,7 +198,7 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
     public int getCapacity() {
         int capacity = CAPACITY;
         capacity += storageUpgrades * 10000;
-        capacity += lapotronUpgrades * 5000000;
+        capacity += lapotronUpgrades * 1000000;
         return capacity;
     }
 

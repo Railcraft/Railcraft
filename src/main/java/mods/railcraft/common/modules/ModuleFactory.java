@@ -365,7 +365,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.cokeOven.addRecipe(log, true, false, new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
                 }
 
-                if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
+                if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
                     boolean classic = Mod.IC2_CLASSIC.isLoaded();
                     ItemStack crushedIron = IC2Plugin.getItem(classic ? "ironDust" : "crushedIronOre");
                     ItemStack crushedGold = IC2Plugin.getItem(classic ? "goldDust" : "crushedGoldOre");

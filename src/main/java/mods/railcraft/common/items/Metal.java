@@ -44,7 +44,7 @@ public enum Metal implements IVariantEnum {
     SILVER("Silver"),
     BRONZE("Bronze"),
     NICKEL("Nickel"),
-    INVAR("Invar");
+    INVAR("Invar"),;
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
@@ -205,7 +205,8 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        POOR_ORE("poorOre", RailcraftBlocks.ORE_METAL_POOR, poorOreMap);
+        POOR_ORE("poorOre", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
+        };
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;
