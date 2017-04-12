@@ -19,6 +19,13 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
+import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,6 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,6 +48,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
     private static final int ACTIVATION_POWER = 50;
     private static final int MAX_RECEIVE = 1000;
     private static final int MAX_ENERGY = TileRollingMachinePowered.ACTIVATION_POWER * PROCESS_TIME;
+    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<Object>();
     private EnergyStorage energyStorage;
 
@@ -72,6 +81,23 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
             }
         } else
             super.progress();
+    }
+
+    @Override
+    protected void findMoreStuff() {
+        Collection<IInventoryObject> chests = cache.getAdjacentInventories();
+        for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
+            ItemStack stack = slot.getStack();
+            if (stack != null && stack.isStackable() && stack.stackSize == 1) {
+                ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
+                if (request != null) {
+                    stack.stackSize++;
+                    break;
+                }
+                if (stack.stackSize > 1)
+                    break;
+            }
+        }
     }
 
     @Override

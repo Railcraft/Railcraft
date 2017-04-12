@@ -11,11 +11,11 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import mods.railcraft.common.util.inventory.*;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryConcatenator;
+import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -23,8 +23,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.Collection;
 
 public abstract class TileRollingMachine extends TileMachineBase {
 
@@ -36,7 +34,6 @@ public abstract class TileRollingMachine extends TileMachineBase {
 
     protected final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", this);
     protected final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
-    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     public boolean useLast;
     protected boolean isWorking, paused;
     private ItemStack currentRecipe;
@@ -129,6 +126,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
                 if (InvTools.isRoomForStack(currentRecipe, invResult)) {
                     currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
                     if (currentRecipe != null) {
+                        // TODO: Replace with IRecipe.getRemainder()
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                             craftMatrix.decrStackSize(i, 1);
                         }
@@ -175,20 +173,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
         }
     }
 
-    private void findMoreStuff() {
-        Collection<IInventoryObject> chests = cache.getAdjacentInventories();
-        for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
-            ItemStack stack = slot.getStack();
-            if (stack != null && stack.isStackable() && stack.stackSize == 1) {
-                ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
-                if (request != null) {
-                    stack.stackSize++;
-                    break;
-                }
-                if (stack.stackSize > 1)
-                    break;
-            }
-        }
+    protected void findMoreStuff() {
     }
 
     public void setPaused(boolean p) {
