@@ -205,7 +205,7 @@ public enum Metal implements IVariantEnum {
                 return super.getStack(metal, qty);
             }
         },
-        POOR_ORE("poorOre", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
+        POOR_ORE("orePoor", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
         };
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
