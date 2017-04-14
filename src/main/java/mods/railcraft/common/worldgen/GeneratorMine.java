@@ -38,20 +38,19 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
  */
 public abstract class GeneratorMine extends Generator {
     private static final EnumSet<BiomeDictionary.Type> RICH_BIOMES = EnumSet.of(MOUNTAIN, MESA, HILLS);
-    private static final boolean SKY_GEN = false;
-    private static final Predicate<IBlockState> STONE_TEST = SKY_GEN ? GenTools.AIR : GenTools.STONE;
     @Nullable
     private final WorldGenerator poorGen;
     @Nullable
     private final WorldGenerator normGen;
     private final int yLevel, yRange, noiseSeed;
-
     private final Map<World, NoiseGen> cloudMap = new MapMaker().weakKeys().makeMap();
     private final Map<World, NoiseGen> veinMap = new MapMaker().weakKeys().makeMap();
+    private final boolean skyGen;
 
     protected GeneratorMine(EventType eventType, Metal metal, int density, int yLevel, int yRange, int noiseSeed) {
         super(getGen(metal.getState(Metal.Form.POOR_ORE), density), getGen(metal.getState(Metal.Form.ORE), density));
-        this.yLevel = SKY_GEN ? 100 + yLevel : yLevel;
+        this.skyGen = RailcraftConfig.isWorldGenEnabled("sky");
+        this.yLevel = yLevel;
         this.yRange = yRange;
         this.noiseSeed = noiseSeed;
         poorGen = generators[0];
@@ -60,13 +59,14 @@ public abstract class GeneratorMine extends Generator {
 
     @Nullable
     private static WorldGenerator getGen(@Nullable IBlockState ore, int density) {
+        Predicate<IBlockState> genCheck = state -> RailcraftConfig.isWorldGenEnabled("sky") ? GenTools.AIR_STONE.test(state) : GenTools.STONE.test(state);
         WorldGenerator gen;
         if (ore == null)
             gen = null;
         else if (density >= 4)
-            gen = new WorldGenMinable(ore, density, STONE_TEST::test);
+            gen = new WorldGenMinable(ore, density, genCheck::test);
         else
-            gen = new WorldGenSmallDeposits(ore, density, STONE_TEST);
+            gen = new WorldGenSmallDeposits(ore, density, genCheck);
         return gen;
     }
 
@@ -75,9 +75,16 @@ public abstract class GeneratorMine extends Generator {
         int worldX = targetPos.getX();
         int worldZ = targetPos.getZ();
 
-        boolean generated = attemptGen(world, rand, worldX, worldZ, biome, 16);
+        boolean generated = attemptGen(world, rand, worldX, worldZ, biome, 16, yLevel);
         if (generated)
-            attemptGen(world, rand, worldX, worldZ, biome, 200);
+            attemptGen(world, rand, worldX, worldZ, biome, 200, yLevel);
+
+        if (skyGen) {
+            int y = 100 + yLevel;
+            generated = attemptGen(world, rand, worldX, worldZ, biome, 16, y);
+            if (generated)
+                attemptGen(world, rand, worldX, worldZ, biome, 200, y);
+        }
     }
 
     private long getNoiseSeed(World world) {
@@ -95,7 +102,7 @@ public abstract class GeneratorMine extends Generator {
         return veinMap.computeIfAbsent(world, k -> new NoiseGenSimplex(new Random(getNoiseSeed(world)), 0.015));
     }
 
-    private boolean attemptGen(World world, Random rand, int worldX, int worldZ, Biome biome, int cycles) {
+    private boolean attemptGen(World world, Random rand, int worldX, int worldZ, Biome biome, int cycles, int yLevel) {
         NoiseGen cloudNoise = getCloudNoise(world);
         NoiseGen veinNoise = getVeinNoise(world);
 

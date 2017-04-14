@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.worldgen;
 
@@ -26,5 +26,5 @@ public class GenTools {
     public static final Predicate<IBlockState> DIRT = input -> input.getBlock() == Blocks.DIRT;
     public static final Predicate<IBlockState> SAND = input -> input.getBlock() == Blocks.SAND;
     public static final Predicate<IBlockState> NETHERRACK = input -> input.getBlock() == Blocks.NETHERRACK;
-    public static final Predicate<IBlockState> AIR = input -> input.getBlock() == Blocks.AIR;
+    public static final Predicate<IBlockState> AIR_STONE = input -> input.getBlock() == Blocks.AIR || STONE.test(input);
 }
