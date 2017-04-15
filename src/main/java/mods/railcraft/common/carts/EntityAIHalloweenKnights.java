@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,6 +25,7 @@ import net.minecraft.world.DifficultyInstance;
 
 public class EntityAIHalloweenKnights extends EntityAIBase {
     private final EntityHorse horse;
+    private boolean executed;
 
     public EntityAIHalloweenKnights(EntityHorse horseIn) {
         this.horse = horseIn;
@@ -35,7 +36,12 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        return horse.worldObj.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
+        return !executed && horse.worldObj.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
+    }
+
+    @Override
+    public boolean continueExecuting() {
+        return !executed;
     }
 
     /**
@@ -43,8 +49,8 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
      */
     @Override
     public void updateTask() {
+        executed = true;
         DifficultyInstance difficultyinstance = horse.worldObj.getDifficultyForLocation(new BlockPos(horse));
-        horse.tasks.removeTask(this);
         horse.setType(HorseType.SKELETON);
         horse.setHorseTamed(true);
         horse.setGrowingAge(0);
