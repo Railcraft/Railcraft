@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -115,7 +115,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private final Supplier<List<Object[]>> recipeSupplier;
     private TrackKit trackKit;
-    private boolean depreciated;
     private boolean visible = true;
     private boolean allowedOnSlopes;
     private boolean requiresTicks;
@@ -201,7 +200,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDeprecated();
     }
 
     @Override
@@ -209,8 +208,13 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         return trackKit != null && isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isLoaded() && RailcraftItems.TRACK_KIT.isLoaded();
     }
 
-    public boolean isDepreciated() {
-        return depreciated;
+    public boolean isDeprecated() {
+        try {
+            //noinspection unchecked
+            return getClass().getField(name()).isAnnotationPresent(Deprecated.class);
+        } catch (NoSuchFieldException ignored) {
+        }
+        return false;
     }
 
     @Override

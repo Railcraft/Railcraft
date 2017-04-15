@@ -449,7 +449,7 @@ public class RailcraftConfig {
 
         // TODO: Move to own file?
         for (TrackKits type : TrackKits.VALUES) {
-//            if (type.isDepreciated())
+//            if (type.isDeprecated())
 //                continue;
             loadBlockFeature(type.getTag());
         }
@@ -493,7 +493,7 @@ public class RailcraftConfig {
 //        }
 
 //        for (EnumOre type : EnumOre.values()) {
-//            if (!type.isDepreciated())
+//            if (!type.isDeprecated())
 //                loadBlockFeature(type.getTag());
 //        }
 

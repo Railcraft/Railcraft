@@ -23,7 +23,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -90,8 +89,14 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
             action.accept(this);
     }
 
-    default boolean isDepreciated() {
-        return ArrayUtils.isEmpty(getDef().modules);
+    @Override
+    default boolean isDeprecated() {
+        try {
+            //noinspection unchecked
+            return getClass().getField(((M) this).name()).isAnnotationPresent(Deprecated.class);
+        } catch (NoSuchFieldException ignored) {
+        }
+        return IVariantEnum.super.isDeprecated();
     }
 
     @Nullable

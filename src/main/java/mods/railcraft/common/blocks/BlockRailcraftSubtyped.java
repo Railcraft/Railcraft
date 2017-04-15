@@ -95,7 +95,8 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
         V[] variants = getVariants();
         if (variants != null) {
             for (V variant : variants) {
-                list.add(getStack(variant));
+                if (!variant.isDeprecated())
+                    list.add(getStack(variant));
             }
         } else {
             list.add(getStack(null));
