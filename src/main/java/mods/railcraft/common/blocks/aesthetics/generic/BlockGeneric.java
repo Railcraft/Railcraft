@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -148,12 +148,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        getVariant(worldIn, pos).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+        getVariant(state).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
     }
 
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        getVariant(world, pos).getBlockDef().updateTick(world, pos, rand);
+        getVariant(state).getBlockDef().updateTick(world, pos, rand);
     }
 
     @Override
@@ -163,17 +163,17 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        getVariant(world, pos).getBlockDef().onBlockAdded(world, pos);
+        getVariant(state).getBlockDef().onBlockAdded(world, pos);
     }
 
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return getVariant(world, pos).getBlockDef().removedByPlayer(world, player, pos);
+        return getVariant(state).getBlockDef().removedByPlayer(world, player, pos);
     }
 
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return getVariant(world, pos).getBlockDef().canCreatureSpawn(type, world, pos);
+        return getVariant(state).getBlockDef().canCreatureSpawn(type, world, pos);
     }
 
     @Override
