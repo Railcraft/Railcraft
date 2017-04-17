@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -75,7 +75,7 @@ public class CrushedObsidian extends SimpleCube {
 
             if (!BlockSand.fallInstantly && WorldPlugin.isAreaLoaded(world, pos.add(-size, -size, -size), pos.add(size, size, size))) {
                 if (!world.isRemote) {
-                    EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world.getBlockState(pos));
+                    EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world.getBlockState(pos));
                     world.spawnEntityInWorld(entity);
                 }
             } else {
