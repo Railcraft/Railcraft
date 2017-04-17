@@ -15,6 +15,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath fileTree(dir: 'libs', include: '*.jar')
     }
 }
 
@@ -253,18 +254,18 @@ uploadArchives.shouldRunAfter releaseInit, build
 release.shouldRunAfter uploadArchives
 
 if (project.hasProperty("ftpUsername"))
-uploadArchives {
-    repositories {
-        ivy {
-            url "sftp://ftp.railcraft.info:22/home2/railcraf/public_html/ivy"
-            credentials {
-                username project.ftpUsername
-                password project.ftpPassword
+    uploadArchives {
+        repositories {
+            ivy {
+                url "sftp://ftp.railcraft.info:22/home2/railcraf/public_html/ivy"
+                credentials {
+                    username project.ftpUsername
+                    password project.ftpPassword
+                }
+                layout 'gradle'
             }
-            layout 'gradle'
         }
     }
-}
 
 artifacts {
     archives jar, devJar, apiZip
