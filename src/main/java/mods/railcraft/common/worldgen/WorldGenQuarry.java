@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -55,6 +56,7 @@ public class WorldGenQuarry extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random rand, BlockPos position) {
+        position = position.add(8, 0, 8);
 //        Game.log(Level.INFO, "Generating Quarry at {0}, {1}, {2}", x, y, z);
         boolean clearTop = true;
         for (int x = -8; x < 8; x++) {
