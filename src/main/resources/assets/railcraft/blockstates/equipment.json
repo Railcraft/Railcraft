@@ -29,11 +29,7 @@
         }
       },
       "smoker": {
-        "textures": {
-          "top": "railcraft:blocks/feed_station_cap",
-          "bottom": "railcraft:blocks/feed_station_cap",
-          "side": "railcraft:blocks/feed_station_side"
-        }
+        "model": "railcraft:smoker"
       }
     }
   }

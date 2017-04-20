@@ -1,3 +1,6 @@
+10.1.0-beta-2
+	NEW: Added a SkyGen config for mines for testing purposes.
+
 10.1.0-beta-1
     NEW: Added Bronze, Nickel, and Invar ores and metals. (contribution by GeneralCamo)
     NEW: Added Manual Rolling Machine, it requires no power, but requires the player's presence to craft. Does not interact with pipes.

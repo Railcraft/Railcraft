@@ -1,0 +1,70 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "railcraft:blocks/smoker_side",
+    "side": "railcraft:blocks/smoker_side",
+    "top": "railcraft:blocks/smoker_top",
+    "bottom": "railcraft:blocks/smoker_bottom",
+    "interior": "railcraft:blocks/smoker_interior"
+  },
+  "elements": [
+    {
+      "__comment": "base",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#interior"},
+        "north": {"uv": [0, 14, 16, 16], "texture": "#side", "cullface": "north"},
+        "south": {"uv": [0, 14, 16, 16], "texture": "#side", "cullface": "south"},
+        "west": {"uv": [0, 14, 16, 16], "texture": "#side", "cullface": "west"},
+        "east": {"uv": [0, 14, 16, 16], "texture": "#side", "cullface": "east"}
+      }
+    },
+    {
+      "__comment": "north",
+      "from": [0, 2, 0],
+      "to": [16, 16, 2],
+      "faces": {
+        "up": {"uv": [0, 0, 16, 2], "texture": "#top", "cullface": "up"},
+        "north": {"uv": [0, 0, 16, 14], "texture": "#side", "cullface": "north"},
+        "south": {"uv": [0, 0, 16, 14], "texture": "#interior"},
+        "west": {"uv": [0, 0, 2, 14], "texture": "#side", "cullface": "west"},
+        "east": {"uv": [14, 0, 16, 14], "texture": "#side", "cullface": "east"}
+      }
+    },
+    {
+      "__comment": "south",
+      "from": [0, 2, 14],
+      "to": [16, 16, 16],
+      "faces": {
+        "up": {"uv": [0, 14, 16, 16], "texture": "#top", "cullface": "up"},
+        "north": {"uv": [0, 0, 16, 14], "texture": "#interior"},
+        "south": {"uv": [0, 0, 16, 14], "texture": "#side", "cullface": "south"},
+        "west": {"uv": [14, 0, 16, 14], "texture": "#side", "cullface": "west"},
+        "east": {"uv": [0, 0, 2, 14], "texture": "#side", "cullface": "east"}
+      }
+    },
+    {
+      "__comment": "west",
+      "from": [0, 2, 2],
+      "to": [2, 16, 14],
+      "faces": {
+        "up": {"uv": [0, 2, 2, 14], "texture": "#top", "cullface": "up"},
+        "west": {"uv": [2, 0, 14, 14], "texture": "#side", "cullface": "west"},
+        "east": {"uv": [2, 0, 14, 14], "texture": "#interior"}
+      }
+    },
+    {
+      "__comment": "east",
+      "from": [14, 2, 2],
+      "to": [16, 16, 14],
+      "faces": {
+        "up": {"uv": [14, 2, 16, 14], "texture": "#top", "cullface": "up"},
+        "west": {"uv": [2, 0, 14, 14], "texture": "#interior"},
+        "east": {"uv": [2, 0, 14, 14], "texture": "#side", "cullface": "east"}
+      }
+    }
+  ]
+}
