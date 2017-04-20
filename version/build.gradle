@@ -11,7 +11,7 @@ task echoVersion << {
 
 def constructVersion() {
     rootProject.version = version_project_major + '.' + version_project_series + '.' + version_project_revision
-    if (project.hasProperty('version_project_qualifier')) {
+    if (version_project_qualifier != 'none') {
         rootProject.version = rootProject.version + '-' + version_project_qualifier + '-' + version_project_build
     }
     if (!rootProject.hasProperty('official')) {
