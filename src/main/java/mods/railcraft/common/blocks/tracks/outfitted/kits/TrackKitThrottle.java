@@ -31,6 +31,7 @@ import java.io.IOException;
 
 public class TrackKitThrottle extends TrackKitPowered {
     private LocoSpeed speed = LocoSpeed.MAX;
+    private boolean reverse = false;
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -40,13 +41,23 @@ public class TrackKitThrottle extends TrackKitPowered {
     @Override
     public int getRenderState() {
         int state = speed.ordinal();
-        if (isPowered())
-            state += LocoSpeed.VALUES.length;
+        if (getReverse())
+        	state = 14;
+        if (isPowered()) {
+            if (getReverse())
+            	state += 1;
+            else
+            	state += 7;
+    	}
         return state;
     }
 
     public LocoSpeed getSpeed() {
         return speed;
+    }
+    
+    public boolean getReverse() {
+    	return reverse;
     }
 
     public void setSpeed(LocoSpeed speed) {
@@ -56,13 +67,30 @@ public class TrackKitThrottle extends TrackKitPowered {
                 markBlockNeedsUpdate();
         }
     }
+    
+    public void setReverse(boolean state) {
+    	if (this.reverse != state) {
+    		this.reverse = state;
+    		if (Game.isClient(theWorldAsserted()))
+    			markBlockNeedsUpdate();
+    	}
+    }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
+            	if (speed == LocoSpeed.MAX) {
+            		if (!getReverse()) {
+            			setReverse(true);
+            		} else {
+            			setReverse(false);
+            			setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
+            		}
+            	} else {
+            		setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
+            	}
                 crowbar.onWhack(player, hand, heldItem, getPos());
                 sendUpdateToClient();
                 return true;
@@ -75,7 +103,13 @@ public class TrackKitThrottle extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
-                ((EntityLocomotive) cart).setSpeed(getSpeed());
+            	if (getReverse()) {
+            		((EntityLocomotive) cart).setReverse(true);
+            		((EntityLocomotive) cart).setSpeed(LocoSpeed.SLOWER);
+            	} else {
+            		((EntityLocomotive) cart).setReverse(false);
+            		((EntityLocomotive) cart).setSpeed(getSpeed());
+            	}
             }
         }
     }
@@ -90,6 +124,7 @@ public class TrackKitThrottle extends TrackKitPowered {
         super.writeToNBT(data);
         data.setString("locoSpeed", speed.getName());
         NBTPlugin.writeEnumName(data, "locoSpeed", speed);
+        data.setBoolean("locoReverse", reverse);
     }
 
     @Override
@@ -98,6 +133,8 @@ public class TrackKitThrottle extends TrackKitPowered {
 
         if (data.hasKey("locoSpeed"))
             speed = NBTPlugin.readEnumName(data, "locoSpeed", LocoSpeed.MAX);
+        if (data.hasKey("locoReverse"))
+        	reverse = data.getBoolean("locoReverse");
     }
 
     @Override

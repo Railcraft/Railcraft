@@ -86,6 +86,17 @@
           "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
         }
       }
+      "14": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_r",
+        }
+      }
+      "15": {
+        "textures": {
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_r",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
+        }
+      }
     },
     "shape": {
       "north_south": {
