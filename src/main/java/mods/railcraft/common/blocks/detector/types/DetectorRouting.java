@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.items.ItemRoutingTable;
@@ -27,7 +27,6 @@ import mods.railcraft.common.util.routing.IRouter;
 import mods.railcraft.common.util.routing.ITileRouting;
 import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -79,8 +78,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
             if (table != null) {
-                if (Game.isClient(theWorld()))
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, getTile(), table));
+                Railcraft.getProxy().openRoutingTableGui(player, getTile(), table);
                 return true;
             }
             return false;
