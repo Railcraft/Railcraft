@@ -220,6 +220,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
+        if (drops.isEmpty())
+            return super.getPickBlock(state, target, world, pos, player);
         return drops.get(0);
     }
 
