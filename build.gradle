@@ -44,6 +44,7 @@ minecraft {
     mappings = project.version_mcp.replace("-", "_");
 
     replace '@VERSION@', project.version
+    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 sourceSets {
