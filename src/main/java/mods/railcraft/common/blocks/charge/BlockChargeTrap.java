@@ -11,7 +11,10 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -28,6 +31,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -70,12 +74,13 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
 
     @Override
     public void defineRecipes() {
-//        CraftingPlugin.addRecipe(getStack(1, FeederVariant.IC2),
-//                "PCP",
-//                "CCC",
-//                "PCP",
-//                'P', RailcraftItems.plate, Metal.TIN,
-//                'C', "ingotCopper");
+        CraftingPlugin.addRecipe(getStack(1),
+                "PGP",
+                "GBG",
+                "PGP",
+                'P', RailcraftItems.PLATE, Metal.TIN,
+                'B', RailcraftItems.PLATE, Metal.NICKEL,
+                'G', Blocks.IRON_BARS);
     }
 
     @Nullable
