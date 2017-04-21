@@ -49,7 +49,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     //    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
     HIGH_SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, "transition", 8, TrackKitSpeedTransition.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE, Items.REDSTONE)),
     LAUNCHER(ModuleExtras.class, 2, "launcher", 1, TrackKitLauncher.class, () -> recipe(Blocks.PISTON, "blockSteel", "blockSteel", Items.REDSTONE)),
-    THROTTLE(ModuleLocomotives.class, 14, "throttle", 8, TrackKitThrottle.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
+    THROTTLE(ModuleLocomotives.class, 10, "throttle", 8, TrackKitThrottle.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
     LOCKING(ModuleTracks.class, 16, "locking", 8, TrackKitLocking.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.STICKY_PISTON, Items.REDSTONE)),
     LOCOMOTIVE(ModuleLocomotives.class, 6, "locomotive", 8, TrackKitLocomotive.class, () -> recipe(RailcraftItems.SIGNAL_LAMP, Items.REDSTONE)),
     ONE_WAY(ModuleTracks.class, 4, "one_way", 8, TrackKitOneWay.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.PISTON, Items.REDSTONE)),

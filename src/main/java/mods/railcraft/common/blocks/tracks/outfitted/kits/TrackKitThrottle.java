@@ -42,13 +42,9 @@ public class TrackKitThrottle extends TrackKitPowered {
     public int getRenderState() {
         int state = speed.ordinal();
         if (getReverse())
-        	state = 14;
-        if (isPowered()) {
-            if (getReverse())
-            	state += 1;
-            else
-            	state += 7;
-    	}
+        	state = 4;
+        if (isPowered())
+        	state += 5;
         return state;
     }
 
@@ -105,7 +101,6 @@ public class TrackKitThrottle extends TrackKitPowered {
             if (cart instanceof EntityLocomotive) {
             	if (getReverse()) {
             		((EntityLocomotive) cart).setReverse(true);
-            		((EntityLocomotive) cart).setSpeed(LocoSpeed.SLOWER);
             	} else {
             		((EntityLocomotive) cart).setReverse(false);
             		((EntityLocomotive) cart).setSpeed(getSpeed());
@@ -125,6 +120,7 @@ public class TrackKitThrottle extends TrackKitPowered {
         data.setString("locoSpeed", speed.getName());
         NBTPlugin.writeEnumName(data, "locoSpeed", speed);
         data.setBoolean("locoReverse", reverse);
+        
     }
 
     @Override
@@ -141,11 +137,13 @@ public class TrackKitThrottle extends TrackKitPowered {
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         ((RailcraftOutputStream) data).writeEnum(speed);
+        data.writeBoolean(reverse);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         setSpeed(((RailcraftInputStream) data).readEnum(LocoSpeed.VALUES));
+        setReverse(data.readBoolean());
     }
 }

@@ -31,69 +31,37 @@
       },
       "4": {
         "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_4"
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_r"
         }
       },
       "5": {
         "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_5"
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_0",
+          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
+	  
         }
       },
       "6": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_6"
-        }
-      },
-      "7": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_0",
-          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
-        }
-      },
-      "8": {
         "textures": {
           "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_1",
           "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
         }
       },
-      "9": {
+      "7": {
         "textures": {
           "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_2",
           "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
         }
       },
-      "10": {
+      "8": {
         "textures": {
           "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_3",
           "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
         }
       },
-      "11": {
+      "9": {
         "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_4",
-          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
-        }
-      },
-      "12": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_5",
-          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
-        }
-      },
-      "13": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_6",
-          "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
-        }
-      }
-      "14": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_r",
-        }
-      }
-      "15": {
-        "textures": {
-          "layer0": "railcraft:blocks/tracks/outfitted/kit/limiter_r",
+          "layer0": "railcraft:blocks/tracks/outfitted/kit/throttle_r",
           "layer1": "railcraft:blocks/tracks/outfitted/kit/throttle_overlay_active"
         }
       }
