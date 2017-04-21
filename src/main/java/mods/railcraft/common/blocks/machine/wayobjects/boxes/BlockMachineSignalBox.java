@@ -40,8 +40,11 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>> extends BlockMachine<V> {
+    @Deprecated
     public static final Set<IEnumMachine<?>> connectionsSenders = new HashSet<>();
+    @Deprecated
     public static final Set<IEnumMachine<?>> connectionsListeners = new HashSet<>();
+    @Deprecated
     public static final Set<IEnumMachine<?>> connectionsSelf = new HashSet<>();
     public static final PropertyBool CAP = PropertyBool.create("cap");
     public static final PropertyBool CONNECTION_NORTH = PropertyBool.create("connection_north");
@@ -91,6 +94,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
         Optional<TileBoxBase> tile = WorldPlugin.getTileEntity(worldIn, pos, TileBoxBase.class);
+        tile.ifPresent(t -> t.getTileCache().resetTimers());
         state = state.withProperty(CAP, !WorldPlugin.isBlockAir(worldIn, pos.up()));
         state = state.withProperty(CONNECTION_NORTH, tile.map(t -> t.isConnected(EnumFacing.NORTH)).orElse(false));
         state = state.withProperty(CONNECTION_EAST, tile.map(t -> t.isConnected(EnumFacing.EAST)).orElse(false));
@@ -99,10 +103,12 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         return state;
     }
 
+    @Deprecated
     public boolean canTransferAspect() {
         return false;
     }
 
+    @Deprecated
     public boolean canReceiveAspect() {
         return false;
     }

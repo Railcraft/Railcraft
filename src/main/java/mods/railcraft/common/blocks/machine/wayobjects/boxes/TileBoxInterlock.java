@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -145,7 +145,6 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         super.readPacketData(data);
         controller.readPacketData(data);
         receiver.readPacketData(data);
-        markBlockForUpdate();
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

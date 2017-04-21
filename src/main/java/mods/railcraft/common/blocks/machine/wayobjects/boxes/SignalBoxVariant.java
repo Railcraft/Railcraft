@@ -46,14 +46,6 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
         creativeList.add(INTERLOCK);
         creativeList.add(SEQUENCER);
         creativeList.add(RELAY);
-
-        BlockMachineSignalBox.connectionsSenders.add(RECEIVER);
-        BlockMachineSignalBox.connectionsSenders.add(RELAY);
-        BlockMachineSignalBox.connectionsSenders.add(SEQUENCER);
-        BlockMachineSignalBox.connectionsSenders.add(CAPACITOR);
-
-        BlockMachineSignalBox.connectionsSelf.add(INTERLOCK);
-        BlockMachineSignalBox.connectionsSelf.add(SEQUENCER);
     }
 
     private final Definition def;

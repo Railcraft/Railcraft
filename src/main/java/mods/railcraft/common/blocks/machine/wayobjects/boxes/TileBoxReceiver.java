@@ -112,7 +112,6 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
     public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
-        markBlockForUpdate();
     }
 
     @Override

@@ -38,17 +38,14 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
         return SELECTION_BOX.offset(pos);
     }
 
-    @Deprecated
     public abstract boolean isConnected(EnumFacing side);
 
     public abstract SignalAspect getBoxSignalAspect(@Nullable EnumFacing side);
 
-    @Deprecated
     public boolean canTransferAspect() {
         return false;
     }
 
-    @Deprecated
     public boolean canReceiveAspect() {
         return false;
     }
@@ -67,7 +64,7 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
         }
     }
 
-    //TODO: remove this
+    //TODO: remove this (stupid CJ, why?)
     @Deprecated
     public boolean isEmittingRedstone(EnumFacing side) {
         return false;

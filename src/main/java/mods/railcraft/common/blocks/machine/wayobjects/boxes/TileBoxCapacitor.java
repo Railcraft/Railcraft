@@ -214,8 +214,6 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         ticksToPower = data.readShort();
         aspect = SignalAspect.values()[data.readByte()];
         stateModeController.setCurrentState(data.readByte());
-
-        markBlockForUpdate();
     }
 
     @Override
