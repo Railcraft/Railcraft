@@ -1,3 +1,8 @@
+10.1.1-beta-1
+	NEW: Added reverse mode to Throttle Track. (contribution by Cream Tea)
+	FIX: Routing Detector and Actuator no longer call client code from the server and crash.
+	FIX: Add temporary crafting recipe for the Charge Trap.
+
 10.1.0
 	FIX: Fixed Smoker model.
 
