@@ -50,7 +50,7 @@ public class ParticleHeatTrail extends ParticleBase {
     }
 
     private void calculateVector() {
-        Vec3d endPoint = source.getPos();
+        Vec3d endPoint = source.getPosF();
         Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
         Vec3d vel = vecParticle.subtract(endPoint);
@@ -93,7 +93,7 @@ public class ParticleHeatTrail extends ParticleBase {
         }
         this.particleAge++;
 
-        if (getPos().squareDistanceTo(source.getPos()) <= 0.1) {
+        if (getPos().squareDistanceTo(source.getPosF()) <= 0.1) {
             setExpired();
             return;
         }

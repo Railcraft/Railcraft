@@ -162,6 +162,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                 ((IRailcraftObject) type.block).finalizeDefinition();
             if (type.item != null)
                 ((IRailcraftObject) type.item).finalizeDefinition();
+//            if (type.block != null) {
+//                List<ItemStack> subBlocks = new ArrayList<>();
+//                type.block.getSubBlocks(type.item, null, subBlocks);
+//                if (subBlocks.contains(null))
+//                    throw new RuntimeException("Null item from " + type.name());
+//            }
         }
     }
 

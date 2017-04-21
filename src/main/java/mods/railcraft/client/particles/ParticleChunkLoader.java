@@ -43,7 +43,7 @@ public class ParticleChunkLoader extends ParticleBase {
     }
 
     private void calculateVector() {
-        Vec3d endPoint = source.getPos();
+        Vec3d endPoint = source.getPosF();
         Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
         Vec3d vel = vecParticle.subtract(endPoint);
@@ -80,7 +80,7 @@ public class ParticleChunkLoader extends ParticleBase {
         }
         this.particleAge++;
 
-        if (getPos().squareDistanceTo(source.getPos()) <= 0.5) {
+        if (getPos().squareDistanceTo(source.getPosF()) <= 0.5) {
             setExpired();
             return;
         }

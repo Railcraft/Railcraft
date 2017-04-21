@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,9 @@ public class EffectManager {
 
     public interface IEffectSource {
 
-        Vec3d getPos();
+        BlockPos getPos();
+
+        Vec3d getPosF();
 
         default boolean isDead() {
             return false;
@@ -34,15 +36,22 @@ public class EffectManager {
 
     public static class EffectSourceBlockPos implements IEffectSource {
 
-        private final Vec3d pos;
+        private final BlockPos pos;
+        private final Vec3d posF;
 
         private EffectSourceBlockPos(BlockPos pos) {
-            this.pos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            this.pos = pos;
+            this.posF = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         }
 
         @Override
-        public Vec3d getPos() {
+        public BlockPos getPos() {
             return pos;
+        }
+
+        @Override
+        public Vec3d getPosF() {
+            return posF;
         }
     }
 
@@ -55,7 +64,12 @@ public class EffectManager {
         }
 
         @Override
-        public Vec3d getPos() {
+        public BlockPos getPos() {
+            return source.getPos();
+        }
+
+        @Override
+        public Vec3d getPosF() {
             BlockPos pos = source.getPos();
             return new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         }
@@ -75,7 +89,12 @@ public class EffectManager {
         }
 
         @Override
-        public Vec3d getPos() {
+        public BlockPos getPos() {
+            return source.getPosition();
+        }
+
+        @Override
+        public Vec3d getPosF() {
             return new Vec3d(source.posX, source.posY + source.getYOffset(), source.posZ);
         }
 
