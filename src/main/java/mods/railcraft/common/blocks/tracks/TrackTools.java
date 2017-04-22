@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -266,7 +266,7 @@ public class TrackTools {
         if (world.isRainingAt(pos))
             chance = 75;
         if (rand.nextInt(chance) == 50)
-            EffectManager.instance.sparkEffectSurface(state, world, pos);
+            EffectManager.instance.zapEffectSurface(state, world, pos);
     }
 
 }

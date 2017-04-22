@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -131,10 +131,25 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void sparkEffectPoint(World world, Object source) {
+    public void zapEffectPoint(World world, Object source) {
     }
 
     @Override
-    public void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
+    public void zapEffectDeath(World world, Object source) {
+        if (Game.isClient(world))
+            return;
+
+        try {
+            PacketEffect pkt = new PacketEffect(Effect.ZAP_DEATH);
+            RailcraftOutputStream data = pkt.getOutputStream();
+            EffectManager.IEffectSource es = EffectManager.getEffectSource(source);
+            data.writeVec3d(es.getPosF());
+            pkt.sendPacket(world, es.getPosF());
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
     }
 }

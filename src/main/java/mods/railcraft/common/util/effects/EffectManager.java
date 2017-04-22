@@ -55,6 +55,27 @@ public class EffectManager {
         }
     }
 
+    public static class EffectSourceVec3d implements IEffectSource {
+
+        private final BlockPos pos;
+        private final Vec3d posF;
+
+        private EffectSourceVec3d(Vec3d pos) {
+            this.pos = new BlockPos(pos);
+            this.posF = pos;
+        }
+
+        @Override
+        public BlockPos getPos() {
+            return pos;
+        }
+
+        @Override
+        public Vec3d getPosF() {
+            return posF;
+        }
+    }
+
     public static class EffectSourceTile implements IEffectSource {
 
         private final TileEntity source;
@@ -111,6 +132,8 @@ public class EffectManager {
             return new EffectSourceEntity((Entity) source);
         } else if (source instanceof BlockPos) {
             return new EffectSourceBlockPos((BlockPos) source);
+        } else if (source instanceof Vec3d) {
+            return new EffectSourceVec3d((Vec3d) source);
         }
         throw new RuntimeException("Invalid Effect Source");
     }

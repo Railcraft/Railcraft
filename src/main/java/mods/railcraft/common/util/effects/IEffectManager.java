@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -41,9 +41,11 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void locomotiveEffect(World world, double x, double y, double z);
 
-    void sparkEffectPoint(World world, Object source);
+    void zapEffectPoint(World world, Object source);
 
-    void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos);
+    void zapEffectDeath(World world, Object source);
+
+    void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos);
 
     void teleportEffect(Entity entity, Vec3d destination);
 

@@ -21,7 +21,6 @@ import net.minecraft.util.EnumFacing;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -231,13 +230,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         }
 
         public void tick(TileBoxInterlock host) {
-            Iterator<TileBoxInterlock> it = interlocks.iterator();
-            while (it.hasNext()) {
-                TileBoxInterlock box = it.next();
-                if (box.isInvalid()) {
-                    it.remove();
-                }
-            }
+            interlocks.removeIf(TileEntity::isInvalid);
             if (delay < DELAY) {
                 delay++;
                 return;

@@ -47,6 +47,7 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+// TODO: Where you stupid when you decided to use a Proxy? Just no, no...
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
@@ -190,6 +191,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
             case FORCE_SPAWN:
                 doForceSpawn(data);
                 break;
+            case ZAP_DEATH:
+                doZapDeath(data);
+                break;
         }
     }
 
@@ -262,23 +266,53 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void sparkEffectPoint(World world, Object source) {
+    public void zapEffectPoint(World world, Object source) {
         if (thinParticles(false))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
+        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
+            return;
         Vec3d vel = new Vec3d(
                 rand.nextDouble() - 0.5D,
                 rand.nextDouble() - 0.5D,
                 rand.nextDouble() - 0.5D);
         spawnParticle(new ParticleSpark(world, es.getPosF(), vel));
-        SoundHelper.playSoundClient(world, es.getPos(), RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, 1F, 1F);
+        SoundHelper.playSoundClient(world, es.getPos(), RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, .2F, 1F);
     }
 
     @Override
-    public void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
+    public void zapEffectDeath(World world, Object source) {
+        if (Game.isHost(world)) {
+            super.zapEffectDeath(world, source);
+            return;
+        }
         if (thinParticles(false))
             return;
-        SoundHelper.playSoundClient(worldIn, pos, RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, 1F, 1F);
+        IEffectSource es = EffectManager.getEffectSource(source);
+        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
+            return;
+        SoundHelper.playSoundClient(world, es.getPos(), RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, 3F, 0.75F);
+        for (int i = 0; i < 20; i++) {
+            Vec3d vel = new Vec3d(
+                    rand.nextDouble() - 0.5D,
+                    rand.nextDouble() - 0.5D,
+                    rand.nextDouble() - 0.5D);
+            spawnParticle(new ParticleSpark(world, es.getPosF(), vel));
+        }
+    }
+
+    private void doZapDeath(RailcraftInputStream data) throws IOException {
+        Vec3d pos = data.readVec3d();
+        zapEffectDeath(Minecraft.getMinecraft().theWorld, pos);
+    }
+
+    @Override
+    public void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
+        if (thinParticles(false))
+            return;
+        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(pos) > 400)
+            return;
+        SoundHelper.playSoundClient(worldIn, pos, RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, .2F, 1F);
         for (EnumFacing side : EnumFacing.VALUES) {
             if (!stateIn.shouldSideBeRendered(worldIn, pos, side))
                 continue;

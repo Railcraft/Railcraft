@@ -125,7 +125,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                     numConnection++;
             }
             if (numConnection > 2)
-                EffectManager.instance.sparkEffectPoint(worldIn, pos);
+                EffectManager.instance.zapEffectPoint(worldIn, pos);
         }
     }
 
