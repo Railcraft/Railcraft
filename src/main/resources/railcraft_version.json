@@ -1,6 +1,7 @@
 {
   "homepage": "http://www.railcraft.info/releases/",
   "1.10.2": {
+    "10.1.1": "NEW: Added reverse mode to Throttle Track. (contribution by Cream Tea)\nNEW: Zap sounds and effects.\nFIX: Fix crash when looking at an Admin Charge Feeder with TheOneProbe.\nFIX: Fix rendering issues with Box connections.\nFIX: Routing Detector and Actuator no longer call client code from the server and crash.\nFIX: Add temporary crafting recipe for the Charge Trap.",
     "10.1.0": "NEW: Smoker and Feed Station restored.\nNEW: Signal Boxes restored.\nNEW: Turnouts, Wyes, and Switch Actuators restored.\nNEW: Spike Maul is used to swap between Flex, Junction, Wye.\nNEW: Sounds restored.\nNEW: Added a SkyGen config for mines for testing purposes.\nNEW: Added Bronze, Nickel, and Invar ores and metals. (contribution by GeneralCamo)\nNEW: Added Brick variants of the new vanilla stone types. (contribution by GeneralCamo)\nNEW: Pearlized Brick an Ender Pearl themed Brick added. (contribution by GeneralCamo)\nNEW: Rolling Machine has been restored. Should fix most recipe issues.\nNEW: Added Manual Rolling Machine, it requires no power, but requires the player's presence to craft. Does not interact with pipes.\nNEW: Added Messenger Track Kit, a track that sends a chat message when passed. (contribution by liach)\nNEW: Riding and Ridden Routing conditionals replaced with the Rider conditional. See GitHub Issue #844 for details.\nNEW: Placing a malformed Routing Table into device will now pop up the GUI to tell you it is erroring.\nNEW: Sneak clicking with an empty hand on Routing device will now allow you to edit the contained Routing Table directly.\nNEW: You can now disable Railcraft enchantments, and moved to Magic module.\nCHANGED: Some of Brick recipes have been Tweaked to reflect various changes in Vanilla. (contribution by GeneralCamo)\nFIX: Various IC2 integration fixes. (contribution by GeneralCamo)\nFIX: Notepad should now interact with the world properly.\nFIX: Charge Feeders should now properly respond to Redstone under all conditions.\nFIX: Reduced Tunnel Bore log spam.",
     "10.0.1": "NEW: Add DynamicLighting support to Locomotive (contribution by liach)\nFIX: Fix config files not being generated correctly\nFIX: Various other minor fixes",
     "10.0.0": "INFO: First official MC 1.10.2 release\nNEW: Added in-game config editor support\nFIX: Fix various GUI issues\nFIX: Render Locomotive and Maintenance Cart Lamps\nFIX: Add Steam Locomotive Fluid Container handling\nFIX: Various other fixes",
@@ -8,7 +9,7 @@
     "10.0.0-beta-3": "CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.\nCHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should be unaffected.\nCONFIG: Added config option to reduce/eliminate vanilla Gold/Iron Ore generation.\nFIX: Fix Geode generation.\nFIX: Various other fixes."
   },
   "promos": {
-    "1.10.2-latest": "10.1.0",
-    "1.10.2-recommended": "10.1.0"
+    "1.10.2-latest": "10.1.1",
+    "1.10.2-recommended": "10.1.1"
   }
 }

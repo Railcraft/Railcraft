@@ -1,3 +1,8 @@
+10.1.1
+	NEW: Zap sounds and effects.
+	FIX: Fix crash when looking at an Admin Charge Feeder with TheOneProbe.
+	FIX: Fix rendering issues with Box connections.
+	
 10.1.1-beta-1
 	NEW: Added reverse mode to Throttle Track. (contribution by Cream Tea)
 	FIX: Routing Detector and Actuator no longer call client code from the server and crash.
