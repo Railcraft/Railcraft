@@ -13,6 +13,7 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
@@ -24,6 +25,7 @@ import javax.annotation.Nullable;
  */
 public enum ModItems {
 
+    SILK(Mod.FORESTRY, "craftingMaterial", 3),
     BAT_BOX(Mod.IC2, "te#batbox"),
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),
@@ -32,16 +34,27 @@ public enum ModItems {
     IC2_MACHINE(Mod.IC2, "resource#machine");
     private final Mod mod;
     public final String itemTag;
+    public final int meta;
     private boolean needsInit = true;
     private ItemStack stack;
 
     ModItems(Mod mod, String itemTag) {
+        this(mod, itemTag, -1);
+    }
+
+    ModItems(Mod mod, String itemTag, int meta) {
         this.mod = mod;
         this.itemTag = itemTag;
+        this.meta = meta;
     }
 
     @Nullable
     public ItemStack get() {
+        return get(1);
+    }
+
+    @Nullable
+    public ItemStack get(int qty) {
         RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
         if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
             throw new RuntimeException("Don't call this function before POST_INIT");
@@ -51,9 +64,16 @@ public enum ModItems {
             needsInit = false;
             init();
         }
-        if (stack != null)
-            return stack.copy();
+        if (stack != null) {
+            stack = stack.copy();
+            stack.stackSize = Math.min(qty, stack.getMaxStackSize());
+            return stack;
+        }
         return null;
+    }
+
+    public boolean isEqual(ItemStack otherStack, boolean matchMeta, boolean matchNBT) {
+        return InvTools.isItemEqual(stack, otherStack, matchMeta, matchNBT);
     }
 
     protected void init() {
@@ -63,5 +83,7 @@ public enum ModItems {
             stack = ForestryPlugin.getItem(itemTag);
         if (stack == null)
             Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
+        else if (meta >= 0)
+            stack.setItemDamage(meta);
     }
 }
