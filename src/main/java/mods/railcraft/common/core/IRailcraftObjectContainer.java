@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.Block;
@@ -94,4 +95,13 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     boolean isEnabled();
 
     boolean isLoaded();
+
+    /**
+     * Set the module that this object belongs to. Each object must have a module. If the module is disabled,
+     * this method will not get called, thus the object cannot get registered. The module may be kept for
+     * debug use, etc.
+     *
+     * @param source The module that loads this object
+     */
+    void loadBy(IRailcraftModule source);
 }

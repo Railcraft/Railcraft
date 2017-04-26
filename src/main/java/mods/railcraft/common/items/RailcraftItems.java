@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -111,6 +112,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     private final Supplier<Boolean> prerequisites;
     private Item item;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
+    @Nullable
+    private IRailcraftModule module;
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
@@ -219,13 +222,19 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
 
     @Override
     public boolean isEnabled() {
-        return RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
+        return module != null && RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
     }
 
     @Override
     public boolean isLoaded() {
         return item != null;
     }
+
+    @Override
+    public void loadBy(IRailcraftModule module) {
+        this.module = module;
+    }
+
 
     @Override
     public String toString() {

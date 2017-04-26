@@ -26,6 +26,8 @@ import org.apache.logging.log4j.Level;
 import java.io.File;
 import java.util.*;
 
+import javax.annotation.Nullable;
+
 public class RailcraftModuleManager {
 
     private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
@@ -55,6 +57,7 @@ public class RailcraftModuleManager {
         }
     }
 
+    @Nullable
     public static Class<? extends IRailcraftModule> getModule(String moduleName) {
         return nameToClassMapping.get(moduleName);
     }

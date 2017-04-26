@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -133,6 +134,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     protected InitializationConditional<RailcraftCarts> conditions = new InitializationConditional<>();
     private Item item;
     private boolean isSetup;
+    @Nullable
+    private IRailcraftModule module;
 
     private static Supplier<ItemStack> from(Block block) {
         return () -> new ItemStack(block);
@@ -337,12 +340,17 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     public boolean isEnabled() {
         if (isVanillaCart())
             return true;
-        return conditions.test(this);
+        return module != null && conditions.test(this);
     }
 
     @Override
     public boolean isLoaded() {
         return isSetup;
+    }
+
+    @Override
+    public void loadBy(IRailcraftModule source) {
+        module = source;
     }
 
     public boolean isVanillaCart() {

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -145,6 +146,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     protected Object altRecipeObject;
     private Block block;
     private ItemBlock item;
+    @Nullable
+    private IRailcraftModule module;
 
     RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier, @Nullable Function<Block, ItemBlock> itemSupplier) {
         this.blockClass = blockClass;
@@ -298,7 +301,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     @Override
     public boolean isEnabled() {
-        return RailcraftConfig.isBlockEnabled(tag);
+        return module != null && RailcraftConfig.isBlockEnabled(tag);
     }
 
     @Override
@@ -307,7 +310,14 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
+    public void loadBy(IRailcraftModule source) {
+        module = source;
+    }
+
+    @Override
     public String toString() {
         return "Block{" + tag + "}";
     }
+
+
 }
