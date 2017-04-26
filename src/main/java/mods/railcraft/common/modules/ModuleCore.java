@@ -131,8 +131,10 @@ public class ModuleCore extends RailcraftModulePayload {
                         RailcraftItems.MAG_GLASS,
                         RailcraftItems.GOGGLES,
                         RailcraftItems.OVERALLS,
-                        RailcraftItems.NUGGET,
-                        RailcraftItems.NOTEPAD
+                        RailcraftItems.NOTEPAD,
+
+                        RailcraftItems.RAIL,
+                        RailcraftItems.TIE
                 );
             }
 

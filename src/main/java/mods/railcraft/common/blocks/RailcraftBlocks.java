@@ -61,6 +61,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -195,7 +196,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                 throw new RuntimeException("Railcraft Blocks must implement IRailcraftBlock");
             IRailcraftBlock blockObject = (IRailcraftBlock) block;
             blockObject.initializeDefinintion();
-            blockObject.defineRecipes();
+            Railcraft.instance.recipeWaitList.add(blockObject);
 
             if (item != null) {
                 if (!(item instanceof IRailcraftItemBlock))
@@ -204,7 +205,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                     throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItemSimple");
                 IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
                 itemObject.initializeDefinintion();
-                itemObject.defineRecipes();
+                Railcraft.instance.recipeWaitList.add(itemObject);
             }
         }
     }

@@ -20,6 +20,7 @@ import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.ItemBottle;
@@ -149,7 +150,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             item.setUnlocalizedName(getFullTag());
             RailcraftRegistry.register(railcraftItem);
             railcraftItem.initializeDefinintion();
-            railcraftItem.defineRecipes();
+            Railcraft.instance.recipeWaitList.add(railcraftItem);
         }
     }
 

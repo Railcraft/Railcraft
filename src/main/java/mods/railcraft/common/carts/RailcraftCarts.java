@@ -328,7 +328,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     RailcraftRegistry.register((IRailcraftItemSimple) itemCart);
 
                     itemCart.initializeDefinintion();
-                    itemCart.defineRecipes();
+                    Railcraft.instance.recipeWaitList.add(itemCart);
                 }
             } else {
                 conditions.printFailureReason(this);
