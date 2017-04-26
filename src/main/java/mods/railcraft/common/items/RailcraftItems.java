@@ -231,7 +231,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     @Override
-    public void loadBy(IRailcraftModule module) {
+    public void addedBy(IRailcraftModule module) {
         this.module = module;
     }
 

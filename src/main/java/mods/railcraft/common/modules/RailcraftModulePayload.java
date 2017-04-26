@@ -74,10 +74,9 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void preInit() {
-            objectContainers.forEach(c -> {
-                c.loadBy(owner);
-                c.register();
-            });
+            objectContainers.forEach(c -> c.addedBy(owner));
+            //Must mark all items as added first because recipe registry may register items in random order
+            objectContainers.forEach(IRailcraftObjectContainer::register);
             enabledEventHandler.preInit();
         }
 

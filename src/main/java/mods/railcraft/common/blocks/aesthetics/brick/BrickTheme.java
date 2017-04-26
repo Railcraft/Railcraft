@@ -394,7 +394,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     }
 
     @Override
-    public void loadBy(IRailcraftModule source) {
+    public void addedBy(IRailcraftModule source) {
         module = source;
     }
 

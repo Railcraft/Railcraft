@@ -209,7 +209,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     }
 
     @Override
-    public void loadBy(IRailcraftModule source) {
+    public void addedBy(IRailcraftModule source) {
         module = source;
     }
 

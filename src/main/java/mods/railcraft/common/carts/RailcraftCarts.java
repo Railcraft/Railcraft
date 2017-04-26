@@ -349,7 +349,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    public void loadBy(IRailcraftModule source) {
+    public void addedBy(IRailcraftModule source) {
         module = source;
     }
 

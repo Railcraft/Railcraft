@@ -310,7 +310,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    public void loadBy(IRailcraftModule source) {
+    public void addedBy(IRailcraftModule source) {
         module = source;
     }
 

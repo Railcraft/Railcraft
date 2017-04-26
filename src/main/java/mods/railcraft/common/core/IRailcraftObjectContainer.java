@@ -103,5 +103,5 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
      *
      * @param source The module that loads this object
      */
-    void loadBy(IRailcraftModule source);
+    void addedBy(IRailcraftModule source);
 }
