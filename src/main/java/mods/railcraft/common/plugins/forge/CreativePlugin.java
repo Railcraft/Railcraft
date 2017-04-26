@@ -16,7 +16,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
 import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -49,5 +52,17 @@ public class CreativePlugin {
             return tabItem.get().getItem();
         }
 
+    }
+
+    public static void addToList(List<ItemStack> creativeList, @Nullable ItemStack stack) {
+        if (stack != null) {
+            creativeList.add(stack);
+        }
+    }
+
+    public static void addToList(List<ItemStack> creativeList, ItemStack... stacks) {
+        for (ItemStack stack : stacks)
+            if (stack != null)
+                creativeList.add(stack);
     }
 }

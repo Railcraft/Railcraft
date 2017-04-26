@@ -25,6 +25,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -114,7 +115,7 @@ public class ItemTrackKit extends ItemRailcraft {
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         Map<String, TrackKit> trackKits = TrackRegistry.TRACK_KIT.getVariants();
-        list.addAll(trackKits.values().stream().filter(TrackKit::isVisible).map(this::getStack).collect(Collectors.toList()));
+        list.addAll(trackKits.values().stream().filter(TrackKit::isVisible).map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
     }
 
     @Override
