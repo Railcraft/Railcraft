@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks;
 import com.google.common.collect.BiMap;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -111,10 +112,10 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
         V[] variants = getVariants();
         if (variants != null) {
             for (V variant : variants) {
-                list.add(getStack(variant));
+                CreativePlugin.addToList(list, getStack(variant));
             }
         } else {
-            list.add(getStack(null));
+            CreativePlugin.addToList(list, getStack(null));
         }
     }
 

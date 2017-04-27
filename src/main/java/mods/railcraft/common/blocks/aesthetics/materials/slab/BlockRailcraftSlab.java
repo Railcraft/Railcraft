@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -184,7 +185,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
     }
 
     @Override

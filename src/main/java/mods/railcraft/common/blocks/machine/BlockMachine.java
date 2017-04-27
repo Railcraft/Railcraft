@@ -23,6 +23,7 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -353,6 +354,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
                 getCreativeList().stream()
                         .filter(m -> m.isAvailable())
                         .map(m -> m.getStack())
+                        .filter(Predicates.nonNull())
                         .collect(Collectors.toList())
         );
     }

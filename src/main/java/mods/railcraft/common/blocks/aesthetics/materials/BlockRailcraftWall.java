@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWall;
@@ -148,7 +149,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
     }
 
     @Nonnull
