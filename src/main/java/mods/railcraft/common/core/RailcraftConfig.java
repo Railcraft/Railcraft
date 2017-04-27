@@ -353,6 +353,7 @@ public class RailcraftConfig {
         loadRecipeProperty("ic2.macerator", "blaze", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Blaze Powder");
         loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Cobblestone");
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
+        loadRecipeProperty("ic2.macerator", "slag", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Slag Dust");
         loadRecipeProperty("forestry.misc", "fertilizer", true, "change to '{t}=false' to disable the saltpeter recipe for Forestry Fertilizer");
         loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carpenter Tie recipe");
         loadRecipeProperty("forestry.carpenter", "torches", true, "change to '{t}=false' to disable the Carpenter Creosote Torch recipe");

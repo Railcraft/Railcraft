@@ -31,7 +31,8 @@ public enum ModItems {
     CESU(Mod.IC2, "te#cesu"),
     MFSU(Mod.IC2, "te#mfsu"),
     BATTERY(Mod.IC2, "re_Battery"),
-    IC2_MACHINE(Mod.IC2, "resource#machine");
+    IC2_MACHINE(Mod.IC2, "resource#machine"),
+    SLAG(Mod.IC2, "misc_resource#slag");
     private final Mod mod;
     public final String itemTag;
     public final int meta;
