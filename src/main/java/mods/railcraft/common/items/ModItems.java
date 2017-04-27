@@ -70,10 +70,10 @@ public enum ModItems {
     }
 
     protected void init() {
-        RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
-        if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
-            throw new RuntimeException("Don't call this function before POST_INIT");
         if (needsInit && mod.isLoaded()) {
+            RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
+            if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
+                throw new RuntimeException("Don't use ModItems before POST_INIT");
             needsInit = false;
             if (mod == Mod.IC2)
                 stack = IC2Plugin.getItem(itemTag);
