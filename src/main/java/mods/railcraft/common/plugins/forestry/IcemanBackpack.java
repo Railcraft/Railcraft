@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,12 +12,16 @@ package mods.railcraft.common.plugins.forestry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -27,6 +31,8 @@ public class IcemanBackpack extends BaseBackpack {
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.SNOWBALL);
     private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.SNOW);
+    private static final Predicate<ItemStack> SNOWBALL_MATCHER = StackFilters.of(Items.SNOWBALL);
+    private static final Predicate<ItemStack> SNOW_BLOCK_MATCHER = StackFilters.of(Blocks.SNOW);
     private static final String INV_TAG = "Items";
 
     public static IcemanBackpack getInstance() {
@@ -53,26 +59,6 @@ public class IcemanBackpack extends BaseBackpack {
         add(Items.SNOWBALL);
     }
 
-    public void compactInventory(ItemStack backpack) {
-        StandaloneInventory inv = new StandaloneInventory(45);
-        NBTTagCompound data = backpack.getTagCompound();
-        if (data == null) return;
-        InvTools.readInvFromNBT(inv, INV_TAG, data);
-        int numSnowballs = InvTools.countItems(inv, SNOWBALL);
-        if (numSnowballs >= 16) {
-            for (int i = 0; i < 4; i++) {
-                InvTools.removeOneItem(inv, SNOWBALL);
-            }
-            if (InvTools.moveItemStack(new ItemStack(Blocks.SNOW), inv) == null) {
-                InvTools.writeInvToNBT(inv, INV_TAG, data);
-            }
-        } else if (numSnowballs < 8 && InvTools.removeOneItem(inv, SNOW_BLOCK) != null) {
-            if (InvTools.moveItemStack(new ItemStack(Items.SNOWBALL, 4), inv) == null) {
-                InvTools.writeInvToNBT(inv, INV_TAG, data);
-            }
-        }
-    }
-
     @Override
     public int getPrimaryColour() {
         return 0xFFFFFF;
@@ -81,5 +67,35 @@ public class IcemanBackpack extends BaseBackpack {
     @Override
     public int getSecondaryColour() {
         return 0xFFFFFF;
+    }
+
+    @Override
+    public boolean stow(IInventory backpackInventory, ItemStack stackToStow) {
+        manageSnow(backpackInventory);
+        return false;
+    }
+
+    @Override
+    public boolean resupply(IInventory backpackInventory) {
+        manageSnow(backpackInventory);
+        return false;
+    }
+
+    private void manageSnow(IInventory backpackInventory) {
+        IInventoryObject inv = InvTools.getInventory(backpackInventory);
+        if (inv != null) {
+            int numSnowballs = InvTools.countItems(inv, SNOWBALL_MATCHER);
+            InventoryManipulator im = InventoryManipulator.get(backpackInventory);
+            while (numSnowballs > 16 && im.canRemoveItems(SNOWBALL_MATCHER, 4) && im.canAddStack(SNOW_BLOCK)) {
+                im.removeItems(SNOWBALL_MATCHER, 4);
+                im.addStack(new ItemStack(Blocks.SNOW));
+                numSnowballs -= 4;
+            }
+            while (numSnowballs < 8 && im.canRemoveItem(SNOW_BLOCK_MATCHER) && im.canAddStack(new ItemStack(Items.SNOWBALL, 4))) {
+                im.removeItem(SNOW_BLOCK_MATCHER);
+                im.addStack(new ItemStack(Items.SNOWBALL, 4));
+                numSnowballs += 4;
+            }
+        }
     }
 }

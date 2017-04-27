@@ -17,7 +17,6 @@ import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
@@ -25,6 +24,7 @@ import mods.railcraft.common.fluids.ItemBottle;
 import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import mods.railcraft.common.plugins.misc.Mod;
@@ -50,6 +50,18 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     ARMOR_LEGGINGS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor_leggings_steel", Items.IRON_LEGGINGS),
     ARMOR_CHESTPLATE_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor_chestplate_steel", Items.IRON_CHESTPLATE),
     AXE_STEEL(ItemSteelAxe::new, "tool_axe_steel", Items.IRON_AXE),
+    BACKPACK_APOTHECARY_T1(() -> ForestryPlugin.instance().getBackpack("apothecary", "NORMAL"),
+            "backpack_apothecary_t1", null, Mod.FORESTRY::isLoaded),
+    BACKPACK_APOTHECARY_T2(() -> ForestryPlugin.instance().getBackpack("apothecary", "WOVEN"),
+            "backpack_apothecary_t2", null, Mod.FORESTRY::isLoaded),
+    BACKPACK_ICEMAN_T1(() -> ForestryPlugin.instance().getBackpack("iceman", "NORMAL"),
+            "backpack_iceman_t1", null, Mod.FORESTRY::isLoaded),
+    BACKPACK_ICEMAN_T2(() -> ForestryPlugin.instance().getBackpack("iceman", "WOVEN"),
+            "backpack_iceman_t2", null, Mod.FORESTRY::isLoaded),
+    BACKPACK_TRACKMAN_T1(() -> ForestryPlugin.instance().getBackpack("trackman", "NORMAL"),
+            "backpack_trackman_t1", null, Mod.FORESTRY::isLoaded),
+    BACKPACK_TRACKMAN_T2(() -> ForestryPlugin.instance().getBackpack("trackman", "WOVEN"),
+            "backpack_trackman_t2", null, Mod.FORESTRY::isLoaded),
     BLEACHED_CLAY(ItemRailcraft::new, "bleached_clay", Items.CLAY_BALL, RailcraftBlocks.BRICK_BLEACHED_BONE::isEnabled),
     BORE_HEAD_IRON(ItemBoreHeadIron::new, "borehead_iron", null, RailcraftCarts.BORE::isEnabled),
     BORE_HEAD_STEEL(ItemBoreHeadSteel::new, "borehead_steel", null, RailcraftCarts.BORE::isEnabled),
@@ -137,14 +149,22 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             return;
 
         if (isEnabled()) {
-            item = itemSupplier.get();
-            if (!(item instanceof IRailcraftItemSimple))
-                throw new RuntimeException("Railcraft Items must implement IRailcraftItemSimple");
-            IRailcraftItemSimple railcraftItem = (IRailcraftItemSimple) item;
-            railcraftObject = Optional.of(railcraftItem);
+            Item newItem = itemSupplier.get();
+            if (newItem == null)
+                return;
+            if (newItem instanceof IRailcraftItemSimple)
+                item = ((IRailcraftItemSimple) newItem).getObject();
+            else
+                item = newItem;
             item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
-            RailcraftRegistry.register(railcraftItem);
+            RailcraftRegistry.register(item);
+            IRailcraftItemSimple railcraftItem;
+            if (newItem instanceof IRailcraftItemSimple)
+                railcraftItem = (IRailcraftItemSimple) newItem;
+            else
+                railcraftItem = new ItemWrapper(newItem);
+            railcraftObject = Optional.of(railcraftItem);
             railcraftItem.initializeDefinintion();
             railcraftItem.defineRecipes();
         }
@@ -186,8 +206,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
-        if (item != null)
-            ((IRailcraftObject) item).checkVariant(variant);
+        getObject().ifPresent(o -> o.checkVariant(variant));
     }
 
     @Nullable

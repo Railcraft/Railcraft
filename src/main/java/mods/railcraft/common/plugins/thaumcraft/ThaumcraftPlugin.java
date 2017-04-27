@@ -30,7 +30,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.Game;
@@ -87,9 +86,9 @@ public class ThaumcraftPlugin {
         ResearchCategories.registerCategory(RESEARCH_CATEGORY, null, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
 
         // Apothecaries Backpack
-        Item item = ForestryPlugin.apothecariesBackpackT1;
+        Item item = RailcraftItems.BACKPACK_APOTHECARY_T1.item();
         if (item != null) {
-            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe("RC_ApothecariesBackpack", new ItemStack(ForestryPlugin.apothecariesBackpackT1),
+            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe("RC_ApothecariesBackpack", RailcraftItems.BACKPACK_APOTHECARY_T1.getStack(),
                     new AspectList().add(Aspect.AIR, 16).add(Aspect.ORDER, 16),
                     "X#X",
                     "VYV",
@@ -102,7 +101,7 @@ public class ThaumcraftPlugin {
             AspectList aspects = new AspectList();
             aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);
 
-            ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, new ItemStack(ForestryPlugin.apothecariesBackpackT1));
+            ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, RailcraftItems.BACKPACK_APOTHECARY_T1.getStack());
             backpack.setPages(ThaumcraftPlugin.getResearchPage("RC_ApothecariesBackpack"), new ResearchPage(recipe)).setParentsHidden("ENCHFABRIC").registerResearchItem();
         }
 

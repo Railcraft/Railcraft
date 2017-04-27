@@ -114,7 +114,7 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
             return oreTag;
         if (variant != null && getHasSubtypes())
             return getStack(variant);
-        return this;
+        return getObject();
     }
 
     @Nullable
