@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -92,7 +92,7 @@ public class LinkageManager implements ILinkageManager {
      */
     public UUID getLinkageId(EntityMinecart cart) {
         UUID id = cart.getPersistentID();
-        if (!cart.isDead)
+        if (cart.isEntityAlive())
             carts.put(id, cart);
         return id;
     }
@@ -107,7 +107,7 @@ public class LinkageManager implements ILinkageManager {
     @Override
     public EntityMinecart getCartFromUUID(UUID id) {
         EntityMinecart cart = carts.get(id);
-        if (cart != null && cart.isDead) {
+        if (cart != null && !cart.isEntityAlive()) {
             carts.remove(id);
             return null;
         }

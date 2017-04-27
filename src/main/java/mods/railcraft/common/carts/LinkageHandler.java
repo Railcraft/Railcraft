@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -326,7 +326,7 @@ public class LinkageHandler {
 
         LinkageManager lm = LinkageManager.instance();
 
-        if (cart.isDead) {
+        if (!cart.isEntityAlive()) {
             lm.removeLinkageId(cart);
             return;
         }
