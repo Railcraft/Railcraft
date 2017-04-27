@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,11 +12,14 @@ package mods.railcraft.common.util.crafting;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
+import java.util.stream.IntStream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,7 +32,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         int numTickets = 0;
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (stack != null) {
+            if (!InvTools.isEmpty(stack)) {
                 if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
                     numTickets++;
                 } else if (stack.getItem() == Items.PAPER || RailcraftItems.TICKET.isEqual(stack)) {
@@ -44,18 +47,14 @@ public class RoutingTicketCopyRecipe implements IRecipe {
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
-        ItemStack ticket = null;
-        for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
-            ItemStack stack = grid.getStackInSlot(slot);
-            if (RailcraftItems.TICKET_GOLD.isEqual(stack)) {
-                ticket = stack;
-                break;
-            }
-        }
-        if (ticket != null) {
+        ItemStack ticket = IntStream.range(0, grid.getSizeInventory())
+                .mapToObj(grid::getStackInSlot)
+                .filter(RailcraftItems.TICKET_GOLD::isEqual)
+                .findFirst().orElse(InvTools.emptyStack());
+        if (!InvTools.isEmpty(ticket)) {
             return ItemTicket.copyTicket(ticket);
         }
-        return null;
+        return InvTools.emptyStack();
     }
 
     @Override

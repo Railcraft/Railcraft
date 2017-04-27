@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,7 +39,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
             List<ItemStack> fuel = new ArrayList<ItemStack>() {
                 @Override
                 public boolean add(ItemStack e) {
-                    return e != null && super.add(e);
+                    return !InvTools.isEmpty(e) && super.add(e);
                 }
 
             };
@@ -77,7 +77,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
         @Override
         public boolean isRoomForOutput(ItemStack outputSlot) {
-            return (outputSlot == null || output == null || (InvTools.isItemEqual(outputSlot, output) && outputSlot.stackSize + output.stackSize <= output.getMaxStackSize()));
+            return (InvTools.isEmpty(outputSlot) || InvTools.isEmpty(output) || (InvTools.isItemEqual(outputSlot, output) && outputSlot.stackSize + output.stackSize <= output.getMaxStackSize()));
         }
 
         @Override
@@ -114,13 +114,13 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
     @Override
     public void addRecipe(@Nullable ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, @Nullable ItemStack output) {
-        if (input != null && output != null)
+        if (!InvTools.isEmpty(input) && !InvTools.isEmpty(output))
             recipes.add(new BlastFurnaceRecipe(input, matchDamage, matchNBT, cookTime, output));
     }
 
     @Override
     public IBlastFurnaceRecipe getRecipe(ItemStack input) {
-        if (input == null) return null;
+        if (InvTools.isEmpty(input)) return null;
         for (BlastFurnaceRecipe r : recipes) {
             if (!r.matchDamage || InvTools.isWildcard(r.input)) continue;
             if (InvTools.isItemEqual(input, r.input, true, r.matchNBT))

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,9 +13,6 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.items.IItemHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -40,14 +37,5 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         if (inv.getInventoryObject() instanceof IItemHandler)
             return new ItemHandlerInventoryIterator((IItemHandler) inv.getInventoryObject());
         throw new RuntimeException("Invalid Inventory Object");
-    }
-
-    public Iterable<T> notNull() {
-        List<T> filledSlots = new ArrayList<T>(32);
-        for (T slot : this) {
-            if (slot.getStack() != null)
-                filledSlots.add(slot);
-        }
-        return filledSlots;
     }
 }

@@ -30,6 +30,7 @@ import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -172,11 +173,11 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
 
     @Override
     public boolean isEqual(@Nullable ItemStack stack) {
-        return stack != null && item == stack.getItem();
+        return !InvTools.isEmpty(stack) && item == stack.getItem();
     }
 
     public boolean isInstance(@Nullable ItemStack stack) {
-        return stack != null && (item == stack.getItem() || item.getClass().isInstance(stack.getItem()));
+        return !InvTools.isEmpty(stack) && (item == stack.getItem() || item.getClass().isInstance(stack.getItem()));
     }
 
     public boolean isEqual(@Nullable Item item) {
@@ -201,7 +202,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     public ItemStack getStack(int qty, int meta) {
         register();
         if (item == null)
-            return null;
+            return InvTools.emptyStack();
         return new ItemStack(item, qty, meta);
     }
 

@@ -43,7 +43,7 @@ public final class StackFilters {
      * Matches against the provided Item.
      */
     public static Predicate<ItemStack> of(@Nonnull final Class<? extends Item> itemClass) {
-        return stack -> stack != null && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
     /**
@@ -75,7 +75,7 @@ public final class StackFilters {
      * If no ItemStacks are provided to match against, it returns true.
      */
     public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
-        return stack -> stacks.isEmpty() || stacks.stream().allMatch(s -> s == null) || InvTools.isItemEqual(stack, stacks);
+        return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
     }
 
     /**
@@ -94,10 +94,10 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> noneOf(@Nonnull final Collection<ItemStack> stacks) {
         return stack -> {
-            if (stack == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             for (ItemStack filter : stacks) {
-                if (filter == null)
+                if (InvTools.isEmpty(filter))
                     continue;
                 if (InvTools.isItemEqual(stack, filter))
                     return false;

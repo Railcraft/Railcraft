@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.util.collections.BlockKey;
@@ -39,7 +40,7 @@ public abstract class BallastRegistry {
     }
 
     public static boolean isItemBallast(ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         IBlockState state = InvTools.getBlockStateFromStack(stack);
         return state != null && ballastRegistry.contains(new BlockKey(state));

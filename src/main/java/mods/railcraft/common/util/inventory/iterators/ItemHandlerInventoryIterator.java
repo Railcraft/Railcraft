@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
     @Override
     public Iterator<IInvSlot> iterator() {
         return new Iterator<IInvSlot>() {
-            int slot = 0;
+            int slot;
 
             @Override
             public boolean hasNext() {
@@ -66,7 +66,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
         @Override
         public boolean canPutStackInSlot(ItemStack stack) {
             ItemStack remainder = inv.insertItem(slot, stack, true);
-            return remainder == null || remainder.stackSize < stack.stackSize;
+            return InvTools.isEmpty(remainder) || remainder.stackSize < stack.stackSize;
         }
 
         @Override

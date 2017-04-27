@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -53,8 +53,8 @@ public class RotorRepairRecipe implements IRecipe {
                 numBlades++;
             }
         }
-        if (rotor == null) {
-            return null;
+        if (InvTools.isEmpty(rotor)) {
+            return InvTools.emptyStack();
         }
         int damage = rotor.getItemDamage();
         damage -= REPAIR_PER_BLADE * numBlades;
@@ -72,7 +72,7 @@ public class RotorRepairRecipe implements IRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return InvTools.emptyStack();
     }
 
     @Override

@@ -1,12 +1,12 @@
-/******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016                                      *
- * http://railcraft.info                                                      *
- * *
- * This code is the property of CovertJaguar                                  *
- * and may only be used with explicit written                                 *
- * permission unless otherwise specified on the                               *
- * license page at http://railcraft.info/wiki/info:license.                   *
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
 import net.minecraft.inventory.ISidedInventory;
@@ -31,7 +31,7 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
     public Iterator<IExtInvSlot> iterator() {
         return new Iterator<IExtInvSlot>() {
             int[] slots = inv.getSlotsForFace(EnumFacing.DOWN);
-            int index = 0;
+            int index;
 
             @Override
             public boolean hasNext() {
@@ -51,7 +51,7 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
         };
     }
 
-    private class InvSlot extends StandardInventoryIterator.InvSlot implements IExtInvSlot {
+    private class InvSlot extends StandardInventoryIterator.InvSlot {
 
         public InvSlot(int slot) {
             super(slot);

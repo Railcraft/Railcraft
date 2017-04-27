@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.common.fluids;
 
 import mods.railcraft.client.particles.ParticleDrip;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -59,6 +58,12 @@ public final class FluidTools {
     }
 
     private FluidTools() {
+    }
+
+    public static String toString(@Nullable FluidStack fluidStack) {
+        if (fluidStack == null)
+            return "null";
+        return fluidStack.amount + "x" + fluidStack.getFluid().getName();
     }
 
     @Nullable

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,11 +12,16 @@ package mods.railcraft.common.util.crafting;
 import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
 public class CraftingHandler {
 
@@ -27,13 +32,13 @@ public class CraftingHandler {
         ItemStack result = event.crafting;
         IInventory craftMatrix = event.craftMatrix;
         int count = 0;
-        ItemStack cartItem = null;
-        for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-            ItemStack stack = craftMatrix.getStackInSlot(i);
-            if (stack != null) {
+        ItemStack cartItem = emptyStack();
+        for (IExtInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
+            ItemStack stack = slot.getStack();
+            if (!isEmpty(stack)) {
                 count++;
                 if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack))
-                    craftMatrix.setInventorySlotContents(i, null);
+                    slot.clear();
                 IRailcraftCartContainer cartType = RailcraftCarts.getCartType(stack);
                 if (cartType != null && cartType != RailcraftCarts.BASIC)
                     cartItem = stack;
@@ -44,7 +49,7 @@ public class CraftingHandler {
 //            if (type != null && EnumCart.getCartType(result) == EnumCart.getCartType(cartItem)) {
 //                ItemStack filterItem = EntityCartFiltered.getFilterFromCartItem(result);
 //                if (filterItem != null)
-//                    for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix).notNull()) {
+//                    for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix).filledSlots()) {
 //                        ItemStack stack = slot.getStackInSlot();
 //                        if (InvTools.isItemEqual(stack, filterItem)) {
 //                            if (!player.inventory.addItemStackToInventory(stack))
