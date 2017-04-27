@@ -70,19 +70,21 @@ public enum ModItems {
     }
 
     protected void init() {
-        if (needsInit && mod.isLoaded()) {
+        if (needsInit) {
             RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
             if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
                 throw new RuntimeException("Don't use ModItems before POST_INIT");
-            needsInit = false;
-            if (mod == Mod.IC2)
-                stack = IC2Plugin.getItem(itemTag);
-            else if (mod == Mod.FORESTRY)
-                stack = ForestryPlugin.getItem(itemTag);
-            if (stack == null)
-                Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
-            else if (meta >= 0)
-                stack.setItemDamage(meta);
+            if (mod.isLoaded()) {
+                needsInit = false;
+                if (mod == Mod.IC2)
+                    stack = IC2Plugin.getItem(itemTag);
+                else if (mod == Mod.FORESTRY)
+                    stack = ForestryPlugin.getItem(itemTag);
+                if (stack == null)
+                    Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
+                else if (meta >= 0)
+                    stack.setItemDamage(meta);
+            }
         }
     }
 }
