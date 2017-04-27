@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -48,7 +51,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     }
 
     public boolean canAddStack(ItemStack stack) {
-        return tryAddStack(stack) == null;
+        return isEmpty(tryAddStack(stack));
     }
 
     @Nullable
@@ -74,7 +77,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * inventory.
      */
     public boolean canRemoveItem(Predicate<ItemStack> filter) {
-        return tryRemoveItem(filter) == null;
+        return !isEmpty(tryRemoveItem(filter));
     }
 
     /**
@@ -85,13 +88,13 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     public ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
+            if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack output = stack.copy();
                 output.stackSize = 1;
                 return output;
             }
         }
-        return null;
+        return emptyStack();
     }
 
     /**
@@ -101,10 +104,10 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     public ItemStack removeItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack))
+            if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack))
                 return slot.decreaseStack();
         }
-        return null;
+        return emptyStack();
     }
 
     public boolean canRemoveItems(Predicate<ItemStack> filter, int maxAmount) {
@@ -129,15 +132,15 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
+            if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
                 stack = imDest.addStack(stack);
-                if (stack == null)
+                if (isEmpty(stack))
                     return slot.decreaseStack();
             }
         }
-        return null;
+        return emptyStack();
     }
 
 }

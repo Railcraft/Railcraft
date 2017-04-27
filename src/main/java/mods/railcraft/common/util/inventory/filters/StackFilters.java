@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.util.inventory.filters;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -43,6 +44,20 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> of(@Nonnull final Class<? extends Item> itemClass) {
         return stack -> stack != null && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
+    public static Predicate<ItemStack> of(@Nonnull final Item item) {
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() == item;
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
+    public static Predicate<ItemStack> of(@Nonnull final Block block) {
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() == Item.getItemFromBlock(block);
     }
 
     /**

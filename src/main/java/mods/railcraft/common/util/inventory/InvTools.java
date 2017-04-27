@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,6 +60,22 @@ import java.util.function.Predicate;
 public abstract class InvTools {
     private static final String TAG_SLOT = "Slot";
 
+    @Contract("null -> true; !null -> _;")
+    public static boolean isEmpty(@Nullable ItemStack stack) {
+        return stack == null || stack.stackSize <= 0;
+    }
+
+    public static int getStackSize(@Nullable ItemStack stack) {
+        if (isEmpty(stack))
+            return 0;
+        return stack.stackSize;
+    }
+
+    @Nullable
+    public static ItemStack emptyStack() {
+        return null;
+    }
+
     @Nullable
     public static ItemStack makeStack(@Nullable Item item, int qty, int meta) {
         if (item != null)
@@ -77,7 +93,7 @@ public abstract class InvTools {
 
     @Nullable
     public static ItemStack makeSafe(@Nullable ItemStack stack) {
-        if (stack == null || stack.stackSize <= 0)
+        if (isEmpty(stack))
             return null;
         return stack;
     }
@@ -207,10 +223,10 @@ public abstract class InvTools {
         return nbt;
     }
 
-    @Contract("null, _ -> null; !null, true -> !null; !null, false -> _")
+    @Contract("null, _ -> null; !null, true -> _; !null, false -> _")
     @Nullable
     public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, boolean create) {
-        if (stack == null)
+        if (isEmpty(stack))
             return null;
         return stack.getSubCompound(Railcraft.MOD_ID, create);
     }
