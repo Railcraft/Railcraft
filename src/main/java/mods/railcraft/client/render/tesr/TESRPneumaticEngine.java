@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
     public TESRPneumaticEngine(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
-        ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
+        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     @Override

@@ -57,13 +57,12 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(IToolCrowbar.ORE_TAG);
 
-        add(EnumMachineAlpha.ANCHOR_WORLD.getItem());
-        add(EnumMachineAlpha.ANCHOR_PERSONAL.getItem());
-        add(EnumMachineAlpha.ANCHOR_ADMIN.getItem());
-        add(EnumMachineAlpha.ANCHOR_PASSIVE.getItem());
-        add(EnumMachineBeta.SENTINEL.getItem());
+        add(EnumMachineAlpha.ANCHOR_WORLD.getStack());
+        add(EnumMachineAlpha.ANCHOR_PERSONAL.getStack());
+        add(EnumMachineAlpha.ANCHOR_ADMIN.getStack());
+        add(EnumMachineAlpha.ANCHOR_PASSIVE.getStack());
+        add(EnumMachineBeta.SENTINEL.getStack());
 
-        add(RailcraftItems.BUCKET_CREOSOTE);
         add(RailcraftItems.BOTTLE_CREOSOTE);
 
         add(RailcraftItems.CROWBAR_IRON);

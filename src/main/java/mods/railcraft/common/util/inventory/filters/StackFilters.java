@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.util.inventory.filters;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -42,7 +43,21 @@ public final class StackFilters {
      * Matches against the provided Item.
      */
     public static Predicate<ItemStack> of(@Nonnull final Class<? extends Item> itemClass) {
-        return stack -> stack != null && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
+    public static Predicate<ItemStack> of(@Nonnull final Item item) {
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() == item;
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
+    public static Predicate<ItemStack> of(@Nonnull final Block block) {
+        return stack -> !InvTools.isEmpty(stack) && stack.getItem() == Item.getItemFromBlock(block);
     }
 
     /**
@@ -60,7 +75,7 @@ public final class StackFilters {
      * If no ItemStacks are provided to match against, it returns true.
      */
     public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
-        return stack -> stacks.isEmpty() || stacks.stream().allMatch(s -> s == null) || InvTools.isItemEqual(stack, stacks);
+        return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
     }
 
     /**
@@ -79,10 +94,10 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> noneOf(@Nonnull final Collection<ItemStack> stacks) {
         return stack -> {
-            if (stack == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             for (ItemStack filter : stacks) {
-                if (filter == null)
+                if (InvTools.isEmpty(filter))
                     continue;
                 if (InvTools.isItemEqual(stack, filter))
                     return false;

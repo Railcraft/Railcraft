@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,6 +67,8 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_TIN);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COPPER);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_BRONZE);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_NICKEL);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_INVAR);
 
         HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
@@ -80,6 +82,8 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_TIN.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_SILVER.getStack());
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_BRONZE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_NICKEL.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_INVAR.getStack());
 
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CONCRETE.getStack());
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
@@ -144,12 +148,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        getVariant(worldIn, pos).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+        getVariant(state).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
     }
 
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        getVariant(world, pos).getBlockDef().updateTick(world, pos, rand);
+        getVariant(state).getBlockDef().updateTick(world, pos, rand);
     }
 
     @Override
@@ -159,24 +163,24 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        getVariant(world, pos).getBlockDef().onBlockAdded(world, pos);
+        getVariant(state).getBlockDef().onBlockAdded(world, pos);
     }
 
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return getVariant(world, pos).getBlockDef().removedByPlayer(world, player, pos);
+        return getVariant(state).getBlockDef().removedByPlayer(world, player, pos);
     }
 
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return getVariant(world, pos).getBlockDef().canCreatureSpawn(type, world, pos);
+        return getVariant(state).getBlockDef().canCreatureSpawn(type, world, pos);
     }
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumGeneric type : EnumGeneric.getCreativeList()) {
             if (type.isEnabled())
-                list.add(type.getStack());
+                CreativePlugin.addToList(list, type.getStack());
         }
     }
 
@@ -209,12 +213,16 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
             case BLOCK_TIN:
             case BLOCK_SILVER:
             case BLOCK_BRONZE:
+            case BLOCK_NICKEL:
+            case BLOCK_INVAR:
                 return SoundType.METAL;
             case BLOCK_CREOSOTE:
                 return SoundType.WOOD;
             case CRUSHED_OBSIDIAN:
-            case BLOCK_COKE:
                 return SoundType.GROUND;
+            case BLOCK_COKE:
+                return SoundType.STONE;
+
         }
         return super.getSoundType(state, world, pos, entity);
     }

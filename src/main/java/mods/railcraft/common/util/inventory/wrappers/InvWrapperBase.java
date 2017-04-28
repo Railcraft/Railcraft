@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.util.inventory.wrappers;
 
@@ -15,19 +15,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 3/6/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class InvWrapperBase implements IInventory, IInventoryObject {
 
     private final IInventory inv;
     private boolean checkItems = true;
 
-    public InvWrapperBase(IInventory inv) {
+    protected InvWrapperBase(IInventory inv) {
         this(inv, true);
     }
 
-    public InvWrapperBase(IInventory inv, boolean checkItems) {
+    protected InvWrapperBase(IInventory inv, boolean checkItems) {
         this.inv = inv;
         this.checkItems = checkItems;
     }
@@ -57,7 +61,7 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject {
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemstack) {
+    public void setInventorySlotContents(int slot, @Nullable ItemStack itemstack) {
         inv.setInventorySlotContents(slot, itemstack);
     }
 

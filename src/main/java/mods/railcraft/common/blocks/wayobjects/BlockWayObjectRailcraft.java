@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -108,7 +109,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         // Define Switch Lever
         ActuatorVariant actuator = ActuatorVariant.LEVER;
         if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PLI",
@@ -132,7 +133,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
         // Define Switch Motor
         actuator = ActuatorVariant.MOTOR;
         if (RailcraftConfig.isSubBlockEnabled(actuator.getTag())) {
-            ItemStack stack = actuator.getItem();
+            ItemStack stack = actuator.getStack();
             CraftingPlugin.addRecipe(stack,
                     "RBW",
                     "PCI",
@@ -163,7 +164,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumWayObject type : EnumWayObject.getCreativeList()) {
             if (type.isEnabled())
-                list.add(type.getItem());
+                CreativePlugin.addToList(list, type.getItem());
         }
     }
 

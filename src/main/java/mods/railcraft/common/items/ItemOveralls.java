@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,10 +64,5 @@ public class ItemOveralls extends ItemRailcraftArmor {
                 "I I",
                 "I I",
                 'I', new ItemStack(Blocks.WOOL, 1, 3));
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.OVERALLS, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 }

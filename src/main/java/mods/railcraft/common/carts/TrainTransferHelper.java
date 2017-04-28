@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     public void offerOrDropItem(EntityMinecart cart, ItemStack stack) {
         stack = pushStack(cart, stack);
 
-        if (stack != null && stack.stackSize > 0)
+        if (!InvTools.isEmpty(stack))
             cart.entityDropItem(stack, 1);
     }
 
@@ -60,8 +60,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     public ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         stack = _pushStack(requester, carts, stack);
-        if (stack == null)
-            return null;
+        if (InvTools.isEmpty(stack))
+            return InvTools.emptyStack();
         if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
             carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
             stack = _pushStack(requester, carts, stack);
@@ -75,7 +75,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             IInventoryObject inv = InvTools.getInventory(cart);
             if (inv != null && canAcceptPushedItem(requester, cart, stack))
                 stack = InvTools.moveItemStack(stack, inv);
-            if (stack == null || !canPassItemRequests(cart))
+            if (InvTools.isEmpty(stack) || !canPassItemRequests(cart))
                 break;
         }
         return stack;
@@ -85,7 +85,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     public ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         ItemStack stack = _pullStack(requester, carts, filter);
-        if (stack != null)
+        if (!InvTools.isEmpty(stack))
             return stack;
         carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
         return _pullStack(requester, carts, filter);
@@ -101,7 +101,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
                     ItemStack stack = stackKey.get();
                     if (canProvidePulledItem(requester, cart, stack)) {
                         ItemStack removed = InvTools.removeOneItem(inv, stack);
-                        if (removed != null)
+                        if (!InvTools.isEmpty(removed))
                             return removed;
                     }
                 }
@@ -109,7 +109,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             if (!canPassItemRequests(cart))
                 break;
         }
-        return null;
+        return InvTools.emptyStack();
     }
 
     private boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {

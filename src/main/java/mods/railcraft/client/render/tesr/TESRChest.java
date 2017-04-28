@@ -1,12 +1,12 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.OpenGL;
@@ -34,7 +34,7 @@ public class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     public TESRChest(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
-        ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
+        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     /**

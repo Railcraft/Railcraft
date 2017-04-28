@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.tracks.behaivor;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -43,8 +44,8 @@ public enum CollisionHandler {
             if (!MiscTools.isKillableEntity(entity))
                 return;
 
-            ChargeNetwork.ChargeGraph graph = ChargeManager.getNetwork(world).getGraph(pos);
-            if (graph.getCharge() > 2000) {
+            ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+            if (node.getChargeGraph().getCharge() > 2000) {
                 boolean shock = true;
                 ItemStack overalls = getOveralls(entity);
                 if (overalls != null) {
@@ -52,8 +53,10 @@ public enum CollisionHandler {
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
                 }
-                if (shock && entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
-                    graph.removeCharge(2000);
+                if (shock && entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) {
+                    node.removeCharge(2000);
+                    EffectManager.instance.zapEffectDeath(world, entity);
+                }
             }
         }
 

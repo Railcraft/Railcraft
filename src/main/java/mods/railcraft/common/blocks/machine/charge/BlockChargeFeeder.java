@@ -69,7 +69,7 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
 
     @Override
     public void initializeDefinintion() {
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(REDSTONE) && rand.nextInt(50) == 25)
-            EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
+            EffectManager.instance.zapEffectSurface(stateIn, worldIn, pos);
     }
 
     @Override

@@ -15,6 +15,7 @@ import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -24,7 +25,13 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Predicates {
+
+    private static final Predicate NON_NULL = Objects::nonNull;
+    private static final Predicate ALWAYS_FALSE = t -> false;
+    private static final Predicate ALWAYS_TRUE = t -> true;
+
     public static <T> Predicate<T> instanceOf(Class<? extends T> clazz) {
         return clazz::isInstance;
     }
@@ -44,14 +51,14 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> alwaysTrue() {
-        return t -> true;
+        return ALWAYS_TRUE;
     }
 
     public static <T> Predicate<T> alwaysFalse() {
-        return t -> false;
+        return ALWAYS_FALSE;
     }
 
     public static <T> Predicate<T> nonNull() {
-        return t -> t != null;
+        return NON_NULL;
     }
 }

@@ -78,11 +78,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
-    public boolean isDepreciated() {
-        return false;
-    }
-
-    @Override
     public String getBaseTag() {
         return tag;
     }

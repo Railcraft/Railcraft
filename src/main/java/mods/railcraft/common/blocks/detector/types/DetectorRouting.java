@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.items.ItemRoutingTable;
@@ -27,7 +27,6 @@ import mods.railcraft.common.util.routing.IRouter;
 import mods.railcraft.common.util.routing.ITileRouting;
 import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -78,15 +77,14 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     public boolean blockActivated(EntityPlayer player) {
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
-            if (table != null) {
-                if (Game.isClient(theWorld()))
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, getTile(), table));
+            if (InvTools.isEmpty(table)) {
+                Railcraft.getProxy().openRoutingTableGui(player, getTile(), table);
                 return true;
             }
             return false;
         }
         ItemStack current = player.inventory.getCurrentItem();
-        if (current != null && current.getItem() instanceof ItemRoutingTable)
+        if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
             if (inv.getStackInSlot(0) == null) {
                 ItemStack copy = current.copy();
                 copy.stackSize = 1;
@@ -180,7 +178,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     }
 
     private void refreshLogic() {
-        if (logic == null && inv.getStackInSlot(0) != null)
+        if (logic == null && !InvTools.isEmpty(inv.getStackInSlot(0)))
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 

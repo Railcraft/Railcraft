@@ -1,17 +1,21 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class CommonProxy {
@@ -21,7 +25,7 @@ public class CommonProxy {
     }
 
     public String getItemDisplayName(ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return "";
         return stack.getDisplayName();
     }
@@ -50,6 +54,9 @@ public class CommonProxy {
 
     public String getCurrentLanguage() {
         return "en_US";
+    }
+
+    public void openRoutingTableGui(EntityPlayer player, @Nullable TileEntity tile, ItemStack stack) {
     }
 
 }

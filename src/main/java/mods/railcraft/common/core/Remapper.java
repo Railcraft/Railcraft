@@ -70,6 +70,13 @@ public enum Remapper {
                 findItem(mapping.name.replace("part.", "")).ifPresent(item -> remap(mapping, item));
         }
     },
+    RENAMED_CARTS {
+        @Override
+        protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {
+            if (mapping.type == GameRegistry.Type.ITEM)
+                findItem(mapping.name.replace("entity_", "")).ifPresent(item -> remap(mapping, item));
+        }
+    },
     REFORMATTED {
         @Override
         protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {

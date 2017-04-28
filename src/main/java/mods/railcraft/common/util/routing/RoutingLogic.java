@@ -19,6 +19,7 @@ import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -386,7 +387,7 @@ public class RoutingLogic {
         public boolean matches(ITileRouting tile, EntityMinecart cart) {
             ItemStack stack = cart.getCartItem();
             //noinspection ConstantConditions
-            if (stack == null || stack.getItem() == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             String itemName = stack.getItem().getRegistryName().toString();
             return itemName.equalsIgnoreCase(value);

@@ -123,7 +123,6 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalBlockTi
         super.readPacketData(data);
         controller.readPacketData(data);
         signalBlock.readPacketData(data);
-        markBlockForUpdate();
     }
 
     @Override

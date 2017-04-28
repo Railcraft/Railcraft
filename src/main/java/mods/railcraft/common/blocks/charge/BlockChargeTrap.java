@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,10 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -28,6 +31,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -65,17 +69,18 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 
     @Override
     public void defineRecipes() {
-//        CraftingPlugin.addRecipe(getStack(1, FeederVariant.IC2),
-//                "PCP",
-//                "CCC",
-//                "PCP",
-//                'P', RailcraftItems.plate, Metal.TIN,
-//                'C', "ingotCopper");
+        CraftingPlugin.addRecipe(getStack(1),
+                "PGP",
+                "GBG",
+                "PGP",
+                'P', RailcraftItems.PLATE, Metal.TIN,
+                'B', RailcraftItems.PLATE, Metal.NICKEL,
+                'G', Blocks.IRON_BARS);
     }
 
     @Nullable
@@ -113,8 +118,8 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(REDSTONE))
-            EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
+        if (stateIn.getValue(REDSTONE) && rand.nextInt(10) == 5)
+            EffectManager.instance.zapEffectSurface(stateIn, worldIn, pos);
     }
 
     @Override
@@ -140,8 +145,12 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
      */
     @Override
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        if (MiscTools.isKillableEntity(entityIn) && ChargeManager.getNetwork(worldIn).getNode(pos).useCharge(ZAP_COST)) {
-            entityIn.attackEntityFrom(RailcraftDamageSource.ELECTRIC, 10);
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(worldIn).getNode(pos);
+        if (MiscTools.isKillableEntity(entityIn)
+                && node.getChargeGraph().getCharge() >= ZAP_COST
+                && entityIn.attackEntityFrom(RailcraftDamageSource.ELECTRIC, 10)) {
+            node.useCharge(ZAP_COST);
+            EffectManager.instance.zapEffectDeath(worldIn, entityIn);
         }
     }
 

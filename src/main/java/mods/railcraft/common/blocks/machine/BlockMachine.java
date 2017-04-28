@@ -23,6 +23,7 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -220,6 +221,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
+        if (drops.isEmpty())
+            return super.getPickBlock(state, target, world, pos, player);
         return drops.get(0);
     }
 
@@ -350,7 +353,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 getCreativeList().stream()
                         .filter(m -> m.isAvailable())
-                        .map(m -> m.getItem())
+                        .map(m -> m.getStack())
+                        .filter(Predicates.nonNull())
                         .collect(Collectors.toList())
         );
     }

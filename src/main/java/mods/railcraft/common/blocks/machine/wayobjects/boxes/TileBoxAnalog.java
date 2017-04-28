@@ -176,7 +176,6 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
         readGuiData(data, null);
 
         controller.readPacketData(data);
-        markBlockForUpdate();
     }
 
     @Override

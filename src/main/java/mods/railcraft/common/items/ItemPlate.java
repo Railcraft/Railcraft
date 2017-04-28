@@ -11,7 +11,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 
 import javax.annotation.Nullable;
@@ -21,14 +20,7 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemPlate extends ItemMetal {
 
     public ItemPlate() {
-        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD, SILVER, BRONZE, GOLD));
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        for (Metal m : getMetalBiMap().values()) {
-            LootPlugin.addLoot(RailcraftItems.PLATE, m, 6, 18, LootPlugin.Type.WORKSHOP);
-        }
+        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD, SILVER, BRONZE, GOLD, NICKEL, INVAR));
     }
 
     @Override

@@ -39,6 +39,12 @@ public class ItemRebar extends ItemRailcraft {
                 "I  ",
                 'I', "ingotRefinedIron");
 
+        RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 6),
+                "  I",
+                " I ",
+                "I  ",
+                'I', "ingotInvar");
+
         RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 8),
                 "  I",
                 " I ",

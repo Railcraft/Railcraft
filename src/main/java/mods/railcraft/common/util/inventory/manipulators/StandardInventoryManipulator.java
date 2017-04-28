@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,15 +37,16 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         return InventoryIterator.getVanilla(inv).iterator();
     }
 
+    @Override
     protected ItemStack addStack(ItemStack stack, boolean doAdd) {
-        if (stack == null || stack.stackSize <= 0)
-            return null;
+        if (InvTools.isEmpty(stack))
+            return InvTools.emptyStack();
         stack = stack.copy();
         List<IExtInvSlot> filledSlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
         List<IExtInvSlot> emptySlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
         for (IExtInvSlot slot : this) {
             if (slot.canPutStackInSlot(stack))
-                if (slot.getStack() == null)
+                if (InvTools.isEmpty(slot.getStack()))
                     emptySlots.add(slot);
                 else
                     filledSlots.add(slot);
@@ -56,7 +57,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         injected = tryPut(emptySlots, stack, injected, doAdd);
         stack.stackSize -= injected;
         if (stack.stackSize <= 0)
-            return null;
+            return InvTools.emptyStack();
         return stack;
     }
 
@@ -65,7 +66,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
             return injected;
         for (IExtInvSlot slot : slots) {
             ItemStack stackInSlot = slot.getStack();
-            if (stackInSlot == null || InvTools.isItemEqual(stackInSlot, stack)) {
+            if (InvTools.isEmpty(stackInSlot) || InvTools.isItemEqual(stackInSlot, stack)) {
                 int used = addToSlot(slot, stack, stack.stackSize - injected, doAdd);
                 if (used > 0) {
                     injected += used;
@@ -85,7 +86,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
 
         ItemStack stackInSlot = slot.getStack();
-        if (stackInSlot == null) {
+        if (InvTools.isEmpty(stackInSlot)) {
             int wanted = Math.min(available, max);
             if (doAdd) {
                 stackInSlot = stack.copy();
@@ -121,14 +122,14 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
+            if (!InvTools.isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack output = stack.copy();
                 if (output.stackSize >= amountNeeded) {
                     output.stackSize = amountNeeded;
                     if (doRemove) {
                         stack.stackSize -= amountNeeded;
                         if (stack.stackSize <= 0)
-                            stack = null;
+                            stack = InvTools.emptyStack();
                         slot.setStack(stack);
                     }
                     amountNeeded = 0;
@@ -137,7 +138,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
                     amountNeeded -= output.stackSize;
                     outputList.add(output);
                     if (doRemove)
-                        slot.setStack(null);
+                        slot.setStack(InvTools.emptyStack());
                 }
             }
         }

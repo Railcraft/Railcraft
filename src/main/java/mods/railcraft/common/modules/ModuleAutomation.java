@@ -54,14 +54,14 @@ public class ModuleAutomation extends RailcraftModulePayload {
             public void preInit() {
                 ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
-                    CraftingPlugin.addRecipe(gamma.getItem(),
+                    CraftingPlugin.addRecipe(gamma.getStack(),
                             "ML",
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
                 if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getItem();
+                    ItemStack stack = alpha.getStack();
                     CraftingPlugin.addRecipe(stack,
                             "SGS",
                             "EDE",

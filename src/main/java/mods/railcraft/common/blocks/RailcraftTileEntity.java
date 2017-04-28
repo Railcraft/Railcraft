@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -130,7 +130,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 //        System.out.println("updating");
         if (worldObj != null) {
             IBlockState state = getBlockState();
-            worldObj.notifyBlockUpdate(getPos(), state, state, 3);
+            worldObj.notifyBlockUpdate(getPos(), state, state, 8);
         }
     }
 
@@ -146,10 +146,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer instanceof EntityPlayer)
             owner = ((EntityPlayer) placer).getGameProfile();
+        notifyBlocksOfNeighborChange();
     }
 
     public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        tileCache.onNeighborChange();
+        tileCache.resetTimers();
     }
 
     @Override

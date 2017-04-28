@@ -1,3 +1,31 @@
+10.1.1
+	NEW: Zap sounds and effects.
+	FIX: Fix crash when looking at an Admin Charge Feeder with TheOneProbe.
+	FIX: Fix rendering issues with Box connections.
+	
+10.1.1-beta-1
+	NEW: Added reverse mode to Throttle Track. (contribution by Cream Tea)
+	FIX: Routing Detector and Actuator no longer call client code from the server and crash.
+	FIX: Add temporary crafting recipe for the Charge Trap.
+
+10.1.0
+	FIX: Fixed Smoker model.
+
+10.1.0-beta-2
+	NEW: Added a SkyGen config for mines for testing purposes.
+
+10.1.0-beta-1
+    NEW: Added Bronze, Nickel, and Invar ores and metals. (contribution by GeneralCamo)
+    NEW: Added Manual Rolling Machine, it requires no power, but requires the player's presence to craft. Does not interact with pipes.
+    NEW: Riding and Ridden Routing conditionals replaced with the Rider conditional. See GitHub Issue #844 for details.
+    NEW: Placing a malformed Routing Table into device will now pop up the GUI to tell you it is erroring.
+    NEW: Sneak clicking with an empty hand on Routing device will now allow you to edit the contained Routing Table directly.
+    NEW: You can now disable Railcraft enchantments, and moved to Magic module.
+    FIX: Various IC2 integration fixes. (contribution by GeneralCamo)
+    FIX: Notepad should now interact with the world properly.
+    FIX: Charge Feeders should now properly respond to Redstone under all conditions.
+    FIX: Reduced Tunnel Bore log spam.
+
 10.1.0-alpha-3
 	NEW: Signal Boxes restored.
 	NEW: Sounds restored.
@@ -98,7 +126,7 @@
 
 9.8.0.3:
 	FIX: Some API stuff for Vexatos.
-	API: Might possible break anyone using depreciated functions of the Signal API.
+	API: Might possible break anyone using deprecated functions of the Signal API.
 
 9.8.0.2:
 	NEW: Signal devices can now be named using the Signal Label item and Anvil. (contribution by Vexatos)

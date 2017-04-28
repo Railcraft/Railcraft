@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -142,6 +143,9 @@ public enum Materials implements IVariantEnum {
     LEAD("lead", EnumGeneric.BLOCK_LEAD::getDefaultState),
     GOLD("gold", Blocks.GOLD_BLOCK::getDefaultState),
     BRONZE("bronze", EnumGeneric.BLOCK_BRONZE::getDefaultState),
+    NICKEL("nickel", EnumGeneric.BLOCK_NICKEL::getDefaultState),
+    INVAR("invar", EnumGeneric.BLOCK_INVAR::getDefaultState),
+
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
@@ -304,14 +308,14 @@ public enum Materials implements IVariantEnum {
     }
 
     public static void tagItemStack(ItemStack stack, String key, Materials material) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         nbt.setString(key, material.getName());
     }
 
     public static Materials from(ItemStack stack, String key) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return getPlaceholder();
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))
@@ -391,6 +395,10 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_STEEL.getHardness();
             case BRONZE:
                 return EnumGeneric.BLOCK_BRONZE.getHardness();
+            case NICKEL:
+                return EnumGeneric.BLOCK_NICKEL.getHardness();
+            case INVAR:
+                return EnumGeneric.BLOCK_INVAR.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -417,6 +425,10 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_STEEL.getResistance() * 3f / 5f;
             case BRONZE:
                 return EnumGeneric.BLOCK_BRONZE.getResistance() * 3f / 5f;
+            case NICKEL:
+                return EnumGeneric.BLOCK_NICKEL.getResistance() * 3f / 5f;
+            case INVAR:
+                return EnumGeneric.BLOCK_INVAR.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)

@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -123,7 +124,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
 
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().filter(m -> !Materials.MAT_SET_FROZEN.contains(m)).map(this::getStack).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().filter(m -> !Materials.MAT_SET_FROZEN.contains(m)).map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
     }
 
     @Override

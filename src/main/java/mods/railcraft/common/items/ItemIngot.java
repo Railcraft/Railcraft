@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 
 import static mods.railcraft.common.items.Metal.*;
@@ -20,16 +19,8 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemIngot extends ItemMetal {
 
     public ItemIngot() {
-        super(Form.INGOT, true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD, SILVER, BRONZE));
+        super(Form.INGOT, true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD, SILVER, BRONZE, NICKEL, INVAR));
         setSmeltingExperience(1);
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        super.initializeDefinintion();
-        for (Metal m : getMetalBiMap().values()) {
-            LootPlugin.addLootUnique(RailcraftItems.INGOT, m, 5, 9, LootPlugin.Type.TOOL);
-        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -63,8 +63,14 @@ public class ItemFluidContainer extends ItemRailcraft {
             if (!player.canPlayerEdit(pos, mop.sideHit, stack))
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
 
-            if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode)
-                return new ActionResult<>(EnumActionResult.SUCCESS, getContainerItem(stack));
+            if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode) {
+                ItemStack empty = getContainerItem(stack);
+                if (empty == null) {
+                    empty = stack.copy();
+                    empty.stackSize = 0;
+                }
+                return new ActionResult<>(EnumActionResult.SUCCESS, empty);
+            }
         }
 
         return new ActionResult<>(EnumActionResult.PASS, stack);

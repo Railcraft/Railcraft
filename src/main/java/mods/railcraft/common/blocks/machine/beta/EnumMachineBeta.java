@@ -102,11 +102,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
-    public boolean isDepreciated() {
-        return module == null;
-    }
-
-    @Override
     public String getBaseTag() {
         return tag;
     }

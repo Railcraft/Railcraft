@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,7 @@ import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
@@ -49,15 +50,15 @@ import java.io.File;
         guiFactory = "mods.railcraft.client.core.RailcraftGuiConfigFactory",
         updateJSON = "http://www.railcraft.info/railcraft_versions",
         dependencies = "required-after:Forge@[12.18.2.2107,);"
-                + "after:BuildCraft|Core[6.1.7,);"
+                + "after:BuildCraft|Core@[6.1.7,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
-                + "after:BuildCraftAPI|statements[1.0,);"
-                + "after:BuildCraftAPI|transport[1.0,);"
-                + "after:forestry[5.2.15,);"
+                + "after:BuildCraftAPI|statements@[1.0,);"
+                + "after:BuildCraftAPI|transport@[1.0,);"
+                + "after:forestry@[5.2.15,);"
                 + "after:Thaumcraft;"
-                + "after:IC2@[2.6.9-ex110,)")
+                + "after:IC2@[2.6.192-ex110,2.7.0-ex111);")
 public final class Railcraft {
     public static final String NAME = "Railcraft";
     public static final String MOD_ID = "railcraft";
@@ -82,6 +83,10 @@ public final class Railcraft {
 
     public static String getVersion() {
         return VERSION;
+    }
+
+    static{
+        FluidRegistry.enableUniversalBucket();
     }
 
     public File getConfigFolder() {
@@ -165,6 +170,8 @@ public final class Railcraft {
         DataManagerPlugin.register();
 
         StandardStackFilters.initialize();
+
+        Metal.init();
 
         RailcraftModuleManager.preInit();
 

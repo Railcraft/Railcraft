@@ -82,14 +82,12 @@ public class ItemGoggles extends ItemRailcraftArmor {
         return helm != null && helm.getItem() instanceof ItemGoggles;
     }
 
-    @Override
-    public void initializeDefinintion() {
+//    @Override
+//    public void initializeDefinintion() {
 //        BlockHidden.registerBlock();
 //        if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
 //            MinecraftForge.EVENT_BUS.register(new TrailTicker());
-
-        LootPlugin.addLoot(RailcraftItems.GOGGLES, 1, 1, LootPlugin.Type.WORKSHOP);
-    }
+//    }
 
     @Override
     public void defineRecipes() {

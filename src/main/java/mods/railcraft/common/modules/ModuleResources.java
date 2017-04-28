@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,6 @@ import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
@@ -43,8 +42,7 @@ public class ModuleResources extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.GENERIC,
                         RailcraftItems.BOTTLE_CREOSOTE,
-                        RailcraftItems.BOTTLE_STEAM,
-                        RailcraftItems.BUCKET_CREOSOTE
+                        RailcraftItems.BOTTLE_STEAM
                 );
             }
 
@@ -68,8 +66,6 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumGeneric type = EnumGeneric.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-
-                        LootPlugin.addLoot(type.getStack(), 1, 1, LootPlugin.Type.TOOL, "steel.block");
 
                         if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                             RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
@@ -98,13 +94,24 @@ public class ModuleResources extends RailcraftModulePayload {
                         CraftingPlugin.addShapelessRecipe(Metal.BRONZE.getStack(Metal.Form.INGOT, RailcraftConfig.enableHarderBronze() ? 3 : 4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
                     }
 
-                    type = EnumGeneric.CRUSHED_OBSIDIAN;
+                    type = EnumGeneric.BLOCK_NICKEL;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.NICKEL);
+
+                    type = EnumGeneric.BLOCK_INVAR;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.INVAR);
+                    if ((RailcraftConfig.forceEnableInvarRecipe() || !OreDictPlugin.oreExists("dustInvar")) && RailcraftItems.INGOT.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(Metal.INVAR.getStack(Metal.Form.INGOT,3), Items.IRON_INGOT, Items.IRON_INGOT, "ingotNickel");
+                    }
+
+                        type = EnumGeneric.CRUSHED_OBSIDIAN;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         ItemStack stack = type.getStack();
 
                         BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
 
-                        if (Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
+                        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
                             IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
                             IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }

@@ -51,7 +51,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
 
     @Override
     public void initializeDefinintion() {
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
         theme.initBlock(this);
 
         for (BrickVariant variant : BrickVariant.VALUES) {
@@ -106,7 +106,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (BrickVariant variant : BrickVariant.VALUES) {
-            list.add(theme.getStack(1, variant));
+            CreativePlugin.addToList(list, theme.getStack(1, variant));
         }
     }
 

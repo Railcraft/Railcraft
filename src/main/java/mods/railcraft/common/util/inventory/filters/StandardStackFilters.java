@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,6 +21,7 @@ import net.minecraft.item.*;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -38,43 +39,49 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 
     ALL {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return true;
+            return !InvTools.isEmpty(stack);
         }
 
     },
     FUEL {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return FuelPlugin.getBurnTime(stack) > 0;
+            return !InvTools.isEmpty(stack) && FuelPlugin.getBurnTime(stack) > 0;
         }
 
     },
     TRACK {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return stack != null && (stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack))));
+            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack))));
         }
 
     },
     MINECART {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return stack != null && (stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem);
+            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem);
         }
 
     },
     BALLAST {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return BallastRegistry.isItemBallast(stack);
+            return !InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack);
         }
 
     },
     EMPTY_BUCKET {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            if (stack == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             if (InvTools.isItem(stack, Items.BUCKET) || InvTools.isItemEqual(stack, FluidContainerRegistry.EMPTY_BUCKET))
                 return true;
@@ -85,8 +92,9 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
     },
     FEED {
         @Override
+        @Contract("null->false")
         public boolean test(@Nullable ItemStack stack) {
-            return stack != null && (stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds);
+            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds);
         }
 
     };
@@ -100,6 +108,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
     }
 
     @Override
+    @Contract("null->false")
     public abstract boolean test(@Nullable ItemStack stack);
 
 }

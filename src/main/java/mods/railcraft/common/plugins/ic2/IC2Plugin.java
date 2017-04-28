@@ -16,11 +16,13 @@ import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
+import ic2.api.item.IItemAPI;
 import ic2.api.recipe.*;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -36,7 +38,7 @@ import java.util.Iterator;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.areLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
+    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
         String[] tokens = s.split("#");
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
@@ -44,6 +46,11 @@ public class IC2Plugin {
     @Nullable
     public static ItemStack getItem(String tag) {
         return ITEMS.get(tag);
+    }
+
+    @Nullable
+    public static IBlockState getBlockState(String name, String variant) {
+        return IC2Items.getItemAPI().getBlockState(name, variant);
     }
 
     public static boolean addTileToNet(TileEntity tile) {

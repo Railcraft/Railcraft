@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -31,12 +30,4 @@ public class ItemCrowbarIron extends ItemCrowbar {
                 'I', "ingotIron",
                 'R', "dyeRed");
     }
-
-    @Override
-    public void initializeDefinintion() {
-        super.initializeDefinintion();
-        LootPlugin.addLoot(RailcraftItems.CROWBAR_IRON, 1, 1, LootPlugin.Type.TOOL);
-        LootPlugin.addLoot(RailcraftItems.CROWBAR_IRON, 1, 1, LootPlugin.Type.WORKSHOP);
-    }
-
 }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.util.effects.EffectManager;
@@ -22,7 +23,8 @@ public class PacketEffect extends RailcraftPacket {
 
         TELEPORT,
         FIRESPARK,
-        FORCE_SPAWN;
+        FORCE_SPAWN,
+        ZAP_DEATH;
         public static final Effect[] VALUES = values();
     }
 

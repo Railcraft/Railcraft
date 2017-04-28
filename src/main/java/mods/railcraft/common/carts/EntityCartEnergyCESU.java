@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -55,9 +56,8 @@ public final class EntityCartEnergyCESU extends CartBaseEnergy {
     }
 
     @Override
-    public ItemStack getIC2Item() {
-        //IC2 Classic so no RenderCrash Happens
-        return IC2Plugin.getItem(Mod.IC2_CLASSIC.isLoaded() ? "mfsUnit" : "cesuUnit");
+    public IBlockState getDefaultDisplayTile() {
+        return IC2Plugin.getBlockState("te", "cesu");
     }
 
 }

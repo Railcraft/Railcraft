@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,7 +67,6 @@ public class RailcraftConfig {
     private static final Map<String, Boolean> worldGen = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> fluids = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> recipes = new HashMap<String, Boolean>();
-    private static final Map<String, Integer> lootChances = new HashMap<String, Integer>();
     private static String anchorFuelWorldString;
     private static String anchorFuelPersonalString;
     private static String anchorFuelPassiveString;
@@ -149,6 +148,8 @@ public class RailcraftConfig {
 
         configMain.addCustomCategoryComment("tweaks", "Here you can change the behavior of various things");
 
+        configMain.removeCategory(configMain.getCategory(CAT_LOOT));
+
         loadAnchorSettings();
         loadBlockTweaks();
         loadItemTweaks();
@@ -160,7 +161,6 @@ public class RailcraftConfig {
         loadBlocks();
         loadItems();
         loadBoreMineableBlocks();
-        loadLoot();
         loadWorldGen();
         loadFluids();
         loadEnchantment();
@@ -338,6 +338,7 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.alloy", "enableAltBronze", false, "change to '{t}=true' to forcibly enable a recipe to craft Bronze Ingots from Tin and Copper Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze recipes to supply 3 Bronze instead of 4");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
+        loadRecipeProperty("railcraft.alloy", "enableAltInvar", false, "change to '{t}=true' to forcibly enable a recipe to craft Invar Ingots from Iron and Nickel Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
@@ -384,6 +385,8 @@ public class RailcraftConfig {
         worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "mineTin", true, "Tin Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("sky", get(configMain, CAT_WORLD_GEN + ".generate", "skyGen", false, "Spawns a copy of mines in the sky for easy configuration testing"));
 
         mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
         vanillaOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "vanillaOreGenChance", 0, 100, 100, "chance that vanilla ore gen (Iron, Gold) will spawn ore uniformly throughout the world, set to zero to disable, min=0, default=100, max=100");
@@ -401,70 +404,24 @@ public class RailcraftConfig {
         fluids.put("creosote", get(configMain, CAT_FLUIDS, "creosote", true));
     }
 
-    private static void loadLoot() {
-        configMain.addCustomCategoryComment(CAT_LOOT, "Loot chances are defined here.\n"
-                + "Smaller values are rarer.\n"
-                + "Example Loot:\n"
-                + "   Bread = 100\n"
-                + "   Redstone = 50\n"
-                + "   Record = 5\n"
-                + "   Golden Apple = 1");
-
-        loadLootProperty("tie_wood", 20);
-        loadLootProperty("tie_stone", 10);
-        loadLootProperty("rail", 20);
-        loadLootProperty("plate", 20);
-        loadLootProperty("cart_basic", 10);
-        loadLootProperty("cart_chest", 10);
-        loadLootProperty("cart_tnt", 5);
-        loadLootProperty("cart_tnt_wood", 5);
-        loadLootProperty("cart_work", 8);
-        loadLootProperty("cart_hopper", 5);
-        loadLootProperty("fuel_coke", 20);
-        loadLootProperty("fuel_coal", 20);
-        loadLootProperty("fluid_creosote_bottle", 20);
-        loadLootProperty("track_flex_iron", 30);
-
-        loadLootProperty("ingot_copper", 10);
-        loadLootProperty("ingot_lead", 10);
-        loadLootProperty("ingot_bronze", 10);
-        loadLootProperty("ingot_steel", 10);
-        loadLootProperty("ingot_tin", 10);
-        loadLootProperty("ingot_silver", 5);
-
-        loadLootProperty("steel.block", 5);
-        loadLootProperty("tool_crowbar_iron", 10);
-        loadLootProperty("tool_spike_maul_iron", 10);
-        loadLootProperty("tool_hoe_steel", 5);
-        loadLootProperty("tool_shears_steel", 5);
-        loadLootProperty("tool_sword_steel", 5);
-        loadLootProperty("tool_shovel_steel", 5);
-        loadLootProperty("tool_pickaxe_steel", 5);
-        loadLootProperty("tool_axe_steel", 5);
-        loadLootProperty("tool_signal_tuner", 5);
-        loadLootProperty("tool_signal_surveyor", 5);
-        loadLootProperty("tool_magnifying_glass", 5);
-        loadLootProperty("tool_charge_meter", 5);
-        loadLootProperty("armor_goggles", 5);
-        loadLootProperty("armor_helmet_steel", 5);
-        loadLootProperty("armor_chestplate_steel", 5);
-        loadLootProperty("armor_leggings_steel", 5);
-        loadLootProperty("armor_boots_steel", 5);
-        loadLootProperty("armor_overalls", 10);
-        loadLootProperty("gear_bushing", 5);
-    }
-
     private static void loadCarts() {
         configEntity.addCustomCategoryComment(CAT_ENTITIES, "Disable individual entities here.");
 
         for (RailcraftCarts cart : RailcraftCarts.VALUES) {
             if (!cart.isVanillaCart())
-                loadEntityProperty(cart.getEntityTag());
+                loadEntityProperty(cart.getBaseTag());
         }
     }
 
     private static void loadEntityProperty(String tag) {
-        Property prop = configEntity.get(CAT_ENTITIES, tag, true);
+        Map<String, Property> items = configEntity.getCategory(CAT_ENTITIES);
+        Property prop = items.remove("entity_" + tag);
+        if (prop != null) {
+            prop.setName(tag);
+            items.put(tag, prop);
+        }
+
+        prop = configEntity.get(CAT_ENTITIES, tag, true);
         entities.put(tag, prop.getBoolean(true));
     }
 
@@ -492,7 +449,7 @@ public class RailcraftConfig {
 
         // TODO: Move to own file?
         for (TrackKits type : TrackKits.VALUES) {
-//            if (type.isDepreciated())
+//            if (type.isDeprecated())
 //                continue;
             loadBlockFeature(type.getTag());
         }
@@ -536,7 +493,7 @@ public class RailcraftConfig {
 //        }
 
 //        for (EnumOre type : EnumOre.values()) {
-//            if (!type.isDepreciated())
+//            if (!type.isDeprecated())
 //                loadBlockFeature(type.getTag());
 //        }
 
@@ -708,6 +665,10 @@ public class RailcraftConfig {
 
     public static boolean forceEnableBronzeRecipe() {
         return getRecipeConfig("railcraft.alloy.enableAltBronze");
+    }
+
+    public static boolean forceEnableInvarRecipe() {
+        return getRecipeConfig("railcraft.alloy.enableAltInvar");
     }
 
     public static boolean enableHarderBronze() {
@@ -932,20 +893,12 @@ public class RailcraftConfig {
     }
 
     public static boolean isCartEnabled(IRailcraftCartContainer cart) {
-        String tag = cart.getEntityTag();
+        String tag = cart.getBaseTag();
         tag = MiscTools.cleanTag(tag);
         Boolean enabled = entities.get(tag);
         if (enabled == null)
             throw new IllegalArgumentException("RailcraftConfig: entity tag not found: " + tag);
         return enabled;
-    }
-
-    public static int getLootChance(String tag) {
-        tag = MiscTools.cleanTag(tag);
-        Integer chance = lootChances.get(tag);
-        if (chance == null)
-            throw new RuntimeException("Railcraft Loot Chance Entry does not exist: " + tag);
-        return chance;
     }
 
     public static boolean isWorldGenEnabled(String tag) {
@@ -1114,12 +1067,6 @@ public class RailcraftConfig {
         Property prop = configMain.get(cat, tag, defaultValue);
         decorateComment(prop, tag, comment);
         return prop;
-    }
-
-    private static void loadLootProperty(String tag, int defaultValue) {
-        Property prop = configMain.get(CAT_LOOT, tag, defaultValue);
-        int chance = parseInteger(prop, defaultValue);
-        lootChances.put(tag, chance);
     }
 
     private static void decorateComment(Property property, String tag, String comment) {

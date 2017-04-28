@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -95,10 +96,11 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
         V[] variants = getVariants();
         if (variants != null) {
             for (V variant : variants) {
-                list.add(getStack(variant));
+                if (!variant.isDeprecated())
+                    CreativePlugin.addToList(list, getStack(variant));
             }
         } else {
-            list.add(getStack(null));
+            CreativePlugin.addToList(list, getStack(null));
         }
     }
 

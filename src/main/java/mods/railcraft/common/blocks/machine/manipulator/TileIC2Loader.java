@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -119,12 +119,14 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
 
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
+        super.writeGuiData(data);
         data.writeBoolean(waitIfEmpty);
         data.writeBoolean(waitTillFull);
     }
 
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
+        super.readGuiData(data, sender);
         waitIfEmpty = data.readBoolean();
         waitTillFull = data.readBoolean();
     }

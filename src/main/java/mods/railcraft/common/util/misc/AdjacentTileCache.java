@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -64,17 +64,13 @@ public final class AdjacentTileCache {
 
     public void purge() {
         Arrays.fill(cache, null);
-        Arrays.fill(delay, DELAY_MIN);
-        for (Timer t : timer) {
-            t.reset();
-        }
-        for (ICacheListener listener : listeners) {
-            listener.purge();
-        }
+        resetTimers();
+        listeners.forEach(ICacheListener::purge);
     }
 
-    public void onNeighborChange() {
+    public void resetTimers() {
         Arrays.fill(delay, DELAY_MIN);
+        Arrays.stream(timer).forEach(Timer::reset);
     }
 
     protected void setTile(EnumFacing side, @Nullable TileEntity tile) {
@@ -86,9 +82,7 @@ public final class AdjacentTileCache {
     }
 
     private void changed(EnumFacing side) {
-        for (ICacheListener listener : listeners) {
-            listener.changed(side);
-        }
+        listeners.forEach(l -> l.changed(side));
     }
 
     private boolean isInSameChunk(EnumFacing side) {

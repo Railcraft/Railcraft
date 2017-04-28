@@ -50,7 +50,7 @@ public class ParticleTuningAura extends ParticleBase {
     }
 
     private void calculateVector() {
-        Vec3d endPoint = dest.getPos();
+        Vec3d endPoint = dest.getPosF();
         Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
         Vec3d vel = endPoint.subtract(vecParticle);
@@ -87,7 +87,7 @@ public class ParticleTuningAura extends ParticleBase {
         }
         this.particleAge++;
 
-        if (getPos().squareDistanceTo(dest.getPos()) <= 0.3) {
+        if (getPos().squareDistanceTo(dest.getPosF()) <= 0.3) {
             setExpired();
             return;
         }

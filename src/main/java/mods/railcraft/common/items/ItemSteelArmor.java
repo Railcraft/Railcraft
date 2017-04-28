@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.items;
 import ic2.api.item.IMetalArmor;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,11 +28,6 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
 
     public ItemSteelArmor(EntityEquipmentSlot type) {
         super(ItemMaterials.STEEL_ARMOR, 0, type);
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(new ItemStack(this), 1, 1, LootPlugin.Type.WARRIOR);
     }
 
     @Override

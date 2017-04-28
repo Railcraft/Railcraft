@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -71,7 +71,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public void defineRecipes() {
-        ItemStack ore = EnumOreMagic.FIRESTONE.getItem();
+        ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
         if (ore != null) {
             ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
             recipe.addOutput(RailcraftItems.FIRESTONE_RAW.getStack(), 1F);

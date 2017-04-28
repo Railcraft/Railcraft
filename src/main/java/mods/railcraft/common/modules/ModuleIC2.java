@@ -27,7 +27,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {
-        if (!Mod.IC2.isLoaded() && !Mod.IC2_CLASSIC.isLoaded())
+        if (!Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC))
             throw new MissingPrerequisiteException("IC2 not detected");
     }
 
@@ -144,13 +144,13 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 ItemStack detector;
                 if (RailcraftBlocks.DETECTOR.isLoaded())
-                    detector = EnumDetector.ADVANCED.getItem();
+                    detector = EnumDetector.ADVANCED.getStack();
                 else
                     detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
                 if (battery != null && machine != null) {
                     if (ManipulatorVariant.ENERGY_LOADER.isAvailable())
-                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_LOADER.getItem(),
+                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_LOADER.getStack(),
                                 "BLB",
                                 "BIB",
                                 "BDB",
@@ -160,7 +160,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 'L', new ItemStack(Blocks.HOPPER));
 
                     if (ManipulatorVariant.ENERGY_UNLOADER.isAvailable())
-                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_UNLOADER.getItem(),
+                        Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_UNLOADER.getStack(),
                                 "BDB",
                                 "BIB",
                                 "BLB",

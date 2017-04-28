@@ -15,7 +15,6 @@ import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.api.signals.SignalBlock;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,11 +35,6 @@ import java.util.Objects;
 public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable {
     public ItemSignalBlockSurveyor() {
         super("gui.railcraft.surveyor");
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.SIGNAL_BLOCK_SURVEYOR, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

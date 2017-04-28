@@ -218,7 +218,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
-            return detector.getDetector().getType().getItem();
+            return detector.getDetector().getType().getStack();
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
@@ -250,7 +250,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileDetector)
-            items.add(((TileDetector) tile).getDetector().getType().getItem());
+            items.add(((TileDetector) tile).getDetector().getType().getStack());
         return items;
     }
 
@@ -404,7 +404,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
-                list.add(detector.getItem());
+                CreativePlugin.addToList(list, detector.getStack());
         }
     }
 }

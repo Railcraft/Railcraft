@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,103 +7,92 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.core.RailcraftConfig;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.IRailcraftItemSimple;
-import mods.railcraft.common.loot.WeightedRandomChestContent;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.net.URL;
 
-import static net.minecraft.world.storage.loot.LootTableList.*;
+import static net.minecraft.world.storage.loot.LootTableList.register;
 
 /**
+ * Created by CovertJaguar on 4/10/2017 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LootPlugin {
-
+    public static final LootPlugin INSTANCE = new LootPlugin();
     public static final ResourceLocation CHESTS_VILLAGE_WORKSHOP = register(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "chests/village_workshop"));
+    private static final String[] poolNames = {"tools", "resources", "carts", "tracks", "general"};
 
-    public static void init() {
-        /*LootPlugin.increaseLootGen(1, 2,
-                CHESTS_ABANDONED_MINESHAFT,
-                CHESTS_VILLAGE_BLACKSMITH);
-        LootPlugin.increaseLootGen(10, 16, CHESTS_VILLAGE_WORKSHOP);*/
-        addLoot(new ItemStack(Items.COAL), 8, 16, Type.WORKSHOP, "fuel_coal");
-    }
-
-    /*public static void increaseLootGen(int min, int max, ResourceLocation... locations) {
-        for (ResourceLocation location : locations) {
-            ChestGenHooks lootInfo = ChestGenHooks.getInfo(location);
-            lootInfo.setMin(lootInfo.getMin() + min);
-            lootInfo.setMax(lootInfo.getMax() + max);
-        }
-    }*/
-
-    private static void addLoot(@Nullable ItemStack loot, int minStack, int maxStack, String tag, ResourceLocation... locations) {
-        if (loot == null) {
-            if (Game.DEVELOPMENT_ENVIRONMENT)
-                throw new RuntimeException("Invalid Loot");
+    @SubscribeEvent
+    public void lootLoad(LootTableLoadEvent event) {
+        if (!"minecraft".equals(event.getName().getResourceDomain())) {
             return;
         }
-        WeightedRandomChestContent contents = new WeightedRandomChestContent(loot, minStack, maxStack, RailcraftConfig.getLootChance(tag));
-        addLoot(contents, locations);
-    }
 
-    private static void addLoot(WeightedRandomChestContent loot, ResourceLocation... locations) {
-        for (ResourceLocation location : locations) {
-            //TODO: this broken, fix
-//            LootEventDispatcher.addItem(location, loot);
+        ResourceLocation resourceLocation = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, event.getName().getResourcePath());
+        LootTable lootTable = LootTableLoader.loadBuiltinLootTable(resourceLocation);
+        if (lootTable != null) {
+            for (String poolName : poolNames) {
+                LootPool pool = lootTable.getPool(RailcraftConstants.RESOURCE_DOMAIN + "_" + poolName);
+                if (pool != null)
+                    event.getTable().addPool(pool);
+            }
         }
     }
 
-    public static void addLoot(ItemStack loot, int minStack, int maxStack, Type type, String tag) {
-        addLoot(loot, minStack, maxStack, tag, type.locations);
-    }
+    /**
+     * Copy of {@link LootTableManager} that can load Railcraft's loot table additions.
+     * This is a workaround so we can load loot table jsons that have pools to be added to vanilla's chests.
+     * During {@link LootTableLoadEvent} the world's lootTable is not set yet.
+     *
+     * @author mezz
+     */
+    public static class LootTableLoader {
+        private static final Gson GSON_INSTANCE = (new GsonBuilder()).registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer()).registerTypeAdapter(LootPool.class, new LootPool.Serializer()).registerTypeAdapter(LootTable.class, new LootTable.Serializer()).registerTypeHierarchyAdapter(LootEntry.class, new LootEntry.Serializer()).registerTypeHierarchyAdapter(LootFunction.class, new LootFunctionManager.Serializer()).registerTypeHierarchyAdapter(LootCondition.class, new LootConditionManager.Serializer()).registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new LootContext.EntityTarget.Serializer()).create();
 
-    public static void addLoot(ItemStack loot, int minStack, int maxStack, Type type) {
-        addLoot(loot, minStack, maxStack, loot.getItem().getRegistryName().getResourcePath(), type.locations);
-    }
+        @Nullable
+        public static LootTable loadBuiltinLootTable(ResourceLocation resource) {
+            URL url = LootTableLoader.class.getResource("/assets/" + resource.getResourceDomain() + "/loot_tables/" + resource.getResourcePath() + ".json");
 
-    public static void addLoot(IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
-        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag(), type.locations);
-    }
+            if (url != null) {
+                String s;
 
-    public static void addLootUnique(IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer, IVariantEnum variant, int minStack, int maxStack, Type type) {
-        addLoot(itemContainer.getStack(variant), minStack, maxStack, itemContainer.getBaseTag() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix(), type.locations);
-    }
+                try {
+                    s = Resources.toString(url, Charsets.UTF_8);
+                } catch (IOException ioexception) {
+                    Game.logThrowable("Couldn\'t load loot table {0} from {1}", ioexception, resource, url);
+                    return LootTable.EMPTY_LOOT_TABLE;
+                }
 
-    public static void addLoot(IRailcraftObjectContainer<IRailcraftItemSimple> item, int minStack, int maxStack, Type type) {
-        addLoot(item.getStack(), minStack, maxStack, item.getBaseTag(), type.locations);
-    }
-
-    public enum Type {
-        WARRIOR(CHESTS_VILLAGE_BLACKSMITH,
-                CHESTS_SIMPLE_DUNGEON,
-                CHESTS_DESERT_PYRAMID,
-                CHESTS_JUNGLE_TEMPLE,
-                CHESTS_STRONGHOLD_CORRIDOR,
-                CHESTS_STRONGHOLD_CROSSING),
-
-        RAILWAY(CHESTS_ABANDONED_MINESHAFT,
-                CHESTS_VILLAGE_WORKSHOP),
-
-        WORKSHOP(CHESTS_VILLAGE_WORKSHOP),
-
-        TOOL(CHESTS_ABANDONED_MINESHAFT,
-                CHESTS_VILLAGE_BLACKSMITH);
-
-        private final ResourceLocation[] locations;
-
-        Type(ResourceLocation... locations) {
-            this.locations = locations;
+                try {
+                    return net.minecraftforge.common.ForgeHooks.loadLootTable(GSON_INSTANCE, resource, s, false);
+                } catch (JsonParseException jsonparseexception) {
+                    Game.logThrowable("Couldn\'t load loot table {0} from {1}", jsonparseexception, resource, url);
+                    return LootTable.EMPTY_LOOT_TABLE;
+                }
+            } else {
+                return null;
+            }
         }
+
     }
 }

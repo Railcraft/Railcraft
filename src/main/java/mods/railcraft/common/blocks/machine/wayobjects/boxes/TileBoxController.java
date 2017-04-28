@@ -151,7 +151,6 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         poweredAspect = SignalAspect.values()[data.readByte()];
 
         controller.readPacketData(data);
-        markBlockForUpdate();
     }
 
     @Override

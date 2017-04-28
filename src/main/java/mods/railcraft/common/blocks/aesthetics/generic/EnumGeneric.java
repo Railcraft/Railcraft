@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,19 +10,13 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +24,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumGeneric implements IVariantEnumBlock {
+public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
 
     BLOCK_COPPER(ModuleResources.class, "copper", new SimpleCube(), 3f, 10f),
     BLOCK_TIN(ModuleResources.class, "tin", new SimpleCube(), 3f, 10f),
@@ -43,7 +37,9 @@ public enum EnumGeneric implements IVariantEnumBlock {
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
     STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),
     BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),
-    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),;
+    BLOCK_BRONZE(ModuleResources.class, "bronze", new SimpleCube(), 3f, 10f),
+    BLOCK_NICKEL(ModuleResources.class, "nickel", new SimpleCube(), 3f, 10f),
+    BLOCK_INVAR(ModuleResources.class, "invar", new SimpleCube(), 3f, 10f),;
     public static final EnumGeneric[] VALUES = values();
     private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
@@ -54,6 +50,8 @@ public enum EnumGeneric implements IVariantEnumBlock {
         creativeList.add(BLOCK_SILVER);
         creativeList.add(BLOCK_STEEL);
         creativeList.add(BLOCK_BRONZE);
+        creativeList.add(BLOCK_NICKEL);
+        creativeList.add(BLOCK_INVAR);
         creativeList.add(BLOCK_CONCRETE);
         creativeList.add(BLOCK_CREOSOTE);
         creativeList.add(BLOCK_COKE);
@@ -62,19 +60,21 @@ public enum EnumGeneric implements IVariantEnumBlock {
         creativeList.add(STONE_QUARRIED);
     }
 
-    @Nullable
-    private final Class<? extends IRailcraftModule> module;
-    private final String tag;
     private final SimpleCube blockDef;
     private final float hardness;
     private final float resistance;
+    private final Definition def;
 
     EnumGeneric(@Nullable Class<? extends IRailcraftModule> module, String tag, SimpleCube blockDef, float hardness, float resistance) {
-        this.module = module;
-        this.tag = tag;
         this.blockDef = blockDef;
         this.hardness = hardness;
         this.resistance = resistance;
+        this.def = new Definition(tag, module);
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public static List<EnumGeneric> getCreativeList() {
@@ -87,19 +87,9 @@ public enum EnumGeneric implements IVariantEnumBlock {
         return VALUES[id];
     }
 
-    @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
-    }
-
-    @Nullable
-    public Class<? extends IRailcraftModule> getModule() {
-        return module;
-    }
-
     public String getTag() {
-        return "tile.railcraft.generic_" + tag;
+        return "tile.railcraft.generic_" + getBaseTag();
     }
 
     public SimpleCube getBlockDef() {
@@ -119,29 +109,4 @@ public enum EnumGeneric implements IVariantEnumBlock {
         return resistance;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
-    }
-
-    @Nullable
-    public ItemStack getStack() {
-        return getStack(1);
-    }
-
-    @Nullable
-    public ItemStack getStack(int qty) {
-        if (!isEnabled())
-            return null;
-        Block block = block();
-        if (block != null)
-            return new ItemStack(block, qty, ordinal());
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return tag;
-    }
 }

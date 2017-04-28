@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
-import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -25,7 +25,6 @@ import mods.railcraft.common.util.routing.ITileRouting;
 import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,8 +61,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
             if (table != null) {
-                if (Game.isClient(theWorld()))
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, this, table));
+                Railcraft.getProxy().openRoutingTableGui(player, this, table);
                 return true;
             }
             return false;

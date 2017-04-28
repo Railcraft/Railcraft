@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -212,8 +212,8 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             case MANUAL:
                 return true;
             case PARTIAL:
-                if (!InvTools.isInventoryEmpty(cartInv))
-                    return false;
+                if (InvTools.isInventoryEmpty(cartInv))
+                    return true;
         }
         this.cart = cartInv;
         return modeHasWork.get(getMode()).test(this);
@@ -258,11 +258,13 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
 
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
+        super.writeGuiData(data);
         data.writeByte(transferModeController.getCurrentState());
     }
 
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
+        super.readGuiData(data, sender);
         transferModeController.setCurrentState(data.readByte());
     }
 

@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -55,7 +56,7 @@ public class BlockPostMetal extends BlockPostBase {
     public void initializeDefinintion() {
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
 
-        ForestryPlugin.addBackpackItem("builder", this);
+        ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack stack = getStack(1, color);
@@ -92,7 +93,7 @@ public class BlockPostMetal extends BlockPostBase {
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumColor color : EnumColor.VALUES) {
-            list.add(getStack(1, color));
+            CreativePlugin.addToList(list, getStack(1, color));
         }
     }
 

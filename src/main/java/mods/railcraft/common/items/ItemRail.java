@@ -14,7 +14,6 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -33,7 +32,6 @@ public class ItemRail extends ItemRailcraftSubtyped {
         for (EnumRail rail : EnumRail.VALUES) {
             ItemStack stack = new ItemStack(this, 1, rail.ordinal());
             RailcraftRegistry.register(this, rail, stack);
-            LootPlugin.addLoot(RailcraftItems.RAIL, rail, 6, 18, LootPlugin.Type.RAILWAY);
         }
     }
 
@@ -53,6 +51,12 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "I I",
                 "I I",
                 'I', "ingotBronze");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(12, EnumRail.STANDARD),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotInvar");
 
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(16, EnumRail.STANDARD),
                 "I I",
@@ -86,6 +90,13 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "IDI",
                 "IDI",
                 'I', "ingotSteel",
+                'D', "dustObsidian");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(4, EnumRail.REINFORCED),
+                "IDI",
+                "IDI",
+                "IDI",
+                'I', "ingotInvar",
                 'D', "dustObsidian");
 
         // Electric

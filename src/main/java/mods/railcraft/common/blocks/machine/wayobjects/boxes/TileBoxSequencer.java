@@ -171,7 +171,6 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         sideOutput = EnumFacing.getFront(data.readByte());
-        markBlockForUpdate();
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
