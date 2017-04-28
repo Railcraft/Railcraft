@@ -857,15 +857,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected float getLayerHardness(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
-        float hardness = layerAction(targetPos, dir, 0F, (pos, direction) -> {
-            float f = getBlockHardness(pos, direction);
-            ItemStack head = getStackInSlot(0);
-            if (canHeadHarvestBlock(head, worldObj.getBlockState(pos))) {
-                int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, head);
-                f /= i * i + 1;
-            }
-            return f;
-        }, (s, r) -> s + r);
+        float hardness = layerAction(targetPos, dir, 0F, this::getBlockHardness, (s, r) -> s + r);
         hardness *= HARDNESS_MULTIPLIER;
 
         ItemStack boreSlot = getStackInSlot(0);
@@ -873,8 +865,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             IBoreHead head = (IBoreHead) boreSlot.getItem();
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
+            int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, head);
+            hardness /= e * e * 0.2 + 1
         }
-
+     
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();
 
         return hardness;
