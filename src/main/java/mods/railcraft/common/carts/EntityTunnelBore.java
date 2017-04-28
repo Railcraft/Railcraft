@@ -861,11 +861,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         hardness *= HARDNESS_MULTIPLIER;
 
         ItemStack boreSlot = getStackInSlot(0);
-        if (boreSlot != null && boreSlot.getItem() instanceof IBoreHead) {
+        if (!InvTools.isEmpty(boreSlot) && boreSlot.getItem() instanceof IBoreHead) {
             IBoreHead head = (IBoreHead) boreSlot.getItem();
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
-            int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, head);
+            int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, boreSlot);
             hardness /= e * e * 0.2 + 1;
         }
      
