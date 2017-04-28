@@ -51,7 +51,7 @@ public class VillagerTrades {
 
         for (Map.Entry<String, TrackKit> track : TrackRegistry.TRACK_KIT.getVariants().entrySet()) {
             TrackKit kit = track.getValue();
-            if (kit != TrackRegistry.getMissingTrackKit() && kit.isEnabled()) {
+            if (kit.isEnabled() && kit.isVisible()) {
                 career.addTrade(2, new GenericTrade(offer(kit.getTrackKitItem(), 2), offer(Items.EMERALD, 1, 3)));
             }
         }
