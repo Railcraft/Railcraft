@@ -866,7 +866,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
             int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, head);
-            hardness /= e * e * 0.2 + 1
+            hardness /= e * e * 0.2 + 1;
         }
      
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();
