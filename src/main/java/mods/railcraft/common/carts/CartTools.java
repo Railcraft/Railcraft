@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -66,7 +66,7 @@ public class CartTools {
      */
     @Nullable
     public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
-        if (cart == null)
+        if (InvTools.isEmpty(cart))
             return null;
         cart = cart.copy();
 
@@ -101,7 +101,7 @@ public class CartTools {
      * @see IMinecart
      */
     public static boolean doesCartMatchFilter(@Nullable ItemStack stack, @Nullable EntityMinecart cart) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         if (cart == null)
             return false;
@@ -111,7 +111,7 @@ public class CartTools {
             return ((IMinecart) cart).doesCartMatchFilter(stack, cart);
         }
         ItemStack cartItem = cart.getCartItem();
-        return cartItem != null && InvTools.isCartItemEqual(stack, cartItem, true);
+        return !InvTools.isEmpty(stack) && InvTools.isCartItemEqual(stack, cartItem, true);
     }
 
     public static void explodeCart(EntityMinecart cart) {

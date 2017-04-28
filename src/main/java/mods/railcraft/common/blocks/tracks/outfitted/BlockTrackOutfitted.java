@@ -180,7 +180,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (Tuple<TrackType, TrackKit> combination : TrackRegistry.getCombinations()) {
-            list.add(combination.getSecond().getOutfittedTrack(combination.getFirst()));
+            CreativePlugin.addToList(list, combination.getSecond().getOutfittedTrack(combination.getFirst()));
         }
     }
 

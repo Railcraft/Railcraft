@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
@@ -32,21 +33,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CraftingPlugin {
 
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
-        if (input == null && output == null) {
+        if (isEmpty(input) && isEmpty(output)) {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both null. Skipping");
             return;
         }
-        if (input == null) {
+        if (isEmpty(input)) {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getUnlocalizedName());
             return;
         }
-        if (output == null) {
+        if (isEmpty(output)) {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getUnlocalizedName());
             return;
         }
@@ -89,7 +92,7 @@ public class CraftingPlugin {
     }
 
     public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
-        if (result == null || result.stackSize <= 0) {
+        if (isEmpty(result)) {
             throw new InvalidRecipeException("Tried to define invalid {0} recipe, the result was null or zero. Skipping", recipeType);
         }
         recipeArray = cleanRecipeArray(recipeType, result, recipeArray);
@@ -154,7 +157,7 @@ public class CraftingPlugin {
         HashMap<Character, ItemStack> hashMap = new HashMap<Character, ItemStack>();
         for (; index < components.length; index += 2) {
             Character character = (Character) components[index];
-            ItemStack itemStack = null;
+            ItemStack itemStack = InvTools.emptyStack();
             if (components[index + 1] instanceof Item) {
                 itemStack = new ItemStack((Item) components[index + 1]);
             } else if (components[index + 1] instanceof Block) {
@@ -171,7 +174,7 @@ public class CraftingPlugin {
             if (hashMap.containsKey(c)) {
                 recipeArray[i1] = hashMap.get(c).copy();
             } else {
-                recipeArray[i1] = null;
+                recipeArray[i1] = InvTools.emptyStack();
             }
         }
 

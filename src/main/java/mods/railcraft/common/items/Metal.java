@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.ore.EnumOreMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -256,10 +257,10 @@ public enum Metal implements IVariantEnum {
         @Nullable
         public ItemStack getStack(Metal metal, int qty) {
             IVariantEnum variant = getVariantObject(metal);
-            ItemStack stack = null;
+            ItemStack stack = InvTools.emptyStack();
             if (variant != null)
                 stack = container.getStack(qty, variant);
-            if (stack == null) {
+            if (InvTools.isEmpty(stack)) {
                 String oreTag = getOreDictTag(metal);
                 if (oreTag != null)
                     stack = OreDictPlugin.getOre(oreTag, qty);

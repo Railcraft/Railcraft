@@ -56,16 +56,8 @@ public enum ModItems {
 
     @Nullable
     public ItemStack get(int qty) {
-        RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
-        if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
-            throw new RuntimeException("Don't call this function before POST_INIT");
-        if (!mod.isLoaded())
-            return null;
-        if (needsInit) {
-            needsInit = false;
-            init();
-        }
-        if (stack != null) {
+        init();
+        if (!InvTools.isEmpty(stack)) {
             stack = stack.copy();
             stack.stackSize = Math.min(qty, stack.getMaxStackSize());
             return stack;
@@ -74,17 +66,26 @@ public enum ModItems {
     }
 
     public boolean isEqual(ItemStack otherStack, boolean matchMeta, boolean matchNBT) {
+        init();
         return InvTools.isItemEqual(stack, otherStack, matchMeta, matchNBT);
     }
 
     protected void init() {
-        if (mod == Mod.IC2)
-            stack = IC2Plugin.getItem(itemTag);
-        else if (mod == Mod.FORESTRY)
-            stack = ForestryPlugin.getItem(itemTag);
-        if (stack == null)
-            Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
-        else if (meta >= 0)
-            stack.setItemDamage(meta);
+        if (needsInit) {
+            RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
+            if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
+                throw new RuntimeException("Don't use ModItems before POST_INIT");
+            if (mod.isLoaded()) {
+                needsInit = false;
+                if (mod == Mod.IC2)
+                    stack = IC2Plugin.getItem(itemTag);
+                else if (mod == Mod.FORESTRY)
+                    stack = ForestryPlugin.getItem(itemTag);
+                if (InvTools.isEmpty(stack))
+                    Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
+                else if (meta >= 0)
+                    stack.setItemDamage(meta);
+            }
+        }
     }
 }

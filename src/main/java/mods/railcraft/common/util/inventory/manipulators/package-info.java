@@ -7,16 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.util.inventory.manipulators;
 
-package mods.railcraft.common.util.inventory.wrappers;
+import mcp.MethodsReturnNonnullByDefault;
 
-/**
- * Created by CovertJaguar on 5/7/2016.
- *
- * @author CovertJaguar <http://www.railcraft.info>
- */
-public interface IInventoryObject {
-    Object getInventoryObject();
-
-    int getNumSlots();
-}
+import javax.annotation.ParametersAreNonnullByDefault;

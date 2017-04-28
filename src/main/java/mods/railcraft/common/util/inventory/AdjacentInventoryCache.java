@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -23,8 +24,8 @@ import java.util.function.Predicate;
 public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
-    private final List<IInventoryObject> sortedInvs = new LinkedList<IInventoryObject>();
-    private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<EnumFacing, IInventoryObject>(EnumFacing.class);
+    private final List<IInventoryObject> sortedInvs = new LinkedList<>();
+    private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<>(EnumFacing.class);
     private final Comparator<IInventoryObject> sorter;
     private final Predicate<TileEntity> filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
@@ -70,7 +71,7 @@ public final class AdjacentInventoryCache {
             sortedInvs.addAll(invs.values());
 
             if (sorter != null)
-                Collections.sort(sortedInvs, sorter);
+                sortedInvs.sort(sorter);
         }
 
         return sortedInvs;

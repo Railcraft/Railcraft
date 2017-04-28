@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -110,8 +111,9 @@ public enum EnumColor implements IVariantEnum {
         return EnumColor.WHITE;
     }
 
+    @Contract("null->false")
     public static boolean isColored(@Nullable ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
             return true;
@@ -123,7 +125,7 @@ public enum EnumColor implements IVariantEnum {
 
     @Nonnull
     public static EnumColor fromItemStack(@Nullable ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return EnumColor.WHITE;
         if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
             return EnumColor.fromOrdinal(stack.getItemDamage());
@@ -194,8 +196,8 @@ public enum EnumColor implements IVariantEnum {
 
     @Nullable
     public ItemStack setItemColor(@Nullable ItemStack stack, String tag) {
-        if (stack == null)
-            return null;
+        if (InvTools.isEmpty(stack))
+            return InvTools.emptyStack();
         NBTTagCompound nbt = InvTools.getItemData(stack);
         writeToNBT(nbt, tag);
         return stack;

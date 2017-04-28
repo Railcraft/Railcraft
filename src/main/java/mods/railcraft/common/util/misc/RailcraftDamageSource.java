@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,6 +34,7 @@ public class RailcraftDamageSource extends DamageSource {
 
     static {
         BORE.setDamageBypassesArmor();
+        ELECTRIC.setDamageBypassesArmor();
         TRACK_ELECTRIC.setDamageBypassesArmor();
         TRAIN.setDamageBypassesArmor();
     }

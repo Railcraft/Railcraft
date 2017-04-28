@@ -15,6 +15,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -163,7 +164,7 @@ public class BlockWayObjectRailcraft extends BlockWayObject {
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumWayObject type : EnumWayObject.getCreativeList()) {
             if (type.isEnabled())
-                list.add(type.getItem());
+                CreativePlugin.addToList(list, type.getItem());
         }
     }
 

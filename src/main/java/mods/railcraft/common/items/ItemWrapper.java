@@ -8,15 +8,24 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.inventory.wrappers;
+package mods.railcraft.common.items;
+
+import net.minecraft.item.Item;
 
 /**
- * Created by CovertJaguar on 5/7/2016.
+ * Created by CovertJaguar on 4/25/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryObject {
-    Object getInventoryObject();
+public class ItemWrapper extends ItemRailcraft {
+    private final Item item;
 
-    int getNumSlots();
+    public ItemWrapper(Item item) {
+        this.item = item;
+    }
+
+    @Override
+    public Item getObject() {
+        return item;
+    }
 }

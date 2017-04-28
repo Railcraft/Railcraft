@@ -17,6 +17,7 @@ import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -66,7 +67,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (String skin : renderType.getRendererTags()) {
-            list.add(renderType.getItemWithRenderer(skin, new ItemStack(this)));
+            CreativePlugin.addToList(list, renderType.getItemWithRenderer(skin, new ItemStack(this)));
         }
     }
 

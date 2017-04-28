@@ -404,7 +404,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
-                list.add(detector.getStack());
+                CreativePlugin.addToList(list, detector.getStack());
         }
     }
 }

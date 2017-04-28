@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -34,15 +35,16 @@ import java.util.function.Predicate;
 public class FirestoneTools {
 
     public static final Predicate<ItemStack> SPAWNS_FIRE = stack -> {
-        if (stack == null || stack.getItem() == null) return false;
+        if (InvTools.isEmpty(stack) || stack.getItem() == null) return false;
         if (RailcraftItems.FIRESTONE_RAW.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CUT.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack)) return true;
         return InvTools.isStackEqualToBlock(stack, EnumOreMagic.FIRESTONE.block()) && stack.getItemDamage() == EnumOreMagic.FIRESTONE.ordinal();
     };
 
+    @Contract("_,_,null->false")
     public static boolean trySpawnFire(World world, BlockPos pos, @Nullable ItemStack stack) {
-        if (stack == null || !SPAWNS_FIRE.test(stack))
+        if (InvTools.isEmpty(stack) || !SPAWNS_FIRE.test(stack))
             return false;
         boolean spawnedFire = false;
         for (int i = 0; i < stack.stackSize; i++) {

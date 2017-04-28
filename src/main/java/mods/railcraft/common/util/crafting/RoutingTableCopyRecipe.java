@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,10 +11,13 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
+import java.util.stream.IntStream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -45,20 +48,17 @@ public class RoutingTableCopyRecipe implements IRecipe {
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
         if (source != null && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
-            int copies = 0;
-            for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
-                ItemStack stack = grid.getStackInSlot(slot);
-                if (stack != null && RailcraftItems.ROUTING_TABLE.isEqual(stack)) {
-                    copies++;
-                }
-            }
+            int copies = (int) IntStream.range(1, grid.getSizeInventory())
+                    .mapToObj(grid::getStackInSlot)
+                    .filter(RailcraftItems.ROUTING_TABLE::isEqual)
+                    .count();
             if (copies > 0) {
                 ItemStack dest = source.copy();
                 dest.stackSize = copies + 1;
                 return dest;
             }
         }
-        return null;
+        return InvTools.emptyStack();
     }
 
     @Override

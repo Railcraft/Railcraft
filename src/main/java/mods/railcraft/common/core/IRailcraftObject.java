@@ -60,10 +60,11 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
             meta = variant.ordinal();
         } else
             meta = 0;
-        if (this instanceof Item)
-            return new ItemStack((Item) this, qty, meta);
-        if (this instanceof Block)
-            return new ItemStack((Block) this, qty, meta);
+        Object obj = getObject();
+        if (obj instanceof Item)
+            return new ItemStack((Item) obj, qty, meta);
+        if (obj instanceof Block)
+            return new ItemStack((Block) obj, qty, meta);
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
@@ -112,7 +113,7 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     default String getResourcePath() {
-        return ((IForgeRegistryEntry) this).getRegistryName().getResourcePath();
+        return ((IForgeRegistryEntry) getObject()).getRegistryName().getResourcePath();
     }
 
     @Override

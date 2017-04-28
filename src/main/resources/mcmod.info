@@ -16,6 +16,6 @@
     "requiredMods": [ "Forge" ],
     "dependencies": [],
     "dependants": [],
-    "useDependencyInformation": true
+    "useDependencyInformation": false
   }]
 }

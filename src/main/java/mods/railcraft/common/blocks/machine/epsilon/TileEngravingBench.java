@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -265,7 +265,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         if (stack.stackSize <= 0)
             return false;

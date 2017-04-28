@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,10 +30,10 @@ public interface IRailcraftItemSimple extends IRailcraftItem {
         if (variants != null) {
             for (int i = 0, variantsLength = variants.length; i < variantsLength; i++) {
                 IVariantEnum variant = variants[i];
-                ModelManager.registerItemModel((Item) this, i, getResourcePath() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix());
+                ModelManager.registerItemModel(getObject(), i, getResourcePath() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix());
             }
         } else {
-            ModelManager.registerItemModel((Item) this, 0);
+            ModelManager.registerItemModel(getObject(), 0);
         }
     }
 
