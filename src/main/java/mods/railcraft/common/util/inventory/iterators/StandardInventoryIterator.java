@@ -98,8 +98,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
 
         @Override
         public String toString() {
-            ItemStack stack = getStack();
-            return "SlotNum = " + slot + " Stack = " + (stack == null ? "null" : getStack().toString());
+            return "SlotNum = " + slot + " Stack = " + InvTools.toString(getStack());
         }
 
     }

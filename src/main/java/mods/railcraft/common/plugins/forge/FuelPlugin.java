@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,7 +61,7 @@ public class FuelPlugin {
      * @return The fuel value
      */
     public static int getBurnTime(ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return 0;
 
         if (InvTools.isItemEqualSemiStrict(stack, lastFuel))

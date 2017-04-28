@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,7 +61,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     }
 
     public static ItemStack addFilterToCartItem(ItemStack cart, @Nullable ItemStack filter) {
-        if (filter != null) {
+        if (!InvTools.isEmpty(filter)) {
             NBTTagCompound nbt = InvTools.getItemData(cart);
             NBTTagCompound filterNBT = new NBTTagCompound();
             filter.writeToNBT(filterNBT);
@@ -73,8 +73,8 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Nullable
     public ItemStack getFilteredCartItem(@Nullable ItemStack filter) {
         ItemStack stack = getCartType().getStack();
-        if (stack == null)
-            return null;
+        if (InvTools.isEmpty(stack))
+            return InvTools.emptyStack();
         return addFilterToCartItem(stack, filter);
     }
 
@@ -89,7 +89,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Override
     public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack stack = getFilteredCartItem(getFilterItem());
-        if (stack != null && hasCustomName())
+        if (!InvTools.isEmpty(stack) && hasCustomName())
             stack.setStackDisplayName(getName());
         return stack;
     }

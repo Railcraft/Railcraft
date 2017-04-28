@@ -65,7 +65,7 @@ public class ForestryPlugin {
     }
 
     public static void addBackpackItem(String pack, @Nullable ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return;
         addBackpackItem(pack, stack.getItem(), stack.getItemDamage());
     }

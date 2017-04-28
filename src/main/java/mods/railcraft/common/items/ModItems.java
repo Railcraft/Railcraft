@@ -56,7 +56,7 @@ public enum ModItems {
     @Nullable
     public ItemStack get(int qty) {
         init();
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             stack = stack.copy();
             stack.stackSize = Math.min(qty, stack.getMaxStackSize());
             return stack;
@@ -80,7 +80,7 @@ public enum ModItems {
                     stack = IC2Plugin.getItem(itemTag);
                 else if (mod == Mod.FORESTRY)
                     stack = ForestryPlugin.getItem(itemTag);
-                if (stack == null)
+                if (InvTools.isEmpty(stack))
                     Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
                 else if (meta >= 0)
                     stack.setItemDamage(meta);

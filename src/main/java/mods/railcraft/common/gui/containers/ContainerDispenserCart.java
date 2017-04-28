@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserCart;
 import mods.railcraft.common.gui.slots.SlotMinecart;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -50,7 +51,7 @@ public class ContainerDispenserCart extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(@Nullable ItemStack stack) {
-            if (stack == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             if (stack.getItem() instanceof IMinecartItem)
                 return ((IMinecartItem) stack.getItem()).canBePlacedByNonPlayer(stack);

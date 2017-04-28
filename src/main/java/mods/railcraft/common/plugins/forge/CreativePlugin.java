@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,16 +10,16 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -28,7 +28,7 @@ public class CreativePlugin {
 
     public static final CreativeTabs RAILCRAFT_TAB = new RailcraftTab("railcraft.general", () -> {
         ItemStack stack = RailcraftItems.CROWBAR_STEEL.getStack();
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             stack = new ItemStack(Items.MINECART);
         return stack;
     });
@@ -55,14 +55,14 @@ public class CreativePlugin {
     }
 
     public static void addToList(List<ItemStack> creativeList, @Nullable ItemStack stack) {
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             creativeList.add(stack);
         }
     }
 
     public static void addToList(List<ItemStack> creativeList, ItemStack... stacks) {
         for (ItemStack stack : stacks)
-            if (stack != null)
+            if (!InvTools.isEmpty(stack))
                 creativeList.add(stack);
     }
 }

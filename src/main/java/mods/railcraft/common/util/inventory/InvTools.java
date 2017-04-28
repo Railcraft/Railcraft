@@ -62,7 +62,7 @@ public abstract class InvTools {
 
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {
-        return stack == null || stack.stackSize <= 0;
+        return stack == null || stack.stackSize <= 0 || stack.getItem() == null;
     }
 
     public static int getStackSize(@Nullable ItemStack stack) {

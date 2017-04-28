@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,11 +33,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
@@ -58,7 +57,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isValidBallast(ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         Block block = InvTools.getBlockFromStack(stack);
         if (block == null)
@@ -116,11 +115,11 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
             boolean slotANull = true;
             boolean slotBNull = true;
-            if (patternInv.getStackInSlot(SLOT_EXIST_UNDER_A) != null) {
+            if (!InvTools.isEmpty(patternInv.getStackInSlot(SLOT_EXIST_UNDER_A))) {
                 replaceUnder(pos, SLOT_EXIST_UNDER_A);
                 slotANull = false;
             }
-            if (patternInv.getStackInSlot(SLOT_EXIST_UNDER_B) != null) {
+            if (!InvTools.isEmpty(patternInv.getStackInSlot(SLOT_EXIST_UNDER_B))) {
                 replaceUnder(pos, SLOT_EXIST_UNDER_B);
                 slotBNull = false;
             }
@@ -130,11 +129,11 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
             slotANull = true;
             slotBNull = true;
-            if (patternInv.getStackInSlot(SLOT_EXIST_SIDE_A) != null) {
+            if (!InvTools.isEmpty(patternInv.getStackInSlot(SLOT_EXIST_SIDE_A))) {
                 replaceSide(pos, SLOT_EXIST_SIDE_A, trackShape);
                 slotANull = false;
             }
-            if (patternInv.getStackInSlot(SLOT_EXIST_SIDE_B) != null) {
+            if (!InvTools.isEmpty(patternInv.getStackInSlot(SLOT_EXIST_SIDE_B))) {
                 replaceSide(pos, SLOT_EXIST_SIDE_B, trackShape);
                 slotBNull = false;
             }
@@ -190,7 +189,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     }
 
     private boolean blockMatches(IBlockState state, ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return true;
 
         if (stack.getItem() instanceof ItemBlock) {

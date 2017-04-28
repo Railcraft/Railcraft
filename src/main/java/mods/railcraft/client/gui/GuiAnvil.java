@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import io.netty.buffer.Unpooled;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.containers.ContainerAnvil;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,8 +22,8 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -188,12 +190,12 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
      * Container, slot number, slot contents
      */
     @Override
-    public void sendSlotContents(Container par1Container, int par2, @Nullable ItemStack par3ItemStack) {
+    public void sendSlotContents(Container par1Container, int par2, @Nullable ItemStack stack) {
         if (par2 == 0) {
-            itemNameField.setText(par3ItemStack == null ? "" : par3ItemStack.getDisplayName());
-            itemNameField.setEnabled(par3ItemStack != null);
+            itemNameField.setText(InvTools.isEmpty(stack) ? "" : stack.getDisplayName());
+            itemNameField.setEnabled(!InvTools.isEmpty(stack));
 
-            if (par3ItemStack != null)
+            if (!InvTools.isEmpty(stack))
                 func_135015_g();
         }
     }

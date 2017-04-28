@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,8 +27,6 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.EssentiaFuelProvider;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -134,7 +132,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             return true;
         for (IInvSlot slot : InventoryIterator.getVanilla((IInventory) invFuel)) {
             ItemStack stack = slot.getStack();
-            if (stack == null || stack.stackSize < stack.getMaxStackSize() / 4)
+            if (InvTools.isEmpty(stack) || stack.stackSize < stack.getMaxStackSize() / 4)
                 return true;
         }
         return false;

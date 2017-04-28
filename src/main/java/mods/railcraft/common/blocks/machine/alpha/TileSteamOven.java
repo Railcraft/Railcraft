@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -343,7 +343,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         if (slot >= SLOT_OUTPUT)
             return false;
