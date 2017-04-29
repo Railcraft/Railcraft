@@ -32,6 +32,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -197,6 +198,45 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
             }
             default:
                 return super.getDrops(world, pos, state, fortune);
+        }
+    }
+
+    @Nullable
+    @Override
+    protected ItemStack createStackedBlock(IBlockState state) {
+        switch (getVariant(state)) {
+            case COPPER: {
+                return EnumOreMetal.COPPER.getStack();
+            }
+            case TIN: {
+                return EnumOreMetal.TIN.getStack();
+            }
+            case LEAD: {
+                return EnumOreMetal.LEAD.getStack();
+            }
+            case SILVER: {
+                return EnumOreMetal.SILVER.getStack();
+            }
+            case POOR_COPPER: {
+                return EnumOreMetalPoor.COPPER.getStack();
+            }
+            case POOR_GOLD: {
+                return EnumOreMetalPoor.GOLD.getStack();
+            }
+            case POOR_IRON: {
+                return EnumOreMetalPoor.IRON.getStack();
+            }
+            case POOR_LEAD: {
+                return EnumOreMetalPoor.LEAD.getStack();
+            }
+            case POOR_SILVER: {
+                return EnumOreMetalPoor.SILVER.getStack();
+            }
+            case POOR_TIN: {
+                return EnumOreMetalPoor.TIN.getStack();
+            }
+            default:
+                return super.createStackedBlock(state);
         }
     }
 
