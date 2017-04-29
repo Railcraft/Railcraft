@@ -111,7 +111,7 @@ public class LinkageManager implements ILinkageManager {
             carts.remove(id);
             return null;
         }
-        return carts.get(id);
+        return cart;
     }
 
     /**
