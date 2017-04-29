@@ -57,9 +57,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
         SULFUR("dustSulfur"),
         SALTPETER("dustSaltpeter"),
         CHARCOAL("dustCharcoal"),
-        SLAG("dustSlag"),
-        NICKEL("dustNickel"),
-        SMALL_NICKEL("dustTinyNickel");
+        SLAG("dustSlag");
         public static final EnumDust[] VALUES = values();
         private final String oreTag;
 

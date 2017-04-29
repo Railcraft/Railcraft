@@ -12,12 +12,15 @@ package mods.railcraft.common.items.firestone;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -208,6 +211,15 @@ public class ItemFirestoneRefined extends ItemFirestone {
         EntityItemFirestone entity = (EntityItemFirestone) super.createEntity(world, location, stack);
         entity.setRefined(true);
         return entity;
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
+        ItemStack rawfirestone = RailcraftItems.FIRESTONE_RAW.getStack();
+        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
+            IC2Plugin.addMaceratorRecipe(ore, rawfirestone);
+        }
     }
 
 }

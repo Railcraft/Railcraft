@@ -143,6 +143,18 @@ public class IC2Plugin {
         }
     }
 
+    public static void addCrushedOreMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output) {
+        if (input == null || output == null)
+            return;
+        output = output.copy();
+        output.stackSize = 2;
+        try {
+            Recipes.macerator.addRecipe(new RecipeInputItemStack(input, numinput), null, false, output);
+        } catch (Throwable error) {
+            Game.logErrorAPI("IC2", error, Recipes.class);
+        }
+    }
+
     public static void removeMaceratorRecipes(ItemStack... items) {
         try {
 
@@ -152,6 +164,16 @@ public class IC2Plugin {
                 if (doesRecipeRequire(recipe.input, items) || doesRecipeProduce(recipe.output, items))
                     it.remove();
             }
+        } catch (Throwable error) {
+            Game.logErrorAPI("IC2", error, Recipes.class);
+        }
+    }
+
+    public static void addCanningRecipe(ItemStack container, @Nullable ItemStack input, @Nullable ItemStack output) {
+        if (input == null || output == null)
+            return;
+        try {
+            Recipes.cannerBottle.addRecipe(new RecipeInputItemStack(container), new RecipeInputItemStack(input), output);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }
