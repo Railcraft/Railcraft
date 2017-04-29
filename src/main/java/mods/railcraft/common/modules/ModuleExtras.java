@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 
@@ -23,9 +24,8 @@ public class ModuleExtras extends RailcraftModulePayload {
                         TrackKits.PRIMING,
                         TrackKits.LAUNCHER,
                         RailcraftCarts.TNT_WOOD,
-                        RailcraftCarts.WORK
-//                        RailcraftBlocks.track
-//                        RailcraftBlocks.trackElevator
+                        RailcraftCarts.WORK,
+                        RailcraftBlocks.TRACK_ELEVATOR
                 );
             }
         });

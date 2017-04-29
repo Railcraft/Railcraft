@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
  */
 public class BlockTrackElevator extends BlockRailcraft {
 
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     private static final float OFFSET = 0.125F;
     private static final AxisAlignedBB[] BOUNDS = {
@@ -147,7 +147,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
         IBlockState state = getDefaultState().withProperty(FACING, enumfacing);
 
-        state.withProperty(POWERED, (meta & 0x8) > 0);
+        state = state.withProperty(POWERED, (meta & 0x8) > 0);
 
         return state;
     }
@@ -163,6 +163,7 @@ public class BlockTrackElevator extends BlockRailcraft {
         return meta;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;

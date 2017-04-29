@@ -31,12 +31,14 @@ import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -79,7 +81,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final BlockSet mineableStates = new BlockSet();
     public static final Set<Block> mineableBlocks = new HashSet<>();
     public static final Set<String> mineableOreTags = new HashSet<>();
-    public static final Set<Block> replaceableBlocks = new HashSet<Block>();
+    public static final Set<Block> replaceableBlocks = new HashSet<>();
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.FACING);
@@ -496,8 +498,13 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
                 List<EntityLivingBase> entities = EntitySearcher.find(EntityLivingBase.class)
-                        .except(this).andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(worldObj);
+                        .andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(worldObj);
                 entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
+
+                ItemStack head = getStackInSlot(0);
+                if (head != null) {
+                    head.damageItem(entities.size(), CartTools.getCartOwnerEntity(this));
+                }
             }
 
             setMoving(hasFuel() && getDelay() == 0);
@@ -805,7 +812,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
         // End of Event Fire
 
-        List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, 0);
+        List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, EnchantmentHelper.getEnchantmentLevel(
+            Enchantments.FORTUNE, head));
 
         for (ItemStack stack : items) {
             if (StandardStackFilters.FUEL.test(stack))
@@ -831,7 +839,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
         WorldPlugin.setBlockToAir(worldObj, targetPos);
 
-        head.setItemDamage(head.getItemDamage() + 1);
+        head.damageItem(1, CartTools.getCartOwnerEntity(this));
         if (head.getItemDamage() > head.getMaxDamage())
             setInventorySlotContents(0, null);
         return true;
@@ -853,12 +861,14 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         hardness *= HARDNESS_MULTIPLIER;
 
         ItemStack boreSlot = getStackInSlot(0);
-        if (boreSlot != null && boreSlot.getItem() instanceof IBoreHead) {
+        if (!InvTools.isEmpty(boreSlot) && boreSlot.getItem() instanceof IBoreHead) {
             IBoreHead head = (IBoreHead) boreSlot.getItem();
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
+            int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, boreSlot);
+            hardness /= e * e * 0.2 + 1;
         }
-
+     
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();
 
         return hardness;
