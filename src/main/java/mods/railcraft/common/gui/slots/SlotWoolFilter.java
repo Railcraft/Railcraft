@@ -1,17 +1,20 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public class SlotWoolFilter extends SlotRailcraft {
 
@@ -22,10 +25,8 @@ public class SlotWoolFilter extends SlotRailcraft {
     }
 
     @Override
-    public boolean isItemValid(ItemStack itemstack) {
-        if (itemstack == null)
-            return false;
-        return InvTools.isStackEqualToBlock(itemstack, Blocks.WOOL);
+    public boolean isItemValid(@Nullable ItemStack stack) {
+        return !InvTools.isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.WOOL);
     }
 
 }

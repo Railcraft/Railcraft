@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -307,14 +308,14 @@ public enum Materials implements IVariantEnum {
     }
 
     public static void tagItemStack(ItemStack stack, String key, Materials material) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         nbt.setString(key, material.getName());
     }
 
     public static Materials from(ItemStack stack, String key) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return getPlaceholder();
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))

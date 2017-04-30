@@ -174,7 +174,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
     public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return false;
         if (!stack.isStackable())
             return false;

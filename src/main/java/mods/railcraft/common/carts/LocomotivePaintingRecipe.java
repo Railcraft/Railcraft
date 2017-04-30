@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class LocomotivePaintingRecipe implements IRecipe {
 
     @Nullable
     private EnumColor getDye(@Nullable ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return null;
         for (EnumColor color : EnumColor.VALUES) {
             if (InvTools.isItemEqual(stack, color.getDyesStacks()))
@@ -71,8 +71,8 @@ public class LocomotivePaintingRecipe implements IRecipe {
         ItemStack loco = craftingGrid.getStackInRowAndColumn(1, 1);
         ItemStack dyeSecondary = craftingGrid.getStackInRowAndColumn(1, 2);
 
-        if (loco == null)
-            return null;
+        if (InvTools.isEmpty(loco))
+            return InvTools.emptyStack();
 
         EnumColor colorPrimary = getDye(dyePrimary);
         EnumColor colorSecondary = getDye(dyeSecondary);

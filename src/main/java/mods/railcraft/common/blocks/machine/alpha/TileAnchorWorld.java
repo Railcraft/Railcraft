@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
@@ -271,8 +272,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     fuel -= chunks.size();
                 if (fuel <= 0) {
                     ItemStack stack = getStackInSlot(0);
-                    if (stack == null || stack.stackSize <= 0) {
-                        setInventorySlotContents(0, null);
+                    if (InvTools.isEmpty(stack)) {
+                        setInventorySlotContents(0, InvTools.emptyStack());
                         releaseTicket();
                     } else if (getFuelMap().containsKey(stack)) {
                         decrStackSize(0, 1);

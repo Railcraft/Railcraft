@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -126,8 +126,8 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             if (anchorFuel <= 0) {
                 stockFuel();
                 ItemStack stack = getStackInSlot(0);
-                if (stack == null || stack.stackSize <= 0) {
-                    setInventorySlotContents(0, null);
+                if (InvTools.isEmpty(stack)) {
+                    setInventorySlotContents(0, InvTools.emptyStack());
                     releaseTicket();
                 } else if (getFuelMap().containsKey(stack)) {
                     decrStackSize(0, 1);
@@ -150,15 +150,15 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
 
     private void stockFuel() {
         ItemStack stack = getStackInSlot(0);
-        if (stack != null && !getFuelMap().containsKey(stack)) {
+        if (!InvTools.isEmpty(stack) && !getFuelMap().containsKey(stack)) {
             CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
-            setInventorySlotContents(0, null);
+            setInventorySlotContents(0, InvTools.emptyStack());
             return;
         }
         stack = getStackInSlot(0);
-        if (stack == null) {
+        if (InvTools.isEmpty(stack)) {
             ItemStack found = CartToolsAPI.transferHelper.pullStack(this, getFuelMap().getStackFilter());
-            if (found != null)
+            if (!InvTools.isEmpty(found))
                 InvTools.moveItemStack(found, this);
         }
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -175,7 +175,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
         @Override
         public boolean test(ItemStack stack) {
-            if (stack == null)
+            if (InvTools.isEmpty(stack))
                 return false;
             if (InvTools.isItemEqual(stack, original))
                 return true;

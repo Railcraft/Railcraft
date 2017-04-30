@@ -73,7 +73,7 @@ public class CrowbarHandler {
                 boolean linkable = cart instanceof ILinkableCart;
                 if (!linkable || ((ILinkableCart) cart).isLinkable()) {
                     EntityMinecart last = linkMap.remove(thePlayer);
-                    if (last != null && !last.isDead) {
+                    if (last != null && last.isEntityAlive()) {
                         LinkageManager lm = LinkageManager.instance();
                         if (lm.areLinked(cart, last, false)) {
                             lm.breakLink(cart, last);

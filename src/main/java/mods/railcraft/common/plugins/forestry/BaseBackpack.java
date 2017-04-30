@@ -14,6 +14,7 @@ import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -52,7 +53,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     public void add(@Nullable ItemStack stack) {
-        if (stack == null) return;
+        if (InvTools.isEmpty(stack)) return;
         backpackFilter.acceptItem(stack);
     }
 

@@ -77,14 +77,14 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     public boolean blockActivated(EntityPlayer player) {
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
-            if (table != null) {
+            if (InvTools.isEmpty(table)) {
                 Railcraft.getProxy().openRoutingTableGui(player, getTile(), table);
                 return true;
             }
             return false;
         }
         ItemStack current = player.inventory.getCurrentItem();
-        if (current != null && current.getItem() instanceof ItemRoutingTable)
+        if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
             if (inv.getStackInSlot(0) == null) {
                 ItemStack copy = current.copy();
                 copy.stackSize = 1;
@@ -178,7 +178,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     }
 
     private void refreshLogic() {
-        if (logic == null && inv.getStackInSlot(0) != null)
+        if (logic == null && !InvTools.isEmpty(inv.getStackInSlot(0)))
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 

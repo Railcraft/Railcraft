@@ -32,6 +32,7 @@ import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.block.Block;
@@ -284,7 +285,7 @@ public class ThaumcraftPlugin {
     }
 
     private static void addItemAspect(@Nullable ItemStack stack, AspectList aspects) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return;
         ThaumcraftApi.registerObjectTag(stack, aspects);
     }
