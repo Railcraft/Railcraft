@@ -407,8 +407,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
                         List<ItemStack> ores = OreDictionary.getOres("orePoorCopper");
-                        for (ItemStack ore : ores)
-                        {
+                        for (ItemStack ore : ores) {
                             IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedCopper);
                         }
 
