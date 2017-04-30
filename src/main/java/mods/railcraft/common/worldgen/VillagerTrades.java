@@ -186,6 +186,8 @@ public class VillagerTrades {
 
         @Override
         public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+            if (trackKits.size() == 0) 
+                return;
             ItemStack stack = trackKits.get(random.nextInt(trackKits.size())).getTrackKitItem(2);
             if (stack == null)
                 return;
