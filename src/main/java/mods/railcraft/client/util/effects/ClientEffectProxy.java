@@ -29,6 +29,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -162,9 +163,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public void fireSparkEffect(World world, Vec3d start, Vec3d end) {
         if (thinParticles(false))
             return;
-
+        IEffectSource es = EffectManager.getEffectSource(start);
         Particle particle = new ParticleFireSpark(world, start, end);
         spawnParticle(particle);
+        SoundHelper.playSoundClient(world, es.getPos(), SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, .2F + rand.nextFloat() * .2F, .9F + rand.nextFloat() * .15F);
     }
 
     private void doFireSpark(RailcraftInputStream data) throws IOException {
@@ -312,7 +314,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             return;
         if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(pos) > 400)
             return;
-        SoundHelper.playSoundClient(worldIn, pos, RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, .2F, 1F);
+        SoundHelper.playSoundClient(worldIn, pos, RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, .1F + rand.nextFloat() * .2F, .9F + rand.nextFloat() * .15F);
         for (EnumFacing side : EnumFacing.VALUES) {
             if (!stateIn.shouldSideBeRendered(worldIn, pos, side))
                 continue;
