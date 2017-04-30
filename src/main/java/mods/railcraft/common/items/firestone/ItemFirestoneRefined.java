@@ -217,7 +217,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     public void finalizeDefinition() {
         ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
         ItemStack rawfirestone = RailcraftItems.FIRESTONE_RAW.getStack();
-        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.ore")) {
+        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
             IC2Plugin.addMaceratorRecipe(ore, rawfirestone);
         }
     }
