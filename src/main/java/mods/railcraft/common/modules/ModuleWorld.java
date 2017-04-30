@@ -53,22 +53,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                         RailcraftBlocks.ORE_MAGIC,
                         RailcraftBlocks.WORLD_LOGIC
                 );
-                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
-                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-                    villagerRegistry.registerVillageCreationHandler(workshop);
-
-                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
-                    villagerRegistry.register(villagerTrackman);
-
-                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
-                    VillagerTrades.define(trackmanCareer);
-
-                    try {
-                        MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
-                    } catch (Throwable ignored) {
-                    }
-                }
             }
 
             @Override
@@ -131,6 +115,26 @@ public class ModuleWorld extends RailcraftModulePayload {
                                 "sand",
                                 new ItemStack(Blocks.DIRT),
                                 new ItemStack(Blocks.DIRT));
+                    }
+                }
+            }
+
+            @Override
+            public void init() {
+                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
+                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
+                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+                    villagerRegistry.registerVillageCreationHandler(workshop);
+
+                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
+                    villagerRegistry.register(villagerTrackman);
+
+                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
+                    VillagerTrades.define(trackmanCareer);
+
+                    try {
+                        MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
+                    } catch (Throwable ignored) {
                     }
                 }
             }
