@@ -408,10 +408,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                         }
                     }
 
-                    if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
-
-                    }
-
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
 
                         ItemStack firestoneore = EnumOreMagic.FIRESTONE.getStack();
