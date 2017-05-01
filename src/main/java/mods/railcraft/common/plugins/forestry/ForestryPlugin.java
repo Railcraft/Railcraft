@@ -169,7 +169,7 @@ public class ForestryPlugin {
                 }
             }
 
-            RailcraftItems icemanT2 = RailcraftItems.BACKPACK_TRACKMAN_T2;
+            RailcraftItems icemanT2 = RailcraftItems.BACKPACK_ICEMAN_T2;
             if (icemanT1.isLoaded() && icemanT2.isLoaded()) {
                 ItemStack backpack = icemanT2.getStack();
                 if (backpack != null) {
