@@ -10,10 +10,7 @@
 package mods.railcraft.common.plugins.forestry;
 
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.Block;
@@ -26,18 +23,18 @@ import net.minecraftforge.fml.common.Optional;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = ForestryPlugin.FORESTRY_ID)
-public class TrackmanBackpack extends BaseBackpack {
+public class SignalmanBackpack extends BaseBackpack {
 
-    private static TrackmanBackpack instance;
+    private static SignalmanBackpack instance;
 
-    public static TrackmanBackpack getInstance() {
+    public static SignalmanBackpack getInstance() {
         if (instance == null)
-            instance = new TrackmanBackpack();
+            instance = new SignalmanBackpack();
         return instance;
     }
 
-    protected TrackmanBackpack() {
-        super("railcraft.trackman");
+    protected SignalmanBackpack() {
+        super("railcraft.signalman");
     }
 
     public void setup() {
@@ -55,37 +52,22 @@ public class TrackmanBackpack extends BaseBackpack {
                 add(item);
         }
 
-        add(IToolCrowbar.ORE_TAG);
-
-        add(EnumMachineAlpha.ANCHOR_WORLD.getStack());
-        add(EnumMachineAlpha.ANCHOR_PERSONAL.getStack());
-        add(EnumMachineAlpha.ANCHOR_ADMIN.getStack());
-        add(EnumMachineAlpha.ANCHOR_PASSIVE.getStack());
-        add(EnumMachineBeta.SENTINEL.getStack());
-
-        add(RailcraftItems.BOTTLE_CREOSOTE);
-
-        add(RailcraftItems.CHARGE_METER);
-        add(RailcraftItems.RAIL);
-        add(RailcraftItems.RAILBED);
-        add(RailcraftItems.TICKET);
-        add(RailcraftItems.TICKET_GOLD);
-        add(RailcraftItems.TIE);
+        add(RailcraftItems.SIGNAL_BLOCK_SURVEYOR);
+        add(RailcraftItems.SIGNAL_TUNER);
+        add(RailcraftItems.SIGNAL_LAMP);
+        add(RailcraftItems.CIRCUIT);
         add(RailcraftItems.SIGNAL_LABEL);
-        add(RailcraftItems.WHISTLE_TUNER);
-        add(RailcraftItems.OVERALLS);
-        add(RailcraftItems.TRACK_KIT);
-        add(RailcraftItems.TRACK_PARTS);
+        add(RailcraftItems.MAG_GLASS);
+        add(RailcraftItems.GOGGLES);
 
-        add(RailcraftBlocks.CHARGE_FEEDER);
-        add(RailcraftBlocks.MANIPULATOR);
-        add(RailcraftBlocks.TRACK_ELEVATOR);
-        add(RailcraftBlocks.WIRE);
+        add(RailcraftBlocks.WAY_OBJECT);
+        add(RailcraftBlocks.DETECTOR);
+        add(RailcraftBlocks.SIGNAL_BOX);
     }
 
     @Override
     public int getPrimaryColour() {
-        return 0x0094FF;
+        return 0x004B82;
     }
 
     @Override
