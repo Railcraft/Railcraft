@@ -19,6 +19,7 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
@@ -407,7 +408,16 @@ public class ModuleFactory extends RailcraftModulePayload {
                         }
                     }
 
+                    if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
+
+                    }
+
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
+
+                        ItemStack firestoneore = EnumOreMagic.FIRESTONE.getStack();
+                        ItemStack rawfirestone = RailcraftItems.FIRESTONE_RAW.getStack();
+                        IC2Plugin.addMaceratorRecipe(firestoneore, rawfirestone);
+
                         List<ItemStack> ores = OreDictionary.getOres("orePoorCopper");
                         for (ItemStack ore : ores) {
                             IC2Plugin.addMaceratorRecipe(ore, 3, crushedCopper, 2);
