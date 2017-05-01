@@ -55,12 +55,13 @@ public class ForestryPlugin {
         return instance;
     }
 
+    @Nullable
     public static ItemStack getItem(String tag) {
         if (!Mod.FORESTRY.isLoaded())
-            return null;
+            return InvTools.emptyStack();
         Item item = GameRegistry.findItem("forestry", tag);
         if (item == null)
-            return null;
+            return InvTools.emptyStack();
         return new ItemStack(item, 1);
     }
 

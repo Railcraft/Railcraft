@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forestry;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.Optional;
 
 /**
@@ -33,6 +34,8 @@ public class ApothecariesBackpack extends BaseBackpack {
     public void setup() {
         add(Items.POTIONITEM);
         add(Items.GLASS_BOTTLE);
+
+        add(s -> !(s.getItem() instanceof ItemBlock) && s.getItem().getRegistryName().getResourcePath().contains("potion"));
     }
 
     @Override
@@ -44,7 +47,5 @@ public class ApothecariesBackpack extends BaseBackpack {
     public int getSecondaryColour() {
         return 0xFFFFFF;
     }
-
-
 
 }
