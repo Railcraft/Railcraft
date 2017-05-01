@@ -24,6 +24,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeHandler;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -60,12 +61,12 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
 
         boolean rolling = false;
         ItemStack stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_MANUAL);
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             registry.addRecipeCategoryCraftingItem(stack, ROLLING);
             rolling = true;
         }
         stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_POWERED);
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             registry.addRecipeCategoryCraftingItem(stack, ROLLING);
             rolling = true;
         }
@@ -78,7 +79,7 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
     }
 
     private void addDescription(IModRegistry registry, @Nullable ItemStack stack) {
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             String locTag = stack.getUnlocalizedName() + ".desc";
             if (LocalizationPlugin.hasTag(locTag))
                 registry.addDescription(stack, locTag);

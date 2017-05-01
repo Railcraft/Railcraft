@@ -25,6 +25,7 @@ import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import mods.railcraft.common.plugins.misc.Mod;
@@ -158,7 +159,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             else
                 item = newItem;
             item.setRegistryName(getBaseTag());
-            item.setUnlocalizedName(getFullTag());
+            item.setUnlocalizedName(LocalizationPlugin.convertTag(getFullTag()));
             RailcraftRegistry.register(item);
             IRailcraftItemSimple railcraftItem;
             if (newItem instanceof IRailcraftItemSimple)
