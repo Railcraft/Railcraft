@@ -129,25 +129,14 @@ public class Train implements Iterable<EntityMinecart> {
 
     @Override
     public Iterator<EntityMinecart> iterator() {
-        return new Iterator<EntityMinecart>() {
-            private final Iterator<UUID> it = carts.iterator();
-            private final LinkageManager lm = LinkageManager.instance();
-
-            @Override
-            public boolean hasNext() {
-                return it.hasNext();
-            }
-
-            @Override
-            public EntityMinecart next() {
-                return lm.getCartFromUUID(it.next());
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("Removing not supported.");
-            }
-        };
+        LinkageManager lm = LinkageManager.instance();
+        List<EntityMinecart> entities = new ArrayList<EntityMinecart>(carts.size());
+        for (UUID cart : carts) {
+            EntityMinecart entity = lm.getCartFromUUID(cart);
+            if (entity != null)
+                entities.add(entity);
+        }
+        return entities.iterator();
     }
 
     public Iterable<EntityMinecart> orderedIteratable(final EntityMinecart head) {
