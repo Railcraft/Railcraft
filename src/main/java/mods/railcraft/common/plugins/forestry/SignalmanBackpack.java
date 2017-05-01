@@ -39,19 +39,6 @@ public class SignalmanBackpack extends BaseBackpack {
 
     public void setup() {
 
-        for (ResourceLocation id : Block.REGISTRY.getKeys()) {
-            Block block = Block.REGISTRY.getObject(id);
-            if (block == null) continue;
-            if (TrackTools.isRailBlock(block))
-                add(block);
-        }
-
-        for (ResourceLocation id : Item.REGISTRY.getKeys()) {
-            Item item = Item.REGISTRY.getObject(id);
-            if (item instanceof ItemMinecart || item instanceof IMinecartItem)
-                add(item);
-        }
-
         add(RailcraftItems.SIGNAL_BLOCK_SURVEYOR);
         add(RailcraftItems.SIGNAL_TUNER);
         add(RailcraftItems.SIGNAL_LAMP);
