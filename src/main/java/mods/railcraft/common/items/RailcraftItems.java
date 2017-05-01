@@ -23,6 +23,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.ItemBottle;
 import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
+import mods.railcraft.common.items.firestone.ItemFirestoneRaw;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -87,7 +88,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     GOGGLES(ItemGoggles::new, "armor_goggles"),
     FIRESTONE_CRACKED(ItemFirestoneCracked::new, "firestone_cracked"),
     FIRESTONE_CUT(ItemFirestone::new, "firestone_cut"),
-    FIRESTONE_RAW(ItemFirestone::new, "firestone_raw"),
+    FIRESTONE_RAW(ItemFirestoneRaw::new, "firestone_raw"),
     FIRESTONE_REFINED(ItemFirestoneRefined::new, "firestone_refined"),
     HOE_STEEL(ItemSteelHoe::new, "tool_hoe_steel", Items.IRON_HOE),
     INGOT(ItemIngot::new, "ingot"),

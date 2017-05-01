@@ -164,7 +164,7 @@ public class IC2Plugin {
     }
 
     public static void addCanningRecipe(ItemStack container, @Nullable ItemStack input, @Nullable ItemStack output) {
-        if (input == null || output == null)
+        if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         try {
             Recipes.cannerBottle.addRecipe(new RecipeInputItemStack(container), new RecipeInputItemStack(input), output);
