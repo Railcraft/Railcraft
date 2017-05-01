@@ -133,12 +133,12 @@ public class IC2Plugin {
         return false;
     }
 
-    public static void addMaceratorRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
+    public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
         addMaceratorRecipe(input, 1, output, 1);
     }
 
-    public static void addMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output, int numoutput) {
-        if (input == null || output == null)
+    public static void addMaceratorRecipe(ItemStack input, int numinput, ItemStack output, int numoutput) {
+        if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         output = output.copy();
         output.stackSize = numoutput;
