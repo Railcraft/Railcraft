@@ -408,32 +408,32 @@ public class ModuleFactory extends RailcraftModulePayload {
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
                         List<ItemStack> ores = OreDictionary.getOres("orePoorCopper");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedCopper);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedCopper, 2);
                         }
 
                         ores = OreDictionary.getOres("orePoorTin");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedTin);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedTin, 2);
                         }
 
                         ores = OreDictionary.getOres("orePoorIron");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedIron);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedIron, 2);
                         }
 
                         ores = OreDictionary.getOres("orePoorGold");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedGold);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedGold, 2);
                         }
 
                         ores = OreDictionary.getOres("orePoorSilver");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedSilver);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedSilver, 2);
                         }
 
                         ores = OreDictionary.getOres("orePoorLead");
                         for (ItemStack ore : ores) {
-                            IC2Plugin.addCrushedOreMaceratorRecipe(ore, 3, crushedLead);
+                            IC2Plugin.addMaceratorRecipe(ore, 3, crushedLead, 2);
                         }
                     }
 

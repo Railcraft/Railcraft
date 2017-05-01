@@ -134,20 +134,14 @@ public class IC2Plugin {
     }
 
     public static void addMaceratorRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
-        if (input == null || output == null)
-            return;
-        try {
-            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, false, output);
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
-        }
+        addMaceratorRecipe(input, 1, output, 1);
     }
 
-    public static void addCrushedOreMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output) {
+    public static void addMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output, int numoutput) {
         if (input == null || output == null)
             return;
         output = output.copy();
-        output.stackSize = 2;
+        output.stackSize = numoutput;
         try {
             Recipes.macerator.addRecipe(new RecipeInputItemStack(input, numinput), null, false, output);
         } catch (Throwable error) {
