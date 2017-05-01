@@ -51,19 +51,19 @@ public enum CollisionHandler {
                 boolean shock = true;
                 ItemStack overalls = getOveralls(entity);
                 ItemStack boots = getRubberBoots(entity);
-                if ((overalls != InvTools.emptyStack()) && (boots != InvTools.emptyStack())) {
+                if (!InvTools.isEmpty(overalls) && !InvTools.isEmpty(boots)) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(300) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
                     else if (MiscTools.RANDOM.nextInt(300) == 150)
                         entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
                 }
-                if ((overalls != InvTools.emptyStack())) {
+                if (!InvTools.isEmpty(overalls)) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
                 }
-                if ((boots != InvTools.emptyStack())) {
+                if (!InvTools.isEmpty(boots)) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
