@@ -80,7 +80,7 @@ public enum CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (pants != InvTools.emptyStack() && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (!InvTools.isEmpty(pants) && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return pants;
             }
             return InvTools.emptyStack();
@@ -90,7 +90,7 @@ public enum CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-                if (feet != InvTools.emptyStack() && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false))) //&& !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (!InvTools.isEmpty(feet) && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false))) //&& !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return feet;
             }
             return InvTools.emptyStack();
