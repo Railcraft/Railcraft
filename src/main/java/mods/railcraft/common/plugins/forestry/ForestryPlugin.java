@@ -55,12 +55,13 @@ public class ForestryPlugin {
         return instance;
     }
 
+    @Nullable
     public static ItemStack getItem(String tag) {
         if (!Mod.FORESTRY.isLoaded())
-            return null;
+            return InvTools.emptyStack();
         Item item = GameRegistry.findItem("forestry", tag);
         if (item == null)
-            return null;
+            return InvTools.emptyStack();
         return new ItemStack(item, 1);
     }
 
@@ -149,6 +150,39 @@ public class ForestryPlugin {
                                 'X', "gemDiamond",
                                 'W', silk,
                                 'T', RailcraftItems.BACKPACK_TRACKMAN_T1.getRecipeObject());
+                    }
+                }
+            }
+
+            RailcraftItems signalmanT1 = RailcraftItems.BACKPACK_SIGNALMAN_T1;
+            if (signalmanT1.isLoaded()) {
+                ItemStack backpack = signalmanT1.getStack();
+                if (backpack != null) {
+                    addBackpackTooltip(backpack);
+                    CraftingPlugin.addRecipe(backpack,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.WOOL,
+                            'V', RailcraftItems.SIGNAL_LAMP.getRecipeObject(),
+                            'X', Items.STRING,
+                            'Y', "chestWood");
+                }
+            }
+
+            RailcraftItems signalmanT2 = RailcraftItems.BACKPACK_SIGNALMAN_T2;
+            if (signalmanT1.isLoaded() && signalmanT2.isLoaded()) {
+                ItemStack backpack = signalmanT2.getStack();
+                if (backpack != null) {
+                    addBackpackTooltip(backpack);
+                    if (silk != null) {
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
+                                "WXW",
+                                "WTW",
+                                "WWW",
+                                'X', "gemDiamond",
+                                'W', silk,
+                                'T', signalmanT1.getRecipeObject());
                     }
                 }
             }
@@ -242,6 +276,9 @@ public class ForestryPlugin {
                 case "apothecary":
                     backpack = ApothecariesBackpack.getInstance();
                     break;
+                case "signalman":
+                    backpack = SignalmanBackpack.getInstance();
+                    break;
                 default:
                     throw new RuntimeException("Invalid backpackId");
             }
@@ -263,6 +300,7 @@ public class ForestryPlugin {
                 TrackmanBackpack.getInstance().setup();
                 IcemanBackpack.getInstance().setup();
                 ApothecariesBackpack.getInstance().setup();
+                SignalmanBackpack.getInstance().setup();
             } catch (Throwable error) {
                 Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.storage.BackpackManager.class);
             }

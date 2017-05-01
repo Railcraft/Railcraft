@@ -43,7 +43,9 @@ public class ModuleForestry extends RailcraftModulePayload {
                         RailcraftItems.BACKPACK_ICEMAN_T1,
                         RailcraftItems.BACKPACK_ICEMAN_T2,
                         RailcraftItems.BACKPACK_TRACKMAN_T1,
-                        RailcraftItems.BACKPACK_TRACKMAN_T2
+                        RailcraftItems.BACKPACK_TRACKMAN_T2,
+                        RailcraftItems.BACKPACK_SIGNALMAN_T1,
+                        RailcraftItems.BACKPACK_SIGNALMAN_T2
                 );
             }
 
