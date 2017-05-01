@@ -9,7 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
+import mods.railcraft.common.blocks.ore.EnumOreMagic;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -63,6 +68,15 @@ public class ItemFirestone extends ItemRailcraft {
     @Override
     public boolean isRepairable() {
         return false;
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
+        ItemStack rawfirestone = RailcraftItems.FIRESTONE_RAW.getStack();
+        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
+            IC2Plugin.addMaceratorRecipe(ore, rawfirestone);
+        }
     }
 
 }
