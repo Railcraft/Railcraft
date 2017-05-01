@@ -212,9 +212,4 @@ public class ItemFirestoneRefined extends ItemFirestone {
         entity.setRefined(true);
         return entity;
     }
-
-    @Override
-    public void finalizeDefinition() {
-    }
-
 }
