@@ -98,6 +98,7 @@ processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
 		exclude '**/*.md'
+		exclude '**/Thumbs.db'
 	}
 }
 
@@ -165,6 +166,8 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 		exclude '**/api/**'
 	}
 
+	exclude '**/Thumbs.db'
+
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	destinationDir = file("build/tmp")
 	archiveName = "signed.jar"
@@ -196,6 +199,8 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 		exclude '**/uristqwerty/**'
 	}
 
+	exclude '**/Thumbs.db'
+
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	destinationDir = file(dirDest)
 	includeEmptyDirs = false
@@ -206,6 +211,8 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	from(sourceSets.main.output) {
 		exclude '**/api/**'
 	}
+
+	exclude '**/Thumbs.db'
 
 	destinationDir = file("build/tmp")
 	archiveName = "signed-dev.jar"
@@ -260,6 +267,8 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 			}
 		}
 	}
+
+	exclude '**/Thumbs.db'
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	destinationDir = file(dirDest)
