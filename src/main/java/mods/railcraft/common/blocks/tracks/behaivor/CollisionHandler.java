@@ -90,7 +90,7 @@ public enum CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-                if (!InvTools.isEmpty(feet) && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false))) //&& !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (!InvTools.isEmpty(feet) && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false)) && !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return feet;
             }
             return InvTools.emptyStack();
