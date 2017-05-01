@@ -11,17 +11,15 @@ package mods.railcraft.common.util.crafting;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import mods.railcraft.common.carts.EntityCartFiltered;
-import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
-import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
 import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 public class CraftingHandler {
 
@@ -51,9 +49,13 @@ public class CraftingHandler {
                     for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix).notNull()) {
                         ItemStack stack = slot.getStackInSlot();
                         if (InvTools.isItemEqual(stack, filterItem)) {
-                            if (!player.inventory.addItemStackToInventory(stack))
-                                player.dropPlayerItemWithRandomChoice(stack, false);
-                            slot.setStackInSlot(null);
+                            if (cartItem.stackSize == 1) {
+                                if (!player.inventory.addItemStackToInventory(stack))
+                                    player.dropPlayerItemWithRandomChoice(stack, false);
+                                slot.setStackInSlot(null);
+                            } else {
+                                stack.stackSize++;
+                            }
                         }
                     }
                 return;
