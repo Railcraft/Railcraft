@@ -25,7 +25,7 @@ public class BlockOreMetalPoor extends BlockOreMetalBase<EnumOreMetalPoor> {
     @Override
     public void defineRecipes() {
         for (EnumOreMetalPoor ore : EnumOreMetalPoor.VALUES) {
-            CraftingPlugin.addFurnaceRecipe(ore.getStack(), ore.getMetal().getStack(Metal.Form.NUGGET, 2), 0.1F);
+            CraftingPlugin.addFurnaceRecipe(ore.getStack(), ore.getMetal().getStack(Metal.Form.NUGGET, 3), 0.3F);
         }
     }
 }

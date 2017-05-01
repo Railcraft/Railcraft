@@ -30,8 +30,25 @@ public enum ModItems {
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),
     MFSU(Mod.IC2, "te#mfsu"),
-    BATTERY(Mod.IC2, "re_Battery"),
-    IC2_MACHINE(Mod.IC2, "resource#machine");
+    BATTERY(Mod.IC2, "re_battery"),
+    IC2_MACHINE(Mod.IC2, "resource#machine"),
+    SLAG(Mod.IC2, "misc_resource#slag"),
+    RUBBER_BOOTS(Mod.IC2, "rubber_boots"),
+    STATIC_BOOTS(Mod.IC2, "static_boots"),
+    CRUSHED_IRON(Mod.IC2, "crushed#iron"),
+    DUST_IRON(Mod.IC2, "dust#iron"),
+    CRUSHED_GOLD(Mod.IC2, "crushed#gold"),
+    DUST_GOLD(Mod.IC2, "dust#gold"),
+    CRUSHED_COPPER(Mod.IC2, "crushed#copper"),
+    DUST_COPPER(Mod.IC2, "dust#copper"),
+    CRUSHED_TIN(Mod.IC2, "crushed#tin"),
+    DUST_TIN(Mod.IC2, "dust#tin"),
+    CRUSHED_SILVER(Mod.IC2, "crushed#silver"),
+    DUST_SILVER(Mod.IC2, "dust#silver"),
+    CRUSHED_LEAD(Mod.IC2, "crushed#lead"),
+    DUST_LEAD(Mod.IC2, "dust#lead"),
+    CRUSHED_URANIUM(Mod.IC2, "crushed#uranium"),
+    URANIUM_DROP(Mod.IC2, "nuclear#uranium_235"),;
     private final Mod mod;
     public final String itemTag;
     public final int meta;

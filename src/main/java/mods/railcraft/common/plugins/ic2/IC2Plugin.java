@@ -133,11 +133,17 @@ public class IC2Plugin {
         return false;
     }
 
-    public static void addMaceratorRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
-        if (input == null || output == null)
+    public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
+        addMaceratorRecipe(input, 1, output, 1);
+    }
+
+    public static void addMaceratorRecipe(ItemStack input, int numinput, ItemStack output, int numoutput) {
+        if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
+        output = output.copy();
+        output.stackSize = numoutput;
         try {
-            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, false, output);
+            Recipes.macerator.addRecipe(new RecipeInputItemStack(input, numinput), null, false, output);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }
@@ -152,6 +158,16 @@ public class IC2Plugin {
                 if (doesRecipeRequire(recipe.input, items) || doesRecipeProduce(recipe.output, items))
                     it.remove();
             }
+        } catch (Throwable error) {
+            Game.logErrorAPI("IC2", error, Recipes.class);
+        }
+    }
+
+    public static void addCanningRecipe(ItemStack container, @Nullable ItemStack input, @Nullable ItemStack output) {
+        if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
+            return;
+        try {
+            Recipes.cannerBottle.addRecipe(new RecipeInputItemStack(container), new RecipeInputItemStack(input), output);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }

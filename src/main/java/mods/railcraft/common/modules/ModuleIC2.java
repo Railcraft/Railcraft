@@ -10,14 +10,18 @@
 package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
+import ic2.api.crops.Crops;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.ModItems;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+//import mods.railcraft.common.plugins.ic2.crops.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -45,22 +49,13 @@ public class ModuleIC2 extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
-//        id = RailcraftConfig.getItemId("item.creosote.wood");
-//        if(id > 0){
-//            creosoteWood = new ItemRailcraft(id).setItemName("creosoteWood").setIconIndex(184);
-//            ItemStack wood = new ItemStack(creosoteWood);
-//            RailcraftLanguage.instance().registerItemName(creosoteWood, "Creosote Wood");
-//
-//            ItemStack oil = RailcraftPartItems.getCreosoteOil(2);
-//            Ic2Recipes.addExtractorRecipe(wood, oil);
-//
-//            CropCard bush = new CreosoteBush(wood);
-//
-//            if(!CropCard.registerCrop(bush, 156)){
-//                CropCard.registerCrop(bush);
-//            }
-//        }
+            public void preInit(){
+            //    IC2Plugin.addCanningRecipe(IC2Plugin.getItem("fluid_cell"), RailcraftItems.TARBERRY.getStack(), IC2Plugin.getItem("fluid_cell#railcraftcreosote")); ##Saved for later
+            }
+
+            @Override
+            public void init() {
+            //    Crops.instance.registerCrop(new CropCreosote()); ##Save this for when a proper crafting recipe is possible
             }
 
             @Override

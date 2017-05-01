@@ -12,7 +12,9 @@ package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -48,10 +50,23 @@ public enum CollisionHandler {
             if (node.getChargeGraph().getCharge() > 2000) {
                 boolean shock = true;
                 ItemStack overalls = getOveralls(entity);
-                if (overalls != null) {
+                ItemStack boots = getRubberBoots(entity);
+                if (!InvTools.isEmpty(overalls) && !InvTools.isEmpty(boots)) {
+                    shock = false;
+                    if (MiscTools.RANDOM.nextInt(300) == 0)
+                        entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
+                    else if (MiscTools.RANDOM.nextInt(300) == 150)
+                        entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
+                }
+                if (!InvTools.isEmpty(overalls)) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
+                }
+                if (!InvTools.isEmpty(boots)) {
+                    shock = false;
+                    if (MiscTools.RANDOM.nextInt(150) == 0)
+                        entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
                 }
                 if (shock && entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2)) {
                     node.removeCharge(2000);
@@ -65,10 +80,20 @@ public enum CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (pants != null && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (!InvTools.isEmpty(pants) && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return pants;
             }
-            return null;
+            return InvTools.emptyStack();
+        }
+        @Nullable
+        private ItemStack getRubberBoots(Entity entity) {
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = ((EntityPlayer) entity);
+                ItemStack feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+                if (!InvTools.isEmpty(feet) && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false)) && !((EntityPlayer) entity).capabilities.isCreativeMode)
+                    return feet;
+            }
+            return InvTools.emptyStack();
         }
     };
 
