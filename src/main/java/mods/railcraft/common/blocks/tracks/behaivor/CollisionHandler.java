@@ -51,19 +51,19 @@ public enum CollisionHandler {
                 boolean shock = true;
                 ItemStack overalls = getOveralls(entity);
                 ItemStack boots = getRubberBoots(entity);
-                if ((overalls != null) && (boots != null)) {
+                if ((overalls != InvTools.emptyStack()) && (boots != InvTools.emptyStack())) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(300) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
-                    if (MiscTools.RANDOM.nextInt(300) == 150)
+                    else if (MiscTools.RANDOM.nextInt(300) == 150)
                         entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
                 }
-                if ((overalls != null)) {
+                if ((overalls != InvTools.emptyStack())) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(overalls, 1));
                 }
-                if ((boots != null)) {
+                if ((boots != InvTools.emptyStack())) {
                     shock = false;
                     if (MiscTools.RANDOM.nextInt(150) == 0)
                         entity.setItemStackToSlot(EntityEquipmentSlot.FEET, InvTools.damageItem(boots, 1));
@@ -80,20 +80,20 @@ public enum CollisionHandler {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (pants != null && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (pants != InvTools.emptyStack() && RailcraftItems.OVERALLS.isInstance(pants) && !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return pants;
             }
-            return null;
+            return InvTools.emptyStack();
         }
         @Nullable
         private ItemStack getRubberBoots(Entity entity) {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = ((EntityPlayer) entity);
                 ItemStack feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-                if (feet != null && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false))) //&& !((EntityPlayer) entity).capabilities.isCreativeMode)
+                if (feet != InvTools.emptyStack() && (ModItems.RUBBER_BOOTS.isEqual(feet, false, false) || ModItems.STATIC_BOOTS.isEqual(feet, false, false))) //&& !((EntityPlayer) entity).capabilities.isCreativeMode)
                     return feet;
             }
-            return null;
+            return InvTools.emptyStack();
         }
     };
 
