@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,4 +29,8 @@ public class EnchantmentToolRailcraft extends Enchantment {
         return stack.getItem() instanceof ItemCrowbar || stack.getItem() instanceof ItemSpikeMaul;
     }
 
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        return canApply(stack);
+    }
 }
