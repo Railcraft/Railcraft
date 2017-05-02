@@ -260,6 +260,10 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+        if (needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
+            WorldPlugin.destroyBlock(worldIn, pos, true);
+            return;
+        }
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileMachineBase)
@@ -269,6 +273,10 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
             if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw error;
         }
+    }
+
+    public boolean needsSupport() {
+        return false;
     }
 
     @Override

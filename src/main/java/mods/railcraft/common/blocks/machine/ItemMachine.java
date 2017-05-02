@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -48,6 +48,19 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
+        if (!super.canPlaceBlockOnSide(worldIn, pos, side, player, stack))
+            return false;
+        if (!machineBlock.needsSupport())
+            return true;
+        Block block = worldIn.getBlockState(pos).getBlock();
+        if (!block.isReplaceable(worldIn, pos)) {
+            pos = pos.offset(side);
+        }
+        return worldIn.isSideSolid(pos.down(), EnumFacing.UP);
     }
 
     @Override
