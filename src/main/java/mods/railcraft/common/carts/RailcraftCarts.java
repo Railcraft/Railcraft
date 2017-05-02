@@ -159,9 +159,9 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static IRailcraftCartContainer fromClass(Class<? extends EntityMinecart> cls) {
+    public static IRailcraftCartContainer fromClass(Class<? extends EntityMinecart> clazz) {
         for (RailcraftCarts cart : VALUES) {
-            if (cls.equals(cart.type))
+            if (clazz.equals(cart.type))
                 return cart;
         }
         return BASIC;
@@ -229,6 +229,10 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         if (item != null)
             return new ItemStack(item, qty);
         return null;
+    }
+
+    public Item getItem() {
+        return item;
     }
 
     @Override

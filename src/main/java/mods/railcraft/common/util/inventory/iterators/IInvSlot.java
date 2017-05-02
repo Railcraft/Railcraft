@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
+import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -23,6 +25,15 @@ public interface IInvSlot {
     boolean canPutStackInSlot(ItemStack stack);
 
     boolean canTakeStackFromSlot(ItemStack stack);
+
+    default boolean hasStack() {
+        return !InvTools.isEmpty(getStack());
+    }
+
+    default boolean containsItem(Item item) {
+        ItemStack stack = getStack();
+        return !InvTools.isEmpty(stack) && stack.getItem() == item;
+    }
 
     ItemStack decreaseStack();
 
