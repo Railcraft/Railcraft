@@ -8,18 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -34,8 +22,22 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemMinecart;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileDispenserCart extends TileMachineItem {
 
@@ -125,13 +127,13 @@ public class TileDispenserCart extends TileMachineItem {
                             float rx = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
                             float ry = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
                             float rz = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                            EntityItem item = new EntityItem(worldObj, x + rx, y + ry, z + rz, cartStack);
+                            EntityItem item = new EntityItem(worldObj, x, y, z, cartStack);
                             float factor = 0.05F;
                             item.motionX = (float) MiscTools.getRand().nextGaussian() * factor;
                             item.motionY = (float) MiscTools.getRand().nextGaussian() * factor + 0.2F;
                             item.motionZ = (float) MiscTools.getRand().nextGaussian() * factor;
-                            if (worldObj.spawnEntityInWorld(item))
-                                setInventorySlotContents(ii, null);
+                            worldObj.spawnEntityInWorld(item);
+                            setInventorySlotContents(ii, null);
                         }
                     }
                 }

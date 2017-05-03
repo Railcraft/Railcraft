@@ -11,7 +11,9 @@ package mods.railcraft.common.plugins.forge;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-import java.util.UUID;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.IOwnable;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,16 +22,41 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
+import java.util.UUID;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class PlayerPlugin {
 
-    public static final GameProfile RAILCRAFT_USER_PROFILE = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
+    public static EntityPlayerMP getFakePlayer(final WorldServer world, final double x, final double y, final double z) {
+        EntityPlayerMP player = FakePlayerFactory.get(world, CartTools.RAILCRAFT_PROFILE);
+        player.setPosition(x, y, z);
+        return player;
+    }
 
-    public static EntityPlayer getFakePlayer(final WorldServer world, final double x, final double y, final double z) {
-        EntityPlayer player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
+    public static EntityPlayerMP getFakePlayer(final WorldServer world, final double x, final double y, final double z, final IOwnable ownable) {
+        GameProfile profile = ownable.getOwner();
+        if (profile == null) {
+            return getFakePlayer(world, x, y, z);
+        }
+        EntityPlayerMP player = (EntityPlayerMP) world.func_152378_a(profile.getId());
+        if (player != null) {
+            return player;
+        }
+        player = FakePlayerFactory.get(world, profile);
+        player.setPosition(x, y, z);
+        return player;
+    }
+
+    public static EntityPlayerMP getFakePlayer(final WorldServer world, final double x, final double y, final double z, final EntityMinecart minecart) {
+        GameProfile profile = CartTools.getCartOwner(minecart);
+        EntityPlayerMP player = (EntityPlayerMP) world.func_152378_a(profile.getId());
+        if (player != null) {
+            return player;
+        }
+        player = FakePlayerFactory.get(world, profile);
         player.setPosition(x, y, z);
         return player;
     }
@@ -42,12 +69,15 @@ public class PlayerPlugin {
     }
 
     public static GameProfile readOwnerFromNBT(NBTTagCompound nbt) {
-        String ownerName = "[Unknown]";
+        String ownerName = null;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
         UUID ownerUUID = null;
         if (nbt.hasKey("ownerId"))
             ownerUUID = UUID.fromString(nbt.getString("ownerId"));
+        if (ownerName == null || ownerUUID == null) {
+            return CartTools.RAILCRAFT_PROFILE;
+        }
         return new GameProfile(ownerUUID, ownerName);
     }
 
@@ -61,7 +91,7 @@ public class PlayerPlugin {
         String username = gameProfile.getName();
         if (username != null && !username.equals(""))
             return username;
-        return "[Unknown]";
+        return "[Railcraft]";
     }
 
     public static String getUsername(World world, UUID playerId) {
@@ -70,7 +100,7 @@ public class PlayerPlugin {
             if (player != null)
                 return player.getDisplayName();
         }
-        return "[Unknown]";
+        return "[Railcraft]";
     }
 
     public static boolean isOwnerOrOp(GameProfile owner, EntityPlayer player) {
