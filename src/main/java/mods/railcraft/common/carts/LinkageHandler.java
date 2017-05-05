@@ -207,12 +207,12 @@ public class LinkageHandler {
 
         EntityMinecart link_A = lm.getLinkedCartA(cart);
         if (link_A != null) {
-            // sanity check to ensure links are consistent
-            if (!Train.areInSameTrain(cart, link_A)) {
-                lm.breakLink(cart, link_A);
-                lm.createLink(cart, link_A);
-                return;
-            }
+//            // sanity check to ensure links are consistent
+//            if (!Train.areInSameTrain(cart, link_A)) {
+//                lm.breakLink(cart, link_A);
+//                lm.createLink(cart, link_A);
+//                return;
+//            }
             launched = link_A.getEntityData().getInteger("Launched");
             if (launched <= 0 && !isOnElevator(link_A)) {
                 linked = true;
@@ -223,12 +223,12 @@ public class LinkageHandler {
 
         EntityMinecart link_B = lm.getLinkedCartB(cart);
         if (link_B != null) {
-            // sanity check to ensure links are consistent
-            if (!Train.areInSameTrain(cart, link_B)) {
-                lm.breakLink(cart, link_B);
-                lm.createLink(cart, link_B);
-                return;
-            }
+//            // sanity check to ensure links are consistent
+//            if (!Train.areInSameTrain(cart, link_B)) {
+//                lm.breakLink(cart, link_B);
+//                lm.createLink(cart, link_B);
+//                return;
+//            }
             launched = link_B.getEntityData().getInteger("Launched");
             if (launched <= 0 && !isOnElevator(link_B)) {
                 linked = true;
