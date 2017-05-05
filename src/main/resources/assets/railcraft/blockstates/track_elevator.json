@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "ladder",
+    "model": "railcraft:track_elevator",
     "textures": {
       "particle": "railcraft:blocks/tracks/track_elevator_off",
       "texture": "railcraft:blocks/tracks/track_elevator_off"
@@ -9,11 +9,9 @@
     "transform": "forge:default-block"
   },
   "variants": {
-    "facing": {
-      "north": {},
-      "east": {"y": 90},
-      "south": {"y": 180},
-      "west": {"y": 270}
+    "rotation": {
+      "x": {"y": 90},
+      "z": {}
     },
     "powered": {
       "true": {

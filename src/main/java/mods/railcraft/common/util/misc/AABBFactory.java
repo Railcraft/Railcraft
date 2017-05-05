@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.util.misc;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -112,39 +113,54 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory grow(double grow) {
-        minX -= grow;
-        minY -= grow;
-        minZ -= grow;
-        maxX += grow;
-        maxY += grow;
-        maxZ += grow;
+    public AABBFactory grow(double distance) {
+        minX -= distance;
+        minY -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxY += distance;
+        maxZ += distance;
         return this;
     }
 
-    public AABBFactory expandHorizontally(double grow) {
-        minX -= grow;
-        minZ -= grow;
-        maxX += grow;
-        maxZ += grow;
+    public AABBFactory expandHorizontally(double distance) {
+        minX -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxZ += distance;
         return this;
     }
 
-    public AABBFactory expandXAxis(double grow) {
-        minX -= grow;
-        maxX += grow;
+    public AABBFactory expandXAxis(double distance) {
+        minX -= distance;
+        maxX += distance;
         return this;
     }
 
-    public AABBFactory expandYAxis(double grow) {
-        minY -= grow;
-        maxY += grow;
+    public AABBFactory expandYAxis(double distance) {
+        minY -= distance;
+        maxY += distance;
         return this;
     }
 
-    public AABBFactory expandZAxis(double grow) {
-        minZ -= grow;
-        maxZ += grow;
+    public AABBFactory expandZAxis(double distance) {
+        minZ -= distance;
+        maxZ += distance;
+        return this;
+    }
+
+    public AABBFactory expandAxis(EnumFacing.Axis axis, double distance) {
+        switch (axis) {
+            case X:
+                expandXAxis(distance);
+                break;
+            case Y:
+                expandYAxis(distance);
+                break;
+            case Z:
+                expandZAxis(distance);
+                break;
+        }
         return this;
     }
 
@@ -171,6 +187,10 @@ public class AABBFactory {
 
     public AABBFactory expandToCoordinate(Vec3d point) {
         return expandToCoordinate(point.xCoord, point.yCoord, point.zCoord);
+    }
+
+    public AABBFactory expandToCoordinate(BlockPos point) {
+        return expandToCoordinate(point.getX(), point.getY(), point.getZ());
     }
 
     public AABBFactory expandToCoordinate(double x, double y, double z) {

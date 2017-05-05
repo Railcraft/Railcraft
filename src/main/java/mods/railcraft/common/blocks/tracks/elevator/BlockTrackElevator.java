@@ -9,19 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.elevator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -54,19 +53,12 @@ import javax.annotation.Nullable;
  * @author DizzyDragon
  */
 public class BlockTrackElevator extends BlockRailcraft {
-
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
+    public static final byte ELEVATOR_TIMER = 20;
+    public static final PropertyEnum<EnumFacing.Axis> ROTATION = PropertyEnum.create("rotation", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     private static final float OFFSET = 0.125F;
-    private static final AxisAlignedBB[] BOUNDS = {
-            new AxisAlignedBB(0.0F, 0.0F, 1.0F - OFFSET, 1.0F, 1.0F, 1.0F),
-
-            new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, OFFSET),
-
-            new AxisAlignedBB(1.0F - OFFSET, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
-
-            new AxisAlignedBB(0.0F, 0.0F, 0.0F, OFFSET, 1.0F, 1.0F)
-    };
+    private static final AxisAlignedBB X_BOUNDS = AABBFactory.start().box().expandXAxis(-2.0 / 16.0).expandZAxis(0.5 / 16.0).build();
+    private static final AxisAlignedBB Z_BOUNDS = AABBFactory.start().box().expandZAxis(-2.0 / 16.0).expandXAxis(0.5 / 16.0).build();
 
 //    /**
 //     * The upward velocity of an entity climbing the ladder.
@@ -82,13 +74,9 @@ public class BlockTrackElevator extends BlockRailcraft {
      */
     public static final double FALL_DOWN_CORRECTION = 0.039999999105930328D;
     /**
-     * Velocity at which a minecart travels up on the rail when activated
+     * Velocity at which a minecart travels up on the rail
      */
-    public static final double RIDE_UP_VELOCITY = +0.4;
-    /**
-     * Velocity at which a minecart travels down on the rail when not activated
-     */
-    public static final double RIDE_DOWN_VELOCITY = -0.4;
+    public static final double RIDE_VELOCITY = 0.4;
 
     public BlockTrackElevator() {
         super(new MaterialElevator());
@@ -97,7 +85,7 @@ public class BlockTrackElevator extends BlockRailcraft {
         setHarvestLevel("crowbar", 0);
 
         setCreativeTab(CreativeTabs.TRANSPORTATION);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
+        setDefaultState(blockState.getBaseState().withProperty(ROTATION, EnumFacing.Axis.X).withProperty(POWERED, false));
     }
 
     @Override
@@ -113,7 +101,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, POWERED, FACING);
+        return new BlockStateContainer(this, POWERED, ROTATION);
     }
 
     /**
@@ -122,7 +110,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      */
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+        return state.withProperty(ROTATION, state.getValue(ROTATION) == EnumFacing.Axis.Z ? EnumFacing.Axis.X : EnumFacing.Axis.Z);
     }
 
     /**
@@ -131,7 +119,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      */
     @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+        return state;
     }
 
     /**
@@ -139,13 +127,13 @@ public class BlockTrackElevator extends BlockRailcraft {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront(meta & 0x7);
+        int axis = meta & 0x7;
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
-            enumfacing = EnumFacing.NORTH;
+        if (axis != 0 && axis != 2) {
+            axis = 0;
         }
 
-        IBlockState state = getDefaultState().withProperty(FACING, enumfacing);
+        IBlockState state = getDefaultState().withProperty(ROTATION, EnumFacing.Axis.values()[axis]);
 
         state = state.withProperty(POWERED, (meta & 0x8) > 0);
 
@@ -157,7 +145,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = state.getValue(FACING).getIndex();
+        int meta = state.getValue(ROTATION).ordinal();
         if (state.getValue(POWERED))
             meta |= 0x8;
         return meta;
@@ -169,12 +157,12 @@ public class BlockTrackElevator extends BlockRailcraft {
         return BlockRenderLayer.CUTOUT;
     }
 
-    public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
-        return getFacing(WorldPlugin.getBlockState(world, pos));
+    public EnumFacing.Axis getAxis(IBlockAccess world, BlockPos pos) {
+        return getAxis(WorldPlugin.getBlockState(world, pos));
     }
 
-    public EnumFacing getFacing(IBlockState state) {
-        return state.getValue(FACING);
+    public EnumFacing.Axis getAxis(IBlockState state) {
+        return state.getValue(ROTATION);
     }
 
     public boolean getPowered(IBlockAccess world, BlockPos pos) {
@@ -192,14 +180,13 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World world, BlockPos pos) {
-        return AABBFactory.start().setBoundsFromBlock(blockState, world, pos).build();
-    }
-
-    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        EnumFacing facing = getFacing(source, pos);
-        return BOUNDS[facing.ordinal() - 2];
+        EnumFacing.Axis axis = getAxis(state);
+        if (axis == EnumFacing.Axis.X) {
+            return X_BOUNDS;
+        } else {
+            return Z_BOUNDS;
+        }
     }
 
     @Override
@@ -217,100 +204,30 @@ public class BlockTrackElevator extends BlockRailcraft {
         return false;
     }
 
-//    @Override
-//    public IIcon getIcon(int side, int meta) {
-//        boolean powered = (meta & 8) != 0;
-//        if (powered)
-//            return texture[0];
-//        return texture[1];
-//    }
-//
-//    @Override
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        texture = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:tracks/track.elevator", 2);
-//    }
-
-    @SuppressWarnings("SimplifiableIfStatement")
-    @Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (isSideFacingSolid(world, pos, side))
-                return true;
-        }
-        return false;
-    }
-
-    //TODO: Test, this is probably completely wrong
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-//        if ((meta == 0 || facing == 2) && worldIn.isSideSolid(x, y, z + 1, EnumFacing.NORTH))
-//            meta = 2;
-//        if ((meta == 0 || facing == 3) && worldIn.isSideSolid(x, y, z - 1, EnumFacing.SOUTH))
-//            meta = 3;
-//        if ((meta == 0 || facing == 4) && worldIn.isSideSolid(x + 1, y, z, EnumFacing.WEST))
-//            meta = 4;
-//        if ((meta == 0 || facing == 5) && worldIn.isSideSolid(x - 1, y, z, EnumFacing.EAST))
-//            meta = 5;
-        EnumFacing placement = null;
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if ((placement == null || facing == side) && isSideFacingSolid(worldIn, pos, side))
-                placement = side;
+        EnumFacing.Axis axis = facing.getAxis();
+        if (axis.isVertical()) {
+            IBlockState state = WorldPlugin.getBlockState(worldIn, pos.offset(facing.getOpposite()));
+            if (state.getBlock() == this) {
+                axis = ((BlockTrackElevator) state.getBlock()).getAxis(state);
+            } else {
+                axis = placer.getHorizontalFacing().getAxis();
+            }
         }
-        assert placement != null;
-        return getDefaultState().withProperty(FACING, placement);
-    }
-
-    private boolean isSideFacingSolid(World world, BlockPos pos, EnumFacing side) {
-        return world.isSideSolid(pos.offset(side.getOpposite()), side);
+        return getDefaultState().withProperty(ROTATION, axis);
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        BlockPos down = pos.down();
-        if (TrackTools.isRailBlockAt(world, down)) {
-            Block block = WorldPlugin.getBlock(world, down);
-            BlockRailBase railBlock = (BlockRailBase) block;
-            if (railBlock.canMakeSlopes(world, down)) {
-                BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(world, down, (EntityMinecart) null);
-                EnumFacing ladderFacing = getFacing(state);
-
-                BlockRailBase.EnumRailDirection newTrackShape = null;
-                if (trackMeta == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
-                    if (ladderFacing == EnumFacing.NORTH)
-                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_SOUTH;
-                    else if (ladderFacing == EnumFacing.SOUTH)
-                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_NORTH;
-                } else if (trackMeta == BlockRailBase.EnumRailDirection.EAST_WEST) {
-                    if (ladderFacing == EnumFacing.EAST)
-                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_WEST;
-                    else if (ladderFacing == EnumFacing.WEST)
-                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_EAST;
-                }
-                if (newTrackShape != null) {
-                    TrackTools.setTrackDirection(world, down, newTrackShape);
-                }
-            }
-        }
-
         boolean powered = getPowered(state);
-        if (powered ^ isPowered(world, pos, state))
-            WorldPlugin.setBlockState(world, pos, state.withProperty(POWERED, powered));
+        if (powered != isPowered(world, pos, state))
+            WorldPlugin.setBlockState(world, pos, state.withProperty(POWERED, !powered));
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
         super.neighborChanged(state, worldIn, pos, neighborBlock);
-        EnumFacing facing = getFacing(state);
-        boolean valid = false;
-
-        if (isSideFacingSolid(worldIn, pos, facing))
-            valid = true;
-
-        if (!valid) {
-            WorldPlugin.destroyBlock(worldIn, pos, true);
-            return;
-        }
-
         boolean powered = getPowered(state);
         if (powered != isPowered(worldIn, pos, state))
             WorldPlugin.setBlockState(worldIn, pos, state.withProperty(POWERED, !powered));
@@ -327,18 +244,10 @@ public class BlockTrackElevator extends BlockRailcraft {
     ////////////////////////////////////////////////////////////////////////////
     // PROTECTED                                                                //
     ////////////////////////////////////////////////////////////////////////////
-    @SuppressWarnings("SimplifiableIfStatement")
     protected boolean isPowered(World world, BlockPos pos, IBlockState state) {
-        EnumFacing facing = getFacing(state);
-        BlockPos posDown = pos.down();
-        IBlockState stateDown = WorldPlugin.getBlockState(world, posDown);
-        if (stateDown.getBlock() == this && facing == getFacing(stateDown) && PowerPlugin.isBlockBeingPowered(world, posDown))
-            return true;
-        if (PowerPlugin.isBlockBeingPowered(world, pos))
-            return true;
         BlockPos posUp = pos.up();
         IBlockState stateUp = WorldPlugin.getBlockState(world, posUp);
-        return stateUp.getBlock() == this && facing == getFacing(stateUp) && isPowered(world, posUp, stateUp);
+        return PowerPlugin.isBlockBeingPowered(world, pos) || stateUp.getBlock() == this && isPowered(world, posUp, stateUp);
     }
 
     /**
@@ -350,141 +259,114 @@ public class BlockTrackElevator extends BlockRailcraft {
      *              assumed that the minecart is whithin the area of effect of the block
      */
     protected void minecartInteraction(World world, EntityMinecart cart, BlockPos pos) {
-        cart.getEntityData().setByte("elevator", (byte) 20);
+        cart.getEntityData().setByte("elevator", ELEVATOR_TIMER);
+        cart.setNoGravity(true);
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        boolean powered = getPowered(state);
-        BlockPos posDown = pos.down();
-        if (powered) {
-            BlockPos posUp = pos.up();
-            boolean nextIsOffload = isOffloadRail(world, posUp, state);
-            if (nextIsOffload || WorldPlugin.isBlockAt(world, posUp, this)) {
-                boolean empty = true;
-                for (EntityMinecart c : CartToolsAPI.getMinecartsAt(world, posUp, 0.2f)) {
-                    if (c != cart)
-                        empty = false;
-                }
-                if ((nextIsOffload || getPowered(world, posUp)) && empty)
-                    cart.motionY = RIDE_UP_VELOCITY + FALL_DOWN_CORRECTION;
-                else if (pushMinecartOntoRail(world, pos, state, cart))
-                    return;
-                else {
-                    cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
-                    cart.motionY = FALL_DOWN_CORRECTION;
-                }
-            } else
-                cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
-        } else if (WorldPlugin.isBlockAt(world, posDown, this)) {
+        keepMinecartConnected(pos, state, cart);
+        if (!(moveUp(world, state, cart, pos) || moveDown(world, state, cart, pos))) {
             pushMinecartOntoRail(world, pos, state, cart);
-            return;
-        } else {
-            boolean empty = true;
-            for (EntityMinecart c : CartToolsAPI.getMinecartsAt(world, posDown, 0.2f)) {
-                if (c != cart)
-                    empty = false;
-            }
-            if (empty)
-                cart.motionY = RIDE_DOWN_VELOCITY + FALL_DOWN_CORRECTION;
-            else {
-                cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
-                cart.motionY = FALL_DOWN_CORRECTION;
-            }
         }
+    }
 
-        if (powered || !TrackTools.isRailBlockAt(world, posDown)) {
-            if (TrackTools.isRailBlockAt(world, posDown) || TrackTools.isRailBlockAt(world, pos.down(2)))
-                cart.setCanUseRail(false);
-            else
-                cart.setCanUseRail(true);
-            keepMinecartConnected(pos, state, cart);
-        } else
-            cart.setCanUseRail(true);
+    private boolean moveUp(World world, IBlockState state, EntityMinecart cart, BlockPos pos) {
+        if (!getPowered(state))
+            return false;
+        BlockPos posUp = pos.up();
+        boolean hasPath = WorldPlugin.isBlockAt(world, posUp, this) && getPowered(world, posUp);
+        if (hasPath) {
+            if (isPathEmpty(state, cart, posUp, true))
+                cart.motionY = RIDE_VELOCITY;
+            else holdPosition(state, cart, pos);
+            return true;
+        }
+        return false;
+    }
 
-//        RailcraftUtils.resetFallDistance(cart);
-        if (powered)
-            pushMinecartOnSupportingBlockIfPossible(world, pos, state, cart);
+    private boolean moveDown(World world, IBlockState state, EntityMinecart cart, BlockPos pos) {
+        if (getPowered(state))
+            return false;
+        BlockPos posDown = pos.down();
+        boolean hasPath = WorldPlugin.isBlockAt(world, posDown, this) && !getPowered(world, posDown);
+        if (hasPath) {
+            if (isPathEmpty(state, cart, posDown, false))
+                cart.motionY = -RIDE_VELOCITY;
+            else holdPosition(state, cart, pos);
+            return true;
+        }
+        return false;
+    }
+
+    private void holdPosition(IBlockState state, EntityMinecart cart, BlockPos pos) {
+        cart.setLocationAndAngles(cart.posX, pos.getY() - cart.height / 2.0 + 0.5, cart.posZ, getCartRotation(state, cart), 0F);
+        cart.motionY = 0;
     }
 
     /**
      * Adjusts the motion and rotation yaw of a minecart so that it stays in
      * position and aligned to the iron ladder.
      *
-     * @param minecart the minecart for which motion and rotation will be
-     *                 adjusted
+     * @param cart the minecart for which motion and rotation will be
+     *             adjusted
      */
-    protected void keepMinecartConnected(BlockPos pos, IBlockState state, EntityMinecart minecart) {
-        minecart.motionX = (pos.getX() + 0.5) - minecart.posX;
-        minecart.motionZ = (pos.getZ() + 0.5) - minecart.posZ;
+    protected void keepMinecartConnected(BlockPos pos, IBlockState state, EntityMinecart cart) {
+        if (TrackTools.isRailBlockAt(cart.worldObj, pos.down()) || TrackTools.isRailBlockAt(cart.worldObj, pos.down(2)))
+            cart.setCanUseRail(false);
+        else
+            cart.setCanUseRail(true);
+        cart.motionX = (pos.getX() + 0.5) - cart.posX;
+        cart.motionZ = (pos.getZ() + 0.5) - cart.posZ;
 
-        alignMinecart(state, minecart);
+        alignMinecart(state, cart);
     }
 
     /**
-     * Alligns the minecart to the ladder to the ladder
+     * Aligns the minecart to the ladder
      *
-     * @param minecart the minecart for which motion and rotation will be
-     *                 adjusted
+     * @param cart the minecart for which rotation will be adjusted
      */
-    protected void alignMinecart(IBlockState state, EntityMinecart minecart) {
-        if (getFacing(state).getAxis() == EnumFacing.Axis.X) {
-            minecart.rotationYaw = minecart.rotationYaw <= 90.0F || minecart.rotationYaw > 270.0F ? 0.0F : 180.0F;
+    protected void alignMinecart(IBlockState state, EntityMinecart cart) {
+        cart.rotationYaw = getCartRotation(state, cart);
+    }
+
+    private float getCartRotation(IBlockState state, EntityMinecart cart) {
+        if (getAxis(state) == EnumFacing.Axis.X) {
+            return cart.rotationYaw <= 90.0F || cart.rotationYaw > 270.0F ? 0.0F : 180.0F;
         } else {
-            minecart.rotationYaw = minecart.rotationYaw > 180.0F ? 270.0F : 90F;
+            return cart.rotationYaw > 180.0F ? 270.0F : 90F;
         }
     }
 
-    private boolean isOffloadRail(World world, BlockPos nextPos, IBlockState state) {
-        if (WorldPlugin.isBlockAir(world, nextPos)) {
-            EnumFacing lastElevatorFacing = getFacing(state);
-            return TrackTools.isRailBlockAt(world, nextPos.offset(lastElevatorFacing.getOpposite()));
+    private boolean isPathEmpty(IBlockState state, EntityMinecart cart, BlockPos pos, boolean up) {
+        if (WorldPlugin.getBlockMaterial(cart.worldObj, pos).isSolid())
+            return false;
+        EnumFacing.Axis axis = getAxis(state);
+        AABBFactory factory = AABBFactory.start().createBoxForTileAt(pos).expandAxis(axis, 1.0);
+        if (up) {
+            factory.raiseCeiling(0.5);
+            factory.raiseFloor(0.2);
+        } else {
+            factory.raiseCeiling(-0.2);
+            factory.raiseFloor(-0.5);
         }
-        return false;
-    }
-
-    /**
-     * Pushes a minecart onto the block on which the ladder is placed if it is
-     * possible. It is only possible to push the minecart if there is air
-     * directly above the ladder block and if the block directly above the
-     * supporting block is a rail.
-     *
-     * @param world the world in which the block resides
-     * @param cart  the minecart that is pushed which onto the block if
-     *              possible
-     * @return true if the minecart can be pushed onto the supporting block,
-     * otherwise false
-     */
-    //TODO: test
-    private boolean pushMinecartOnSupportingBlockIfPossible(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
-        if (!state.getMaterial().isSolid()) {
-            EnumFacing facing = getFacing(state);
-            if (TrackTools.isRailBlockAt(world, pos.up().offset(facing.getOpposite()))) {
-                cart.motionY = RIDE_UP_VELOCITY;
-                double vel = facing.getAxisDirection().getOffset() * RIDE_UP_VELOCITY;
-                if (facing.getAxis() == EnumFacing.Axis.Z)
-                    cart.motionZ = vel;
-                else
-                    cart.motionX = vel;
-            }
-            return true;
-        }
-        return false;
+        return EntitySearcher.findMinecarts().inArea(factory.build()).except(cart).at(cart.worldObj).isEmpty();
     }
 
     /**
      * Pushes a Minecart onto a Railcraft block opposite the elevator if possible.
      */
-    //TODO: test
     private boolean pushMinecartOntoRail(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
         cart.setCanUseRail(true);
-        EnumFacing facing = getFacing(state);
-        if (TrackTools.isRailBlockAt(world, pos.offset(facing))) {
-            cart.setPosition(cart.posX, pos.getY() + 0.6f, cart.posZ);
-            cart.motionY = FALL_DOWN_CORRECTION;
-            double vel = facing.getAxisDirection().getOffset() * RIDE_UP_VELOCITY;
-            if (facing.getAxis() == EnumFacing.Axis.Z)
-                cart.motionZ = vel;
-            else
-                cart.motionX = vel;
-            return true;
+        EnumFacing.Axis axis = getAxis(state);
+        for (EnumFacing.AxisDirection direction : EnumFacing.AxisDirection.values()) {
+            if (TrackTools.isRailBlockAt(world, pos.offset(EnumFacing.getFacingFromAxis(direction, axis)))) {
+                holdPosition(state, cart, pos);
+                double vel = direction.getOffset() * RIDE_VELOCITY;
+                if (axis == EnumFacing.Axis.Z)
+                    cart.motionZ = vel;
+                else
+                    cart.motionX = vel;
+                return true;
+            }
         }
         return false;
     }
