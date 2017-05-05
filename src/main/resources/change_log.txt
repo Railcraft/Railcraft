@@ -1,3 +1,15 @@
+10.1.2-beta-3
+    NEW: Restored and redesigned Elevator Tracks. Should be much less fiddly now.
+    NEW: Restored Forestry backpacks.
+    NEW: Add Bore Head Enchantment compatibility. (contribution by liach)
+    NEW: Various IC2 integration fixes and improvements. (contribution by GeneralCamo)
+    CHANGE: Poor Ore output increased to 3 nuggets instead of 2.
+    FIX: Limit Enchantments to proper tools.
+    FIX: Experiment fix for random train unlinking.
+    FIX: Cart Disassembly recipes work again.
+    FIX: Boxes and Actuators must be placed on solid surfaces again.
+    FIX: Catch possible null entries before they get added to the creative list. (contribution by liach)
+
 10.1.1
 	NEW: Zap sounds and effects.
 	FIX: Fix crash when looking at an Admin Charge Feeder with TheOneProbe.
