@@ -374,7 +374,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     ItemStack crushedGold = classic ? ModItems.DUST_GOLD.get() : ModItems.CRUSHED_GOLD.get();
                     ItemStack crushedCopper = classic ? ModItems.DUST_COPPER.get() : ModItems.CRUSHED_COPPER.get();
                     ItemStack crushedTin = classic ? ModItems.DUST_TIN.get() : ModItems.CRUSHED_TIN.get();
-                    ItemStack crushedSilver = classic ? ModItems.DUST_TIN.get() : ModItems.CRUSHED_TIN.get();
+                    ItemStack crushedSilver = classic ? ModItems.DUST_SILVER.get() : ModItems.CRUSHED_SILVER.get();
                     ItemStack crushedLead = ModItems.CRUSHED_LEAD.get();
                     ItemStack crushedUranium = classic ? ModItems.URANIUM_DROP.get() : ModItems.CRUSHED_URANIUM.get();
 
