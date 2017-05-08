@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,9 +13,13 @@ import com.google.common.collect.Lists;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -302,6 +306,16 @@ public class Train implements Iterable<EntityMinecart> {
 
     public List<UUID> getUUIDs() {
         return safeCarts;
+    }
+
+    public IItemHandler getItemHandler() {
+        ArrayList<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
+        for (EntityMinecart cart : this) {
+            IItemHandler itemHandler = InvTools.getItemHandler(cart);
+            if (itemHandler instanceof IItemHandlerModifiable)
+                cartHandlers.add((IItemHandlerModifiable) itemHandler);
+        }
+        return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[cartHandlers.size()]));
     }
 
     public int size() {

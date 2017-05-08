@@ -48,6 +48,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Contract;
 
@@ -183,6 +184,14 @@ public abstract class InvTools {
             return new ChestWrapper(chest);
         } else if (obj instanceof IInventory) {
             return InventoryObject.get((IInventory) obj);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static IItemHandler getItemHandler(@Nullable Object obj) {
+        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+            return ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         }
         return null;
     }

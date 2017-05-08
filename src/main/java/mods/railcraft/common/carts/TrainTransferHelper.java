@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -125,6 +126,12 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             return ((IItemCart) cart).canPassItemRequests();
         IInventoryObject inv = InvTools.getInventory(cart);
         return inv != null && inv.getNumSlots() >= NUM_SLOTS;
+    }
+
+    @Override
+    public IItemHandler getTrainItemHandler(EntityMinecart cart) {
+        Train train = Train.getTrain(cart);
+        return train.getItemHandler();
     }
 
     // ***************************************************************************************************************************
