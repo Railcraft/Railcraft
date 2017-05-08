@@ -95,9 +95,9 @@ public class ThaumcraftPlugin {
                     "VYV",
                     "X#X",
                     '#', Blocks.WOOL,
-                    'V', new ItemStack(Items.POTIONITEM, 1, 8197),
+                    'V', Items.GLASS_BOTTLE,
                     'X', Items.STRING,
-                    'Y', new ItemStack(Blocks.CHEST));
+                    'Y', "chestWood");
 
             AspectList aspects = new AspectList();
             aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);
