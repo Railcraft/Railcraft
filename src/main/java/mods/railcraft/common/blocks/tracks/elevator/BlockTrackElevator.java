@@ -263,14 +263,18 @@ public class BlockTrackElevator extends BlockRailcraft {
         cart.setNoGravity(true);
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         keepMinecartConnected(pos, state, cart);
-        if (!(moveUp(world, state, cart, pos) || moveDown(world, state, cart, pos))) {
+        boolean hasPath;
+        if (getPowered(state)) {
+            hasPath = moveUp(world, state, cart, pos);
+        } else {
+            hasPath = moveDown(world, state, cart, pos);
+        }
+        if (!hasPath) {
             pushMinecartOntoRail(world, pos, state, cart);
         }
     }
 
     private boolean moveUp(World world, IBlockState state, EntityMinecart cart, BlockPos pos) {
-        if (!getPowered(state))
-            return false;
         BlockPos posUp = pos.up();
         boolean hasPath = WorldPlugin.isBlockAt(world, posUp, this) && getPowered(world, posUp);
         if (hasPath) {
@@ -283,8 +287,6 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     private boolean moveDown(World world, IBlockState state, EntityMinecart cart, BlockPos pos) {
-        if (getPowered(state))
-            return false;
         BlockPos posDown = pos.down();
         boolean hasPath = WorldPlugin.isBlockAt(world, posDown, this) && !getPowered(world, posDown);
         if (hasPath) {
