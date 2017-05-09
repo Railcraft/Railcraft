@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -114,6 +114,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     @Override
     protected void entityInit() {
         super.entityInit();
+
+        setSize(0.98F, 1F);
 
         dataManager.register(HAS_FUEL, false);
         dataManager.register(PRIMARY_COLOR, EnumColor.WHITE);

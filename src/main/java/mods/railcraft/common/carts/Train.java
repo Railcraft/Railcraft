@@ -12,11 +12,14 @@ package mods.railcraft.common.carts;
 import com.google.common.collect.Lists;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ICartBattery;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -316,6 +319,16 @@ public class Train implements Iterable<EntityMinecart> {
                 cartHandlers.add((IItemHandlerModifiable) itemHandler);
         }
         return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[cartHandlers.size()]));
+    }
+
+    public IFluidHandler getFluidHandler() {
+        ArrayList<IFluidHandler> cartHandlers = new ArrayList<>();
+        for (EntityMinecart cart : this) {
+            IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
+            if (fluidHandler != null)
+                cartHandlers.add(fluidHandler);
+        }
+        return new FluidHandlerConcatenate(cartHandlers.toArray(new IFluidHandler[cartHandlers.size()]));
     }
 
     public int size() {

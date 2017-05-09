@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,7 @@ public class Game {
     static {
         boolean obfuscated = true;
         try {
-            obfuscated = Entity.class.getDeclaredField("worldObj") == null;
+            obfuscated = Entity.class.getDeclaredField("world") == null && Entity.class.getDeclaredField("worldObj") == null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
         OBFUSCATED = obfuscated;

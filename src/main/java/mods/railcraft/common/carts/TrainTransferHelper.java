@@ -227,4 +227,10 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     private boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
         return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || Fluids.areEqual(fluid, p.getContents())));
     }
+
+    @Override
+    public IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
+        Train train = Train.getTrain(cart);
+        return train.getFluidHandler();
+    }
 }
