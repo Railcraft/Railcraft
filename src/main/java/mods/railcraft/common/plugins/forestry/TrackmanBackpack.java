@@ -65,6 +65,8 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(RailcraftItems.BOTTLE_CREOSOTE);
 
+        add(RailcraftItems.SPIKE_MAUL_IRON);
+        add(RailcraftItems.SPIKE_MAUL_STEEL);
         add(RailcraftItems.CHARGE_METER);
         add(RailcraftItems.RAIL);
         add(RailcraftItems.RAILBED);
