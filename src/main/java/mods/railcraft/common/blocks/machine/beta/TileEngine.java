@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
+import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyConnection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -43,6 +45,12 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     private boolean needsInit = true;
     //    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
+    public final RFEnergyIndicator rfIndicator = new RFEnergyIndicator(new EnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted()) {
+        @Override
+        public int getEnergyStored() {
+            return energy;
+        }
+    });
 
     protected TileEngine() {
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,8 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.gui.widgets.IIndicatorController;
+import mods.railcraft.common.gui.widgets.IndicatorController;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +26,30 @@ import java.lang.invoke.MethodHandles;
 public final class EntityCartRF extends CartBase {
     private static final DataParameter<Integer> RF = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
     private static final int RF_CAP = 2000000;
+    public final IIndicatorController rfIndicator = new IndicatorController() {
+        private int rf;
+
+        @Override
+        protected void refreshToolTip() {
+            tip.text = String.format("%,d / %,d RF", rf, getMaxRF());
+        }
+
+        @Override
+        public double getMeasurement() {
+            double e = Math.min(rf, getMaxRF());
+            return e / getMaxRF();
+        }
+
+        @Override
+        public void setClientValue(double value) {
+            rf = (int) value;
+        }
+
+        @Override
+        public double getServerValue() {
+            return getRF();
+        }
+    };
 
     public EntityCartRF(World world) {
         super(world);

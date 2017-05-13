@@ -7,14 +7,16 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.carts.EntityCartRF;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
+package mods.railcraft.common.blocks.charge;
 
-public class ContainerCartRF extends RailcraftContainer {
+/**
+ * Created by CovertJaguar on 5/13/2017 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface IChargeBattery {
+    double getCharge();
 
-    public ContainerCartRF(EntityCartRF cart) {
-        addWidget(new IndicatorWidget(cart.rfIndicator, 57, 38, 176, 0, 62, 8, false));
-    }
+    double getCapacity();
 }

@@ -33,12 +33,17 @@ public class Game {
     public static final boolean BUKKIT;
 
     static {
-        boolean obfuscated = true;
+        boolean worldFound = false;
+        boolean worldObjFound = false;
         try {
-            obfuscated = Entity.class.getDeclaredField("world") == null && Entity.class.getDeclaredField("worldObj") == null;
+            worldFound = Entity.class.getDeclaredField("world") != null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
-        OBFUSCATED = obfuscated;
+        try {
+            worldObjFound = Entity.class.getDeclaredField("worldObj") != null;
+        } catch (NoSuchFieldException | SecurityException ignored) {
+        }
+        OBFUSCATED = !worldFound && !worldObjFound;
         DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {

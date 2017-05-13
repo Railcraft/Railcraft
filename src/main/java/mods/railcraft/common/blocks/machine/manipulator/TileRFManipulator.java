@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,20 +9,24 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.common.carts.EntityCartRF;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-public abstract class TileRFManipulator extends TileManipulatorCart implements ITileRotate {
+public abstract class TileRFManipulator extends TileManipulatorCart implements IEnergyHandler {
     protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
     private static final int RF_CAP = 4000000;
-    protected int amountRF;
+    protected final EnergyStorage energyStorage = new EnergyStorage(RF_CAP);
+    public final RFEnergyIndicator rfIndicator = new RFEnergyIndicator(energyStorage);
 
     protected TileRFManipulator() {
         setInventorySize(0);
@@ -46,24 +50,16 @@ public abstract class TileRFManipulator extends TileManipulatorCart implements I
     }
 
     @Override
-    protected void upkeep() {
-        super.upkeep();
-        int capacity = getMaxRF();
-        if (amountRF > capacity)
-            amountRF = capacity;
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setInteger("rf", amountRF);
+        energyStorage.writeToNBT(data);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        amountRF = data.getInteger("rf");
+        energyStorage.readFromNBT(data);
     }
 
     @Override
@@ -84,46 +80,13 @@ public abstract class TileRFManipulator extends TileManipulatorCart implements I
         }
     }
 
-    public int addRF(int rf, boolean simulate) {
-        if (rf <= 0)
-            return 0;
-        if (amountRF >= RF_CAP)
-            return 0;
-        if (RF_CAP - amountRF >= rf) {
-            if (!simulate)
-                amountRF += rf;
-            return rf;
-        }
-        int used = RF_CAP - amountRF;
-        if (!simulate)
-            amountRF = RF_CAP;
-        return used;
+    @Override
+    public final int getEnergyStored(EnumFacing from) {
+        return energyStorage.getEnergyStored();
     }
 
-    public int removeRF(int request, boolean simulate) {
-        if (request <= 0)
-            return 0;
-        if (amountRF >= request) {
-            if (!simulate)
-                amountRF -= request;
-            return request;
-        }
-        int ret = amountRF;
-        if (!simulate)
-            amountRF = 0;
-        return ret;
+    @Override
+    public final int getMaxEnergyStored(EnumFacing from) {
+        return energyStorage.getMaxEnergyStored();
     }
-
-    public int getRF() {
-        return amountRF;
-    }
-
-    public void setRF(int energy) {
-        this.amountRF = energy;
-    }
-
-    public int getMaxRF() {
-        return RF_CAP;
-    }
-
 }

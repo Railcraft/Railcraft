@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,16 +43,16 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
     protected void processCart(EntityMinecart cart) {
         EntityCartRF rfCart = (EntityCartRF) cart;
 
-        if (amountRF < getMaxRF() && rfCart.getRF() > 0) {
+        if (energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored() && rfCart.getRF() > 0) {
             int request = TRANSFER_RATE;
 
-            int room = getMaxRF() - getRF();
+            int room = energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
             if (room < request) {
                 request = room;
             }
 
-            double extracted = rfCart.removeRF(request);
-            amountRF += extracted;
+            int extracted = rfCart.removeRF(request);
+            energyStorage.modifyEnergyStored(extracted);
             setProcessing(extracted > 0);
         }
     }
@@ -73,17 +73,7 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
 
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return removeRF(maxExtract, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        return getRF();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return getMaxRF();
+        return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
     @Override
