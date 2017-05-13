@@ -128,6 +128,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return inv != null && inv.getNumSlots() >= NUM_SLOTS;
     }
 
+    @Nullable
     @Override
     public IItemHandler getTrainItemHandler(EntityMinecart cart) {
         Train train = Train.getTrain(cart);
@@ -228,6 +229,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || Fluids.areEqual(fluid, p.getContents())));
     }
 
+    @Nullable
     @Override
     public IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
         Train train = Train.getTrain(cart);

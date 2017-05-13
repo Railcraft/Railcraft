@@ -311,6 +311,7 @@ public class Train implements Iterable<EntityMinecart> {
         return safeCarts;
     }
 
+    @Nullable
     public IItemHandler getItemHandler() {
         ArrayList<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
@@ -318,9 +319,12 @@ public class Train implements Iterable<EntityMinecart> {
             if (itemHandler instanceof IItemHandlerModifiable)
                 cartHandlers.add((IItemHandlerModifiable) itemHandler);
         }
+        if (cartHandlers.isEmpty())
+            return null;
         return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[cartHandlers.size()]));
     }
 
+    @Nullable
     public IFluidHandler getFluidHandler() {
         ArrayList<IFluidHandler> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
@@ -328,6 +332,8 @@ public class Train implements Iterable<EntityMinecart> {
             if (fluidHandler != null)
                 cartHandlers.add(fluidHandler);
         }
+        if (cartHandlers.isEmpty())
+            return null;
         return new FluidHandlerConcatenate(cartHandlers.toArray(new IFluidHandler[cartHandlers.size()]));
     }
 
