@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -53,10 +54,10 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
         IVariantEnum[] variants = getVariants();
         if (variants != null) {
             for (IVariantEnum variant : variants) {
-                list.add(getStack(variant));
+                CreativePlugin.addToList(list, getStack(variant));
             }
         } else {
-            list.add(getStack(null));
+            CreativePlugin.addToList(list, getStack(null));
         }
     }
 

@@ -18,6 +18,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -108,7 +109,7 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
     default ItemStack getStack(int qty) {
         Block block = block();
         if (block == null)
-            return null;
+            return InvTools.emptyStack();
         return new ItemStack(block, qty, ordinal());
     }
 

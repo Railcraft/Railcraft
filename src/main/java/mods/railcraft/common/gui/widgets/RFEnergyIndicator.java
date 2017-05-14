@@ -1,50 +1,46 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import cofh.api.energy.IEnergyHandler;
-import net.minecraft.util.EnumFacing;
+import cofh.api.energy.EnergyStorage;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class RFEnergyIndicator extends IndicatorController {
 
-    private int energy;
-    private final int maxEnergy;
+    private final EnergyStorage energyStorage;
+    private int rf;
 
-    public RFEnergyIndicator(IEnergyHandler energyHandler) {
-        this.maxEnergy = energyHandler.getMaxEnergyStored(null);
-    }
-
-    public RFEnergyIndicator(int maxEnergy) {
-        this.maxEnergy = maxEnergy;
+    public RFEnergyIndicator(EnergyStorage energyStorage) {
+        this.energyStorage = energyStorage;
     }
 
     @Override
     protected void refreshToolTip() {
-        tip.text = String.format("%,d / %,d RF", energy, maxEnergy);
+        tip.text = String.format("%,d / %,d RF", rf, energyStorage.getMaxEnergyStored());
     }
 
     @Override
-    public int getScaledLevel(int size) {
-        double e = Math.min(energy, maxEnergy);
-        return (int) (e * size / maxEnergy);
+    public double getMeasurement() {
+        double e = Math.min(rf, energyStorage.getMaxEnergyStored());
+        return e / energyStorage.getMaxEnergyStored();
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    @Override
+    public void setClientValue(double value) {
+        rf = (int) value;
     }
 
-    public void updateEnergy(int energy) {
-        this.energy = (int) ((this.energy * 9 + energy) / 10.0);
+    @Override
+    public double getServerValue() {
+        return energyStorage.getEnergyStored();
     }
-
 }

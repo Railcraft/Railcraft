@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
+import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -296,6 +297,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         }
 
         byte elevator = data.getByte("elevator");
+        if (elevator < BlockTrackElevator.ELEVATOR_TIMER) {
+            cart.setNoGravity(false);
+        }
         if (elevator > 0) {
             elevator--;
             data.setByte("elevator", elevator);

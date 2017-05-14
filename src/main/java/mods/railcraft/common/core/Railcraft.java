@@ -52,15 +52,15 @@ import java.util.Collection;
         guiFactory = "mods.railcraft.client.core.RailcraftGuiConfigFactory",
         updateJSON = "http://www.railcraft.info/railcraft_versions",
         dependencies = "required-after:Forge@[12.18.2.2107,);"
-                + "after:BuildCraft|Core[6.1.7,);"
+                + "after:BuildCraft|Core@[6.1.7,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
-                + "after:BuildCraftAPI|statements[1.0,);"
-                + "after:BuildCraftAPI|transport[1.0,);"
-                + "after:forestry[5.2.15,);"
+                + "after:BuildCraftAPI|statements@[1.0,);"
+                + "after:BuildCraftAPI|transport@[1.0,);"
+                + "after:forestry@[5.2.15,);"
                 + "after:Thaumcraft;"
-                + "after:IC2@[2.6.192-ex110,2.7.0-ex111)")
+                + "after:IC2@[2.6.192-ex110,2.7.0-ex111);")
 public final class Railcraft {
     public static final String NAME = "Railcraft";
     public static final String MOD_ID = "railcraft";

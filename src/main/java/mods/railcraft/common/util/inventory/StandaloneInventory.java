@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -80,7 +80,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
         return Arrays.stream(contents);
     }
 
-    public Predicate<ItemStack> precenseTest() {
+    public Predicate<ItemStack> presenceTest() {
         return StackFilters.containedIn(this);
     }
 
@@ -106,37 +106,37 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        if (contents[i] != null) {
+        if (!InvTools.isEmpty(contents[i])) {
             if (contents[i].stackSize <= j) {
                 ItemStack itemstack = contents[i];
-                contents[i] = null;
+                contents[i] = InvTools.emptyStack();
                 markDirty();
                 return itemstack;
             }
             ItemStack itemStack1 = contents[i].splitStack(j);
             if (contents[i].stackSize <= 0) {
-                contents[i] = null;
+                contents[i] = InvTools.emptyStack();
             }
             markDirty();
             return itemStack1;
         } else {
-            return null;
+            return InvTools.emptyStack();
         }
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = contents[index];
-        contents[index] = null;
+        contents[index] = InvTools.emptyStack();
         markDirty();
         return stack;
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
-        contents[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
+    public void setInventorySlotContents(int i, @Nullable ItemStack stack) {
+        contents[i] = stack;
+        if (!InvTools.isEmpty(stack) && stack.stackSize > getInventoryStackLimit()) {
+            stack.stackSize = getInventoryStackLimit();
         }
         markDirty();
     }

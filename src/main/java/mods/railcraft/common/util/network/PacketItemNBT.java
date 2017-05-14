@@ -11,6 +11,7 @@ package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.ITileRouting;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,9 +42,9 @@ public abstract class PacketItemNBT extends RailcraftPacket {
             // check the player's hands as well.
             return Stream
                     .of(sourceStack, player.getHeldItemMainhand(), player.getHeldItemOffhand())
-                    .filter(ci -> ci != null
-                            && ci.getItem() == readStack.getItem()
-                            && ci.getItem() instanceof IEditableItem)
+                    .filter(currentStack -> !InvTools.isEmpty(currentStack)
+                            && currentStack.getItem() == readStack.getItem()
+                            && currentStack.getItem() instanceof IEditableItem)
                     .findFirst().orElse(null);
         }
 
@@ -132,12 +133,12 @@ public abstract class PacketItemNBT extends RailcraftPacket {
             readLocationData(data);
             ItemStack readStack = data.readItemStack();
 
-            if (readStack == null)
+            if (InvTools.isEmpty(readStack))
                 return;
 
             ItemStack targetStack = findTargetStack(readStack);
 
-            if (targetStack == null)
+            if (InvTools.isEmpty(targetStack))
                 return;
 
             IEditableItem eItem = (IEditableItem) readStack.getItem();

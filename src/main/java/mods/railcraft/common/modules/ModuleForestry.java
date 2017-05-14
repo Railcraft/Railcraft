@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,16 +35,24 @@ public class ModuleForestry extends RailcraftModulePayload {
 
     public ModuleForestry() {
         setEnabledEventHandler(new ModuleEventHandler() {
-
             @Override
-            @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void preInit() {
-                ForestryPlugin.instance().registerBackpacks();
+            public void construction() {
+                add(
+                        RailcraftItems.BACKPACK_APOTHECARY_T1,
+                        RailcraftItems.BACKPACK_APOTHECARY_T2,
+                        RailcraftItems.BACKPACK_ICEMAN_T1,
+                        RailcraftItems.BACKPACK_ICEMAN_T2,
+                        RailcraftItems.BACKPACK_TRACKMAN_T1,
+                        RailcraftItems.BACKPACK_TRACKMAN_T2,
+                        RailcraftItems.BACKPACK_SIGNALMAN_T1,
+                        RailcraftItems.BACKPACK_SIGNALMAN_T2
+                );
             }
 
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
             public void postInit() {
+                ForestryPlugin.instance().defineBackpackRecipes();
                 ForestryPlugin.instance().setupBackpackContents();
 
                 ItemStack stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.WOOD);

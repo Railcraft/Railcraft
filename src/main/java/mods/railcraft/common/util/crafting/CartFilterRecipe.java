@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.common.carts.CartBaseFiltered;
 import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.InventoryCrafting;
@@ -65,36 +66,38 @@ public class CartFilterRecipe implements IRecipe {
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
-        ItemStack cartItem = null;
-        ItemStack filterItem = null;
+        ItemStack cartItem = InvTools.emptyStack();
+        ItemStack filterItem = InvTools.emptyStack();
         FilterType filterType = null;
         int cartSlot = -1;
         int itemCount = 0;
         int filterCartCount = 0;
-        for (IInvSlot slot : InventoryIterator.getVanilla(grid).notNull()) {
-            itemCount++;
+        for (IInvSlot slot : InventoryIterator.getVanilla(grid)) {
             ItemStack stack = slot.getStack();
-            FilterType type = FilterType.fromCartType(RailcraftCarts.getCartType(stack));
-            if (type != null) {
-                cartSlot = slot.getIndex();
-                filterType = type;
-                cartItem = stack.copy();
-                filterCartCount++;
+            if (!InvTools.isEmpty(stack)) {
+                itemCount++;
+                FilterType type = FilterType.fromCartType(RailcraftCarts.getCartType(stack));
+                if (type != null) {
+                    cartSlot = slot.getIndex();
+                    filterType = type;
+                    cartItem = stack.copy();
+                    filterCartCount++;
+                }
             }
         }
         if (filterType == null || itemCount > 2 || filterCartCount > 1)
-            return null;
-        for (IInvSlot slot : InventoryIterator.getVanilla(grid).notNull()) {
+            return InvTools.emptyStack();
+        for (IInvSlot slot : InventoryIterator.getVanilla(grid)) {
             if (slot.getIndex() == cartSlot)
                 continue;
             ItemStack stack = slot.getStack();
-            if (filterType.isAllowedFilterItem(stack)) {
+            if (!InvTools.isEmpty(stack) && filterType.isAllowedFilterItem(stack)) {
                 filterItem = stack.copy();
                 break;
             }
         }
-        if (cartItem == null || filterItem == null)
-            return null;
+        if (InvTools.isEmpty(cartItem) || InvTools.isEmpty(filterItem))
+            return InvTools.emptyStack();
 
         filterItem.stackSize = 1;
         return CartBaseFiltered.addFilterToCartItem(cartItem, filterItem);
@@ -114,9 +117,9 @@ public class CartFilterRecipe implements IRecipe {
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
-        for (IInvSlot slot : InventoryIterator.getVanilla(inv).notNull()) {
+        for (IInvSlot slot : InventoryIterator.getVanilla(inv)) {
             ItemStack stack = slot.getStack();
-            if (FilterType.fromCartType(RailcraftCarts.getCartType(stack)) == null) {
+            if (!InvTools.isEmpty(stack) && FilterType.fromCartType(RailcraftCarts.getCartType(stack)) == null) {
                 grid[slot.getIndex()] = stack.copy();
             }
         }

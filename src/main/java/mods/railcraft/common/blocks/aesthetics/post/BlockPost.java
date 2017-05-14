@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -101,7 +102,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumPost post : EnumPost.values()) {
             if (post == EnumPost.EMBLEM) continue;
-            list.add(post.getStack());
+            CreativePlugin.addToList(list, post.getStack());
         }
     }
 

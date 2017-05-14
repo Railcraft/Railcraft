@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -38,14 +41,14 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
 
     @Override
     protected ItemStack addStack(ItemStack stack, boolean doAdd) {
-        if (stack == null || stack.stackSize <= 0)
-            return null;
+        if (isEmpty(stack))
+            return emptyStack();
         stack = stack.copy();
         List<IInvSlot> filledSlots = new ArrayList<IInvSlot>(inv.getSlots());
         List<IInvSlot> emptySlots = new ArrayList<IInvSlot>(inv.getSlots());
         for (IInvSlot slot : InventoryIterator.getForge(inv)) {
             if (slot.canPutStackInSlot(stack)) {
-                if (slot.getStack() == null)
+                if (isEmpty(slot.getStack()))
                     emptySlots.add(slot);
                 else
                     filledSlots.add(slot);
@@ -57,7 +60,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         injected = tryPut(emptySlots, stack, injected, doAdd);
         stack.stackSize -= injected;
         if (stack.stackSize <= 0)
-            return null;
+            return emptyStack();
         return stack;
     }
 
@@ -87,9 +90,9 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
+            if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack removed = inv.extractItem(slot.getIndex(), amountNeeded, !doRemove);
-                if (removed != null) {
+                if (!isEmpty(removed)) {
                     amountNeeded -= removed.stackSize;
                     outputList.add(removed);
                 }

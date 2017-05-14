@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -80,13 +80,13 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
         OpenGL.glPushMatrix();
         OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glTranslatef(0.0F, -0.6F, 0.68F);
+        OpenGL.glTranslatef(0.0F, -0.9F, 0.68F);
         OpenGL.glScalef(scale, scale, scale);
         renderItem(item);
         OpenGL.glPopMatrix();
 
         OpenGL.glRotatef(-90.F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glTranslatef(0.0F, -0.6F, 0.68F);
+        OpenGL.glTranslatef(0.0F, -0.9F, 0.68F);
         OpenGL.glScalef(scale, scale, scale);
         renderItem(item);
 

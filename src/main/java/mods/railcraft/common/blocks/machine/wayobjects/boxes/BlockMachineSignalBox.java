@@ -103,6 +103,11 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         return state;
     }
 
+    @Override
+    public boolean needsSupport() {
+        return true;
+    }
+
     @Deprecated
     public boolean canTransferAspect() {
         return false;

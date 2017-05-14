@@ -46,6 +46,9 @@ public class ItemDust extends ItemRailcraftSubtyped {
         if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
             IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
         }
+        if (Mod.IC2.isLoaded() && RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
+            IC2Plugin.addMaceratorRecipe(ModItems.SLAG.get(), new ItemStack(this, 1, EnumDust.SLAG.ordinal()));
+        }
     }
 
     public enum EnumDust implements IVariantEnum {

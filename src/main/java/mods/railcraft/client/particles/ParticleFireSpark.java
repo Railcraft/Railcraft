@@ -11,6 +11,7 @@ package mods.railcraft.client.particles;
 
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -99,6 +100,16 @@ public class ParticleFireSpark extends ParticleBase {
             return;
         }
         this.particleAge++;
+
+        /**
+         * Called to spawn smoke particles with the entity
+         */
+        float f = (float)this.particleAge / (float)this.particleMaxAge;
+
+        if (this.rand.nextFloat() > f)
+        {
+            this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ, 0);
+        }
 
         double dist = getPos().squareDistanceTo(end);
         if (dist <= 0.1) {

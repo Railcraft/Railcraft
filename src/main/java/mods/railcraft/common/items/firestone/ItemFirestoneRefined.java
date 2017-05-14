@@ -209,5 +209,4 @@ public class ItemFirestoneRefined extends ItemFirestone {
         entity.setRefined(true);
         return entity;
     }
-
 }

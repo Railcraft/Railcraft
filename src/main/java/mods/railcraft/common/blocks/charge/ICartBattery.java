@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ICartBattery {
+public interface ICartBattery extends IChargeBattery {
     enum Type {
 
         /**
@@ -44,15 +44,11 @@ public interface ICartBattery {
 
     Type getType();
 
-    double getCharge();
-
     void setCharge(double charge);
 
     void addCharge(double charge);
 
     double removeCharge(double request);
-
-    double getCapacity();
 
     double getLosses();
 

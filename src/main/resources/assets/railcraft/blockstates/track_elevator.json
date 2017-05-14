@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:track_elevator",
+    "textures": {
+      "particle": "railcraft:blocks/tracks/track_elevator_off",
+      "texture": "railcraft:blocks/tracks/track_elevator_off"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "rotation": {
+      "x": {"y": 90},
+      "z": {}
+    },
+    "powered": {
+      "true": {
+        "textures": {
+          "texture": "railcraft:blocks/tracks/track_elevator_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "texture": "railcraft:blocks/tracks/track_elevator_off"
+        }
+      }
+    }
+  }
+}

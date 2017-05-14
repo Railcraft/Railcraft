@@ -180,7 +180,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumGeneric type : EnumGeneric.getCreativeList()) {
             if (type.isEnabled())
-                list.add(type.getStack());
+                CreativePlugin.addToList(list, type.getStack());
         }
     }
 

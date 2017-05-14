@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -139,7 +140,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     private final Set<Object> actions = new HashSet<Object>();
     private int processTime;
     @Nullable
-    private EnergyStorage energyStorage;
+    private final EnergyStorage energyStorage;
+    @Nullable
+    public final RFEnergyIndicator rfIndicator;
     private boolean isWorking;
     private boolean paused;
 
@@ -147,8 +150,13 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public TileRockCrusher() {
         super(18, patterns);
 
-        if (RailcraftConfig.machinesRequirePower())
+        if (RailcraftConfig.machinesRequirePower()) {
             energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
+            rfIndicator = new RFEnergyIndicator(energyStorage);
+        } else {
+            energyStorage = null;
+            rfIndicator = null;
+        }
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {

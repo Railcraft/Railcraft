@@ -22,13 +22,10 @@ import mods.railcraft.common.worldgen.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -53,22 +50,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                         RailcraftBlocks.ORE_MAGIC,
                         RailcraftBlocks.WORLD_LOGIC
                 );
-                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
-                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-                    villagerRegistry.registerVillageCreationHandler(workshop);
-
-                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
-                    villagerRegistry.register(villagerTrackman);
-
-                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
-                    VillagerTrades.define(trackmanCareer);
-
-                    try {
-                        MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
-                    } catch (Throwable ignored) {
-                    }
-                }
             }
 
             @Override
@@ -115,8 +96,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
-                    IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
-                    CraftingManager.getInstance().getRecipeList().add(recipe);
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
                 }
 
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
@@ -131,6 +111,26 @@ public class ModuleWorld extends RailcraftModulePayload {
                                 "sand",
                                 new ItemStack(Blocks.DIRT),
                                 new ItemStack(Blocks.DIRT));
+                    }
+                }
+            }
+
+            @Override
+            public void init() {
+                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
+                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
+                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+                    villagerRegistry.registerVillageCreationHandler(workshop);
+
+                    villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
+                    villagerRegistry.register(villagerTrackman);
+
+                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
+                    VillagerTrades.define(trackmanCareer);
+
+                    try {
+                        MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
+                    } catch (Throwable ignored) {
                     }
                 }
             }

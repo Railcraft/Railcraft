@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,6 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     private final EntityLocomotiveSteamSolid loco;
     private double lastBurnTime;
     private double lastItemBurnTime;
-    private double lastHeat;
 
     private ContainerLocomotiveSteamSolid(InventoryPlayer playerInv, EntityLocomotiveSteamSolid loco) {
         super(playerInv, loco, 205);
@@ -71,14 +70,10 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
 
             if (lastItemBurnTime != loco.boiler.currentItemBurnTime)
                 listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
-
-            if (lastHeat != loco.boiler.getHeat())
-                listener.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
         }
 
         this.lastBurnTime = loco.boiler.burnTime;
         this.lastItemBurnTime = loco.boiler.currentItemBurnTime;
-        this.lastHeat = loco.boiler.getHeat();
     }
 
     @Override
@@ -92,9 +87,6 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
                 break;
             case 21:
                 loco.boiler.currentItemBurnTime = value;
-                break;
-            case 22:
-                loco.boiler.setHeat(value);
                 break;
         }
     }

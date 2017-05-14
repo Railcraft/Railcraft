@@ -64,5 +64,4 @@ public class ItemFirestone extends ItemRailcraft {
     public boolean isRepairable() {
         return false;
     }
-
 }

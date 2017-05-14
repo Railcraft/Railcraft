@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.items.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -67,7 +68,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
 
     @Override
     public boolean canApplyTogether(Enchantment enchantment) {
-        return !(enchantment instanceof EnchantmentDamageRailcraft);
+        return !(enchantment instanceof EnchantmentDamageRailcraft) && !(enchantment instanceof EnchantmentDamage);
     }
 
 }

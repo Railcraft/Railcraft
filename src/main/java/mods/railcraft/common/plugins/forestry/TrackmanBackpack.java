@@ -65,25 +65,24 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(RailcraftItems.BOTTLE_CREOSOTE);
 
-        add(RailcraftItems.CROWBAR_IRON);
-        add(RailcraftItems.CROWBAR_STEEL);
-        add(RailcraftItems.SIGNAL_BLOCK_SURVEYOR);
-        add(RailcraftItems.SIGNAL_TUNER);
+        add(RailcraftItems.SPIKE_MAUL_IRON);
+        add(RailcraftItems.SPIKE_MAUL_STEEL);
+        add(RailcraftItems.CHARGE_METER);
         add(RailcraftItems.RAIL);
         add(RailcraftItems.RAILBED);
+        add(RailcraftItems.TICKET);
+        add(RailcraftItems.TICKET_GOLD);
         add(RailcraftItems.TIE);
-        add(RailcraftItems.SIGNAL_LAMP);
-        add(RailcraftItems.CIRCUIT);
         add(RailcraftItems.SIGNAL_LABEL);
         add(RailcraftItems.WHISTLE_TUNER);
-        add(RailcraftItems.MAG_GLASS);
-        add(RailcraftItems.GOGGLES);
         add(RailcraftItems.OVERALLS);
+        add(RailcraftItems.TRACK_KIT);
+        add(RailcraftItems.TRACK_PARTS);
 
+        add(RailcraftBlocks.CHARGE_FEEDER);
         add(RailcraftBlocks.MANIPULATOR);
         add(RailcraftBlocks.TRACK_ELEVATOR);
-        add(RailcraftBlocks.WAY_OBJECT);
-        add(RailcraftBlocks.DETECTOR);
+        add(RailcraftBlocks.WIRE);
     }
 
     @Override

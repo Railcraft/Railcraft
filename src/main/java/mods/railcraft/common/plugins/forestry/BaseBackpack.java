@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,10 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,7 +53,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     public void add(@Nullable ItemStack stack) {
-        if (stack == null) return;
+        if (InvTools.isEmpty(stack)) return;
         backpackFilter.acceptItem(stack);
     }
 
@@ -79,7 +82,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     @Override
     public String getName(ItemStack backpack) {
         Item item = backpack.getItem();
-        String name = ("" + I18n.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
+        String name = ("" + I18n.translateToLocal(LocalizationPlugin.convertTag(item.getUnlocalizedName()) + ".name")).trim();
 
         if (backpack.getTagCompound() != null && backpack.getTagCompound().hasKey("display", 10)) {
             NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");
@@ -89,5 +92,13 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         }
 
         return name;
+    }
+
+    public boolean stow(IInventory backpackInventory, ItemStack stackToStow) {
+        return false;
+    }
+
+    public boolean resupply(IInventory backpackInventory) {
+        return false;
     }
 }

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +25,7 @@ public class CommonProxy {
     }
 
     public String getItemDisplayName(ItemStack stack) {
-        if (stack == null)
+        if (InvTools.isEmpty(stack))
             return "";
         return stack.getDisplayName();
     }

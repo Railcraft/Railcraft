@@ -92,6 +92,11 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     }
 
     @Override
+    public boolean needsSupport() {
+        return true;
+    }
+
+    @Override
     public void defineRecipes() {
         // Define Switch Lever
         ActuatorVariant actuator = ActuatorVariant.LEVER;

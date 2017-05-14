@@ -28,10 +28,11 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -50,18 +51,15 @@ public class VillagerTrades {
 
         career.addTrade(1, new GenericTrade(offer(Blocks.RAIL, 30, 34), offer(Items.EMERALD, 2, 3)));
 
-//        if (RailcraftBlocks.TRACK_OUTFITTED.isEnabled()) {
-            for (Map.Entry<String, TrackKit> track : TrackRegistry.TRACK_KIT.getVariants().entrySet()) {
-                TrackKit kit = track.getValue();
-                if (kit != TrackRegistry.getMissingTrackKit() && kit.isEnabled()) {
-                    career.addTrade(2, new GenericTrade(offer(kit.getTrackKitItem(), 2), offer(Items.EMERALD, 1, 3)));
-                }
-            }
-//        }
+        career.addTrade(2, new TrackKitTrade());
+        career.addTrade(2, new TrackKitTrade());
+        career.addTrade(2, new TrackKitTrade());
 
         career.addTrade(2, new GenericTrade(offer(Items.MINECART), offer(Items.EMERALD, 2, 5)));
 
         career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getStack()), offer(Items.EMERALD, 32, 40)));
+
+        career.addTrade(3, new TrackKitTrade());
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_IRON), offer(Items.EMERALD, 7, 9)));
         career.addTrade(3,
@@ -173,6 +171,30 @@ public class VillagerTrades {
 
         private int stackSize(Random rand, Offer offer) {
             return MathHelper.getRandomIntegerInRange(rand, offer.min, offer.max);
+        }
+    }
+
+    private static class TrackKitTrade implements EntityVillager.ITradeList {
+
+        private static final List<TrackKit> trackKits;
+
+        static {
+            trackKits = TrackRegistry.TRACK_KIT.getVariants()
+                .values()
+                .stream()
+                .filter(kit -> kit.isEnabled() && kit.isVisible())
+                .collect(Collectors.toList());
+        }
+
+        @Override
+        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+            if (trackKits.size() == 0) 
+                return;
+            ItemStack stack = trackKits.get(random.nextInt(trackKits.size())).getTrackKitItem(2);
+            if (stack == null)
+                return;
+            recipeList.add(new MerchantRecipe(stack, null,
+                new ItemStack(Items.EMERALD, MathHelper.getRandomIntegerInRange(random, 1, 3))));
         }
     }
 }
