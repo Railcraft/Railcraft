@@ -33,13 +33,6 @@ public class ItemLocoElectric extends ItemLocomotive {
     }
 
     @Override
-    public void defineRecipes() {
-        super.defineRecipes();
-        RailcraftItems.GEAR.register();
-        RailcraftItems.PLATE.register();
-    }
-
-    @Override
     public void finalizeDefinition() {
         super.finalizeDefinition();
         //TODO: Change to battery
