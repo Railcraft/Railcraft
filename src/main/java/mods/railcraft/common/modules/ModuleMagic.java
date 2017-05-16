@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.items.firestone.FirestoneTickHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,7 +43,7 @@ public class ModuleMagic extends RailcraftModulePayload {
 
                 RailcraftEnchantments.registerEnchantment();
 
-                FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
+                MinecraftForge.EVENT_BUS.register(new FirestoneTickHandler());
             }
 
         });

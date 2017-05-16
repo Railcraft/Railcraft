@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.MapMaker;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.fluids.FluidTools;
@@ -18,6 +19,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate;
 import net.minecraftforge.items.IItemHandler;
@@ -35,61 +37,49 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings("unused")
 public class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
-    private static final Map<UUID, Train> trains = new HashMap<UUID, Train>();
+    private static final Map<World, Map<UUID, Train>> trains = new MapMaker().weakKeys().makeMap();
     private final UUID uuid;
     private final LinkedList<UUID> carts = new LinkedList<UUID>();
     private final List<UUID> safeCarts = Collections.unmodifiableList(carts);
     private final Collection<UUID> lockingTracks = new HashSet<UUID>();
+    private final World world;
     private TrainState trainState = TrainState.NORMAL;
 
     public Train(EntityMinecart cart) {
         uuid = UUID.randomUUID();
+        world = cart.worldObj;
 
-        buildTrain(null, cart);
+        buildTrain(cart);
+    }
+
+    public static Map<UUID, Train> getTrainMap(World world) {
+        return trains.computeIfAbsent(world, k -> new HashMap<>());
     }
 
     public static Train getTrain(EntityMinecart cart) {
-        Train train = trains.get(getTrainUUID(cart));
-        if (train != null && !train.containsCart(cart)) {
-            train.releaseTrain();
-            trains.remove(train.getUUID());
-            train = null;
-        }
-        if (train != null) {
-            train.validate();
-            if (train.isEmpty()) {
-                train = null;
-            }
+        Map<UUID, Train> trainMap = getTrainMap(cart.worldObj);
+        Train train = trainMap.get(getTrainUUID(cart));
+        if (train != null && (!train.containsCart(cart) || !train.isValid(cart.worldObj) || train.isEmpty())) {
+            train.buildTrain(cart);
         }
         if (train == null) {
             train = new Train(cart);
-            trains.put(train.getUUID(), train);
+            trainMap.put(train.getUUID(), train);
         }
         return train;
     }
 
-    private static Train getTrainUnsafe(EntityMinecart cart) {
+    @Nullable
+    private static Train getTrainUnsafe(@Nullable EntityMinecart cart) {
         if (cart == null)
             return null;
-        return trains.get(getTrainUUID(cart));
+        return getTrainMap(cart.worldObj).get(getTrainUUID(cart));
     }
 
     @Nullable
     public static UUID getTrainUUID(EntityMinecart cart) {
         NBTTagCompound nbt = cart.getEntityData();
         return NBTPlugin.readUUID(nbt, TRAIN_NBT);
-    }
-
-    public static void resetTrain(EntityMinecart cart) {
-        Train train = trains.remove(getTrainUUID(cart));
-        if (train != null)
-            train.releaseTrain();
-    }
-
-    public static void resetTrain(UUID uuid) {
-        Train train = trains.remove(uuid);
-        if (train != null)
-            train.releaseTrain();
     }
 
     public static boolean areInSameTrain(@Nullable EntityMinecart cart1, @Nullable EntityMinecart cart2) {
@@ -115,6 +105,23 @@ public class Train implements Iterable<EntityMinecart> {
         return train2;
     }
 
+    @Nullable
+    private static Train getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
+        Train train1 = getTrainUnsafe(cart1);
+        Train train2 = getTrainUnsafe(cart2);
+
+        if (train1 == train2)
+            return train1;
+        if (train1 == null)
+            return train2;
+        if (train2 == null)
+            return train1;
+
+        if (train1.size() >= train2.size())
+            return train1;
+        return train2;
+    }
+
     public static void removeTrainTag(EntityMinecart cart) {
         cart.getEntityData().removeTag(TRAIN_NBT);
     }
@@ -124,15 +131,15 @@ public class Train implements Iterable<EntityMinecart> {
         NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
-    @Nullable
-    public Train getTrain(@Nullable UUID cartUUID) {
-        if (cartUUID == null)
-            return null;
-        EntityMinecart cart = LinkageManager.instance().getCartFromUUID(cartUUID);
-        if (cart == null)
-            return null;
-        return getTrain(cart);
-    }
+//    @Nullable
+//    public static Train getTrain(@Nullable UUID cartUUID) {
+//        if (cartUUID == null)
+//            return null;
+//        EntityMinecart cart = CartTools.getCartFromUUID(cartUUID);
+//        if (cart == null)
+//            return null;
+//        return getTrain(cart);
+//    }
 
     public Stream<EntityMinecart> stream() {
         return StreamSupport.stream(spliterator(), false);
@@ -143,11 +150,16 @@ public class Train implements Iterable<EntityMinecart> {
         LinkageManager lm = LinkageManager.instance();
         List<EntityMinecart> entities = new ArrayList<>(carts.size());
         for (UUID cart : carts) {
-            EntityMinecart entity = lm.getCartFromUUID(cart);
+            EntityMinecart entity = CartTools.getCartFromUUID(world, cart);
             if (entity != null)
                 entities.add(entity);
         }
         return entities.iterator();
+    }
+
+    private void buildTrain(EntityMinecart first) {
+        resetTrain();
+        buildTrain(null, first);
     }
 
     private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
@@ -164,52 +176,37 @@ public class Train implements Iterable<EntityMinecart> {
             buildTrain(next, linkB);
     }
 
-    private void dropCarts(EntityMinecart cart) {
-        _removeCart(cart);
-
-        LinkageManager lm = LinkageManager.instance();
-        EntityMinecart linkA = lm.getLinkedCartA(cart);
-        EntityMinecart linkB = lm.getLinkedCartB(cart);
-
-        if (linkA != null && containsCart(linkA)) dropCarts(linkA);
-        if (linkB != null && containsCart(linkB)) dropCarts(linkB);
+    private boolean isValid(World world) {
+        return carts.stream().allMatch(id -> isCartValid(world, id));
     }
 
-    public void validate() {
-        if (!isValid()) {
-            UUID first = null;
-            for (UUID id : carts) {
-                if (isCartValid(id)) {
-                    first = id;
-                    break;
-                }
-            }
-            releaseTrain();
-            EntityMinecart firstCart;
-            if (first == null || (firstCart = LinkageManager.instance().getCartFromUUID(first)) == null)
-                trains.remove(getUUID());
-            else
-                buildTrain(null, firstCart);
-        }
-    }
-
-    private boolean isValid() {
-        for (UUID id : carts) {
-            if (!isCartValid(id))
-                return false;
-        }
-        return true;
-    }
-
-    private boolean isCartValid(UUID cartId) {
-        EntityMinecart cart = LinkageManager.instance().getCartFromUUID(cartId);
+    private boolean isCartValid(World world, UUID cartId) {
+        EntityMinecart cart = CartTools.getCartFromUUID(world, cartId);
         return cart != null && uuid.equals(getTrainUUID(cart));
     }
 
-    protected void releaseTrain() {
+    public static void repairTrain(EntityMinecart cart1, EntityMinecart cart2) {
+        Train train = getLongestTrainUnsafe(cart1, cart2);
+        if (train != null)
+            train.buildTrain(cart1);
+    }
+
+    protected void deleteTrain() {
+        resetTrain();
+        getTrainMap(world).remove(getUUID());
+    }
+
+    public static void deleteTrain(EntityMinecart cart) {
+        Train train = getTrainMap(cart.worldObj).remove(getTrainUUID(cart));
+        if (train != null)
+            train.deleteTrain();
+        removeTrainTag(cart);
+    }
+
+    protected void resetTrain() {
         LinkageManager lm = LinkageManager.instance();
         for (UUID id : carts) {
-            EntityMinecart cart = lm.getCartFromUUID(id);
+            EntityMinecart cart = CartTools.getCartFromUUID(world, id);
             if (cart != null) {
                 removeTrainTag(cart);
             }
@@ -222,18 +219,8 @@ public class Train implements Iterable<EntityMinecart> {
         return uuid;
     }
 
-    public void removeAllLinkedCarts(EntityMinecart cart) {
-        UUID cartId = cart.getPersistentID();
-        if (carts.contains(cartId)) {
-            dropCarts(cart);
-        }
-    }
-
-    public void addLink(EntityMinecart cart1, EntityMinecart cart2) {
-        if (isTrainEnd(cart1))
-            buildTrain(cart1, cart2);
-        else if (isTrainEnd(cart2))
-            buildTrain(cart2, cart1);
+    public void rebuild(EntityMinecart cart) {
+        buildTrain(cart);
     }
 
     private void _addLink(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
@@ -262,8 +249,7 @@ public class Train implements Iterable<EntityMinecart> {
         boolean removed = carts.remove(cart);
         if (removed) {
             if (carts.isEmpty()) {
-                releaseTrain();
-                trains.remove(getUUID());
+                deleteTrain();
             }
         }
         return removed;
@@ -273,11 +259,11 @@ public class Train implements Iterable<EntityMinecart> {
         return stream().anyMatch(c -> c.isPassenger(entity));
     }
 
-    public boolean containsCart(EntityMinecart cart) {
+    public boolean containsCart(@Nullable EntityMinecart cart) {
         return cart != null && carts.contains(cart.getPersistentID());
     }
 
-    public boolean isTrainEnd(EntityMinecart cart) {
+    public boolean isTrainEnd(@Nullable EntityMinecart cart) {
         return cart != null && getEnds().contains(cart.getPersistentID());
     }
 
@@ -288,10 +274,11 @@ public class Train implements Iterable<EntityMinecart> {
         return ends;
     }
 
+    @Nullable
     public EntityLocomotive getLocomotive() {
         LinkageManager lm = LinkageManager.instance();
         for (UUID id : getEnds()) {
-            EntityMinecart cart = lm.getCartFromUUID(id);
+            EntityMinecart cart = CartTools.getCartFromUUID(world, id);
             if (cart instanceof EntityLocomotive)
                 return (EntityLocomotive) cart;
         }

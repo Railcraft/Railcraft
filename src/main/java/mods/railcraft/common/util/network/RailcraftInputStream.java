@@ -27,6 +27,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.BitSet;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -48,6 +49,10 @@ public class RailcraftInputStream extends DataInputStream {
         double y = readDouble();
         double z = readDouble();
         return new Vec3d(x, y, z);
+    }
+
+    public UUID readUUID() throws IOException {
+        return new UUID(readLong(), readLong());
     }
 
     //TODO: this badly needs testing

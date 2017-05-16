@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.api.tracks.ITrackKitSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -30,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -87,7 +87,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         if (lockingCarts.contains(cart.getPersistentID()))
             return false; // Carts at the locking entrance always are on locked tracks
 
-        boolean sameTrain = Train.areInSameTrain(LinkageManager.instance().getCartFromUUID(currentCart), cart);
+        boolean sameTrain = Train.areInSameTrain(CartTools.getCartFromUUID((WorldServer) theWorldAsserted(), currentCart), cart);
 
         boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(cart) : false;
 
@@ -345,11 +345,13 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
     // To render the state of the track most accurately, we choose the "best" cart from our set of
     // carts based on distance.
+    @Nullable
     private EntityMinecart getBestCartForVisualState(List<UUID> cartsOnTrack) {
+        World world = theWorldAsserted();
         UUID cartUUID = null;
         if (!cartsOnTrack.isEmpty()) {
             cartUUID = cartsOnTrack.get(0);
-            return LinkageManager.instance().getCartFromUUID(cartUUID);
+            return CartTools.getCartFromUUID(world, cartUUID);
         } else {
             EntityMinecart closestCart = null;
             ArrayList<UUID> allCarts = new ArrayList<UUID>();
@@ -359,10 +361,10 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
             for (UUID testCartUUID : allCarts) {
                 if (closestCart == null) {
-                    closestCart = LinkageManager.instance().getCartFromUUID(testCartUUID);
+                    closestCart = CartTools.getCartFromUUID(world, testCartUUID);
                 } else {
                     double closestDist = crudeDistance(closestCart);
-                    EntityMinecart testCart = LinkageManager.instance().getCartFromUUID(testCartUUID);
+                    EntityMinecart testCart = CartTools.getCartFromUUID(world, testCartUUID);
                     if (testCart != null) {
                         double testDist = crudeDistance(testCart);
                         if (testDist < closestDist)
