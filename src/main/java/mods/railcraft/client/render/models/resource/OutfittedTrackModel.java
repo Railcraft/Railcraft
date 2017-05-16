@@ -79,14 +79,14 @@ public class OutfittedTrackModel implements IModel {
     @Override
     public Collection<ResourceLocation> getDependencies() {
         if (trackTypeModelsLocations.isEmpty()) {
-            for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
+            for (TrackType trackType : TrackRegistry.TRACK_TYPE) {
                 for (BlockRailBase.EnumRailDirection shape : BlockTrackOutfitted.SHAPE.getAllowedValues()) {
                     trackTypeModelsLocations.add(getTrackTypeModelLocation(trackType, shape));
                 }
             }
         }
         if (trackKitModelsLocations.isEmpty()) {
-            TrackRegistry.TRACK_KIT.getVariants().values().stream()
+            TrackRegistry.TRACK_KIT.stream()
                     .filter(t -> t.getRenderer() == TrackKit.Renderer.COMPOSITE)
                     .forEach(t -> {
                                 EnumSet<BlockRailBase.EnumRailDirection> shapes = EnumSet.copyOf(BlockTrackOutfitted.SHAPE.getAllowedValues());
@@ -101,14 +101,14 @@ public class OutfittedTrackModel implements IModel {
                     );
         }
         if (unifiedModelsLocations.isEmpty()) {
-            TrackRegistry.TRACK_KIT.getVariants().values().stream()
+            TrackRegistry.TRACK_KIT.stream()
                     .filter(t -> t.getRenderer() == TrackKit.Renderer.UNIFIED)
                     .forEach(trackKit -> {
                                 EnumSet<BlockRailBase.EnumRailDirection> shapes = EnumSet.copyOf(BlockTrackOutfitted.SHAPE.getAllowedValues());
                                 if (!trackKit.isAllowedOnSlopes()) {
                                     shapes.removeIf(s -> !TrackShapeHelper.isLevelStraight(s));
                                 }
-                                for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values())
+                                for (TrackType trackType : TrackRegistry.TRACK_TYPE)
                                     for (BlockRailBase.EnumRailDirection shape : shapes) {
                                         for (int state = 0; state < trackKit.getRenderStates(); state++)
                                             unifiedModelsLocations.add(getUnifiedModelLocation(trackType, trackKit, shape, state));

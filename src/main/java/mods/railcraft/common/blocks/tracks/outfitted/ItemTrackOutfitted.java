@@ -50,8 +50,8 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     @Override
     public void initializeClient() {
         ArrayList<ModelResourceLocation> textures = new ArrayList<>();
-        for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
-            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
+        for (TrackType trackType : TrackRegistry.TRACK_TYPE) {
+            for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
                 textures.add(new ModelResourceLocation(
                         new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN,
                                 MODEL_PREFIX + trackType.getName() + "." + trackKit.getName()), "inventory"));
