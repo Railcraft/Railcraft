@@ -21,7 +21,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler();
     private final LinkedHashSet<IRailcraftObjectContainer> objectContainers = new LinkedHashSet<>();
-    private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler();
+    private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
     private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
     private ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
 
@@ -61,6 +61,12 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
     }
 
     private final class BaseModuleEventHandler extends ModuleEventHandler {
+        private final IRailcraftModule owner;
+
+        private BaseModuleEventHandler(IRailcraftModule owner) {
+            this.owner = owner;
+        }
+
         @Override
         public void construction() {
             enabledEventHandler.construction();
@@ -68,6 +74,8 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void preInit() {
+            objectContainers.forEach(c -> c.addedBy(owner));
+            //Must mark all items as added first because recipe registry may register items in random order
             objectContainers.forEach(IRailcraftObjectContainer::register);
             enabledEventHandler.preInit();
         }

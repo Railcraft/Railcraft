@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -18,6 +19,7 @@ import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.ItemBottle;
@@ -129,6 +131,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     private final Supplier<Boolean> prerequisites;
     private Item item;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
+    @Nullable
+    private IRailcraftModule module;
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
@@ -172,7 +176,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
                 railcraftItem = new ItemWrapper(newItem);
             railcraftObject = Optional.of(railcraftItem);
             railcraftItem.initializeDefinintion();
-            railcraftItem.defineRecipes();
+            Railcraft.instance.recipeWaitList.add(railcraftItem);
         }
     }
 
@@ -244,13 +248,19 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
 
     @Override
     public boolean isEnabled() {
-        return RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
+        return module != null && RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
     }
 
     @Override
     public boolean isLoaded() {
         return item != null;
     }
+
+    @Override
+    public void addedBy(IRailcraftModule module) {
+        this.module = module;
+    }
+
 
     @Override
     public String toString() {

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -60,6 +61,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
 import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -145,6 +147,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     protected Object altRecipeObject;
     private Block block;
     private ItemBlock item;
+    @Nullable
+    private IRailcraftModule module;
 
     RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier, @Nullable Function<Block, ItemBlock> itemSupplier) {
         this.blockClass = blockClass;
@@ -192,7 +196,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                 throw new RuntimeException("Railcraft Blocks must implement IRailcraftBlock");
             IRailcraftBlock blockObject = (IRailcraftBlock) block;
             blockObject.initializeDefinintion();
-            blockObject.defineRecipes();
+            Railcraft.instance.recipeWaitList.add(blockObject);
 
             if (item != null) {
                 if (!(item instanceof IRailcraftItemBlock))
@@ -201,7 +205,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                     throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItemSimple");
                 IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
                 itemObject.initializeDefinintion();
-                itemObject.defineRecipes();
+                Railcraft.instance.recipeWaitList.add(itemObject);
             }
         }
     }
@@ -298,7 +302,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     @Override
     public boolean isEnabled() {
-        return RailcraftConfig.isBlockEnabled(tag);
+        return module != null && RailcraftConfig.isBlockEnabled(tag);
     }
 
     @Override
@@ -307,7 +311,14 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
+    public void addedBy(IRailcraftModule source) {
+        module = source;
+    }
+
+    @Override
     public String toString() {
         return "Block{" + tag + "}";
     }
+
+
 }
