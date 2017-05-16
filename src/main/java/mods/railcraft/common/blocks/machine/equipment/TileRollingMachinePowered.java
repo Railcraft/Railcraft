@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
@@ -50,11 +51,19 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
     private static final int MAX_ENERGY = TileRollingMachinePowered.ACTIVATION_POWER * PROCESS_TIME;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<Object>();
-    private EnergyStorage energyStorage;
+    @Nullable
+    private final EnergyStorage energyStorage;
+    @Nullable
+    public final RFEnergyIndicator rfIndicator;
 
     public TileRollingMachinePowered() {
-        if (RailcraftConfig.machinesRequirePower())
+        if (RailcraftConfig.machinesRequirePower()) {
             energyStorage = new EnergyStorage(TileRollingMachinePowered.MAX_ENERGY, TileRollingMachinePowered.MAX_RECEIVE);
+            rfIndicator = new RFEnergyIndicator(energyStorage);
+        } else {
+            energyStorage = null;
+            rfIndicator = null;
+        }
     }
 
     @Override

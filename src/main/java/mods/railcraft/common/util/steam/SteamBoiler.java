@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class SteamBoiler {
@@ -250,9 +249,19 @@ public class SteamBoiler {
         }
 
         @Override
-        public int getScaledLevel(int size) {
-            return (int) ((getHeat() - Steam.COLD_TEMP) * size / (getMaxHeat() - Steam.COLD_TEMP));
+        public double getMeasurement() {
+            return (getHeat() - Steam.COLD_TEMP) / (getMaxHeat() - Steam.COLD_TEMP);
         }
 
+        @Override
+        public double getServerValue() {
+            return getHeat();
+        }
+
+        @Override
+        public void setClientValue(double value) {
+            setHeat(value);
+        }
     }
+
 }

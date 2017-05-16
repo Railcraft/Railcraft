@@ -1,3 +1,10 @@
+10.2.0-alpha-1
+    NEW: Added Shunting Aura to Goggles for inspecting train linkage issues.
+    NEW: "/railcraft debug" now print the debug info for the block/cart the player is looking at.
+
+10.1.2
+    API: Added a Train wide IItemHandler and IFluidHandler provider for interfacing with Architect.
+
 10.1.2-beta-3
     NEW: Restored and redesigned Elevator Tracks. Should be much less fiddly now.
     NEW: Restored Forestry backpacks.

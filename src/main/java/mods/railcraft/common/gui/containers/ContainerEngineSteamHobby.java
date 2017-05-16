@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
@@ -14,8 +15,6 @@ import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWater;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
-import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
@@ -28,9 +27,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     private double lastBurnTime;
     private double lastItemBurnTime;
     private float lastOutput;
-    private double lastHeat;
-    private int lastEnergy;
-    private final RFEnergyIndicator energyIndicator;
 
     public ContainerEngineSteamHobby(InventoryPlayer inventoryplayer, TileEngineSteamHobby tile) {
         super(tile);
@@ -40,8 +36,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         addWidget(new FluidGaugeWidget(tile.getTankManager().get(1), 107, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
-        energyIndicator = new RFEnergyIndicator(tile.maxEnergy());
-        addWidget(new IndicatorWidget(energyIndicator, 94, 25, 182, 61, 6, 43));
+        addWidget(new IndicatorWidget(tile.rfIndicator, 94, 25, 182, 61, 6, 43));
 
         addSlot(new SlotFuel(tile, 0, 62, 39));
         addSlot(new SlotWater(tile, 1, 143, 21));
@@ -64,8 +59,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
         listener.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
-        listener.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
-        PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 14, tile.energy);
     }
 
     @Override
@@ -81,19 +74,11 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
 
             if (lastOutput != tile.currentOutput)
                 crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
-
-            if (lastHeat != tile.boiler.getHeat())
-                crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
-
-            if (lastEnergy != tile.energy)
-                PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 15, tile.energy);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
         this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
         this.lastOutput = tile.currentOutput;
-        this.lastHeat = tile.boiler.getHeat();
-        this.lastEnergy = tile.energy;
     }
 
     @Override
@@ -109,15 +94,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
                 break;
             case 12:
                 tile.currentOutput = value / 100f;
-                break;
-            case 13:
-                tile.boiler.setHeat(value);
-                break;
-            case 14:
-                energyIndicator.setEnergy(value);
-                break;
-            case 15:
-                energyIndicator.updateEnergy(value);
                 break;
         }
     }

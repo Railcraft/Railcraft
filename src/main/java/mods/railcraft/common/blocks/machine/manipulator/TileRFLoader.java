@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,14 +37,14 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
     protected void processCart(EntityMinecart cart) {
         EntityCartRF rfCart = (EntityCartRF) cart;
 
-        if (amountRF > 0 && rfCart.getRF() < rfCart.getMaxRF()) {
+        if (energyStorage.getEnergyStored() > 0 && rfCart.getRF() < rfCart.getMaxRF()) {
             int injection = TRANSFER_RATE;
-            if (injection > amountRF) {
-                injection = amountRF;
+            if (injection > energyStorage.getEnergyStored()) {
+                injection = energyStorage.getEnergyStored();
             }
             int used = rfCart.addRF(injection);
             if (used > 0) {
-                amountRF -= used;
+                energyStorage.modifyEnergyStored(-used);
                 setProcessing(true);
             }
         }
@@ -76,17 +76,7 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return addRF(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        return amountRF;
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return getMaxRF();
+        return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override

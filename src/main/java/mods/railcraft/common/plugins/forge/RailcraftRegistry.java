@@ -129,7 +129,7 @@ public final class RailcraftRegistry {
      */
     public static void register(Item item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
-            throw new RuntimeException("Items must be initialized in Construction or PreInit!");
+            throw new RuntimeException("Items must be initialized in Construction or PreInit:" + item.getRegistryName());
         GameRegistry.register(item);
         RailcraftItemStackRegistry.register(item, new ItemStack(item));
         if (Game.DEVELOPMENT_ENVIRONMENT)

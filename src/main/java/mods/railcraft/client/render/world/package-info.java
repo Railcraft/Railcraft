@@ -7,14 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.gui.containers;
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.client.render.world;
 
-import mods.railcraft.common.carts.EntityCartRF;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import mcp.MethodsReturnNonnullByDefault;
 
-public class ContainerCartRF extends RailcraftContainer {
-
-    public ContainerCartRF(EntityCartRF cart) {
-        addWidget(new IndicatorWidget(cart.rfIndicator, 57, 38, 176, 0, 62, 8, false));
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -131,8 +131,10 @@ public class ModuleCore extends RailcraftModulePayload {
                         RailcraftItems.MAG_GLASS,
                         RailcraftItems.GOGGLES,
                         RailcraftItems.OVERALLS,
-                        RailcraftItems.NUGGET,
-                        RailcraftItems.NOTEPAD
+                        RailcraftItems.NOTEPAD,
+
+                        RailcraftItems.RAIL,
+                        RailcraftItems.TIE
                 );
             }
 
@@ -152,6 +154,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new CraftingHandler());
                 MinecraftForge.EVENT_BUS.register(new SoundLimiterTicker());
                 MinecraftForge.EVENT_BUS.register(new MinecartRiderAIDisabler());
+                MinecraftForge.EVENT_BUS.register(new ShuntingAuraTickHandler());
                 MinecraftForge.EVENT_BUS.register(new Object() {
                     @SubscribeEvent
                     public void logout(PlayerEvent.PlayerLoggedOutEvent event) {

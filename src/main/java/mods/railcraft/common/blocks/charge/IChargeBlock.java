@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -185,7 +185,7 @@ public interface IChargeBlock {
         }
     }
 
-    class ChargeBattery {
+    class ChargeBattery implements IChargeBattery {
         public static final String NBT_CHARGE_TAG = "charge";
         public static final double DEFAULT_MAX_CHARGE = 20000.0;
         private double charge;
@@ -194,6 +194,7 @@ public interface IChargeBlock {
             return false;
         }
 
+        @Override
         public double getCharge() {
             return charge;
         }
@@ -202,6 +203,7 @@ public interface IChargeBlock {
             this.charge = charge;
         }
 
+        @Override
         public double getCapacity() {
             return DEFAULT_MAX_CHARGE;
         }

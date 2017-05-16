@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -300,6 +301,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;
     private final RailcraftBlocks container;
+    @Nullable
+    private IRailcraftModule module;
 
     BrickTheme(RailcraftBlocks container, MapColor mapColor) {
         this.container = container;
@@ -382,11 +385,18 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 
     @Override
     public boolean isEnabled() {
-        return container.isEnabled();
+        return module != null && container.isEnabled();
     }
 
     @Override
     public boolean isLoaded() {
         return container.isLoaded();
     }
+
+    @Override
+    public void addedBy(IRailcraftModule source) {
+        module = source;
+    }
+
+
 }

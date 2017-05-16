@@ -80,11 +80,10 @@ public class LinkageHandler {
      *
      * @param cart1 EntityMinecart
      * @param cart2 EntityMinecart
-     * @param link  char
      */
-    protected void adjustVelocity(EntityMinecart cart1, EntityMinecart cart2, char link) {
+    protected void adjustVelocity(EntityMinecart cart1, EntityMinecart cart2, LinkageManager.LinkType linkType) {
         String timer = LINK_A_TIMER;
-        if (link == 'B')
+        if (linkType == LinkageManager.LinkType.LINK_B)
             timer = LINK_B_TIMER;
         if (cart1.worldObj.provider.getDimension() != cart2.worldObj.provider.getDimension()) {
             short count = cart1.getEntityData().getShort(timer);
@@ -193,60 +192,47 @@ public class LinkageHandler {
      * adjustments need to be made.
      *
      * @param cart EntityMinecart
-     * @param lm   LinkageManager
      */
-    private void adjustCart(EntityMinecart cart, LinkageManager lm) {
-        int launched = cart.getEntityData().getInteger("Launched");
-        if (launched > 0)
+    private void adjustCart(EntityMinecart cart) {
+        if (isLaunched(cart))
             return;
 
         if (isOnElevator(cart))
             return;
 
-        boolean linked = false;
-
-        EntityMinecart link_A = lm.getLinkedCartA(cart);
-        if (link_A != null) {
-//            // sanity check to ensure links are consistent
-//            if (!Train.areInSameTrain(cart, link_A)) {
-//                lm.breakLink(cart, link_A);
-//                lm.createLink(cart, link_A);
-//                return;
-//            }
-            launched = link_A.getEntityData().getInteger("Launched");
-            if (launched <= 0 && !isOnElevator(link_A)) {
-                linked = true;
-                adjustVelocity(cart, link_A, 'A');
-//                adjustCartFromHistory(cart, link_A);
-            }
-        }
-
-        EntityMinecart link_B = lm.getLinkedCartB(cart);
-        if (link_B != null) {
-//            // sanity check to ensure links are consistent
-//            if (!Train.areInSameTrain(cart, link_B)) {
-//                lm.breakLink(cart, link_B);
-//                lm.createLink(cart, link_B);
-//                return;
-//            }
-            launched = link_B.getEntityData().getInteger("Launched");
-            if (launched <= 0 && !isOnElevator(link_B)) {
-                linked = true;
-                adjustVelocity(cart, link_B, 'B');
-//                adjustCartFromHistory(cart, link_B);
-            }
-        }
+        boolean linkedA = adjustLinkedCart(cart, LinkageManager.LinkType.LINK_A);
+        boolean linkedB = adjustLinkedCart(cart, LinkageManager.LinkType.LINK_B);
+        boolean linked = linkedA || linkedB;
 
         if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class) && !CartTools.isTravellingHighSpeed(cart)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }
 
-        if (link_A == null && link_B == null)
-            Train.getTrain(cart).setMaxSpeed(1.2f);
-        else if (link_A == null || link_B == null)
-            Train.getTrain(cart).refreshMaxSpeed();
+        Train train = Train.getTrain(cart);
+        if (train.size() == 1)
+            train.setMaxSpeed(1.2f);
+        else if (train.isTrainEnd(cart))
+            train.refreshMaxSpeed();
 
+    }
+
+    private boolean adjustLinkedCart(EntityMinecart cart, LinkageManager.LinkType linkType) {
+        boolean linked = false;
+        LinkageManager lm = LinkageManager.instance();
+        EntityMinecart link = lm.getLinkedCart(cart, linkType);
+        if (link != null) {
+            // sanity check to ensure links are consistent
+            if (!lm.areLinked(cart, link)) {
+                lm.repairLink(cart, link);
+            }
+            if (!isLaunched(link) && !isOnElevator(link)) {
+                linked = true;
+                adjustVelocity(cart, link, linkType);
+//                adjustCartFromHistory(cart, link);
+            }
+        }
+        return linked;
     }
 
 //    /**
@@ -324,20 +310,15 @@ public class LinkageHandler {
     public void onMinecartUpdate(MinecartUpdateEvent event) {
         EntityMinecart cart = event.getMinecart();
 
-        LinkageManager lm = LinkageManager.instance();
-
-        if (!cart.isEntityAlive()) {
-            lm.removeLinkageId(cart);
-            return;
-        }
-
-        // Causes a link id cache store
-        lm.getLinkageId(cart);
-
         // Physics done here
-        adjustCart(cart, lm);
+        adjustCart(cart);
 
 //        savePosition(cart);
+    }
+
+    private boolean isLaunched(EntityMinecart cart) {
+        int launched = cart.getEntityData().getInteger("Launched");
+        return launched > 0;
     }
 
     private boolean isOnElevator(EntityMinecart cart) {

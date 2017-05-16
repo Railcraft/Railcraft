@@ -11,6 +11,7 @@ package mods.railcraft.common.worldgen;
 
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
@@ -50,6 +51,7 @@ public class VillagerTrades {
 
         career.addTrade(1, new GenericTrade(offer(Blocks.RAIL, 30, 34), offer(Items.EMERALD, 2, 3)));
 
+        career.addTrade(2, new TrackKitTrade());
         career.addTrade(2, new TrackKitTrade());
         career.addTrade(2, new TrackKitTrade());
 

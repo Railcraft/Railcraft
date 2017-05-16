@@ -34,10 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -198,4 +195,60 @@ public class CartTools {
         range = range * 64.0D * CartConstants.RENDER_DIST_MULTIPLIER;
         return distance < range * range;
     }
+
+    public static List<String> getDebugOutput(EntityMinecart cart) {
+        List<String> debug = new ArrayList<>();
+        debug.add("Railcraft Minecart Data Dump");
+        debug.add("Object: " + cart);
+        debug.add("UUID: " + cart.getPersistentID());
+        debug.add("Owner: " + CartToolsAPI.getCartOwner(cart).getName());
+        LinkageManager lm = LinkageManager.instance();
+        debug.add("LinkA: " + lm.getLinkA(cart));
+        debug.add("LinkB: " + lm.getLinkB(cart));
+        debug.add("Train: " + Train.getTrain(cart).getUUID());
+        debug.add("Train Carts:");
+        for (UUID uuid : Train.getTrain(cart).getUUIDs()) {
+            debug.add("  " + uuid);
+        }
+        return debug;
+    }
+
+    /**
+     * Returns a minecart from a persistent UUID. Only returns carts from the same world.
+     *
+     * @param id Cart's persistent UUID
+     * @return EntityMinecart
+     */
+    @Nullable
+    public static EntityMinecart getCartFromUUID(World world, UUID id) {
+        if (world instanceof WorldServer) {
+            Entity entity = ((WorldServer) world).getEntityFromUuid(id);
+            if (entity instanceof EntityMinecart && entity.isEntityAlive()) {
+                return (EntityMinecart) entity;
+            }
+        } else {
+            for (Entity entity : world.loadedEntityList) {
+                if (entity instanceof EntityMinecart && entity.isEntityAlive() && entity.getPersistentID().equals(id))
+                    return (EntityMinecart) entity;
+            }
+        }
+        return null;
+    }
+
+//    /**
+//     * Returns a minecart from a persistent UUID. Returns carts from any World.
+//     *
+//     * @param id Cart's persistent UUID
+//     * @return EntityMinecart
+//     */
+//    @Nullable
+//    public static EntityMinecart getCartFromUUID(UUID id) {
+//        for (WorldServer world : DimensionManager.getWorlds()) {
+//            Entity entity = world.getEntityFromUuid(id);
+//            if (entity instanceof EntityMinecart && entity.isEntityAlive()) {
+//                return (EntityMinecart) entity;
+//            }
+//        }
+//        return null;
+//    }
 }

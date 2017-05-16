@@ -22,13 +22,10 @@ import mods.railcraft.common.worldgen.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -99,8 +96,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
-                    IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
-                    CraftingManager.getInstance().getRecipeList().add(recipe);
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
                 }
 
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {

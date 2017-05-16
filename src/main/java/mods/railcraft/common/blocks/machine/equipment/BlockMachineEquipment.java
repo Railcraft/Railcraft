@@ -81,7 +81,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> {
                     "CSC",
                     "PCP",
                     'P', "plankWood",
-                    'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron",
+                    'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) && RailcraftItems.PLATE.isEnabled() ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron",
                     'C', new ItemStack(Items.GOLDEN_CARROT));
         }
 

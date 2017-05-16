@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
@@ -25,7 +26,6 @@ public class ContainerBoilerSolid extends RailcraftContainer {
     private TileBoilerFireboxSolid tile;
     private double lastBurnTime;
     private double lastItemBurnTime;
-    private double lastHeat;
     private boolean wasBurning;
 
     public ContainerBoilerSolid(InventoryPlayer inventoryplayer, TileBoilerFireboxSolid tile) {
@@ -61,7 +61,6 @@ public class ContainerBoilerSolid extends RailcraftContainer {
 
         listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        listener.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
         listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
     }
 
@@ -76,16 +75,12 @@ public class ContainerBoilerSolid extends RailcraftContainer {
             if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
                 listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (lastHeat != tile.boiler.getHeat())
-                listener.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
-
             if (wasBurning != tile.boiler.isBurning())
                 listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
         this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
-        this.lastHeat = tile.boiler.getHeat();
         this.wasBurning = tile.boiler.isBurning();
     }
 
@@ -99,9 +94,6 @@ public class ContainerBoilerSolid extends RailcraftContainer {
                 break;
             case 11:
                 tile.boiler.currentItemBurnTime = value;
-                break;
-            case 12:
-                tile.boiler.setHeat(value);
                 break;
             case 13:
                 tile.boiler.setBurning(value != 0);
