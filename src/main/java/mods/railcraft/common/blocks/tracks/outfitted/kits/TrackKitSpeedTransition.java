@@ -17,7 +17,6 @@ import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -53,8 +52,6 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
-            BlockRailBase.EnumRailDirection dir = getRailDirectionRaw();
-            World world = theWorldAsserted();
             if (speed > BOOST_THRESHOLD) {
                 BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
                 boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
@@ -72,7 +69,7 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
                     }
                 }
             } else {
-                CartTools.startBoost(cart, getPos(), dir, START_BOOST);
+                CartTools.startBoost(cart, getPos(), getRailDirectionRaw(), START_BOOST);
             }
         }
     }

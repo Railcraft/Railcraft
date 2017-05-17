@@ -34,7 +34,6 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@SuppressWarnings("deprecation")
 public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<TrackKit>> {
 
     ACTIVATOR(2, "activator", 8, TrackKitActivator.class, () -> recipe(Items.REDSTONE, Items.REDSTONE)),
