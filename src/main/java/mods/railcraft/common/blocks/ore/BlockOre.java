@@ -94,8 +94,6 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
             }
         }
 
-        RailcraftItems.DUST.register();
-
         for (EnumOre ore : EnumOre.VALUES) {
             if (ore.isEnabled())
                 OreDictionary.registerOre(ore.getOreTag(), ore.getStack());

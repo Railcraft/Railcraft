@@ -224,14 +224,14 @@ public class ModuleTransport extends RailcraftModulePayload {
                         "GPG",
                         "PGP",
                         "GPG",
-                        'P', RailcraftItems.PLATE.getRecipeObject(Metal.IRON),
+                        'P', RailcraftItems.PLATE, Metal.IRON,
                         'G', "paneGlassColorless");
 
                 defineIronTank(EnumMachineBeta.TANK_IRON_VALVE,
                         "GPG",
                         "PLP",
                         "GPG",
-                        'P', RailcraftItems.PLATE.getRecipeObject(Metal.IRON),
+                        'P', RailcraftItems.PLATE, Metal.IRON,
                         'L', new ItemStack(Blocks.LEVER),
                         'G', new ItemStack(Blocks.IRON_BARS));
             }
@@ -240,20 +240,20 @@ public class ModuleTransport extends RailcraftModulePayload {
                 defineTank(EnumMachineBeta.TANK_STEEL_WALL,
                         "PP",
                         "PP",
-                        'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL));
+                        'P', RailcraftItems.PLATE, Metal.STEEL);
 
                 defineTank(EnumMachineBeta.TANK_STEEL_GAUGE,
                         "GPG",
                         "PGP",
                         "GPG",
-                        'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
+                        'P', RailcraftItems.PLATE, Metal.STEEL,
                         'G', "paneGlassColorless");
 
                 defineTank(EnumMachineBeta.TANK_STEEL_VALVE,
                         "GPG",
                         "PLP",
                         "GPG",
-                        'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
+                        'P', RailcraftItems.PLATE, Metal.STEEL,
                         'L', new ItemStack(Blocks.LEVER),
                         'G', new ItemStack(Blocks.IRON_BARS));
             }

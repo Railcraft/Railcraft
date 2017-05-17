@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.Game;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.SimpleMessage;
@@ -28,11 +29,11 @@ import java.util.function.Supplier;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InitializationConditional<T extends IRailcraftObjectContainer<?>> {
+public class InitializationConditional {
     private List<Condition> conditions = new ArrayList<>();
     private Supplier<String> failureReason = () -> "";
 
-    public boolean test(T objectContainer) {
+    public boolean test(IRailcraftObjectContainer<?> objectContainer) {
         for (Condition condition : conditions) {
             if (!condition.predicate.test(objectContainer)) {
                 failureReason = condition.failureReason;
@@ -42,7 +43,7 @@ public class InitializationConditional<T extends IRailcraftObjectContainer<?>> {
         return true;
     }
 
-    public void printFailureReason(T objectContainer) {
+    public void printFailureReason(IRailcraftObjectContainer<?> objectContainer) {
         Game.log(Level.INFO, new SimpleMessage(objectContainer + " cannot be defined because " + failureReason.get()));
     }
 
@@ -58,6 +59,10 @@ public class InitializationConditional<T extends IRailcraftObjectContainer<?>> {
         add(o -> RailcraftModuleManager.isModuleEnabled(moduleClass), () -> "Module " + RailcraftModuleManager.getModuleName(moduleClass) + " is disabled");
     }
 
+    public void add(Mod mod) {
+        add(o -> mod.isLoaded(), () -> "Mod " + mod.modId + " is not ");
+    }
+
     public void add(IVariantEnum variant) {
         add(o -> variant.isEnabled(), () -> "Object Variant " + variant.getClass().getSimpleName() + "." + variant.getName() + " is disabled");
     }
@@ -66,15 +71,15 @@ public class InitializationConditional<T extends IRailcraftObjectContainer<?>> {
         add(o -> condition.getAsBoolean(), failureReason);
     }
 
-    public void add(Predicate<T> condition, Supplier<String> failureReason) {
+    public void add(Predicate<IRailcraftObjectContainer<?>> condition, Supplier<String> failureReason) {
         conditions.add(new Condition(condition, failureReason));
     }
 
     private class Condition {
-        private final Predicate<T> predicate;
+        private final Predicate<IRailcraftObjectContainer<?>> predicate;
         private final Supplier<String> failureReason;
 
-        public Condition(Predicate<T> predicate, Supplier<String> failureReason) {
+        public Condition(Predicate<IRailcraftObjectContainer<?>> predicate, Supplier<String> failureReason) {
             this.predicate = predicate;
             this.failureReason = failureReason;
         }
