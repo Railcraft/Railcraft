@@ -17,6 +17,8 @@ import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,9 +26,10 @@ import java.io.IOException;
 
 public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKitReversible {
 
-    private static final double BOOST_AMOUNT = 0.04;
+    private static final double BOOST_AMOUNT = 0.06;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
+    private static final double START_BOOST = 0.02;
     private boolean reversed;
 
     @Override
@@ -51,6 +54,8 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
+            BlockRailBase.EnumRailDirection dir = getRailDirectionRaw();
+            World world = theWorldAsserted();
             if (speed > BOOST_THRESHOLD) {
                 BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
                 boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
@@ -66,6 +71,18 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
                     } else {
                         slowOrNormalCartSpeed(cart, highSpeed);
                     }
+                }
+            } else if (dir == BlockRailBase.EnumRailDirection.EAST_WEST) {
+                if (world.isSideSolid(getPos().west(), EnumFacing.EAST)) {
+                    cart.motionX = START_BOOST;
+                } else if (world.isSideSolid(getPos().east(), EnumFacing.WEST)) {
+                    cart.motionX = -START_BOOST;
+                }
+            } else if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+                if (world.isSideSolid(getPos().north(), EnumFacing.SOUTH)) {
+                    cart.motionZ = START_BOOST;
+                } else if (world.isSideSolid(getPos().south(), EnumFacing.NORTH)) {
+                    cart.motionZ = -START_BOOST;
                 }
             }
         }

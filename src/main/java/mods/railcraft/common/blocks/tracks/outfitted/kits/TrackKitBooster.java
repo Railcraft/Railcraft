@@ -86,9 +86,23 @@ public class TrackKitBooster extends TrackKitPowered {
     private void onMinecartPassHighSpeed(EntityMinecart cart) {
         if (isPowered()) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
+            EnumRailDirection dir = getRailDirectionRaw();
+            World world = theWorldAsserted();
             if (speed > BOOST_THRESHOLD) {
                 cart.motionX += (cart.motionX / speed) * BOOST_FACTOR_HS;
                 cart.motionZ += (cart.motionZ / speed) * BOOST_FACTOR_HS;
+            } else if (dir == EnumRailDirection.EAST_WEST) {
+                if (world.isSideSolid(getPos().west(), EnumFacing.EAST)) {
+                    cart.motionX = START_BOOST;
+                } else if (world.isSideSolid(getPos().east(), EnumFacing.WEST)) {
+                    cart.motionX = -START_BOOST;
+                }
+            } else if (dir == EnumRailDirection.NORTH_SOUTH) {
+                if (world.isSideSolid(getPos().north(), EnumFacing.SOUTH)) {
+                    cart.motionZ = START_BOOST;
+                } else if (world.isSideSolid(getPos().south(), EnumFacing.NORTH)) {
+                    cart.motionZ = -START_BOOST;
+                }
             }
         } else {
             boolean highSpeed = CartTools.isTravellingHighSpeed(cart);

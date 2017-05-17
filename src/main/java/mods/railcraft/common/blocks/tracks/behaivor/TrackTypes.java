@@ -143,7 +143,7 @@ public enum TrackTypes {
         }
 
         @Override
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             return speedController.getMaxSpeed(world, cart, pos);
         }
     }

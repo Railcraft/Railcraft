@@ -359,7 +359,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted)
-            return ((TileTrackOutfitted) tile).getTrackKitInstance().getRailMaxSpeed(world, cart, pos);
+            return ((TileTrackOutfitted) tile).getTrackKitInstance().getRailMaxSpeed(world, cart, pos, ((TileTrackOutfitted) tile).getTrackType());
         return 0.4f;
     }
 
