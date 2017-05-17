@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -34,12 +35,12 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ContainerAnvil extends ContainerRepair {
+    public static int MAX_COST = 50;
 
     private final IInventory outputSlot = new InventoryCraftResult();
     private final World world;
     private final EntityPlayer thePlayer;
     private final BlockPos pos;
-    private int stackSizeToBeUsedInRepair;
     private String repairedItemName;
     private final IInventory inputSlots;
 
@@ -76,9 +77,9 @@ public class ContainerAnvil extends ContainerRepair {
             ItemStack input1 = input1original.copy();
             ItemStack input2 = inputSlots.getStackInSlot(1);
             Map<Enchantment, Integer> input1Enchantments = EnchantmentHelper.getEnchantments(input1);
-            boolean isEnchantedBook = false;
             baseCost = baseCost + input1original.getRepairCost() + (input2 == null ? 0 : input2.getRepairCost());
             this.materialCost = 0;
+            boolean isEnchantedBook = false;
 
             if (input2 != null) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
@@ -112,46 +113,38 @@ public class ContainerAnvil extends ContainerRepair {
                     }
 
                     if (input1.isItemStackDamageable() && !isEnchantedBook) {
-                        int k2 = input1original.getMaxDamage() - input1original.getItemDamage();
-                        int l2 = input2.getMaxDamage() - input2.getItemDamage();
-                        int i3 = l2 + input1.getMaxDamage() * 12 / 100;
-                        int j3 = k2 + i3;
-                        int k3 = input1.getMaxDamage() - j3;
+                        int health1 = input1original.getMaxDamage() - input1original.getItemDamage();
+                        int health2 = input2.getMaxDamage() - input2.getItemDamage();
+                        int repairAmount = health2 + input1.getMaxDamage() * 12 / 100;
+                        int newHealth = health1 + repairAmount;
+                        int damage1 = input1.getMaxDamage() - newHealth;
 
-                        if (k3 < 0) {
-                            k3 = 0;
+                        if (damage1 < 0) {
+                            damage1 = 0;
                         }
 
-                        if (k3 < input1.getMetadata()) {
-                            input1.setItemDamage(k3);
+                        if (damage1 < input1.getMetadata()) {
+                            input1.setItemDamage(damage1);
                             enchantCost += 2;
                         }
                     }
 
                     Map<Enchantment, Integer> input2Enchantments = EnchantmentHelper.getEnchantments(input2);
 
-                    for (Enchantment input2Enchantment : input2Enchantments.keySet()) {
+                    for (@Nullable Enchantment input2Enchantment : input2Enchantments.keySet()) {
                         if (input2Enchantment != null) {
                             int input1EnchantLevel = input1Enchantments.containsKey(input2Enchantment) ? input1Enchantments.get(input2Enchantment) : 0;
                             int input2EnchantLevel = input2Enchantments.get(input2Enchantment);
-                            int highestLevel;
-
-                            if (input1EnchantLevel == input2EnchantLevel) {
-                                ++input2EnchantLevel;
-                                highestLevel = input2EnchantLevel;
-                            } else {
-                                highestLevel = Math.max(input2EnchantLevel, input1EnchantLevel);
-                            }
-
-                            input2EnchantLevel = highestLevel;
+                            input2EnchantLevel = input1EnchantLevel == input2EnchantLevel ? input2EnchantLevel + 1 : Math.max(input2EnchantLevel, input1EnchantLevel);
                             boolean canApplyEnchants = input2Enchantment.canApply(input1original);
 
                             if (thePlayer.capabilities.isCreativeMode || input1original.getItem() == Items.ENCHANTED_BOOK) {
                                 canApplyEnchants = true;
                             }
 
-                            for (Enchantment input1Enchantment : input1Enchantments.keySet()) {
-                                if (input1Enchantment != input2Enchantment && !(input2Enchantment.canApplyTogether(input1Enchantment) && input1Enchantment.canApplyTogether(input2Enchantment))) //Forge BugFix: Let Both enchantments veto being together
+                            for (@Nullable Enchantment input1Enchantment : input1Enchantments.keySet()) {
+                                // Null check to prevent crash
+                                if (input1Enchantment != null && input1Enchantment != input2Enchantment && !(input2Enchantment.canApplyTogether(input1Enchantment) && input1Enchantment.canApplyTogether(input2Enchantment))) //Forge BugFix: Let Both enchantments veto being together
                                 {
                                     canApplyEnchants = false;
                                     ++enchantCost;
@@ -213,12 +206,12 @@ public class ContainerAnvil extends ContainerRepair {
             }
 
             // Railcraft changes max cost from 39 to 50
-            if (nameCost == enchantCost && nameCost > 0 && maximumCost > 50) {
-                this.maximumCost = 50;
+            if (nameCost == enchantCost && nameCost > 0 && maximumCost > MAX_COST) {
+                this.maximumCost = MAX_COST;
             }
 
             // Here too
-            if (maximumCost > 50 && !thePlayer.capabilities.isCreativeMode) {
+            if (maximumCost > MAX_COST && !thePlayer.capabilities.isCreativeMode) {
                 input1 = null;
             }
 
@@ -229,7 +222,9 @@ public class ContainerAnvil extends ContainerRepair {
                     repairCost = input2.getRepairCost();
                 }
 
-                repairCost = repairCost * 2 + 1;
+                if (nameCost != enchantCost || nameCost == 0) {
+                    repairCost = repairCost * 2 + 1;
+                }
                 input1.setRepairCost(repairCost);
                 EnchantmentHelper.setEnchantments(input1Enchantments, input1);
             }
@@ -241,6 +236,8 @@ public class ContainerAnvil extends ContainerRepair {
 
     /**
      * used by the Anvil GUI to update the Item Name being typed by the player
+     *
+     * We override it to point at our version of repairedItemName
      */
     @Override
     public void updateItemName(String par1Str) {
