@@ -34,6 +34,9 @@ public class ModuleCharge extends RailcraftModulePayload {
 
                 add(
                         RailcraftItems.CHARGE_METER,
+                        RailcraftItems.TURBINE_ROTOR,
+                        RailcraftItems.TURBINE_BLADE,
+                        RailcraftItems.TURBINE_DISK,
 //                        RailcraftBlocks.track,
                         RailcraftBlocks.CHARGE_FEEDER,
                         RailcraftBlocks.CHARGE_TRAP,
@@ -53,10 +56,8 @@ public class ModuleCharge extends RailcraftModulePayload {
                             "BPB",
                             "P P",
                             "BPB",
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
+                            'P', RailcraftItems.PLATE, Metal.STEEL,
                             'B', "blockSteel");
-
-                    RailcraftItems.TURBINE_ROTOR.register();
 
                     CraftingPlugin.addRecipe(new RotorRepairRecipe());
 

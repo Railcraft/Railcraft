@@ -134,7 +134,8 @@ public class ModuleCore extends RailcraftModulePayload {
                         RailcraftItems.NOTEPAD,
 
                         RailcraftItems.RAIL,
-                        RailcraftItems.TIE
+                        RailcraftItems.TIE,
+                        RailcraftItems.REBAR
                 );
             }
 

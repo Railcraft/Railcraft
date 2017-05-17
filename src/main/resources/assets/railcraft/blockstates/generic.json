@@ -20,7 +20,9 @@
       "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},
       "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}},
 	  "nickel": {"textures": {"all": "railcraft:blocks/metal_nickel"}},
-	  "invar": {"textures": {"all": "railcraft:blocks/metal_invar"}}
+	  "invar": {"textures": {"all": "railcraft:blocks/metal_invar"}},
+	  "zinc": {"textures": {"all": "railcraft:blocks/metal_zinc"}},
+	  "brass": {"textures": {"all": "railcraft:blocks/metal_brass"}}
     }
   }
 }

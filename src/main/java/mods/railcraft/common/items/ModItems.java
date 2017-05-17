@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 public enum ModItems {
 
     SILK(Mod.FORESTRY, "craftingMaterial", 3),
+    STURDY_CASING(Mod.FORESTRY, "sturdyMachine"),
     BAT_BOX(Mod.IC2, "te#batbox"),
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),

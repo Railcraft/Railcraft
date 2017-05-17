@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,6 +25,8 @@ public class ModuleTracks extends RailcraftModulePayload {
                         RailcraftItems.TRACK_KIT,
                         RailcraftItems.SPIKE_MAUL_IRON,
                         RailcraftItems.SPIKE_MAUL_STEEL,
+                        RailcraftItems.RAILBED,
+                        RailcraftItems.TRACK_PARTS,
                         RailcraftBlocks.ACTUATOR,
                         RailcraftBlocks.TRACK_OUTFITTED,
 //                        RailcraftBlocks.TRACK_JUNCTION_IRON,

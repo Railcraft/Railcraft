@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -26,6 +25,8 @@ import mods.railcraft.common.fluids.ItemBottle;
 import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
+import mods.railcraft.common.modules.ModuleMagic;
+import mods.railcraft.common.modules.ModuleSignals;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -49,31 +50,59 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSimple> {
-    ARMOR_BOOTS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.FEET), "armor_boots_steel", Items.IRON_BOOTS),
-    ARMOR_HELMET_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.HEAD), "armor_helmet_steel", Items.IRON_HELMET),
-    ARMOR_LEGGINGS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor_leggings_steel", Items.IRON_LEGGINGS),
-    ARMOR_CHESTPLATE_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor_chestplate_steel", Items.IRON_CHESTPLATE),
-    AXE_STEEL(ItemSteelAxe::new, "tool_axe_steel", Items.IRON_AXE),
+    ARMOR_BOOTS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.FEET), "armor_boots_steel", () -> Items.IRON_BOOTS),
+    ARMOR_HELMET_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.HEAD), "armor_helmet_steel", () -> Items.IRON_HELMET),
+    ARMOR_LEGGINGS_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor_leggings_steel", () -> Items.IRON_LEGGINGS),
+    ARMOR_CHESTPLATE_STEEL(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor_chestplate_steel", () -> Items.IRON_CHESTPLATE),
+    AXE_STEEL(ItemSteelAxe::new, "tool_axe_steel", () -> Items.IRON_AXE),
     BACKPACK_APOTHECARY_T1(() -> ForestryPlugin.instance().getBackpack("apothecary", "NORMAL"),
-            "backpack_apothecary_t1", null, Mod.FORESTRY::isLoaded),
+            "backpack_apothecary_t1") {{
+        conditions().add(Mod.FORESTRY);
+        conditions().add(ModuleMagic.class);
+    }},
     BACKPACK_APOTHECARY_T2(() -> ForestryPlugin.instance().getBackpack("apothecary", "WOVEN"),
-            "backpack_apothecary_t2", null, Mod.FORESTRY::isLoaded),
+            "backpack_apothecary_t2") {{
+        conditions().add(Mod.FORESTRY);
+        conditions().add(ModuleMagic.class);
+    }},
     BACKPACK_ICEMAN_T1(() -> ForestryPlugin.instance().getBackpack("iceman", "NORMAL"),
-            "backpack_iceman_t1", null, Mod.FORESTRY::isLoaded),
+            "backpack_iceman_t1") {{
+        conditions().add(Mod.FORESTRY);
+    }},
     BACKPACK_ICEMAN_T2(() -> ForestryPlugin.instance().getBackpack("iceman", "WOVEN"),
-            "backpack_iceman_t2", null, Mod.FORESTRY::isLoaded),
+            "backpack_iceman_t2") {{
+        conditions().add(Mod.FORESTRY);
+    }},
     BACKPACK_TRACKMAN_T1(() -> ForestryPlugin.instance().getBackpack("trackman", "NORMAL"),
-            "backpack_trackman_t1", null, Mod.FORESTRY::isLoaded),
+            "backpack_trackman_t1") {{
+        conditions().add(Mod.FORESTRY);
+    }},
     BACKPACK_TRACKMAN_T2(() -> ForestryPlugin.instance().getBackpack("trackman", "WOVEN"),
-            "backpack_trackman_t2", null, Mod.FORESTRY::isLoaded),
+            "backpack_trackman_t2") {{
+        conditions().add(Mod.FORESTRY);
+    }},
     BACKPACK_SIGNALMAN_T1(() -> ForestryPlugin.instance().getBackpack("signalman", "NORMAL"),
-            "backpack_signalman_t1", null, Mod.FORESTRY::isLoaded),
+            "backpack_signalman_t1") {{
+        conditions().add(Mod.FORESTRY);
+        conditions().add(ModuleSignals.class);
+    }},
     BACKPACK_SIGNALMAN_T2(() -> ForestryPlugin.instance().getBackpack("signalman", "WOVEN"),
-            "backpack_signalman_t2", null, Mod.FORESTRY::isLoaded),
-    BLEACHED_CLAY(ItemRailcraft::new, "bleached_clay", Items.CLAY_BALL, RailcraftBlocks.BRICK_BLEACHED_BONE::isEnabled),
-    BORE_HEAD_IRON(ItemBoreHeadIron::new, "borehead_iron", null, RailcraftCarts.BORE::isEnabled),
-    BORE_HEAD_STEEL(ItemBoreHeadSteel::new, "borehead_steel", null, RailcraftCarts.BORE::isEnabled),
-    BORE_HEAD_DIAMOND(ItemBoreHeadDiamond::new, "borehead_diamond", null, RailcraftCarts.BORE::isEnabled),
+            "backpack_signalman_t2") {{
+        conditions().add(Mod.FORESTRY);
+        conditions().add(ModuleSignals.class);
+    }},
+    BLEACHED_CLAY(ItemRailcraft::new, "bleached_clay", () -> Items.CLAY_BALL) {{
+        conditions().add(RailcraftBlocks.BRICK_BLEACHED_BONE);
+    }},
+    BORE_HEAD_IRON(ItemBoreHeadIron::new, "borehead_iron") {{
+        conditions().add(RailcraftCarts.BORE);
+    }},
+    BORE_HEAD_STEEL(ItemBoreHeadSteel::new, "borehead_steel") {{
+        conditions().add(RailcraftCarts.BORE);
+    }},
+    BORE_HEAD_DIAMOND(ItemBoreHeadDiamond::new, "borehead_diamond") {{
+        conditions().add(RailcraftCarts.BORE);
+    }},
     CHARGE_METER(ItemChargeMeter::new, "tool_charge_meter"),
     CIRCUIT(ItemCircuit::new, "circuit"),
     COKE(ItemCoke::new, "fuel_coke"),
@@ -82,8 +111,12 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool_crowbar_steel"),
-    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium", null, Mod.THAUMCRAFT::isLoaded),
-    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void", null, Mod.THAUMCRAFT::isLoaded),
+    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
+        conditions().add(Mod.THAUMCRAFT);
+    }},
+    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{
+        conditions().add(Mod.THAUMCRAFT);
+    }},
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
@@ -91,62 +124,67 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     FIRESTONE_CUT(ItemFirestone::new, "firestone_cut"),
     FIRESTONE_RAW(ItemFirestone::new, "firestone_raw"),
     FIRESTONE_REFINED(ItemFirestoneRefined::new, "firestone_refined"),
-    HOE_STEEL(ItemSteelHoe::new, "tool_hoe_steel", Items.IRON_HOE),
+    HOE_STEEL(ItemSteelHoe::new, "tool_hoe_steel", () -> Items.IRON_HOE),
     INGOT(ItemIngot::new, "ingot"),
-    LAPOTRON_UPGRADE(ItemLapotronUpgrade::new, "ic2_upgrade_lapotron", null, () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)),
+    LAPOTRON_UPGRADE(ItemLapotronUpgrade::new, "ic2_upgrade_lapotron") {{
+        conditions().add(() -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), () -> "Mod Ic2 or Ic2Classic is not installed");
+    }},
     MAG_GLASS(ItemMagnifyingGlass::new, "tool_magnifying_glass"),
     NOTEPAD(ItemNotepad::new, "tool_notepad"),
     NUGGET(ItemNugget::new, "nugget"),
     OVERALLS(ItemOveralls::new, "armor_overalls"),
-    PICKAXE_STEEL(ItemSteelPickaxe::new, "tool_pickaxe_steel", Items.IRON_PICKAXE),
+    PICKAXE_STEEL(ItemSteelPickaxe::new, "tool_pickaxe_steel", () -> Items.IRON_PICKAXE),
     PLATE(ItemPlate::new, "plate"),
     RAIL(ItemRail::new, "rail"),
     RAILBED(ItemRailbed::new, "railbed"),
-    REBAR(ItemRebar::new, "rebar", "ingotIron"),
-    ROUTING_TABLE(ItemRoutingTable::new, "routing_table", Items.WRITABLE_BOOK),
-    SHEARS_STEEL(ItemSteelShears::new, "tool_shears_steel", Items.SHEARS),
-    SHOVEL_STEEL(ItemSteelShovel::new, "tool_shovel_steel", Items.IRON_SHOVEL),
+    REBAR(ItemRebar::new, "rebar", () -> "ingotIron"),
+    ROUTING_TABLE(ItemRoutingTable::new, "routing_table", () -> Items.WRITABLE_BOOK),
+    SHEARS_STEEL(ItemSteelShears::new, "tool_shears_steel", () -> Items.SHEARS),
+    SHOVEL_STEEL(ItemSteelShovel::new, "tool_shovel_steel", () -> Items.IRON_SHOVEL),
     SIGNAL_BLOCK_SURVEYOR(ItemSignalBlockSurveyor::new, "tool_signal_surveyor"),
     SIGNAL_LABEL(ItemSignalLabel::new, "tool_signal_label"),
-    SIGNAL_LAMP(ItemSignalLamp::new, "signal_lamp", Blocks.REDSTONE_LAMP),
+    SIGNAL_LAMP(ItemSignalLamp::new, "signal_lamp", () -> Blocks.REDSTONE_LAMP),
     SIGNAL_TUNER(ItemSignalTuner::new, "tool_signal_tuner"),
     SPIKE_MAUL_IRON(ItemSpikeMaulIron::new, "tool_spike_maul_iron"),
     SPIKE_MAUL_STEEL(ItemSpikeMaulSteel::new, "tool_spike_maul_steel"),
     STONE_CARVER(ItemStoneCarver::new, "tool_stone_carver"),
-    SWORD_STEEL(ItemSteelSword::new, "tool_sword_steel", Items.IRON_SWORD),
-    TICKET(ItemTicket::new, "routing_ticket", Items.PAPER),
-    TICKET_GOLD(ItemTicketGold::new, "routing_ticket_gold", Items.GOLD_NUGGET),
+    SWORD_STEEL(ItemSteelSword::new, "tool_sword_steel", () -> Items.IRON_SWORD),
+    TICKET(ItemTicket::new, "routing_ticket", () -> Items.PAPER),
+    TICKET_GOLD(ItemTicketGold::new, "routing_ticket_gold", () -> Items.GOLD_NUGGET),
     TIE(ItemTie::new, "tie"),
-    TRACK_KIT(ItemTrackKit::new, "track_kit", null, RailcraftBlocks.TRACK_OUTFITTED::isEnabled),
-    TRACK_PARTS(ItemTrackParts::new, "track_parts", "ingotIron"),
-    TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", "ingotSteel", EnumMachineAlpha.TURBINE::isEnabled),
-    TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", "blockSteel", EnumMachineAlpha.TURBINE::isEnabled),
-    TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor", null, EnumMachineAlpha.TURBINE::isEnabled),
+    TRACK_KIT(ItemTrackKit::new, "track_kit") {{
+        conditions().add(RailcraftBlocks.TRACK_OUTFITTED);
+    }},
+    TRACK_PARTS(ItemTrackParts::new, "track_parts", () -> "ingotIron"),
+    TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", () -> "ingotSteel") {{
+        conditions().add(EnumMachineAlpha.TURBINE);
+    }},
+    TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", () -> "blockSteel") {{
+        conditions().add(EnumMachineAlpha.TURBINE);
+    }},
+    TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor") {{
+        conditions().add(EnumMachineAlpha.TURBINE);
+    }},
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();
     private final Supplier<Item> itemSupplier;
-    private final String tag;
-    @Nullable
-    private final Object altRecipeObject;
-    private final Supplier<Boolean> prerequisites;
+    private final Definition def;
     private Item item;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
-    @Nullable
-    private IRailcraftModule module;
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag) {
         this(itemSupplier, tag, null);
     }
 
-    RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Object alt) {
-        this(itemSupplier, tag, alt, () -> true);
+    RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Supplier<Object> alt) {
+        this.def = new Definition(this, tag, alt);
+        this.itemSupplier = itemSupplier;
+        conditions().add(RailcraftConfig::isItemEnabled, () -> "disabled via config");
     }
 
-    RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Object alt, Supplier<Boolean> prerequisites) {
-        this.itemSupplier = itemSupplier;
-        this.tag = tag;
-        this.altRecipeObject = alt;
-        this.prerequisites = prerequisites;
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public static void finalizeDefinitions() {
@@ -177,6 +215,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             railcraftObject = Optional.of(railcraftItem);
             railcraftItem.initializeDefinintion();
             Railcraft.instance.recipeWaitList.add(railcraftItem);
+        } else {
+            conditions().printFailureReason(this);
         }
     }
 
@@ -198,18 +238,12 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         return item;
     }
 
-    @Override
-    public String getBaseTag() {
-        return tag;
-    }
-
     public String getFullTag() {
-        return "railcraft." + tag;
+        return "railcraft." + getBaseTag();
     }
 
     @Nullable
     public ItemStack getStack(int qty, int meta) {
-        register();
         if (item == null)
             return InvTools.emptyStack();
         return new ItemStack(item, qty, meta);
@@ -221,24 +255,9 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
 
     @Nullable
     @Override
-    public ItemStack getStack(int qty, IVariantEnum variant) {
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariantObject(variant);
-        register();
         return getObject().map(i -> i.getStack(qty, variant)).orElse(null);
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        checkVariantObject(variant);
-        register();
-        Object obj = getObject().map(i -> i.getRecipeObject(variant)).orElse(null);
-        if (obj == null && variant != null)
-            obj = variant.getAlternate(this);
-        if (obj == null)
-            obj = altRecipeObject;
-        if (obj instanceof ItemStack)
-            obj = ((ItemStack) obj).copy();
-        return obj;
     }
 
     @Override
@@ -247,23 +266,12 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     @Override
-    public boolean isEnabled() {
-        return module != null && RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
-    }
-
-    @Override
     public boolean isLoaded() {
         return item != null;
     }
 
     @Override
-    public void addedBy(IRailcraftModule module) {
-        this.module = module;
-    }
-
-
-    @Override
     public String toString() {
-        return "Item{" + tag + "}";
+        return "Item{" + getBaseTag() + "}";
     }
 }

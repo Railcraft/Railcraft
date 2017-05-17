@@ -34,7 +34,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
         OreDictionary.registerOre("gearIron", RailcraftItems.GEAR.getStack(1, EnumGear.IRON));
         OreDictionary.registerOre("gearSteel", RailcraftItems.GEAR.getStack(1, EnumGear.STEEL));
         OreDictionary.registerOre("gearBronze", RailcraftItems.GEAR.getStack(1, EnumGear.BRONZE));
-        OreDictionary.registerOre("gearGoldPlate", RailcraftItems.GEAR.getStack(1, EnumGear.GOLD_PLATE));
+        OreDictionary.registerOre("gearBrass", RailcraftItems.GEAR.getStack(1, EnumGear.BRASS));
         OreDictionary.registerOre("gearInvar", RailcraftItems.GEAR.getStack(1, EnumGear.INVAR));
         OreDictionary.registerOre("gearBushing", RailcraftItems.GEAR.getStack(1, EnumGear.BUSHING));
     }
@@ -47,14 +47,17 @@ public class ItemGear extends ItemRailcraftSubtyped {
                 "TT",
                 "TT",
                 'T', "ingotBronze");
+        CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
+                "TT",
+                "TT",
+                'T', "ingotBrass");
 
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.GOLD_PLATE),
-                " G ",
-                "GBG",
-                " G ",
-                'G', "nuggetGold",
+        CraftingPlugin.addRecipe(gear.getStack(EnumGear.BRASS),
+                " I ",
+                "IBI",
+                " I ",
+                'I', "ingotBrass",
                 'B', "gearBushing");
-
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.IRON),
                 " I ",
                 "IBI",
@@ -83,13 +86,12 @@ public class ItemGear extends ItemRailcraftSubtyped {
     }
 
     public enum EnumGear implements IVariantEnum {
-
-        GOLD_PLATE("ingotGold"),
+        BRASS("blockBrass"),
         IRON("blockIron"),
         STEEL("blockSteel"),
         BUSHING("ingotBronze"),
         BRONZE("blockBronze"),
-        INVAR("blockInvar");
+        INVAR("blockInvar"),;
         public static final EnumGear[] VALUES = values();
         private Object alternate;
 

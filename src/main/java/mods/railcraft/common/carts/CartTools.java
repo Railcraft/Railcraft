@@ -81,7 +81,12 @@ public class CartTools {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
             if (!CartToolsAPI.isMinecartAt(world, pos, 0)) {
-                EntityMinecart cart = cartType.makeCart(cartStack, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
+                double h = 0.0D;
+                if (trackShape.isAscending())
+                    h = 0.5D;
+
+                EntityMinecart cart = cartType.makeCart(cartStack, world, pos.getX() + 0.5, pos.getY() + 0.0625D + h, pos.getZ() + 0.5);
                 if (cartStack.hasDisplayName())
                     cart.setCustomNameTag(cartStack.getDisplayName());
                 CartToolsAPI.setCartOwner(cart, owner);

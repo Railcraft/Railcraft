@@ -40,7 +40,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     add(brick.getContainer());
                 }
                 add(
-                        RailcraftItems.STONE_CARVER, // TODO: this can probably be removed once recipes are working right
+                        RailcraftItems.STONE_CARVER,
                         RailcraftBlocks.GLASS,
                         RailcraftBlocks.GENERIC
 //                        RailcraftBlocks.post,
