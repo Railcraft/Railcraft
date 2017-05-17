@@ -11,6 +11,7 @@ package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -32,13 +33,17 @@ public class Game {
     public static final boolean BUKKIT;
 
     static {
-        boolean obfuscated;
+        boolean worldFound = false;
+        boolean worldObjFound = false;
         try {
-            obfuscated = MinecraftServer.class.getDeclaredField("worldServers") == null;
-        } catch (NoSuchFieldException absence) {
-            obfuscated = true;
+            worldFound = Entity.class.getDeclaredField("world") != null;
+        } catch (NoSuchFieldException | SecurityException ignored) {
         }
-        OBFUSCATED = obfuscated;
+        try {
+            worldObjFound = Entity.class.getDeclaredField("worldObj") != null;
+        } catch (NoSuchFieldException | SecurityException ignored) {
+        }
+        OBFUSCATED = !worldFound && !worldObjFound;
         DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
