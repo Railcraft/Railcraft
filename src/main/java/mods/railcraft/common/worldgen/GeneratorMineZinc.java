@@ -11,7 +11,7 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
  */
 public class GeneratorMineZinc extends GeneratorMine {
 
-    private static final int Y_LEVEL = 40;
+    private static final int Y_LEVEL = 30;
     private static final int Y_RANGE = 3;
     private static final int DENSITY = 4;
     private static final int SEED = 30;
