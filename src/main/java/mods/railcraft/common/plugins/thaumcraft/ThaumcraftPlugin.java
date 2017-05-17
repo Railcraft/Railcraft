@@ -211,7 +211,7 @@ public class ThaumcraftPlugin {
             addItemAspect(RailcraftItems.PLATE.getStack(1, Metal.STEEL), new AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 1));
             addItemAspect(RailcraftItems.PLATE.getStack(1, Metal.TIN), new AspectList().add(Aspect.METAL, 3));
 
-            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.GOLD_PLATE), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 2).add(Aspect.DESIRE, 2));
+            addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.BRASS), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 2).add(Aspect.DESIRE, 2));
             addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.BUSHING), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 1));
             addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.IRON), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 4));
             addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.STEEL), new AspectList().add(Aspect.METAL, 8).add(Aspect.ORDER, 2).add(Aspect.MECHANISM, 4));

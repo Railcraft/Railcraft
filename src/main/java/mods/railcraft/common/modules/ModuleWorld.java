@@ -84,6 +84,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                         GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("nickel"))
                         GameRegistry.registerWorldGenerator(new GeneratorMineNickel(), 100);
+                    if (RailcraftConfig.isWorldGenEnabled("zinc"))
+                        GameRegistry.registerWorldGenerator(new GeneratorMineZinc(), 100);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {

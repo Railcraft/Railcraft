@@ -46,9 +46,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " C ",
                             "GPG",
                             'P', new ItemStack(Blocks.PISTON),
-                            'N', "nuggetGold",
+                            'N', RailcraftItems.PLATE.getRecipeObject(Metal.BRASS),
                             'C', "blockGlassColorless",
-                            'G', "gearGoldPlate");
+                            'G', "gearBrass");
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_LOW;

@@ -111,7 +111,18 @@ public class ModuleResources extends RailcraftModulePayload {
                         CraftingPlugin.addShapelessRecipe(Metal.INVAR.getStack(Metal.Form.INGOT,3), Items.IRON_INGOT, Items.IRON_INGOT, "ingotNickel");
                     }
 
-                        type = EnumGeneric.CRUSHED_OBSIDIAN;
+                    type = EnumGeneric.BLOCK_ZINC;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.ZINC);
+
+                    type = EnumGeneric.BLOCK_BRASS;
+                    if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
+                        initMetalBlock(Metal.BRASS);
+                    if ((RailcraftConfig.forceEnableBrassRecipe() || !OreDictPlugin.oreExists("dustBrass")) && RailcraftItems.INGOT.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(Metal.BRASS.getStack(Metal.Form.INGOT, RailcraftConfig.enableHarderBrass() ? 3 : 4), "ingotZinc", "ingotCopper", "ingotCopper", "ingotCopper");
+                    }
+
+                    type = EnumGeneric.CRUSHED_OBSIDIAN;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         ItemStack stack = type.getStack();
 

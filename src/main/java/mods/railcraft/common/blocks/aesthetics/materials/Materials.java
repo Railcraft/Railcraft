@@ -145,6 +145,8 @@ public enum Materials implements IVariantEnum {
     BRONZE("bronze", EnumGeneric.BLOCK_BRONZE::getDefaultState),
     NICKEL("nickel", EnumGeneric.BLOCK_NICKEL::getDefaultState),
     INVAR("invar", EnumGeneric.BLOCK_INVAR::getDefaultState),
+    ZINC("zinc", EnumGeneric.BLOCK_ZINC::getDefaultState),
+    BRASS("brass", EnumGeneric.BLOCK_BRASS::getDefaultState),
 
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
@@ -247,6 +249,10 @@ public enum Materials implements IVariantEnum {
         LEAD.oreTag = "blockLead";
         STEEL.oreTag = "blockSteel";
         BRONZE.oreTag = "blockBronze";
+        NICKEL.oreTag = "blockNickel";
+        INVAR.oreTag = "blockInvar";
+        ZINC.oreTag = "blockZinc";
+        BRASS.oreTag = "blockBrass";
 
         CONCRETE.sound = SoundType.STONE;
 
@@ -259,6 +265,10 @@ public enum Materials implements IVariantEnum {
         LEAD.sound = SoundType.METAL;
         STEEL.sound = SoundType.METAL;
         BRONZE.sound = SoundType.METAL;
+        NICKEL.sound = SoundType.METAL;
+        INVAR.sound = SoundType.METAL;
+        ZINC.sound = SoundType.METAL;
+        BRASS.sound = SoundType.METAL;
 
         for (Materials mat : VALUES) {
             NAMES.put(mat.name(), mat);
@@ -399,6 +409,10 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_NICKEL.getHardness();
             case INVAR:
                 return EnumGeneric.BLOCK_INVAR.getHardness();
+            case ZINC:
+                return EnumGeneric.BLOCK_ZINC.getHardness();
+            case BRASS:
+                return EnumGeneric.BLOCK_BRASS.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -429,6 +443,10 @@ public enum Materials implements IVariantEnum {
                 return EnumGeneric.BLOCK_NICKEL.getResistance() * 3f / 5f;
             case INVAR:
                 return EnumGeneric.BLOCK_INVAR.getResistance() * 3f / 5f;
+            case ZINC:
+                return EnumGeneric.BLOCK_ZINC.getResistance() * 3f / 5f;
+            case BRASS:
+                return EnumGeneric.BLOCK_BRASS.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)
