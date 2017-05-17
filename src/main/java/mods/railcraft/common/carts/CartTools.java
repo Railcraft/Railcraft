@@ -20,6 +20,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -234,21 +236,26 @@ public class CartTools {
         }
         return null;
     }
-
-//    /**
-//     * Returns a minecart from a persistent UUID. Returns carts from any World.
-//     *
-//     * @param id Cart's persistent UUID
-//     * @return EntityMinecart
-//     */
-//    @Nullable
-//    public static EntityMinecart getCartFromUUID(UUID id) {
-//        for (WorldServer world : DimensionManager.getWorlds()) {
-//            Entity entity = world.getEntityFromUuid(id);
-//            if (entity instanceof EntityMinecart && entity.isEntityAlive()) {
-//                return (EntityMinecart) entity;
-//            }
-//        }
-//        return null;
-//    }
+    
+    public static boolean startBoost(EntityMinecart cart, BlockPos pos, BlockRailBase.EnumRailDirection dir, double startBoost) {
+        World world = cart.worldObj;
+        if (dir == BlockRailBase.EnumRailDirection.EAST_WEST) {
+            if (world.isSideSolid(pos.west(), EnumFacing.EAST)) {
+                cart.motionX = startBoost;
+                return true;
+            } else if (world.isSideSolid(pos.east(), EnumFacing.WEST)) {
+                cart.motionX = -startBoost;
+                return true;
+            }
+        } else if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+            if (world.isSideSolid(pos.north(), EnumFacing.SOUTH)) {
+                cart.motionZ = startBoost;
+                return true;
+            } else if (world.isSideSolid(pos.south(), EnumFacing.NORTH)) {
+                cart.motionZ = -startBoost;
+                return true;
+            }
+        }
+        return false;
+    }
 }

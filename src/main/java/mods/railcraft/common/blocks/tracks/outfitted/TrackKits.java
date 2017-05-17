@@ -13,10 +13,8 @@ import com.google.common.collect.ObjectArrays;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.core.*;
 import mods.railcraft.common.items.ItemRail.EnumRail;
@@ -72,12 +70,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     static {
         TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
-        TrackToolsAPI.setTrackTypeFunction((tile) -> {
-            if (!(tile instanceof TileTrackOutfitted)) {
-                return TrackTypes.IRON.getTrackType();
-            }
-            return ((TileTrackOutfitted) tile).getTrackType();
-        });
 
         DETECTOR.requiresTicks = true;
         LOCKING.requiresTicks = true;
