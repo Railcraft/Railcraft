@@ -14,9 +14,13 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -72,6 +76,18 @@ public class ModuleForestry extends RailcraftModulePayload {
                             "|",
                             '#', Blocks.WOOL,
                             '|', Items.STICK);
+                }
+
+                if (Metal.BRASS.getStack(Metal.Form.INGOT) != InvTools.emptyStack() && (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing"))) {
+                        ItemStack casing = ModItems.STURDY_CASING.get();
+
+                    if (casing != InvTools.emptyStack()){
+                        CraftingPlugin.addRecipe(casing,
+                                "III",
+                                "I I",
+                                "III",
+                                'I', Metal.BRASS.getStack(Metal.Form.INGOT));
+                    }
                 }
             }
         });

@@ -44,6 +44,7 @@ public class ModuleWorld extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftBlocks.GENERIC,
                         RailcraftBlocks.ORE,
                         RailcraftBlocks.ORE_METAL,
                         RailcraftBlocks.ORE_METAL_POOR,
@@ -56,16 +57,6 @@ public class ModuleWorld extends RailcraftModulePayload {
             public void preInit() {
                 if (RailcraftConfig.vanillaOreGenChance() < 100)
                     MinecraftForge.ORE_GEN_BUS.register(new VanillaOreDisabler());
-
-                EnumGeneric cubeType = EnumGeneric.STONE_ABYSSAL;
-                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.GENERIC.register();
-                }
-
-                cubeType = EnumGeneric.STONE_QUARRIED;
-                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.GENERIC.register();
-                }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
                     GameRegistry.registerWorldGenerator(new GeneratorSaltpeter(), 100);
@@ -93,6 +84,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                         GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
                     if (RailcraftConfig.isWorldGenEnabled("nickel"))
                         GameRegistry.registerWorldGenerator(new GeneratorMineNickel(), 100);
+                    if (RailcraftConfig.isWorldGenEnabled("zinc"))
+                        GameRegistry.registerWorldGenerator(new GeneratorMineZinc(), 100);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {

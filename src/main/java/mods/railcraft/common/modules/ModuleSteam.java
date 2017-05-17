@@ -46,9 +46,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " C ",
                             "GPG",
                             'P', new ItemStack(Blocks.PISTON),
-                            'N', "nuggetGold",
+                            'N', RailcraftItems.PLATE.getRecipeObject(Metal.BRASS),
                             'C', "blockGlassColorless",
-                            'G', "gearGoldPlate");
+                            'G', "gearBrass");
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_LOW;
@@ -72,7 +72,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " C ",
                             "GPG",
                             'P', new ItemStack(Blocks.PISTON),
-                            'I', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
+                            'I', RailcraftItems.PLATE, Metal.STEEL,
                             'C', "blockGlassColorless",
                             'G', "gearSteel");
                 }
@@ -97,7 +97,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             'B', new ItemStack(Items.BUCKET),
                             'G', new ItemStack(Blocks.IRON_BARS),
                             'C', new ItemStack(Items.FIRE_CHARGE),
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL),
+                            'P', RailcraftItems.PLATE, Metal.STEEL,
                             'F', new ItemStack(Blocks.FURNACE));
                 }
 
@@ -106,7 +106,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(beta.getStack(),
                             "P",
                             "P",
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.IRON));
+                            'P', RailcraftItems.PLATE, Metal.IRON);
 
                     RailcraftCraftingManager.blastFurnace.addRecipe(beta.getStack(), true, false, 2560, RailcraftItems.INGOT.getStack(2, Metal.STEEL));
                 }
@@ -116,7 +116,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(beta.getStack(),
                             "P",
                             "P",
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.STEEL));
+                            'P', RailcraftItems.PLATE, Metal.STEEL);
                 }
             }
 

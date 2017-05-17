@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void preInit() {
-            objectContainers.forEach(c -> c.addedBy(owner));
+            objectContainers.forEach(c -> c.addedBy(owner.getClass()));
             //Must mark all items as added first because recipe registry may register items in random order
             objectContainers.forEach(IRailcraftObjectContainer::register);
             enabledEventHandler.preInit();

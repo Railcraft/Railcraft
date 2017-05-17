@@ -87,33 +87,33 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
         fontRendererObj.drawString(I18n.format("container.repair"), 60, 6, 4210752);
 
         if (repairContainer.maximumCost > 0) {
-            int k = 8453920;
+            int msgColor = 8453920;
             boolean flag = true;
-            String s = I18n.format("container.repair.cost", repairContainer.maximumCost);
+            String msg = I18n.format("container.repair.cost", repairContainer.maximumCost);
 
-            if (repairContainer.maximumCost >= 40 && !mc.thePlayer.capabilities.isCreativeMode) {
-                s = I18n.format("container.repair.expensive");
-                k = 16736352;
+            if (repairContainer.maximumCost >= ContainerAnvil.MAX_COST && !mc.thePlayer.capabilities.isCreativeMode) {
+                msg = I18n.format("container.repair.expensive");
+                msgColor = 16736352;
             } else if (!repairContainer.getSlot(2).getHasStack())
                 flag = false;
             else if (!repairContainer.getSlot(2).canTakeStack(playerInv.player))
-                k = 16736352;
+                msgColor = 16736352;
 
             if (flag) {
-                int l = -16777216 | (k & 16579836) >> 2 | k & -16777216;
-                int i1 = xSize - 8 - fontRendererObj.getStringWidth(s);
-                byte b0 = 67;
+                int color = -16777216 | (msgColor & 16579836) >> 2 | msgColor & -16777216;
+                int x = xSize - 8 - fontRendererObj.getStringWidth(msg);
+                byte y = 67;
 
                 if (fontRendererObj.getUnicodeFlag()) {
-                    drawRect(i1 - 3, b0 - 2, xSize - 7, b0 + 10, -16777216);
-                    drawRect(i1 - 2, b0 - 1, xSize - 8, b0 + 9, -12895429);
+                    drawRect(x - 3, y - 2, xSize - 7, y + 10, -16777216);
+                    drawRect(x - 2, y - 1, xSize - 8, y + 9, -12895429);
                 } else {
-                    fontRendererObj.drawString(s, i1, b0 + 1, l);
-                    fontRendererObj.drawString(s, i1 + 1, b0, l);
-                    fontRendererObj.drawString(s, i1 + 1, b0 + 1, l);
+                    fontRendererObj.drawString(msg, x, y + 1, color);
+                    fontRendererObj.drawString(msg, x + 1, y, color);
+                    fontRendererObj.drawString(msg, x + 1, y + 1, color);
                 }
 
-                fontRendererObj.drawString(s, i1, b0, k);
+                fontRendererObj.drawString(msg, x, y, msgColor);
             }
         }
 

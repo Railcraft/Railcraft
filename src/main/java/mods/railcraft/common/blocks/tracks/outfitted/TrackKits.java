@@ -10,23 +10,25 @@
 package mods.railcraft.common.blocks.tracks.outfitted;
 
 import com.google.common.collect.ObjectArrays;
-import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
-import mods.railcraft.common.core.*;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.modules.*;
+import mods.railcraft.common.modules.ModuleTracks;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
@@ -61,7 +63,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     WYE(4, "wye", 8, TrackKitSwitchWye.class),
     MESSENGER(2, "messenger", 8, TrackKitMessenger.class, () -> recipe(Items.SIGN, Items.REDSTONE)),
     ;
-  
+
     public static final TrackKits[] VALUES = values();
     private static final Set<TrackKit> TRACK_KITS = new HashSet<>(50);
     private static final Predicate<TrackType> IS_HIGH_SPEED = TrackType::isHighSpeed;
@@ -109,10 +111,10 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     }
 
     public final int recipeOutput;
-    private final String tag;
     private final int states;
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private final Supplier<List<Object[]>> recipeSupplier;
+    private final Definition def;
     private TrackKit trackKit;
     private boolean visible = true;
     private boolean allowedOnSlopes;
@@ -120,8 +122,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private int maxSupportDistance;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;
     private TrackKit.Renderer renderer = TrackKit.Renderer.COMPOSITE;
-    @Nullable
-    private IRailcraftModule module;
 
     TrackKits(int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance) {
         this(states, tag, recipeOutput, trackInstance, Collections::emptyList);
@@ -129,10 +129,15 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     TrackKits(int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Supplier<List<Object[]>> recipeSupplier) {
         this.states = states;
-        this.tag = tag;
+        this.def = new Definition(this, tag, null);
         this.recipeOutput = recipeOutput;
         this.trackInstance = trackInstance;
         this.recipeSupplier = recipeSupplier;
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public static TrackKits fromId(int id) {
@@ -165,7 +170,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
             return;
         //TODO: Add way to disable track kits
         if (trackKit == null) {
-            TrackKit.Builder builder = new TrackKit.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag), trackInstance);
+            TrackKit.Builder builder = new TrackKit.Builder(getRegistryName(), trackInstance);
             builder.setRequiresTicks(requiresTicks);
             builder.setRenderer(renderer);
             builder.setRenderStates(states);
@@ -200,17 +205,13 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     @Override
     public boolean isEnabled() {
-        return module != null && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDeprecated();
+        // TODO: Convert to conditionals
+        return IRailcraftObjectContainer.super.isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getRegistryName()) && !isDeprecated();
     }
 
     @Override
     public boolean isLoaded() {
         return trackKit != null && isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isLoaded() && RailcraftItems.TRACK_KIT.isLoaded();
-    }
-
-    @Override
-    public void addedBy(IRailcraftModule source) {
-        module = source;
     }
 
     public boolean isDeprecated() {
@@ -245,18 +246,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     public TrackKit getTrackKit() {
         return trackKit;
     }
-
-    @Override
-    public String getBaseTag() {
-        return tag;
-    }
-
-    public String getTag() {
-        return RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag();
-    }
-
-
-
     /*
     @Nullable
     private ItemStack registerRecipe() {

@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -63,7 +62,6 @@ import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -72,7 +70,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -142,22 +139,28 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     private final Function<Block, ItemBlock> itemSupplier;
     private final Class<? extends Block> blockClass;
     private final Class<? extends IVariantEnum> variantClass;
-    private final String tag;
-    private final ResourceLocation registryName;
-    protected Object altRecipeObject;
+    private final Definition def;
     private Block block;
     private ItemBlock item;
-    @Nullable
-    private IRailcraftModule module;
 
     RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier, @Nullable Function<Block, ItemBlock> itemSupplier) {
+        this(tag, blockClass, blockSupplier, itemSupplier, null);
+    }
+
+    RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier,
+                    @Nullable Function<Block, ItemBlock> itemSupplier, @Nullable Supplier<?> altRecipeObject) {
+        this.def = new Definition(this, tag, altRecipeObject);
         this.blockClass = blockClass;
         RailcraftBlockMetadata annotation = blockClass.getAnnotation(RailcraftBlockMetadata.class);
         this.variantClass = annotation != null ? annotation.variant() : null;
         this.blockSupplier = blockSupplier;
         this.itemSupplier = itemSupplier;
-        this.tag = tag;
-        this.registryName = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN + ":" + getBaseTag());
+        conditions().add(RailcraftConfig::isBlockEnabled, () -> "disabled via config");
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public static void finalizeDefinitions() {
@@ -182,12 +185,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
         if (isEnabled()) {
             block = blockSupplier.get();
-            block.setRegistryName(registryName);
-            block.setUnlocalizedName("railcraft." + tag.replace("_", "."));
+            block.setRegistryName(getRegistryName());
+            block.setUnlocalizedName("railcraft." + getBaseTag().replace("_", "."));
 
             if (itemSupplier != null) {
                 item = itemSupplier.apply(block);
-                item.setRegistryName(registryName);
+                item.setRegistryName(getRegistryName());
             }
 
             RailcraftRegistry.register(block, item);
@@ -207,11 +210,9 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                 itemObject.initializeDefinintion();
                 Railcraft.instance.recipeWaitList.add(itemObject);
             }
+        } else {
+            conditions().printFailureReason(this);
         }
-    }
-
-    protected void setAltRecipeObject(Object obj) {
-        altRecipeObject = obj;
     }
 
     @Override
@@ -259,40 +260,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         return item;
     }
 
-    @Override
-    public String getBaseTag() {
-        return tag;
-    }
-
-    public ResourceLocation getRegistryName() {
-        return registryName;
-    }
 
     @Nullable
     public Class<? extends IVariantEnum> getVariantClass() {
         return variantClass;
-    }
-
-    private void checkVariantObject(@Nullable IVariantEnum variant) {
-        if (block != null)
-            ((IRailcraftObject) block).checkVariant(variant);
-    }
-
-    @Nullable
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        checkVariantObject(variant);
-//        register(); Blocks are not created lazily like items.
-        Object obj = null;
-        if (block != null)
-            obj = ((IRailcraftObject) block).getRecipeObject(variant);
-        if (obj == null && variant != null)
-            obj = variant.getAlternate(this);
-        if (obj == null)
-            obj = altRecipeObject;
-        if (obj instanceof ItemStack)
-            obj = ((ItemStack) obj).copy();
-        return obj;
     }
 
     @Override
@@ -301,23 +272,13 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    public boolean isEnabled() {
-        return module != null && RailcraftConfig.isBlockEnabled(tag);
-    }
-
-    @Override
     public boolean isLoaded() {
         return block != null;
     }
 
     @Override
-    public void addedBy(IRailcraftModule source) {
-        module = source;
-    }
-
-    @Override
     public String toString() {
-        return "Block{" + tag + "}";
+        return "Block{" + getBaseTag() + "}";
     }
 
 
