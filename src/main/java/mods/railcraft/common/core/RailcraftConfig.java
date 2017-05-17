@@ -337,6 +337,8 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
         loadRecipeProperty("railcraft.alloy", "enableAltBronze", false, "change to '{t}=true' to forcibly enable a recipe to craft Bronze Ingots from Tin and Copper Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze recipes to supply 3 Bronze instead of 4");
+        loadRecipeProperty("railcraft.alloy", "enableAltBrass", false, "change to '{t}=true' to forcibly enable a recipe to craft Brass Ingots from Zinc and Copper Ingots, regardless of whether the Factory Module is enabled");
+        loadRecipeProperty("railcraft.alloy", "enableHarderBrass", false, "change to '{t}=true' if you want Brass recipes to supply 3 Brass instead of 4");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.alloy", "enableAltInvar", false, "change to '{t}=true' to forcibly enable a recipe to craft Invar Ingots from Iron and Nickel Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
@@ -355,6 +357,7 @@ public class RailcraftConfig {
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
         loadRecipeProperty("ic2.macerator", "slag", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Slag Dust");
         loadRecipeProperty("forestry.misc", "fertilizer", true, "change to '{t}=false' to disable the saltpeter recipe for Forestry Fertilizer");
+        loadRecipeProperty("forestry.misc", "brass.casing", true, "change to '{t}=false' to disable the brass recipe for Forestry Sturdy Casing");
         loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carpenter Tie recipe");
         loadRecipeProperty("forestry.carpenter", "torches", true, "change to '{t}=false' to disable the Carpenter Creosote Torch recipe");
         loadRecipeProperty("forestry.carpenter", "creosote.block", true, "change to '{t}=false' to disable the Carpenter Creosote Block recipe");
@@ -387,6 +390,7 @@ public class RailcraftConfig {
         worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
+        worldGen.put("zinc", get(configMain, CAT_WORLD_GEN + ".generate", "mineZinc", true, "Zinc Mine, spawns a cloud of ore over a lare but localized region"));
         worldGen.put("sky", get(configMain, CAT_WORLD_GEN + ".generate", "skyGen", false, "Spawns a copy of mines in the sky for easy configuration testing"));
 
         mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
@@ -668,12 +672,20 @@ public class RailcraftConfig {
         return getRecipeConfig("railcraft.alloy.enableAltBronze");
     }
 
+    public static boolean forceEnableBrassRecipe() {
+        return getRecipeConfig("railcraft.alloy.enableAltBrass");
+    }
+
     public static boolean forceEnableInvarRecipe() {
         return getRecipeConfig("railcraft.alloy.enableAltInvar");
     }
 
     public static boolean enableHarderBronze() {
         return getRecipeConfig("railcraft.alloy.enableHarderBronze");
+    }
+
+    public static boolean enableHarderBrass() {
+        return getRecipeConfig("railcraft.alloy.enableHarderBrass");
     }
 
     public static boolean forceEnableSteelRecipe() {

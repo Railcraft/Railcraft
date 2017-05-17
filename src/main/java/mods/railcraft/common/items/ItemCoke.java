@@ -29,7 +29,7 @@ public class ItemCoke extends ItemRailcraft {
             CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",
                     "S",
-                    'C', new ItemStack(this),
+                    'C', "fuelCoke",
                     'S', "stickWood");
         }
     }

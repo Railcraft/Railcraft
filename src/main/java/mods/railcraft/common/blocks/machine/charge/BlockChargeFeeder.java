@@ -77,10 +77,11 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
         FeederVariant.IC2.ifAvailable(v ->
                 CraftingPlugin.addRecipe(getStack(v),
                         "PCP",
-                        "CCC",
+                        "CBC",
                         "PCP",
                         'P', RailcraftItems.PLATE, Metal.TIN,
-                        'C', "ingotCopper"));
+                        'C', "ingotCopper",
+                        'B', "ingotBrass"));
     }
 
     @Nullable
