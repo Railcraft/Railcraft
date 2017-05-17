@@ -73,7 +73,6 @@ public class TrackmanBackpack extends BaseBackpack {
         add(RailcraftItems.TICKET);
         add(RailcraftItems.TICKET_GOLD);
         add(RailcraftItems.TIE);
-        add(RailcraftItems.SIGNAL_LABEL);
         add(RailcraftItems.WHISTLE_TUNER);
         add(RailcraftItems.OVERALLS);
         add(RailcraftItems.TRACK_KIT);

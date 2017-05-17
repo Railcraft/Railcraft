@@ -77,17 +77,14 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         creativeList.add(STEAM_TRAP_AUTO);
     }
 
-    private final Class<? extends IRailcraftModule> module;
-    private final String tag;
-    private final Class<? extends TileMachineBase> tile;
     private final int textureWidth, textureHeight;
+    private final Definition def;
     private ToolTip tip;
     private String toolClass = HarvestPlugin.ToolClass.PICKAXE.getToolString(2);
 
     EnumMachineAlpha(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int textureWidth, int textureHeight) {
-        this.module = module;
-        this.tile = tile;
-        this.tag = tag;
+        this.def = new Definition(tag, tile, module);
+        def.passesLight = false;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
     }
@@ -100,12 +97,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     @Override
     public Definition getDef() {
-        return null;
-    }
-
-    @Override
-    public String getBaseTag() {
-        return tag;
+        return def;
     }
 
     @Override
@@ -119,29 +111,9 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public boolean passesLight() {
-        return false;
-    }
-
-    @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(textureWidth, textureHeight);
     }
-
-    @Override
-    public Class<? extends TileMachineBase> getTileClass() {
-        return tile;
-    }
-
-    @Override
-    public TileMachineBase getTileEntity() {
-        try {
-            return tile.newInstance();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
 
     @Override
     public IRailcraftBlockContainer getContainer() {
@@ -193,6 +165,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     @Override
     public String getName() {
-        return tag.replace(".", "_");
+        return getBaseTag().replace(".", "_");
     }
 }

@@ -14,7 +14,6 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.carts.IRailcraftCartContainer;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.items.RailcraftItems;
@@ -27,6 +26,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.Steam;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -452,7 +452,7 @@ public class RailcraftConfig {
         for (TrackKits type : TrackKits.VALUES) {
 //            if (type.isDeprecated())
 //                continue;
-            loadBlockFeature(type.getTag());
+            loadBlockFeature(type.getRegistryName());
         }
 
         Map<String, Property> blocks = configBlocks.getCategory(CAT_BLOCKS);
@@ -538,6 +538,10 @@ public class RailcraftConfig {
 
         Property prop = configBlocks.get(CAT_BLOCKS, tag, true);
         enabledBlocks.put(tag, prop.getBoolean(true));
+    }
+
+    private static void loadBlockFeature(ResourceLocation registryName) {
+        loadBlockFeature(registryName.toString());
     }
 
     private static void loadBlockFeature(String tag) {
@@ -868,12 +872,17 @@ public class RailcraftConfig {
         return destructionEnabled;
     }
 
-    public static boolean isItemEnabled(String tag) {
+    public static boolean isItemEnabled(IRailcraftObjectContainer<?> itemContainer) {
+        String tag = itemContainer.getBaseTag();
         tag = MiscTools.cleanTag(tag);
         Boolean b = enabledItems.get(tag);
         if (b == null)
             throw new IllegalArgumentException("RailcraftConfig: item tag not found: " + tag);
         return b;
+    }
+
+    public static boolean isBlockEnabled(IRailcraftObjectContainer<?> block) {
+        return isBlockEnabled(block.getBaseTag());
     }
 
     public static boolean isBlockEnabled(String tag) {
@@ -885,6 +894,10 @@ public class RailcraftConfig {
         return b;
     }
 
+    public static boolean isSubBlockEnabled(ResourceLocation registryName) {
+        return isSubBlockEnabled(registryName.toString());
+    }
+
     public static boolean isSubBlockEnabled(String tag) {
         tag = MiscTools.cleanTag(tag);
         Boolean b = enabledSubBlocks.get(tag);
@@ -893,7 +906,7 @@ public class RailcraftConfig {
         return b;
     }
 
-    public static boolean isCartEnabled(IRailcraftCartContainer cart) {
+    public static boolean isCartEnabled(IRailcraftObjectContainer<?> cart) {
         String tag = cart.getBaseTag();
         tag = MiscTools.cleanTag(tag);
         Boolean enabled = entities.get(tag);

@@ -25,7 +25,9 @@ public class ModuleSignals extends RailcraftModulePayload {
                         RailcraftBlocks.SIGNAL_BOX,
                         RailcraftItems.SIGNAL_BLOCK_SURVEYOR,
                         RailcraftItems.SIGNAL_TUNER,
-                        RailcraftItems.SIGNAL_LABEL
+                        RailcraftItems.SIGNAL_LAMP,
+                        RailcraftItems.SIGNAL_LABEL,
+                        RailcraftItems.CIRCUIT
                 );
             }
         });

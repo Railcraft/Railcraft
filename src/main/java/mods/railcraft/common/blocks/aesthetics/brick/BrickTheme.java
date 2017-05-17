@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -27,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 import java.util.Optional;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.BLOCK;
@@ -301,12 +301,18 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;
     private final RailcraftBlocks container;
-    @Nullable
-    private IRailcraftModule module;
+    private final Definition def;
 
     BrickTheme(RailcraftBlocks container, MapColor mapColor) {
+        this.def = new Definition(this, "brick_" + name().toLowerCase(Locale.ROOT), null);
         this.container = container;
         this.mapColor = mapColor;
+        conditions().add(container);
+    }
+
+    @Override
+    public Definition getDef() {
+        return def;
     }
 
     public final MapColor getMapColor() {
@@ -384,19 +390,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     }
 
     @Override
-    public boolean isEnabled() {
-        return module != null && container.isEnabled();
-    }
-
-    @Override
     public boolean isLoaded() {
         return container.isLoaded();
     }
-
-    @Override
-    public void addedBy(IRailcraftModule source) {
-        module = source;
-    }
-
-
 }
