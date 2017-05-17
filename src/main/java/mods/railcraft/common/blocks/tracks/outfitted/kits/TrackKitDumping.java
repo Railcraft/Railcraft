@@ -34,7 +34,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (!isPowered()) {
+        if (!isPowered() && !theWorldAsserted().getBlockState(getPos().down()).getBlock().isVisuallyOpaque()) {
             if (cart.isBeingRidden()) {
                 CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
             }
