@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -129,13 +130,51 @@ public abstract class MiscTools {
 
     @Nullable
     public static RayTraceResult rayTracePlayerLook(EntityPlayer player) {
-        if (player.worldObj == null) return null;
-        double distance = player.capabilities != null && player.capabilities.isCreativeMode ? 5.0F : 4.5F;
-        Vec3d posVec = player.getPositionVector();
+        Entity pointedEntity = null;
+        final double reach = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
+        Vec3d eyePos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+
         Vec3d lookVec = player.getLook(1);
-        lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
-        lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
-        return player.worldObj.rayTraceBlocks(posVec, lookVec);
+        Vec3d rayVec = eyePos.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
+        Vec3d hitPos = null;
+        List<Entity> foundEntities = player.worldObj.getEntitiesInAABBexcluding(player,
+                player.getEntityBoundingBox().addCoord(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach)
+                        .expand(1.0D, 1.0D, 1.0D),
+                com.google.common.base.Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
+        double smallestDistance = reach;
+
+        for (Entity entity : foundEntities) {
+            AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expandXyz(entity.getCollisionBorderSize());
+            RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(eyePos, rayVec);
+
+            if (axisalignedbb.isVecInside(eyePos)) {
+                if (smallestDistance >= 0.0D) {
+                    pointedEntity = entity;
+                    hitPos = raytraceresult == null ? eyePos : raytraceresult.hitVec;
+                    smallestDistance = 0.0D;
+                }
+            } else if (raytraceresult != null) {
+                double hitDistance = eyePos.distanceTo(raytraceresult.hitVec);
+
+                if (hitDistance < smallestDistance || smallestDistance == 0.0D) {
+                    if (entity.getLowestRidingEntity() == player.getLowestRidingEntity() && !player.canRiderInteract()) {
+                        if (smallestDistance == 0.0D) {
+                            pointedEntity = entity;
+                            hitPos = raytraceresult.hitVec;
+                        }
+                    } else {
+                        pointedEntity = entity;
+                        hitPos = raytraceresult.hitVec;
+                        smallestDistance = hitDistance;
+                    }
+                }
+            }
+        }
+
+        if (pointedEntity != null && (smallestDistance < reach)) {
+            return new RayTraceResult(pointedEntity, hitPos);
+        }
+        return ForgeHooks.rayTraceEyes(player, reach);
     }
 
     /**

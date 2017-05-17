@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.MapMaker;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
@@ -20,7 +19,6 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -48,7 +46,6 @@ public class LinkageManager implements ILinkageManager {
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
     public static final String LINK_B_LOW = "rcLinkBLow";
-    private final Map<UUID, EntityMinecart> carts = new MapMaker().weakValues().makeMap();
 
     private LinkageManager() {
     }
@@ -72,46 +69,20 @@ public class LinkageManager implements ILinkageManager {
     }
 
     /**
-     * Removes a id:cart pairing from the linkage registry.
-     * <p/>
-     * You should not need to call this function ever, it is needed only by the
-     * LinkageHandler (internal RailcraftProxy code) in order to clean up dead
-     * links left by dead carts.
-     *
-     * @param cart The cart to remove
-     */
-    public void removeLinkageId(EntityMinecart cart) {
-        carts.remove(getLinkageId(cart));
-    }
-
-    /**
      * Returns the linkage id of the cart and adds the cart the linkage cache.
      *
      * @param cart The EntityMinecart
      * @return The linkage id
      */
     public UUID getLinkageId(EntityMinecart cart) {
-        UUID id = cart.getPersistentID();
-        if (cart.isEntityAlive())
-            carts.put(id, cart);
-        return id;
+        return cart.getPersistentID();
     }
 
-    /**
-     * Returns a minecart from a persistent UUID.
-     *
-     * @param id Cart's persistent UUID
-     * @return EntityMinecart
-     */
     @Nullable
     @Override
+    @Deprecated
     public EntityMinecart getCartFromUUID(UUID id) {
-        EntityMinecart cart = carts.get(id);
-        if (cart != null && !cart.isEntityAlive()) {
-            carts.remove(id);
-            return null;
-        }
-        return cart;
+        return null;
     }
 
     /**
@@ -229,7 +200,7 @@ public class LinkageManager implements ILinkageManager {
             setLink(cart1, cart2);
             setLink(cart2, cart1);
 
-            train.addLink(cart1, cart2);
+            train.rebuild(cart1);
 
             if (cart1 instanceof ILinkableCart)
                 ((ILinkableCart) cart1).onLinkCreated(cart2);
@@ -254,11 +225,15 @@ public class LinkageManager implements ILinkageManager {
         return true;
     }
 
-    private void setLink(EntityMinecart cart1, EntityMinecart cart2) {
-        if (getLinkedCartA(cart1) == null)
+    private boolean setLink(EntityMinecart cart1, EntityMinecart cart2) {
+        if (getLinkedCartA(cart1) == null) {
             setLink(cart1, cart2, LinkType.LINK_A);
-        else if (hasLink(cart1, LinkType.LINK_B) && getLinkedCartB(cart1) == null)
+            return true;
+        } else if (hasLink(cart1, LinkType.LINK_B) && getLinkedCartB(cart1) == null) {
             setLink(cart1, cart2, LinkType.LINK_B);
+            return true;
+        }
+        return false;
     }
 
     public UUID getLink(EntityMinecart cart, LinkType linkType) {
@@ -309,7 +284,7 @@ public class LinkageManager implements ILinkageManager {
 
     @Nullable
     public EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
-        return getCartFromUUID(getLink(cart, type));
+        return CartTools.getCartFromUUID(cart.worldObj, getLink(cart, type));
     }
 
     /**
@@ -388,6 +363,28 @@ public class LinkageManager implements ILinkageManager {
     }
 
     /**
+     * Repairs an asymmetrical link between carts
+     *
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
+     * @return true if the repair was successful.
+     */
+    public boolean repairLink(EntityMinecart cart1, EntityMinecart cart2) {
+        boolean repaired = _repairLink(cart1, cart2) && _repairLink(cart2, cart1);
+        if (repaired)
+            Train.repairTrain(cart1, cart2);
+        else
+            breakLink(cart1, cart2);
+        return repaired;
+    }
+
+    public boolean _repairLink(EntityMinecart cart1, EntityMinecart cart2) {
+        UUID link = getLinkageId(cart2);
+
+        return link.equals(getLinkA(cart1)) || link.equals(getLinkB(cart1)) || setLink(cart1, cart2);
+    }
+
+    /**
      * Breaks all links the passed cart has.
      *
      * @param cart Cart
@@ -418,12 +415,12 @@ public class LinkageManager implements ILinkageManager {
         breakLink(cart, LinkType.LINK_B);
     }
 
+    @Nullable
     private EntityMinecart breakLink(EntityMinecart cart, LinkType linkType) {
-        Train.resetTrain(cart);
+        Train.deleteTrain(cart);
         UUID link = getLink(cart, linkType);
-        cart.getEntityData().setLong(linkType.tagHigh, 0);
-        cart.getEntityData().setLong(linkType.tagLow, 0);
-        EntityMinecart other = getCartFromUUID(link);
+        removeLinkTags(cart, linkType);
+        EntityMinecart other = CartTools.getCartFromUUID(cart.worldObj, link);
         if (other != null) {
             breakLink(other, cart);
         }
@@ -432,6 +429,11 @@ public class LinkageManager implements ILinkageManager {
 
         printDebug("Carts {0}({1}) and {2}({3}) unlinked ({4}).", getLinkageId(cart), cart, link, other != null ? other : "null", linkType.name());
         return other;
+    }
+
+    private void removeLinkTags(EntityMinecart cart, LinkType linkType) {
+        cart.getEntityData().removeTag(linkType.tagHigh);
+        cart.getEntityData().removeTag(linkType.tagLow);
     }
 
     /**

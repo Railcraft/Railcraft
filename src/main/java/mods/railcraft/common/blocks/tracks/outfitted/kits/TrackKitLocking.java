@@ -21,7 +21,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.BoardingLockin
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.HoldingLockingProfile;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.LockdownLockingProfile;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.LockingProfile;
-import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -34,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -109,22 +110,22 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
      */
     @Override
     public void update() {
-
         if (Game.isHost(theWorldAsserted())) {
+            World world = theWorldAsserted();
             boolean updateClient = false; // flag determines whether we send an update to the client, only update when visible changes occur
 
-            // At the time we read from NBT, LinkageManager has not been initialized so we cannot
+            // At the time we read from NBT, the chunk has not been fully loaded so we cannot
             // lookup the carts by UUID in readFromNBT(). We must wait until update(), which
-            // occurs after LinkageManager gets initialized. The justLoaded flag lets us lookup
+            // occurs after the chunk is loaded. The justLoaded flag lets us lookup
             // the carts only after restoring from NBT.
             if (justLoaded) {
-                prevCart = LinkageManager.instance().getCartFromUUID(prevCartUUID);
-                currentCart = LinkageManager.instance().getCartFromUUID(currentCartUUID);
+                prevCart = CartTools.getCartFromUUID(world, prevCartUUID);
+                currentCart = CartTools.getCartFromUUID(world, currentCartUUID);
                 justLoaded = false;
                 updateClient = true;
             }
 
-            if (currentCart != null && currentCart.isDead) {
+            if (currentCart != null && !currentCart.isEntityAlive()) {
                 releaseCurrentCart();
                 currentCart = null;
                 updateClient = true;

@@ -12,22 +12,29 @@ package mods.railcraft.common.commands;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFactory;
 import org.apache.logging.log4j.message.MessageFormatMessageFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +52,12 @@ public class CommandDebug extends SubCommand {
     }
 
     private static void printLine(ICommandSender sender, String msg, Object... args) {
-        Message msgObj = msgFactory.newMessage(msg, args);
+        Message msgObj;
+        if (args.length == 0) {
+            msgObj = msgFactory.newMessage(msg);
+        } else {
+            msgObj = msgFactory.newMessage(msg, args);
+        }
         Game.log(DEBUG_LEVEL, msgObj);
         sender.addChatMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
     }
@@ -62,6 +74,37 @@ public class CommandDebug extends SubCommand {
 
     private static String shortCoords(BlockPos coord) {
         return String.format("[%d, %d, %d]", coord.getX(), coord.getY(), coord.getZ());
+    }
+
+    @Override
+    public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (args.length != 0)
+            CommandHelpers.throwWrongUsage(sender, this);
+
+        RayTraceResult rayTraceResult = MiscTools.rayTracePlayerLook((EntityPlayer) sender);
+        List<String> debug = Collections.emptyList();
+        switch (rayTraceResult.typeOfHit) {
+            case ENTITY:
+                Entity entity = rayTraceResult.entityHit;
+                if (entity instanceof EntityMinecart) {
+                    debug = CartTools.getDebugOutput((EntityMinecart) entity);
+                } else {
+                    CommandHelpers.throwWrongUsage(sender, this);
+                }
+                break;
+            case BLOCK:
+                World world = CommandHelpers.getWorld(sender);
+                TileEntity tile = WorldPlugin.getBlockTile(world, rayTraceResult.getBlockPos());
+                if (tile instanceof RailcraftTileEntity) {
+                    debug = ((RailcraftTileEntity) tile).getDebugOutput();
+                } else {
+                    CommandHelpers.throwWrongUsage(sender, this);
+                }
+                break;
+        }
+        for (String s : debug) {
+            printLine(sender, s);
+        }
     }
 
     public static class CommandDebugTile extends SubCommand {
