@@ -1,4 +1,5 @@
 10.2.0-alpha-2
+    NEW: Added Zinc and Brass. (contribution by GeneralCamo)
     FIX: Fix missing items from last build.
     FIX: Fix cart bounding box position issues. Issue #946
 
