@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,6 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * It also contains some generic code that most carts will find useful.
@@ -116,5 +118,15 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
         return CartTools.isInRangeToRenderDist(this, distance);
+    }
+
+    public List<String> getDebugOutput() {
+        List<String> debug = new ArrayList<>();
+        debug.add("Railcraft Entity Data Dump");
+        debug.add("Object: " + this);
+        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimension(), getPositionVector()));
+        debug.add("Owner: " + CartTools.getCartOwnerEntity(this));
+        debug.add("LinkA: " + CartTools.getCartOwnerEntity(this));
+        return debug;
     }
 }

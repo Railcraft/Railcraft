@@ -26,6 +26,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.BitSet;
+import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -47,6 +48,16 @@ public class RailcraftOutputStream extends DataOutputStream {
         writeDouble(vec.xCoord);
         writeDouble(vec.yCoord);
         writeDouble(vec.zCoord);
+    }
+
+    public void writeUUID(@Nullable UUID uuid) throws IOException {
+        if (uuid == null) {
+            writeLong(0);
+            writeLong(0);
+        } else {
+            writeLong(uuid.getMostSignificantBits());
+            writeLong(uuid.getLeastSignificantBits());
+        }
     }
 
     public void writeBitSet(BitSet bitSet) throws IOException {

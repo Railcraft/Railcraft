@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -52,6 +52,8 @@ public class EntitySearcher {
         }
 
         public List<T> at(World world) {
+            if (searchBox == null)
+                throw new NullPointerException("Improperly defined EntitySearcher");
             return world.getEntitiesWithinAABB(entityClass, searchBox, filter);
         }
 
@@ -84,6 +86,11 @@ public class EntitySearcher {
             sensitivity = Math.min(sensitivity, 0.49f);
             searchBox = new AxisAlignedBB(pos.getX() + sensitivity, pos.getY(), pos.getZ() + sensitivity,
                     pos.getX() + 1 - sensitivity, pos.getY() + 1 - sensitivity, pos.getZ() + 1 - sensitivity);
+            return this;
+        }
+
+        public SearchParameters<T> around(Entity entity, float distance) {
+            searchBox = entity.getEntityBoundingBox().expandXyz(distance);
             return this;
         }
 
