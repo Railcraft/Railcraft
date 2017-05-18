@@ -17,17 +17,16 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MathTools;
-import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.Vec2D;
+import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -357,9 +356,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                     other.moveEntity(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
-
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
-            List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(cart.worldObj, cart.getPosition(), 0);
+            List<EntityMinecart> carts = EntitySearcher.findMinecarts().collidingWith(cart)
+                    .with(Predicates.notInstanceOf(EntityMinecartCommandBlock.class)).at(cart.worldObj);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }

@@ -45,7 +45,7 @@ public class EntitySearcher {
         private final Class<T> entityClass;
         private AxisAlignedBB searchBox;
         private Entity searcher;
-        private Predicate<Entity> filter = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE);
+        private Predicate<T> filter = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE);
 
         public SearchParameters(Class<T> entityClass) {
             this.entityClass = entityClass;
@@ -89,18 +89,28 @@ public class EntitySearcher {
             return this;
         }
 
+        public SearchParameters<T> collidingWith(Entity entity) {
+            searchBox = entity.getEntityBoundingBox();
+            return this;
+        }
+
         public SearchParameters<T> around(Entity entity, float distance) {
             searchBox = entity.getEntityBoundingBox().expandXyz(distance);
             return this;
         }
 
-        public SearchParameters<T> with(Predicate<Entity> filter) {
+        public SearchParameters<T> with(Predicate<T> filter) {
             this.filter = filter;
             return this;
         }
 
+        public SearchParameters<T> with(java.util.function.Predicate<T> filter) {
+            this.filter = filter::test;
+            return this;
+        }
+
         @SafeVarargs
-        public final SearchParameters<T> andWith(Predicate<Entity>... filters) {
+        public final SearchParameters<T> andWith(Predicate<T>... filters) {
             if (!ArrayUtils.isEmpty(filters))
                 this.filter = Predicates.and(filter, Predicates.and(filters));
             return this;
