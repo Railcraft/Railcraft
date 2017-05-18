@@ -114,17 +114,14 @@ public class ItemTrackKit extends ItemRailcraft {
 
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        Map<String, TrackKit> trackKits = TrackRegistry.TRACK_KIT.getVariants();
-        list.addAll(trackKits.values().stream().filter(TrackKit::isVisible).map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
+        list.addAll(TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
-        Map<String, TrackKit> trackKits = TrackRegistry.TRACK_KIT.getVariants();
-        trackKits.values().stream().filter(TrackKit::isVisible).forEach(trackKit -> {
-            ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath());
-        });
+        TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> ModelManager.registerItemModel(this, trackKit.ordinal(),
+            trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath()));
     }
 
     @Override
