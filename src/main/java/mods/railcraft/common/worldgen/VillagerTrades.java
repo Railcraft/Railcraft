@@ -179,9 +179,7 @@ public class VillagerTrades {
         private static final List<TrackKit> trackKits;
 
         static {
-            trackKits = TrackRegistry.TRACK_KIT.getVariants()
-                .values()
-                .stream()
+            trackKits = TrackRegistry.TRACK_KIT.stream()
                 .filter(kit -> kit.isEnabled() && kit.isVisible())
                 .collect(Collectors.toList());
         }
