@@ -16,6 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
@@ -34,12 +37,19 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (!isPowered()) {
-            if (cart.isBeingRidden()) {
-                CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
-            }
-            cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
+        if (isPowered())
+            return;
+        World world = theWorldAsserted();
+        BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain().setPos(getTile().getPos());
+        for (int i = 0; i < 2; i++) {
+            pos.move(EnumFacing.DOWN);
+            if (world.getBlockState(pos).getBlock().isVisuallyOpaque())
+                return;
         }
+        if (cart.isBeingRidden()) {
+            CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
+        }
+        cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
     }
 
     @Override
