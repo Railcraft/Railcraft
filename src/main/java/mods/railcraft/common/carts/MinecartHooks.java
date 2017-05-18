@@ -356,6 +356,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                     other.moveEntity(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
+
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
             List<EntityMinecart> carts = EntitySearcher.findMinecarts().collidingWith(cart)
                     .with(Predicates.notInstanceOf(EntityMinecartCommandBlock.class)).at(cart.worldObj);
