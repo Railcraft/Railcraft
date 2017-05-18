@@ -27,6 +27,7 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
     private static final double BOOST_AMOUNT = 0.04;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
+    private static final double START_BOOST = 0.02;
     private boolean reversed;
 
     @Override
@@ -67,6 +68,8 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
                         slowOrNormalCartSpeed(cart, highSpeed);
                     }
                 }
+            } else {
+                CartTools.startBoost(cart, getPos(), getRailDirectionRaw(), START_BOOST);
             }
         }
     }

@@ -120,9 +120,8 @@ public class ItemTrackKit extends ItemRailcraft {
     @Override
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
-        TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> {
-            ModelManager.registerItemModel(this, trackKit.ordinal(), trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath());
-        });
+        TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> ModelManager.registerItemModel(this, trackKit.ordinal(),
+            trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath()));
     }
 
     @Override
