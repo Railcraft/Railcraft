@@ -108,7 +108,7 @@ public enum SpeedController {
         return null;
     }
 
-    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+    public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
         return 0.4f;
     }
 }
