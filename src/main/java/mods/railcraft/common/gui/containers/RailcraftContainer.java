@@ -105,7 +105,7 @@ public abstract class RailcraftContainer extends Container {
     }
 
     @Nullable
-    private ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
+    protected ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
         ItemStack stack = null;
 
         if (mouseButton == 2) {
@@ -135,7 +135,7 @@ public abstract class RailcraftContainer extends Container {
         return stack;
     }
 
-    private void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, ClickType clickType) {
+    protected void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, ClickType clickType) {
         if (!slot.canAdjustPhantom())
             return;
         ItemStack stackSlot = slot.getStack();
@@ -156,7 +156,7 @@ public abstract class RailcraftContainer extends Container {
             slot.putStack(null);
     }
 
-    private void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton) {
+    protected void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton) {
         if (!slot.canAdjustPhantom())
             return;
         int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
@@ -168,7 +168,7 @@ public abstract class RailcraftContainer extends Container {
         slot.putStack(phantomStack);
     }
 
-    private boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
+    protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
         boolean changed = false;
         if (stackToShift.isStackable())
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
@@ -207,7 +207,7 @@ public abstract class RailcraftContainer extends Container {
         return changed;
     }
 
-    private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
+    protected boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
         for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
             Slot slot = inventorySlots.get(machineIndex);
             if (slot instanceof SlotRailcraft) {
