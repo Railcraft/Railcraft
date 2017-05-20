@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
-import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.widgets.ChargeIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
@@ -22,7 +22,7 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
     private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
-        ICartBattery chargeHandler = loco.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
+        ICartBattery chargeHandler = loco.getCapability(CapabilitiesCharge.CART_BATTERY, null);
         this.chargeIndicator = new ChargeIndicator(chargeHandler);
     }
 

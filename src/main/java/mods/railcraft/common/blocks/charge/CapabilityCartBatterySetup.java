@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 /**
@@ -23,10 +22,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CapabilityCartBattery {
-    @CapabilityInject(ICartBattery.class)
-    public static Capability<ICartBattery> CHARGE_CART_CAPABILITY;
-
+public class CapabilityCartBatterySetup {
     public static void register() {
         CapabilityManager.INSTANCE.register(ICartBattery.class, new Capability.IStorage<ICartBattery>() {
             @Override
