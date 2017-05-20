@@ -19,7 +19,6 @@ import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
-import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -112,6 +111,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
                     if (Game.isClient(worldIn))
                         return EnumActionResult.SUCCESS;
                     WorldPlugin.setBlockToAir(worldIn, pos);
+                    ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
                     if (target.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
                         stack.damageItem(1, playerIn);
@@ -155,11 +155,11 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
 
     static {
         if (TrackKits.TURNOUT.isEnabled())
-            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.TURNOUT));
+            ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.TURNOUT::getTrackKit));
         if (TrackKits.WYE.isEnabled())
-            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.WYE));
+            ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.WYE::getTrackKit));
         if (TrackKits.JUNCTION.isEnabled())
-            ISpikeMaulTarget.spikeMaulTargets.add(new TrackKitTarget(TrackKits.JUNCTION));
+            ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.JUNCTION::getTrackKit));
         ISpikeMaulTarget.spikeMaulTargets.add(new FlexTarget());
     }
 
@@ -177,32 +177,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
                                    BlockRailBase.EnumRailDirection shape,
                                    TrackType trackType) {
             IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-            ChargeManager.getNetwork(world).deregisterChargeNode(pos);
             return WorldPlugin.setBlockState(world, pos, newState);
-        }
-    }
-
-    private static class TrackKitTarget implements ISpikeMaulTarget {
-        private final TrackKits trackKit;
-
-        public TrackKitTarget(TrackKits trackKit) {
-            this.trackKit = trackKit;
-        }
-
-        @Override
-        public boolean matches(World world, BlockPos pos, IBlockState state) {
-            return state.getBlock() instanceof BlockTrackOutfitted
-                    && ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == trackKit.getTrackKit();
-        }
-
-        @Override
-        public boolean setToTarget(World world,
-                                   BlockPos pos,
-                                   IBlockState state,
-                                   EntityPlayer player,
-                                   BlockRailBase.EnumRailDirection shape,
-                                   TrackType trackType) {
-            return BlockTrackOutfitted.placeTrack(world, pos, player, shape, trackType, trackKit.getTrackKit());
         }
     }
 }
