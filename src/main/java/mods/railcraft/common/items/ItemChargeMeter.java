@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
-import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;

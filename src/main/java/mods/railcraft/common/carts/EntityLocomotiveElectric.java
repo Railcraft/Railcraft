@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,9 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.CartBattery;
-import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
@@ -48,7 +48,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     private static final int SLOT_TICKET = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
     private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
-    private final CartBattery cartBattery = new CartBattery(ICartBattery.Type.USER, MAX_CHARGE);
+    private final ICartBattery cartBattery = new CartBattery(ICartBattery.Type.USER, MAX_CHARGE);
 
     public EntityLocomotiveElectric(World world) {
         super(world);

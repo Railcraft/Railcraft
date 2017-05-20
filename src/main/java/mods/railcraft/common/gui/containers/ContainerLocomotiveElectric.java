@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
-import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.widgets.ChargeIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;

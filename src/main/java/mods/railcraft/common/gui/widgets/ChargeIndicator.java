@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import mods.railcraft.common.blocks.charge.IChargeBattery;
+import mods.railcraft.api.charge.IChargeBattery;
 
 /**
  *

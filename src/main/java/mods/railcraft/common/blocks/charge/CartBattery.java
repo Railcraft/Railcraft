@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
+import mods.railcraft.api.charge.ICartBattery;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 
@@ -37,16 +38,16 @@ import java.util.Random;
 public class CartBattery implements ICartBattery {
 
     static final int DRAW_INTERVAL = 8;
-    private static final Random rand = new Random();
+    protected static final Random rand = new Random();
 
-    private final Type type;
-    private final double capacity;
-    private final double lossPerTick;
-    private double charge;
-    private double draw;
-    private double lastTickDraw;
-    private int clock = rand.nextInt();
-    private int drewFromTrack;
+    protected final Type type;
+    protected final double capacity;
+    protected final double lossPerTick;
+    protected double charge;
+    protected double draw;
+    protected double lastTickDraw;
+    protected int clock = rand.nextInt();
+    protected int drewFromTrack;
 
     public CartBattery() {
         this(Type.USER, 5000.0, 0.0);
@@ -123,7 +124,7 @@ public class CartBattery implements ICartBattery {
         return ret;
     }
 
-    private void removeLosses() {
+    protected void removeLosses() {
         if (lossPerTick > 0.0)
             if (charge >= lossPerTick)
                 charge -= lossPerTick;

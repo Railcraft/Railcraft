@@ -11,8 +11,8 @@ package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
-import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
