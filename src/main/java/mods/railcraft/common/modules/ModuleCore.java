@@ -17,7 +17,7 @@ import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
@@ -147,7 +147,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 BuildcraftPlugin.init();
 
-                CapabilityCartBattery.register();
+                CapabilityCartBatterySetup.register();
 
                 MinecraftForge.EVENT_BUS.register(CrowbarHandler.instance());
                 MinecraftForge.EVENT_BUS.register(MinecartHooks.getInstance());

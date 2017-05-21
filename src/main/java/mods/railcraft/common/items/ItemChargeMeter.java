@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.charge.CapabilitiesCharge;
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
-import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
-import mods.railcraft.common.blocks.charge.ICartBattery;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -83,8 +83,8 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
 
         if (stack != null && stack.getItem() instanceof ItemChargeMeter)
             try {
-                if (entity.hasCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null)) {
-                    ICartBattery battery = entity.getCapability(CapabilityCartBattery.CHARGE_CART_CAPABILITY, null);
+                if (entity.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
+                    ICartBattery battery = entity.getCapability(CapabilitiesCharge.CART_BATTERY, null);
                     if (battery != null) {
                         sendChat(player, "gui.railcraft.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
                         event.setCanceled(true);

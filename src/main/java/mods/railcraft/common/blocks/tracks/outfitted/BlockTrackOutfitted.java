@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -70,7 +70,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock {
+public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
     public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
@@ -86,6 +86,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
         GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
         GameRegistry.registerTileEntity(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
+        TrackToolsAPI.blockTrackOutfitted = this;
     }
 
     @Override
@@ -95,6 +96,11 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             TrackKit trackKit = combo.getSecond();
             CraftingPlugin.addShapelessRecipe(trackKit.getOutfittedTrack(trackType), trackKit.getTrackKitItem(), trackType.getBaseBlock());
         }
+    }
+
+    @Override
+    public boolean place(World world, BlockPos pos, EntityLivingBase placer, EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {
+        return placeTrack(world, pos, placer, shape, trackType, trackKit);
     }
 
     public static boolean placeTrack(World world, BlockPos pos, EntityLivingBase placer, EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {

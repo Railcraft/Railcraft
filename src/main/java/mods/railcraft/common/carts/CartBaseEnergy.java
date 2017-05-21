@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,17 +12,15 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.common.blocks.charge.CapabilityCartBattery;
+import mods.railcraft.api.charge.CapabilitiesCharge;
+import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CartBattery;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.APIErrorHandler;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,7 +34,7 @@ import javax.annotation.Nonnull;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
-    private final CartBattery cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
+    private final ICartBattery cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
     protected CartBaseEnergy(World world) {
         super(world);
@@ -44,13 +42,13 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY || super.hasCapability(capability, facing);
+        return capability == CapabilitiesCharge.CART_BATTERY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityCartBattery.CHARGE_CART_CAPABILITY)
+        if (capability == CapabilitiesCharge.CART_BATTERY)
             return (T) cartBattery;
         return super.getCapability(capability, facing);
     }

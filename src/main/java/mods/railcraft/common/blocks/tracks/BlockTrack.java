@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,10 @@
 
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.tracks.IBlockTrack;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -42,7 +44,7 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTrack extends BlockRailBase implements IRailcraftTrack {
+public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, IRailcraftBlock {
 
     protected BlockTrack() {
         super(false);
