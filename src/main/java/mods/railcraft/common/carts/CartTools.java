@@ -263,4 +263,20 @@ public class CartTools {
         }
         return false;
     }
+
+    public static void smackCart(EntityMinecart cart, EntityPlayer smacker, float smackVelocity) {
+        smackCart(cart, cart, smacker, smackVelocity);
+    }
+
+    public static void smackCart(EntityMinecart respect, EntityMinecart cart, EntityPlayer smacker, float smackVelocity) {
+        if (respect.posX < smacker.posX)
+            cart.motionX -= smackVelocity;
+        else
+            cart.motionX += smackVelocity;
+        if (respect.posZ < smacker.posZ)
+            cart.motionZ -= smackVelocity;
+        else
+            cart.motionZ += smackVelocity;
+    }
+
 }

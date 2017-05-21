@@ -36,9 +36,9 @@ import java.io.File;
 import java.util.*;
 
 public class RailcraftConfig {
-    public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
-    public static final ItemMap<Float> anchorFuelPersonal = new ItemMap<Float>();
-    public static final ItemMap<Float> anchorFuelPassive = new ItemMap<Float>();
+    public static final ItemMap<Float> anchorFuelWorld = new ItemMap<>();
+    public static final ItemMap<Float> anchorFuelPersonal = new ItemMap<>();
+    public static final ItemMap<Float> anchorFuelPassive = new ItemMap<>();
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
     //    private static final String COMMENT_PREFIX = "\n\n   # ";
@@ -59,14 +59,14 @@ public class RailcraftConfig {
     private static final String CAT_TWEAKS_BLOCKS = CAT_TWEAKS + ".blocks";
     private static final String CAT_TWEAKS_ITEMS = CAT_TWEAKS + ".items";
     private static final String CAT_TWEAKS_ROUTING = CAT_TWEAKS + ".routing";
-    private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<String>();
-    private static final Map<String, Boolean> enabledItems = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> enabledBlocks = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> entities = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> enabledSubBlocks = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> worldGen = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> fluids = new HashMap<String, Boolean>();
-    private static final Map<String, Boolean> recipes = new HashMap<String, Boolean>();
+    private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<>();
+    private static final Map<String, Boolean> enabledItems = new HashMap<>();
+    private static final Map<String, Boolean> enabledBlocks = new HashMap<>();
+    private static final Map<String, Boolean> entities = new HashMap<>();
+    private static final Map<String, Boolean> enabledSubBlocks = new HashMap<>();
+    private static final Map<String, Boolean> worldGen = new HashMap<>();
+    private static final Map<String, Boolean> fluids = new HashMap<>();
+    private static final Map<String, Boolean> recipes = new HashMap<>();
     private static String anchorFuelWorldString;
     private static String anchorFuelPersonalString;
     private static String anchorFuelPassiveString;
@@ -107,6 +107,7 @@ public class RailcraftConfig {
     private static boolean wreckingEnabled;
     private static boolean implosionEnabled;
     private static boolean destructionEnabled;
+    private static boolean boostEnabled;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -207,6 +208,7 @@ public class RailcraftConfig {
         wreckingEnabled = get(CAT_ENCHANTMENTS, true, "ench_wrecking");
         implosionEnabled = get(CAT_ENCHANTMENTS, true, "ench_implosion");
         destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
+        boostEnabled = get(CAT_ENCHANTMENTS, true, "ench_boost");
     }
 
     private static void loadAnchorSettings() {
@@ -262,7 +264,7 @@ public class RailcraftConfig {
     }
 
     private static void loadItemTweaks() {
-//        trackingAuraEnabled = get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
+        trackingAuraEnabled = get(CAT_AURAS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
     }
 
     private static void loadTrackTweaks() {
@@ -326,12 +328,7 @@ public class RailcraftConfig {
         configMain.addCustomCategoryComment(CAT_RECIPES, "You can add or remove various recipes here");
 
         ConfigCategory cat = configMain.getCategory(CAT_RECIPES);
-        Iterator<String> keys = cat.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            if (key.startsWith("recipe"))
-                keys.remove();
-        }
+        cat.keySet().removeIf(key -> key.startsWith("recipe"));
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
@@ -882,6 +879,10 @@ public class RailcraftConfig {
 
     public static boolean destructionEnabled() {
         return destructionEnabled;
+    }
+
+    public static boolean boostEnabled() {
+        return boostEnabled;
     }
 
     public static boolean isItemEnabled(IRailcraftObjectContainer<?> itemContainer) {

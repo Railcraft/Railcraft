@@ -52,7 +52,7 @@ import java.util.Set;
 })
 public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple, IActivationBlockingItem {
 
-    private static final byte BOOST_DAMAGE = 3;
+    private static final int BOOST_DAMAGE = 3;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
     private final Set<Class<? extends Block>> bannedRotations = new HashSet<Class<? extends Block>>();
 
