@@ -386,6 +386,17 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     }
 
     @Override
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+        if (!super.canPlaceBlockOnSide(worldIn, pos, side))
+            return false;
+        if (needsSupport()) {
+            pos = pos.down();
+            return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP);
+        }
+        return true;
+    }
+
+    @Override
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
