@@ -42,7 +42,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
                 "#r#",
                 'O', Items.WATER_BUCKET,
                 'r', RailcraftItems.REBAR,
-                '#', RailcraftItems.CONCRETE);
+                '#', RailcraftItems.CONCRETE_BAG);
     }
 
     @Override

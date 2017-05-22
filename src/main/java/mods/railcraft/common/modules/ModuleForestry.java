@@ -67,7 +67,7 @@ public class ModuleForestry extends RailcraftModulePayload {
                 stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.STONE);
                 ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.WATER.get(750), null, stack,
                         "#r#",
-                        '#', RailcraftItems.CONCRETE,
+                        '#', RailcraftItems.CONCRETE_BAG,
                         'r', RailcraftItems.REBAR);
 
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
