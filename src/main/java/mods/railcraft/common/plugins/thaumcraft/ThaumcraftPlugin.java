@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.ore.EnumOre;
@@ -227,10 +228,10 @@ public class ThaumcraftPlugin {
             addItemAspect(EnumMachineAlpha.STEAM_OVEN.getStack(), steamAspects.copy().add(Aspect.FIRE, 3));
             addItemAspect(EnumMachineAlpha.TURBINE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
 
-            addItemAspect(EnumMachineAlpha.ANCHOR_ADMIN.getStack(), anchorAspects);
-            addItemAspect(EnumMachineAlpha.ANCHOR_PERSONAL.getStack(), anchorAspects);
-            addItemAspect(EnumMachineAlpha.ANCHOR_WORLD.getStack(), anchorAspects);
-            addItemAspect(EnumMachineBeta.SENTINEL.getStack(), anchorAspects);
+            addItemAspect(AnchorVariant.ADMIN.getStack(), anchorAspects);
+            addItemAspect(AnchorVariant.PERSONAL.getStack(), anchorAspects);
+            addItemAspect(AnchorVariant.WORLD.getStack(), anchorAspects);
+            addItemAspect(RailcraftBlocks.ANCHOR_SENTINEL.getStack(), anchorAspects);
 
             addItemAspect(EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
             addItemAspect(EnumMachineBeta.BOILER_FIREBOX_FLUID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));

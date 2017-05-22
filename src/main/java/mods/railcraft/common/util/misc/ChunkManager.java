@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.carts.EntityCartAnchor;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -200,9 +201,9 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
-                    if (type.equals(EnumMachineAlpha.ANCHOR_ADMIN.getTag()))
+                    if (type.equals(AnchorVariant.ADMIN.getTag()))
                         adminTickets.add(ticket);
-                    else if (type.equals(EnumMachineAlpha.ANCHOR_WORLD.getTag()))
+                    else if (type.equals(AnchorVariant.WORLD.getTag()))
                         worldTickets.add(ticket);
                     else if (type.isEmpty())
                         worldTickets.add(ticket);

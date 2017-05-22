@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -57,22 +57,22 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
-    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getStack) {
+    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, AnchorVariant.WORLD::getStack) {
         {
             conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_WORLD);
+            conditions().add(AnchorVariant.WORLD);
         }
     },
     ANCHOR_ADMIN(3, "cart_anchor_admin", EntityCartAnchorAdmin.class, ItemCartAnchor::new) {
         {
             conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_ADMIN);
+            conditions().add(AnchorVariant.ADMIN);
         }
     },
-    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getStack) {
+    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, AnchorVariant.PERSONAL::getStack) {
         {
             conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_PERSONAL);
+            conditions().add(AnchorVariant.PERSONAL);
         }
     },
     BORE(1, "bore", EntityTunnelBore.class, ItemTunnelBore::new),

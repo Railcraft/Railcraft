@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
@@ -31,7 +31,7 @@ public class ItemCartAnchorPersonal extends ItemCartAnchor {
             CraftingPlugin.addRecipe(getStack(),
                     "A",
                     "M",
-                    'A', EnumMachineAlpha.ANCHOR_PERSONAL.getStack(),
+                    'A', AnchorVariant.PERSONAL.getStack(),
                     'M', Items.MINECART);
         }
     }

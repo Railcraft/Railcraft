@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import com.google.common.collect.Iterators;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.items.ISpikeMaulTarget;
@@ -33,6 +32,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -93,31 +93,49 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         playerIn.swingArm(hand);
+        if (ISpikeMaulTarget.spikeMaulTargets.isEmpty())
+            return EnumActionResult.PASS;
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
+        TileEntity oldTile = null;
+        if (oldState.getBlock().hasTileEntity(oldState)) {
+            oldTile = WorldPlugin.getBlockTile(worldIn, pos);
+        }
         if (!TrackTools.isRailBlock(oldState))
             return EnumActionResult.PASS;
         TrackType trackType = TrackTools.getTrackTypeAt(worldIn, pos, oldState);
         BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(oldState);
         if (!TrackShapeHelper.isAscending(shape)) {
-            Iterator<ISpikeMaulTarget> it = Iterators.cycle(ISpikeMaulTarget.spikeMaulTargets);
+            Deque<ISpikeMaulTarget> targets = new LinkedList<>(ISpikeMaulTarget.spikeMaulTargets);
             Set<ISpikeMaulTarget> tried = new HashSet<>();
-            while (true) {
-                ISpikeMaulTarget target = it.next();
-                if (tried.contains(target))
-                    break;
-                tried.add(target);
+            boolean foundMatch = false;
+            ISpikeMaulTarget target;
+            while ((target = targets.poll()) != null && !tried.contains(target)) {
                 if (target.matches(worldIn, pos, oldState)) {
-                    target = it.next();
-                    if (Game.isClient(worldIn))
-                        return EnumActionResult.SUCCESS;
-                    WorldPlugin.setBlockToAir(worldIn, pos);
-                    ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+                    foundMatch = true;
+                    break;
+                } else {
+                    tried.add(target);
+                    targets.addLast(target);
+                }
+            }
+            if (foundMatch) {
+                if (Game.isClient(worldIn))
+                    return EnumActionResult.SUCCESS;
+                WorldPlugin.setBlockToAir(worldIn, pos);
+                ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+                while ((target = targets.poll()) != null) {
                     if (target.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
                         stack.damageItem(1, playerIn);
                         return EnumActionResult.SUCCESS;
                     }
                 }
+                WorldPlugin.setBlockState(worldIn, pos, oldState);
+                if (oldTile != null) {
+                    oldTile.validate();
+                    worldIn.setTileEntity(pos, oldTile);
+                }
+                return EnumActionResult.FAIL;
             }
         }
         return EnumActionResult.PASS;
