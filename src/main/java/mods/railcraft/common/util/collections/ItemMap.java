@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,13 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemMap<V> extends HashMap<ItemKey, V> {
+    private static ItemMap EMPTY = new ItemMap();
+
+    public static <V> ItemMap<V> emptyMap() {
+        //noinspection unchecked
+        return (ItemMap<V>) EMPTY;
+    }
+
     public V put(Item item, int meta, V value) {
         return put(new ItemKey(item, meta), value);
     }
@@ -52,6 +59,6 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
     }
 
     public Predicate<ItemStack> getStackFilter() {
-        return stack -> containsKey(stack);
+        return this::containsKey;
     }
 }

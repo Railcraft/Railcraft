@@ -32,8 +32,8 @@ public class ParticleChunkLoader extends ParticleBase {
         calculateVector();
 
         multipleParticleScaleBy(1.2f);
-        float var14 = rand.nextFloat() * 0.6F + 0.4F;
-        this.particleRed = this.particleGreen = this.particleBlue = 1.0F * var14;
+        float brightness = rand.nextFloat() * 0.6F + 0.4F;
+        this.particleRed = this.particleGreen = this.particleBlue = 1.0F * brightness;
         this.particleGreen *= 0.3F;
         this.particleRed *= 0.9F;
         this.particleMaxAge = 250;
@@ -46,7 +46,7 @@ public class ParticleChunkLoader extends ParticleBase {
         Vec3d endPoint = source.getPosF();
         Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
-        Vec3d vel = vecParticle.subtract(endPoint);
+        Vec3d vel = endPoint.subtract(vecParticle);
         vel = vel.normalize();
 
         float velScale = 0.04f;

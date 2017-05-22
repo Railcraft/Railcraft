@@ -14,16 +14,10 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.carts.ItemCartAnchor;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
@@ -34,17 +28,17 @@ import java.util.List;
  */
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
-    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1),
+    //    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1),
     TURBINE(ModuleCharge.class, "turbine", TileSteamTurbine.class, 3, 3),
-    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
+    //    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
     STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
-    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
+    //    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
     TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
     COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
     STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
     STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1),
     BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1),
-    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1),
+    //    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1),
     TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1),
     ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3);
     public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
@@ -52,12 +46,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
 
     static {
-        String pickaxe3 = HarvestPlugin.ToolClass.PICKAXE.getToolString(3);
-        ANCHOR_WORLD.toolClass = pickaxe3;
-        ANCHOR_PASSIVE.toolClass = pickaxe3;
-        ANCHOR_PERSONAL.toolClass = pickaxe3;
-        ANCHOR_ADMIN.toolClass = pickaxe3;
-
         String axe1 = HarvestPlugin.ToolClass.AXE.getToolString(1);
         TANK_WATER.toolClass = axe1;
 //        FEED_STATION.toolClass = axe1;
@@ -68,10 +56,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         creativeList.add(TANK_WATER);
         creativeList.add(ROCK_CRUSHER);
         creativeList.add(TRADE_STATION);
-        creativeList.add(ANCHOR_WORLD);
-        creativeList.add(ANCHOR_PERSONAL);
-        creativeList.add(ANCHOR_PASSIVE);
-        creativeList.add(ANCHOR_ADMIN);
         creativeList.add(TURBINE);
         creativeList.add(STEAM_TRAP_MANUAL);
         creativeList.add(STEAM_TRAP_AUTO);
@@ -126,41 +110,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     @Override
     public boolean isAvailable() {
         return block() != null && isEnabled();
-    }
-
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        if (tip != null)
-            return tip;
-        switch (this) {
-            case ANCHOR_WORLD:
-                if (!RailcraftConfig.anchorFuelWorld.isEmpty())
-                    return addAnchorInfo(stack);
-                break;
-            case ANCHOR_PERSONAL:
-                if (!RailcraftConfig.anchorFuelPersonal.isEmpty())
-                    return addAnchorInfo(stack);
-                break;
-            case ANCHOR_PASSIVE:
-                if (!RailcraftConfig.anchorFuelPassive.isEmpty())
-                    return addAnchorInfo(stack);
-                break;
-            default:
-                String tipTag = getLocalizationTag() + ".tips";
-                if (LocalizationPlugin.hasTag(tipTag))
-                    tip = ToolTip.buildToolTip(tipTag);
-                break;
-        }
-        return tip;
-    }
-
-    private ToolTip addAnchorInfo(ItemStack stack) {
-        ToolTip toolTip = new ToolTip();
-        long fuel = ItemCartAnchor.getFuel(stack);
-        double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
-        String format = LocalizationPlugin.translate("gui.railcraft.anchor.fuel.remaining");
-        toolTip.add(String.format(format, hours));
-        return toolTip;
     }
 
     @Override

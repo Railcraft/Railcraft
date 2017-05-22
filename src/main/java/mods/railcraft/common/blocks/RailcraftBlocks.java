@@ -39,6 +39,9 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.anchor.BlockAnchor;
+import mods.railcraft.common.blocks.machine.anchor.BlockAnchorSentinel;
+import mods.railcraft.common.blocks.machine.anchor.ItemAnchor;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -83,6 +86,8 @@ import java.util.function.Supplier;
  */
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ACTUATOR("actuator", BlockMachineActuator.class, BlockMachineActuator::new, ItemMachineActuator::new),
+    ANCHOR("anchor", BlockAnchor.class, BlockAnchor::new, ItemAnchor::new),
+    ANCHOR_SENTINEL("anchor_sentinel", BlockAnchorSentinel.class, BlockAnchorSentinel::new, ItemBlockRailcraft::new),
     ANVIL_STEEL("anvil", BlockRCAnvil.class, BlockRCAnvil::new, ItemAnvil::new),
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
     BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),

@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.anchor;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -27,8 +28,8 @@ public class TileAnchorPersonal extends TileAnchorWorld {
     private long ticksSincePlayerLogged;
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL;
+    public AnchorVariant getMachineType() {
+        return AnchorVariant.PERSONAL;
     }
 
     @Override

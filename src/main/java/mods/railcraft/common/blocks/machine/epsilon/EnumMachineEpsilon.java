@@ -18,13 +18,9 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,17 +118,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     @Override
     public boolean isAvailable() {
         return block() != null && isEnabled();
-    }
-
-    @Nullable
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        if (tip != null)
-            return tip;
-        String tipTag = getLocalizationTag() + ".tips";
-        if (LocalizationPlugin.hasTag(tipTag))
-            tip = ToolTip.buildToolTip(tipTag);
-        return tip;
     }
 
     @Override

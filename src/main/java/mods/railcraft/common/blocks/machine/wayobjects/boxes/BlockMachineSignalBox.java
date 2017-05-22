@@ -117,4 +117,9 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     public boolean canReceiveAspect() {
         return false;
     }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 }

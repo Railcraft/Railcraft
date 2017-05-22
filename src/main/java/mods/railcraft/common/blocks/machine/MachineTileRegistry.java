@@ -10,6 +10,10 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorAdmin;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorPassive;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorPersonal;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
@@ -36,9 +40,6 @@ public class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha
-        GameRegistry.registerTileEntity(TileAnchorWorld.class, "RCWorldAnchorTile");
-        GameRegistry.registerTileEntity(TileAnchorPersonal.class, "RCPersonalAnchorTile");
-        GameRegistry.registerTileEntity(TileAnchorAdmin.class, "RCAdminAnchorTile");
         GameRegistry.registerTileEntity(TileTradeStation.class, "RCTradeStationTile");
         GameRegistry.registerTileEntity(TileSteamTurbine.class, "RCSteamTurbineTile");
         GameRegistry.registerTileEntity(TileBlastFurnace.class, "RCBlastFurnaceTile");
@@ -48,10 +49,8 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
         GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
         GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
-        GameRegistry.registerTileEntity(TileAnchorPassive.class, "RCPassiveAnchorTile");
 
         // Beta
-        GameRegistry.registerTileEntity(TileSentinel.class, "RCAnchorSentinelTile");
         GameRegistry.registerTileEntity(TileEngineSteamHobby.class, "RCEngineSteamHobby");
         GameRegistry.registerTileEntity(TileEngineSteamLow.class, "RCEngineSteamLow");
         GameRegistry.registerTileEntity(TileEngineSteamHigh.class, "RCEngineSteamHigh");
@@ -79,6 +78,12 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileActuatorLever.class, "actuator_lever");
         RailcraftRegistry.register(TileActuatorMotor.class, "actuator_motor");
         RailcraftRegistry.register(TileActuatorRouting.class, "actuator_router");
+
+        // Anchor
+        RailcraftRegistry.register(TileAnchorWorld.class, "anchor_world");
+        RailcraftRegistry.register(TileAnchorPersonal.class, "anchor_personal");
+        RailcraftRegistry.register(TileAnchorAdmin.class, "anchor_admin");
+        RailcraftRegistry.register(TileAnchorPassive.class, "anchor_passive");
 
         // Charge Feeders
         RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");

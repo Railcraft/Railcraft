@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerAnchor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;

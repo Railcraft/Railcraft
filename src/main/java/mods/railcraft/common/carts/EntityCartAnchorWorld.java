@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
+import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.collections.ItemMap;
@@ -50,7 +50,7 @@ public class EntityCartAnchorWorld extends EntityCartAnchor {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_WORLD.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
+        return AnchorVariant.WORLD.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
     }
 
 }

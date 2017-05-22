@@ -72,13 +72,6 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return EnumMachineAlpha.TRADE_STATION;
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state) {
-        state = super.getActualState(state);
-//        state = state.withProperty(FACING, direction);
-        return state;
-    }
-
     public IInventory getRecipeSlots() {
         return recipeSlots;
     }

@@ -218,6 +218,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return TrackTypes.IRON.getTrackType();
     }
 
+    @Override
     public TrackKit getTrackKit(IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {

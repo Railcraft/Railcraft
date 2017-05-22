@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
@@ -36,7 +37,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,20 +179,20 @@ public class ModuleFactory extends RailcraftModulePayload {
                         addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.05f);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_WORLD.getStack(), true, false);
+                    if (AnchorVariant.WORLD.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.WORLD.getStack(), true, false);
                         addOutput(recipe, new ItemStack(Items.DIAMOND), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_PERSONAL.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PERSONAL.getStack(), true, false);
+                    if (AnchorVariant.PERSONAL.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.PERSONAL.getStack(), true, false);
                         addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_PASSIVE.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PASSIVE.getStack(), true, false);
+                    if (AnchorVariant.PASSIVE.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.PASSIVE.getStack(), true, false);
 //                addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
                         addAnchorOutputs(recipe);
                     }

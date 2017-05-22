@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,13 +32,23 @@ public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
     @Nullable
     @Override
     public Class<? extends IVariantEnum> getVariantEnum() {
-        return ((IRailcraftObject) block).getVariantEnum();
+        return ((IRailcraftBlock) block).getVariantEnum();
     }
 
     @Nullable
     @Override
     public IVariantEnum[] getVariants() {
         return ((IRailcraftObject) block).getVariants();
+    }
+
+    @Nullable
+    public IVariantEnum getVariant(ItemStack stack) {
+        int damage = stack.getItemDamage();
+        IVariantEnum[] variants = getVariants();
+        if (variants == null || damage < 0 || damage >= variants.length) {
+            return null;
+        }
+        return variants[damage];
     }
 
     @Override
@@ -48,11 +58,10 @@ public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        int damage = stack.getItemDamage();
-        IVariantEnum[] variants = getVariants();
-        if (variants == null || damage < 0 || damage >= variants.length)
+        IVariantEnum variant = getVariant(stack);
+        if (variant == null)
             return getUnlocalizedName();
-        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
+        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);
     }
 }
