@@ -71,7 +71,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                                     "SIS",
                                     'W', Items.WATER_BUCKET,
                                     'I', RailcraftItems.REBAR,
-                                    'S', RailcraftItems.CONCRETE_BAG);
+                                    'S', RailcraftItems.CONCRETE);
                         } else {
                             stack.stackSize = 4;
                             CraftingPlugin.addRecipe(stack,
@@ -79,7 +79,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                                     "SIS",
                                     " S ",
                                     'I', "ingotIron",
-                                    'S', RailcraftItems.CONCRETE_BAG);
+                                    'S', RailcraftItems.CONCRETE);
                         }
                     }
                 }

@@ -106,7 +106,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     CHARGE_METER(ItemChargeMeter::new, "tool_charge_meter"),
     CIRCUIT(ItemCircuit::new, "circuit"),
     COKE(ItemCoke::new, "fuel_coke"),
-    CONCRETE_BAG(ItemConcrete::new, "concrete_bag"),
+    CONCRETE(ItemConcrete::new, "concrete"),
     BOTTLE_CREOSOTE(() -> new ItemBottle(Fluids.CREOSOTE), "fluid_bottle_creosote"),
     BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),

@@ -48,7 +48,7 @@ public class ModuleResources extends RailcraftModulePayload {
                         RailcraftItems.GEAR,
                         RailcraftItems.PLATE,
                         RailcraftItems.DUST,
-                        RailcraftItems.CONCRETE_BAG
+                        RailcraftItems.CONCRETE
                 );
             }
 
