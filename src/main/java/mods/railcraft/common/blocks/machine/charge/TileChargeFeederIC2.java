@@ -71,7 +71,7 @@ public class TileChargeFeederIC2 extends TileChargeFeeder implements ISinkDelega
     @Override
     public double getDemandedEnergy() {
         IBlockState state = getBlockState();
-        if (state.getValue(BlockChargeFeeder.REDSTONE)) {
+        if (state.getValue(BlockChargeFeeder.REDSTONE) && chargeBattery.isInitialized()) {
             double chargeDifference = chargeBattery.getCapacity() - chargeBattery.getCharge();
             return chargeDifference > 0.0 ? chargeDifference : 0.0;
         }

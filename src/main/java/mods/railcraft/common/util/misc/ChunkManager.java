@@ -11,9 +11,9 @@ package mods.railcraft.common.util.misc;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
-import mods.railcraft.common.carts.EntityCartAnchor;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
+import mods.railcraft.common.carts.EntityCartWorldspike;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
@@ -52,12 +52,12 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
     @SubscribeEvent
     public void entityEnteredChunk(EntityEvent.EnteringChunk event) {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityCartAnchor) {
+        if (entity instanceof EntityCartWorldspike) {
             if (Game.isHost(entity.worldObj)) {
-//                System.out.println("Anchor Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
-                ((EntityCartAnchor) entity).forceChunkLoading(event.getNewChunkX(), event.getNewChunkZ());
+//                System.out.println("Worldspike Cart Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
+                ((EntityCartWorldspike) entity).forceChunkLoading(event.getNewChunkX(), event.getNewChunkZ());
             } else {
-                ((EntityCartAnchor) entity).setupChunks(event.getNewChunkX(), event.getNewChunkZ());
+                ((EntityCartWorldspike) entity).setupChunks(event.getNewChunkX(), event.getNewChunkZ());
 
             }
         }
@@ -150,8 +150,8 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
         return chunkList;
     }
 
-    private void printAnchor(String type, int x, int y, int z) {
-        if (RailcraftConfig.printAnchorLocations()) {
+    private void printWorldspike(String type, int x, int y, int z) {
+        if (RailcraftConfig.printWorldspikeLocations()) {
             Game.log(Level.INFO, "{0} found at [{1}-{2}-{3}]", type, x, y, z);
         }
     }
@@ -170,19 +170,19 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
                 if (y >= 0) {
                     TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-                    if (tile instanceof TileAnchorWorld) {
-                        TileAnchorWorld anchor = (TileAnchorWorld) tile;
-                        anchor.forceChunkLoading(ticket);
-                        printAnchor(anchor.getName(), x, y, z);
+                    if (tile instanceof TileWorldspike) {
+                        TileWorldspike worldspike = (TileWorldspike) tile;
+                        worldspike.forceChunkLoading(ticket);
+                        printWorldspike(worldspike.getName(), x, y, z);
                     }
                 }
             } else {
-                if (entity instanceof EntityCartAnchor) {
-                    EntityCartAnchor anchor = (EntityCartAnchor) entity;
-                    anchor.setChunkTicket(ticket);
+                if (entity instanceof EntityCartWorldspike) {
+                    EntityCartWorldspike worldspike = (EntityCartWorldspike) entity;
+                    worldspike.setChunkTicket(ticket);
 //                    System.out.println("Load Cart Chunks");
-                    anchor.forceChunkLoading(anchor.chunkCoordX, anchor.chunkCoordZ);
-                    printAnchor(anchor.getName(), (int) entity.posX, (int) entity.posY, (int) entity.posZ);
+                    worldspike.forceChunkLoading(worldspike.chunkCoordX, worldspike.chunkCoordZ);
+                    printWorldspike(worldspike.getName(), (int) entity.posX, (int) entity.posY, (int) entity.posZ);
                 }
             }
         }
@@ -201,15 +201,15 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
-                    if (type.equals(AnchorVariant.ADMIN.getTag()))
+                    if (type.equals(WorldspikeVariant.ADMIN.getTag()))
                         adminTickets.add(ticket);
-                    else if (type.equals(AnchorVariant.WORLD.getTag()))
+                    else if (type.equals(WorldspikeVariant.STANDARD.getTag()))
                         worldTickets.add(ticket);
                     else if (type.isEmpty())
                         worldTickets.add(ticket);
                 }
             } else {
-                if (entity instanceof EntityCartAnchor) {
+                if (entity instanceof EntityCartWorldspike) {
 //                    System.out.println("Claim Cart Ticket");
                     cartTickets.add(ticket);
                 }
@@ -225,7 +225,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
     @Override
     public ListMultimap<String, Ticket> playerTicketsLoaded(ListMultimap<String, Ticket> tickets, World world) {
-        if (RailcraftConfig.printAnchorLocations())
+        if (RailcraftConfig.printWorldspikeLocations())
             for (Ticket ticket : tickets.values()) {
                 Entity entity = ticket.getEntity();
                 if (entity == null) {
@@ -235,7 +235,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                     String type = ticket.getModData().getString("type");
 
                     if (y >= 0) {
-                        printAnchor(LocalizationPlugin.translate(type + ".name"), x, y, z);
+                        printWorldspike(LocalizationPlugin.translate(type + ".name"), x, y, z);
                     }
                 }
             }

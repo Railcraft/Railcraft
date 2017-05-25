@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
@@ -28,6 +27,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMot
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
@@ -108,8 +108,8 @@ public class FactoryGui {
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
                     return new GuiTradeStation(inv, (TileTradeStation) obj);
-                case WORLD_ANCHOR:
-                    return new GuiWorldAnchor(inv, (TileAnchorWorld) obj);
+                case WORLDSPIKE:
+                    return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
                     return new GuiEngineSteam(inv, (TileEngineSteam) obj);
                 case ENGINE_HOBBY:
@@ -154,8 +154,8 @@ public class FactoryGui {
                     return new GuiCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
                     return new GuiCartCargo(inv, (EntityCartCargo) obj);
-                case CART_ANCHOR:
-                    return new GuiCartAnchor(inv, (EntityCartAnchor) obj);
+                case CART_WORLDSPIKE:
+                    return new GuiCartWorldspike(inv, (EntityCartWorldspike) obj);
                 case CART_TNT_FUSE:
                     return new GuiCartTNTFuse((CartBaseExplosive) obj);
                 case CART_WORK:

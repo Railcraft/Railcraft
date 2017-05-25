@@ -69,7 +69,7 @@ public class ParticleChunkLoader extends ParticleBase {
             return;
         }
 
-        if (!EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.ANCHOR)) {
+        if (!EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.WORLDSPIKE)) {
             setExpired();
             return;
         }

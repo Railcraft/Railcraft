@@ -17,9 +17,9 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
@@ -179,22 +179,22 @@ public class ModuleFactory extends RailcraftModulePayload {
                         addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.05f);
                     }
 
-                    if (AnchorVariant.WORLD.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.WORLD.getStack(), true, false);
+                    if (WorldspikeVariant.STANDARD.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.STANDARD.getStack(), true, false);
                         addOutput(recipe, new ItemStack(Items.DIAMOND), 0.5f);
-                        addAnchorOutputs(recipe);
+                        addWorldspikeOutputs(recipe);
                     }
 
-                    if (AnchorVariant.PERSONAL.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.PERSONAL.getStack(), true, false);
+                    if (WorldspikeVariant.PERSONAL.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.PERSONAL.getStack(), true, false);
                         addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
-                        addAnchorOutputs(recipe);
+                        addWorldspikeOutputs(recipe);
                     }
 
-                    if (AnchorVariant.PASSIVE.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(AnchorVariant.PASSIVE.getStack(), true, false);
+                    if (WorldspikeVariant.PASSIVE.isAvailable()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.PASSIVE.getStack(), true, false);
 //                addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
-                        addAnchorOutputs(recipe);
+                        addWorldspikeOutputs(recipe);
                     }
 
                     recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.COBBLESTONE), false, false);
@@ -299,7 +299,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'G', "gearSteel");
             }
 
-            private void addAnchorOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {
+            private void addWorldspikeOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {
                 if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
                     addOutput(recipe, EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 1.0f);
                     addOutput(recipe, EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);

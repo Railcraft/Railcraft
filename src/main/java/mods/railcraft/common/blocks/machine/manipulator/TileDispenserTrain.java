@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.carts.ItemCartAnchor;
+import mods.railcraft.common.carts.ItemCartWorldspike;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
@@ -179,7 +179,7 @@ public class TileDispenserTrain extends TileDispenserCart {
                 return false;
             if (InvTools.isItemEqual(stack, original))
                 return true;
-            if (stack.getItem() instanceof ItemCartAnchor || stack.getItem() instanceof ItemLocomotive)
+            if (stack.getItem() instanceof ItemCartWorldspike || stack.getItem() instanceof ItemLocomotive)
                 return InvTools.isItemEqual(stack, original, false, false);
             return false;
         }

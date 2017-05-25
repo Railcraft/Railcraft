@@ -20,7 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule(value = "railcraft:chunk_loading", description = "world anchors, world anchor carts")
+@RailcraftModule(value = "railcraft:chunk_loading", description = "worldspikes, worldspike carts")
 public class ModuleChunkLoading extends RailcraftModulePayload {
 
     public ModuleChunkLoading() {
@@ -28,11 +28,11 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.ANCHOR,
-                        RailcraftBlocks.ANCHOR_SENTINEL,
-                        RailcraftCarts.ANCHOR_WORLD,
-                        RailcraftCarts.ANCHOR_ADMIN,
-                        RailcraftCarts.ANCHOR_PERSONAL
+                        RailcraftBlocks.WORLDSPIKE,
+                        RailcraftBlocks.WORLDSPIKE_POINT,
+                        RailcraftCarts.WORLDSPIKE_STANDARD,
+                        RailcraftCarts.WORLDSPIKE_ADMIN,
+                        RailcraftCarts.WORLDSPIKE_PERSONAL
                 );
             }
 

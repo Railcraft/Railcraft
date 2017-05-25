@@ -15,9 +15,9 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.anchor.AnchorVariant;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.carts.IRailcraftCartContainer;
@@ -165,7 +165,7 @@ public class ThaumcraftPlugin {
 
     public static void registerAspects() {
         try {
-            AspectList anchorAspects = new AspectList().add(Aspect.ELDRITCH, 4).add(Aspect.ORDER, 4).add(Aspect.AURA, 2).add(Aspect.DESIRE, 2);
+            AspectList worldspikeAspects = new AspectList().add(Aspect.ELDRITCH, 4).add(Aspect.ORDER, 4).add(Aspect.AURA, 2).add(Aspect.DESIRE, 2);
             AspectList steamAspects = new AspectList().add(Aspect.WATER, 3).add(Aspect.MECHANISM, 2).add(Aspect.FIRE, 3);
             AspectList tankAspects = new AspectList().add(Aspect.VOID, 4).add(Aspect.WATER, 4);
 
@@ -228,10 +228,10 @@ public class ThaumcraftPlugin {
             addItemAspect(EnumMachineAlpha.STEAM_OVEN.getStack(), steamAspects.copy().add(Aspect.FIRE, 3));
             addItemAspect(EnumMachineAlpha.TURBINE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
 
-            addItemAspect(AnchorVariant.ADMIN.getStack(), anchorAspects);
-            addItemAspect(AnchorVariant.PERSONAL.getStack(), anchorAspects);
-            addItemAspect(AnchorVariant.WORLD.getStack(), anchorAspects);
-            addItemAspect(RailcraftBlocks.ANCHOR_SENTINEL.getStack(), anchorAspects);
+            addItemAspect(WorldspikeVariant.ADMIN.getStack(), worldspikeAspects);
+            addItemAspect(WorldspikeVariant.PERSONAL.getStack(), worldspikeAspects);
+            addItemAspect(WorldspikeVariant.STANDARD.getStack(), worldspikeAspects);
+            addItemAspect(RailcraftBlocks.WORLDSPIKE_POINT.getStack(), worldspikeAspects);
 
             addItemAspect(EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
             addItemAspect(EnumMachineBeta.BOILER_FIREBOX_FLUID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
@@ -266,9 +266,9 @@ public class ThaumcraftPlugin {
             addCartAspect(RailcraftCarts.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.MECHANISM, 4));
             addCartAspect(RailcraftCarts.LOCO_ELECTRIC, new AspectList().add(Aspect.FLUX, 6).add(Aspect.MECHANISM, 6).add(Aspect.MOTION, 2));
             addCartAspect(RailcraftCarts.PUMPKIN, new AspectList(new ItemStack(Blocks.PUMPKIN)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
-            addCartAspect(RailcraftCarts.ANCHOR_WORLD, anchorAspects.copy().add(Aspect.MOTION, 2));
-            addCartAspect(RailcraftCarts.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2));
-            addCartAspect(RailcraftCarts.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.WORLDSPIKE_STANDARD, worldspikeAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.WORLDSPIKE_ADMIN, worldspikeAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.WORLDSPIKE_PERSONAL, worldspikeAspects.copy().add(Aspect.MOTION, 2));
 
             addItemAspect(RailcraftItems.GOGGLES.getStack(), new AspectList().add(Aspect.AURA, 4).add(Aspect.SENSES, 4));
 
