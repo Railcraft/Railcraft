@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
@@ -23,6 +22,7 @@ import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
@@ -94,8 +94,8 @@ public class FactoryContainer {
                     return new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
                     return new ContainerTradeStation(inv, (TileTradeStation) obj);
-                case WORLD_ANCHOR:
-                    return new ContainerAnchor(inv, (TileAnchorWorld) obj);
+                case WORLDSPIKE:
+                    return new ContainerWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
                     return new ContainerEngineSteam(inv, (TileEngineSteam) obj);
                 case ENGINE_HOBBY:
@@ -118,8 +118,8 @@ public class FactoryContainer {
                     return new ContainerCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
                     return new ContainerCartCargo(inv, (EntityCartCargo) obj);
-                case CART_ANCHOR:
-                    return new ContainerAnchor(inv, (EntityCartAnchor) obj);
+                case CART_WORLDSPIKE:
+                    return new ContainerWorldspike(inv, (EntityCartWorldspike) obj);
                 case CART_WORK:
                     return new ContainerCartWork(inv, (EntityCartWork) obj);
                 case CART_TRACK_LAYER:

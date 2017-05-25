@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,9 +23,9 @@ public class EntityIDs {
     public static final int CART_HOPPER = 5;
     public static final int CART_COMMAND_BLOCK = 6;
 
-    public static final int CART_ANCHOR_ADMIN = 20;
-    public static final int CART_ANCHOR_PERSONAL = 21;
-    public static final int CART_ANCHOR_WORLD = 22;
+    public static final int CART_WORLDSPIKE_ADMIN = 20;
+    public static final int CART_WORLDSPIKE_PERSONAL = 21;
+    public static final int CART_WORLDSPIKE_STANDARD = 22;
     public static final int CART_CARGO = 23;
     public static final int CART_GIFT = 24;
     public static final int CART_PUMPKIN = 25;

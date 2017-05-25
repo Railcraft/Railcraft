@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -50,12 +51,7 @@ public class ChargeNetwork {
         World worldObj = world.get();
         if (worldObj == null)
             return;
-        Iterator<ChargeNode> nodeIterator = tickingNodes.iterator();
-        while (nodeIterator.hasNext()) {
-            ChargeNode chargeNode = nodeIterator.next();
-            if (!chargeNode.tickUsageRecording())
-                nodeIterator.remove();
-        }
+        tickingNodes.removeIf(chargeNode -> !chargeNode.tickUsageRecording());
 
         Map<BlockPos, ChargeNode> added = new LinkedHashMap<>();
         Iterator<Map.Entry<BlockPos, ChargeNode>> iterator = chargeQueue.entrySet().iterator();
@@ -132,6 +128,11 @@ public class ChargeNetwork {
     public boolean isUndefined(BlockPos pos) {
         ChargeNode chargeNode = chargeNodes.get(pos);
         return chargeNode == null || chargeNode.isGraphNull() || !chargeQueue.containsKey(pos);
+    }
+
+    public boolean isReady(BlockPos pos) {
+        ChargeNode chargeNode = chargeNodes.get(pos);
+        return chargeNode != null && !chargeNode.isGraphNull();
     }
 
     public ChargeGraph getGraph(BlockPos pos) {
@@ -252,7 +253,7 @@ public class ChargeNetwork {
             double averageCharge = chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCharge).average().orElse(0.0);
             if (averageCharge < 0.0)
                 averageCharge = 0.0;
-            double finalCharge = averageCharge;
+            final double finalCharge = averageCharge;
             chargeBatteries.entrySet().forEach(b -> {
                 b.getValue().setCharge(finalCharge);
                 batterySaveData.updateBatteryRecord(b.getKey().pos, b.getValue());
@@ -474,24 +475,21 @@ public class ChargeNetwork {
             visitedNodes.add(this);
             Set<ChargeNode> nullNodes = new HashSet<>();
             nullNodes.add(this);
-            Set<ChargeNode> newNodes = new HashSet<>();
-            newNodes.add(this);
-            TreeSet<ChargeGraph> graphs = new TreeSet<>((o1, o2) -> Integer.compare(o1.size(), o2.size()));
+            Deque<ChargeNode> nodeQueue = new ArrayDeque<>();
+            nodeQueue.add(this);
+            TreeSet<ChargeGraph> graphs = new TreeSet<>(Comparator.comparingInt(ForwardingCollection::size));
             graphs.add(chargeGraph);
-            while (!newNodes.isEmpty()) {
-                Set<ChargeNode> currentNodes = new HashSet<>(newNodes);
-                newNodes.clear();
-                for (ChargeNode current : currentNodes) {
-                    current.forConnections(n -> {
-                        if (!visitedNodes.contains(n) && (n.isGraphNull() || !graphs.contains(n.chargeGraph))) {
-                            if (n.isGraphNull())
-                                nullNodes.add(n);
-                            graphs.add(n.chargeGraph);
-                            visitedNodes.add(n);
-                            newNodes.add(n);
-                        }
-                    });
-                }
+            ChargeNode nextNode;
+            while ((nextNode = nodeQueue.poll()) != null) {
+                nextNode.forConnections(n -> {
+                    if (!visitedNodes.contains(n) && (n.isGraphNull() || !graphs.contains(n.chargeGraph))) {
+                        if (n.isGraphNull())
+                            nullNodes.add(n);
+                        graphs.add(n.chargeGraph);
+                        visitedNodes.add(n);
+                        nodeQueue.addLast(n);
+                    }
+                });
             }
             chargeGraph = graphs.pollLast();
             if (chargeGraph.isNull() && nullNodes.size() > 1) {

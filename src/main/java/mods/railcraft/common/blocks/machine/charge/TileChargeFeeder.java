@@ -17,6 +17,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -37,4 +39,11 @@ public abstract class TileChargeFeeder extends TileMachineBase {
         prevComparatorOutput = newComparatorOutput;
     }
 
+    @Override
+    public List<String> getDebugOutput() {
+        List<String> lines = super.getDebugOutput();
+        lines.add("Our Bat: " + getChargeBattery());
+        lines.add("Graph Bat: " + ChargeManager.getNetwork(worldObj).getNode(pos).getBattery());
+        return lines;
+    }
 }

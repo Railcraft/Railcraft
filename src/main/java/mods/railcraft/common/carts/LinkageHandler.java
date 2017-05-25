@@ -331,8 +331,8 @@ public class LinkageHandler {
         if (event.getEntity() instanceof EntityMinecart) {
             EntityMinecart cart = (EntityMinecart) event.getEntity();
             Train train = Train.getTrain(cart);
-            for (EntityCartAnchor anchor : train.getCarts(EntityCartAnchor.class)) {
-                if (anchor.hasActiveTicket()) {
+            for (EntityCartWorldspike worldspike : train.getCarts(EntityCartWorldspike.class)) {
+                if (worldspike.hasActiveTicket()) {
                     event.setCanUpdate(true);
                     return;
                 }

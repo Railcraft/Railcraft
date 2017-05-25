@@ -55,8 +55,8 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(IToolCrowbar.ORE_TAG);
 
-        add(RailcraftBlocks.ANCHOR);
-        add(RailcraftBlocks.ANCHOR_SENTINEL);
+        add(RailcraftBlocks.WORLDSPIKE);
+        add(RailcraftBlocks.WORLDSPIKE_POINT);
 
         add(RailcraftItems.BOTTLE_CREOSOTE);
 
