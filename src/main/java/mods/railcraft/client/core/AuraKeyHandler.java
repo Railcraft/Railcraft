@@ -35,7 +35,7 @@ public class AuraKeyHandler {
 
     private AuraKeyHandler() {
         keyBindings = new EnumMap<GoggleAura, KeyBinding>(GoggleAura.class);
-        keyBindings.put(GoggleAura.ANCHOR, new KeyBinding("railcraft.keybind.aura.anchor", Keyboard.KEY_F9, Railcraft.MOD_ID));
+        keyBindings.put(GoggleAura.WORLDSPIKE, new KeyBinding("railcraft.keybind.aura.worldspike", Keyboard.KEY_F9, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.TUNING, new KeyBinding("railcraft.keybind.aura.tuning", Keyboard.KEY_P, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.SURVEYING, new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.SIGNALLING, new KeyBinding("railcraft.keybind.aura.signalling", Keyboard.KEY_I, Railcraft.MOD_ID));

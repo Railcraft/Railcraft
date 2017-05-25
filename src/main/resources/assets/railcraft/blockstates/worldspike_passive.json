@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column",
+    "textures": {
+      "end": "railcraft:blocks/worldspike_passive_0",
+      "side": "railcraft:blocks/worldspike_passive_1"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "enabled": {
+      "true": {
+        "textures": {
+          "end": "railcraft:blocks/worldspike_passive_0"
+        }
+      },
+      "false": {
+        "textures": {
+          "end": "railcraft:blocks/worldspike_passive_2"
+        }
+      }
+    }
+  }
+}

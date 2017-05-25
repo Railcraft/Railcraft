@@ -30,19 +30,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.util.*;
 
 public class RailcraftConfig {
-    public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
-    public static final ItemMap<Float> anchorFuelPersonal = new ItemMap<Float>();
-    public static final ItemMap<Float> anchorFuelPassive = new ItemMap<Float>();
+    public static final ItemMap<Float> worldspikeFuelStandard = new ItemMap<Float>();
+    public static final ItemMap<Float> worldspikeFuelPersonal = new ItemMap<Float>();
+    public static final ItemMap<Float> worldspikeFuelPassive = new ItemMap<Float>();
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
     //    private static final String COMMENT_PREFIX = "\n\n   # ";
-    private static final String CAT_ANCHORS = "anchors";
     private static final String CAT_AURAS = "auras";
     private static final String CAT_ENCHANTMENTS = "enchantments";
     private static final String CAT_LOOT = "loot";
@@ -59,6 +59,7 @@ public class RailcraftConfig {
     private static final String CAT_TWEAKS_BLOCKS = CAT_TWEAKS + ".blocks";
     private static final String CAT_TWEAKS_ITEMS = CAT_TWEAKS + ".items";
     private static final String CAT_TWEAKS_ROUTING = CAT_TWEAKS + ".routing";
+    private static final String CAT_WORLDSPIKES = "worldspikes";
     private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<String>();
     private static final Map<String, Boolean> enabledItems = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> enabledBlocks = new HashMap<String, Boolean>();
@@ -67,22 +68,20 @@ public class RailcraftConfig {
     private static final Map<String, Boolean> worldGen = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> fluids = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> recipes = new HashMap<String, Boolean>();
-    private static String anchorFuelWorldString;
-    private static String anchorFuelPersonalString;
-    private static String anchorFuelPassiveString;
+    private static String worldspikeFuelStandardString;
+    private static String worldspikeFuelPersonalString;
+    private static String worldspikeFuelPassiveString;
     private static String boreMineableBlocksString;
     private static float maxHighSpeed = 1.1f;
     private static boolean boreDestroysBlocks;
     private static boolean boreMinesAllBlocks;
     private static boolean locomotiveDamageMobs;
     private static boolean printLinkingDebug;
-    private static boolean printAnchorDebug;
-    private static boolean deleteAnchors;
-    private static boolean anchorCrafting;
-    private static boolean anchorCraftingPersonal;
-    private static boolean anchorCraftingPassive;
-    private static boolean anchorsCanInteractWithPipes;
-    private static boolean printAnchors;
+    private static boolean printWorldspikeDebug;
+    private static boolean deleteWorldspikes;
+    private static String[] worldspikeCrafting;
+    private static boolean worldspikesCanInteractWithPipes;
+    private static boolean printWorldspikes;
     private static boolean minecartsBreakOnDrop;
     private static boolean adjustBasicCartDrag;
     private static boolean chestAllowLiquids;
@@ -149,8 +148,9 @@ public class RailcraftConfig {
         configMain.addCustomCategoryComment("tweaks", "Here you can change the behavior of various things");
 
         configMain.removeCategory(configMain.getCategory(CAT_LOOT));
+        configMain.removeCategory(configMain.getCategory("anchors"));
 
-        loadAnchorSettings();
+        loadWorldspikeSettings();
         loadBlockTweaks();
         loadItemTweaks();
         loadTrackTweaks();
@@ -191,9 +191,9 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        anchorFuelWorld.putAll(BlockItemListParser.parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        anchorFuelPersonal.putAll(BlockItemListParser.parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        anchorFuelPassive.putAll(BlockItemListParser.parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        worldspikeFuelStandard.putAll(BlockItemListParser.parseDictionary(worldspikeFuelStandardString, "Adding Standard Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        worldspikeFuelPersonal.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPersonalString, "Adding Personal Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        worldspikeFuelPassive.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPassiveString, "Adding Passive Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
     }
 
@@ -209,36 +209,35 @@ public class RailcraftConfig {
         destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
     }
 
-    private static void loadAnchorSettings() {
-        deleteAnchors = get(CAT_ANCHORS, "delete.anchors", false, true, "change to '{t}=true' to delete every World Anchor or Anchor Cart in the world.\nValue resets to false after each session.\nTo disable Anchors completely, disable the ChunkLoading Module from 'modules.cfg'");
-        anchorCrafting = get(CAT_ANCHORS, "craftable", true, "change to {t}=false to disable World Anchor crafting, they will still be available via Creative");
-        anchorCraftingPersonal = get(CAT_ANCHORS, "personal.craftable", true, "change to {t}=false to disable Personal Anchor crafting, they will still be available via Creative");
-        anchorCraftingPassive = get(CAT_ANCHORS, "passive.craftable", true, "change to {t}=false to disable Passive Anchor crafting, they will still be available via Creative");
-        printAnchors = get(CAT_ANCHORS, "print.locations", false, "change to {t}=true to print Anchor locations to the log on startup");
-        printAnchorDebug = get(CAT_ANCHORS, "print.debug", false, "change to '{t}=true' to log debug info for Anchors");
+    private static void loadWorldspikeSettings() {
+        configMain.addCustomCategoryComment(CAT_WORLDSPIKES, "Settings for Worldspikes");
+        deleteWorldspikes = get(CAT_WORLDSPIKES, "delete.worldspikes", false, true, "change to '{t}=true' to delete every Worldspike or Worldspike Cart in the world.\nValue resets to false after each session.\nTo disable Worldspikes completely, disable the ChunkLoading Module from 'modules.cfg'");
+        worldspikeCrafting = configMain.getStringList("craftableWorldspikes", CAT_WORLDSPIKES, new String[]{"standard", "personal", "passive"}, "Controls with Worldspikes are craftable, they will still be available via Creative");
+        printWorldspikes = get(CAT_WORLDSPIKES, "print.locations", false, "change to {t}=true to print Worldspike locations to the log on startup");
+        printWorldspikeDebug = get(CAT_WORLDSPIKES, "print.debug", false, "change to '{t}=true' to log debug info for Worldspikes");
 
-        Property fuelProp = get(CAT_ANCHORS, "world.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a World Anchor or World Anchor Cart\n"
+        Property fuelProp = get(CAT_WORLDSPIKES, "standard.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Standard Worldspike or Standard Worldspike Cart\n"
                 + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, World Anchors will not require fuel, default = 12\n"
+                + "if the list is empty, World Worldspikes will not require fuel, default = 12\n"
                 + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
                 + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        anchorFuelWorldString = fuelProp.getString();
+        worldspikeFuelStandardString = fuelProp.getString();
 
-        fuelProp = get(CAT_ANCHORS, "personal.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Personal Anchor or Personal Anchor Cart\n"
+        fuelProp = get(CAT_WORLDSPIKES, "personal.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Personal Worldspike or Personal Worldspike Cart\n"
                 + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, Personal Anchors will not require fuel, default = 12\n"
+                + "if the list is empty, Personal Worldspikes will not require fuel, default = 12\n"
                 + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
                 + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        anchorFuelPersonalString = fuelProp.getString();
+        worldspikeFuelPersonalString = fuelProp.getString();
 
-        fuelProp = get(CAT_ANCHORS, "passive.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Passive Anchor\n"
+        fuelProp = get(CAT_WORLDSPIKES, "passive.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Passive Worldspike\n"
                 + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, Passive Anchors will not require fuel, default = 12\n"
+                + "if the list is empty, Passive Worldspikes will not require fuel, default = 12\n"
                 + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
                 + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        anchorFuelPassiveString = fuelProp.getString();
+        worldspikeFuelPassiveString = fuelProp.getString();
 
-        anchorsCanInteractWithPipes = get(CAT_ANCHORS, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Anchors");
+        worldspikesCanInteractWithPipes = get(CAT_WORLDSPIKES, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Worldspikes");
     }
 
     private static void loadBlockTweaks() {
@@ -623,9 +622,9 @@ public class RailcraftConfig {
 //        loadItemProperty("cart.energy.mfe");
 //        loadItemProperty("cart.energy.mfsu");
 //
-//        changeItemProperty("item.cart.anchor", "cart.anchor");
-//        changeItemProperty("item.cart.anchor.personal", "cart.anchor.personal");
-//        changeItemProperty("item.cart.anchor.admin", "cart.anchor.admin");
+//        changeItemProperty("item.cart.worldspike", "cart.worldspike");
+//        changeItemProperty("item.cart.worldspike.personal", "cart.worldspike.personal");
+//        changeItemProperty("item.cart.worldspike.admin", "cart.worldspike.admin");
 //        changeItemProperty("item.cart.work", "cart.work");
 //        changeItemProperty("item.cart.track.relayer", "cart.track.relayer");
 //        changeItemProperty("item.cart.undercutter", "cart.undercutter");
@@ -740,32 +739,32 @@ public class RailcraftConfig {
         return printLinkingDebug;
     }
 
-    public static boolean printAnchorDebug() {
-        return printAnchorDebug;
+    public static boolean printWorldspikeDebug() {
+        return printWorldspikeDebug;
     }
 
-    public static boolean anchorsCanInteractWithPipes() {
-        return anchorsCanInteractWithPipes;
+    public static boolean worldspikesCanInteractWithPipes() {
+        return worldspikesCanInteractWithPipes;
     }
 
-    public static boolean deleteAnchors() {
-        return deleteAnchors || !RailcraftModuleManager.isModuleEnabled(ModuleChunkLoading.class);
+    public static boolean deleteWorldspikes() {
+        return deleteWorldspikes || !RailcraftModuleManager.isModuleEnabled(ModuleChunkLoading.class);
     }
 
-    public static boolean canCraftAnchors() {
-        return anchorCrafting;
+    public static boolean canCraftStandardWorldspikes() {
+        return ArrayUtils.contains(worldspikeCrafting, "standard");
     }
 
-    public static boolean canCraftPersonalAnchors() {
-        return anchorCraftingPersonal;
+    public static boolean canCraftPersonalWorldspikes() {
+        return ArrayUtils.contains(worldspikeCrafting, "personal");
     }
 
-    public static boolean canCraftPassiveAnchors() {
-        return anchorCraftingPassive;
+    public static boolean canCraftPassiveWorldspikes() {
+        return ArrayUtils.contains(worldspikeCrafting, "passive");
     }
 
-    public static boolean printAnchorLocations() {
-        return printAnchors;
+    public static boolean printWorldspikeLocations() {
+        return printWorldspikes;
     }
 
     public static boolean doCartsBreakOnDrop() {

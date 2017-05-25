@@ -28,17 +28,13 @@ import java.util.List;
  */
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
-    //    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1),
     TURBINE(ModuleCharge.class, "turbine", TileSteamTurbine.class, 3, 3),
-    //    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
     STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
-    //    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
     TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
     COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
     STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
     STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1),
     BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1),
-    //    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1),
     TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1),
     ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3);
     public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);

@@ -139,12 +139,12 @@ public class ItemGoggles extends ItemRailcraftArmor {
     public enum GoggleAura {
 
         NONE("gui.railcraft.goggles.aura.none"),
-        ANCHOR("gui.railcraft.goggles.aura.anchor"),
         TRACKING("gui.railcraft.goggles.aura.tracking"),
         TUNING("gui.railcraft.goggles.aura.tuning"),
-        SURVEYING("gui.railcraft.goggles.aura.surveying"),
+        SHUNTING("gui.railcraft.goggles.aura.shunting"),
         SIGNALLING("gui.railcraft.goggles.aura.signalling"),
-        SHUNTING("gui.railcraft.goggles.aura.shunting");
+        SURVEYING("gui.railcraft.goggles.aura.surveying"),
+        WORLDSPIKE("gui.railcraft.goggles.aura.worldspike"),;
         public static final GoggleAura[] VALUES = values();
         private final String locTag;
 

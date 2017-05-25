@@ -10,10 +10,6 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorAdmin;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorPassive;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorPersonal;
-import mods.railcraft.common.blocks.machine.anchor.TileAnchorWorld;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
@@ -30,6 +26,10 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLev
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -79,12 +79,6 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileActuatorMotor.class, "actuator_motor");
         RailcraftRegistry.register(TileActuatorRouting.class, "actuator_router");
 
-        // Anchor
-        RailcraftRegistry.register(TileAnchorWorld.class, "anchor_world");
-        RailcraftRegistry.register(TileAnchorPersonal.class, "anchor_personal");
-        RailcraftRegistry.register(TileAnchorAdmin.class, "anchor_admin");
-        RailcraftRegistry.register(TileAnchorPassive.class, "anchor_passive");
-
         // Charge Feeders
         RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");
         RailcraftRegistry.register(TileChargeFeederIC2.class, "charge_feeder_ic2");
@@ -117,5 +111,11 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileBoxInterlock.class, "signal_box_interlock");
         RailcraftRegistry.register(TileBoxReceiver.class, "signal_box_receiver");
         RailcraftRegistry.register(TileBoxSequencer.class, "signal_box_sequencer");
+
+        // Worldspike
+        RailcraftRegistry.register(TileWorldspike.class, "worldspike_standard");
+        RailcraftRegistry.register(TileWorldspikePersonal.class, "worldspike_personal");
+        RailcraftRegistry.register(TileWorldspikeAdmin.class, "worldspike_admin");
+        RailcraftRegistry.register(TileWorldspikePassive.class, "worldspike_passive");
     }
 }

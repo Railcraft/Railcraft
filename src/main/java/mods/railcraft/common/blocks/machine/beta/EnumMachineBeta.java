@@ -38,7 +38,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, true, 1, 1),
     ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, true, 1, 1),
     ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, true, 1, 1),
-    //    SENTINEL(ModuleChunkLoading.class, "anchor.sentinel", TileSentinel.class, true, 2, 1),
     VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, true, 1, 1),
     METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1),
     TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1),
@@ -49,8 +48,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     private static final EnumMachineBeta[] VALUES = values();
 
     static {
-//        SENTINEL.toolClass = "pickaxe:3";
-
         creativeList.add(TANK_IRON_WALL);
         creativeList.add(TANK_IRON_GAUGE);
         creativeList.add(TANK_IRON_VALVE);
