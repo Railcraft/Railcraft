@@ -68,9 +68,9 @@ public class RailcraftConfig {
     private static final Map<String, Boolean> worldGen = new HashMap<>();
     private static final Map<String, Boolean> fluids = new HashMap<>();
     private static final Map<String, Boolean> recipes = new HashMap<>();
-    private static String anchorFuelWorldString;
-    private static String anchorFuelPersonalString;
-    private static String anchorFuelPassiveString;
+    private static String worldspikeFuelStandardString;
+    private static String worldspikeFuelPersonalString;
+    private static String worldspikeFuelPassiveString;
     private static String boreMineableBlocksString;
     private static float maxHighSpeed = 1.1f;
     private static boolean boreDestroysBlocks;
