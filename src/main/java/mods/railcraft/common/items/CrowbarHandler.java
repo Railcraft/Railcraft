@@ -22,7 +22,6 @@ import mods.railcraft.common.modules.ModuleTrain;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -111,7 +110,7 @@ public class CrowbarHandler {
                     } else if (cart instanceof IDirectionalCart)
                         ((IDirectionalCart) cart).reverse();
                     else {
-                        int lvl = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.boost, stack);
+                        int lvl = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.smack, stack);
                         if (lvl == 0) {
                             CartTools.smackCart(cart, thePlayer, SMACK_VELOCITY);
                         }

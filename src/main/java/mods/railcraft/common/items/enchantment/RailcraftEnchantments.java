@@ -15,7 +15,6 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -25,7 +24,7 @@ public class RailcraftEnchantments {
     public static Enchantment wrecking;
     public static Enchantment implosion;
     public static Enchantment destruction;
-    public static Enchantment boost;
+    public static Enchantment smack;
 
     public static void registerEnchantment() {
         if (RailcraftConfig.wreckingEnabled()) {
@@ -41,9 +40,9 @@ public class RailcraftEnchantments {
             destruction = new EnchantmentDestruction(Enchantment.Rarity.VERY_RARE);
             GameRegistry.register(destruction, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "destruction"));
         }
-        if (RailcraftConfig.boostEnabled()) {
-            boost = new EnchantmentBoost(Enchantment.Rarity.RARE).setRegistryName(Railcraft.MOD_ID, "boost");
-            GameRegistry.register(boost);
+        if (RailcraftConfig.smackEnabled()) {
+            smack = new EnchantmentSmack(Enchantment.Rarity.RARE).setRegistryName(Railcraft.MOD_ID, "smack");
+            GameRegistry.register(smack);
         }
     }
 

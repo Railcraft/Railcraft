@@ -14,10 +14,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 /**
  * Boost enchantment.
  */
-public class EnchantmentBoost extends EnchantmentToolRailcraft {
+public class EnchantmentSmack extends EnchantmentToolRailcraft {
 
-    public EnchantmentBoost(Rarity rarity) {
-        super("boost", rarity, EntityEquipmentSlot.MAINHAND);
+    public EnchantmentSmack(Rarity rarity) {
+        super("smack", rarity, EntityEquipmentSlot.MAINHAND);
     }
 
     @Override

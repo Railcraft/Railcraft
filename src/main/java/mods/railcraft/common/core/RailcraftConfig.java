@@ -106,7 +106,7 @@ public class RailcraftConfig {
     private static boolean wreckingEnabled;
     private static boolean implosionEnabled;
     private static boolean destructionEnabled;
-    private static boolean boostEnabled;
+    private static boolean smackEnabled;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -208,7 +208,7 @@ public class RailcraftConfig {
         wreckingEnabled = get(CAT_ENCHANTMENTS, true, "ench_wrecking");
         implosionEnabled = get(CAT_ENCHANTMENTS, true, "ench_implosion");
         destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
-        boostEnabled = get(CAT_ENCHANTMENTS, true, "ench_boost");
+        smackEnabled = get(CAT_ENCHANTMENTS, true, "ench_smack");
     }
 
     private static void loadWorldspikeSettings() {
@@ -880,8 +880,8 @@ public class RailcraftConfig {
         return destructionEnabled;
     }
 
-    public static boolean boostEnabled() {
-        return boostEnabled;
+    public static boolean smackEnabled() {
+        return smackEnabled;
     }
 
     public static boolean isItemEnabled(IRailcraftObjectContainer<?> itemContainer) {
