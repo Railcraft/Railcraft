@@ -64,7 +64,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return uuid;
     }
 
+    @Nullable
     public IBlockState getBlockState() {
+        if (isInvalid())
+            return null;
         return WorldPlugin.getBlockState(getWorld(), getPos());
     }
 
@@ -126,7 +129,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 //        System.out.println("updating");
         if (worldObj != null) {
             IBlockState state = getBlockState();
-            worldObj.notifyBlockUpdate(getPos(), state, state, 8);
+            if (state != null)
+                worldObj.notifyBlockUpdate(getPos(), state, state, 8);
         }
     }
 
