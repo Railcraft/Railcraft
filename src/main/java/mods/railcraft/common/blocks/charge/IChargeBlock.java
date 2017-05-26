@@ -189,15 +189,26 @@ public interface IChargeBlock {
     class ChargeBattery implements IChargeBattery {
         public static final String NBT_CHARGE_TAG = "charge";
         public static final double DEFAULT_MAX_CHARGE = 20000.0;
+
+        private boolean initialized;
         private double charge;
 
         public boolean isInfinite() {
             return false;
         }
 
+        public final boolean isInitialized() {
+            return initialized;
+        }
+
         @Override
         public double getCharge() {
             return charge;
+        }
+
+        public void initCharge(double charge) {
+            initialized = true;
+            setCharge(charge);
         }
 
         public void setCharge(double charge) {
@@ -229,6 +240,11 @@ public interface IChargeBlock {
             charge = 0.0;
 //            lastTickDraw += ret;
             return ret;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s@%s { i:%s; c:%.2f; }", getClass().getSimpleName(), Integer.toHexString(hashCode()), initialized, charge);
         }
     }
 }

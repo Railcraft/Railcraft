@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemCartAnchor extends ItemCart {
+public class ItemCartWorldspike extends ItemCart {
 
-    public ItemCartAnchor(IRailcraftCartContainer cartType) {
+    public ItemCartWorldspike(IRailcraftCartContainer cartType) {
         super(cartType);
     }
 
@@ -37,10 +37,11 @@ public class ItemCartAnchor extends ItemCart {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        if ((getCartType() == RailcraftCarts.ANCHOR_WORLD && !RailcraftConfig.anchorFuelWorld.isEmpty()) || (getCartType() == RailcraftCarts.ANCHOR_PERSONAL && !RailcraftConfig.anchorFuelPersonal.isEmpty())) {
+        super.addInformation(stack, player, info, adv);
+        if ((getCartType() == RailcraftCarts.WORLDSPIKE_STANDARD && !RailcraftConfig.worldspikeFuelStandard.isEmpty()) || (getCartType() == RailcraftCarts.WORLDSPIKE_PERSONAL && !RailcraftConfig.worldspikeFuelPersonal.isEmpty())) {
             long fuel = getFuel(stack);
             double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
-            String format = LocalizationPlugin.translate("gui.railcraft.anchor.fuel.remaining");
+            String format = LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining");
             info.add(String.format(format, hours));
         }
     }

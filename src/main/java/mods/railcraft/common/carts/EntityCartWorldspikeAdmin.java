@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
@@ -19,19 +19,19 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartAnchorAdmin extends EntityCartAnchorWorld {
+public class EntityCartWorldspikeAdmin extends EntityCartWorldspikeStandard {
 
-    public EntityCartAnchorAdmin(World world) {
+    public EntityCartWorldspikeAdmin(World world) {
         super(world);
     }
 
-    public EntityCartAnchorAdmin(World world, double x, double y, double z) {
+    public EntityCartWorldspikeAdmin(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_ADMIN;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.WORLDSPIKE_ADMIN;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class EntityCartAnchorAdmin extends EntityCartAnchorWorld {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_ADMIN.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
+        return WorldspikeVariant.ADMIN.getDefaultState().withProperty(BlockWorldspike.ENABLED, hasTicketFlag());
     }
 
 }

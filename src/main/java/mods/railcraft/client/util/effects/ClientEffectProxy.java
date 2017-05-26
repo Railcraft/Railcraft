@@ -201,7 +201,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks) {
-        if (!isGoggleAuraActive(GoggleAura.ANCHOR))
+        if (!isGoggleAuraActive(GoggleAura.WORLDSPIKE))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
 

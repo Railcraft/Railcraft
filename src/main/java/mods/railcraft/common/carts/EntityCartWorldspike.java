@@ -23,7 +23,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.IAnchor;
+import mods.railcraft.common.util.misc.IWorldspike;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -44,24 +44,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public abstract class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMinecart {
+public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart {
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
-    private static final byte ANCHOR_RADIUS = 2;
+    private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
     private final InventoryMapper invWrapper = new InventoryMapper(this);
     @Nullable
     protected Ticket ticket;
     private Set<ChunkPos> chunks;
-    private long anchorFuel;
+    private long fuel;
     private boolean teleported;
     private int disabled;
     private int clock = MiscTools.RANDOM.nextInt();
 
-    protected EntityCartAnchor(World world) {
+    protected EntityCartWorldspike(World world) {
         super(world);
     }
 
-    protected EntityCartAnchor(World world, double x, double y, double z) {
+    protected EntityCartWorldspike(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -74,18 +74,18 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
 
     @Override
     public IRailcraftCartContainer getCartType() {
-        return RailcraftCarts.ANCHOR_WORLD;
+        return RailcraftCarts.WORLDSPIKE_STANDARD;
     }
 
     @Override
     public void initEntityFromItem(ItemStack stack) {
         super.initEntityFromItem(stack);
-        long fuel = ItemCartAnchor.getFuel(stack);
-        setAnchorFuel(fuel);
+        long fuel = ItemCartWorldspike.getFuel(stack);
+        setFuel(fuel);
     }
 
     private boolean hasFuel() {
-        return anchorFuel > 0;
+        return fuel > 0;
     }
 
     public boolean hasActiveTicket() {
@@ -112,7 +112,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             return;
         }
 
-        if (RailcraftConfig.deleteAnchors()) {
+        if (RailcraftConfig.deleteWorldspikes()) {
             setDead();
             return;
         }
@@ -121,9 +121,9 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
             disabled--;
 
         if (needsFuel()) {
-            if (ticket != null && anchorFuel > 0)
-                anchorFuel--;
-            if (anchorFuel <= 0) {
+            if (ticket != null && fuel > 0)
+                fuel--;
+            if (fuel <= 0) {
                 stockFuel();
                 ItemStack stack = getStackInSlot(0);
                 if (InvTools.isEmpty(stack)) {
@@ -131,7 +131,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
                     releaseTicket();
                 } else if (getFuelMap().containsKey(stack)) {
                     decrStackSize(0, 1);
-                    anchorFuel = (long) (getFuelMap().get(stack) * RailcraftConstants.TICKS_PER_HOUR);
+                    fuel = (long) (getFuelMap().get(stack) * RailcraftConstants.TICKS_PER_HOUR);
                 }
             }
         }
@@ -139,7 +139,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
         if (ticket == null)
             requestTicket();
 
-        if (RailcraftConfig.printAnchorDebug() && ticket != null) {
+        if (RailcraftConfig.printWorldspikeDebug() && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
                 ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
@@ -232,7 +232,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
 
     public void setupChunks(int xChunk, int zChunk) {
         if (hasTicketFlag())
-            chunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, ANCHOR_RADIUS);
+            chunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, CHUNK_RADIUS);
         else
             chunks = null;
     }
@@ -241,7 +241,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     protected void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        data.setLong("anchorFuel", anchorFuel);
+        data.setLong("fuel", fuel);
     }
 
     @Override
@@ -249,7 +249,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
         super.readEntityFromNBT(data);
 
         if (needsFuel())
-            anchorFuel = data.getLong("anchorFuel");
+            fuel = data.getLong("fuel");
     }
 
     @Override
@@ -268,7 +268,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj) && needsFuel())
-            GuiHandler.openGui(EnumGui.CART_ANCHOR, player, worldObj, this);
+            GuiHandler.openGui(EnumGui.CART_WORLDSPIKE, player, worldObj, this);
         return true;
     }
 
@@ -277,7 +277,7 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
         ItemStack drop = super.getCartItem();
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setLong("fuel", anchorFuel);
+            nbt.setLong("fuel", fuel);
             drop.setTagCompound(nbt);
         }
         return drop;
@@ -300,17 +300,17 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     public abstract IBlockState getDefaultDisplayTile();
 
     @Override
-    public long getAnchorFuel() {
-        return anchorFuel;
+    public long getFuelAmount() {
+        return fuel;
     }
 
-    public void setAnchorFuel(long fuel) {
-        anchorFuel = fuel;
+    public void setFuel(long fuel) {
+        this.fuel = fuel;
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return RailcraftConfig.anchorsCanInteractWithPipes() && getFuelMap().containsKey(stack);
+        return RailcraftConfig.worldspikesCanInteractWithPipes() && getFuelMap().containsKey(stack);
     }
 
     @Override
@@ -324,6 +324,6 @@ public abstract class EntityCartAnchor extends CartBaseContainer implements IAnc
     @Nonnull
     @Override
     protected EnumGui getGuiType() {
-        return EnumGui.CART_ANCHOR;
+        return EnumGui.CART_WORLDSPIKE;
     }
 }

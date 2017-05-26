@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
@@ -20,19 +20,19 @@ import net.minecraft.init.Items;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemCartAnchorWorld extends ItemCartAnchor {
-    public ItemCartAnchorWorld(IRailcraftCartContainer cartType) {
+public class ItemCartWorldspikeStandard extends ItemCartWorldspike {
+    public ItemCartWorldspikeStandard(IRailcraftCartContainer cartType) {
         super(cartType);
     }
 
     @Override
     public void finalizeDefinition() {
-        if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable()) {
-            if (RailcraftConfig.canCraftAnchors()) {
+        if (WorldspikeVariant.STANDARD.isAvailable()) {
+            if (RailcraftConfig.canCraftStandardWorldspikes()) {
                 CraftingPlugin.addRecipe(getStack(),
                         "A",
                         "M",
-                        'A', EnumMachineAlpha.ANCHOR_WORLD.getStack(),
+                        'A', WorldspikeVariant.STANDARD.getStack(),
                         'M', Items.MINECART);
             }
         }

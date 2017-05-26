@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,12 +10,11 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
+import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import net.minecraft.block.state.IBlockState;
@@ -24,21 +23,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartAnchorPersonal extends EntityCartAnchor {
+public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
 
     private static final int MINUTES_BEFORE_DISABLE = 5;
     private long ticksSincePlayerLogged;
 
-    public EntityCartAnchorPersonal(World world) {
+    public EntityCartWorldspikePersonal(World world) {
         super(world);
     }
 
-    public EntityCartAnchorPersonal(World world, double x, double y, double z) {
+    public EntityCartWorldspikePersonal(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -57,7 +54,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_PERSONAL;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.WORLDSPIKE_PERSONAL;
     }
 
     @Override
@@ -67,7 +64,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.anchorFuelPersonal;
+        return RailcraftConfig.worldspikeFuelPersonal;
     }
 
     @Override
@@ -77,6 +74,6 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL.getDefaultState().withProperty(TileAnchorWorld.DISABLED, !hasTicketFlag());
+        return WorldspikeVariant.PERSONAL.getDefaultState().withProperty(BlockWorldspike.ENABLED, hasTicketFlag());
     }
 }

@@ -15,13 +15,9 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.ModuleTransport;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
@@ -42,7 +38,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, true, 1, 1),
     ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, true, 1, 1),
     ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, true, 1, 1),
-    SENTINEL(ModuleChunkLoading.class, "anchor.sentinel", TileSentinel.class, true, 2, 1),
     VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, true, 1, 1),
     METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1),
     TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1),
@@ -53,8 +48,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     private static final EnumMachineBeta[] VALUES = values();
 
     static {
-        SENTINEL.toolClass = "pickaxe:3";
-
         creativeList.add(TANK_IRON_WALL);
         creativeList.add(TANK_IRON_GAUGE);
         creativeList.add(TANK_IRON_VALVE);
@@ -68,7 +61,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         creativeList.add(ENGINE_STEAM_HOBBY);
         creativeList.add(ENGINE_STEAM_LOW);
         creativeList.add(ENGINE_STEAM_HIGH);
-        creativeList.add(SENTINEL);
         creativeList.add(VOID_CHEST);
         creativeList.add(METALS_CHEST);
     }
@@ -148,16 +140,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     @Override
     public boolean isAvailable() {
         return block() != null && isEnabled();
-    }
-
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        if (tip != null)
-            return tip;
-        String tipTag = getLocalizationTag() + ".tips";
-        if (LocalizationPlugin.hasTag(tipTag))
-            tip = ToolTip.buildToolTip(tipTag);
-        return tip;
     }
 
     @Override

@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.worldspike;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -21,14 +22,14 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileAnchorPersonal extends TileAnchorWorld {
+public class TileWorldspikePersonal extends TileWorldspike {
 
     private static final int MINUTES_BEFORE_DISABLE = 5;
     private long ticksSincePlayerLogged;
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL;
+    public WorldspikeVariant getMachineType() {
+        return WorldspikeVariant.PERSONAL;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.anchorFuelPersonal;
+        return RailcraftConfig.worldspikeFuelPersonal;
     }
 
     @Override

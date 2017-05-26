@@ -64,6 +64,11 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty(), FACING, THROWN, RED_FLAG, WHITE_FLAG);
     }

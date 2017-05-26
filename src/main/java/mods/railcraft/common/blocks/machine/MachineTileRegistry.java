@@ -26,6 +26,10 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLev
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
+import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -36,9 +40,6 @@ public class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha
-        GameRegistry.registerTileEntity(TileAnchorWorld.class, "RCWorldAnchorTile");
-        GameRegistry.registerTileEntity(TileAnchorPersonal.class, "RCPersonalAnchorTile");
-        GameRegistry.registerTileEntity(TileAnchorAdmin.class, "RCAdminAnchorTile");
         GameRegistry.registerTileEntity(TileTradeStation.class, "RCTradeStationTile");
         GameRegistry.registerTileEntity(TileSteamTurbine.class, "RCSteamTurbineTile");
         GameRegistry.registerTileEntity(TileBlastFurnace.class, "RCBlastFurnaceTile");
@@ -48,10 +49,8 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
         GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
         GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
-        GameRegistry.registerTileEntity(TileAnchorPassive.class, "RCPassiveAnchorTile");
 
         // Beta
-        GameRegistry.registerTileEntity(TileSentinel.class, "RCAnchorSentinelTile");
         GameRegistry.registerTileEntity(TileEngineSteamHobby.class, "RCEngineSteamHobby");
         GameRegistry.registerTileEntity(TileEngineSteamLow.class, "RCEngineSteamLow");
         GameRegistry.registerTileEntity(TileEngineSteamHigh.class, "RCEngineSteamHigh");
@@ -112,5 +111,11 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileBoxInterlock.class, "signal_box_interlock");
         RailcraftRegistry.register(TileBoxReceiver.class, "signal_box_receiver");
         RailcraftRegistry.register(TileBoxSequencer.class, "signal_box_sequencer");
+
+        // Worldspike
+        RailcraftRegistry.register(TileWorldspike.class, "worldspike_standard");
+        RailcraftRegistry.register(TileWorldspikePersonal.class, "worldspike_personal");
+        RailcraftRegistry.register(TileWorldspikeAdmin.class, "worldspike_admin");
+        RailcraftRegistry.register(TileWorldspikePassive.class, "worldspike_passive");
     }
 }

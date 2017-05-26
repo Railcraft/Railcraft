@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,13 +27,8 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
         this.machineBlock = (BlockMachine<? extends IEnumMachine<?>>) block;
     }
 
-    private IEnumMachine<?> getMachine(ItemStack stack) {
+    public IEnumMachine<?> getMachine(ItemStack stack) {
         return machineBlock.getMetaMap().get(stack.getItemDamage());
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getMachine(stack).getLocalizationTag();
     }
 
     @Override
@@ -61,10 +55,5 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
             pos = pos.offset(side);
         }
         return worldIn.isSideSolid(pos.down(), EnumFacing.UP);
-    }
-
-    @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        return getMachine(stack).getToolTip(stack, player, adv);
     }
 }

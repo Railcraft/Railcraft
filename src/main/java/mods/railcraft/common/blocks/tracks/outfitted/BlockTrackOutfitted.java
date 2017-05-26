@@ -28,6 +28,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -59,6 +60,7 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -216,6 +218,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return TrackTypes.IRON.getTrackType();
     }
 
+    @Override
     public TrackKit getTrackKit(IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
@@ -400,13 +403,21 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public boolean clearBlock(IBlockState state, World world, BlockPos pos, EntityPlayer player) {
-//        if (player.capabilities.isCreativeMode)
-//            return super.clearBlock(state, world, pos, player);
+    public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
         ChargeManager.getNetwork(world).deregisterChargeNode(pos);
-        return WorldPlugin.setBlockState(world, pos, newState);
+        boolean b = WorldPlugin.setBlockState(world, pos, newState);
+        world.notifyBlockOfStateChange(pos, this);
+        // Below is ugly workaround for fluids!
+        for (EnumFacing face : EnumFacing.VALUES) {
+            Block block = WorldPlugin.getBlock(world, pos.offset(face));
+            if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
+                newState.getBlock().dropBlockAsItem(world, pos, newState, 0);
+                break;
+            }
+        }
+        return b;
     }
 
     @Override

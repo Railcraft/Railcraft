@@ -12,8 +12,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -57,24 +57,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     TNT(0, "cart_tnt", EntityCartTNT.class, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
 
     // Railcraft Carts
-    ANCHOR_WORLD(0, "cart_anchor_world", EntityCartAnchorWorld.class, ItemCartAnchorWorld::new, EnumMachineAlpha.ANCHOR_WORLD::getStack) {
-        {
-            conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_WORLD);
-        }
-    },
-    ANCHOR_ADMIN(3, "cart_anchor_admin", EntityCartAnchorAdmin.class, ItemCartAnchor::new) {
-        {
-            conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_ADMIN);
-        }
-    },
-    ANCHOR_PERSONAL(0, "cart_anchor_personal", EntityCartAnchorPersonal.class, ItemCartAnchorPersonal::new, EnumMachineAlpha.ANCHOR_PERSONAL::getStack) {
-        {
-            conditions().add(RailcraftBlocks.MACHINE_ALPHA);
-            conditions().add(EnumMachineAlpha.ANCHOR_PERSONAL);
-        }
-    },
     BORE(1, "bore", EntityTunnelBore.class, ItemTunnelBore::new),
     CARGO(0, "cart_cargo", EntityCartCargo.class, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
     ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
@@ -117,6 +99,24 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     LOCO_CREATIVE(3, "locomotive_creative", EntityLocomotiveCreative.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA)) {
         {
             conditions().add(ModuleLocomotives.class);
+        }
+    },
+    WORLDSPIKE_STANDARD(0, "cart_worldspike_standard", EntityCartWorldspikeStandard.class, ItemCartWorldspikeStandard::new, WorldspikeVariant.STANDARD::getStack) {
+        {
+            conditions().add(RailcraftBlocks.WORLDSPIKE);
+            conditions().add(WorldspikeVariant.STANDARD);
+        }
+    },
+    WORLDSPIKE_ADMIN(3, "cart_worldspike_admin", EntityCartWorldspikeAdmin.class, ItemCartWorldspike::new) {
+        {
+            conditions().add(RailcraftBlocks.WORLDSPIKE);
+            conditions().add(WorldspikeVariant.ADMIN);
+        }
+    },
+    WORLDSPIKE_PERSONAL(0, "cart_worldspike_personal", EntityCartWorldspikePersonal.class, ItemCartWorldspikePersonal::new, WorldspikeVariant.PERSONAL::getStack) {
+        {
+            conditions().add(RailcraftBlocks.WORLDSPIKE);
+            conditions().add(WorldspikeVariant.PERSONAL);
         }
     },;
     @SuppressWarnings("WeakerAccess")

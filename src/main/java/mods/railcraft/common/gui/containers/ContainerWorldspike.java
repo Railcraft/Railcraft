@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,23 +11,23 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
-import mods.railcraft.common.util.misc.IAnchor;
+import mods.railcraft.common.util.misc.IWorldspike;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerAnchor extends RailcraftContainer {
+public class ContainerWorldspike extends RailcraftContainer {
 
-    private final IAnchor anchor;
+    private final IWorldspike worldspike;
     public short minutesRemaining;
     private short prevMinutesRemaining;
 
-    public ContainerAnchor(InventoryPlayer inventoryplayer, IAnchor a) {
+    public ContainerWorldspike(InventoryPlayer inventoryplayer, IWorldspike a) {
         super(a);
-        this.anchor = a;
-        addSlot(new SlotStackFilter(stack -> anchor.getFuelMap().containsKey(stack), anchor, 0, 60, 24));
+        this.worldspike = a;
+        addSlot(new SlotStackFilter(stack -> worldspike.getFuelMap().containsKey(stack), worldspike, 0, 60, 24));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -44,7 +44,7 @@ public class ContainerAnchor extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, getMinutesRemaining(anchor.getAnchorFuel()));
+        listener.sendProgressBarUpdate(this, 0, getMinutesRemaining(worldspike.getFuelAmount()));
     }
 
     private short getMinutesRemaining(long fuel) {
@@ -57,7 +57,7 @@ public class ContainerAnchor extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        short minutes = getMinutesRemaining(anchor.getAnchorFuel());
+        short minutes = getMinutesRemaining(worldspike.getFuelAmount());
 
         for (IContainerListener listener : listeners) {
             if (prevMinutesRemaining != minutes)

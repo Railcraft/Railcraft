@@ -12,8 +12,6 @@ package mods.railcraft.common.plugins.forestry;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.Block;
@@ -57,11 +55,8 @@ public class TrackmanBackpack extends BaseBackpack {
 
         add(IToolCrowbar.ORE_TAG);
 
-        add(EnumMachineAlpha.ANCHOR_WORLD.getStack());
-        add(EnumMachineAlpha.ANCHOR_PERSONAL.getStack());
-        add(EnumMachineAlpha.ANCHOR_ADMIN.getStack());
-        add(EnumMachineAlpha.ANCHOR_PASSIVE.getStack());
-        add(EnumMachineBeta.SENTINEL.getStack());
+        add(RailcraftBlocks.WORLDSPIKE);
+        add(RailcraftBlocks.WORLDSPIKE_POINT);
 
         add(RailcraftItems.BOTTLE_CREOSOTE);
 

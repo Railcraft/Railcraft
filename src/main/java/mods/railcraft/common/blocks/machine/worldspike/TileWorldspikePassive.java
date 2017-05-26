@@ -1,12 +1,13 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.machine.worldspike;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -17,16 +18,16 @@ import net.minecraftforge.common.ForgeChunkManager;
 /**
  * Created by Terpo on 2/24/2015.
  */
-public class TileAnchorPassive extends TileAnchorWorld {
+public class TileWorldspikePassive extends TileWorldspike {
 
     @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ANCHOR_PASSIVE;
+    public WorldspikeVariant getMachineType() {
+        return WorldspikeVariant.PASSIVE;
     }
 
     @Override
     public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.anchorFuelPassive;
+        return RailcraftConfig.worldspikeFuelPassive;
     }
 
     @Override

@@ -15,13 +15,10 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IContainerBlock;
 import mods.railcraft.common.core.IContainerState;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
@@ -38,7 +35,6 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
     class Definition {
         public final Class<? extends IRailcraftModule>[] modules;
         public final String tag;
-        public ToolTip tip;
         private Boolean enabled;
 
         @SafeVarargs
@@ -129,17 +125,6 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
 
     default Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(1, 1);
-    }
-
-    @Nullable
-    default ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        Definition def = getDef();
-        if (def.tip != null)
-            return def.tip;
-        String tipTag = getLocalizationTag() + ".tips";
-        if (LocalizationPlugin.hasTag(tipTag))
-            def.tip = ToolTip.buildToolTip(tipTag);
-        return def.tip;
     }
 
     @Override
