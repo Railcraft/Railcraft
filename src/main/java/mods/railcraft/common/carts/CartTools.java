@@ -269,14 +269,8 @@ public class CartTools {
     }
 
     public static void smackCart(EntityMinecart respect, EntityMinecart cart, EntityPlayer smacker, float smackVelocity) {
-        if (respect.posX < smacker.posX)
-            cart.motionX -= smackVelocity;
-        else
-            cart.motionX += smackVelocity;
-        if (respect.posZ < smacker.posZ)
-            cart.motionZ -= smackVelocity;
-        else
-            cart.motionZ += smackVelocity;
+        cart.motionX += Math.copySign(smackVelocity, respect.posX - smacker.posX);
+        cart.motionZ += Math.copySign(smackVelocity, respect.posZ - smacker.posZ);
     }
 
 }
