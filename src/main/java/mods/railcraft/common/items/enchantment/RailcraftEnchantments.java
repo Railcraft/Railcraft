@@ -11,6 +11,7 @@
 package mods.railcraft.common.items.enchantment;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -23,6 +24,7 @@ public class RailcraftEnchantments {
     public static Enchantment wrecking;
     public static Enchantment implosion;
     public static Enchantment destruction;
+    public static Enchantment smack;
 
     public static void registerEnchantment() {
         if (RailcraftConfig.wreckingEnabled()) {
@@ -37,6 +39,10 @@ public class RailcraftEnchantments {
         if (RailcraftConfig.destructionEnabled()) {
             destruction = new EnchantmentDestruction(Enchantment.Rarity.VERY_RARE);
             GameRegistry.register(destruction, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "destruction"));
+        }
+        if (RailcraftConfig.smackEnabled()) {
+            smack = new EnchantmentSmack(Enchantment.Rarity.RARE).setRegistryName(Railcraft.MOD_ID, "smack");
+            GameRegistry.register(smack);
         }
     }
 
