@@ -220,13 +220,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         }
     }
 
-    @Override
-    public boolean isEqual(@Nullable ItemStack stack) {
-        return stack != null && block != null && InvTools.getBlockFromStack(stack) == block;
-    }
-
     public boolean isEqual(IVariantEnum variant, @Nullable ItemStack stack) {
-        return stack != null && block != null && InvTools.isItemEqual(getStack(variant));
+        return !InvTools.isEmpty(stack) && block != null && InvTools.isItemEqual(stack, getStack(variant));
     }
 
     public boolean isEqual(@Nullable Block block) {
@@ -235,20 +230,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     public boolean isEqual(IBlockState state) {
         return block != null && block == state.getBlock();
-    }
-
-    @Override
-    @Nullable
-    public Block block() {
-        return block;
-    }
-
-    @Override
-    @Nullable
-    public IBlockState getDefaultState() {
-        if (block == null)
-            return null;
-        return block.getDefaultState();
     }
 
     @Override
@@ -264,7 +245,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public ItemBlock item() {
         return item;
     }
-
 
     @Nullable
     public Class<? extends IVariantEnum> getVariantClass() {

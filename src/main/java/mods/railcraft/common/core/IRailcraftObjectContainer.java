@@ -13,6 +13,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -60,7 +61,18 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     default void register() {
     }
 
-    boolean isEqual(ItemStack stack);
+    default boolean isEqual(ItemStack stack) {
+        if (InvTools.isEmpty(stack))
+            return false;
+        return getObject().map(obj -> {
+            if (obj instanceof Item) {
+                return obj == stack.getItem();
+            } else if (obj instanceof Block) {
+                return InvTools.getBlockFromStack(stack) == obj;
+            }
+            return false;
+        }).orElse(false);
+    }
 
     default String getResourceDomain() {
         return RailcraftConstants.RESOURCE_DOMAIN;
@@ -134,7 +146,9 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         return getDef().conditions.test(this);
     }
 
-    boolean isLoaded();
+    default boolean isLoaded() {
+        return getObject().isPresent();
+    }
 
     /**
      * Set the modules that this object belongs to. Each object must have at least one module. If the module is disabled,

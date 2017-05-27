@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,10 +11,8 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IContainerBlock;
-import mods.railcraft.common.core.IContainerItem;
-import mods.railcraft.common.core.IContainerState;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 import javax.annotation.Nullable;
@@ -26,5 +24,22 @@ import javax.annotation.Nullable;
  */
 public interface IRailcraftBlockContainer extends IRailcraftObjectContainer<IRailcraftBlock>, IContainerBlock, IContainerItem, IContainerState {
     @Nullable
-    IBlockState getState(@Nullable IVariantEnum variant);
+    default IBlockState getState(@Nullable IVariantEnum variant) {
+        Block block = block();
+        if (block instanceof IRailcraftBlock)
+            return ((IRailcraftBlock) block).getState(variant);
+        return getDefaultState();
+    }
+
+    @Nullable
+    @Override
+    default IBlockState getDefaultState() {
+        return getObject().map(o -> o.getObject().getDefaultState()).orElse(null);
+    }
+
+    @Nullable
+    @Override
+    default Block block() {
+        return getObject().map(IRailcraftObject::getObject).orElse(null);
+    }
 }

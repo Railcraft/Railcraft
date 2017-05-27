@@ -10,13 +10,14 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
+import mods.railcraft.common.items.ItemWrapper;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
@@ -130,6 +131,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private final Supplier<ItemStack> contentsSupplier;
     private Item item;
     private boolean isSetup;
+    private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
 
     private static Supplier<ItemStack> from(Block block) {
         return () -> new ItemStack(block);
@@ -162,11 +164,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
     @SuppressWarnings("WeakerAccess")
     public static IRailcraftCartContainer fromClass(Class<? extends EntityMinecart> clazz) {
-        for (RailcraftCarts cart : VALUES) {
-            if (clazz.equals(cart.type))
-                return cart;
-        }
-        return BASIC;
+        return Arrays.stream(VALUES).filter(cart -> clazz.equals(cart.type)).findFirst().orElse(BASIC);
     }
 
     public static IRailcraftCartContainer fromCart(EntityMinecart cart) {
@@ -203,50 +201,17 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    public boolean isEqual(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public String getEntityLocalizationTag() {
         return "entity.railcraft." + getBaseTag() + ".name";
     }
 
-//    @Override
-//    @Nullable
-//    public ItemStack getStack(int qty, int meta) {
-//        if (item != null)
-//            return new ItemStack(item, qty, meta);
-//        return null;
-//    }
-
-    @Override
-    @Nullable
-    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        if (item != null)
-            return new ItemStack(item, qty);
-        return null;
-    }
-
     public Item getItem() {
-        return item;
+        return getObject().map(IRailcraftObject::getObject).orElse(null);
     }
 
     @Override
     public Optional<IRailcraftItemSimple> getObject() {
-        return Optional.ofNullable(item instanceof ItemCart ? (ItemCart) item : null);
-    }
-
-    @Nullable
-    @Override
-    public Object getRecipeObject() {
-        return item;
-    }
-
-    @Nullable
-    @Override
-    public Object getRecipeObject(IVariantEnum variant) {
-        return item;
+        return railcraftObject;
     }
 
     @Override
@@ -319,6 +284,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 item = itemSupplier.apply(this);
                 if (item instanceof ItemCart) {
                     ItemCart itemCart = (ItemCart) item;
+                    railcraftObject = Optional.of(itemCart);
                     itemCart.setRegistryName(getRegistryName());
                     itemCart.setUnlocalizedName("railcraft.entity." + getBaseTag().replace("_", "."));
                     itemCart.setRarity(rarity);
@@ -326,6 +292,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 
                     itemCart.initializeDefinintion();
                     Railcraft.instance.recipeWaitList.add(itemCart);
+                } else if (item != null) {
+                    railcraftObject = Optional.of(new ItemWrapper(item));
                 }
             } else {
                 conditions().printFailureReason(this);
@@ -338,11 +306,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         if (isVanillaCart())
             return true;
         return conditions().test(this);
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return isSetup;
     }
 
     public boolean isVanillaCart() {
