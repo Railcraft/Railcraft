@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.charge;
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
@@ -45,6 +46,11 @@ public class ChargeNetwork {
     public ChargeNetwork(World world) {
         this.world = new WeakReference<World>(world);
         this.batterySaveData = BatterySaveData.forWorld(world);
+    }
+
+    private void printDebug(String msg, Object... args) {
+        if (RailcraftConfig.printChargeDebug())
+            Game.log(Level.INFO, msg, args);
     }
 
     public void tick() {
@@ -82,7 +88,7 @@ public class ChargeNetwork {
         chargeGraphs.forEach(ChargeGraph::tick);
 
         if (!newNodes.isEmpty())
-            Game.log(Level.INFO, "Nodes queued: {0}", newNodes.size());
+            printDebug("Nodes queued: {0}", newNodes.size());
     }
 
     private void insertNode(BlockPos pos, ChargeNode node) {
@@ -114,7 +120,7 @@ public class ChargeNetwork {
 
     public boolean registerChargeNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         if (!nodeMatches(pos, chargeDef)) {
-//            Game.log(Level.INFO, "Registering Node: {0}->{1}", pos, chargeDef);
+            printDebug("Registering Node: {0}->{1}", pos, chargeDef);
             chargeQueue.put(pos, new ChargeNode(pos, chargeDef, chargeDef.makeBattery(world, pos)));
             return true;
         }
@@ -231,7 +237,7 @@ public class ChargeNetwork {
 
         private void destroy(boolean touchNodes) {
             if (isActive()) {
-                Game.log(Level.INFO, "Destroying graph: {0}", this);
+                printDebug("Destroying graph: {0}", this);
                 invalid = true;
                 totalMaintenanceCost = 0.0;
                 if (touchNodes) {
@@ -497,13 +503,13 @@ public class ChargeNetwork {
                 chargeGraphs.add(chargeGraph);
             }
             if (chargeGraph.isActive()) {
-//                int originalSize = chargeGraph.size();
+                int originalSize = chargeGraph.size();
                 chargeGraph.addAll(nullNodes);
                 for (ChargeGraph graph : graphs) {
                     chargeGraph.addAll(graph);
                 }
                 graphs.forEach(g -> g.destroy(false));
-//                Game.log(Level.INFO, "Constructing Graph: {0}->{1} Added {2} nodes", pos, chargeGraph, chargeGraph.size() - originalSize);
+                printDebug("Constructing Graph: {0}->{1} Added {2} nodes", pos, chargeGraph, chargeGraph.size() - originalSize);
             }
         }
 

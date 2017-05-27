@@ -17,6 +17,7 @@ import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.BlockItemListParser;
@@ -27,7 +28,6 @@ import mods.railcraft.common.util.steam.Steam;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RailcraftConfig {
     public static final ItemMap<Float> worldspikeFuelStandard = new ItemMap<>();
@@ -44,6 +45,7 @@ public class RailcraftConfig {
     private static final String COMMENT_SUFFIX = "\n";
     //    private static final String COMMENT_PREFIX = "\n\n   # ";
     private static final String CAT_AURAS = "auras";
+    private static final String CAT_CHARGE = "charge";
     private static final String CAT_ENCHANTMENTS = "enchantments";
     private static final String CAT_LOOT = "loot";
     private static final String CAT_WORLD_GEN = "worldgen";
@@ -78,6 +80,7 @@ public class RailcraftConfig {
     private static boolean locomotiveDamageMobs;
     private static boolean printLinkingDebug;
     private static boolean printWorldspikeDebug;
+    private static boolean printChargeDebug;
     private static boolean deleteWorldspikes;
     private static String[] worldspikeCrafting;
     private static boolean worldspikesCanInteractWithPipes;
@@ -103,10 +106,7 @@ public class RailcraftConfig {
     private static int creosoteTorchOutput;
     private static int coalcokeTorchOutput;
     private static int villagerID;
-    private static boolean wreckingEnabled;
-    private static boolean implosionEnabled;
-    private static boolean destructionEnabled;
-    private static boolean smackEnabled;
+    private static String[] enchantments;
     private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -150,6 +150,8 @@ public class RailcraftConfig {
 
         configMain.removeCategory(configMain.getCategory(CAT_LOOT));
         configMain.removeCategory(configMain.getCategory("anchors"));
+
+        printChargeDebug = get(CAT_CHARGE, "printDebug", false, "change to '{t}=true' to enabled Charge Network debug spam");
 
         loadWorldspikeSettings();
         loadBlockTweaks();
@@ -205,10 +207,10 @@ public class RailcraftConfig {
 
     private static void loadEnchantment() {
         configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantments can be disabled here.\n");
-        wreckingEnabled = get(CAT_ENCHANTMENTS, true, "ench_wrecking");
-        implosionEnabled = get(CAT_ENCHANTMENTS, true, "ench_implosion");
-        destructionEnabled = get(CAT_ENCHANTMENTS, true, "ench_destruction");
-        smackEnabled = get(CAT_ENCHANTMENTS, true, "ench_smack");
+        List<RailcraftEnchantments> enchantmentsList = Arrays.asList(RailcraftEnchantments.VALUES);
+        List<String> enchantmentNames = enchantmentsList.stream().map(RailcraftEnchantments::getTag).collect(Collectors.toList());
+        enchantments = configMain.getStringList(CAT_ENCHANTMENTS, "enchantments",
+                enchantmentNames.toArray(new String[enchantmentNames.size()]), "Enabled enchantments.");
     }
 
     private static void loadWorldspikeSettings() {
@@ -263,7 +265,7 @@ public class RailcraftConfig {
     }
 
     private static void loadItemTweaks() {
-        trackingAuraEnabled = get(CAT_AURAS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
+//        trackingAuraEnabled = get(CAT_AURAS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
     }
 
     private static void loadTrackTweaks() {
@@ -325,9 +327,6 @@ public class RailcraftConfig {
 
     private static void loadRecipeOption() {
         configMain.addCustomCategoryComment(CAT_RECIPES, "You can add or remove various recipes here");
-
-        ConfigCategory cat = configMain.getCategory(CAT_RECIPES);
-        cat.keySet().removeIf(key -> key.startsWith("recipe"));
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
@@ -740,6 +739,10 @@ public class RailcraftConfig {
         return printWorldspikeDebug;
     }
 
+    public static boolean printChargeDebug() {
+        return printChargeDebug;
+    }
+
     public static boolean worldspikesCanInteractWithPipes() {
         return worldspikesCanInteractWithPipes;
     }
@@ -868,20 +871,8 @@ public class RailcraftConfig {
         return villagerID;
     }
 
-    public static boolean wreckingEnabled() {
-        return wreckingEnabled;
-    }
-
-    public static boolean implosionEnabled() {
-        return implosionEnabled;
-    }
-
-    public static boolean destructionEnabled() {
-        return destructionEnabled;
-    }
-
-    public static boolean smackEnabled() {
-        return smackEnabled;
+    public static boolean isEnchantmentEnabled(String enchantment) {
+        return ArrayUtils.contains(enchantments, enchantment);
     }
 
     public static boolean isItemEnabled(IRailcraftObjectContainer<?> itemContainer) {

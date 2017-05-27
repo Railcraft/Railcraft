@@ -9,7 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.enchantment;
 
+import mods.railcraft.common.items.ItemCrowbar;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 
 /**
  * Boost enchantment.
@@ -33,5 +35,10 @@ public class EnchantmentSmack extends EnchantmentToolRailcraft {
     @Override
     public int getMaxLevel() {
         return 4;
+    }
+
+    @Override
+    public boolean canApply(ItemStack stack) {
+        return stack.getItem() instanceof ItemCrowbar;
     }
 }

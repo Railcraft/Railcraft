@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -35,6 +36,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
         this.thresholdEnchantability = thresholdEnchantability;
         this.targetType = targetType;
         this.damageBonusPerLevel = damageBonusPerLevel;
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override

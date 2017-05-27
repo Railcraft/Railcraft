@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,7 +51,7 @@ public class BatterySaveData extends WorldSavedData {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        if (Game.DEVELOPMENT_ENVIRONMENT)
+        if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
         for (Map.Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
@@ -65,7 +66,7 @@ public class BatterySaveData extends WorldSavedData {
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        if (Game.DEVELOPMENT_ENVIRONMENT)
+        if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, "Loading Charge Battery data...");
         List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTPlugin.EnumNBTType.COMPOUND);
         for (NBTTagCompound entry : list) {

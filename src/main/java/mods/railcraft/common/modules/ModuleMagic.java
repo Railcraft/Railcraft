@@ -41,7 +41,7 @@ public class ModuleMagic extends RailcraftModulePayload {
             public void preInit() {
                 EntityItemFirestone.register();
 
-                RailcraftEnchantments.registerEnchantment();
+                RailcraftEnchantments.registerEnchantments();
 
                 MinecraftForge.EVENT_BUS.register(new FirestoneTickHandler());
             }

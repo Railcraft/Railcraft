@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -24,7 +23,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,7 +48,7 @@ import java.util.Set;
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
         @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 })
-public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple, IActivationBlockingItem {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple {
 
     private static final int BOOST_DAMAGE = 1;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
@@ -150,8 +148,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
             if (entityLiving instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entityLiving;
                 if (!player.isSneaking()) {
-                    int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction, stack) * 2 + 1;
-                    if (level > 0)
+                    int level = RailcraftEnchantments.DESTRUCTION.getLevel(stack) * 2 + 1;
+                    if (level > 1)
                         checkBlocks(world, level, pos);
                 }
             }

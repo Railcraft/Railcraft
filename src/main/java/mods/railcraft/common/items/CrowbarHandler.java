@@ -12,17 +12,12 @@ package mods.railcraft.common.items;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.carts.IDirectionalCart;
-import mods.railcraft.common.carts.LinkageManager;
-import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.carts.*;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleTrain;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -110,7 +105,7 @@ public class CrowbarHandler {
                     } else if (cart instanceof IDirectionalCart)
                         ((IDirectionalCart) cart).reverse();
                     else {
-                        int lvl = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.smack, stack);
+                        int lvl = RailcraftEnchantments.SMACK.getLevel(stack);
                         if (lvl == 0) {
                             CartTools.smackCart(cart, thePlayer, SMACK_VELOCITY);
                         }
