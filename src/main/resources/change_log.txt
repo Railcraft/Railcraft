@@ -1,3 +1,16 @@
+10.2.0-alpha-4
+    NEW: Added Crowbar Smack enchantment, super-boost Trains. (contribution by liach)
+    CHANGE: Move Charge network debug spam to a config option.
+    CONFIG: Fixed Enchantment enabled/disable config.
+
+10.2.0-alpha-3
+    NEW: World Anchors ported and renamed to Worldspikes.
+    FIX: Outfitted Tracks should now drop both track and kit when destroyed/popped off. (contribution by liach)
+    FIX: Exclude Command Block Minecarts from the entity cramming explosion code. Fixes World Preload Scripts.
+    FIX: High Speed Track should have the correct speed values now.
+    FIX: Dumping Track should check for empty space before dumping entities now.
+    API: Moved some Cart Charge stuff to the API.
+
 10.2.0-alpha-2
     NEW: Added Zinc and Brass. (contribution by GeneralCamo)
     FIX: Fix missing items from last build.
