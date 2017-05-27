@@ -236,8 +236,10 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     private void removeAndDrop(World world, BlockPos pos, IBlockState state) {
-        List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
-        InvTools.dropItems(drops, world, pos);
+        if (world.getGameRules().getBoolean("doTileDrops")) {
+            List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
+            InvTools.dropItems(drops, world, pos);
+        }
         world.setBlockToAir(pos);
     }
 
