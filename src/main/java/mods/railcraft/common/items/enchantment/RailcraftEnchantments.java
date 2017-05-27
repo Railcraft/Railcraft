@@ -27,7 +27,7 @@ public enum RailcraftEnchantments {
     WRECKING(() -> new EnchantmentDamageRailcraft("wrecking", Enchantment.Rarity.RARE, 1, 11, 20, null, 0.75f)),
     IMPLOSION(() -> new EnchantmentDamageRailcraft("implosion", Enchantment.Rarity.RARE, 5, 8, 20, EntityCreeper.class, 2.5f)),
     DESTRUCTION(() -> new EnchantmentDestruction(Enchantment.Rarity.VERY_RARE)),
-    SMACK(() -> new EnchantmentSmack(Enchantment.Rarity.RARE).setRegistryName(Railcraft.MOD_ID, "smack"));
+    SMACK(() -> new EnchantmentSmack(Enchantment.Rarity.VERY_RARE));
     public static RailcraftEnchantments[] VALUES = values();
     private final Supplier<Enchantment> factory;
     private Enchantment enchantment;
