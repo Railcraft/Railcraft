@@ -17,6 +17,7 @@ import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -235,7 +236,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
 
     @Nullable
     public Item item() {
-        return item;
+        return getObject().map(IRailcraftObject::getObject).orElse(null);
     }
 
     public String getFullTag() {
@@ -263,11 +264,6 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     @Override
     public Optional<IRailcraftItemSimple> getObject() {
         return railcraftObject;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return item != null;
     }
 
     @Override
