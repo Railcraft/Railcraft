@@ -187,7 +187,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
     }
 
     @Override
@@ -199,7 +199,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("Items", data);
-
         boiler.writeToNBT(data);
         return data;
     }
