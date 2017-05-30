@@ -340,7 +340,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (InvTools.isEmpty(stack))

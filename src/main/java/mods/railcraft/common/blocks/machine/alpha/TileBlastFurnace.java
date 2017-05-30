@@ -249,7 +249,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 setLavaIdle();
 
             ItemStack input = getStackInSlot(SLOT_INPUT);
-            if (InvTools.isEmpty(input) && input.stackSize > 0) {
+            if (!InvTools.isEmpty(input) && input.stackSize > 0) {
 
                 ItemStack output = getStackInSlot(SLOT_OUTPUT);
                 IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);

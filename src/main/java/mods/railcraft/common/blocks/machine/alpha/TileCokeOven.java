@@ -187,7 +187,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
 
                         if (recipe != null)
-                            if ((!InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && output.stackSize + recipe.getOutput().stackSize <= output.getMaxStackSize()))
+                            if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && output.stackSize + recipe.getOutput().stackSize <= output.getMaxStackSize()))
                                     && tank.fill(recipe.getFluidOutput(), false) >= recipe.getFluidOutput().amount) {
                                 cookTimeTotal = recipe.getCookTime();
                                 cookTime += COOK_STEP_LENGTH;
