@@ -176,9 +176,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         if (tile instanceof TileRockCrusher) {
             TileRockCrusher master = (TileRockCrusher) tile;
             for (int slot = 0; slot < 9; slot++) {
-                if (input != null && slot < input.size())
+                if (!InvTools.isEmpty(input) && slot < input.size())
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_INPUT + slot, input.get(slot));
-                if (output != null && slot < output.size())
+                if (!InvTools.isEmpty(output) && slot < output.size())
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_OUTPUT + slot, output.get(slot));
             }
         }
@@ -259,11 +259,11 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                 if (paused)
                     return;
 
-                ItemStack input = null;
+                ItemStack input = InvTools.emptyStack();
                 ICrusherCraftingManager.ICrusherRecipe recipe = null;
                 for (IInvSlot slot : InventoryIterator.getVanilla((IInventory) invInput)) {
                     input = slot.getStack();
-                    if (input != null) {
+                    if (!InvTools.isEmpty(input)) {
                         recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);
                         if (recipe == null)
                             recipe = RockCrusherCraftingManager.NULL_RECIPE;
@@ -279,7 +279,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                         List<ItemStack> outputs = recipe.getProcessedOutputs();
                         for (ItemStack output : outputs) {
                             output = InvTools.moveItemStack(output, tempInv);
-                            if (output != null) {
+                            if (!InvTools.isEmpty(output)) {
                                 hasRoom = false;
                                 break;
                             }

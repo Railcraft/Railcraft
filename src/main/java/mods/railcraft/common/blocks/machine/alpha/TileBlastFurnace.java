@@ -49,7 +49,7 @@ import java.util.function.Predicate;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> stack != null && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
     public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
@@ -176,7 +176,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public int getTotalCookTime() {
         ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (input == null)
+        if (InvTools.isEmpty(input))
             return 1;
         IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
         if (recipe != null)
@@ -249,7 +249,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 setLavaIdle();
 
             ItemStack input = getStackInSlot(SLOT_INPUT);
-            if (input != null && input.stackSize > 0) {
+            if (InvTools.isEmpty(input) && input.stackSize > 0) {
 
                 ItemStack output = getStackInSlot(SLOT_OUTPUT);
                 IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
@@ -276,7 +276,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                         if (cookTime >= recipe.getCookTime()) {
                             cookTime = 0;
                             finishedAt = clock;
-                            if (output == null)
+                            if (InvTools.isEmpty(output))
                                 setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                             else
                                 output.stackSize += recipe.getOutputStackSize();
@@ -339,7 +339,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
     }
 
     @Override

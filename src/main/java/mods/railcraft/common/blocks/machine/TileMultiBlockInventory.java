@@ -54,14 +54,14 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) {
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             mBlock.inv.setInventorySlotContents(i, itemstack);
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, @Nullable ItemStack p_94041_2_) {
+    public boolean isItemValidForSlot(int p_94041_1_,ItemStack p_94041_2_) {
         return isStructureValid();
     }
 
@@ -114,7 +114,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack inSlot = getStackInSlot(index);
-        setInventorySlotContents(index, null);
+        setInventorySlotContents(index, InvTools.emptyStack());
         return inSlot;
     }
 

@@ -119,9 +119,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;
             for (int slot = 0; slot < 9; slot++) {
-                if (input != null && slot < input.size())
+                if (!InvTools.isEmpty(input) && slot < input.size())
                     master.inv.setInventorySlotContents(TileSteamOven.SLOT_INPUT + slot, input.get(slot));
-                if (output != null && slot < output.size())
+                if (!InvTools.isEmpty(output) && slot < output.size())
                     master.inv.setInventorySlotContents(TileSteamOven.SLOT_OUTPUT + slot, output.get(slot));
             }
         }
@@ -219,7 +219,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private boolean hasRecipe() {
         for (int slot = 0; slot < 9; slot++) {
             ItemStack stack = invInput.getStackInSlot(slot);
-            if (stack != null && FurnaceRecipes.instance().getSmeltingResult(stack) != null)
+            if (!InvTools.isEmpty(stack) && FurnaceRecipes.instance().getSmeltingResult(stack) != null)
                 return true;
         }
         return false;
@@ -233,11 +233,11 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
             changed = false;
             for (int slot = 0; slot < 9 && count < ITEMS_SMELTED; slot++) {
                 ItemStack stack = invInput.getStackInSlot(slot);
-                if (stack != null) {
+                if (!InvTools.isEmpty(stack)) {
                     ItemStack output = FurnaceRecipes.instance().getSmeltingResult(stack);
                     if (output != null && InvTools.isRoomForStack(output, invOutput)) {
                         ItemStack remainder = InvTools.moveItemStack(output.copy(), invOutput);
-                        if (remainder == null) {
+                        if (InvTools.isEmpty(remainder)) {
                             invInput.decrStackSize(slot, 1);
                             changed = true;
                             count++;
@@ -340,7 +340,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (InvTools.isEmpty(stack))
