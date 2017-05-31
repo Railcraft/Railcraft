@@ -27,7 +27,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (!InvTools.isEmpty(source) || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
+        if (InvTools.isEmpty(source) || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
             return false;
         }
         int numCopies = 0;

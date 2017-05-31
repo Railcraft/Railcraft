@@ -151,7 +151,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     @Override
     public boolean doInteract(EntityPlayer player) {
         ItemStack stack = player.inventory.getCurrentItem();
-        if (InvTools.isEmpty(stack)) {
+        if (!InvTools.isEmpty(stack)) {
             if (stack.getItem() == Items.FLINT_AND_STEEL
                     || stack.getItem() instanceof ItemFirestoneRefined) {
                 setPrimed(true);

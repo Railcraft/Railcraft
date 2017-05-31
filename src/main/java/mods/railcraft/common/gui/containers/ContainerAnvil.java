@@ -203,7 +203,7 @@ public class ContainerAnvil extends ContainerRepair {
             this.maximumCost = baseCost + enchantCost;
 
             if (enchantCost <= 0) {
-                InvTools.isEmpty(input1);
+                input1 = InvTools.emptyStack();
             }
 
             // Railcraft changes max cost from 39 to 50
@@ -213,7 +213,7 @@ public class ContainerAnvil extends ContainerRepair {
 
             // Here too
             if (maximumCost > MAX_COST && !thePlayer.capabilities.isCreativeMode) {
-                InvTools.isEmpty(input1);
+                input1 = InvTools.emptyStack();
             }
 
             if (!InvTools.isEmpty(input1)) {
@@ -246,7 +246,7 @@ public class ContainerAnvil extends ContainerRepair {
 
         if (getSlot(2).getHasStack()) {
             ItemStack itemstack = getSlot(2).getStack();
-            assert itemstack != null;
+            assert !InvTools.isEmpty(itemstack);
 
             if (StringUtils.isBlank(par1Str)) {
                 itemstack.clearCustomName();

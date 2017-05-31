@@ -100,7 +100,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
 
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
         ItemStack trackStock = getStackInSlot(slotStock);
-        if (InvTools.isEmpty(trackStock))
+        if (!InvTools.isEmpty(trackStock))
             if (TrackToolsAPI.placeRailAt(trackStock, (WorldServer) getEntityWorld(), pos)) {
                 decrStackSize(slotStock, 1);
                 blink();
