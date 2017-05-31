@@ -40,10 +40,10 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
 
     @Nonnull
     public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
-        if (inv.getInventoryObject() instanceof IInventory)
-            return new StandardInventoryManipulator((IInventory) inv.getInventoryObject());
-        if (inv.getInventoryObject() instanceof IItemHandler)
-            return new ItemHandlerInventoryManipulator((IItemHandler) inv.getInventoryObject());
+        if (inv.getBackingObject() instanceof IInventory)
+            return new StandardInventoryManipulator((IInventory) inv.getBackingObject());
+        if (inv.getBackingObject() instanceof IItemHandler)
+            return new ItemHandlerInventoryManipulator((IItemHandler) inv.getBackingObject());
         throw new RuntimeException("Invalid Inventory Object");
     }
 

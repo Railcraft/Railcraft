@@ -10,9 +10,10 @@
 
 package mods.railcraft.common.util.inventory.filters;
 
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,8 +57,22 @@ public final class StackFilters {
     /**
      * Matches against the provided Item.
      */
+    public static Predicate<ItemStack> of(@Nonnull final RailcraftItems item) {
+        return stack -> !InvTools.isEmpty(stack) && item.isEqual(stack);
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
     public static Predicate<ItemStack> of(@Nonnull final Block block) {
         return stack -> !InvTools.isEmpty(stack) && stack.getItem() == Item.getItemFromBlock(block);
+    }
+
+    /**
+     * Matches against the provided ItemStack. If the Item class extends IFilterItem then it will pass the check to the item.
+     */
+    public static Predicate<ItemStack> matches(@Nonnull final ItemStack filter) {
+        return stack -> InvTools.matchesFilter(filter, stack);
     }
 
     /**
@@ -76,6 +91,10 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
         return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
+    }
+
+    public static Predicate<ItemStack> none() {
+        return itemStack -> false;
     }
 
     /**
@@ -116,7 +135,7 @@ public final class StackFilters {
     /**
      * Matches if the Inventory contains the given ItemStack.
      */
-    public static Predicate<ItemStack> containedIn(@Nonnull final IInventoryObject inv) {
+    public static Predicate<ItemStack> containedIn(@Nonnull final IInventoryComposite inv) {
         return stack -> InvTools.containsItem(inv, stack);
     }
 }

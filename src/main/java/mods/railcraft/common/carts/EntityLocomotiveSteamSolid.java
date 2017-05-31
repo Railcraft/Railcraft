@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,9 +45,9 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     private static final int SLOT_TICKET = 7;
     private static final int SLOT_DESTINATION = 8;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
-    private final InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private final InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private final InventoryMapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
 //    private boolean outOfWater = true;
 
@@ -97,7 +97,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         if (Game.isHost(worldObj)) {
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
-            if (InvTools.isEmptySlot(invStock)) {
+            if (InvTools.hasEmptySlot(invStock)) {
                 ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
                 if (stack != null)
                     InvTools.moveItemStack(stack, invStock);

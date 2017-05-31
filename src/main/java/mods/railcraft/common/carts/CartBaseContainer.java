@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,12 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.google.common.collect.Iterators;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
@@ -38,13 +40,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 /**
  * It also contains some generic code that most carts will find useful.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject {
+public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject, IInventoryComposite {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected EnumFacing travelDirection;
     protected EnumFacing verticalTravelDirection;
@@ -209,7 +212,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     @Override
-    public Object getInventoryObject() {
+    public Object getBackingObject() {
         return this;
     }
 
@@ -220,5 +223,10 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
         return CartTools.isInRangeToRenderDist(this, distance);
+    }
+
+    @Override
+    public Iterator<IInventoryObject> iterator() {
+        return Iterators.singletonIterator(this);
     }
 }

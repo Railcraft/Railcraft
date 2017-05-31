@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -283,6 +283,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         redstoneModeController.setCurrentState(data.readByte());
+        sendUpdateToClient();
     }
 
     @Override

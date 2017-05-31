@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -106,13 +107,13 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileBlastFurnace)
             return false;
-        IInventoryObject tileInv = InvTools.getInventory(tile);
+        IInventoryObject tileInv = InventoryFactory.get(tile);
         return tileInv != null && tileInv.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     /**

@@ -662,7 +662,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockBallast() {
-        if (InvTools.isEmptySlot(invBallast)) {
+        if (InvTools.hasEmptySlot(invBallast)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.BALLAST);
             if (stack != null)
                 InvTools.moveItemStack(stack, invBallast);
@@ -693,7 +693,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockTracks() {
-        if (InvTools.isEmptySlot(invRails)) {
+        if (InvTools.hasEmptySlot(invRails)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.TRACK);
             if (stack != null)
                 InvTools.moveItemStack(stack, invRails);
@@ -996,7 +996,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockFuel() {
-        if (InvTools.isEmptySlot(invFuel)) {
+        if (InvTools.hasEmptySlot(invFuel)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
             if (stack != null)
                 InvTools.moveItemStack(stack, invFuel);

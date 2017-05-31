@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -37,7 +37,7 @@ public class FirestoneTickHandler {
             return;
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
             return;
-        IInventoryObject inv = InvTools.getInventory(entity);
+        IInventoryObject inv = InventoryFactory.get(entity);
         if (inv != null) {
             for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
                 ItemStack stack = slot.getStack();

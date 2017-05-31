@@ -19,6 +19,7 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.FilterOreDictRecipe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -39,6 +40,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.EQUIPMENT,
 
+                        RailcraftItems.FILTER_BLANK,
+                        RailcraftItems.FILTER_ORE_DICT,
+
                         RailcraftCarts.BORE,
                         RailcraftItems.BORE_HEAD_IRON,
                         RailcraftItems.BORE_HEAD_STEEL,
@@ -52,6 +56,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
+                if (RailcraftItems.FILTER_ORE_DICT.isEnabled())
+                    CraftingPlugin.addRecipe(new FilterOreDictRecipe());
+
                 ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
                     CraftingPlugin.addRecipe(gamma.getStack(),

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,6 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -58,6 +57,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static net.minecraft.util.EnumFacing.DOWN;
@@ -185,7 +185,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     @Override

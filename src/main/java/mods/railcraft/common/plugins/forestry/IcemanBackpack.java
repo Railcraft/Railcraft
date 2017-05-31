@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -82,8 +82,8 @@ public class IcemanBackpack extends BaseBackpack {
     }
 
     private void manageSnow(IInventory backpackInventory) {
-        IInventoryObject inv = InvTools.getInventory(backpackInventory);
-        if (inv != null) {
+        InventoryComposite inv = InventoryComposite.of(backpackInventory);
+        if (!inv.isEmpty()) {
             int numSnowballs = InvTools.countItems(inv, SNOWBALL_MATCHER);
             InventoryManipulator im = InventoryManipulator.get(backpackInventory);
             while (numSnowballs > 16 && im.canRemoveItems(SNOWBALL_MATCHER, 4) && im.canAddStack(SNOW_BLOCK)) {

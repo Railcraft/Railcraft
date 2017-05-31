@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,16 +13,14 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
-import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
+import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.EnumFacing;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TileItemUnloader extends TileItemManipulator {
 
@@ -39,12 +37,12 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    public List<IInventoryObject> getSource() {
-        return Collections.singletonList(cart);
+    public IInventoryComposite getSource() {
+        return cart;
     }
 
     @Override
-    public List<IInventoryObject> getDestination() {
+    public IInventoryComposite getDestination() {
         return chests;
     }
 
@@ -61,7 +59,7 @@ public class TileItemUnloader extends TileItemManipulator {
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        return super.canHandleCart(cart) && !InvTools.isInventoryEmpty(InventoryObject.get((IInventory) cart));
+        return super.canHandleCart(cart) && !InvTools.isInventoryEmpty(InventoryComposite.of(InventoryAdaptor.get((IInventory) cart)));
     }
 
     private void clearInv() {
