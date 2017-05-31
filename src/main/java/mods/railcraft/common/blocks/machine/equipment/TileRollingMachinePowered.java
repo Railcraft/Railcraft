@@ -97,7 +97,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
         Collection<IInventoryObject> chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.isStackable() && stack.stackSize == 1) {
+            if (InvTools.isEmpty(stack) && stack.isStackable() && stack.stackSize == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
                 if (request != null) {
                     stack.stackSize++;
@@ -169,18 +169,18 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
         if (InvTools.isEmpty(stack))
