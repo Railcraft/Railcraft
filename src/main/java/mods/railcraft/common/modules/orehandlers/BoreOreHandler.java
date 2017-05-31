@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules.orehandlers;
 
 import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,7 +24,7 @@ public class BoreOreHandler {
     public void onOreEvent(OreRegisterEvent event) {
         String oreClass = event.getName();
         ItemStack ore = event.getOre();
-        if (ore == null)
+        if (InvTools.isEmpty(ore))
             return;
         if (ore.getItem() instanceof ItemBlock && oreClass.startsWith("ore")) {
             if (EntityTunnelBore.mineableOreTags.add(oreClass))

@@ -82,14 +82,14 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
-        if (stack != null && stack.getItem() instanceof ItemNotepad) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, true);
             nbt.setByte("pasteMode", (byte) mode.ordinal());
         }
     }
 
     private static PasteMode getPasteMode(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemNotepad) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
             return PasteMode.fromOrdinal(nbt != null ? nbt.getByte("pasteMode") : 0);
         }
@@ -97,7 +97,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     }
 
     private static PasteMode nextPasteMode(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemNotepad) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
             PasteMode pasteMode = getPasteMode(stack);
             pasteMode = pasteMode.next();
             setPasteMode(stack, pasteMode);
@@ -107,7 +107,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     }
 
     private static void setContents(ItemStack stack, EnumMap<Contents, NBTTagCompound> contents) {
-        if (stack != null && stack.getItem() instanceof ItemNotepad) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
 
             NBTTagCompound contentTag = new NBTTagCompound();
             for (Map.Entry<Contents, NBTTagCompound> entry : contents.entrySet()) {
@@ -122,7 +122,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     @Nonnull
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
-        if (stack != null && stack.getItem() instanceof ItemNotepad) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
             if (nbt != null && nbt.hasKey("contents")) {
                 nbt = nbt.getCompoundTag("contents");

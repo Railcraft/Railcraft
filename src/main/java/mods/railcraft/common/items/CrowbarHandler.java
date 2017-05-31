@@ -17,6 +17,7 @@ import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleTrain;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -53,7 +54,7 @@ public class CrowbarHandler {
             event.setCanceled(true);
 
         ItemStack stack = event.getItem();
-        if (stack != null && stack.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IToolCrowbar) {
             thePlayer.swingArm(event.getHand());
             event.setCanceled(true);
         } else

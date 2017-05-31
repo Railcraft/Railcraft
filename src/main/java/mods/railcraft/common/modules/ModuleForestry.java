@@ -81,7 +81,7 @@ public class ModuleForestry extends RailcraftModulePayload {
                 if (Metal.BRASS.getStack(Metal.Form.INGOT) != InvTools.emptyStack() && (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing"))) {
                         ItemStack casing = ModItems.STURDY_CASING.get();
 
-                    if (casing != InvTools.emptyStack()){
+                    if (!InvTools.isEmpty(casing)){
                         CraftingPlugin.addRecipe(casing,
                                 "III",
                                 "I I",

@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
     public void initializeDefinintion() {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             ItemStack stack = getStack(circuit);
-            assert stack != null;
+            assert !InvTools.isEmpty(stack);
             RailcraftRegistry.register(this, circuit, stack);
         }
     }

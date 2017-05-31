@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -41,7 +42,7 @@ public class ModuleRF extends RailcraftModulePayload {
                 ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(gamma.getStack(),
                             "RLR",
@@ -55,7 +56,7 @@ public class ModuleRF extends RailcraftModulePayload {
                 gamma = ManipulatorVariant.RF_UNLOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(gamma.getStack(),
                             "RDR",

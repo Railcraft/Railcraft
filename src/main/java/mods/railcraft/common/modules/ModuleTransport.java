@@ -22,6 +22,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.CartFilterRecipe;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -72,7 +73,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 if (itemLoader.isAvailable()) {
                     ItemStack stack = itemLoader.getStack();
                     ItemStack detector = EnumDetector.ITEM.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(stack,
                             "SSS",
@@ -98,7 +99,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 if (itemUnloader.isAvailable()) {
                     ItemStack stack = itemUnloader.getStack();
                     ItemStack detector = EnumDetector.ITEM.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(stack,
                             "SSS",
@@ -124,7 +125,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 if (liquidLoader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(liquidLoader.getStack(),
                             "GLG",
@@ -138,7 +139,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 ManipulatorVariant liquidUnloader = ManipulatorVariant.FLUID_UNLOADER;
                 if (liquidUnloader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getStack();
-                    if (detector == null)
+                    if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(liquidUnloader.getStack(),
                             "GDG",

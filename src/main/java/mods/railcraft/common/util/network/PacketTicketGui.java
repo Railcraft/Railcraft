@@ -11,6 +11,7 @@ package mods.railcraft.common.util.network;
 
 import mods.railcraft.client.gui.GuiTicket;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +43,7 @@ class PacketTicketGui extends RailcraftPacket {
         try {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             ItemStack heldItem = player.getHeldItem(data.readEnum(EnumHand.values()));
-            if (heldItem != null && RailcraftItems.TICKET_GOLD.isEqual(heldItem))
+            if (!InvTools.isEmpty(heldItem) && RailcraftItems.TICKET_GOLD.isEqual(heldItem))
                 Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, heldItem));
         } catch (Exception exception) {
             Game.logThrowable("Error reading Golden Ticket Gui Packet", exception);

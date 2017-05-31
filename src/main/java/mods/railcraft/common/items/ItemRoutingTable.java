@@ -107,7 +107,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Nullable
     public static Deque<String> getContents(ItemStack routingTable) {
-        if (routingTable == null || !isRoutingTable(routingTable))
+        if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();
         if (nbt == null)
@@ -128,7 +128,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Nullable
     public static LinkedList<LinkedList<String>> getPages(ItemStack routingTable) {
-        if (routingTable == null || !isRoutingTable(routingTable))
+        if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();
         if (nbt == null)

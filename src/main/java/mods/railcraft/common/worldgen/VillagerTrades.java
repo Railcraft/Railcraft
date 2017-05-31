@@ -14,6 +14,7 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -128,11 +129,11 @@ public class VillagerTrades {
             }
             ItemStack sellStack = prepareStack(rand, sale);
             ItemStack buyStack1 = prepareStack(rand, offers[0]);
-            ItemStack buyStack2 = null;
+            ItemStack buyStack2 = InvTools.emptyStack();
             if (offers.length >= 2) {
                 buyStack2 = prepareStack(rand, offers[1]);
             }
-            if (sellStack != null && buyStack1 != null) {
+            if (!InvTools.isEmpty(sellStack) && !InvTools.isEmpty(buyStack1)) {
                 recipeList.add(new MerchantRecipe(buyStack1, buyStack2, enchanter.apply(sellStack, rand), 0, maxUseSetter.applyAsInt(this)));
             } else {
                 Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping",

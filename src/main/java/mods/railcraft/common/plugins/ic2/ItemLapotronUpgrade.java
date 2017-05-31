@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.ic2;
 
 import ic2.api.recipe.Recipes;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -27,12 +28,12 @@ public class ItemLapotronUpgrade extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        ItemStack lapotron = IC2Plugin.getItem("lapotron_crystal");
+        ItemStack energy_crystal = IC2Plugin.getItem("energy_crystal");
         ItemStack glassCable = IC2Plugin.getItem("cable#type:glass,insulation:0");
         ItemStack circuit = IC2Plugin.getItem("crafting#advanced_circuit");
 
-        if (lapotron != null && glassCable != null && circuit != null) {
-            lapotron.copy();
+        if (!InvTools.isEmpty(energy_crystal) && !InvTools.isEmpty(glassCable) && !InvTools.isEmpty(circuit)) {
+            energy_crystal.copy();
 //                lapotron.setItemDamage(-1);
             Recipes.advRecipes.addRecipe(new ItemStack(this),
                     "GGG",
@@ -42,7 +43,7 @@ public class ItemLapotronUpgrade extends ItemRailcraft {
                     'G', new ItemStack(Blocks.GLASS, 1, 0),
                     'w', glassCable,
                     'C', circuit,
-                    'L', lapotron);
+                    'L', energy_crystal);
         }
     }
 }

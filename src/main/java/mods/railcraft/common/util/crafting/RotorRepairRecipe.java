@@ -43,7 +43,7 @@ public class RotorRepairRecipe implements IRecipe {
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
-        ItemStack rotor = null;
+        ItemStack rotor = InvTools.emptyStack();
         int numBlades = 0;
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);

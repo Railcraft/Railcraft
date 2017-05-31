@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,14 +73,14 @@ public class ItemGoggles extends ItemRailcraftArmor {
         if (player == null)
             return null;
         ItemStack helm = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (helm != null && helm.getItem() instanceof ItemGoggles)
+        if (!InvTools.isEmpty(helm) && helm.getItem() instanceof ItemGoggles)
             return helm;
         return null;
     }
 
     public static boolean isPlayerWearing(EntityPlayer player) {
         ItemStack helm = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        return helm != null && helm.getItem() instanceof ItemGoggles;
+        return !InvTools.isEmpty(helm) && helm.getItem() instanceof ItemGoggles;
     }
 
 //    @Override
