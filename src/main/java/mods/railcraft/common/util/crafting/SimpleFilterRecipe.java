@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.items.ItemFilterOreDictionary;
+import mods.railcraft.common.items.ItemFilterSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -25,16 +25,25 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FilterOreDictRecipe implements IRecipe {
-    private static Predicate<ItemStack> FILTER = StackFilters.of(RailcraftItems.FILTER_ORE_DICT);
+public class SimpleFilterRecipe implements IRecipe {
+    private static Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterSimple.class);
     private static Predicate<ItemStack> PROTOTYPE = s -> !OreDictPlugin.getOreTags(s).isEmpty();
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         InventoryComposite inv = InventoryComposite.of(grid);
-        int filter = InvTools.countStacks(inv, FILTER);
-        int prototype = InvTools.countStacks(inv, PROTOTYPE);
-        return filter == 1 && prototype == 1;
+        int filterStacks = InvTools.countStacks(inv, FILTER);
+        if (filterStacks != 1)
+            return false;
+        ItemStack filter = InvTools.findMatchingItem(inv, FILTER);
+        if (InvTools.isEmpty(filter))
+            return false;
+        int prototype = InvTools.countStacks(inv, validPrototype(filter));
+        return prototype == 1;
+    }
+
+    private Predicate<ItemStack> validPrototype(ItemStack filter) {
+        return s -> !FILTER.test(s) && ((ItemFilterSimple) filter.getItem()).isValidPrototype(s);
     }
 
     @Override
@@ -43,9 +52,11 @@ public class FilterOreDictRecipe implements IRecipe {
             return InvTools.emptyStack();
         InventoryComposite inv = InventoryComposite.of(grid);
         ItemStack filter = InvTools.findMatchingItem(inv, FILTER);
-        ItemStack prototype = InvTools.findMatchingItem(inv, PROTOTYPE);
-        if (!InvTools.isEmpty(filter) && !InvTools.isEmpty(prototype))
-            return ItemFilterOreDictionary.setPrototype(filter, prototype);
+        if (InvTools.isEmpty(filter))
+            return InvTools.emptyStack();
+        ItemStack prototype = InvTools.findMatchingItem(inv, validPrototype(filter));
+        if (!InvTools.isEmpty(prototype))
+            return ItemFilterSimple.setPrototype(filter, prototype);
         return InvTools.emptyStack();
     }
 
@@ -66,7 +77,7 @@ public class FilterOreDictRecipe implements IRecipe {
         for (int i = 0; i < grid.length; ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!InvTools.isEmpty(stack)) {
-                if (!RailcraftItems.FILTER_ORE_DICT.isEqual(stack)) {
+                if (!FILTER.test(stack)) {
                     stack = stack.copy();
                     stack.stackSize = 1;
                     grid[i] = stack;

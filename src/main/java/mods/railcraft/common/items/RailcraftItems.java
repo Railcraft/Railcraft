@@ -122,6 +122,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
     FILTER_BLANK(ItemFilterBlank::new, "filter_blank"),
+    FILTER_TYPE(ItemFilterType::new, "filter_type"),
     FILTER_ORE_DICT(ItemFilterOreDictionary::new, "filter_ore_dict"),
     FIRESTONE_CRACKED(ItemFirestoneCracked::new, "firestone_cracked"),
     FIRESTONE_CUT(ItemFirestone::new, "firestone_cut"),
