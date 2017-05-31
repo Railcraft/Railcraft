@@ -13,6 +13,8 @@ import com.google.common.collect.Iterators;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,10 +24,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Creates a standalone instance of IInventory.
@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IInventoryObject {
+public class StandaloneInventory implements IInventory, IInventoryObject, IInventoryComposite {
 
     @Nullable
     private final String name;
@@ -76,16 +76,12 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
         this(size, null, (RailcraftTileEntity) null);
     }
 
-    public Stream<ItemStack> stream() {
-        return Arrays.stream(contents);
-    }
-
     public Predicate<ItemStack> presenceTest() {
         return StackFilters.containedIn(this);
     }
 
     @Override
-    public Object getInventoryObject() {
+    public Object getBackingObject() {
         return this;
     }
 
@@ -210,11 +206,6 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     }
 
     @Override
-    public Iterator<ItemStack> iterator() {
-        return Iterators.forArray(contents);
-    }
-
-    @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return true;
     }
@@ -240,6 +231,15 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
             contents[i] = null;
         }
         markDirty();
+    }
+
+    public Iterable<ItemStack> getStacks() {
+        return InventoryIterator.getRailcraft(this).getStacks();
+    }
+
+    @Override
+    public Iterator<IInventoryObject> iterator() {
+        return Iterators.singletonIterator(this);
     }
 
     public abstract static class Callback {

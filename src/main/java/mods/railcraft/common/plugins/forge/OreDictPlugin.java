@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,6 +49,17 @@ public class OreDictPlugin {
 //                return true;
 //        }
 //        return false;
+    }
+
+    public static boolean matches(ItemStack prototype, ItemStack target) {
+        int[] prototypeIds = OreDictionary.getOreIDs(prototype);
+        int[] targetIds = OreDictionary.getOreIDs(target);
+        return Arrays.stream(targetIds).anyMatch(id -> ArrayUtils.contains(prototypeIds, id));
+    }
+
+    public static List<String> getOreTags(ItemStack stack) {
+        int[] ids = OreDictionary.getOreIDs(stack);
+        return Arrays.stream(ids).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
     }
 
     @Nullable

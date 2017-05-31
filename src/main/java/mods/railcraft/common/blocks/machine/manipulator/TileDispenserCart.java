@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -91,7 +91,7 @@ public class TileDispenserCart extends TileManipulator {
                 cartStack.setStackDisplayName(cart.getName());
             ItemStack remainder = InvTools.moveItemStack(cartStack.copy(), testInv);
             if (remainder == null) {
-                InvTools.moveItemStack(cartStack, this);
+                InvTools.moveItemStack(cartStack, getInventory());
                 if (cart.isBeingRidden())
                     CartTools.removePassengers(cart);
                 cart.setDead();

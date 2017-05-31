@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,6 +19,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -55,12 +56,12 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
             return true;
         if (tile instanceof TileBoiler)
             return false;
-        IInventoryObject inventoryObject = InvTools.getInventory(tile);
+        IInventoryObject inventoryObject = InventoryFactory.get(tile);
         return inventoryObject != null && inventoryObject.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
-    private InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
+    private InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private boolean needsFuel;
 
     public TileBoilerFireboxSolid() {
@@ -78,7 +79,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
                 if (tile instanceof TileBoilerFireboxSolid) {
                     TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
                     master.tankWater.setFluid(Fluids.WATER.get(water));
-                    InventoryMapper masterFuel = new InventoryMapper(master.inventory, SLOT_BURN, 4);
+                    InventoryMapper masterFuel = InventoryMapper.make(master.inventory, SLOT_BURN, 4);
                     for (ItemStack stack : fuel) {
                         InvTools.moveItemStack(stack, masterFuel);
                     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,12 +21,24 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryMapper extends InvWrapperBase implements IInventory {
+public class InventoryMapper extends InvWrapperBase {
 
     private final IInventory inv;
     private final int start;
     private final int size;
     private int stackSizeLimit = -1;
+
+    public static InventoryMapper make(IInventory inv, boolean checkItems) {
+        return new InventoryMapper(inv, 0, inv.getSizeInventory(), checkItems);
+    }
+
+    public static InventoryMapper make(IInventory inv, int start, int size) {
+        return new InventoryMapper(inv, start, size, true);
+    }
+
+    public static InventoryMapper make(IInventory inv, int start, int size, boolean checkItems) {
+        return new InventoryMapper(inv, start, size, checkItems);
+    }
 
     public InventoryMapper(IInventory inv) {
         this(inv, 0, inv.getSizeInventory(), true);

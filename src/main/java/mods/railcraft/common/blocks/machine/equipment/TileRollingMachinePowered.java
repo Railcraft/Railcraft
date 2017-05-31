@@ -26,7 +26,7 @@ import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -35,7 +35,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,7 +93,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
 
     @Override
     protected void findMoreStuff() {
-        Collection<IInventoryObject> chests = cache.getAdjacentInventories();
+        IInventoryComposite chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && stack.isStackable() && stack.stackSize == 1) {

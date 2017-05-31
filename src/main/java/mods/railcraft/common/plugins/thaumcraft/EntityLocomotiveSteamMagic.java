@@ -45,7 +45,6 @@ import javax.annotation.Nonnull;
 import java.util.Map.Entry;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft")
@@ -60,10 +59,11 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
     private static final DataParameter<Integer> FIRE_ASPECT = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final DataParameter<Integer> WATER_ASPECT = DataManagerPlugin.create(DataSerializers.VARINT);
-    private final InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private final InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private final InventoryMapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
+
     private EssentiaTank fireAspect;
     private EssentiaTank waterAspect;
 

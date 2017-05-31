@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
 import net.minecraft.inventory.ISidedInventory;
@@ -19,16 +19,16 @@ import net.minecraft.util.EnumFacing;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
+public class SidedInventoryDecorator extends InvWrapperBase implements ISidedInventory {
 
     private final ISidedInventory inv;
     private final EnumFacing side;
 
-    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
+    public SidedInventoryDecorator(ISidedInventory inv, EnumFacing side) {
         this(inv, side, true);
     }
 
-    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
+    public SidedInventoryDecorator(ISidedInventory inv, EnumFacing side, boolean checkItems) {
         super(inv, checkItems);
         this.inv = inv;
         this.side = side;

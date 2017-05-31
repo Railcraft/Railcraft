@@ -10,13 +10,20 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 /**
- * Created by CovertJaguar on 5/7/2016.
+ * Created by CovertJaguar on 5/28/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryObject {
-    Object getBackingObject();
+public interface IInventoryComposite extends Iterable<IInventoryObject> {
+    default Stream<IInventoryObject> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
 
-    int getNumSlots();
+    default int slotCount() {
+        return stream().mapToInt(IInventoryObject::getNumSlots).sum();
+    }
 }

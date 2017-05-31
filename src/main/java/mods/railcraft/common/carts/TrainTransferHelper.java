@@ -17,7 +17,9 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -73,8 +75,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     @Nullable
     private ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
         for (EntityMinecart cart : carts) {
-            IInventoryObject inv = InvTools.getInventory(cart);
-            if (inv != null && canAcceptPushedItem(requester, cart, stack))
+            InventoryComposite inv = InventoryComposite.of(cart);
+            if (!inv.isEmpty() && canAcceptPushedItem(requester, cart, stack))
                 stack = InvTools.moveItemStack(stack, inv);
             if (InvTools.isEmpty(stack) || !canPassItemRequests(cart))
                 break;
@@ -95,8 +97,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     @Nullable
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, Predicate<ItemStack> filter) {
         for (EntityMinecart cart : carts) {
-            IInventoryObject inv = InvTools.getInventory(cart);
-            if (inv != null) {
+            InventoryComposite inv = InventoryComposite.of(cart);
+            if (!inv.isEmpty()) {
                 Set<StackKey> items = InvTools.findMatchingItems(inv, filter);
                 for (StackKey stackKey : items) {
                     ItemStack stack = stackKey.get();
@@ -124,7 +126,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     private boolean canPassItemRequests(EntityMinecart cart) {
         if (cart instanceof IItemCart)
             return ((IItemCart) cart).canPassItemRequests();
-        IInventoryObject inv = InvTools.getInventory(cart);
+        IInventoryObject inv = InventoryFactory.get(cart);
         return inv != null && inv.getNumSlots() >= NUM_SLOTS;
     }
 

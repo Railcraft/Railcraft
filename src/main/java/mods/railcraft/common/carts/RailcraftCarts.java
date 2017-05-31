@@ -268,7 +268,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private void registerEntity() {
         if (id < 0)
             return;
-        EntityRegistry.registerModEntity(type, getBaseTag(), id, Railcraft.getMod(), 256, 3, true);
+        EntityRegistry.registerModEntity(type, getBaseTag(), id, Railcraft.getMod(), 256, 2, true);
 
         // Legacy stuff
 //        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);

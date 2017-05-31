@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,7 @@ public class CommandHelpers {
     }
 
     public static void executeChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
-        if (!sender.canCommandSenderUseCommand(child.getRequiredPermissionLevel(), child.getFullCommandString()))
+        if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
             throw new WrongUsageException(LocalizationPlugin.translate("command.railcraft.noperms"));
         String[] newArgs = new String[args.length - 1];
         System.arraycopy(args, 1, newArgs, 0, newArgs.length);
@@ -93,7 +93,7 @@ public class CommandHelpers {
         Style body = new Style();
         body.setColor(TextFormatting.GRAY);
         sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
-        sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getRequiredPermissionLevel());
+        sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getPermissionLevel());
         sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".help");
         if (!command.getChildren().isEmpty()) {
             sendLocalizedChatMessage(sender, "command.railcraft.list");

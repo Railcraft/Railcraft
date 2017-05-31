@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -28,7 +27,6 @@ import java.util.function.Predicate;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Predicates {
 
-    private static final Predicate NON_NULL = Objects::nonNull;
     private static final Predicate ALWAYS_FALSE = t -> false;
     private static final Predicate ALWAYS_TRUE = t -> true;
 
@@ -56,9 +54,5 @@ public class Predicates {
 
     public static <T> Predicate<T> alwaysFalse() {
         return ALWAYS_FALSE;
-    }
-
-    public static <T> Predicate<T> nonNull() {
-        return NON_NULL;
     }
 }
