@@ -185,7 +185,7 @@ public class ContainerAnvil extends ContainerRepair {
                 }
             }
 
-            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) InvTools.isEmpty(input1);
+            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) input1 = InvTools.emptyStack();
 
             if (!InvTools.isEmpty(input1))
                 if (StringUtils.isBlank(repairedItemName)) {
@@ -307,7 +307,7 @@ public class ContainerAnvil extends ContainerRepair {
                     itemstack.stackSize -= repairContainer.materialCost;
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack);
                 } else {
-                    repairContainer.inputSlots.setInventorySlotContents(1, null);
+                    repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());
                 }
             } else {
                 repairContainer.inputSlots.setInventorySlotContents(1, null);
