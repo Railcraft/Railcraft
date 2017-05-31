@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -200,7 +201,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
                 TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
                 ITrackKitInstance track = trackTile.getTrackKitInstance();
                 ItemStack itemStack = track.getTrackKit().getTrackKitItem();
-                if (itemStack != null)
+                if (!InvTools.isEmpty(itemStack))
                     return itemStack;
             }
         } catch (Error error) {
@@ -426,7 +427,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             return false;
         if (super.canPlaceBlockAt(worldIn, pos))
             return true;
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             TrackType trackType = TrackRegistry.TRACK_TYPE.get(stack);
             if (trackType.getMaxSupportDistance() > 0 && TrackSupportTools.isSupported(worldIn, pos, trackType.getMaxSupportDistance()))
                 return true;

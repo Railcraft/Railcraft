@@ -15,6 +15,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -58,7 +59,7 @@ public abstract class BlockWayObject extends BlockContainerRailcraft implements 
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null)
+        if (!InvTools.isEmpty(heldItem))
             if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;
         TileEntity tile = worldIn.getTileEntity(pos);

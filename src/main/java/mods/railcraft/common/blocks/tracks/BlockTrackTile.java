@@ -41,8 +41,7 @@ public abstract class BlockTrackTile extends BlockTrack {
 
     //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te,
-        @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
