@@ -49,7 +49,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements ITankT
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
