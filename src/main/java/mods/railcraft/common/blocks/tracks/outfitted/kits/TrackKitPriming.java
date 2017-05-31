@@ -49,7 +49,7 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-        if (InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());

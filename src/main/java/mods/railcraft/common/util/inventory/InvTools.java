@@ -66,10 +66,6 @@ public abstract class InvTools {
         return stack == null || stack.stackSize <= 0 || stack.getItem() == null;
     }
 
-    public static boolean isEmpty(@Nullable List<ItemStack> stack) {
-        return stack == null || stack.size() <= 0;
-    }
-
     public static int getStackSize(@Nullable ItemStack stack) {
         if (isEmpty(stack))
             return 0;

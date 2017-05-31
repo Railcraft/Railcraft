@@ -176,9 +176,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         if (tile instanceof TileRockCrusher) {
             TileRockCrusher master = (TileRockCrusher) tile;
             for (int slot = 0; slot < 9; slot++) {
-                if (!InvTools.isEmpty(input) && slot < input.size())
+                if (input != null && slot < input.size())
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_INPUT + slot, input.get(slot));
-                if (!InvTools.isEmpty(output) && slot < output.size())
+                if (output != null && slot < output.size())
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_OUTPUT + slot, output.get(slot));
             }
         }

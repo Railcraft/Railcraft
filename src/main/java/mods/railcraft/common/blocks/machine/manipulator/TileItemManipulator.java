@@ -226,7 +226,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         });
     }
 
-    protected boolean itemMoved(ItemStack stack) {
+    protected boolean itemMoved(@Nullable ItemStack stack) {
         if (!InvTools.isEmpty(stack)) {
             setProcessing(true);
             return true;

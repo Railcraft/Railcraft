@@ -88,7 +88,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, getPos());
     }
 
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         if (!InvTools.isEmpty(heldItem)) {

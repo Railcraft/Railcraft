@@ -119,9 +119,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;
             for (int slot = 0; slot < 9; slot++) {
-                if (!InvTools.isEmpty(input) && slot < input.size())
+                if (input != null && slot < input.size())
                     master.inv.setInventorySlotContents(TileSteamOven.SLOT_INPUT + slot, input.get(slot));
-                if (!InvTools.isEmpty(output) && slot < output.size())
+                if (output != null && slot < output.size())
                     master.inv.setInventorySlotContents(TileSteamOven.SLOT_OUTPUT + slot, output.get(slot));
             }
         }

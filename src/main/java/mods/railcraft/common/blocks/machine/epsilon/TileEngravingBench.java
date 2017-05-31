@@ -262,7 +262,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
         if (InvTools.isEmpty(stack))
