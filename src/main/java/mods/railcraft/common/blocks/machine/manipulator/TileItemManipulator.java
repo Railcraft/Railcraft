@@ -159,7 +159,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
                         .filter(entry -> transferredItems.getOrDefault(entry.getKey(), 0) < entry.getValue())
                         .anyMatch(entry -> {
                             ItemStack moved = InvTools.moveOneItem(getSource(), getDestination(), entry.getKey().get());
-                            if (moved != null) {
+                            if (!InvTools.isEmpty(moved)) {
                                 setProcessing(true);
                                 transferredItems.merge(entry.getKey(), 1, Integer::sum);
                                 return true;
@@ -226,8 +226,8 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         });
     }
 
-    protected boolean itemMoved(@Nullable ItemStack stack) {
-        if (stack != null) {
+    protected boolean itemMoved(ItemStack stack) {
+        if (!InvTools.isEmpty(stack)) {
             setProcessing(true);
             return true;
         }

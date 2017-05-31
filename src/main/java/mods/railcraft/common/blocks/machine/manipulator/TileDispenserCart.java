@@ -62,7 +62,7 @@ public class TileDispenserCart extends TileManipulator {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
                     ItemStack cartStack = getStackInSlot(ii);
-                    if (cartStack != null) {
+                    if (!InvTools.isEmpty(cartStack)) {
                         BlockPos pos = getPos().offset(facing);
                         boolean minecartItem = cartStack.getItem() instanceof IMinecartItem;
                         if (cartStack.getItem() instanceof ItemMinecart || minecartItem) {

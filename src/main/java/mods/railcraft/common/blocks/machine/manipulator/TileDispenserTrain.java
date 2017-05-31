@@ -77,7 +77,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     private boolean spawnNextCart() {
         ItemStack spawn = getPattern().getStackInSlot(patternIndex);
-        if (spawn == null) {
+        if (InvTools.isEmpty(spawn)) {
             resetSpawnSequence();
             return false;
         }
@@ -90,7 +90,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
                 && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
-            if (cartItem != null) {
+            if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
                 if (cartPlaced != null) {
                     CartToolsAPI.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
