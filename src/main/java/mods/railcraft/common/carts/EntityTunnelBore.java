@@ -1007,7 +1007,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         int burn = 0;
         for (int slot = 0; slot < invFuel.getSizeInventory(); slot++) {
             ItemStack stack = invFuel.getStackInSlot(slot);
-            if (InvTools.isEmpty(stack)) {
+            if (!InvTools.isEmpty(stack)) {
                 burn = FuelPlugin.getBurnTime(stack);
                 if (burn > 0) {
                     if (stack.getItem().hasContainerItem(stack))
