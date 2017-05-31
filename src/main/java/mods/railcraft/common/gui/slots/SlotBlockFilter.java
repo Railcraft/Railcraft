@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ public class SlotBlockFilter extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null && stack.getItem() instanceof ItemBlock;
+        return !InvTools.isEmpty(stack) && stack.getItem() instanceof ItemBlock;
     }
 
 }

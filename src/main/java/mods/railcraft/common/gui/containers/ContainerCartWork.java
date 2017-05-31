@@ -10,6 +10,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.carts.EntityCartWork;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -68,7 +69,7 @@ public final class ContainerCartWork extends RailcraftContainer {
             for (int i = 0; i < 9; ++i) {
                 ItemStack itemstack = craftMatrix.removeStackFromSlot(i);
 
-                if (itemstack != null) {
+                if (!InvTools.isEmpty(itemstack)) {
                     player.dropItem(itemstack, false);
                 }
             }

@@ -11,6 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -81,7 +82,7 @@ public class ContainerAnvil extends ContainerRepair {
             this.materialCost = 0;
             boolean isEnchantedBook = false;
 
-            if (input2 != null) {
+            if (!InvTools.isEmpty(input2)) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
                     return;
                 isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
@@ -184,9 +185,9 @@ public class ContainerAnvil extends ContainerRepair {
                 }
             }
 
-            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) input1 = null;
+            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) InvTools.isEmpty(input1);
 
-            if (input1 != null)
+            if (!InvTools.isEmpty(input1))
                 if (StringUtils.isBlank(repairedItemName)) {
                     if (input1original.hasDisplayName()) {
                         nameCost = 1;
@@ -202,7 +203,7 @@ public class ContainerAnvil extends ContainerRepair {
             this.maximumCost = baseCost + enchantCost;
 
             if (enchantCost <= 0) {
-                input1 = null;
+                InvTools.isEmpty(input1);
             }
 
             // Railcraft changes max cost from 39 to 50
@@ -212,13 +213,13 @@ public class ContainerAnvil extends ContainerRepair {
 
             // Here too
             if (maximumCost > MAX_COST && !thePlayer.capabilities.isCreativeMode) {
-                input1 = null;
+                InvTools.isEmpty(input1);
             }
 
-            if (input1 != null) {
+            if (!InvTools.isEmpty(input1)) {
                 int repairCost = input1.getRepairCost();
 
-                if (input2 != null && repairCost < input2.getRepairCost()) {
+                if (!InvTools.isEmpty(input2) && repairCost < input2.getRepairCost()) {
                     repairCost = input2.getRepairCost();
                 }
 
@@ -302,7 +303,7 @@ public class ContainerAnvil extends ContainerRepair {
             if (repairContainer.materialCost > 0) {
                 ItemStack itemstack = repairContainer.inputSlots.getStackInSlot(1);
 
-                if (itemstack != null && itemstack.stackSize > repairContainer.materialCost) {
+                if (!InvTools.isEmpty(itemstack) && itemstack.stackSize > repairContainer.materialCost) {
                     itemstack.stackSize -= repairContainer.materialCost;
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack);
                 } else {

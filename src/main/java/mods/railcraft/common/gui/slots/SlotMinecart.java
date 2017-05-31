@@ -9,6 +9,7 @@
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,6 @@ public class SlotMinecart extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(@Nullable ItemStack stack) {
-        return stack != null && (stack.getItem() instanceof IMinecartItem || stack.getItem() instanceof ItemMinecart);
+        return !InvTools.isEmpty(stack) && (stack.getItem() instanceof IMinecartItem || stack.getItem() instanceof ItemMinecart);
     }
 }

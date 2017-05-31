@@ -11,6 +11,7 @@ package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,7 +66,7 @@ public class ItemFluidContainer extends ItemRailcraft {
 
             if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode) {
                 ItemStack empty = getContainerItem(stack);
-                if (empty == null) {
+                if (InvTools.isEmpty(empty)) {
                     empty = stack.copy();
                     empty.stackSize = 0;
                 }

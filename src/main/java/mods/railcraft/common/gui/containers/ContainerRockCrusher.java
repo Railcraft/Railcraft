@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.machine.alpha.TileRockCrusher;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -92,7 +93,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(@Nullable ItemStack stack) {
-            return stack != null && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
         }
 
     }

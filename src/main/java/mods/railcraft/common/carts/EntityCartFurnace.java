@@ -70,7 +70,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)))
             return true;
         Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             int burnTime = FuelPlugin.getBurnTime(stack);
 
             if (burnTime > 0 && fuel + burnTime <= 32000) {

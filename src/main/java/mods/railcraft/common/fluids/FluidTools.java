@@ -97,7 +97,7 @@ public final class FluidTools {
 
     private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
         ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (filled == null) {
+        if (InvTools.isEmpty(container)) {
             sendToOutput(inv);
             return ProcessState.RESET;
         }
@@ -107,7 +107,7 @@ public final class FluidTools {
 
     private static ProcessState tryDrain(IInventory inv, StandardTank tank, ItemStack container) {
         ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (drained == null) {
+        if (InvTools.isEmpty(drained)) {
             sendToOutput(inv);
             return ProcessState.RESET;
         }
@@ -121,21 +121,21 @@ public final class FluidTools {
      */
     public static ProcessState processContainer(IInventory inv, StandardTank tank, boolean defaultToFill, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
-        if (container == null || FluidUtil.getFluidHandler(container) == null) {
+        if (InvTools.isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
             sendToProcessing(inv);
             return ProcessState.RESET;
         }
         if (state == ProcessState.RESET) {
             if (defaultToFill) {
                 ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-                if (filled == null) {
+                if (InvTools.isEmpty(filled)) {
                     return tryDrain(inv, tank, container);
                 }
                 inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
                 return ProcessState.FILLING;
             } else {
                 ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-                if (drained == null) {
+                if (InvTools.isEmpty(drained)) {
                     return tryFill(inv, tank, container);
                 }
                 inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
@@ -294,7 +294,7 @@ public final class FluidTools {
     }
 
     public static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
-        if (empty != null) {
+        if (!InvTools.isEmpty(empty)) {
             FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
             registerContainer(container);
             return true;

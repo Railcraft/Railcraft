@@ -106,7 +106,7 @@ public abstract class RailcraftContainer extends Container {
 
     @Nullable
     protected ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
-        ItemStack stack = null;
+        ItemStack stack = InvTools.emptyStack();
 
         if (mouseButton == 2) {
             if (slot.canAdjustPhantom())
@@ -117,13 +117,13 @@ public abstract class RailcraftContainer extends Container {
             ItemStack stackSlot = slot.getStack();
             ItemStack stackHeld = playerInv.getItemStack();
 
-            if (stackSlot != null)
+            if (!InvTools.isEmpty(stackSlot))
                 stack = stackSlot.copy();
 
-            if (stackSlot == null) {
-                if (stackHeld != null && slot.isItemValid(stackHeld))
+            if (InvTools.isEmpty(stackSlot)) {
+                if (!InvTools.isEmpty(stackHeld) && slot.isItemValid(stackHeld))
                     fillPhantomSlot(slot, stackHeld, mouseButton);
-            } else if (stackHeld == null) {
+            } else if (InvTools.isEmpty(stackHeld)) {
                 adjustPhantomSlot(slot, mouseButton, clickType);
                 slot.onPickupFromSlot(player, playerInv.getItemStack());
             } else if (slot.isItemValid(stackHeld))
@@ -139,7 +139,7 @@ public abstract class RailcraftContainer extends Container {
         if (!slot.canAdjustPhantom())
             return;
         ItemStack stackSlot = slot.getStack();
-        if (stackSlot == null)
+        if (InvTools.isEmpty(stackSlot))
             return;
         int stackSize;
         if (clickType == ClickType.QUICK_MOVE)
@@ -174,7 +174,7 @@ public abstract class RailcraftContainer extends Container {
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot != null && InvTools.isItemEqual(stackInSlot, stackToShift)) {
+                if (!InvTools.isEmpty(stackInSlot) && InvTools.isItemEqual(stackInSlot, stackToShift)) {
                     int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     if (resultingStackSize <= max) {
@@ -194,7 +194,7 @@ public abstract class RailcraftContainer extends Container {
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot == null) {
+                if (InvTools.isEmpty(stackInSlot)) {
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     stackInSlot = stackToShift.copy();
                     stackInSlot.stackSize = Math.min(stackToShift.stackSize, max);
@@ -232,7 +232,7 @@ public abstract class RailcraftContainer extends Container {
         int numSlots = inventorySlots.size();
         if (slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();
-            assert stackInSlot != null;
+            assert !InvTools.isEmpty(stackInSlot);
             originalStack = stackInSlot.copy();
             if (!(slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots))) {
                 if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {

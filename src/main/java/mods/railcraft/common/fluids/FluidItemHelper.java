@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.*;
@@ -31,7 +32,7 @@ public class FluidItemHelper {
      * @return The modified container and the amount of Fluid filled.
      */
     public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
-        if (container == null)
+        if (InvTools.isEmpty(container))
             return new FillReturn(null, 0);
         container = container.copy();
         if (fluidStack == null)
@@ -42,7 +43,7 @@ public class FluidItemHelper {
             return new FillReturn(container, fluidCon.fill(container, fluidStack, true));
         }
         ItemStack filledCon = FluidContainerRegistry.fillFluidContainer(fluidStack, container);
-        if (filledCon != null)
+        if (!InvTools.isEmpty(filledCon))
             return new FillReturn(filledCon, FluidContainerRegistry.getFluidForFilledItem(filledCon).amount);
         return new FillReturn(container, 0);
     }
@@ -57,7 +58,7 @@ public class FluidItemHelper {
      * @return The modified container and any fluid drained.
      */
     public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
-        if (container == null)
+        if (InvTools.isEmpty(container))
             return new DrainReturn(null, null, false);
         container = container.copy();
         if (container.getItem() instanceof IFluidContainerItem) {

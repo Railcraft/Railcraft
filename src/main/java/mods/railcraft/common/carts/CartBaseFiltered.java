@@ -51,7 +51,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
 
     @Nullable
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
-        ItemStack filter = null;
+        ItemStack filter = InvTools.emptyStack();
         NBTTagCompound nbt = cart.getTagCompound();
         if (nbt != null) {
             NBTTagCompound filterNBT = nbt.getCompoundTag("filterStack");

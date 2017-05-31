@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ public class SlotBallast extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null && BallastRegistry.isItemBallast(stack);
+        return !InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack);
     }
 
 }
