@@ -78,7 +78,7 @@ public class ContainerAnvil extends ContainerRepair {
             ItemStack input1 = input1original.copy();
             ItemStack input2 = inputSlots.getStackInSlot(1);
             Map<Enchantment, Integer> input1Enchantments = EnchantmentHelper.getEnchantments(input1);
-            baseCost = baseCost + input1original.getRepairCost() + (input2 == null ? 0 : input2.getRepairCost());
+            baseCost = baseCost + input1original.getRepairCost() + (InvTools.isEmpty(input2) ? 0 : input2.getRepairCost());
             this.materialCost = 0;
             boolean isEnchantedBook = false;
 
@@ -91,7 +91,7 @@ public class ContainerAnvil extends ContainerRepair {
                     int damageToRepair = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
 
                     if (damageToRepair <= 0) {
-                        outputSlot.setInventorySlotContents(0, null);
+                        outputSlot.setInventorySlotContents(0, InvTools.emptyStack());
                         this.maximumCost = 0;
                         return;
                     }
@@ -108,7 +108,7 @@ public class ContainerAnvil extends ContainerRepair {
                     this.materialCost = projectedMaterialCost;
                 } else {
                     if (!isEnchantedBook && (input1.getItem() != input2.getItem() || !input1.isItemStackDamageable())) {
-                        outputSlot.setInventorySlotContents(0, null);
+                        outputSlot.setInventorySlotContents(0, InvTools.emptyStack());
                         this.maximumCost = 0;
                         return;
                     }
@@ -298,7 +298,7 @@ public class ContainerAnvil extends ContainerRepair {
             // Only Railcraft change is to divide breakChance in half
             breakChance /= 2.0;
 
-            repairContainer.inputSlots.setInventorySlotContents(0, null);
+            repairContainer.inputSlots.setInventorySlotContents(0, InvTools.emptyStack());
 
             if (repairContainer.materialCost > 0) {
                 ItemStack itemstack = repairContainer.inputSlots.getStackInSlot(1);
