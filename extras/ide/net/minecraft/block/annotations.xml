@@ -1,8 +1,0 @@
-<root>
-    <item name='net.minecraft.block.Block net.minecraft.block.state.IBlockState getDefaultState()'>
-        <annotation name='javax.annotation.Nonnull'/>
-    </item>
-    <item name='net.minecraft.block.Block net.minecraft.item.ItemStack getPickBlock(net.minecraft.block.state.IBlockState, net.minecraft.util.math.RayTraceResult, net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.player.EntityPlayer)'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
-</root>
