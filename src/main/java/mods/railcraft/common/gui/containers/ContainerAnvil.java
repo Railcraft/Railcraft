@@ -310,7 +310,7 @@ public class ContainerAnvil extends ContainerRepair {
                     repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());
                 }
             } else {
-                repairContainer.inputSlots.setInventorySlotContents(1, null);
+                repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());
             }
 
             repairContainer.maximumCost = 0;
