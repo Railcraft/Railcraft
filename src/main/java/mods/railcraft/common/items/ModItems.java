@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -31,7 +32,7 @@ public enum ModItems {
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),
     MFSU(Mod.IC2, "te#mfsu"),
-    BATTERY(Mod.IC2, "re_battery"),
+    BATTERY(Mod.IC2, "re_battery", OreDictionary.WILDCARD_VALUE),
     IC2_MACHINE(Mod.IC2, "resource#machine"),
     SLAG(Mod.IC2, "misc_resource#slag"),
     RUBBER_BOOTS(Mod.IC2, "rubber_boots"),
