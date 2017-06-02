@@ -97,7 +97,7 @@ public final class FluidTools {
 
     private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
         ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (InvTools.isEmpty(container)) {
+        if (InvTools.isEmpty(filled)) {
             sendToOutput(inv);
             return ProcessState.RESET;
         }
