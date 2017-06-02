@@ -167,7 +167,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_INPUT);
-        return fuel == null || fuel.stackSize < 8;
+        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
     }
 
     @Override
@@ -181,13 +181,13 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         setCooking(false);
 
                 ItemStack input = getStackInSlot(SLOT_INPUT);
-                if (input != null && input.stackSize > 0 && !InvTools.isSynthetic(input)) {
+                if (!InvTools.isEmpty(input) && input.stackSize > 0 && !InvTools.isSynthetic(input)) {
                     if (!paused && clock % COOK_STEP_LENGTH == 0) {
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
                         ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
 
                         if (recipe != null)
-                            if ((output == null || (output.isItemEqual(recipe.getOutput()) && output.stackSize + recipe.getOutput().stackSize <= output.getMaxStackSize()))
+                            if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && output.stackSize + recipe.getOutput().stackSize <= output.getMaxStackSize()))
                                     && tank.fill(recipe.getFluidOutput(), false) >= recipe.getFluidOutput().amount) {
                                 cookTimeTotal = recipe.getCookTime();
                                 cookTime += COOK_STEP_LENGTH;
@@ -197,7 +197,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                                     cookTime = 0;
                                     finishedAt = clock;
                                     decrStackSize(SLOT_INPUT, 1);
-                                    if (output == null)
+                                    if (InvTools.isEmpty(output))
                                         setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                                     else
                                         output.stackSize += recipe.getOutput().stackSize;
@@ -221,13 +221,13 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                 }
 
                 ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
-                if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
+                if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
                     setInventorySlotContents(SLOT_LIQUID_INPUT, null);
                     dropItem(topSlot);
                 }
 
                 ItemStack bottomSlot = getStackInSlot(SLOT_LIQUID_OUTPUT);
-                if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
+                if (!InvTools.isEmpty(bottomSlot) && !FluidItemHelper.isContainer(bottomSlot)) {
                     setInventorySlotContents(SLOT_LIQUID_OUTPUT, null);
                     dropItem(bottomSlot);
                 }

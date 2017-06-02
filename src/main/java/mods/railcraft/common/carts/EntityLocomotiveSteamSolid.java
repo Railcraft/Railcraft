@@ -99,7 +99,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
             if (InvTools.hasEmptySlot(invStock)) {
                 ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
-                if (stack != null)
+                if (!InvTools.isEmpty(stack))
                     InvTools.moveItemStack(stack, invStock);
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {

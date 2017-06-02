@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -49,7 +50,7 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());

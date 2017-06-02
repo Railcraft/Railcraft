@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,7 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
      */
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
-        return stack != null && stack.getItemDamage() == EnumOreMagic.FIRESTONE.ordinal();
+        return !InvTools.isEmpty(stack) && stack.getItemDamage() == EnumOreMagic.FIRESTONE.ordinal();
     }
 
     /**

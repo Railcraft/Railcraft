@@ -194,7 +194,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         }
 
         ItemStack emblem = makeEmblem();
-        if (emblem == null)
+        if (InvTools.isEmpty(emblem))
             return;
 
         if (!isItemValidForSlot(SLOT_INPUT, getStackInSlot(SLOT_INPUT))) {
@@ -272,6 +272,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         if (OreDictPlugin.isOreType("ingotSteel", stack))
             return true;
         if (OreDictPlugin.isOreType("ingotBronze", stack))
+            return true;
+        if (OreDictPlugin.isOreType("ingotBrass", stack))
             return true;
         return Items.GOLD_INGOT == stack.getItem();
     }

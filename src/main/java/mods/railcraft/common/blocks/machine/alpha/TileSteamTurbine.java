@@ -424,7 +424,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null) {
             ItemStack rotor = mBlock.inv.getStackInSlot(0);
-            if (rotor == null)
+            if (InvTools.isEmpty(rotor))
                 return true;
             if (!InvTools.isItemEqual(rotor, getSampleRotor()))
                 return true;

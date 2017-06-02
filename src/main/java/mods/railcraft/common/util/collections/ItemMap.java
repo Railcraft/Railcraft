@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -55,7 +56,7 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
     }
 
     public boolean containsKey(@Nullable ItemStack stack) {
-        return stack != null && containsKey(stack.getItem(), stack.getItemDamage());
+        return !InvTools.isEmpty(stack) && containsKey(stack.getItem(), stack.getItemDamage());
     }
 
     public Predicate<ItemStack> getStackFilter() {

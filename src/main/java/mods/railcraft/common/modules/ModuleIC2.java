@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
 //import mods.railcraft.common.plugins.ic2.crops.*;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -76,10 +77,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
 //                }
 
                 ItemStack batbox = ModItems.BAT_BOX.get();
-                if (batbox != null) {
+                if (!InvTools.isEmpty(batbox)) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_BATBOX;
                     ItemStack stack = cart.getStack();
-                    if (stack != null) {
+                    if (!InvTools.isEmpty(stack)) {
                         CraftingPlugin.addRecipe(stack,
                                 "E",
                                 "M",
@@ -91,10 +92,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 if (!Mod.IC2_CLASSIC.isLoaded()) {
                     ItemStack cesu = ModItems.CESU.get();
-                    if (cesu != null) {
+                    if (!InvTools.isEmpty(cesu)) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
                         ItemStack stack = cart.getStack();
-                        if (stack != null) {
+                        if (!InvTools.isEmpty(stack)) {
                             CraftingPlugin.addRecipe(stack,
                                     "E",
                                     "M",
@@ -105,10 +106,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 } else {
                     ItemStack mfsu = ModItems.MFSU.get();
-                    if (mfsu != null) {
+                    if (!InvTools.isEmpty(mfsu)) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_MFSU;
                         ItemStack stack = cart.getStack();
-                        if (stack != null) {
+                        if (!InvTools.isEmpty(stack)) {
                             CraftingPlugin.addRecipe(stack,
                                     "E",
                                     "M",
@@ -120,10 +121,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 }
 
                 ItemStack mfe = ModItems.MFE.get();
-                if (mfe != null) {
+                if (!InvTools.isEmpty(mfe)) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_MFE;
                     ItemStack stack = cart.getStack();
-                    if (stack != null) {
+                    if (!InvTools.isEmpty(stack)) {
 
                         CraftingPlugin.addRecipe(stack,
                                 "E",
@@ -143,7 +144,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 else
                     detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
-                if (battery != null && machine != null) {
+                if (!InvTools.isEmpty(battery) && !InvTools.isEmpty(machine)) {
                     if (ManipulatorVariant.ENERGY_LOADER.isAvailable())
                         Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_LOADER.getStack(),
                                 "BLB",

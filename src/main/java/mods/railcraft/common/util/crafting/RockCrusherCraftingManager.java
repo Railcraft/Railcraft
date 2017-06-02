@@ -98,7 +98,7 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
     @Override
     public ICrusherRecipe getRecipe(ItemStack input) {
-        if (input == null) return null;
+        if (InvTools.isEmpty(input)) return null;
         for (ICrusherRecipe r : recipes.high()) {
             if (r.getInputMatcher().apply(input))
                 return r;
@@ -235,7 +235,7 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
         @Override
         public void addOutput(@Nullable ItemStack output, IGenRule genRule) {
-            if (output == null) return;
+            if (InvTools.isEmpty(output)) return;
             outputs.add(new OutputEntry(output, genRule));
         }
 
@@ -277,7 +277,7 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
                         break;
                     }
                 }
-                if (output != null) {
+                if (!InvTools.isEmpty(output)) {
                     list.add(output);
                 }
             }

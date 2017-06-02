@@ -11,6 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -77,11 +78,11 @@ public class ContainerAnvil extends ContainerRepair {
             ItemStack input1 = input1original.copy();
             ItemStack input2 = inputSlots.getStackInSlot(1);
             Map<Enchantment, Integer> input1Enchantments = EnchantmentHelper.getEnchantments(input1);
-            baseCost = baseCost + input1original.getRepairCost() + (input2 == null ? 0 : input2.getRepairCost());
+            baseCost = baseCost + input1original.getRepairCost() + (InvTools.isEmpty(input2) ? 0 : input2.getRepairCost());
             this.materialCost = 0;
             boolean isEnchantedBook = false;
 
-            if (input2 != null) {
+            if (!InvTools.isEmpty(input2)) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
                     return;
                 isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
@@ -90,7 +91,7 @@ public class ContainerAnvil extends ContainerRepair {
                     int damageToRepair = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
 
                     if (damageToRepair <= 0) {
-                        outputSlot.setInventorySlotContents(0, null);
+                        outputSlot.setInventorySlotContents(0, InvTools.emptyStack());
                         this.maximumCost = 0;
                         return;
                     }
@@ -107,7 +108,7 @@ public class ContainerAnvil extends ContainerRepair {
                     this.materialCost = projectedMaterialCost;
                 } else {
                     if (!isEnchantedBook && (input1.getItem() != input2.getItem() || !input1.isItemStackDamageable())) {
-                        outputSlot.setInventorySlotContents(0, null);
+                        outputSlot.setInventorySlotContents(0, InvTools.emptyStack());
                         this.maximumCost = 0;
                         return;
                     }
@@ -184,9 +185,9 @@ public class ContainerAnvil extends ContainerRepair {
                 }
             }
 
-            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) input1 = null;
+            if (isEnchantedBook && !input1.getItem().isBookEnchantable(input1, input2)) input1 = InvTools.emptyStack();
 
-            if (input1 != null)
+            if (!InvTools.isEmpty(input1))
                 if (StringUtils.isBlank(repairedItemName)) {
                     if (input1original.hasDisplayName()) {
                         nameCost = 1;
@@ -202,7 +203,7 @@ public class ContainerAnvil extends ContainerRepair {
             this.maximumCost = baseCost + enchantCost;
 
             if (enchantCost <= 0) {
-                input1 = null;
+                input1 = InvTools.emptyStack();
             }
 
             // Railcraft changes max cost from 39 to 50
@@ -212,13 +213,13 @@ public class ContainerAnvil extends ContainerRepair {
 
             // Here too
             if (maximumCost > MAX_COST && !thePlayer.capabilities.isCreativeMode) {
-                input1 = null;
+                input1 = InvTools.emptyStack();
             }
 
-            if (input1 != null) {
+            if (!InvTools.isEmpty(input1)) {
                 int repairCost = input1.getRepairCost();
 
-                if (input2 != null && repairCost < input2.getRepairCost()) {
+                if (!InvTools.isEmpty(input2) && repairCost < input2.getRepairCost()) {
                     repairCost = input2.getRepairCost();
                 }
 
@@ -245,7 +246,7 @@ public class ContainerAnvil extends ContainerRepair {
 
         if (getSlot(2).getHasStack()) {
             ItemStack itemstack = getSlot(2).getStack();
-            assert itemstack != null;
+            assert !InvTools.isEmpty(itemstack);
 
             if (StringUtils.isBlank(par1Str)) {
                 itemstack.clearCustomName();
@@ -297,19 +298,19 @@ public class ContainerAnvil extends ContainerRepair {
             // Only Railcraft change is to divide breakChance in half
             breakChance /= 2.0;
 
-            repairContainer.inputSlots.setInventorySlotContents(0, null);
+            repairContainer.inputSlots.setInventorySlotContents(0, InvTools.emptyStack());
 
             if (repairContainer.materialCost > 0) {
                 ItemStack itemstack = repairContainer.inputSlots.getStackInSlot(1);
 
-                if (itemstack != null && itemstack.stackSize > repairContainer.materialCost) {
+                if (!InvTools.isEmpty(itemstack) && itemstack.stackSize > repairContainer.materialCost) {
                     itemstack.stackSize -= repairContainer.materialCost;
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack);
                 } else {
-                    repairContainer.inputSlots.setInventorySlotContents(1, null);
+                    repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());
                 }
             } else {
-                repairContainer.inputSlots.setInventorySlotContents(1, null);
+                repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());
             }
 
             repairContainer.maximumCost = 0;

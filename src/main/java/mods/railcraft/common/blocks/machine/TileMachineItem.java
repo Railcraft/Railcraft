@@ -110,7 +110,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack inSlot = getStackInSlot(index);
-        setInventorySlotContents(index, null);
+        setInventorySlotContents(index, InvTools.emptyStack());
         return inSlot;
     }
 

@@ -151,7 +151,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
                         .filter(entry -> transferredItems.count(entry.getElement()) < entry.getCount())
                         .anyMatch(entry -> {
                             ItemStack moved = InvTools.moveOneItem(getSource(), getDestination(), StackFilters.matches(entry.getElement().get()));
-                            if (moved != null) {
+                            if (!InvTools.isEmpty(moved)) {
                                 setProcessing(true);
                                 transferredItems.add(entry.getElement());
                                 return true;

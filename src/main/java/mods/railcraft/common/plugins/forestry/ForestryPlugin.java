@@ -124,7 +124,7 @@ public class ForestryPlugin {
             RailcraftItems trackmanT1 = RailcraftItems.BACKPACK_TRACKMAN_T1;
             if (trackmanT1.isLoaded()) {
                 ItemStack backpack = trackmanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -140,9 +140,9 @@ public class ForestryPlugin {
             RailcraftItems trackmanT2 = RailcraftItems.BACKPACK_TRACKMAN_T2;
             if (trackmanT1.isLoaded() && trackmanT2.isLoaded()) {
                 ItemStack backpack = trackmanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -157,7 +157,7 @@ public class ForestryPlugin {
             RailcraftItems signalmanT1 = RailcraftItems.BACKPACK_SIGNALMAN_T1;
             if (signalmanT1.isLoaded()) {
                 ItemStack backpack = signalmanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -173,9 +173,9 @@ public class ForestryPlugin {
             RailcraftItems signalmanT2 = RailcraftItems.BACKPACK_SIGNALMAN_T2;
             if (signalmanT1.isLoaded() && signalmanT2.isLoaded()) {
                 ItemStack backpack = signalmanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -190,7 +190,7 @@ public class ForestryPlugin {
             RailcraftItems icemanT1 = RailcraftItems.BACKPACK_ICEMAN_T1;
             if (icemanT1.isLoaded()) {
                 ItemStack backpack = icemanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -206,9 +206,9 @@ public class ForestryPlugin {
             RailcraftItems icemanT2 = RailcraftItems.BACKPACK_ICEMAN_T2;
             if (icemanT1.isLoaded() && icemanT2.isLoaded()) {
                 ItemStack backpack = icemanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -224,7 +224,7 @@ public class ForestryPlugin {
             RailcraftItems apothecaryT1 = RailcraftItems.BACKPACK_APOTHECARY_T1;
             if (apothecaryT1.isLoaded()) {
                 ItemStack backpack = apothecaryT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
 //                if (!ThaumcraftPlugin.isModInstalled()) {
                     CraftingPlugin.addRecipe(backpack,
@@ -243,9 +243,9 @@ public class ForestryPlugin {
             RailcraftItems apothecaryT2 = RailcraftItems.BACKPACK_APOTHECARY_T2;
             if (apothecaryT1.isLoaded() && apothecaryT2.isLoaded()) {
                 ItemStack backpack = apothecaryT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",

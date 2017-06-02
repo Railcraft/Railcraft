@@ -18,6 +18,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.worldgen.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -95,7 +96,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
                     ItemStack fertilizer = ForestryPlugin.getItem("fertilizerCompound");
 
-                    if (fertilizer != null) {
+                    if (!InvTools.isEmpty(fertilizer)) {
                         fertilizer = fertilizer.copy();
                         fertilizer.stackSize = 2;
                         CraftingPlugin.addShapelessRecipe(fertilizer,

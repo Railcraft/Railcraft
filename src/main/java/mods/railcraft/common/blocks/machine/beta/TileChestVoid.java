@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 
@@ -31,7 +32,7 @@ public class TileChestVoid extends TileChestRailcraft {
         if (clock % TICK_PER_VOID == 0 && Game.isHost(worldObj))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 ItemStack stack = getStackInSlot(slot);
-                if (stack != null) {
+                if (!InvTools.isEmpty(stack)) {
                     decrStackSize(slot, 1);
                     break;
                 }

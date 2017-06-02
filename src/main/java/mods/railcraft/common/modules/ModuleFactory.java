@@ -71,7 +71,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'M', "sand");
 
                     ItemStack cokeStack = RailcraftItems.COKE.getStack();
-                    if (cokeStack != null)
+                    if (!InvTools.isEmpty(cokeStack))
                         RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Items.COAL, 1, 0), true, false, cokeStack, Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE), COKE_COOK_TIME);
                 }
 

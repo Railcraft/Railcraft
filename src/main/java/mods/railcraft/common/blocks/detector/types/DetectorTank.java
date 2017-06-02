@@ -21,6 +21,7 @@ import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -57,7 +58,7 @@ public class DetectorTank extends DetectorFilter {
     @Nullable
     public Fluid getFilterFluid() {
         ItemStack filter = getFilters().getStackInSlot(0);
-        if (filter != null)
+        if (!InvTools.isEmpty(filter))
             return FluidItemHelper.getFluidInContainer(filter);
         return null;
     }

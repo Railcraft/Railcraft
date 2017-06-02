@@ -96,7 +96,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
         IInventoryComposite chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.isStackable() && stack.stackSize == 1) {
+            if (!InvTools.isEmpty(stack) && stack.isStackable() && stack.stackSize == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
                 if (request != null) {
                     stack.stackSize++;

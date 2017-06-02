@@ -82,12 +82,12 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
 
         for (int i = 2; i < 6; i++) {
             ItemStack stack = getStackInSlot(i);
-            if (stack != null)
-                if (storage != null && stack.isItemEqual(storage))
+            if (!InvTools.isEmpty(stack))
+                if (!InvTools.isEmpty(storage) && stack.isItemEqual(storage))
                     storageUpgrades += stack.stackSize;
-                else if (overclocker != null && stack.isItemEqual(overclocker))
+                else if (!InvTools.isEmpty(overclocker) && stack.isItemEqual(overclocker))
                     overclockerUpgrades += stack.stackSize;
-                else if (transformer != null && stack.isItemEqual(transformer))
+                else if (!InvTools.isEmpty(transformer) && stack.isItemEqual(transformer))
                     transformerUpgrades += stack.stackSize;
                 else if (lapotron != null && stack.getItem() == lapotron)
                     lapotronUpgrades += stack.stackSize;
@@ -129,11 +129,11 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
             energy = capacity;
 
         ItemStack charge = getStackInSlot(SLOT_CHARGE);
-        if (charge != null)
+        if (!InvTools.isEmpty(charge))
             energy -= IC2Plugin.chargeItem(charge, energy, getTier());
 
         ItemStack battery = getStackInSlot(SLOT_BATTERY);
-        if (battery != null && energy < capacity)
+        if (!InvTools.isEmpty(battery) && energy < capacity)
             energy += IC2Plugin.dischargeItem(battery, capacity - energy, getTier());
 
         if (clock % 64 == 0)

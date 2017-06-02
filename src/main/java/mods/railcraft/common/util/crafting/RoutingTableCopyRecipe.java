@@ -27,13 +27,13 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source == null || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
+        if (InvTools.isEmpty(source) || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
             return false;
         }
         int numCopies = 0;
         for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (stack != null) {
+            if (!InvTools.isEmpty(stack)) {
                 if (RailcraftItems.ROUTING_TABLE.isEqual(stack)) {
                     numCopies++;
                 } else {
@@ -47,7 +47,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source != null && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
+        if (!InvTools.isEmpty(source) && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
             int copies = (int) IntStream.range(1, grid.getSizeInventory())
                     .mapToObj(grid::getStackInSlot)
                     .filter(RailcraftItems.ROUTING_TABLE::isEqual)

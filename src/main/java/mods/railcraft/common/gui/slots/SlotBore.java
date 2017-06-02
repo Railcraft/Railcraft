@@ -9,6 +9,7 @@
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,6 @@ public class SlotBore extends Slot
 
     public static boolean canPlaceItem(ItemStack stack)
     {
-        return stack != null && stack.getItem() instanceof IBoreHead;
+        return !InvTools.isEmpty(stack) && stack.getItem() instanceof IBoreHead;
     }
 }

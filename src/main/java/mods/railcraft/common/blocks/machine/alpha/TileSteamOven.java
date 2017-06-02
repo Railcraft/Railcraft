@@ -219,7 +219,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private boolean hasRecipe() {
         for (int slot = 0; slot < 9; slot++) {
             ItemStack stack = invInput.getStackInSlot(slot);
-            if (stack != null && FurnaceRecipes.instance().getSmeltingResult(stack) != null)
+            if (!InvTools.isEmpty(stack) && !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack)))
                 return true;
         }
         return false;
@@ -233,11 +233,11 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
             changed = false;
             for (int slot = 0; slot < 9 && count < ITEMS_SMELTED; slot++) {
                 ItemStack stack = invInput.getStackInSlot(slot);
-                if (stack != null) {
+                if (!InvTools.isEmpty(stack)) {
                     ItemStack output = FurnaceRecipes.instance().getSmeltingResult(stack);
-                    if (output != null && InvTools.isRoomForStack(output, invOutput)) {
+                    if (!InvTools.isEmpty(output) && InvTools.isRoomForStack(output, invOutput)) {
                         ItemStack remainder = InvTools.moveItemStack(output.copy(), invOutput);
-                        if (remainder == null) {
+                        if (InvTools.isEmpty(remainder)) {
                             invInput.decrStackSize(slot, 1);
                             changed = true;
                             count++;
@@ -347,7 +347,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
             return false;
         if (slot >= SLOT_OUTPUT)
             return false;
-        return FurnaceRecipes.instance().getSmeltingResult(stack) != null;
+        return !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack));
     }
 
     @Override

@@ -10,6 +10,7 @@ package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -21,7 +22,7 @@ public class SlotTrack extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null && (stack.getItem() instanceof ITrackItem || TrackTools.isRailBlock(stack));
+        return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ITrackItem || TrackTools.isRailBlock(stack));
     }
 
 }

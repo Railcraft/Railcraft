@@ -81,7 +81,7 @@ public class DetectorItem extends DetectorFilter {
     private boolean matchesFilter(InventoryComposite cartInv) {
         for (int i = 0; i < getFilters().getSizeInventory(); i++) {
             ItemStack filter = getFilters().getStackInSlot(i);
-            if (filter == null)
+            if (InvTools.isEmpty(filter))
                 continue;
             Predicate<ItemStack> stackFilter = StackFilters.matches(filter);
             int amountFilter = InvTools.countItems(getFilters(), stackFilter);

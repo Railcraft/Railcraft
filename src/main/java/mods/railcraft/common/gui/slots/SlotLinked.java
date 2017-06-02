@@ -36,7 +36,7 @@ public class SlotLinked extends Slot {
     @Override
     public boolean isItemValid(ItemStack stack) {
         ItemStack master = masterSlot.getStack();
-        if (master == null)
+        if (InvTools.isEmpty(master))
             return allowNull;
         return InvTools.isItemEqual(stack, master);
     }

@@ -17,6 +17,7 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -161,9 +162,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                     tank = EnumMachineBeta.TANK_STEEL_WALL.getStack();
                 else
                     tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
-                if (tank == null)
+                if (InvTools.isEmpty(tank))
                     tank = RailcraftItems.INGOT.getStack(1, Metal.STEEL);
-                if (tank == null)
+                if (InvTools.isEmpty(tank))
                     tank = new ItemStack(Blocks.IRON_BLOCK);
                 return tank;
             }

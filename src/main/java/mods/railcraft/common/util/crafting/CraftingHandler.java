@@ -44,7 +44,7 @@ public class CraftingHandler {
                     cartItem = stack;
             }
         }
-        if (cartItem != null) {
+        if (!isEmpty(cartItem)) {
 //            CartFilterRecipe.FilterType type = CartFilterRecipe.FilterType.fromCartType(EnumCart.getCartType(cartItem));
 //            if (type != null && EnumCart.getCartType(result) == EnumCart.getCartType(cartItem)) {
 //                ItemStack filterItem = EntityCartFiltered.getFilterFromCartItem(result);

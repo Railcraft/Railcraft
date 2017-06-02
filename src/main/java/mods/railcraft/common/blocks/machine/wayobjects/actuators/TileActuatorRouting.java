@@ -60,7 +60,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
-            if (table != null) {
+            if (!InvTools.isEmpty(table)) {
                 Railcraft.getProxy().openRoutingTableGui(player, this, table);
                 return true;
             }
@@ -68,7 +68,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         }
         if (Game.isHost(worldObj)) {
             ItemStack current = player.inventory.getCurrentItem();
-            if (current != null && current.getItem() instanceof ItemRoutingTable)
+            if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
                 if (inv.getStackInSlot(0) == null) {
                     ItemStack copy = current.copy();
                     copy.stackSize = 1;

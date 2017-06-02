@@ -54,7 +54,7 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 GuiHandler.openGui(EnumGui.TRACK_ROUTING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
