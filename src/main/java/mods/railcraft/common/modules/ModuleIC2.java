@@ -10,22 +10,22 @@
 package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
-import ic2.api.crops.Crops;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
-//import mods.railcraft.common.plugins.ic2.crops.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+//import mods.railcraft.common.plugins.ic2.crops.*;
 
 @RailcraftModule(value = "railcraft:ic2", description = "industrial craft integration")
 public class ModuleIC2 extends RailcraftModulePayload {
@@ -165,6 +165,18 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 'I', machine,
                                 'L', new ItemStack(Blocks.HOPPER));
                 }
+
+                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.bones"))
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.DYE, 1, 15));
+
+                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.blaze"))
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_POWDER));
+
+                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble"))
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE));
+
+                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
             }
         });
     }

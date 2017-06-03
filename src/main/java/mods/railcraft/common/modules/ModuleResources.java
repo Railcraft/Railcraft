@@ -108,7 +108,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
                         initMetalBlock(Metal.INVAR);
                     if ((RailcraftConfig.forceEnableInvarRecipe() || !OreDictPlugin.oreExists("dustInvar")) && RailcraftItems.INGOT.isEnabled()) {
-                        CraftingPlugin.addShapelessRecipe(Metal.INVAR.getStack(Metal.Form.INGOT,3), Items.IRON_INGOT, Items.IRON_INGOT, "ingotNickel");
+                        CraftingPlugin.addShapelessRecipe(Metal.INVAR.getStack(Metal.Form.INGOT, 3), Items.IRON_INGOT, Items.IRON_INGOT, "ingotNickel");
                     }
 
                     type = EnumGeneric.BLOCK_ZINC;
@@ -128,7 +128,7 @@ public class ModuleResources extends RailcraftModulePayload {
 
                         BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
 
-                        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.addObsidianRecipesToMacerator() && RailcraftItems.DUST.isEnabled()) {
+                        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian") && RailcraftItems.DUST.isEnabled()) {
                             IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
                             IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }

@@ -283,8 +283,14 @@ public class ModuleFactory extends RailcraftModulePayload {
                     addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.25f);
 
                     if (RailcraftItems.DUST.isEnabled()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.COAL, 1, 0), true, false);
+                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL), 1.0f);
+
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.COAL, 1, 1), true, false);
                         addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL), 1.0f);
+
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.ENDER_PEARL), false, false);
+                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER), 1.0f);
                     }
                 }
 
@@ -443,23 +449,9 @@ public class ModuleFactory extends RailcraftModulePayload {
                         for (ItemStack ore : ores) {
                             IC2Plugin.addMaceratorRecipe(ore, 3, crushedLead, 2);
                         }
-                    }
-
-
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.ores"))
+                    } else {
                         IC2Plugin.removeMaceratorDustRecipes(crushedIron, crushedGold, crushedCopper, crushedTin, crushedSilver, crushedLead, crushedUranium);
-
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.bones"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.DYE, 1, 15));
-
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.blaze"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_POWDER));
-
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE));
-
-                    if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
-                        IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
+                    }
                 }
             }
 

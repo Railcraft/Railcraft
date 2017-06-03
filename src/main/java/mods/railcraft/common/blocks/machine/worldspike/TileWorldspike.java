@@ -75,6 +75,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     public TileWorldspike() {
         super(1);
+        getInventory().setInventoryStackLimit(16);
     }
 
     @Override

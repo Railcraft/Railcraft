@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,6 +33,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(GL11.GL_LIGHTING_BIT);
         OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
 
@@ -81,6 +82,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
             OpenGL.glPopMatrix();
         }
 
+        OpenGL.glPopAttrib();
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
     }

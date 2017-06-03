@@ -62,6 +62,7 @@ public class RailcraftConfig {
     private static final String CAT_TWEAKS_ITEMS = CAT_TWEAKS + ".items";
     private static final String CAT_TWEAKS_ROUTING = CAT_TWEAKS + ".routing";
     private static final String CAT_WORLDSPIKES = "worldspikes";
+    private static final String CAT_WORLDSPIKES_FUEL = CAT_WORLDSPIKES + ".fuel";
     private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<>();
     private static final Map<String, Boolean> enabledItems = new HashMap<>();
     private static final Map<String, Boolean> enabledBlocks = new HashMap<>();
@@ -70,9 +71,9 @@ public class RailcraftConfig {
     private static final Map<String, Boolean> worldGen = new HashMap<>();
     private static final Map<String, Boolean> fluids = new HashMap<>();
     private static final Map<String, Boolean> recipes = new HashMap<>();
-    private static String worldspikeFuelStandardString;
-    private static String worldspikeFuelPersonalString;
-    private static String worldspikeFuelPassiveString;
+    private static String[] worldspikeFuelStandardArray;
+    private static String[] worldspikeFuelPersonalArray;
+    private static String[] worldspikeFuelPassiveArray;
     private static String boreMineableBlocksString;
     private static float maxHighSpeed = 1.1f;
     private static boolean boreDestroysBlocks;
@@ -194,10 +195,10 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        worldspikeFuelStandard.putAll(BlockItemListParser.parseDictionary(worldspikeFuelStandardString, "Adding Standard Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        worldspikeFuelPersonal.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPersonalString, "Adding Personal Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        worldspikeFuelPassive.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPassiveString, "Adding Passive Worldspike Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
+        worldspikeFuelStandard.putAll(BlockItemListParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
+        worldspikeFuelPersonal.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
+        worldspikeFuelPassive.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
+        EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser::parseBlock));
     }
 
     private static void loadClient() {
@@ -216,30 +217,27 @@ public class RailcraftConfig {
     private static void loadWorldspikeSettings() {
         configMain.addCustomCategoryComment(CAT_WORLDSPIKES, "Settings for Worldspikes");
         deleteWorldspikes = get(CAT_WORLDSPIKES, "delete.worldspikes", false, true, "change to '{t}=true' to delete every Worldspike or Worldspike Cart in the world.\nValue resets to false after each session.\nTo disable Worldspikes completely, disable the ChunkLoading Module from 'modules.cfg'");
-        worldspikeCrafting = configMain.getStringList("craftableWorldspikes", CAT_WORLDSPIKES, new String[]{"standard", "personal", "passive"}, "Controls with Worldspikes are craftable, they will still be available via Creative");
+        worldspikeCrafting = configMain.getStringList("craftableWorldspikes", CAT_WORLDSPIKES, new String[]{"standard", "personal", "passive"}, "Controls which Worldspikes are craftable, they will still be available via Creative");
         printWorldspikes = get(CAT_WORLDSPIKES, "print.locations", false, "change to {t}=true to print Worldspike locations to the log on startup");
         printWorldspikeDebug = get(CAT_WORLDSPIKES, "print.debug", false, "change to '{t}=true' to log debug info for Worldspikes");
 
-        Property fuelProp = get(CAT_WORLDSPIKES, "standard.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Standard Worldspike or Standard Worldspike Cart\n"
-                + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, World Worldspikes will not require fuel, default = 12\n"
-                + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
-                + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        worldspikeFuelStandardString = fuelProp.getString();
 
-        fuelProp = get(CAT_WORLDSPIKES, "personal.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Personal Worldspike or Personal Worldspike Cart\n"
-                + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, Personal Worldspikes will not require fuel, default = 12\n"
-                + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
-                + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        worldspikeFuelPersonalString = fuelProp.getString();
+        configMain.addCustomCategoryComment(CAT_WORLDSPIKES_FUEL,
+                "the number of hours that an item will power a Worldspike or Worldspike Cart\n"
+                        + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
+                        + "if the list is empty, Worldspikes will not require fuel\n"
+                        + "Entry Format: <modid>:<itemname>[#<metadata>]=<value>");
 
-        fuelProp = get(CAT_WORLDSPIKES, "passive.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Passive Worldspike\n"
-                + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, Passive Worldspikes will not require fuel, default = 12\n"
-                + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
-                + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
-        worldspikeFuelPassiveString = fuelProp.getString();
+        String[] fuelDefault = {
+                "railcraft:dust#0=2",
+                "minecraft:ender_pearl=4",
+                "railcraft:dust#6=8",
+                "railcraft:dust#7=12"
+        };
+
+        worldspikeFuelStandardArray = configMain.getStringList("standard", CAT_WORLDSPIKES_FUEL, fuelDefault, "");
+        worldspikeFuelPersonalArray = configMain.getStringList("personal", CAT_WORLDSPIKES_FUEL, fuelDefault, "");
+        worldspikeFuelPassiveArray = configMain.getStringList("passive", CAT_WORLDSPIKES_FUEL, fuelDefault, "");
 
         worldspikesCanInteractWithPipes = get(CAT_WORLDSPIKES, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Worldspikes");
     }
@@ -351,6 +349,7 @@ public class RailcraftConfig {
         loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Cobblestone");
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
         loadRecipeProperty("ic2.macerator", "slag", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Slag Dust");
+        loadRecipeProperty("ic2.macerator", "ender", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Ender Powder");
         loadRecipeProperty("forestry.misc", "fertilizer", true, "change to '{t}=false' to disable the saltpeter recipe for Forestry Fertilizer");
         loadRecipeProperty("forestry.misc", "brass.casing", true, "change to '{t}=false' to disable the brass recipe for Forestry Sturdy Casing");
         loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carpenter Tie recipe");
@@ -661,10 +660,6 @@ public class RailcraftConfig {
 
     public static boolean canCrushOres() {
         return getRecipeConfig("railcraft.rockCrusher.ores");
-    }
-
-    public static boolean addObsidianRecipesToMacerator() {
-        return getRecipeConfig("ic2.macerator.obsidian");
     }
 
     public static boolean forceEnableBronzeRecipe() {

@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.gui.slots.SlotItemMap;
 import mods.railcraft.common.util.misc.IWorldspike;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -27,7 +27,7 @@ public class ContainerWorldspike extends RailcraftContainer {
     public ContainerWorldspike(InventoryPlayer inventoryplayer, IWorldspike a) {
         super(a);
         this.worldspike = a;
-        addSlot(new SlotStackFilter(stack -> worldspike.getFuelMap().containsKey(stack), worldspike, 0, 60, 24));
+        addSlot(new SlotItemMap<>(worldspike.getFuelMap(), worldspike, 0, 60, 24).setStackLimit(16));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
