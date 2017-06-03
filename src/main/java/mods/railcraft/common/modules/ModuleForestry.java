@@ -20,7 +20,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -40,8 +39,11 @@ public class ModuleForestry extends RailcraftModulePayload {
     public ModuleForestry() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
             public void construction() {
                 add(
+                        RailcraftItems.FILTER_BEE,
+                        RailcraftItems.FILTER_BEE_GENOME,
                         RailcraftItems.BACKPACK_APOTHECARY_T1,
                         RailcraftItems.BACKPACK_APOTHECARY_T2,
                         RailcraftItems.BACKPACK_ICEMAN_T1,
@@ -51,6 +53,14 @@ public class ModuleForestry extends RailcraftModulePayload {
                         RailcraftItems.BACKPACK_SIGNALMAN_T1,
                         RailcraftItems.BACKPACK_SIGNALMAN_T2
                 );
+            }
+
+            @Override
+            @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
+            public void preInit() {
+                if (RailcraftItems.FILTER_BEE_GENOME.isEnabled()) {
+                    ForestryPlugin.instance().registerBeeFilterRecipe();
+                }
             }
 
             @Override
@@ -78,16 +88,13 @@ public class ModuleForestry extends RailcraftModulePayload {
                             '|', Items.STICK);
                 }
 
-                if (Metal.BRASS.getStack(Metal.Form.INGOT) != InvTools.emptyStack() && (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing"))) {
-                        ItemStack casing = ModItems.STURDY_CASING.get();
-
-                    if (casing != InvTools.emptyStack()){
-                        CraftingPlugin.addRecipe(casing,
-                                "III",
-                                "I I",
-                                "III",
-                                'I', Metal.BRASS.getStack(Metal.Form.INGOT));
-                    }
+                if (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing")) {
+                    ItemStack casing = ModItems.STURDY_CASING.get();
+                    CraftingPlugin.addRecipe(casing,
+                            "III",
+                            "I I",
+                            "III",
+                            'I', RailcraftItems.INGOT, Metal.BRASS);
                 }
             }
         });

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,13 +11,10 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.EnumFacing;
-
-import java.util.Collections;
-import java.util.List;
 
 public class TileItemLoader extends TileItemManipulator {
 
@@ -27,13 +24,13 @@ public class TileItemLoader extends TileItemManipulator {
     }
 
     @Override
-    public List<IInventoryObject> getSource() {
+    public IInventoryComposite getSource() {
         return chests;
     }
 
     @Override
-    public List<IInventoryObject> getDestination() {
-        return Collections.singletonList(cart);
+    public IInventoryComposite getDestination() {
+        return cart;
     }
 
     @Override

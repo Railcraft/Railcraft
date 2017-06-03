@@ -15,6 +15,7 @@ import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -76,7 +77,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
             crowbar.onWhack(player, hand, heldItem, getPos());
@@ -103,7 +104,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
                     }
 
                     ItemStack current = player.getActiveItemStack();
-                    if (current != null && current.getItem() instanceof IToolCrowbar) {
+                    if (!InvTools.isEmpty(current) && current.getItem() instanceof IToolCrowbar) {
                         return;
                     }
                 } else if (excludedEntities.contains(entity.getClass())) {

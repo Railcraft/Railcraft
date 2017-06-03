@@ -44,7 +44,7 @@ public class FuelPlugin {
 
         @Override
         public int getBurnTime(ItemStack fuel) {
-            if (fuel == null)
+            if (InvTools.isEmpty(fuel))
                 return 0;
             if (fuel.getItem() instanceof IRailcraftItem)
                 return ((IRailcraftItem) fuel.getItem()).getHeatValue(fuel);

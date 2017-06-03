@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -66,7 +67,7 @@ public class RailcraftDamageSource extends DamageSource {
                 for (EntityItem entityItem : event.getDrops()) {
                     ItemStack drop = entityItem.getEntityItem();
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drop);
-                    if (cooked != null && MiscTools.RANDOM.nextDouble() < 0.5) {
+                    if (!InvTools.isEmpty(cooked) && MiscTools.RANDOM.nextDouble() < 0.5) {
                         cooked = cooked.copy();
                         cooked.stackSize = drop.stackSize;
                         entityItem.setEntityItemStack(cooked);

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -100,7 +101,7 @@ public enum Fluids {
     }
 
     public boolean isContained(ItemStack containerStack) {
-        return containerStack != null && FluidItemHelper.containsFluid(containerStack, get());
+        return !InvTools.isEmpty(containerStack) && FluidItemHelper.containsFluid(containerStack, get());
     }
 
 }

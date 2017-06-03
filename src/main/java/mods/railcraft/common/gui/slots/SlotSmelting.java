@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,6 @@ public class SlotSmelting extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return FurnaceRecipes.instance().getSmeltingResult(stack) != null;
+        return !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack));
     }
 }

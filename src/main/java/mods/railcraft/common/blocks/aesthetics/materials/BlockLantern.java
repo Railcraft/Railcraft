@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,6 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -48,6 +47,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -124,7 +124,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
 
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().filter(m -> !Materials.MAT_SET_FROZEN.contains(m)).map(this::getStack).filter(Predicates.nonNull()).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().filter(m -> !Materials.MAT_SET_FROZEN.contains(m)).map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     @Override

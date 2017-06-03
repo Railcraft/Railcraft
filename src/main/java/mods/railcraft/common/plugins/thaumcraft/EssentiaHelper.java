@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.aspects.Aspect;
@@ -23,7 +24,7 @@ public class EssentiaHelper {
     public static boolean getEssentia(IInventory inv, int slot, Aspect aspect) {
         ItemStack stack = inv.getStackInSlot(slot);
 
-        if (stack != null && stack.getItem() instanceof IEssentiaContainerItem && "item.BlockJarFilledItem".equals(stack.getUnlocalizedName())) {
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IEssentiaContainerItem && "item.BlockJarFilledItem".equals(stack.getUnlocalizedName())) {
             IEssentiaContainerItem jar = (IEssentiaContainerItem) stack.getItem();
             AspectList aspects = jar.getAspects(stack);
             if (aspects.getAmount(aspect) > 0) {

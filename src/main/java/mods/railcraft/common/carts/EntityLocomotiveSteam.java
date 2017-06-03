@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,7 +61,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
-    protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_WATER_OUTPUT, 1);
+    protected InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_WATER_OUTPUT, 1);
     protected InventoryMapper invWaterContainers = new InventoryMapper(this, SLOT_WATER_INPUT, 3);
     private TankManager tankManager = new TankManager();
     private int update = rand.nextInt();

@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.Entity;
@@ -75,13 +76,13 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         Entity entity = event.getTarget();
 
         ItemStack stack = event.getItemStack();
-        if (stack != null && stack.getItem() instanceof ItemChargeMeter)
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)
             player.swingArm(event.getHand());
 
         if (Game.isClient(player.worldObj))
             return;
 
-        if (stack != null && stack.getItem() instanceof ItemChargeMeter)
+        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)
             try {
                 if (entity.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
                     ICartBattery battery = entity.getCapability(CapabilitiesCharge.CART_BATTERY, null);

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -16,6 +17,7 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -23,15 +25,17 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum ModItems {
+public enum ModItems implements IRailcraftRecipeIngredient {
 
     SILK(Mod.FORESTRY, "craftingMaterial", 3),
     STURDY_CASING(Mod.FORESTRY, "sturdyMachine"),
+    HONEY_DROP(Mod.FORESTRY, "honeyDrop"),
+    HONEYCOMB(Mod.FORESTRY, "beeCombs", OreDictionary.WILDCARD_VALUE),
     BAT_BOX(Mod.IC2, "te#batbox"),
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),
     MFSU(Mod.IC2, "te#mfsu"),
-    BATTERY(Mod.IC2, "re_battery"),
+    BATTERY(Mod.IC2, "re_battery", OreDictionary.WILDCARD_VALUE),
     IC2_MACHINE(Mod.IC2, "resource#machine"),
     SLAG(Mod.IC2, "misc_resource#slag"),
     RUBBER_BOOTS(Mod.IC2, "rubber_boots"),
@@ -80,6 +84,12 @@ public enum ModItems {
             return stack;
         }
         return null;
+    }
+
+    @Nullable
+    @Override
+    public Object getRecipeObject() {
+        return get();
     }
 
     public boolean isEqual(ItemStack otherStack, boolean matchMeta, boolean matchNBT) {

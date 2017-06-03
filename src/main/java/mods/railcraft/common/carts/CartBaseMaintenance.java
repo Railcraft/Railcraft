@@ -14,6 +14,7 @@ import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -99,7 +100,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
 
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
         ItemStack trackStock = getStackInSlot(slotStock);
-        if (trackStock != null)
+        if (!InvTools.isEmpty(trackStock))
             if (TrackToolsAPI.placeRailAt(trackStock, (WorldServer) getEntityWorld(), pos)) {
                 decrStackSize(slotStock, 1);
                 blink();

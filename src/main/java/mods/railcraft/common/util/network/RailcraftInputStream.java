@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -84,7 +85,7 @@ public class RailcraftInputStream extends DataInputStream {
 
     @Nullable
     public ItemStack readItemStack() throws IOException {
-        ItemStack stack = null;
+        ItemStack stack = InvTools.emptyStack();
         short id = readShort();
 
         if (id >= 0) {

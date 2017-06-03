@@ -16,7 +16,7 @@ package mods.railcraft.common.util.inventory.wrappers;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IInventoryObject {
-    Object getInventoryObject();
+    Object getBackingObject();
 
     int getNumSlots();
 }

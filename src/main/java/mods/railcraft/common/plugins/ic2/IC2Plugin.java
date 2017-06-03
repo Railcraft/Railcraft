@@ -76,7 +76,7 @@ public class IC2Plugin {
 
     public static boolean isEnergyItem(ItemStack stack) {
         try {
-            return stack != null && stack.getItem() instanceof IElectricItem;
+            return !InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem;
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, IElectricItem.class);
         }
@@ -88,7 +88,7 @@ public class IC2Plugin {
      */
     public static double chargeItem(ItemStack stack, double energy, int tier) {
         try {
-            if (stack != null && stack.getItem() instanceof IElectricItem && energy > 0)
+            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem && energy > 0)
                 return ElectricItem.manager.charge(stack, energy, tier, false, false);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, ElectricItem.class);
@@ -101,7 +101,7 @@ public class IC2Plugin {
      */
     public static double dischargeItem(ItemStack stack, double energyNeeded, int tier) {
         try {
-            if (stack != null && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
+            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
                 return ElectricItem.manager.discharge(stack, energyNeeded, tier, false, true, false);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, ElectricItem.class);
@@ -111,7 +111,7 @@ public class IC2Plugin {
 
     public static boolean canCharge(ItemStack stack, int tier) {
         try {
-            if (stack != null && stack.getItem() instanceof IElectricItem) {
+            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem) {
                 IElectricItem battery = (IElectricItem) stack.getItem();
                 return tier >= battery.getTier(stack);
             }
@@ -123,7 +123,7 @@ public class IC2Plugin {
 
     public static boolean canDischarge(ItemStack stack, int tier) {
         try {
-            if (stack != null && stack.getItem() instanceof IElectricItem) {
+            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem) {
                 IElectricItem battery = (IElectricItem) stack.getItem();
                 return battery.canProvideEnergy(stack) && tier >= battery.getTier(stack);
             }
@@ -204,7 +204,7 @@ public class IC2Plugin {
 
     private static boolean isInputBlock(IRecipeInput input, ItemStack... items) {
         for (ItemStack stack : input.getInputs()) {
-            if (stack != null && stack.getItem() instanceof ItemBlock)
+            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemBlock)
                 return true;
         }
         return false;
@@ -214,7 +214,7 @@ public class IC2Plugin {
         for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
             try {
                 ItemStack output = recipe.getRecipeOutput();
-                if (output != null)
+                if (!InvTools.isEmpty(output))
                     if (output.getItem() == Items.COAL && output.stackSize == 20)
                         output.stackSize = 5;
             } catch (Throwable ignored) {

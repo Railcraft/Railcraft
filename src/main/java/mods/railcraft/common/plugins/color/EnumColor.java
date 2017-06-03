@@ -31,7 +31,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumColor implements IVariantEnum {
+public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
 
     WHITE(0xFFFFFF, "dyeWhite", "white"),
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
@@ -219,5 +219,11 @@ public enum EnumColor implements IVariantEnum {
             dyes.addAll(OreDictionary.getOres(getDyeOreDictTag()));
         }
         return dyes;
+    }
+
+    @Nullable
+    @Override
+    public Object getRecipeObject() {
+        return getDyeOreDictTag();
     }
 }

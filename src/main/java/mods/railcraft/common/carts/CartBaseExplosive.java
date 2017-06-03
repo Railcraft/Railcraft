@@ -15,6 +15,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -150,7 +151,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     @Override
     public boolean doInteract(EntityPlayer player) {
         ItemStack stack = player.inventory.getCurrentItem();
-        if (stack != null) {
+        if (!InvTools.isEmpty(stack)) {
             if (stack.getItem() == Items.FLINT_AND_STEEL
                     || stack.getItem() instanceof ItemFirestoneRefined) {
                 setPrimed(true);

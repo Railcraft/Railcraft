@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +34,7 @@ public class TileRollingMachineManual extends TileRollingMachine {
     public void onGuiClosed(EntityPlayer player) {
         for (IExtInvSlot slot : InventoryIterator.getVanilla(getInventory())) {
             ItemStack stack = slot.getStack();
-            if (stack != null) {
+            if (!InvTools.isEmpty(stack)) {
                 slot.setStack(null);
                 player.dropItem(stack, false);
             }

@@ -148,13 +148,13 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         update++;
 
         ItemStack topSlot = invLiquids.getStackInSlot(SLOT_INPUT);
-        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
+        if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
             invLiquids.setInventorySlotContents(SLOT_INPUT, null);
             entityDropItem(topSlot, 1);
         }
 
         ItemStack bottomSlot = invLiquids.getStackInSlot(SLOT_OUTPUT);
-        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
+        if (!InvTools.isEmpty(bottomSlot) && !FluidItemHelper.isContainer(bottomSlot)) {
             invLiquids.setInventorySlotContents(SLOT_OUTPUT, null);
             entityDropItem(bottomSlot, 1);
         }
@@ -203,7 +203,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Nullable
     public Fluid getFilterFluid() {
         ItemStack filter = getFilterItem();
-        if (filter == null)
+        if (InvTools.isEmpty(filter))
             return null;
         return FluidItemHelper.getFluidInContainer(filter);
     }

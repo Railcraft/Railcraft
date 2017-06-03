@@ -91,7 +91,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
-        if (heldItem != null) {
+        if (!InvTools.isEmpty(heldItem)) {
             if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;
             if (heldItem.getItem() instanceof ITrackItem)

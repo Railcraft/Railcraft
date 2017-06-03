@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -74,7 +75,7 @@ public class TrackKitThrottle extends TrackKitPowered {
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
             	if (speed == LocoSpeed.MAX) {

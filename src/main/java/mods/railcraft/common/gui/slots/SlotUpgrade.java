@@ -12,6 +12,7 @@ package mods.railcraft.common.gui.slots;
 import ic2.api.item.IC2Items;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -35,12 +36,12 @@ public class SlotUpgrade extends Slot {
         ItemStack transformer = IC2Plugin.getItem("upgrade#transformer");
         Item lapotron = RailcraftItems.LAPOTRON_UPGRADE.item();
 
-        if (stack != null)
-            if (storage != null && stack.isItemEqual(storage))
+        if (!InvTools.isEmpty(stack))
+            if (!InvTools.isEmpty(storage) && stack.isItemEqual(storage))
                 return true;
-            else if (overclocker != null && stack.isItemEqual(overclocker))
+            else if (!InvTools.isEmpty(overclocker) && stack.isItemEqual(overclocker))
                 return true;
-            else if (transformer != null && stack.isItemEqual(transformer))
+            else if (!InvTools.isEmpty(transformer) && stack.isItemEqual(transformer))
                 return true;
             else if (lapotron != null && stack.getItem() == lapotron)
                 return true;

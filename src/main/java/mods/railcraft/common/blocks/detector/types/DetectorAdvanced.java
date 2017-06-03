@@ -34,7 +34,7 @@ public class DetectorAdvanced extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            for (ItemStack filter : getFilters()) {
+            for (ItemStack filter : getFilters().getStacks()) {
                 if (CartTools.doesCartMatchFilter(filter, cart)) {
                     return FULL_POWER;
                 }

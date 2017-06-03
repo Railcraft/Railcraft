@@ -12,7 +12,6 @@ package mods.railcraft.common.worldgen;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.worldgen.NoiseGen.NoiseGenSimplex;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -25,10 +24,7 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
@@ -160,7 +156,7 @@ public abstract class GeneratorMine extends Generator {
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
         if (world.provider.getDimension() != 0)
             return false;
-        WorldGenerator gen = Arrays.stream(generators).filter(Predicates.nonNull()).findFirst().orElse(null);
+        WorldGenerator gen = Arrays.stream(generators).filter(Objects::nonNull).findFirst().orElse(null);
         return TerrainGen.generateOre(world, rand, gen, targetPos, EventType.CUSTOM);
     }
 }

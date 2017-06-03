@@ -9,10 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
+import com.google.common.collect.Iterators;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,12 +35,20 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
     }
 
     public static InventoryIterator<? extends IInvSlot> getRailcraft(IInventoryObject inv) {
-        if (inv.getInventoryObject() instanceof ISidedInventory)
-            return new SidedInventoryIterator((ISidedInventory) inv.getInventoryObject());
-        if (inv.getInventoryObject() instanceof IInventory)
-            return new StandardInventoryIterator((IInventory) inv.getInventoryObject());
-        if (inv.getInventoryObject() instanceof IItemHandler)
-            return new ItemHandlerInventoryIterator((IItemHandler) inv.getInventoryObject());
+        if (inv.getBackingObject() instanceof ISidedInventory)
+            return new SidedInventoryIterator((ISidedInventory) inv.getBackingObject());
+        if (inv.getBackingObject() instanceof IInventory)
+            return new StandardInventoryIterator((IInventory) inv.getBackingObject());
+        if (inv.getBackingObject() instanceof IItemHandler)
+            return new ItemHandlerInventoryIterator((IItemHandler) inv.getBackingObject());
         throw new RuntimeException("Invalid Inventory Object");
+    }
+
+    public Iterable<ItemStack> getStacks() {
+        return () -> Iterators.transform(Iterators.filter(iterator(), s -> s != null && s.hasStack()), s -> s != null ? s.getStack() : null);
+    }
+
+    public Stream<ItemStack> getStackStream() {
+        return StreamSupport.stream(getStacks().spliterator(), false);
     }
 }

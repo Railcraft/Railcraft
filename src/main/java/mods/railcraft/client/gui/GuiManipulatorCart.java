@@ -16,6 +16,9 @@ import mods.railcraft.common.gui.containers.ContainerManipulatorCart;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
+import net.minecraft.client.gui.GuiButton;
+
+import java.io.IOException;
 
 public class GuiManipulatorCart extends TileGui {
 
@@ -50,13 +53,23 @@ public class GuiManipulatorCart extends TileGui {
     }
 
     @Override
-    public void onGuiClosed() {
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
+        updateServer();
+    }
+
+    private void updateServer() {
         if (Game.isClient(tile.getWorld())) {
             if (tile instanceof TileItemManipulator)
                 ((TileItemManipulator) tile).getTransferModeController().setCurrentState(transferMode.getController().getCurrentState());
             tile.redstoneController().setCurrentState(redstoneMode.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        updateServer();
     }
 
 }

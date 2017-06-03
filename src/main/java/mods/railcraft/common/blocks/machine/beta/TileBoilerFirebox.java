@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,8 +46,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     public final SteamBoiler boiler;
     private boolean wasLit;
     protected final StandaloneInventory inventory;
-    protected InventoryMapper invWaterInput = new InventoryMapper(this, SLOT_LIQUID_INPUT, 1);
-    protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1, false);
+    protected InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
+    protected InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1, false);
 
     protected TileBoilerFirebox(int invSize) {
         inventory = new StandaloneInventory(invSize, (IInventory) this);

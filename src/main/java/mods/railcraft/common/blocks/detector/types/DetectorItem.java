@@ -14,7 +14,8 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,6 +28,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
@@ -46,10 +48,10 @@ public class DetectorItem extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            IInventoryObject cartInv = null;
+            InventoryComposite cartInv = null;
             if (cart instanceof IInventory)
-                cartInv = InvTools.getInventory(cart);
-            if (cartInv != null && cartInv.getNumSlots() > 0)
+                cartInv = InventoryComposite.of(cart);
+            if (cartInv != null && cartInv.slotCount() > 0)
                 switch (primaryMode) {
                     case ANYTHING:
                         return FULL_POWER;
@@ -76,13 +78,14 @@ public class DetectorItem extends DetectorFilter {
         return NO_POWER;
     }
 
-    private boolean matchesFilter(IInventoryObject cartInv) {
+    private boolean matchesFilter(InventoryComposite cartInv) {
         for (int i = 0; i < getFilters().getSizeInventory(); i++) {
             ItemStack filter = getFilters().getStackInSlot(i);
-            if (filter == null)
+            if (InvTools.isEmpty(filter))
                 continue;
-            int amountFilter = InvTools.countItems(getFilters(), filter);
-            int amountCart = InvTools.countItems(cartInv, filter);
+            Predicate<ItemStack> stackFilter = StackFilters.matches(filter);
+            int amountFilter = InvTools.countItems(getFilters(), stackFilter);
+            int amountCart = InvTools.countItems(cartInv, stackFilter);
 
             switch (filterMode) {
                 case EXACTLY:

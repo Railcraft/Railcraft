@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -49,7 +50,7 @@ import java.util.function.Predicate;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> stack != null && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
     public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
@@ -106,13 +107,13 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileBlastFurnace)
             return false;
-        IInventoryObject tileInv = InvTools.getInventory(tile);
+        IInventoryObject tileInv = InventoryFactory.get(tile);
         return tileInv != null && tileInv.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     /**
@@ -176,7 +177,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public int getTotalCookTime() {
         ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (input == null)
+        if (InvTools.isEmpty(input))
             return 1;
         IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
         if (recipe != null)
@@ -249,7 +250,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 setLavaIdle();
 
             ItemStack input = getStackInSlot(SLOT_INPUT);
-            if (input != null && input.stackSize > 0) {
+            if (!InvTools.isEmpty(input) && input.stackSize > 0) {
 
                 ItemStack output = getStackInSlot(SLOT_OUTPUT);
                 IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
@@ -276,7 +277,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                         if (cookTime >= recipe.getCookTime()) {
                             cookTime = 0;
                             finishedAt = clock;
-                            if (output == null)
+                            if (InvTools.isEmpty(output))
                                 setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                             else
                                 output.stackSize += recipe.getOutputStackSize();
@@ -339,7 +340,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
     }
 
     @Override

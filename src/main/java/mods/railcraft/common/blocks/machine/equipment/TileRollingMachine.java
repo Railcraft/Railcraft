@@ -12,10 +12,10 @@ package mods.railcraft.common.blocks.machine.equipment;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventoryConcatenator;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.InventoryConcatenator;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -155,13 +155,13 @@ public abstract class TileRollingMachine extends TileMachineBase {
     private void balanceSlots() {
         for (IInvSlot slotA : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stackA = slotA.getStack();
-            if (stackA == null)
+            if (InvTools.isEmpty(stackA))
                 continue;
             for (IInvSlot slotB : InventoryIterator.getVanilla(craftMatrix)) {
                 if (slotA.getIndex() == slotB.getIndex())
                     continue;
                 ItemStack stackB = slotB.getStack();
-                if (stackB == null)
+                if (InvTools.isEmpty(stackB))
                     continue;
                 if (InvTools.isItemEqual(stackA, stackB))
                     if (stackA.stackSize > stackB.stackSize + 1) {
@@ -187,7 +187,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return true;
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
             ItemStack slot = craftMatrix.getStackInSlot(i);
-            if (slot != null && slot.stackSize <= 1)
+            if (!InvTools.isEmpty(slot) && slot.stackSize <= 1)
                 return false;
         }
         return true;

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
+import com.google.common.collect.Multiset;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
@@ -29,7 +30,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class TileDispenserTrain extends TileDispenserCart {
@@ -63,12 +63,12 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     private boolean canBuildTrain() {
-        Map<StackKey, Integer> pattern = InvTools.createManifest(getPattern());
-        Map<StackKey, Integer> buffer = InvTools.createManifest(this);
+        Multiset<StackKey> pattern = InvTools.createManifest(getPattern());
+        Multiset<StackKey> buffer = InvTools.createManifest(getInventory());
 
-        for (Map.Entry<StackKey, Integer> entry : pattern.entrySet()) {
-            Integer count = buffer.get(entry.getKey());
-            if (count == null || count < entry.getValue())
+        for (Multiset.Entry<StackKey> entry : pattern.entrySet()) {
+            int count = buffer.count(entry.getElement());
+            if (count < entry.getCount())
                 return false;
         }
 
@@ -77,7 +77,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     private boolean spawnNextCart() {
         ItemStack spawn = getPattern().getStackInSlot(patternIndex);
-        if (spawn == null) {
+        if (InvTools.isEmpty(spawn)) {
             resetSpawnSequence();
             return false;
         }
@@ -90,7 +90,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
                 && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
-            if (cartItem != null) {
+            if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
                 if (cartPlaced != null) {
                     CartToolsAPI.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
@@ -209,7 +209,7 @@ public class TileDispenserTrain extends TileDispenserCart {
                 patternSet.add(stack);
         }
 
-        for (ItemStack stack : getInventory().getContents()) {
+        for (ItemStack stack : get().getContents()) {
             if (stack != null)
                 bufferSet.add(stack);
         }

@@ -1,5 +1,0 @@
-<root>
-    <item name='net.minecraft.item.Item net.minecraft.item.ItemStack getContainerItem(net.minecraft.item.ItemStack)'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
-</root>

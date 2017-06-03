@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -82,7 +83,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
             return false;
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (minecartSlot1 != null || minecartSlot2 != null)
+        if (!InvTools.isEmpty(minecartSlot1) || !InvTools.isEmpty(minecartSlot2))
             if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
                 return false;
         return true;
@@ -283,6 +284,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         redstoneModeController.setCurrentState(data.readByte());
+        sendUpdateToClient();
     }
 
     @Override

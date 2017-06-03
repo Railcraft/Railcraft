@@ -15,6 +15,7 @@ import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -90,7 +91,7 @@ public final class RailcraftRegistry {
 //    }
 
     public static void register(IRailcraftRegistryEntry<?> object, IVariantEnum variant, ItemStack stack) {
-        assert stack != null : "Do not register null items!";
+        assert !InvTools.isEmpty(stack) : "Do not register null or empty items!";
         RailcraftItemStackRegistry.register(object, variant, stack);
     }
 

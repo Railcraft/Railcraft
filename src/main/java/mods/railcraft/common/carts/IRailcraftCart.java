@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -30,14 +31,14 @@ public interface IRailcraftCart {
     @Nullable
     default ItemStack createCartItem(EntityMinecart cart) {
         ItemStack stack = RailcraftCarts.fromCart(cart).getStack();
-        if (stack != null && cart.hasCustomName())
+        if (!InvTools.isEmpty(stack) && cart.hasCustomName())
             stack.setStackDisplayName(cart.getCustomNameTag());
         return stack;
     }
 
     default ItemStack[] getComponents(EntityMinecart cart) {
         ItemStack contents = getCartType().getContents();
-        if (contents != null)
+        if (!InvTools.isEmpty(contents))
             return new ItemStack[]{new ItemStack(Items.MINECART), contents};
         return new ItemStack[]{createCartItem(cart)};
     }
@@ -57,7 +58,7 @@ public interface IRailcraftCart {
         if (!RailcraftConfig.doCartsBreakOnDrop() && cart.hasCustomName() && !ArrayUtils.isEmpty(drops))
             drops[0].setStackDisplayName(cart.getCustomNameTag());
         for (ItemStack item : drops) {
-            if (item != null)
+            if (!InvTools.isEmpty(item))
                 cart.entityDropItem(item, 0.0F);
         }
     }

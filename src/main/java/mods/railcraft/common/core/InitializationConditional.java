@@ -64,7 +64,7 @@ public class InitializationConditional {
     }
 
     public void add(IVariantEnum variant) {
-        add(o -> variant.isEnabled(), () -> "Object Variant " + variant.getClass().getSimpleName() + "." + variant.getName() + " is disabled");
+        add(o -> variant.isEnabled(), () -> "object variant " + variant.getClass().getSimpleName() + "." + variant.getName() + " is disabled");
     }
 
     public void add(BooleanSupplier condition, Supplier<String> failureReason) {

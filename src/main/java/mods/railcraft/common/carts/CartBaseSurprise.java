@@ -119,7 +119,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
 
         protected void add(@Nullable ItemStack gift, int chance) {
-            if (gift != null)
+            if (!InvTools.isEmpty(gift))
                 surprises.add(new SurpriseItem(gift, chance));
         }
 

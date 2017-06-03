@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,9 +54,10 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     private static final int[] NO_SLOTS = new int[0];
     public final SteamBoiler boiler;
     private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
-    private InventoryMapper invFuel = new InventoryMapper(inv, SLOT_FUEL, 1);
-    private InventoryMapper invOutput = new InventoryMapper(inv, SLOT_LIQUID_OUTPUT, 1);
+    private InventoryMapper invFuel = InventoryMapper.make(inv, SLOT_FUEL, 1);
+    private InventoryMapper invOutput = InventoryMapper.make(inv, SLOT_LIQUID_OUTPUT, 1);
     private boolean explode;
+
     public TileEngineSteamHobby() {
         FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
             @Override
@@ -187,7 +188,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
-        return fuel == null || fuel.stackSize < 8;
+        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
     }
 
     @Override
@@ -199,7 +200,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("Items", data);
-
         boiler.writeToNBT(data);
         return data;
     }

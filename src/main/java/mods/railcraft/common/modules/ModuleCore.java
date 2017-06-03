@@ -41,6 +41,7 @@ import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.crafting.*;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -109,6 +110,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:cart.filter", CartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+                RecipeSorter.register("railcraft:filter_simple", FilterSimpleRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictPlugin.registerNewTags();
 
@@ -190,12 +192,12 @@ public class ModuleCore extends RailcraftModulePayload {
                 Iterator it = CraftingManager.getInstance().getRecipeList().iterator();
                 while (it.hasNext()) {
                     IRecipe r = (IRecipe) it.next();
-                    ItemStack output = null;
+                    ItemStack output = InvTools.emptyStack();
                     try {
                         output = r.getRecipeOutput();
                     } catch (Exception ignored) {
                     }
-                    if (output != null)
+                    if (!InvTools.isEmpty(output))
                         if (testSet.contains(output.getItem()))
                             it.remove();
                 }

@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -102,7 +103,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         if (tip != null)
             info.addAll(tip.convertToStrings());
         ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
-        if (filter != null) {
+        if (!InvTools.isEmpty(filter)) {
             info.add(TextFormatting.BLUE + LocalizationPlugin.translate("gui.railcraft.filter") + ": " + filter.getDisplayName());
         }
     }

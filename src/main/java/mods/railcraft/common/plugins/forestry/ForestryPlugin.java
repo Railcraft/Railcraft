@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBee;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackInterface;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -19,6 +21,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.FilterBeesGenomeRecipe;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -33,6 +36,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -113,6 +117,17 @@ public class ForestryPlugin {
         return null;
     }
 
+    public boolean isBee(ItemStack stack) {
+        return false;
+    }
+
+    public boolean isAnalyzedBee(ItemStack stack) {
+        return false;
+    }
+
+    public void registerBeeFilterRecipe() {
+    }
+
     private static class ForestryPluginInstalled extends ForestryPlugin {
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
@@ -124,7 +139,7 @@ public class ForestryPlugin {
             RailcraftItems trackmanT1 = RailcraftItems.BACKPACK_TRACKMAN_T1;
             if (trackmanT1.isLoaded()) {
                 ItemStack backpack = trackmanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -140,9 +155,9 @@ public class ForestryPlugin {
             RailcraftItems trackmanT2 = RailcraftItems.BACKPACK_TRACKMAN_T2;
             if (trackmanT1.isLoaded() && trackmanT2.isLoaded()) {
                 ItemStack backpack = trackmanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -157,7 +172,7 @@ public class ForestryPlugin {
             RailcraftItems signalmanT1 = RailcraftItems.BACKPACK_SIGNALMAN_T1;
             if (signalmanT1.isLoaded()) {
                 ItemStack backpack = signalmanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -173,9 +188,9 @@ public class ForestryPlugin {
             RailcraftItems signalmanT2 = RailcraftItems.BACKPACK_SIGNALMAN_T2;
             if (signalmanT1.isLoaded() && signalmanT2.isLoaded()) {
                 ItemStack backpack = signalmanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -190,7 +205,7 @@ public class ForestryPlugin {
             RailcraftItems icemanT1 = RailcraftItems.BACKPACK_ICEMAN_T1;
             if (icemanT1.isLoaded()) {
                 ItemStack backpack = icemanT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     CraftingPlugin.addRecipe(backpack,
                             "X#X",
@@ -206,9 +221,9 @@ public class ForestryPlugin {
             RailcraftItems icemanT2 = RailcraftItems.BACKPACK_ICEMAN_T2;
             if (icemanT1.isLoaded() && icemanT2.isLoaded()) {
                 ItemStack backpack = icemanT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -224,7 +239,7 @@ public class ForestryPlugin {
             RailcraftItems apothecaryT1 = RailcraftItems.BACKPACK_APOTHECARY_T1;
             if (apothecaryT1.isLoaded()) {
                 ItemStack backpack = apothecaryT1.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
 //                if (!ThaumcraftPlugin.isModInstalled()) {
                     CraftingPlugin.addRecipe(backpack,
@@ -243,9 +258,9 @@ public class ForestryPlugin {
             RailcraftItems apothecaryT2 = RailcraftItems.BACKPACK_APOTHECARY_T2;
             if (apothecaryT1.isLoaded() && apothecaryT2.isLoaded()) {
                 ItemStack backpack = apothecaryT2.getStack();
-                if (backpack != null) {
+                if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    if (silk != null) {
+                    if (!InvTools.isEmpty(silk)) {
                         forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
                                 "WXW",
                                 "WTW",
@@ -326,6 +341,24 @@ public class ForestryPlugin {
             } catch (Throwable error) {
                 Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
             }
+        }
+
+        @Override
+        public boolean isBee(ItemStack stack) {
+            IBee bee = BeeManager.beeRoot.getMember(stack);
+            return bee != null && bee.isAnalyzed();
+        }
+
+        @Override
+        public boolean isAnalyzedBee(ItemStack stack) {
+            IBee bee = BeeManager.beeRoot.getMember(stack);
+            return bee != null && bee.isAnalyzed();
+        }
+
+        @Override
+        public void registerBeeFilterRecipe() {
+            CraftingPlugin.addRecipe(new FilterBeesGenomeRecipe());
+            RecipeSorter.register("railcraft:filter_bees_species", FilterBeesGenomeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         }
     }
 }

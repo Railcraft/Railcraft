@@ -10,19 +10,21 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import com.google.common.collect.Iterators;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 /**
  * Created by CovertJaguar on 3/6/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class InvWrapperBase implements IInventory, IInventoryObject {
+public abstract class InvWrapperBase implements IInventory, IInventoryObject, IInventoryComposite {
 
     private final IInventory inv;
     private boolean checkItems = true;
@@ -135,13 +137,18 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject {
     }
 
     @Override
-    public Object getInventoryObject() {
+    public Object getBackingObject() {
         return this;
     }
 
     @Override
     public int getNumSlots() {
         return getSizeInventory();
+    }
+
+    @Override
+    public Iterator<IInventoryObject> iterator() {
+        return Iterators.singletonIterator(this);
     }
 }
 

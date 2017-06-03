@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -110,7 +110,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack inSlot = getStackInSlot(index);
-        setInventorySlotContents(index, null);
+        setInventorySlotContents(index, InvTools.emptyStack());
         return inSlot;
     }
 
@@ -135,7 +135,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public Object getInventoryObject() {
+    public Object getBackingObject() {
         return this;
     }
 

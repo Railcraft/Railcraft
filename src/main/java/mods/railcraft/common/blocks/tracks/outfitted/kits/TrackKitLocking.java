@@ -26,6 +26,7 @@ import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -153,7 +154,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 LockingProfileType p;

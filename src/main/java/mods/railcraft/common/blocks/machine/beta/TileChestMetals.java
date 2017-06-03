@@ -13,6 +13,7 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -63,7 +64,7 @@ public class TileChestMetals extends TileChestRailcraft {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (ingotStack != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
+                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
                         im.removeItems(metal.nuggetFilter, 9);
                         im.addStack(ingotStack);
                         return true;
@@ -79,7 +80,7 @@ public class TileChestMetals extends TileChestRailcraft {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (blockStack != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
+                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
                         im.removeItems(metal.ingotFilter, 9);
                         im.addStack(blockStack);
                         return true;
@@ -96,7 +97,7 @@ public class TileChestMetals extends TileChestRailcraft {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = nuggetFilters.get(metal);
                     ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
-                    if (nuggetStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
+                    if (!InvTools.isEmpty(nuggetStack) && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
                         im.removeItems(filter, 1);
                         im.addStack(nuggetStack);
                         return true;
@@ -113,7 +114,7 @@ public class TileChestMetals extends TileChestRailcraft {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = ingotFilters.get(metal);
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (ingotStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
+                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
                         im.removeItems(filter, 1);
                         im.addStack(ingotStack);
                         return true;
@@ -130,7 +131,7 @@ public class TileChestMetals extends TileChestRailcraft {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = blockFilters.get(metal);
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (blockStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
+                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
                         im.removeItems(filter, 1);
                         im.addStack(blockStack);
                         return true;

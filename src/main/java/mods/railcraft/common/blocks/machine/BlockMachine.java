@@ -23,7 +23,6 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -57,6 +56,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -362,7 +362,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
                 getCreativeList().stream()
                         .filter(m -> m.isAvailable())
                         .map(m -> m.getStack())
-                        .filter(Predicates.nonNull())
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList())
         );
     }
