@@ -37,12 +37,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
@@ -51,8 +55,8 @@ import java.util.Set;
 public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple {
 
     private static final int BOOST_DAMAGE = 1;
-    private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
-    private final Set<Class<? extends Block>> bannedRotations = new HashSet<Class<? extends Block>>();
+    private final Set<Class<? extends Block>> shiftRotations = new HashSet<>();
+    private final Set<Class<? extends Block>> bannedRotations = new HashSet<>();
 
     protected ItemCrowbar(ItemMaterials.Material material, ToolMaterial vanillaMaterial) {
         this(
@@ -150,7 +154,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
                 if (!player.isSneaking()) {
                     int level = RailcraftEnchantments.DESTRUCTION.getLevel(stack) * 2 + 1;
                     if (level > 1)
-                        checkBlocks(world, level, pos);
+                        checkBlocks(world, level, pos, player);
                 }
             }
         return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
@@ -235,49 +239,43 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tips"));
     }
 
-    private void removeAndDrop(World world, BlockPos pos, IBlockState state) {
-        List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
-        InvTools.dropItems(drops, world, pos);
-        world.setBlockToAir(pos);
-    }
-
-    private void removeExtraBlocks(World world, int level, BlockPos pos, IBlockState state) {
+    private void removeExtraBlocks(World world, int level, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (level > 0) {
-            removeAndDrop(world, pos, state);
-            checkBlocks(world, level, pos);
+            WorldPlugin.playerRemoveBlock(world, pos, player);
+            checkBlocks(world, level, pos, player);
         }
     }
 
-    private void checkBlock(World world, int level, BlockPos pos) {
+    private void checkBlock(World world, int level, BlockPos pos, EntityPlayer player) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (TrackTools.isRailBlock(state) || state.getBlock() instanceof BlockTrackElevator || state.getBlock().isToolEffective("crowbar", state))
-            removeExtraBlocks(world, level - 1, pos, state);
+            removeExtraBlocks(world, level - 1, pos, state, player);
     }
 
-    private void checkBlocks(World world, int level, BlockPos pos) {
+    private void checkBlocks(World world, int level, BlockPos pos, EntityPlayer player) {
         //NORTH
-        checkBlock(world, level, pos.add(0, 0, -1));
-        checkBlock(world, level, pos.add(0, 1, -1));
-        checkBlock(world, level, pos.add(0, -1, -1));
+        checkBlock(world, level, pos.add(0, 0, -1), player);
+        checkBlock(world, level, pos.add(0, 1, -1), player);
+        checkBlock(world, level, pos.add(0, -1, -1), player);
         //SOUTH
-        checkBlock(world, level, pos.add(0, 0, 1));
-        checkBlock(world, level, pos.add(0, 1, 1));
-        checkBlock(world, level, pos.add(0, -1, 1));
+        checkBlock(world, level, pos.add(0, 0, 1), player);
+        checkBlock(world, level, pos.add(0, 1, 1), player);
+        checkBlock(world, level, pos.add(0, -1, 1), player);
         //EAST
-        checkBlock(world, level, pos.add(1, 0, 0));
-        checkBlock(world, level, pos.add(1, 1, 0));
-        checkBlock(world, level, pos.add(1, -1, 0));
+        checkBlock(world, level, pos.add(1, 0, 0), player);
+        checkBlock(world, level, pos.add(1, 1, 0), player);
+        checkBlock(world, level, pos.add(1, -1, 0), player);
         //WEST
-        checkBlock(world, level, pos.add(-1, 0, 0));
-        checkBlock(world, level, pos.add(-1, 1, 0));
-        checkBlock(world, level, pos.add(-1, -1, 0));
+        checkBlock(world, level, pos.add(-1, 0, 0), player);
+        checkBlock(world, level, pos.add(-1, 1, 0), player);
+        checkBlock(world, level, pos.add(-1, -1, 0), player);
         //UP_DOWN
-        checkBlock(world, level, pos.up());
-        checkBlock(world, level, pos.down());
+        checkBlock(world, level, pos.up(), player);
+        checkBlock(world, level, pos.down(), player);
     }
 
     @Override
-    public Object getRecipeObject(IVariantEnum meta) {
+    public Object getRecipeObject(@Nullable IVariantEnum meta) {
         return ORE_TAG;
     }
 
