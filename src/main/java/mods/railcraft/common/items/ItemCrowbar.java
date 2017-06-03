@@ -239,19 +239,9 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tips"));
     }
 
-    private void removeAndDrop(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)))
-            return;
-        state.getBlock().removedByPlayer(state, world, pos, player, true);
-        if (world.getGameRules().getBoolean("doTileDrops")) {
-            List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
-            InvTools.dropItems(drops, world, pos);
-        }
-    }
-
     private void removeExtraBlocks(World world, int level, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (level > 0) {
-            removeAndDrop(world, pos, state, player);
+            WorldPlugin.playerRemoveBlock(world, pos, player);
             checkBlocks(world, level, pos, player);
         }
     }

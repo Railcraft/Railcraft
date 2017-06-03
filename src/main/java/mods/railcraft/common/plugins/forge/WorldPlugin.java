@@ -10,11 +10,13 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +27,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nullable;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -104,19 +108,46 @@ public class WorldPlugin {
         return world.destroyBlock(pos, dropBlock);
     }
 
+    public static boolean destroyBlock(World world, BlockPos pos) {
+        return world.destroyBlock(pos, world.getGameRules().getBoolean("doTileDrops"));
+    }
+
+    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor) {
+        return destroyBlockSafe(world, pos, actor, world.getGameRules().getBoolean("doTileDrops"));
+    }
+
     public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor, boolean dropBlock) {
         if (actor == null)
             actor = RailcraftFakePlayer.get((WorldServer) world, pos);
 
         // Start of Event Fire
-        BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(world, pos, Blocks.AIR.getDefaultState(), actor);
-        MinecraftForge.EVENT_BUS.post(breakEvent);
-
-        if (breakEvent.isCanceled())
+        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, Blocks.AIR.getDefaultState(), actor)))
             return false;
         // End of Event Fire
 
         return destroyBlock(world, pos, dropBlock);
+    }
+
+    public static boolean playerRemoveBlock(World world, BlockPos pos, @Nullable EntityPlayer player) {
+        return playerRemoveBlock(world, pos, player, world.getGameRules().getBoolean("doTileDrops"));
+    }
+
+    public static boolean playerRemoveBlock(World world, BlockPos pos, @Nullable EntityPlayer player, boolean dropBlock) {
+        if (player == null)
+            player = RailcraftFakePlayer.get((WorldServer) world, pos);
+        IBlockState state = getBlockState(world, pos);
+
+        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)))
+            return false;
+
+        if (state.getBlock().removedByPlayer(state, world, pos, player, dropBlock))
+            return false;
+
+        if (dropBlock) {
+            List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
+            InvTools.dropItems(drops, world, pos);
+        }
+        return true;
     }
 
     public static void neighborAction(BlockPos pos, EnumFacing[] sides, Consumer<BlockPos> action) {
