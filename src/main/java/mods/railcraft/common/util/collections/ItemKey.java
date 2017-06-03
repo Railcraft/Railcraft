@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
 import net.minecraft.item.Item;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemKey {
@@ -29,6 +29,10 @@ public class ItemKey {
     public ItemKey(Item item, int metadata) {
         this.item = item;
         this.metadata = metadata;
+    }
+
+    public ItemKey(ItemStack stack) {
+        this(stack.getItem(), stack.getMetadata());
     }
 
     public ItemStack asStack() {

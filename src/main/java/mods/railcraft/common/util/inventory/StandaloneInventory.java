@@ -41,6 +41,7 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     @Nullable
     private final Callback callback;
     private final ItemStack[] contents;
+    private int inventoryStackLimit = 64;
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable IInventory callback) {
         this.name = name;
@@ -162,9 +163,13 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
         return "Standalone";
     }
 
+    public void setInventoryStackLimit(int inventoryStackLimit) {
+        this.inventoryStackLimit = inventoryStackLimit;
+    }
+
     @Override
     public int getInventoryStackLimit() {
-        return 64;
+        return inventoryStackLimit;
     }
 
     @Override

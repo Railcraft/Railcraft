@@ -16,7 +16,6 @@ import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
-import ic2.api.item.IItemAPI;
 import ic2.api.recipe.*;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -133,11 +132,11 @@ public class IC2Plugin {
         return false;
     }
 
-    public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
+    public static void addMaceratorRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
         addMaceratorRecipe(input, 1, output, 1);
     }
 
-    public static void addMaceratorRecipe(ItemStack input, int numinput, ItemStack output, int numoutput) {
+    public static void addMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output, int numoutput) {
         if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         output = output.copy();

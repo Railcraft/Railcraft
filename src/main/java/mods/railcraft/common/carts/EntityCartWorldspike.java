@@ -297,6 +297,11 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     }
 
     @Override
+    public int getInventoryStackLimit() {
+        return 16;
+    }
+
+    @Override
     public abstract IBlockState getDefaultDisplayTile();
 
     @Override

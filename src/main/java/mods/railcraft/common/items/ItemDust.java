@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
@@ -42,12 +43,25 @@ public class ItemDust extends ItemRailcraftSubtyped {
     }
 
     @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapelessRecipe(getStack(3, EnumDust.VOID),
+                RailcraftItems.DUST, EnumDust.COAL,
+                RailcraftItems.DUST, EnumDust.ENDER,
+                RailcraftItems.DUST, EnumDust.OBSIDIAN);
+    }
+
+    @Override
     public void finalizeDefinition() {
-        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
-            IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
-        }
-        if (Mod.IC2.isLoaded() && RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
-            IC2Plugin.addMaceratorRecipe(ModItems.SLAG.get(), new ItemStack(this, 1, EnumDust.SLAG.ordinal()));
+        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
+            if (RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
+                IC2Plugin.addMaceratorRecipe(new ItemStack(Items.COAL, 1, 1), getStack(EnumDust.CHARCOAL));
+            }
+            if (RailcraftConfig.getRecipeConfig("ic2.macerator.ender")) {
+                IC2Plugin.addMaceratorRecipe(new ItemStack(Items.ENDER_PEARL), getStack(EnumDust.ENDER));
+            }
+            if (RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
+                IC2Plugin.addMaceratorRecipe(ModItems.SLAG.get(), getStack(EnumDust.SLAG));
+            }
         }
     }
 
@@ -57,7 +71,10 @@ public class ItemDust extends ItemRailcraftSubtyped {
         SULFUR("dustSulfur"),
         SALTPETER("dustSaltpeter"),
         CHARCOAL("dustCharcoal"),
-        SLAG("dustSlag");
+        SLAG("dustSlag"),
+        COAL("dustCoal"),
+        ENDER("dustEnder"),
+        VOID("dustVoid");
         public static final EnumDust[] VALUES = values();
         private final String oreTag;
 

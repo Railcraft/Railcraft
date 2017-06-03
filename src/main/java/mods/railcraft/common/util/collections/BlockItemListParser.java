@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
 import mods.railcraft.common.util.misc.Game;
@@ -13,12 +14,14 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -26,66 +29,32 @@ import java.util.Set;
 //TODO: test this!
 public class BlockItemListParser {
 
-    public enum ParseType {
-
-        ITEM {
-            @Override
-            public ItemKey makeKey(String entry) throws IllegalArgumentException {
-                String[] tokens = entry.split("#");
-                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tokens[0]));
-                if (item == null)
-                    throw new IllegalArgumentException("Invalid Item Name while parsing config = " + entry);
-                int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-                return new ItemKey(item, meta);
-            }
-
-        },
-        BLOCK {
-            @Override
-            public BlockKey makeKey(String entry) throws IllegalArgumentException {
-                String[] tokens = entry.split("#");
-                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
-                if (block == null)
-                    throw new IllegalArgumentException("Invalid Block Name while parsing config = " + entry);
-                int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-                return new BlockKey(block.getStateFromMeta(meta));
-            }
-
-        };
-
-        public abstract Object makeKey(String entry);
-
+    public static BlockKey parseBlock(String line) {
+        String[] tokens = line.split("#");
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
+        if (block == null)
+            throw new IllegalArgumentException("Invalid Block Name while parsing config = " + line);
+        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
+        return new BlockKey(block.getStateFromMeta(meta));
     }
 
-    public enum ValueType {
-
-        INT {
-            @Override
-            public Integer parseValue(String value) {
-                return Integer.valueOf(value);
-            }
-
-        },
-        FLOAT {
-            @Override
-            public Float parseValue(String value) {
-                return Float.valueOf(value);
-            }
-
-        };
-
-        public abstract Object parseValue(String value);
-
+    public static ItemKey parseItem(String line) {
+        String[] tokens = line.split("#");
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tokens[0]));
+        if (item == null)
+            throw new IllegalArgumentException("Invalid Item Name while parsing config = " + line);
+        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
+        return new ItemKey(item, meta);
     }
 
-    public static <T> Set<T> parseList(String list, String logMessage, ParseType type) {
+    public static <T> Set<T> parseList(String list, String logMessage, Function<String, T> keyParser) {
         try {
             Set<T> set = new HashSet<T>();
-            for (String segment : list.replaceAll("[{} ]", "").split("[,;]+")) {
-                if (segment.equals(""))
+            for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
+                if (line.equals(""))
                     continue;
-                set.add((T) type.makeKey(segment));
-                Game.log(Level.DEBUG, logMessage, segment);
+                set.add(keyParser.apply(line));
+                Game.log(Level.DEBUG, logMessage, line);
             }
             return set;
         } catch (IllegalArgumentException ex) {
@@ -95,15 +64,34 @@ public class BlockItemListParser {
         }
     }
 
-    public static <T, V> Map<T, V> parseDictionary(String list, String logMessage, ParseType type, ValueType valueType) {
+    public static <T, V> Map<T, V> parseDictionary(String list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
         try {
             Map<T, V> map = new HashMap<T, V>();
-            for (String segment : list.replaceAll("[{} ]", "").split("[,;]+")) {
-                if (segment.equals(""))
+            for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
+                if (StringUtils.isEmpty(line))
                     continue;
-                String[] entry = segment.split("=");
-                map.put((T) type.makeKey(entry[0]), (V) valueType.parseValue(entry[1]));
-                Game.log(Level.DEBUG, logMessage, segment);
+                String[] entry = line.split("=");
+                map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
+                Game.log(Level.DEBUG, logMessage, line);
+            }
+            return map;
+        } catch (IllegalArgumentException ex) {
+            throw ex;
+        } catch (RuntimeException ex) {
+            throw new IllegalArgumentException("Invalid map while parsing config = " + list);
+        }
+    }
+
+    public static <T, V> Map<T, V> parseDictionary(String[] list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
+        try {
+            Map<T, V> map = new HashMap<T, V>();
+            for (String line : list) {
+                line = line.replaceAll("[{} ]", "");
+                if (StringUtils.isEmpty(line))
+                    continue;
+                String[] entry = line.split("=");
+                map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
+                Game.log(Level.DEBUG, logMessage, line);
             }
             return map;
         } catch (IllegalArgumentException ex) {
