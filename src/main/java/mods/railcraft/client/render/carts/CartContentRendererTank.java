@@ -35,6 +35,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
                 OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
                 OpenGL.glEnable(GL11.GL_BLEND);
+                OpenGL.glDisable(GL11.GL_LIGHTING);
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                 OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -54,6 +55,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
                 }
 
                 OpenGL.glDisable(GL11.GL_BLEND);
+                OpenGL.glEnable(GL11.GL_LIGHTING);
 
                 OpenGL.glPopAttrib();
                 OpenGL.glPopMatrix();
@@ -67,6 +69,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(GL11.GL_LIGHTING_BIT);
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
 //        OpenGL.glEnable(GL11.GL_CULL_FACE);
@@ -90,6 +93,8 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
         OpenGL.glScalef(scale, scale, scale);
         renderItem(item);
 
+
+        OpenGL.glPopAttrib();
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
     }
@@ -111,11 +116,8 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
     public void render(RenderCart renderer, EntityCartTank cart, float light, float partialTicks) {
         super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
         OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glDisable(GL11.GL_LIGHTING);
-        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));
@@ -124,7 +126,6 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
         renderTank(renderer, cart, light, partialTicks, x, y, z);
         renderFilterItem(renderer, cart, light, partialTicks, x, y, z);
 
-        OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
     }
 }
