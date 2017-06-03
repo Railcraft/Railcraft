@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.command.ICommand java.util.List&lt;java.lang.String&gt; getCommandAliases()'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

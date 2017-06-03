@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,8 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
+import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -76,6 +78,22 @@ public class NBTPlugin {
         if (data.hasKey(tag)) {
             int[] c = data.getIntArray(tag);
             return new BlockPos(c[0], c[1], c[2]);
+        }
+        return null;
+    }
+
+    public static void writeItemStack(NBTTagCompound data, String tag, @Nullable ItemStack stack) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        if (!InvTools.isEmpty(stack))
+            stack.writeToNBT(nbt);
+        data.setTag(tag, nbt);
+    }
+
+    @Nullable
+    public static ItemStack readItemStack(NBTTagCompound data, String tag) {
+        if (data.hasKey(tag)) {
+            NBTTagCompound nbt = data.getCompoundTag(tag);
+            return ItemStack.loadItemStackFromNBT(nbt);
         }
         return null;
     }

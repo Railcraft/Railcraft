@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.world.storage.loot.LootTable net.minecraft.world.storage.loot.LootPool getPool(java.lang.String)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

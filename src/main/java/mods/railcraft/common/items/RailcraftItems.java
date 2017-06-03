@@ -121,6 +121,12 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
+    FILTER_BEE(ItemFilterBee::new, "filter_bee") {{
+        conditions().add(Mod.FORESTRY);
+    }},
+    FILTER_BEE_GENOME(ItemFilterBeeGenome::new, "filter_bee_genome") {{
+        conditions().add(Mod.FORESTRY);
+    }},
     FILTER_BLANK(ItemFilterBlank::new, "filter_blank"),
     FILTER_TYPE(ItemFilterType::new, "filter_type"),
     FILTER_ORE_DICT(ItemFilterOreDictionary::new, "filter_ore_dict"),

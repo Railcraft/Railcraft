@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBee;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackInterface;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -19,6 +21,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.FilterBeesGenomeRecipe;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -33,6 +36,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -111,6 +115,17 @@ public class ForestryPlugin {
     @Nullable
     public Item getBackpack(String backpackId, String type) {
         return null;
+    }
+
+    public boolean isBee(ItemStack stack) {
+        return false;
+    }
+
+    public boolean isAnalyzedBee(ItemStack stack) {
+        return false;
+    }
+
+    public void registerBeeFilterRecipe() {
     }
 
     private static class ForestryPluginInstalled extends ForestryPlugin {
@@ -326,6 +341,24 @@ public class ForestryPlugin {
             } catch (Throwable error) {
                 Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
             }
+        }
+
+        @Override
+        public boolean isBee(ItemStack stack) {
+            IBee bee = BeeManager.beeRoot.getMember(stack);
+            return bee != null && bee.isAnalyzed();
+        }
+
+        @Override
+        public boolean isAnalyzedBee(ItemStack stack) {
+            IBee bee = BeeManager.beeRoot.getMember(stack);
+            return bee != null && bee.isAnalyzed();
+        }
+
+        @Override
+        public void registerBeeFilterRecipe() {
+            CraftingPlugin.addRecipe(new FilterBeesGenomeRecipe());
+            RecipeSorter.register("railcraft:filter_bees_species", FilterBeesGenomeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         }
     }
 }

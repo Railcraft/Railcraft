@@ -11,7 +11,6 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.ItemFilterSimple;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
@@ -25,9 +24,8 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SimpleFilterRecipe implements IRecipe {
+public class FilterSimpleRecipe implements IRecipe {
     private static Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterSimple.class);
-    private static Predicate<ItemStack> PROTOTYPE = s -> !OreDictPlugin.getOreTags(s).isEmpty();
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
@@ -76,12 +74,10 @@ public class SimpleFilterRecipe implements IRecipe {
 
         for (int i = 0; i < grid.length; ++i) {
             ItemStack stack = inv.getStackInSlot(i);
-            if (!InvTools.isEmpty(stack)) {
-                if (!FILTER.test(stack)) {
-                    stack = stack.copy();
-                    stack.stackSize = 1;
-                    grid[i] = stack;
-                }
+            if (!InvTools.isEmpty(stack) && !FILTER.test(stack)) {
+                stack = stack.copy();
+                stack.stackSize = 1;
+                grid[i] = stack;
             }
         }
 

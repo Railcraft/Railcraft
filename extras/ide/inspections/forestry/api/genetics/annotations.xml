@@ -1,0 +1,5 @@
+<root>
+    <item name='forestry.api.genetics.IAlleleRegistry forestry.api.genetics.IAllele getAllele(java.lang.String)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

@@ -209,9 +209,20 @@ public abstract class InvTools {
 
     @Nullable
     public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack, false);
-        if (nbt != null && nbt.hasKey(tag))
-            return nbt.getCompoundTag(tag);
+        return getItemDataRailcraft(stack, tag, false);
+    }
+
+    @Contract("null, _, _ -> null; !null, _, true -> !null; !null, _, false -> _")
+    @Nullable
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag, boolean create) {
+        if (isEmpty(stack))
+            return null;
+        NBTTagCompound nbt = getItemDataRailcraft(stack, create);
+        if (nbt != null && (create || nbt.hasKey(tag))) {
+            NBTTagCompound subNBT = nbt.getCompoundTag(tag);
+            nbt.setTag(tag, subNBT);
+            return subNBT;
+        }
         return null;
     }
 

@@ -52,8 +52,8 @@ public class TileItemUnloader extends TileItemManipulator {
     }
 
     @Override
-    protected void processCart(EntityMinecart cart) {
-        super.processCart(cart);
+    protected void upkeep() {
+        super.upkeep();
         clearInv();
     }
 

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -24,10 +25,12 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum ModItems {
+public enum ModItems implements IRailcraftRecipeIngredient {
 
     SILK(Mod.FORESTRY, "craftingMaterial", 3),
     STURDY_CASING(Mod.FORESTRY, "sturdyMachine"),
+    HONEY_DROP(Mod.FORESTRY, "honeyDrop"),
+    HONEYCOMB(Mod.FORESTRY, "beeCombs", OreDictionary.WILDCARD_VALUE),
     BAT_BOX(Mod.IC2, "te#batbox"),
     MFE(Mod.IC2, "te#mfe"),
     CESU(Mod.IC2, "te#cesu"),
@@ -81,6 +84,12 @@ public enum ModItems {
             return stack;
         }
         return null;
+    }
+
+    @Nullable
+    @Override
+    public Object getRecipeObject() {
+        return get();
     }
 
     public boolean isEqual(ItemStack otherStack, boolean matchMeta, boolean matchNBT) {
