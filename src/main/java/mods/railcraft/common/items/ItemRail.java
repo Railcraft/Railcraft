@@ -105,6 +105,12 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "I I",
                 "I I",
                 'I', "ingotCopper");
+        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(12, EnumRail.ELECTRIC),
+                "ICI",
+                "ICI",
+                "ICI",
+                'I', "ingotSteel",
+                'C', "ingotCopper");
     }
 
     public enum EnumRail implements IVariantEnum {

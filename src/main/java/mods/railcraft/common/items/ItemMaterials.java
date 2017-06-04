@@ -79,7 +79,7 @@ public class ItemMaterials {
     public static ToolMaterial STEEL_TOOL = EnumHelper.addToolMaterial("RAILCRAFT_STEEL", 2, 500, 7, 2.5F, 9);
 
     //TODO: texture?
-    public static ArmorMaterial STEEL_ARMOR = EnumHelper.addArmorMaterial("RAILCRAFT_STEEL", "texture?", 25, new int[]{2, 5, 6, 2}, 8, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0F);
+    public static ArmorMaterial STEEL_ARMOR = EnumHelper.addArmorMaterial("RAILCRAFT_STEEL", "texture?", 25, new int[]{2, 5, 6, 2}, 8, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1F);
     public static ArmorMaterial GOGGLES = EnumHelper.addArmorMaterial("RAILCRAFT_GOGGLES", "texture?", 20, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
     public static ArmorMaterial OVERALLS = EnumHelper.addArmorMaterial("RAILCRAFT_OVERALLS", "texture?", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
 }

@@ -61,6 +61,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
 
     @Override
     public void defineRecipes() {
+        CraftingPlugin.addShapelessRecipe(getStack(BLOCK), getStack(BRICK));
         CraftingPlugin.addShapelessRecipe(getStack(BRICK), getStack(FITTED));
         CraftingPlugin.addShapelessRecipe(getStack(FITTED), getStack(BLOCK));
         CraftingPlugin.addRecipe(getStack(8, ORNATE),
