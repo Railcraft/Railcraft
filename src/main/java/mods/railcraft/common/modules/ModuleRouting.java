@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ActuatorVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RoutingTableCopyRecipe;
@@ -42,8 +43,7 @@ public class ModuleRouting extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
-
+            public void init() {
                 if (RailcraftItems.ROUTING_TABLE.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
 
@@ -52,11 +52,11 @@ public class ModuleRouting extends RailcraftModulePayload {
 
                 if (EnumDetector.ROUTING.isEnabled()) {
                     CraftingPlugin.addRecipe(EnumDetector.ROUTING.getStack(),
-                            "XXX",
-                            "XPX",
-                            "XXX",
-                            'X', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1),
-                            'P', Blocks.STONE_PRESSURE_PLATE);
+                        "XXX",
+                        "XPX",
+                        "XXX",
+                        'X', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1),
+                        'P', Blocks.STONE_PRESSURE_PLATE);
 
                 }
 
@@ -64,6 +64,12 @@ public class ModuleRouting extends RailcraftModulePayload {
                     // Define Switch Motor
                     if (ActuatorVariant.ROUTING.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
                         CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getStack(), ActuatorVariant.MOTOR.getStack(), EnumDetector.ROUTING.getStack());
+                    }
+
+                    // Lever -> Motor upgrade recipe
+                    if (ActuatorVariant.LEVER.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.MOTOR.getStack(), ActuatorVariant.LEVER.getStack(), RailcraftItems.CIRCUIT.getRecipeObject(
+                            ItemCircuit.EnumCircuit.RECEIVER));
                     }
                 }
             }
