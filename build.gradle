@@ -35,6 +35,8 @@ ext.apiRailcraft = "./api/railcraft"
 
 ext.dirLang = "./lang"
 
+ext.dirDest = './build/distributions'
+
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
     runDir = "run"
@@ -162,7 +164,7 @@ jar {
 //        from "./src/api/java/buildcraft/api/LICENSE.API"
 //    }
 
-//    destinationDir = file(dirDest)
+    destinationDir = file(dirDest)
     includeEmptyDirs = false
 }
 
@@ -194,7 +196,7 @@ task devJar(type: Jar, dependsOn: 'classes') {
 
     exclude '**/Thumbs.db'
 
-//    destinationDir = file(dirDest)
+    destinationDir = file(dirDest)
     includeEmptyDirs = false
 
     extension = 'jar'
@@ -230,18 +232,20 @@ task signDevJar(type: JarSigner, dependsOn: 'devJar') {
 
 task apiZip(type: Zip) {
     from project.apiRailcraft
-//    destinationDir = file(dirDest)
+    destinationDir = file(dirDest)
     classifier = 'api'
     extension = 'zip'
 }
 
-task releaseInit << {
-    println '*************************************************************'
-    println 'This build will be version: ' + rootProject.version
-    println '*************************************************************'
+task releaseInit {
+    doLast {
+        println '*************************************************************'
+        println 'This build will be version: ' + rootProject.version
+        println '*************************************************************'
+    }
 }
 
-task release << {
+task release {
 }
 
 build.dependsOn signMainJar, signDevJar, apiZip
