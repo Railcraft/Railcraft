@@ -65,7 +65,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                 'B', Blocks.STONE_BUTTON,
                 'G', "paneGlassColorless",
                 'C', "ingotBrass",
-                'T', "ingotTin");
+                'T', "ingotCopper");
     }
 
     @SuppressWarnings("unused")

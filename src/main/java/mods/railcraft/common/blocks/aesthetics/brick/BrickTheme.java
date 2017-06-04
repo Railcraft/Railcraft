@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -41,9 +42,12 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_ABYSSAL.getStack(), new ItemStack(block, 1, 2), 0.2F);
+                CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+                        "II",
+                        "II",
+                        'I', EnumGeneric.STONE_ABYSSAL.getStack());
                 ItemStack abyssalStone = EnumGeneric.STONE_ABYSSAL.getStack();
-                if (abyssalStone != null) {
+                if (!InvTools.isEmpty(abyssalStone)) {
                     ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(abyssalStone, true, false);
                     recipe.addOutput(getStack(1, COBBLE), 1.0F);
                 }
@@ -95,9 +99,12 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_QUARRIED.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_QUARRIED.getStack(), new ItemStack(block, 1, 2), 0.2F);
+                CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+                        "II",
+                        "II",
+                        'I', EnumGeneric.STONE_QUARRIED.getStack());
                 ItemStack quarriedStone = EnumGeneric.STONE_QUARRIED.getStack();
-                if (quarriedStone != null) {
+                if (!InvTools.isEmpty(quarriedStone)) {
                     ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(quarriedStone, true, false);
                     recipe.addOutput(getStack(1, COBBLE), 1.0F);
                 }

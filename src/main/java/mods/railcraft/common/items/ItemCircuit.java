@@ -39,37 +39,43 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
-                " #S",
-                "BGR",
-                "SRL",
-                'L', "gemLapis",
-                '#', Items.REPEATER,
-                'G', "ingotGold",
-                'S', new ItemStack(Blocks.WOOL, 1, 14),
-                'R', "dustRedstone",
-                'B', "slimeball");
-        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
-                " #S",
-                "BGR",
-                "SRL",
-                'L', "gemLapis",
-                '#', Items.REPEATER,
-                'G', "ingotGold",
-                'S', new ItemStack(Blocks.WOOL, 1, 13),
-                'R', "dustRedstone",
-                'B', "slimeball");
-        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
-                " #S",
-                "BGR",
-                "SRL",
-                'L', "gemLapis",
-                '#', Items.REPEATER,
-                'G', "ingotGold",
-                'S', new ItemStack(Blocks.WOOL, 1, 4),
-                'R', "dustRedstone",
-                'B', "slimeball");
+    public void finalizeDefinition() {
+        Object[] glueTypes = {"slimeball", ModItems.STICKY_RESIN};
+        Object[] gemTypes = {"gemLapis", "gemQuartz", "crystalCertusQuartz"};
+        for (Object glue : glueTypes) {
+            for (Object gem : gemTypes) {
+                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
+                        " #S",
+                        "BGR",
+                        "SRL",
+                        'L', gem,
+                        '#', Items.REPEATER,
+                        'G', RailcraftItems.PLATE, Metal.GOLD,
+                        'S', new ItemStack(Blocks.WOOL, 1, 14),
+                        'R', "dustRedstone",
+                        'B', glue);
+                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
+                        " #S",
+                        "BGR",
+                        "SRL",
+                        'L', gem,
+                        '#', Items.REPEATER,
+                        'G', RailcraftItems.PLATE, Metal.GOLD,
+                        'S', new ItemStack(Blocks.WOOL, 1, 13),
+                        'R', "dustRedstone",
+                        'B', glue);
+                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
+                        " #S",
+                        "BGR",
+                        "SRL",
+                        'L', gem,
+                        '#', Items.REPEATER,
+                        'G', RailcraftItems.PLATE, Metal.GOLD,
+                        'S', new ItemStack(Blocks.WOOL, 1, 4),
+                        'R', "dustRedstone",
+                        'B', glue);
+            }
+        }
     }
 
     public enum EnumCircuit implements IVariantEnum {

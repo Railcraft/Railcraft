@@ -63,7 +63,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        if (EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() && RailcraftItems.REBAR.isEnabled()) {
+                        if ((EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() || EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) && RailcraftItems.REBAR.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",

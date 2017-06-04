@@ -29,6 +29,7 @@ public class ItemFilterBee extends ItemRailcraft implements IFilterItem {
     @Override
     public void finalizeDefinition() {
         CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEY_DROP);
+        CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEYDEW_DROP);
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
