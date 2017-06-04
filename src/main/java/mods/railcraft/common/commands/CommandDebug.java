@@ -82,6 +82,9 @@ public class CommandDebug extends SubCommand {
             CommandHelpers.throwWrongUsage(sender, this);
 
         RayTraceResult rayTraceResult = MiscTools.rayTracePlayerLook((EntityPlayer) sender);
+        if (rayTraceResult == null)
+            CommandHelpers.throwWrongUsage(sender, this);
+
         List<String> debug = Collections.emptyList();
         switch (rayTraceResult.typeOfHit) {
             case ENTITY:
@@ -89,7 +92,7 @@ public class CommandDebug extends SubCommand {
                 if (entity instanceof EntityMinecart) {
                     debug = CartTools.getDebugOutput((EntityMinecart) entity);
                 } else {
-                    CommandHelpers.throwWrongUsage(sender, this);
+                    throw new EntityInvalidException(entity);
                 }
                 break;
             case BLOCK:
@@ -98,7 +101,7 @@ public class CommandDebug extends SubCommand {
                 if (tile instanceof RailcraftTileEntity) {
                     debug = ((RailcraftTileEntity) tile).getDebugOutput();
                 } else {
-                    CommandHelpers.throwWrongUsage(sender, this);
+                    throw new BlockNotFoundException();
                 }
                 break;
         }
@@ -116,11 +119,8 @@ public class CommandDebug extends SubCommand {
 
         @Override
         public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-            if (args.length != 3)
-                CommandHelpers.throwWrongUsage(sender, this);
-
-
-            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
+            ArgDeque argsQueue = ArgDeque.make(args);
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -130,7 +130,7 @@ public class CommandDebug extends SubCommand {
                     printLine(sender, s);
                 }
             } else {
-                CommandHelpers.throwWrongUsage(sender, this);
+                throw new BlockNotFoundException();
             }
         }
     }
@@ -143,10 +143,8 @@ public class CommandDebug extends SubCommand {
 
         @Override
         public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-            if (args.length != 3)
-                CommandHelpers.throwWrongUsage(sender, this);
-
-            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
+            ArgDeque argsQueue = ArgDeque.make(args);
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -173,7 +171,7 @@ public class CommandDebug extends SubCommand {
                     printLine(sender, "Railcraft Controller Debug End");
                 }
             } else {
-                CommandHelpers.throwWrongUsage(sender, this);
+                throw new BlockNotFoundException();
             }
         }
     }
@@ -186,10 +184,8 @@ public class CommandDebug extends SubCommand {
 
         @Override
         public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-            if (args.length != 3)
-                CommandHelpers.throwWrongUsage(sender, this);
-
-            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
+            ArgDeque argsQueue = ArgDeque.make(args);
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -221,7 +217,7 @@ public class CommandDebug extends SubCommand {
                     printLine(sender, "Railcraft Receiver Debug End");
                 }
             } else {
-                CommandHelpers.throwWrongUsage(sender, this);
+                throw new BlockNotFoundException();
             }
         }
     }
