@@ -12,12 +12,12 @@ package mods.railcraft.common.commands;
 
 import com.google.gson.JsonParseException;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.SyntaxErrorException;
-import net.minecraft.command.WrongUsageException;
+import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.command.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -128,20 +128,19 @@ public class CommandHelpers {
         return false;
     }
 
-    public static BlockPos parseBlockPos(ICommandSender sender, IModCommand command, String[] args, int start) throws WrongUsageException {
-        if (args.length <= start + 3)
-            CommandHelpers.throwWrongUsage(sender, command);
-
-        int x = 0, y = 0, z = 0;
+    public static BlockPos parseBlockPos(ICommandSender sender, ArgDeque args) throws CommandException {
+        BlockPos pos;
         try {
-            x = Integer.parseInt(args[start]);
-            y = Integer.parseInt(args[start + 1]);
-            z = Integer.parseInt(args[start + 2]);
-        } catch (NumberFormatException ex) {
-            throwWrongUsage(sender, command);
+            pos = CommandBase.parseBlockPos(sender, args.peekArray(3), 0, false);
+            args.poll(3);
+        } catch (CommandException ex) {
+            RayTraceResult rayTraceResult = MiscTools.rayTracePlayerLook((EntityPlayer) sender);
+            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK)
+                pos = rayTraceResult.getBlockPos();
+            else
+                throw ex;
         }
-
-        return new BlockPos(x, y, z);
+        return pos;
     }
 
     public static SyntaxErrorException toSyntaxException(JsonParseException e) {

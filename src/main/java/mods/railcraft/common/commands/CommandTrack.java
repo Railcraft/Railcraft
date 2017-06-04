@@ -39,19 +39,19 @@ public class CommandTrack extends SubCommand {
 
         @Override
         public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-            if (args.length < 4)
-                CommandHelpers.throwWrongUsage(sender, this);
-
-            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
+            ArgDeque argsQueue = ArgDeque.make(args);
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             TrackKitMessenger track = TrackTools.getTrackInstance(CommandHelpers.getWorld(sender), pos, TrackKitMessenger.class);
             if (track != null) {
-                String message = CommandBase.buildString(args, 3);
+                String message = CommandBase.buildString(argsQueue.toArgArray(), 0);
                 try {
                     track.setTitle(sender, ITextComponent.Serializer.jsonToComponent(message));
                 } catch (JsonParseException ex) {
                     throw CommandHelpers.toSyntaxException(ex);
                 }
+            } else {
+                throw new BlockNotFoundException();
             }
         }
     }
@@ -64,20 +64,20 @@ public class CommandTrack extends SubCommand {
 
         @Override
         public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-            if (args.length < 4)
-                CommandHelpers.throwWrongUsage(sender, this);
-
-            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
+            ArgDeque argsQueue = ArgDeque.make(args);
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             TrackKitMessenger track = TrackTools.getTrackInstance(CommandHelpers.getWorld(sender), pos, TrackKitMessenger.class);
             if (track != null) {
-                String message = CommandBase.buildString(args, 3);
+                String message = CommandBase.buildString(argsQueue.toArgArray(), 0);
 
                 try {
                     track.setSubtitle(sender, ITextComponent.Serializer.jsonToComponent(message));
                 } catch (JsonParseException ex) {
                     throw CommandHelpers.toSyntaxException(ex);
                 }
+            } else {
+                throw new BlockNotFoundException();
             }
         }
     }
