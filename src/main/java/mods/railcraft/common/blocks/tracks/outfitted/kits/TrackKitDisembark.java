@@ -52,7 +52,7 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
         if (isPowered() && cart.isBeingRidden()) {
             double x = getPos().getX();
             double z = getPos().getZ();
-            double offset = 1.5;
+            double offset = 1;
             IBlockState state = theWorldAsserted().getBlockState(getPos());
             EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
             if (dir == EnumRailDirection.NORTH_SOUTH)
