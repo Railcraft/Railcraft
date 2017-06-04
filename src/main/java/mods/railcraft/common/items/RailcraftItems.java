@@ -118,6 +118,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{
         conditions().add(Mod.THAUMCRAFT);
     }},
+    CROWBAR_DIAMOND(ItemCrowbarDiamond::new, "tool_crowbar_diamond"),
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
