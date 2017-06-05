@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by CovertJaguar on 8/18/2016 for Railcraft.
@@ -82,7 +81,8 @@ public class MaterialBlockModel implements IModel {
             TextureAtlasSprite texture = null; // TODO: figure out how to find this, it shouldn't be too hard...maybe... we can always hardcode the resource location
 
             List<BakedQuad> quads = baseModel.getQuads(state, side, rand);
-            return quads.stream().map(q -> new BakedQuadRetextured(q, texture)).collect(Collectors.toList());
+            quads.replaceAll(q -> new BakedQuadRetextured(q, texture));
+            return quads;
         }
 
         @Override
