@@ -62,58 +62,15 @@ public abstract class MiscTools {
         return null;
     }
 
-    //TODO: test
+    /**
+     * Same as {@link net.minecraft.block.Block#rayTrace(BlockPos, Vec3d, Vec3d, AxisAlignedBB)}
+     */
     @Nullable
-    public static RayTraceResult rayTraceBlock(Vec3d start, Vec3d end, BlockPos pos) {
-        start = start.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-        end = end.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-        Vec3d minX = start.getIntermediateWithXValue(end, 0);
-        Vec3d maxX = start.getIntermediateWithXValue(end, 1);
-        Vec3d minY = start.getIntermediateWithYValue(end, 0);
-        Vec3d maxY = start.getIntermediateWithYValue(end, 1);
-        Vec3d minZ = start.getIntermediateWithZValue(end, 0);
-        Vec3d maxZ = start.getIntermediateWithZValue(end, 1);
-        if (isVecOutsideYZBounds(minX))
-            minX = null;
-        if (isVecOutsideYZBounds(maxX))
-            maxX = null;
-        if (isVecOutsideXZBounds(minY))
-            minY = null;
-        if (isVecOutsideXZBounds(maxY))
-            maxY = null;
-        if (isVecOutsideXYBounds(minZ))
-            minZ = null;
-        if (isVecOutsideXYBounds(maxZ))
-            maxZ = null;
-        Vec3d closest = null;
-        if (minX != null)
-            closest = minX;
-        if (maxX != null && (closest == null || start.distanceTo(maxX) < start.distanceTo(closest)))
-            closest = maxX;
-        if (minY != null && (closest == null || start.distanceTo(minY) < start.distanceTo(closest)))
-            closest = minY;
-        if (maxY != null && (closest == null || start.distanceTo(maxY) < start.distanceTo(closest)))
-            closest = maxY;
-        if (minZ != null && (closest == null || start.distanceTo(minZ) < start.distanceTo(closest)))
-            closest = minZ;
-        if (maxZ != null && (closest == null || start.distanceTo(maxZ) < start.distanceTo(closest)))
-            closest = maxZ;
-        if (closest == null)
-            return null;
-        EnumFacing sideHit = null;
-        if (closest == minX)
-            sideHit = EnumFacing.WEST;
-        if (closest == maxX)
-            sideHit = EnumFacing.EAST;
-        if (closest == minY)
-            sideHit = EnumFacing.DOWN;
-        if (closest == maxY)
-            sideHit = EnumFacing.UP;
-        if (closest == minZ)
-            sideHit = EnumFacing.NORTH;
-        if (closest == maxZ)
-            sideHit = EnumFacing.SOUTH;
-        return new RayTraceResult(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), sideHit, pos);
+    public static RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+        Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
+        Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
+        RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
+        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
     }
 
     private static boolean isVecOutsideYZBounds(@Nullable Vec3d vec3d) {
