@@ -21,7 +21,6 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.CartFilterRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -159,25 +158,6 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                'I', new ItemStack(Block.fenceIron),
 //                'W', new ItemStack(Item.wheat),
 //                'P', ItemPlate.getPlate(ItemPlate.EnumPlate.STEEL));
-                RailcraftCarts cart = RailcraftCarts.TANK;
-
-                if (cart.isLoaded()) {
-                    if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
-                        CraftingPlugin.addRecipe(cart.getStack(),
-                                "T",
-                                "M",
-                                'T', EnumMachineBeta.TANK_IRON_GAUGE.getStack(),
-                                'M', Items.MINECART);
-                    } else {
-                        CraftingPlugin.addRecipe(cart.getStack(),
-                                "GGG",
-                                "GMG",
-                                "GGG",
-                                'G', "blockGlassColorless",
-                                'M', Items.MINECART);
-                    }
-                    CraftingPlugin.addRecipe(new CartFilterRecipe());
-                }
             }
 
             private void addColorRecipes(EnumMachineBeta type) {

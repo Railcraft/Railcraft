@@ -41,9 +41,9 @@ public final class StackFilters {
     }
 
     /**
-     * Matches against the provided Item.
+     * Matches against the provided class/interface.
      */
-    public static Predicate<ItemStack> of(@Nonnull final Class<? extends Item> itemClass) {
+    public static Predicate<ItemStack> of(@Nonnull final Class<?> itemClass) {
         return stack -> !InvTools.isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
