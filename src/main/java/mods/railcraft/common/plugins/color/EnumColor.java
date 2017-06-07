@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.color;
 
+import com.google.common.primitives.Ints;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -20,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
@@ -123,7 +125,6 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return nbt != null && nbt.hasKey(DEFAULT_COLOR_TAG);
     }
 
-    @Nonnull
     public static EnumColor fromItemStack(@Nullable ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return EnumColor.WHITE;
@@ -133,6 +134,20 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
             return EnumColor.fromOrdinal(15 - stack.getItemDamage());
         NBTTagCompound nbt = stack.getTagCompound();
         return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
+    }
+
+    @Contract("null -> null; !null -> _")
+    @Nullable
+    public static EnumColor dyeColorOf(@Nullable ItemStack stack) {
+        if (InvTools.isEmpty(stack))
+            return null;
+        int[] ids = OreDictionary.getOreIDs(stack);
+        for (EnumColor color : VALUES) {
+            if (Ints.contains(ids, OreDictionary.getOreID(color.oreTagDyeName))) {
+                return color;
+            }
+        }
+        return null;
     }
 
     public EnumDyeColor getDye() {

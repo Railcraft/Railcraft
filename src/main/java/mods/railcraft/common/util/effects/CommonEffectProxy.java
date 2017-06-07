@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.effects;
 
 import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketEffect;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
@@ -123,7 +124,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void chimneyEffect(World world, double x, double y, double z) {
+    public void chimneyEffect(World world, double x, double y, double z, EnumColor color) {
     }
 
     @Override
