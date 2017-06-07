@@ -72,11 +72,14 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     }
 
     @Override
-    public RayTraceResult collisionRayTrace(Vec3d vec3d, Vec3d vec3d1) {
-        return MiscTools.rayTraceBlock(vec3d, vec3d1, getPos());
+    @Nullable
+    public RayTraceResult collisionRayTrace(Vec3d start, Vec3d end) {
+        BlockPos pos = getPos();
+        return MiscTools.rayTrace(pos, start, end, getSelectedBoundingBox().offset(-pos.getX(), -pos.getY(), -pos.getZ()));
     }
 
     @Override
+    @Nullable
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
         if (isGateOpen())
             return null;

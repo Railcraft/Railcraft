@@ -13,6 +13,7 @@ package mods.railcraft.client.render.world;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,7 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
@@ -33,14 +37,17 @@ import java.util.UUID;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class GoggleAuraWorldRenderer {
+
     public static GoggleAuraWorldRenderer INSTANCE = new GoggleAuraWorldRenderer();
     public Collection<CartInfo> cartInfos = new LinkedList<>();
 
     @SubscribeEvent
     public void onWorldRender(final RenderWorldLastEvent event) {
-        if (cartInfos.isEmpty())
+        if (cartInfos.isEmpty()) {
             return;
+        }
 
         final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
@@ -71,8 +78,9 @@ public class GoggleAuraWorldRenderer {
                 World world = Minecraft.getMinecraft().theWorld;
                 for (CartInfo cartInfo : cartInfos) {
                     EntityMinecart cart = CartTools.getCartFromUUID(world, cartInfo.id);
-                    if (cart == null)
+                    if (cart == null) {
                         continue;
+                    }
                     setColor(cartInfo.train.hashCode());
                     OpenGL.glVertex(cart.getPositionVector());
                     Vec3d top = cart.getPositionVector().addVector(0.0, 2.0, 0.0);
@@ -90,6 +98,13 @@ public class GoggleAuraWorldRenderer {
         }
     }
 
+    @SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event) {
+        if (Game.isClient(event.getWorld())) {
+            cartInfos.clear();
+        }
+    }
+
     private void setColor(int color) {
         float c1 = (float) (color >> 16 & 255) / 255.0F;
         float c2 = (float) (color >> 8 & 255) / 255.0F;
@@ -100,13 +115,13 @@ public class GoggleAuraWorldRenderer {
     private void renderLink(World world, Vec3d top, UUID linkId) {
         EntityMinecart link = CartTools.getCartFromUUID(world, linkId);
         if (link != null) {
-//            setColor(EnumColor.BLUE.getHexColor());
             OpenGL.glVertex(top);
             OpenGL.glVertex(link.getPositionVector().addVector(0.0, 1.5, 0.0));
         }
     }
 
     public static class CartInfo {
+
         public final UUID id;
         public final UUID train;
         public final UUID linkA;
