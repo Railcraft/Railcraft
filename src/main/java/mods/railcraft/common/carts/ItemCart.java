@@ -13,7 +13,6 @@ import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -99,9 +98,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
-        ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tips");
-        if (tip != null)
-            info.addAll(tip.convertToStrings());
+        addToolTips(stack, player, info, adv);
         ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         if (!InvTools.isEmpty(filter)) {
             info.add(TextFormatting.BLUE + LocalizationPlugin.translate("gui.railcraft.filter") + ": " + filter.getDisplayName());
