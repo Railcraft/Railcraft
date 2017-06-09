@@ -13,9 +13,14 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemSteelSword extends ItemSword implements IRailcraftItemSimple {
 
@@ -52,6 +57,13 @@ public class ItemSteelSword extends ItemSword implements IRailcraftItemSimple {
     @Override
     public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
         return OreDictPlugin.isOreType("ingotSteel", stack);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, playerIn, tooltip, advanced);
+        addToolTips(stack, playerIn, tooltip, advanced);
     }
 
 }

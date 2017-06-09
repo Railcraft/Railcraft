@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -21,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -50,18 +48,6 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
         return (stack, tintIndex) -> EnumColor.fromItemStack(stack).getHexColor();
     }
 
-    public String getTooltipTag(ItemStack stack) {
-        return stack.getUnlocalizedName() + ".tips";
-    }
-
-    @Nullable
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        String tipTag = getTooltipTag(stack);
-        if (LocalizationPlugin.hasTag(tipTag))
-            return ToolTip.buildToolTip(tipTag);
-        return null;
-    }
-
     @Override
     public String getUnlocalizedName() {
         return LocalizationPlugin.convertTag(super.getUnlocalizedName());
@@ -72,10 +58,10 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
         return getUnlocalizedName();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        ToolTip toolTip = getToolTip(stack, player, adv);
-        if (toolTip != null)
-            info.addAll(toolTip.convertToStrings());
+        super.addInformation(stack, player, info, adv);
+        addToolTips(stack, player, info, adv);
     }
 }

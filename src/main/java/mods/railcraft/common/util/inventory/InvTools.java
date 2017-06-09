@@ -13,7 +13,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IFilterItem;
-import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.api.core.items.InvToolsAPI;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.collections.StackKey;
@@ -64,18 +64,18 @@ public abstract class InvTools {
 
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {
-        return stack == null || stack.stackSize <= 0 || stack.getItem() == null;
+        return InvToolsAPI.isEmpty(stack);
+    }
+
+    @Nullable
+    public static ItemStack emptyStack() {
+        return InvToolsAPI.emptyStack();
     }
 
     public static int sizeOf(@Nullable ItemStack stack) {
         if (isEmpty(stack))
             return 0;
         return stack.stackSize;
-    }
-
-    @Nullable
-    public static ItemStack emptyStack() {
-        return null;
     }
 
     @Contract("!null, _ -> !null; null, _ -> null")
@@ -196,44 +196,6 @@ public abstract class InvTools {
             stack.setTagCompound(nbt);
         }
         return nbt;
-    }
-
-    @Contract("null, _ -> null; !null, true -> !null; !null, false -> _")
-    @Nullable
-    public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, boolean create) {
-        if (isEmpty(stack))
-            return null;
-        return stack.getSubCompound(Railcraft.MOD_ID, create);
-    }
-
-    public static void clearItemDataRailcraft(ItemStack stack, String tag) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack, false);
-        if (nbt != null && nbt.hasKey(tag))
-            nbt.removeTag(tag);
-    }
-
-    public static void setItemDataRailcraft(ItemStack stack, String tag, NBTTagCompound data) {
-        NBTTagCompound nbt = getItemDataRailcraft(stack, true);
-        nbt.setTag(tag, data);
-    }
-
-    @Nullable
-    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag) {
-        return getItemDataRailcraft(stack, tag, false);
-    }
-
-    @Contract("null, _, _ -> null; !null, _, true -> !null; !null, _, false -> _")
-    @Nullable
-    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag, boolean create) {
-        if (isEmpty(stack))
-            return null;
-        NBTTagCompound nbt = getItemDataRailcraft(stack, create);
-        if (nbt != null && (create || nbt.hasKey(tag))) {
-            NBTTagCompound subNBT = nbt.getCompoundTag(tag);
-            nbt.setTag(tag, subNBT);
-            return subNBT;
-        }
-        return null;
     }
 
     public static void addNBTTag(ItemStack stack, String key, String value) {

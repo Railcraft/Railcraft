@@ -72,7 +72,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     MOW_UNDERCUTTER(1, "mow_undercutter", EntityCartUndercutter.class, ItemCartMOWUndercutter::new),
     PUMPKIN(3, "cart_pumpkin", EntityCartPumpkin.class, ItemCartPumpkin::new),
     REDSTONE_FLUX(0, "cart_redstone_flux", EntityCartRF.class, ItemCartRF::new),
-    TANK(0, "cart_tank", EntityCartTank.class, ItemCart::new, () -> {
+    TANK(0, "cart_tank", EntityCartTank.class, ItemCartTank::new, () -> {
         ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
         return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),

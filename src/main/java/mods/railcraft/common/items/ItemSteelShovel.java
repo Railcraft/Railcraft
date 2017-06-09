@@ -10,9 +10,14 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -59,4 +64,10 @@ public class ItemSteelShovel extends ItemSpade implements IRailcraftItemSimple {
         return OreDictPlugin.isOreType("ingotSteel", stack);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, playerIn, tooltip, advanced);
+        addToolTips(stack, playerIn, tooltip, advanced);
+    }
 }

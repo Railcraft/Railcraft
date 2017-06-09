@@ -20,7 +20,6 @@ import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,16 +36,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
@@ -234,8 +232,10 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         player.swingArm(hand);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean advInfo) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+        addToolTips(stack, player, info, adv);
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tips"));
     }
 
@@ -274,8 +274,9 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         checkBlock(world, level, pos.down(), player);
     }
 
+    @Nullable
     @Override
-    public Object getRecipeObject(@Nullable IVariantEnum meta) {
+    public String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

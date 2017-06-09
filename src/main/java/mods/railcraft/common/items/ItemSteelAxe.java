@@ -12,10 +12,15 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemSteelAxe extends ItemAxe implements IRailcraftItemSimple {
 
@@ -68,4 +73,10 @@ public class ItemSteelAxe extends ItemAxe implements IRailcraftItemSimple {
         return super.getStrVsBlock(stack, state);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, playerIn, tooltip, advanced);
+        addToolTips(stack, playerIn, tooltip, advanced);
+    }
 }

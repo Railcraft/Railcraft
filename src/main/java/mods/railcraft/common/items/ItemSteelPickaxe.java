@@ -10,9 +10,14 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimple {
 
@@ -56,4 +61,10 @@ public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimpl
         return OreDictPlugin.isOreType("ingotSteel", stack);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, playerIn, tooltip, advanced);
+        addToolTips(stack, playerIn, tooltip, advanced);
+    }
 }

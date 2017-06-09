@@ -40,6 +40,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -156,13 +158,17 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         return true;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean advInfo) {
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> info, boolean advanced) {
+        super.addInformation(stack, playerIn, info, advanced);
+        addToolTips(stack, playerIn, info, advanced);
         info.add(LocalizationPlugin.translate("item.railcraft.tool.spike.maul.tips"));
     }
 
+    @Nullable
     @Override
-    public Object getRecipeObject(@Nullable IVariantEnum meta) {
+    public String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

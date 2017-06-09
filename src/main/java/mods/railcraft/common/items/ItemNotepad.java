@@ -11,6 +11,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.core.items.InvToolsAPI;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
@@ -73,7 +74,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     @Override
     public void initializeClient() {
         ModelManager.registerComplexItemModel(this, stack -> {
-            NBTTagCompound tag = InvTools.getItemDataRailcraft(stack, false);
+            NBTTagCompound tag = InvToolsAPI.getItemDataRailcraft(stack, false);
             if (tag != null && tag.hasKey("contents")) {
                 return MODEL_FILLED;
             }
@@ -83,14 +84,14 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, true);
+            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, true);
             nbt.setByte("pasteMode", (byte) mode.ordinal());
         }
     }
 
     private static PasteMode getPasteMode(ItemStack stack) {
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, false);
             return PasteMode.fromOrdinal(nbt != null ? nbt.getByte("pasteMode") : 0);
         }
         return PasteMode.ALL;
@@ -114,7 +115,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
                 contentTag.setTag(entry.getKey().nbtTag, entry.getValue());
             }
 
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, true);
+            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, true);
             nbt.setTag("contents", contentTag);
         }
     }
@@ -123,7 +124,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, false);
+            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, false);
             if (nbt != null && nbt.hasKey("contents")) {
                 nbt = nbt.getCompoundTag("contents");
                 for (Contents content : Contents.VALUES) {
@@ -160,7 +161,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
-            InvTools.clearItemDataRailcraft(stack, "contents");
+            InvToolsAPI.clearItemDataRailcraft(stack, "contents");
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
             if (Game.isClient(world))

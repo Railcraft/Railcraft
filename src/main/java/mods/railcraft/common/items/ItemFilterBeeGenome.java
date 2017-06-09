@@ -16,6 +16,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.IAllele;
 import mods.railcraft.api.core.items.IFilterItem;
+import mods.railcraft.api.core.items.InvToolsAPI;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -55,17 +56,17 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
     public static ItemStack setBeeFilter(ItemStack filter, String type, @Nullable ItemStack active, @Nullable ItemStack inactive) {
         filter = filter.copy();
-        NBTTagCompound nbt = InvTools.getItemDataRailcraft(filter, "filter", true);
+        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(filter, "filter", true);
         nbt.setString("type", type);
         NBTPlugin.writeItemStack(nbt, "active", active);
         NBTPlugin.writeItemStack(nbt, "inactive", inactive);
-        InvTools.setItemDataRailcraft(filter, "filter", nbt);
+        InvToolsAPI.setItemDataRailcraft(filter, "filter", nbt);
         return filter;
     }
 
     @Nullable
     public static BeeFilter getBeeFilter(ItemStack stack) {
-        NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, "filter");
+        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "filter");
         if (nbt != null) {
             try {
                 String typeName = nbt.getString("type");
@@ -93,7 +94,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, "filter");
+        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "filter");
         if (nbt != null) {
             try {
                 EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;

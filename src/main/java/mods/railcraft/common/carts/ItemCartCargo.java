@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.core.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.CartFilterRecipe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
@@ -20,7 +20,7 @@ import net.minecraft.init.Items;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemCartCargo extends ItemCart {
+public class ItemCartCargo extends ItemCart implements IPrototypedItem {
     public ItemCartCargo(IRailcraftCartContainer cart) {
         super(cart);
     }
@@ -32,6 +32,5 @@ public class ItemCartCargo extends ItemCart {
                 "M",
                 'B', Blocks.TRAPPED_CHEST,
                 'M', Items.MINECART);
-        CraftingPlugin.addRecipe(new CartFilterRecipe());
     }
 }

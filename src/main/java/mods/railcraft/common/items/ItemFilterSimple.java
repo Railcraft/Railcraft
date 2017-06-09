@@ -11,13 +11,12 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.items.IFilterItem;
+import mods.railcraft.api.core.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -25,29 +24,8 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemFilterSimple extends ItemRailcraft implements IFilterItem {
+public class ItemFilterSimple extends ItemRailcraft implements IFilterItem, IPrototypedItem {
     public ItemFilterSimple() {
-    }
-
-    public static ItemStack setPrototype(ItemStack filter, ItemStack prototype) {
-        filter = filter.copy();
-        NBTTagCompound nbt = new NBTTagCompound();
-        prototype.writeToNBT(nbt);
-        InvTools.setItemDataRailcraft(filter, "prototype", nbt);
-        return filter;
-    }
-
-    @Nullable
-    public static ItemStack getPrototype(ItemStack stack) {
-        NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack, "prototype");
-        if (nbt != null) {
-            return ItemStack.loadItemStackFromNBT(nbt);
-        }
-        return InvTools.emptyStack();
-    }
-
-    public boolean isValidPrototype(ItemStack stack) {
-        return true;
     }
 
     @Override

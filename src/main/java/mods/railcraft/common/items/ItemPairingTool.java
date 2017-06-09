@@ -12,9 +12,9 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.core.items.InvToolsAPI;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,7 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
     @Nullable
     public WorldCoordinate getPairData(ItemStack stack) {
         WorldCoordinate pos = null;
-        NBTTagCompound pairData = InvTools.getItemDataRailcraft(stack, PAIR_DATA_TAG);
+        NBTTagCompound pairData = InvToolsAPI.getItemDataRailcraft(stack, PAIR_DATA_TAG);
         if (pairData != null)
             pos = WorldCoordinate.readFromNBT(pairData, COORD_TAG);
         return pos;
@@ -56,11 +56,11 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
         NBTTagCompound pairData = new NBTTagCompound();
         WorldCoordinate pos = new WorldCoordinate(tile);
         pos.writeToNBT(pairData, COORD_TAG);
-        InvTools.setItemDataRailcraft(stack, PAIR_DATA_TAG, pairData);
+        InvToolsAPI.setItemDataRailcraft(stack, PAIR_DATA_TAG, pairData);
     }
 
     public void clearPairData(ItemStack stack) {
-        InvTools.clearItemDataRailcraft(stack, PAIR_DATA_TAG);
+        InvToolsAPI.clearItemDataRailcraft(stack, PAIR_DATA_TAG);
     }
 
     public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer player, World worldIn, Class<? extends T> clazz, Function<T, AbstractPair> transform) {

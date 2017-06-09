@@ -9,8 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.EntityLivingBase;
@@ -61,7 +59,6 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
         return EnumRarity.values()[rarity];
     }
 
-
     public ItemRailcraft setSmeltingExperience(float smeltingExperience) {
         this.smeltingExperience = smeltingExperience;
         return this;
@@ -77,23 +74,10 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
         return false;
     }
 
-    public String getTooltipTag(ItemStack stack) {
-        return stack.getUnlocalizedName() + ".tips";
-    }
-
-    @Nullable
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        String tipTag = getTooltipTag(stack);
-        if (LocalizationPlugin.hasTag(tipTag))
-            return ToolTip.buildToolTip(tipTag);
-        return null;
-    }
-
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        ToolTip toolTip = getToolTip(stack, player, adv);
-        if (toolTip != null)
-            info.addAll(toolTip.convertToStrings());
+        addToolTips(stack, player, info, adv);
     }
 
     @Override
@@ -104,21 +88,5 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         return getUnlocalizedName();
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        checkVariant(variant);
-        String oreTag = getOreTag(variant);
-        if (oreTag != null)
-            return oreTag;
-        if (variant != null && getHasSubtypes())
-            return getStack(variant);
-        return getObject();
-    }
-
-    @Nullable
-    public String getOreTag(@Nullable IVariantEnum variant) {
-        return null;
     }
 }
