@@ -11,6 +11,7 @@ package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -37,7 +38,7 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void steamJetEffect(World world, Object source, Vec3d vel);
 
-    void chimneyEffect(World world, double x, double y, double z);
+    void chimneyEffect(World world, double x, double y, double z, EnumColor color);
 
     void locomotiveEffect(World world, double x, double y, double z);
 

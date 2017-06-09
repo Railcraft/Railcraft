@@ -72,10 +72,19 @@ public abstract class InvTools {
         return InvToolsAPI.emptyStack();
     }
 
-    public static int getStackSize(@Nullable ItemStack stack) {
+    public static int sizeOf(@Nullable ItemStack stack) {
         if (isEmpty(stack))
             return 0;
         return stack.stackSize;
+    }
+
+    @Contract("!null, _ -> !null; null, _ -> null")
+    @Nullable
+    public static ItemStack setSize(@Nullable ItemStack stack, int size) {
+        if (isEmpty(stack))
+            return emptyStack();
+        stack.stackSize = size;
+        return stack;
     }
 
     public static String toString(@Nullable ItemStack stack) {
@@ -100,6 +109,7 @@ public abstract class InvTools {
         return emptyStack();
     }
 
+    @Contract("null -> null")
     @Nullable
     public static ItemStack makeSafe(@Nullable ItemStack stack) {
         if (isEmpty(stack))
