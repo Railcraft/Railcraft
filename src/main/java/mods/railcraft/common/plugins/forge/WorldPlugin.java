@@ -136,6 +136,7 @@ public class WorldPlugin {
         if (player == null)
             player = RailcraftFakePlayer.get((WorldServer) world, pos);
         IBlockState state = getBlockState(world, pos);
+        TileEntity te = getBlockTile(world, pos);
 
         if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)))
             return false;
@@ -144,7 +145,7 @@ public class WorldPlugin {
             return false;
 
         if (dropBlock) {
-            state.getBlock().harvestBlock(world, player, pos, state, getBlockTile(world, pos), player.getHeldItem(player.getActiveHand()));
+            state.getBlock().harvestBlock(world, player, pos, state, te, player.getHeldItem(player.getActiveHand()));
         }
         return true;
     }
