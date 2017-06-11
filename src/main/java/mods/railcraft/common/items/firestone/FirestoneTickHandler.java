@@ -25,15 +25,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class FirestoneTickHandler {
 
-    private int clock;
-
     @SubscribeEvent
     public void tick(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         if (Game.isClient(entity.worldObj))
             return;
-        clock++;
-        if (clock % 4 != 0)
+        if ((entity.worldObj.getTotalWorldTime() + entity.getEntityId()) % 4 != 0)
             return;
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
             return;
