@@ -78,18 +78,18 @@ public class CrowbarHandler {
                         if (lm.areLinked(cart, last, false)) {
                             lm.breakLink(cart, last);
                             used = true;
-                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.broken");
+                            ChatPlugin.sendLocalizedHotBarMessageFromServer(thePlayer, "gui.railcraft.link.broken");
                             LinkageManager.printDebug("Reason For Broken Link: User removed link.");
                         } else {
                             used = lm.createLink(last, (EntityMinecart) entity);
                             if (used)
-                                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.created");
+                                ChatPlugin.sendLocalizedHotBarMessageFromServer(thePlayer, "gui.railcraft.link.created");
                         }
                         if (!used)
-                            ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.failed");
+                            ChatPlugin.sendLocalizedHotBarMessageFromServer(thePlayer, "gui.railcraft.link.failed");
                     } else {
                         linkMap.put(thePlayer, (EntityMinecart) entity);
-                        ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.link.started");
+                        ChatPlugin.sendLocalizedHotBarMessageFromServer(thePlayer, "gui.railcraft.link.started");
                     }
                 }
                 if (used)
