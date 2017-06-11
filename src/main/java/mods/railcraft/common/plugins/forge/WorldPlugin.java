@@ -121,7 +121,7 @@ public class WorldPlugin {
             actor = RailcraftFakePlayer.get((WorldServer) world, pos);
 
         // Start of Event Fire
-        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, Blocks.AIR.getDefaultState(), actor)))
+        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, getBlockState(world, pos), actor)))
             return false;
         // End of Event Fire
 
@@ -140,12 +140,11 @@ public class WorldPlugin {
         if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)))
             return false;
 
-        if (state.getBlock().removedByPlayer(state, world, pos, player, dropBlock))
+        if (!state.getBlock().removedByPlayer(state, world, pos, player, dropBlock))
             return false;
 
         if (dropBlock) {
-            List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, 0);
-            InvTools.dropItems(drops, world, pos);
+            state.getBlock().harvestBlock(world, player, pos, state, getBlockTile(world, pos), player.getHeldItem(player.getActiveHand()));
         }
         return true;
     }
