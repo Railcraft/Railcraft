@@ -16,6 +16,7 @@ import mods.railcraft.client.render.tesr.TESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -39,6 +40,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.util.Set;
@@ -49,6 +52,7 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 // TODO: Where you stupid when you decided to use a Proxy? Just no, no...
+@SideOnly(Side.CLIENT)
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
@@ -251,10 +255,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void chimneyEffect(World world, double x, double y, double z) {
+    public void chimneyEffect(World world, double x, double y, double z, EnumColor color) {
         if (thinParticles(false))
             return;
-        spawnParticle(new ParticleChimney(world, new Vec3d(x, y, z)));
+        spawnParticle(new ParticleChimney(world, new Vec3d(x, y, z), color));
     }
 
     @Override
