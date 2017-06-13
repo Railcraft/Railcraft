@@ -107,7 +107,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
         incrementAura(stack);
         if (Game.isClient(world)) {
             GoggleAura aura = getCurrentAura(stack);
-            ChatPlugin.sendLocalizedChat(player, "gui.railcraft.goggles.mode", "\u00A75" + aura);
+            ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "gui.railcraft.goggles.mode", "\u00A75" + aura);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
     }

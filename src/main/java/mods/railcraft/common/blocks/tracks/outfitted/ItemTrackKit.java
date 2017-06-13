@@ -146,7 +146,7 @@ public class ItemTrackKit extends ItemRailcraft {
                 TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
                 if (!shape.isAscending() || trackKit.isAllowedOnSlopes()) {
                     if (!trackKit.isAllowedTrackType(trackType)) {
-                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track_type");
+                        ChatPlugin.sendLocalizedHotBarMessageFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track_type");
                         return EnumActionResult.PASS;
                     }
                     if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
@@ -155,13 +155,13 @@ public class ItemTrackKit extends ItemRailcraft {
                         return EnumActionResult.SUCCESS;
                     }
                 } else {
-                    ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.slope");
+                    ChatPlugin.sendLocalizedHotBarMessageFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.slope");
                 }
             } else {
-                ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.curve");
+                ChatPlugin.sendLocalizedHotBarMessageFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.curve");
             }
         } else {
-            ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track");
+            ChatPlugin.sendLocalizedHotBarMessageFromServer(playerIn, "gui.railcraft.track_kit.item.invalid.track");
         }
         return EnumActionResult.PASS;
     }
