@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,9 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Random;
 
@@ -27,10 +25,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class Generator implements IWorldGenerator {
-    protected final WorldGenerator[] generators;
-
-    protected Generator(WorldGenerator... generators) {
-        this.generators = generators;
+    protected Generator() {
     }
 
 //    @SubscribeEvent
@@ -42,14 +37,11 @@ public abstract class Generator implements IWorldGenerator {
 
     @Override
     public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        _generate(rand, new BlockPos(chunkX << 4, 0, chunkZ << 4), world);
+        _generate(rand, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8), world);
     }
 
     private void _generate(Random rand, BlockPos pos, World world) {
-        if (ArrayUtils.isEmpty(generators))
-            return;
-
-        Biome biome = world.getBiome(pos.add(8, 0, 8));
+        Biome biome = world.getBiome(pos);
         if (canGen(world, rand, pos, biome)) {
             generate(world, rand, pos, biome);
         }

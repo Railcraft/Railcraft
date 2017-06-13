@@ -14,19 +14,26 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.worldgen.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+
+import java.io.File;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -42,6 +49,8 @@ public class ModuleWorld extends RailcraftModulePayload {
 
     public ModuleWorld() {
         setEnabledEventHandler(new ModuleEventHandler() {
+            private File oreConfigFolder;
+
             @Override
             public void construction() {
                 add(
@@ -70,23 +79,41 @@ public class ModuleWorld extends RailcraftModulePayload {
                 if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumGeneric.STONE_QUARRIED.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
 
-                if (RailcraftBlocks.ORE.isEnabled()) {
-                    if (RailcraftConfig.isWorldGenEnabled("iron"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineIron(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("gold"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineGold(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("copper"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineCopper(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("tin"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineTin(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("lead"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineLead(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("silver"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineSilver(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("nickel"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineNickel(), 100);
-                    if (RailcraftConfig.isWorldGenEnabled("zinc"))
-                        GameRegistry.registerWorldGenerator(new GeneratorMineZinc(), 100);
+                oreConfigFolder = new File(Railcraft.instance.getConfigFolder(), "ores");
+                if (!oreConfigFolder.exists())
+                    oreConfigFolder.mkdirs();
+
+                if (RailcraftConfig.generateDefaultOreConfigs()) {
+                    generateDefaultMine(100, 60, 3, 8, 29, Metal.COPPER, "mine_copper.cfg");
+                    generateDefaultMine(100, 15, 1, 1, 79, Metal.GOLD, "mine_gold.cfg");
+                    generateDefaultMine(100, 40, 4, 16, 26, Metal.IRON, "mine_iron.cfg");
+                    generateDefaultMine(100, 30, 3, 6, 82, Metal.LEAD, "mine_lead.cfg");
+                    generateDefaultMine(101, 40, 6, 4, 26, Metal.NICKEL, "mine_nickel.cfg"); // Same depth/seed as Iron so they will generate together
+                    generateDefaultMine(100, 20, 2, 2, 47, Metal.SILVER, "mine_silver.cfg");
+                    generateDefaultMine(100, 50, 2, 4, 50, Metal.TIN, "mine_tin.cfg");
+                    generateDefaultMine(100, 30, 3, 4, 30, Metal.ZINC, "mine_zinc.cfg");
+
+//                    generateDefaultMine(100, 60, 3, 8, 29, "diffuse_copper.cfg");
+//                    generateDefaultMine(100, 15, 1, 1, 79, "diffuse_gold.cfg");
+//                    generateDefaultMine(100, 40, 4, 16, 26, "diffuse_iron.cfg");
+//                    generateDefaultMine(100, 30, 3, 6, 82, "diffuse_lead.cfg");
+//                    generateDefaultMine(100, 40, 6, 4, 26, "diffuse_nickel.cfg");
+//                    generateDefaultMine(100, 20, 2, 2, 47, "diffuse_silver.cfg");
+//                    generateDefaultMine(100, 50, 2, 4, 50, "diffuse_tin.cfg");
+//                    generateDefaultMine(100, 30, 3, 4, 30, "diffuse_zinc.cfg");
+                }
+
+                File[] oreConfigs = oreConfigFolder.listFiles((dir, name) -> name != null && name.endsWith(".cfg"));
+                if (oreConfigs == null)
+                    throw new RuntimeException("'ore' directory does not exist or is not accessible.");
+                for (File oreConfigFile : oreConfigs) {
+                    Configuration oreConfig = new Configuration(oreConfigFile);
+                    oreConfig.load();
+
+                    OreGeneratorFactory genFactory = new OreGeneratorFactory(oreConfig);
+                    GameRegistry.registerWorldGenerator(genFactory.worldGen, genFactory.settings.weight);
+                    if (oreConfig.hasChanged())
+                        oreConfig.save();
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
@@ -107,6 +134,23 @@ public class ModuleWorld extends RailcraftModulePayload {
                                 new ItemStack(Blocks.DIRT));
                     }
                 }
+            }
+
+            private void generateDefaultMine(int defaultWeight, int defaultDepth, int defaultRange, int defaultBlockCount, int defaultSeed, Metal metal, String fileName) {
+                File file = new File(oreConfigFolder, fileName);
+                if (file.exists())
+                    file.delete();
+                Configuration oreConfig = new Configuration(file);
+                oreConfig.load();
+                IBlockState fringeState = Metal.Form.POOR_ORE.getState(metal);
+                if (fringeState == null)
+                    return;
+                String fringeOre = BlockItemParser.toString(fringeState);
+                IBlockState coreState = Metal.Form.ORE.getState(metal);
+                if (coreState == null)
+                    return;
+                String coreOre = BlockItemParser.toString(coreState);
+                OreGeneratorFactory.makeMine(oreConfig, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, fringeOre, coreOre);
             }
 
             @Override

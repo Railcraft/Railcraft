@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,10 @@ package mods.railcraft.common.worldgen;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 import java.util.Random;
 
@@ -21,11 +24,8 @@ import java.util.Random;
  */
 public class GeneratorSaltpeter extends Generator {
 
-//    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SALTPETER", new Class[0], new Object[0]);
-
-    public GeneratorSaltpeter() {
-        super(new WorldGenSaltpeter());
-    }
+    //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "SALTPETER", new Class[0], new Object[0]);
+    private final WorldGenerator generator = new WorldGenSaltpeter();
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
@@ -37,7 +37,7 @@ public class GeneratorSaltpeter extends Generator {
             BlockPos topBlock = world.getTopSolidOrLiquidBlock(new BlockPos(x, 50, z)).down(1 + (rand.nextInt(100) == 0 ? 0 : 1));
             if (topBlock.getY() < 50 || topBlock.getY() > 100)
                 continue;
-            generators[0].generate(world, rand, topBlock);
+            generator.generate(world, rand, topBlock);
         }
     }
 
@@ -49,7 +49,8 @@ public class GeneratorSaltpeter extends Generator {
             return false;
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DRY))
             return false;
-        return !biome.canRain() && biome.getTemperature() >= 1.5f && biome.getRainfall() <= 0.1f;
+        return !biome.canRain() && biome.getTemperature() >= 1.5f && biome.getRainfall() <= 0.1f
+                && TerrainGen.generateOre(world, rand, generator, targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM);
     }
 
 }

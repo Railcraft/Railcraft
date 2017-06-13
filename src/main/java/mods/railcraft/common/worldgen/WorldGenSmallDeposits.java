@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,17 +20,20 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 /**
+ * WorldGenMinable doesn't handle deposits smaller than four blocks very well,
+ * so we made our own WorldGenerator for those.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenSmallDeposits extends WorldGenerator {
 
     private final IBlockState ore;
     private final Predicate<IBlockState> replace;
-    private final int number;
+    private final int blockCount;
 
-    public WorldGenSmallDeposits(IBlockState ore, int number, Predicate<IBlockState> replace) {
+    public WorldGenSmallDeposits(IBlockState ore, int blockCount, Predicate<IBlockState> replace) {
         this.ore = ore;
-        this.number = number;
+        this.blockCount = blockCount;
         this.replace = replace;
     }
 
@@ -48,7 +51,7 @@ public class WorldGenSmallDeposits extends WorldGenerator {
     }
 
     private void placeOre(World world, Random rand, BlockPos pos) {
-        for (int num = 0; num < number; num++) {
+        for (int num = 0; num < blockCount; num++) {
             IBlockState blockState = WorldPlugin.getBlockState(world, pos);
             if (blockState.getBlock().isReplaceableOreGen(blockState, world, pos, replace::test))
                 WorldPlugin.setBlockState(world, pos, ore, 2);

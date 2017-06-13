@@ -69,13 +69,13 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
         // TODO: This can't be right
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
-        setDefaultState(getDefaultState().withProperty(getVariantProperty(), getMetaMap().get(0)));
+        setDefaultState(getDefaultState().withProperty(getVariantProperty(), getVariants()[0]));
         this.fullBlock = opaque;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
 
-        for (IEnumMachine<V> machine : getMetaMap().values()) {
+        for (IEnumMachine<V> machine : getVariants()) {
             HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
         }
     }
@@ -83,19 +83,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     @Override
     public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return getMetaMap().inverse().get(state.getValue(getVariantProperty()));
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        V variant = getMetaMap().get(meta);
-        if (variant == null)
-            return getDefaultState();
-        return getDefaultState().withProperty(getVariantProperty(), variant);
     }
 
 //    /**

@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,24 +28,24 @@ import java.util.Set;
  */
 public abstract class BallastRegistry {
 
-    private static final Set<BlockKey> ballastRegistry = new HashSet<BlockKey>();
+    private static final Set<IBlockState> ballastRegistry = new HashSet<>();
 
     static {
         registerBallast(Blocks.GRAVEL, 0);
     }
 
     public static void registerBallast(Block block, int metadata) {
-        ballastRegistry.add(new BlockKey(block.getStateFromMeta(metadata)));
+        ballastRegistry.add(block.getStateFromMeta(metadata));
     }
 
     public static boolean isItemBallast(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
         IBlockState state = InvTools.getBlockStateFromStack(stack);
-        return state != null && ballastRegistry.contains(new BlockKey(state));
+        return state != null && ballastRegistry.contains(state);
     }
 
-    public static Set<BlockKey> getRegisteredBallasts() {
+    public static Set<IBlockState> getRegisteredBallasts() {
         return ballastRegistry;
     }
 

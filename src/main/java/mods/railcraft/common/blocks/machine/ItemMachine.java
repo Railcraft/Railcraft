@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
+import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +29,10 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
     }
 
     public IEnumMachine<?> getMachine(ItemStack stack) {
-        return machineBlock.getMetaMap().get(stack.getItemDamage());
+        int meta = stack.getMetadata();
+        if (!ArrayTools.indexInBounds(machineBlock.getVariants().length, meta))
+            meta = 0;
+        return machineBlock.getVariants()[meta];
     }
 
     @Override

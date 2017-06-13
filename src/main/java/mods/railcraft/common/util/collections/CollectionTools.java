@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,5 +43,9 @@ public class CollectionTools {
 
     public static Set<StackKey> createItemStackSet() {
         return new HashSet<StackKey>();
+    }
+
+    public static <T> boolean intersects(Collection<T> collection, T[] array) {
+        return Arrays.stream(array).anyMatch(collection::contains);
     }
 }

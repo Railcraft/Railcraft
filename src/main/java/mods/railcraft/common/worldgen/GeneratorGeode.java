@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
@@ -29,20 +30,17 @@ public class GeneratorGeode extends Generator {
     public static final int MIN_DEPTH = 16;
     public static final int MIN_Y = 12;
     public static final int MIN_FLOOR = 24;
-
-    public GeneratorGeode() {
-        super(new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState()));
-    }
+    private final WorldGenerator generator = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState());
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
-        BlockPos chunkCenterPos = targetPos.add(8, 0, 8);
-        OceanFloor floor = scanOceanFloor(world, chunkCenterPos);
+        BlockPos geodeCenter = targetPos.add(8, 0, 8);
+        OceanFloor floor = scanOceanFloor(world, geodeCenter);
         if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
             int deviation = MIN_Y + Math.round(Math.abs((float) rand.nextGaussian()) * (floor.floorY - MIN_Y) * 0.5F);
 //            Game.log(Level.INFO, "Deviation from floor: {0}", deviation - floor.floorY);
             int y = Math.min(floor.floorY, deviation);
-            generators[0].generate(world, rand, new BlockPos(chunkCenterPos.getX(), y, chunkCenterPos.getZ()));
+            generator.generate(world, rand, new BlockPos(geodeCenter.getX(), y, geodeCenter.getZ()));
         }
     }
 

@@ -10,11 +10,10 @@
 
 package mods.railcraft.common.blocks;
 
-import com.google.common.collect.BiMap;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -43,7 +42,6 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
     private Class<V> variantClass;
     private V[] variantValues;
     private PropertyEnum<V> variantProperty;
-    private BiMap<Integer, V> metaMap;
 
     protected BlockContainerRailcraftSubtyped(Material materialIn) {
         this(materialIn, materialIn.getMaterialMapColor());
@@ -61,7 +59,6 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
             variantClass = (Class<V>) annotation.variant();
             variantValues = variantClass.getEnumConstants();
             variantProperty = PropertyEnum.create("variant", variantClass);
-            metaMap = CollectionTools.createIndexedLookupTable(variantValues);
         }
     }
 
@@ -101,10 +98,23 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
         return variantValues;
     }
 
-    @Nonnull
-    public final BiMap<Integer, V> getMetaMap() {
-        setup();
-        return metaMap;
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        IBlockState state = getDefaultState();
+        if (ArrayTools.indexInBounds(variantValues.length, meta))
+            state = state.withProperty(getVariantProperty(), variantValues[meta]);
+        return state;
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override

@@ -20,7 +20,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.util.collections.BlockItemListParser;
+import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -97,6 +97,7 @@ public class RailcraftConfig {
     private static boolean machinesRequirePower;
     private static boolean trackingAuraEnabled;
     private static boolean enableGhostTrain;
+    private static boolean generateDefaultOreConfigs;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -108,7 +109,6 @@ public class RailcraftConfig {
     private static int coalcokeTorchOutput;
     private static int villagerID;
     private static String[] enchantments;
-    private static int mineStandardOreGenChance = 20;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
     private static float boreMiningSpeedMultiplier = 1F;
@@ -195,10 +195,10 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        worldspikeFuelStandard.putAll(BlockItemListParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
-        worldspikeFuelPersonal.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
-        worldspikeFuelPassive.putAll(BlockItemListParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel = {0}", BlockItemListParser::parseItem, Float::parseFloat));
-        EntityTunnelBore.mineableStates.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser::parseBlock));
+        worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPassive.putAll(BlockItemParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
+        EntityTunnelBore.mineableStates.addAll(BlockItemParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemParser::parseBlock));
     }
 
     private static void loadClient() {
@@ -358,7 +358,7 @@ public class RailcraftConfig {
     }
 
     private static void loadWorldGen() {
-        configMain.addCustomCategoryComment(CAT_WORLD_GEN + ".generate",
+        configMain.addCustomCategoryComment(CAT_WORLD_GEN,
                 "You can control which Ores/Features generate in the world here.\n" +
                         "If wish to disable world gen entirely it is recommended\n" +
                         "that you disable the World Module in 'modules.cfg' instead.\n" +
@@ -367,7 +367,11 @@ public class RailcraftConfig {
                         "in distinct regions rather than a uniform spread.\n" +
                         "It also consists of two types of ore, standard and poor.\n" +
                         "Poor ore forms throughout the cloud, standard ore only forms in the core of the cloud.\n" +
-                        "These are referred to as Railcraft Ore Mines.");
+                        "These are referred to as Railcraft Ore Mines.\n" +
+                        "The configs for these mines are now found in '<root>/config/railcraft/ore'\n" +
+                        "You can even add your own generators with blocks from other mods.");
+
+        generateDefaultOreConfigs = getAndClear(configMain, CAT_WORLD_GEN, "generateDefaultConfigs", true, false, "Generate default config files for ore generation. Resets to false after game load. This will overwrite existing files.");
 
         worldGen.put("sulfur", get(configMain, CAT_WORLD_GEN + ".generate", "sulfur", true, "spawns near lava layer in mountains"));
         worldGen.put("saltpeter", get(configMain, CAT_WORLD_GEN + ".generate", "saltpeter", true, "spawns beneath surface of deserts, regenerates via bedrock layer block"));
@@ -377,17 +381,17 @@ public class RailcraftConfig {
 
         worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true, "village building"));
 
-        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "mineIron", true, "Iron Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "mineGold", true, "Gold Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "mineCopper", true, "Copper Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "mineTin", true, "Tin Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
-        worldGen.put("zinc", get(configMain, CAT_WORLD_GEN + ".generate", "mineZinc", true, "Zinc Mine, spawns a cloud of ore over a lare but localized region"));
+//        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "mineIron", true, "Iron Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "mineGold", true, "Gold Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "mineCopper", true, "Copper Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "mineTin", true, "Tin Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
+//        worldGen.put("zinc", get(configMain, CAT_WORLD_GEN + ".generate", "mineZinc", true, "Zinc Mine, spawns a cloud of ore over a lare but localized region"));
         worldGen.put("sky", get(configMain, CAT_WORLD_GEN + ".generate", "skyGen", false, "Spawns a copy of mines in the sky for easy configuration testing"));
 
-        mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
+//        mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
         vanillaOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "vanillaOreGenChance", 0, 100, 100, "chance that vanilla ore gen (Iron, Gold) will spawn ore uniformly throughout the world, set to zero to disable, min=0, default=100, max=100");
 
         villagerID = configMain.get(CAT_WORLD_GEN + ".id", "workshop", 456).getInt(456);
@@ -794,6 +798,10 @@ public class RailcraftConfig {
         return playSounds;
     }
 
+    public static boolean generateDefaultOreConfigs() {
+        return generateDefaultOreConfigs;
+    }
+
     public static float getMaxHighSpeed() {
         return maxHighSpeed;
     }
@@ -852,10 +860,6 @@ public class RailcraftConfig {
 
     public static float steamLocomotiveEfficiencyMultiplier() {
         return steamLocomotiveEfficiencyMultiplier;
-    }
-
-    public static int mineStandardOreGenChance() {
-        return mineStandardOreGenChance;
     }
 
     public static int vanillaOreGenChance() {
@@ -981,6 +985,14 @@ public class RailcraftConfig {
         boolean ret = prop.getBoolean(defaultValue);
         if (reset)
             prop.set(defaultValue);
+        return ret;
+    }
+
+    private static boolean getAndClear(Configuration config, String cat, String tag, boolean defaultValue, boolean clearValue, String comment) {
+        Property prop = config.get(cat, tag, defaultValue);
+        decorateComment(prop, tag, comment);
+        boolean ret = prop.getBoolean(defaultValue);
+        prop.set(clearValue);
         return ret;
     }
 

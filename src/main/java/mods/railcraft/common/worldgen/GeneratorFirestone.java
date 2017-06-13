@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.worldgen;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -23,11 +24,8 @@ import java.util.Random;
  */
 public class GeneratorFirestone extends Generator {
 
-//    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FIRESTONE", new Class[0], new Object[0]);
-
-    public GeneratorFirestone() {
-        super(new WorldGenFirestone());
-    }
+    //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FIRESTONE", new Class[0], new Object[0]);
+    private final WorldGenerator generator = new WorldGenFirestone();
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
@@ -35,13 +33,13 @@ public class GeneratorFirestone extends Generator {
         int y = 31;
         int z = targetPos.getZ() + rand.nextInt(16);
 
-        generators[0].generate(world, rand, new BlockPos(x, y, z));
+        generator.generate(world, rand, new BlockPos(x, y, z));
     }
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
         return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER) &&
-                TerrainGen.generateOre(world, rand, generators[0], targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM) &&
+                TerrainGen.generateOre(world, rand, generator, targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM) &&
                 rand.nextDouble() <= 0.1;
     }
 }

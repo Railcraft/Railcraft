@@ -15,7 +15,7 @@
     "parent": "",
     "requiredMods": [ "Forge" ],
     "dependencies": [],
-    "dependants": [],
+    "dependants": [ "railcraftretrogen" ],
     "useDependencyInformation": false
   }]
 }

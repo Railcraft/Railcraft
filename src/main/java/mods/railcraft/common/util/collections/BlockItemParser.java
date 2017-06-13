@@ -9,8 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
+import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -27,15 +30,23 @@ import java.util.function.Function;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 //TODO: test this!
-public class BlockItemListParser {
+public class BlockItemParser {
 
-    public static BlockKey parseBlock(String line) {
+    public static String toString(RailcraftBlocks block, IVariantEnum variant) {
+        return block.getRegistryName() + "#" + variant.ordinal();
+    }
+
+    public static String toString(IBlockState state) {
+        return state.getBlock().getRegistryName() + "#" + state.getBlock().getMetaFromState(state);
+    }
+
+    public static IBlockState parseBlock(String line) {
         String[] tokens = line.split("#");
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
         if (block == null)
             throw new IllegalArgumentException("Invalid Block Name while parsing config = " + line);
-        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-        return new BlockKey(block.getStateFromMeta(meta));
+        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : 0;
+        return block.getStateFromMeta(meta);
     }
 
     public static ItemKey parseItem(String line) {
