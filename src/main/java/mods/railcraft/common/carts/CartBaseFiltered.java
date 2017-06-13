@@ -34,14 +34,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     }
 
     protected CartBaseFiltered(World world, double x, double y, double z) {
-        this(world);
-        setPosition(x, y + getYOffset(), z);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = x;
-        prevPosY = y;
-        prevPosZ = z;
+        super(world, x, y, z);
     }
 
     @Override

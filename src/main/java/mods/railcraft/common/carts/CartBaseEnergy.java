@@ -40,6 +40,10 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         super(world);
     }
 
+    protected CartBaseEnergy(World world, double x, double y, double z) {
+        super(world, x, y, z);
+    }
+
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return capability == CapabilitiesCharge.CART_BATTERY || super.hasCapability(capability, facing);

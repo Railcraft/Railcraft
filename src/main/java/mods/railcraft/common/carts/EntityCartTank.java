@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.carts.IFluidCart;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.*;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -26,26 +37,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import java.lang.invoke.MethodHandles;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.OptionalFluidStack;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
+import java.lang.invoke.MethodHandles;
 
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
     private static final DataParameter<OptionalFluidStack> FLUID_STACK = EntityDataManager.createKey(EntityCartTank.class, DataManagerPlugin.OPTIONAL_FLUID_STACK);
@@ -66,15 +60,8 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         tankManager.add(tank);
     }
 
-    public EntityCartTank(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartTank(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     @Override

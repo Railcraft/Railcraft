@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,14 +43,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     public EntityCartTrackLayer(World world, double x, double y, double z) {
-        this(world);
-        setPosition(x, y + getYOffset(), z);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = x;
-        prevPosY = y;
-        prevPosZ = z;
+        super(world, x, y, z);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,13 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -26,15 +22,8 @@ public final class EntityCartEnergyBatBox extends CartBaseEnergy {
         super(world);
     }
 
-    public EntityCartEnergyBatBox(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartEnergyBatBox(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     @Override

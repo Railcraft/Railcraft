@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -53,7 +53,6 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
 
     protected CartBaseExplosive(World world) {
         super(world);
-
     }
 
     protected CartBaseExplosive(World world, double x, double y, double z) {

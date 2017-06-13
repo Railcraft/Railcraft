@@ -55,15 +55,8 @@ public final class EntityCartRF extends CartBase {
         super(world);
     }
 
-    public EntityCartRF(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartRF(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     @Override

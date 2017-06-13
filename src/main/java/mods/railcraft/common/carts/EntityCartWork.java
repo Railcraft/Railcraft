@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,15 +26,8 @@ public class EntityCartWork extends CartBase {
         super(world);
     }
 
-    public EntityCartWork(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartWork(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     @Override

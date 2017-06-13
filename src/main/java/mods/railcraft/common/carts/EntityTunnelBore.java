@@ -21,7 +21,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.*;
-import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
@@ -78,7 +77,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final int BALLAST_DELAY = 10;
     public static final int FUEL_CONSUMPTION = 12;
     public static final float HARDNESS_MULTIPLIER = 8;
-    public static final BlockSet mineableStates = new BlockSet();
+    public static final Set<IBlockState> mineableStates = new HashSet<>();
     public static final Set<Block> mineableBlocks = new HashSet<>();
     public static final Set<String> mineableOreTags = new HashSet<>();
     public static final Set<Block> replaceableBlocks = new HashSet<>();
@@ -181,12 +180,20 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     private final boolean hasInit;
     private final EntityTunnelBorePart[] partArray;
 
-    public EntityTunnelBore(World world, double i, double j, double k) {
-        this(world, i, j, k, EnumFacing.SOUTH);
+    public EntityTunnelBore(World world) {
+        this(world, 0, 0, 0, EnumFacing.SOUTH);
     }
 
-    public EntityTunnelBore(World world, double i, double j, double k, EnumFacing f) {
-        super(world);
+    public EntityTunnelBore(World world, double x, double y, double z) {
+        this(world, x, y, z, EnumFacing.SOUTH);
+    }
+
+    public EntityTunnelBore(World world, double x, double y, double z, EnumFacing f) {
+        super(world, x, y, z);
+        setFacing(f);
+    }
+
+    {
         float headW = 1.5F;
         float headH = 2.6F;
         float headSO = 0.7F;
@@ -201,19 +208,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
         };
         hasInit = true;
-        setPosition(i, j + getYOffset(), k);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = i;
-        prevPosY = j;
-        prevPosZ = k;
-        setFacing(f);
         setSize(LENGTH, HEIGHT);
-    }
-
-    public EntityTunnelBore(World world) {
-        this(world, 0, 0, 0, EnumFacing.SOUTH);
     }
 
     public static void addMineableBlock(Block block) {
@@ -813,7 +808,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         // End of Event Fire
 
         List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, EnchantmentHelper.getEnchantmentLevel(
-            Enchantments.FORTUNE, head));
+                Enchantments.FORTUNE, head));
 
         for (ItemStack stack : items) {
             if (StandardStackFilters.FUEL.test(stack))
@@ -868,7 +863,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, boreSlot);
             hardness /= e * e * 0.2 + 1;
         }
-     
+
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();
 
         return hardness;

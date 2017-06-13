@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,9 +28,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.EnumSet;
-
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
 
 public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
@@ -43,15 +42,8 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
         super(world);
     }
 
-    public EntityCartTrackRelayer(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + getYOffset(), d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public EntityCartTrackRelayer(World world, double x, double y, double z) {
+        super(world, x, y, z);
     }
 
     @Override
