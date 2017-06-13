@@ -1,10 +1,17 @@
+10.2.0-alpha-5
+    NEW: Config files for the mine generator. Control everything about the generation, even create your own.
+    NEW: Change the color of the smoker from Smokers using dyes. (contribution by liach)
+    CHANGE: Status messages now go to the hotbar instead of chat. (contribution by liach)
+    FIX: Fix Destruction enchant. (contribution by liach)
+    FIX: Fix dupe bug with Tank Carts and Cargo Carts.
+
 10.2.0-alpha-4
     NEW: Added Filter items that can be used in Loaders and Detectors to match groups of items.
     NEW: Filters include: Ore Dict Tag Filter, Metadata/NBT Ignore Filter, Generic Bee Filter, Bee Genome Filter.
     NEW: Added Coal Dust, Ender Dust, and Void Powder (Coal Dust + Obsidian Dust + Ender Dust).
     NEW: Added Crowbar Smack enchantment, super-boost Trains. (contribution by liach)
     CHANGE: Worldspike fuels have been rebalanced. Void Powder is the best default fuel now.
-    CHANGE: Rework some recipes in minor ways.  (contribution by GeneralCamo)
+    CHANGE: Rework some recipes in minor ways. (contribution by GeneralCamo)
     CHANGE: Ore Dict Tag Plates, yes plates. You can stop whining now.  (contribution by GeneralCamo)
     CHANGE: Message Track command can now be used by just looking at the track you want to change and omitting the coords.
     EXPERIMENTAL: Steel Armor now has a toughness of 0.8. (contribution by GeneralCamo)
