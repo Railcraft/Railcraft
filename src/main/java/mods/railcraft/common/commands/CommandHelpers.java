@@ -78,8 +78,12 @@ public class CommandHelpers {
         throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getCommandUsage(sender))));
     }
 
+    public static boolean checkPermission(MinecraftServer server, ICommandSender sender, IModCommand command) {
+        return command.getPermissionLevel() <= 0 || sender.canCommandSenderUseCommand(command.getPermissionLevel(), command.getFullCommandString());
+    }
+
     public static void executeChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
-        if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
+        if (!child.checkPermission(server, sender))
             throw new WrongUsageException(LocalizationPlugin.translate("command.railcraft.noperms"));
         String[] newArgs = new String[args.length - 1];
         System.arraycopy(args, 1, newArgs, 0, newArgs.length);

@@ -54,6 +54,11 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return CommandHelpers.checkPermission(server, sender, this);
+    }
+
+    @Override
     public List<String> getCommandAliases() {
         List<String> aliases = new ArrayList<>();
         aliases.add("rc");
