@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -259,6 +259,10 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
     public void bindTexture(ResourceLocation texture) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+    }
+
+    public float getZLevel() {
+        return zLevel;
     }
 
 //    public void drawTexture(int x, int y, int w, int h, float uMin, float vMin, float uMax, float vMax) {

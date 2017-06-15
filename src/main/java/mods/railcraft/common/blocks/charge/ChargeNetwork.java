@@ -276,6 +276,10 @@ public class ChargeNetwork {
             return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCapacity).sum();
         }
 
+        public double getMaxNetworkDraw() {
+            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getAvailableCharge).sum();
+        }
+
         public int getComparatorOutput() {
             double level = getCharge() / getCapacity();
             return Math.round((float) (15.0 * level));
@@ -287,6 +291,15 @@ public class ChargeNetwork {
 
         public double getAverageUsagePerTick() {
             return averageUsagePerTick;
+        }
+
+        public double getUsageRatio() {
+            if (isInfinite())
+                return 0.0;
+            double maxDraw = getMaxNetworkDraw();
+            if (maxDraw <= 0.0)
+                return 1.0;
+            return Math.min(getAverageUsagePerTick() / maxDraw, 1.0);
         }
 
         public boolean isInfinite() {
@@ -308,20 +321,21 @@ public class ChargeNetwork {
          * @return true if charge could be removed in full
          */
         public boolean useCharge(double amount) {
-            double searchAmount = 0;
+            double availableCharge = 0;
             for (IChargeBlock.ChargeBattery battery : chargeBatteries.values()) {
-                searchAmount += battery.getCharge();
-                if (searchAmount >= amount)
+                availableCharge += battery.getAvailableCharge();
+                if (availableCharge >= amount)
                     break;
             }
-            if (searchAmount >= amount) {
+            double requestedAmount = amount;
+            if (availableCharge >= requestedAmount) {
                 for (Map.Entry<ChargeNode, IChargeBlock.ChargeBattery> battery : chargeBatteries.entrySet()) {
                     amount -= battery.getValue().removeCharge(amount);
                     batterySaveData.updateBatteryRecord(battery.getKey().pos, battery.getValue());
                     if (amount <= 0.0)
                         break;
                 }
-                chargeUsedThisTick += amount;
+                chargeUsedThisTick += requestedAmount;
             }
             return amount <= 0.0;
         }

@@ -33,6 +33,11 @@ public class TileChargeFeederAdmin extends TileChargeFeeder {
         private boolean enabled;
 
         @Override
+        public double getMaxDraw() {
+            return enabled ? Double.MAX_VALUE : 0.0;
+        }
+
+        @Override
         public boolean isInfinite() {
             return enabled;
         }

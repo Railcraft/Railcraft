@@ -16,6 +16,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiRollingMachinePowered extends GuiRollingMachine {
     public GuiRollingMachinePowered(InventoryPlayer inventoryplayer, TileRollingMachinePowered tile) {
-        super(tile, new ContainerRollingMachinePowered(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_powered.png");
+        super(tile, new ContainerRollingMachinePowered(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_powered.png", 36);
     }
 }

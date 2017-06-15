@@ -53,7 +53,7 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
         registry.addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
 
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
-        registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 45, 23, 9, ROLLING);
+        registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 36, 23, 9, ROLLING);
 
         IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
         recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachine.class, ROLLING, 2, 9, 11, 36);

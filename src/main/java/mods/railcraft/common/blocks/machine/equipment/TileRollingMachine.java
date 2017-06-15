@@ -120,7 +120,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
                 findMoreStuff();
         }
 
-        if (currentRecipe != null && canMakeMore())
+        if (currentRecipe != null && canMakeMore()) {
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
                 if (InvTools.isRoomForStack(currentRecipe, invResult)) {
@@ -139,7 +139,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
                 isWorking = true;
                 progress();
             }
-        else {
+        } else {
             progress = 0;
             isWorking = false;
         }

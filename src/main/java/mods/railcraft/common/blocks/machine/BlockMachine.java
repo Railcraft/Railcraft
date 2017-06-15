@@ -124,6 +124,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (hand == EnumHand.OFF_HAND)
+            return false;
         return TileManager.forTile(this::getTileClass, state, worldIn, pos)
                 .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ)).orElse(false);
     }

@@ -12,18 +12,18 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
-import mods.railcraft.common.gui.widgets.ChargeIndicator;
+import mods.railcraft.common.gui.widgets.ChargeBatteryIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
-    private final ChargeIndicator chargeIndicator;
+    private final ChargeBatteryIndicator chargeIndicator;
 
     private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
         ICartBattery chargeHandler = loco.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-        this.chargeIndicator = new ChargeIndicator(chargeHandler);
+        this.chargeIndicator = new ChargeBatteryIndicator(chargeHandler);
     }
 
     public static ContainerLocomotiveElectric make(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {

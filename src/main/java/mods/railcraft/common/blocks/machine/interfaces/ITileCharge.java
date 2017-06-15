@@ -7,22 +7,18 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.gui.widgets;
 
-import mods.railcraft.common.gui.tooltips.ToolTip;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+package mods.railcraft.common.blocks.machine.interfaces;
+
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 
 /**
+ * Created by CovertJaguar on 6/14/2017 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IIndicatorController {
-    @SideOnly(Side.CLIENT)
-    ToolTip getToolTip();
-
-    double getMeasurement();
-
-    double getServerValue();
-
-    void setClientValue(double value);
+public interface ITileCharge {
+    default IChargeBlock.ChargeDef getChargeDef() {
+        return null;
+    }
 }

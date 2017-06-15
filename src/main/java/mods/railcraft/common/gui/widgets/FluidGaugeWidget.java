@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,8 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
@@ -59,6 +61,7 @@ public class FluidGaugeWidget extends Widget {
 //        Game.log(Level.INFO, "fluid read {0}", tank.getFluidAmount());
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public ToolTip getToolTip() {
         return tank.getToolTip();

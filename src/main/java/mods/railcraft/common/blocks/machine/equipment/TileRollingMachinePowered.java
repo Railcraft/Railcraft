@@ -11,13 +11,13 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
@@ -31,7 +31,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
@@ -44,30 +43,23 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileRollingMachinePowered extends TileRollingMachine implements IEnergyReceiver, ISidedInventory, IHasWork {
-    private static final int ACTIVATION_POWER = 50;
-    private static final int MAX_RECEIVE = 1000;
-    private static final int MAX_ENERGY = TileRollingMachinePowered.ACTIVATION_POWER * PROCESS_TIME;
+public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, IHasWork, ITileCharge {
+    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<Object>();
-    @Nullable
-    private final EnergyStorage energyStorage;
-    @Nullable
-    public final RFEnergyIndicator rfIndicator;
 
     public TileRollingMachinePowered() {
-        if (RailcraftConfig.machinesRequirePower()) {
-            energyStorage = new EnergyStorage(TileRollingMachinePowered.MAX_ENERGY, TileRollingMachinePowered.MAX_RECEIVE);
-            rfIndicator = new RFEnergyIndicator(energyStorage);
-        } else {
-            energyStorage = null;
-            rfIndicator = null;
-        }
     }
 
     @Override
     public EquipmentVariant getMachineType() {
         return EquipmentVariant.ROLLING_MACHINE_POWERED;
+    }
+
+    @Override
+    public IChargeBlock.ChargeDef getChargeDef() {
+        return chargeDef;
     }
 
     @Override
@@ -81,14 +73,10 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
 
     @Override
     protected void progress() {
-        if (energyStorage != null) {
-            int energy = energyStorage.extractEnergy(TileRollingMachinePowered.ACTIVATION_POWER, true);
-            if (energy >= TileRollingMachinePowered.ACTIVATION_POWER) {
-                super.progress();
-                energyStorage.extractEnergy(TileRollingMachinePowered.ACTIVATION_POWER, false);
-            }
-        } else
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(worldObj).getNode(pos);
+        if (node.useCharge(CHARGE_PER_TICK)) {
             super.progress();
+        }
     }
 
     @Override
@@ -114,52 +102,6 @@ public class TileRollingMachinePowered extends TileRollingMachine implements IEn
             return false;
         GuiHandler.openGui(EnumGui.ROLLING_MACHINE_POWERED, player, worldObj, getPos());
         return true;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        if (energyStorage != null)
-            energyStorage.writeToNBT(data);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        if (energyStorage != null)
-            energyStorage.readFromNBT(data);
-    }
-
-    @Nullable
-    public EnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return energyStorage != null;
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getMaxEnergyStored();
     }
 
     @Override

@@ -10,14 +10,14 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import mods.railcraft.common.gui.widgets.AnalogWidget;
+import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerRollingMachinePowered extends ContainerRollingMachine {
 
     public ContainerRollingMachinePowered(final InventoryPlayer inventoryplayer, final TileRollingMachinePowered tile) {
-        super(inventoryplayer, tile);
-        if (tile.rfIndicator != null)
-            addWidget(new IndicatorWidget(tile.rfIndicator, 157, 19, 176, 12, 6, 48));
+        super(inventoryplayer, tile, 93, 17);
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.theWorld(), tile.getPos()), 87, 54, 28, 14));
     }
 }

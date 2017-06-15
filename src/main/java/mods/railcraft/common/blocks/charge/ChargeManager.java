@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -41,7 +41,7 @@ public class ChargeManager {
 
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
-        if (event.side == Side.SERVER)
+        if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
             getNetwork(event.world).tick();
     }
 

@@ -94,7 +94,6 @@ public class RailcraftConfig {
     private static boolean cartsAreSolid;
     private static boolean playSounds;
     private static boolean routingOpsOnly;
-    private static boolean machinesRequirePower;
     private static boolean trackingAuraEnabled;
     private static boolean enableGhostTrain;
     private static boolean generateDefaultOreConfigs;
@@ -251,8 +250,6 @@ public class RailcraftConfig {
 
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
-
-        machinesRequirePower = get(CAT_TWEAKS_BLOCKS + ".machines", "requirePower", true, "change to '{t}=false' to disable the Power Requirements for most machines");
 
         chargeMaintenanceCostMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "maintenanceCostMultiplier", 0.2F, 1.0F, 10F, "adjust the maintenance costs for the Charge network, min=0.2, default=1.0, max=10.0");
 
@@ -836,10 +833,6 @@ public class RailcraftConfig {
 
     public static boolean isTrackingAuraEnabled() {
         return trackingAuraEnabled;
-    }
-
-    public static boolean machinesRequirePower() {
-        return machinesRequirePower;
     }
 
     public static float chargeMaintenanceCostMultiplier() {

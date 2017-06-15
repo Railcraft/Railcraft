@@ -137,7 +137,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        deregisterNode(worldIn, pos);
     }
 
     /**

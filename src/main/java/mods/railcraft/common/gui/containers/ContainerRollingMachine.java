@@ -34,6 +34,10 @@ public class ContainerRollingMachine extends RailcraftContainer {
     private ItemStack prevOutput;
 
     public ContainerRollingMachine(final InventoryPlayer inventoryplayer, final TileRollingMachine tile) {
+        this(inventoryplayer, tile, 93, 27);
+    }
+
+    public ContainerRollingMachine(final InventoryPlayer inventoryplayer, final TileRollingMachine tile, int cx, int cy) {
         this.tile = tile;
         craftMatrix = tile.getCraftMatrix(this);
         craftResult = new InventoryCraftResult() {
@@ -46,7 +50,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
         };
 
-        addSlot(new SlotRollingMachine(craftResult, 0, 93, 27));
+        addSlot(new SlotRollingMachine(craftResult, 0, cx, cy));
         addSlot(new SlotOutput(tile.getInvResult(), 0, 124, 35));
 
         for (int l = 0; l < 3; l++) {

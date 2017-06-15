@@ -17,7 +17,6 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
@@ -150,13 +149,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public TileRockCrusher() {
         super(18, patterns);
 
-        if (RailcraftConfig.machinesRequirePower()) {
-            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
-            rfIndicator = new RFEnergyIndicator(energyStorage);
-        } else {
-            energyStorage = null;
-            rfIndicator = null;
-        }
+        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
+        rfIndicator = new RFEnergyIndicator(energyStorage);
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
@@ -443,6 +437,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return RailcraftConfig.machinesRequirePower();
+        return true;
     }
 }

@@ -189,6 +189,7 @@ public interface IChargeBlock {
     class ChargeBattery implements IChargeBattery {
         public static final String NBT_CHARGE_TAG = "charge";
         public static final double DEFAULT_MAX_CHARGE = 20000.0;
+        public static final double DEFAULT_MAX_DRAW = 20.0;
 
         private boolean initialized;
         private double charge;
@@ -204,6 +205,10 @@ public interface IChargeBlock {
         @Override
         public double getCharge() {
             return charge;
+        }
+
+        public double getMaxDraw() {
+            return DEFAULT_MAX_DRAW;
         }
 
         public void initCharge(double charge) {
@@ -231,15 +236,19 @@ public interface IChargeBlock {
          * @return charge removed
          */
         public double removeCharge(double request) {
-            if (charge >= request) {
+            double availableCharge = getAvailableCharge();
+            if (availableCharge >= request) {
                 charge -= request;
 //                lastTickDraw += request;
                 return request;
             }
-            double ret = charge;
-            charge = 0.0;
-//            lastTickDraw += ret;
-            return ret;
+            charge -= availableCharge;
+//            lastTickDraw += availableCharge;
+            return availableCharge;
+        }
+
+        public double getAvailableCharge() {
+            return Math.min(charge, getMaxDraw());
         }
 
         @Override

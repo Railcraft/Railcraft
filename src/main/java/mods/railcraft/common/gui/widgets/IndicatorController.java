@@ -11,9 +11,10 @@ package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class IndicatorController implements IIndicatorController {
@@ -34,6 +35,7 @@ public abstract class IndicatorController implements IIndicatorController {
     protected void refreshToolTip() {
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public final ToolTip getToolTip() {
         return tips;

@@ -18,14 +18,16 @@ import net.minecraft.util.text.translation.I18n;
 public class GuiRollingMachine extends TileGui {
 
     private final TileRollingMachine tile;
+    private final int ay;
 
     public GuiRollingMachine(InventoryPlayer inventoryplayer, TileRollingMachine tile) {
-        this(tile, new ContainerRollingMachine(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_manual.png");
+        this(tile, new ContainerRollingMachine(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_manual.png", 45);
     }
 
-    protected GuiRollingMachine(TileRollingMachine tile, ContainerRollingMachine container, String texture) {
+    protected GuiRollingMachine(TileRollingMachine tile, ContainerRollingMachine container, String texture, int ay) {
         super(tile, container, texture);
         this.tile = tile;
+        this.ay = ay;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class GuiRollingMachine extends TileGui {
         int y = (height - ySize) / 2;
         if (tile.getProgress() > 0) {
             int progress = tile.getProgressScaled(23);
-            drawTexturedModalRect(x + 89, y + 45, 176, 0, progress + 1, 12);
+            drawTexturedModalRect(x + 89, y + ay, 176, 0, progress + 1, 12);
         }
     }
 }

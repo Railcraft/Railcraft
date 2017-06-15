@@ -10,20 +10,22 @@
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.api.charge.IChargeBattery;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ChargeIndicator extends IndicatorController {
+public class ChargeBatteryIndicator extends IndicatorController {
 
     private double charge;
     private final IChargeBattery battery;
 
-    public ChargeIndicator(IChargeBattery battery) {
+    public ChargeBatteryIndicator(IChargeBattery battery) {
         this.battery = battery;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     protected void refreshToolTip() {
         tip.text = String.format("%.0f%%", (charge / battery.getCapacity()) * 100.0);
