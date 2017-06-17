@@ -12,12 +12,15 @@ package mods.railcraft.common.blocks.machine.interfaces;
 
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 6/14/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITileCharge {
+    @Nullable
     default IChargeBlock.ChargeDef getChargeDef() {
         return null;
     }

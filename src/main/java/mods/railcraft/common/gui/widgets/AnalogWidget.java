@@ -40,52 +40,15 @@ public class AnalogWidget extends MeterWidget {
         // average the value over time to smooth the needle
         double value = 1.0 - getMeasurement();
 
-        // set the needle angle between 45° (= 0%) and 135° (= 100%)
-        double angle = Math.toRadians(90 * value + 45);
-
-//        int fx = 0, fz = 0; // vector towards the front of the gauge
-//        int rx = 0, rz = 0; // vector to the right when looking at the gauge
-
-//        BlockPos patternPos = turbine.getPatternPosition();
-//        if (turbine.getPatternIndex() == 0) {
-//            if (patternPos.getX() == 1) {
-//                fx = -1;
-//                rz = 1;
-//            } else if (patternPos.getX() == 2) {
-//                x++;
-//                z++;
-//                fx = 1;
-//                rz = -1;
-//            }
-//        } else if (turbine.getPatternIndex() == 1)
-//            if (patternPos.getZ() == 1) {
-//                x++;
-//                fz = -1;
-//                rx = -1;
-//            } else if (patternPos.getZ() == 2) {
-//                z++;
-//                fz = 1;
-//                rx = 1;
-//            }
-//
-//        if (fx == 0 && fz == 0 || rx == 0 && rz == 0)
-//            throw new IllegalStateException("can't detect gauge orientation");
-
-        // fix lightmap coords to use the brightness value in front of the block, not inside it (which would be just 0)
-//        int lmCoords = turbine.getWorld().getCombinedLight(turbine.getPos().add(fx, 0, fz), 0);
-//        int lmX = lmCoords % 65536;
-//        int lmY = lmCoords / 65536;
-//        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lmX / 1.0F, lmY / 1.0F);
+        // set the needle angle between 30° (= 0%) and 150° (= 100%)
+        double angle = Math.toRadians(120 * value + 30);
 
         OpenGL.glDisable(GL11.GL_TEXTURE_2D);
-//        OpenGL.glDisable(GL11.GL_LIGHTING);
 
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        // move the origin to the center of the gauge
-//        vertexBuffer.setTranslation(x, y, 0);
 
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
@@ -111,12 +74,6 @@ public class AnalogWidget extends MeterWidget {
         double gx = guiX + x;
         double gy = guiY + y - 1;
 
-//        vertexBuffer.pos(guiX + x, guiY + y + h, z).color(red, green, blue, alpha).endVertex();
-//        vertexBuffer.pos(guiX + x + w, guiY + y + h, z).color(red, green, blue, alpha).endVertex();
-//        vertexBuffer.pos(guiX + x + w, guiY + y, z).color(red, green, blue, alpha).endVertex();
-//        vertexBuffer.pos(guiX + x, guiY + y, z).color(red, green, blue, alpha).endVertex();
-
-//        blue = 100;
         double bx = gx + w * 0.5;
         double by = gy + h;
         vertexBuffer.pos(bx - baseOffset, by, z).color(red, green, blue, alpha).endVertex();
@@ -124,13 +81,9 @@ public class AnalogWidget extends MeterWidget {
         vertexBuffer.pos(bx - glx + gwx, by - (gly + gwy), z).color(red, green, blue, alpha).endVertex();
         vertexBuffer.pos(bx - glx - gwx, by - (gly - gwy), z).color(red, green, blue, alpha).endVertex();
 
-//        z += 1;
-
         tessellator.draw();
 
         // resetting
-//        vertexBuffer.setTranslation(0, 0, 0);
-//        OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glEnable(GL11.GL_TEXTURE_2D);
 
         gui.drawTexturedModalRect(guiX + 99, guiY + 65, 99, 65, 4, 3);
