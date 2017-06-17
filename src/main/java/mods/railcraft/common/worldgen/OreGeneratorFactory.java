@@ -16,6 +16,7 @@ import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
@@ -55,20 +56,21 @@ public class OreGeneratorFactory {
 
     private OreGeneratorFactory(Configuration config, String defaultType, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, int defaultSeed, String defaultFringeOre, String defaultCoreOre) {
         config.setCategoryComment(CAT + ".retrogen", "Retrogen settings. You must have the Railcraft-Retrogen mod installed for these to do anything.");
-        boolean retrogen = config.getBoolean("retrogen", CAT + ".retrogen", false, "Whether retrogen should be enabled on this generator. =");
+        boolean retrogen = config.getBoolean("retrogen", CAT + ".retrogen", false, "Whether retrogen should be enabled on this generator.");
         String retrogenMarker = config.getString("retrogenMarker", CAT + ".retrogen", "RCRGMARK", "The marker used to indicate whether a chunk has generated this ore. Generally this should be unique each time you run retrogen.");
 
         String name = config.getConfigFile().getName().replace(".cfg", "").replace(" ", "_");
 
         type = Type.valueOf(config.getString("type", CAT, defaultType, "The generation type, can be either 'DIFFUSE' or 'MINE'."));
 
+        DimensionRules dimensionRules = new DimensionRules(config);
         BiomeRules biomeRules = new BiomeRules(config);
 
         switch (type) {
             case MINE:
                 GeneratorSettingsMine settings = new GeneratorSettingsMine(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, defaultFringeOre, defaultCoreOre);
                 this.settings = settings;
-                IWorldGenerator genImpl = new GeneratorMine(config, biomeRules, settings);
+                IWorldGenerator genImpl = new GeneratorMine(config, dimensionRules, biomeRules, settings);
                 worldGen = new GeneratorRailcraftOre(genImpl, retrogen, retrogenMarker).setRegistryName(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name));
                 break;
             default:
@@ -118,6 +120,32 @@ public class OreGeneratorFactory {
             fringeGenChance = config.getFloat("fringeGen", OreGeneratorFactory.CAT + ".chances", 0.3F, 0F, 1F, "The percent chance that a generate event in a fringe area will result in ore spawning.");
             coreGenChance = config.getFloat("coreGen", OreGeneratorFactory.CAT + ".chances", 1F, 0F, 1F, "The percent chance that a generate event in a core area will result in ore spawning.");
             coreOreChance = config.getFloat("coreOre", OreGeneratorFactory.CAT + ".chances", 0.2F, 0F, 1F, "The percent chance that a generate event in a core area will result in core ore spawning instead of fringe ore. Applied after coreGen.");
+        }
+    }
+
+    public static class DimensionRules {
+        final Set<String> worldProviderBlacklist;
+        final Set<Integer> dimensionBlacklist;
+        final Set<Integer> dimensionWhitelist;
+
+        public DimensionRules(Configuration config) {
+            config.setCategoryComment(CAT + ".dimensions", "Control which dimensions the generator is allowed to generate in.\n" +
+                    "Generally they still require stone to generate in regardless, though this may become a config option in the future.\n" +
+                    "The system is permissive and will allow any dimension not blacklisted to be generated in.");
+            String[] worldProvidersNames = config.getStringList("worldProvidersBlacklist", CAT + ".dimensions", new String[]{"net.minecraft.world.WorldProviderHell", "net.minecraft.world.WorldProviderEnd"}, "World Provider classes to disallow generation in.");
+            worldProviderBlacklist = Collections.unmodifiableSet(Arrays.stream(worldProvidersNames).collect(Collectors.toSet()));
+
+            String[] dimensionIds = config.getStringList("dimensionBlacklist", CAT + ".dimensions", new String[]{"-1", "1"}, "Dimension IDs to disallow generation in.");
+            dimensionBlacklist = Collections.unmodifiableSet(Arrays.stream(dimensionIds).map(Integer::parseInt).collect(Collectors.toSet()));
+
+            dimensionIds = config.getStringList("dimensionWhitelist", CAT + ".dimensions", new String[]{"0"}, "Dimension IDs to allow generation in. Overrides blacklists.");
+            dimensionWhitelist = Collections.unmodifiableSet(Arrays.stream(dimensionIds).map(Integer::parseInt).collect(Collectors.toSet()));
+        }
+
+        public boolean isDimensionValid(World world) {
+            if (dimensionWhitelist.contains(world.provider.getDimension()))
+                return true;
+            return !dimensionBlacklist.contains(world.provider.getDimension()) && !worldProviderBlacklist.contains(world.provider.getClass().getName());
         }
     }
 

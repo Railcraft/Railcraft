@@ -33,11 +33,13 @@ import java.util.function.Predicate;
 public class GeneratorMine extends Generator {
     private final Map<World, NoiseGen> cloudMap = new MapMaker().weakKeys().makeMap();
     private final Map<World, NoiseGen> veinMap = new MapMaker().weakKeys().makeMap();
+    private final OreGeneratorFactory.DimensionRules dimensionRules;
     private final OreGeneratorFactory.BiomeRules biomeRules;
     private final OreGeneratorFactory.GeneratorSettingsMine settings;
     private final WorldGenerator fringeGen, coreGen;
 
-    protected GeneratorMine(Configuration config, OreGeneratorFactory.BiomeRules biomeRules, OreGeneratorFactory.GeneratorSettingsMine settings) {
+    protected GeneratorMine(Configuration config, OreGeneratorFactory.DimensionRules dimensionRules, OreGeneratorFactory.BiomeRules biomeRules, OreGeneratorFactory.GeneratorSettingsMine settings) {
+        this.dimensionRules = dimensionRules;
         this.biomeRules = biomeRules;
         this.settings = settings;
 
@@ -136,8 +138,6 @@ public class GeneratorMine extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        if (!biomeRules.isValidBiome(biome))
-            return false;
-        return TerrainGen.generateOre(world, rand, coreGen, targetPos, EventType.CUSTOM);
+        return dimensionRules.isDimensionValid(world) && biomeRules.isValidBiome(biome) && TerrainGen.generateOre(world, rand, coreGen, targetPos, EventType.CUSTOM);
     }
 }
