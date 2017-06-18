@@ -33,6 +33,7 @@ public class ModuleCharge extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(ChargeManager.getEventListener());
 
                 add(
+                        RailcraftItems.CHARGE,
                         RailcraftItems.CHARGE_METER,
                         RailcraftItems.TURBINE_ROTOR,
                         RailcraftItems.TURBINE_BLADE,

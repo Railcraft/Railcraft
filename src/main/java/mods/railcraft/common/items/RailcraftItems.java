@@ -104,6 +104,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BORE_HEAD_DIAMOND(ItemBoreHeadDiamond::new, "borehead_diamond") {{
         conditions().add(RailcraftCarts.BORE);
     }},
+    CHARGE(ItemCharge::new, "charge"),
     CHARGE_METER(ItemChargeMeter::new, "tool_charge_meter"),
     CIRCUIT(ItemCircuit::new, "circuit"),
     COKE(ItemCoke::new, "fuel_coke"),

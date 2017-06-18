@@ -26,10 +26,10 @@ import net.minecraft.util.EnumFacing;
 public class TileChargeFeederIC2 extends TileChargeFeeder implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery() {
+    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024) {
         @Override
         public double getMaxDraw() {
-            return getCapacity();
+            return 512.0;
         }
     };
 

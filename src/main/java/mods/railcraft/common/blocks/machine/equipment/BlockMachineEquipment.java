@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeeder;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleFactory;
@@ -88,8 +89,9 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
             CraftingPlugin.addRecipe(stack,
                     "IPI",
                     "PCP",
-                    "IPI",
+                    "IMI",
                     'I', "gearSteel",
+                    'M', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR,
                     'P', Blocks.PISTON,
                     'C', "workbench");
         }

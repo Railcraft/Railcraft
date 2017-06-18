@@ -188,8 +188,17 @@ public interface IChargeBlock {
 
     class ChargeBattery implements IChargeBattery {
         public static final String NBT_CHARGE_TAG = "charge";
-        public static final double DEFAULT_MAX_CHARGE = 20000.0;
+        public static final double DEFAULT_MAX_CHARGE = 1000.0;
         public static final double DEFAULT_MAX_DRAW = 20.0;
+        private final double capacity;
+
+        public ChargeBattery() {
+            this(DEFAULT_MAX_CHARGE);
+        }
+
+        public ChargeBattery(double capacity) {
+            this.capacity = capacity;
+        }
 
         private boolean initialized;
         private double charge;
@@ -222,7 +231,7 @@ public interface IChargeBlock {
 
         @Override
         public double getCapacity() {
-            return DEFAULT_MAX_CHARGE;
+            return capacity;
         }
 
         public void addCharge(double charge) {

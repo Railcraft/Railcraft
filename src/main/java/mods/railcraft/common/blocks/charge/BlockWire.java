@@ -16,6 +16,8 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.items.ItemCharge;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -103,7 +105,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                 "LPL",
                 "PCP",
                 "LPL",
-                'C', "blockCopper",
+                'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_LARGE,
                 'P', Items.PAPER,
                 'L', "ingotLead");
     }

@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -76,12 +77,12 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
     public void defineRecipes() {
         FeederVariant.IC2.ifAvailable(v ->
                 CraftingPlugin.addRecipe(getStack(v),
-                        "PCP",
-                        "CBC",
-                        "PCP",
+                        "PPP",
+                        "TCT",
+                        "PPP",
                         'P', RailcraftItems.PLATE, Metal.TIN,
-                        'C', "ingotCopper",
-                        'B', "ingotBrass"));
+                        'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.COIL,
+                        'T', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL));
     }
 
     @Nullable
