@@ -1,3 +1,9 @@
+10.2.0-alpha-6
+    CHANGE: Migrate Powered Rolling Machine from RF to Charge.
+    CHANGE: Reworked crafting of various Charge related items. Added more intermediate items.
+    FIX: Fix various bugs in the Charge Network code, mostly related to usage/loss tracking.
+    FIX: Fix command permission levels issues.
+
 10.2.0-alpha-5
     NEW: Config files for the mine generator. Control everything about the generation, even create your own.
     NEW: Change the color of the smoker from Smokers using dyes. (contribution by liach)
