@@ -189,7 +189,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         List<String> debug = new ArrayList<>();
         debug.add("Railcraft Tile Entity Data Dump");
         debug.add("Object: " + this);
-        debug.add(String.format("Coordinates: d=%d, %s", getDimension(), getPos()));
+        if (!worldObj.getGameRules().getBoolean("reducedDebugInfo"))
+            debug.add(String.format("Coordinates: d=%d, %s", getDimension(), getPos()));
         debug.add("Owner: " + owner.getName());
         debug.addAll(tileCache.getDebugOutput());
         return debug;

@@ -206,7 +206,13 @@ public class CartTools {
     public static List<String> getDebugOutput(EntityMinecart cart) {
         List<String> debug = new ArrayList<>();
         debug.add("Railcraft Minecart Data Dump");
-        debug.add("Object: " + cart);
+        String cartInfo;
+        if (cart.getEntityWorld().getGameRules().getBoolean("reducedDebugInfo")) {
+            cartInfo = String.format("%s[\'%s\'/%d, l=\'%s\']", cart.getClass().getSimpleName(), cart.getName(), cart.getEntityId(), cart.worldObj.getWorldInfo().getWorldName());
+        } else {
+            cartInfo = cart.toString();
+        }
+        debug.add("Object: " + cartInfo);
         debug.add("UUID: " + cart.getPersistentID());
         debug.add("Owner: " + CartToolsAPI.getCartOwner(cart).getName());
         LinkageManager lm = LinkageManager.instance();
@@ -241,7 +247,7 @@ public class CartTools {
         }
         return null;
     }
-    
+
     public static boolean startBoost(EntityMinecart cart, BlockPos pos, BlockRailBase.EnumRailDirection dir, double startBoost) {
         World world = cart.worldObj;
         if (dir == BlockRailBase.EnumRailDirection.EAST_WEST) {

@@ -64,16 +64,23 @@ public class CommandDebug extends SubCommand {
 
     private static void printTarget(ICommandSender sender, World world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(pos), block.getClass(), block.getUnlocalizedName());
+        printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(sender, pos), block.getClass(), block.getUnlocalizedName());
         TileEntity t = world.getTileEntity(pos);
         if (t != null)
-            printLine(sender, "Target tile [{0}, {1}, {2}] = {3}", t.getPos().getX(), t.getPos().getY(), t.getPos().getZ(), t.getClass());
+            printLine(sender, "Target tile [{0}] = {1}", shortCoords(sender, t.getPos()), t.getClass());
         else
-            printLine(sender, "Target tile [{0}, {1}, {2}] = null", pos.getY(), pos.getY(), pos.getZ());
+            printLine(sender, "Target tile [{0}] = null", shortCoords(sender, pos));
     }
 
-    private static String shortCoords(BlockPos coord) {
-        return String.format("[%d, %d, %d]", coord.getX(), coord.getY(), coord.getZ());
+    private static String shortCoords(ICommandSender sender, BlockPos coord) {
+        String formatString;
+        if (sender.getEntityWorld().getGameRules().getBoolean("reducedDebugInfo")) {
+            coord = coord.subtract(sender.getPosition());
+            formatString = "[~%d, ~%d, ~%d]";
+        } else {
+            formatString = "[%d, %d, %d]";
+        }
+        return String.format(formatString, coord.getX(), coord.getY(), coord.getZ());
     }
 
     @Override
@@ -152,9 +159,9 @@ public class CommandDebug extends SubCommand {
                 IControllerTile conTile = (IControllerTile) tile;
                 SignalController con = conTile.getController();
                 printLine(sender, "Railcraft Controller Debug Start");
-                printLine(sender, "Target: {0} = {1}, {2}", shortCoords(con.getCoords()), conTile, con);
+                printLine(sender, "Target: {0} = {1}, {2}", shortCoords(sender, con.getCoords()), conTile, con);
                 for (BlockPos pair : con.getPairs()) {
-                    printLine(sender, "Rec at {0}", shortCoords(pair));
+                    printLine(sender, "Rec at {0}", shortCoords(sender, pair));
                     printLine(sender, "Con Aspect for Rec = {0}", con.getAspectFor(pair));
                     SignalReceiver rec = con.getReceiverAt(pair);
                     if (rec instanceof SimpleSignalReceiver) {
@@ -165,7 +172,7 @@ public class CommandDebug extends SubCommand {
                         printLine(sender, "Post Rec Aspect = {0}", ((SimpleSignalReceiver) rec).getAspect());
                         WorldPlugin.markBlockForUpdate(world, pos);
                     } else if (rec == null) {
-                        printLine(sender, "Could not find Rec at {0}", shortCoords(pair));
+                        printLine(sender, "Could not find Rec at {0}", shortCoords(sender, pair));
                         printTarget(sender, tile.getWorld(), pair);
                     }
                     printLine(sender, "Railcraft Controller Debug End");
@@ -193,12 +200,12 @@ public class CommandDebug extends SubCommand {
                 IReceiverTile recTile = (IReceiverTile) tile;
                 SignalReceiver rec = recTile.getReceiver();
                 printLine(sender, "Railcraft Receiver Debug Start");
-                printLine(sender, "Target: {0} = {1}, {2}", shortCoords(rec.getCoords()), recTile, rec);
+                printLine(sender, "Target: {0} = {1}, {2}", shortCoords(sender, rec.getCoords()), recTile, rec);
                 if (recTile instanceof TileBoxBase) {
                     printLine(sender, "Rec Tile Aspect = {0}", ((TileBoxBase) recTile).getBoxSignalAspect(EnumFacing.NORTH));
                 }
                 for (BlockPos pair : rec.getPairs()) {
-                    printLine(sender, "Con at {0}", shortCoords(pair));
+                    printLine(sender, "Con at {0}", shortCoords(sender, pair));
                     SignalController con = rec.getControllerAt(pair);
                     if (con != null) {
                         printLine(sender, "Con Aspect for Rec = {0}", con.getAspectFor(rec.getCoords()));
@@ -211,7 +218,7 @@ public class CommandDebug extends SubCommand {
                             WorldPlugin.markBlockForUpdate(world, pos);
                         }
                     } else {
-                        printLine(sender, "Could not find Con at {0}", shortCoords(pair));
+                        printLine(sender, "Could not find Con at {0}", shortCoords(sender, pair));
                         printTarget(sender, tile.getWorld(), pair);
                     }
                     printLine(sender, "Railcraft Receiver Debug End");
