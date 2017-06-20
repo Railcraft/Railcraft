@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -79,7 +80,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
                 "GBG",
                 "PGP",
                 'P', RailcraftItems.PLATE, Metal.TIN,
-                'B', RailcraftItems.PLATE, Metal.NICKEL,
+                'B', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL,
                 'G', Blocks.IRON_BARS);
     }
 
