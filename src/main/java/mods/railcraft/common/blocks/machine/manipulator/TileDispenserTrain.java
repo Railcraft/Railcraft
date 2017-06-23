@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import com.google.common.collect.Multiset;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
@@ -18,8 +17,8 @@ import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryManifest;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.entity.item.EntityMinecart;
@@ -63,16 +62,10 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     private boolean canBuildTrain() {
-        Multiset<StackKey> pattern = InvTools.createManifest(getPattern());
-        Multiset<StackKey> buffer = InvTools.createManifest(getInventory());
+        InventoryManifest pattern = InventoryManifest.create(getPattern());
+        InventoryManifest buffer = InventoryManifest.create(getInventory(), pattern.keySet());
 
-        for (Multiset.Entry<StackKey> entry : pattern.entrySet()) {
-            int count = buffer.count(entry.getElement());
-            if (count < entry.getCount())
-                return false;
-        }
-
-        return true;
+        return pattern.values().stream().anyMatch(e -> buffer.count(e.key()) >= e.count());
     }
 
     private boolean spawnNextCart() {

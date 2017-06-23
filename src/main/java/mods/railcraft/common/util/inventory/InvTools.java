@@ -9,8 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IFilterItem;
 import mods.railcraft.api.core.items.InvToolsAPI;
@@ -55,6 +53,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -432,49 +431,6 @@ public abstract class InvTools {
         return false;
     }
 
-    private static void populateManifest(Multiset<StackKey> manifest, IInventoryObject inv) {
-        for (ItemStack stack : InventoryIterator.getRailcraft(inv).getStacks()) {
-            StackKey key = StackKey.make(stack);
-            manifest.add(key, stack.stackSize);
-        }
-    }
-
-    /**
-     * Returns a Multiset that lists the total
-     * number of each type of item in the inventory.
-     *
-     * @param invs the inventories to generate the manifest for
-     * @return A <code>Multiset</code> that lists how many of each item is in the inventories
-     */
-    @Nonnull
-    public static Multiset<StackKey> createManifest(IInventoryComposite invs) {
-        Multiset<StackKey> manifest = HashMultiset.create();
-        invs.forEach(inv -> populateManifest(manifest, inv));
-        return manifest;
-    }
-
-    /**
-     * Returns a Multiset that lists the total
-     * number of each type of item in the inventory.
-     *
-     * @param invs the inventories to generate the manifest for
-     * @return A <code>Multiset</code> that lists how many of each item is in the inventories
-     */
-    @Nonnull
-    public static Multiset<StackKey> createManifest(IInventoryComposite invs, Collection<StackKey> manifestEntries) {
-        Multiset<StackKey> manifest = HashMultiset.create();
-        for (StackKey entry : manifestEntries) {
-            Predicate<ItemStack> filter = StackFilters.matches(entry.get());
-            invs.forEach(inv -> {
-                for (ItemStack stack : InventoryIterator.getRailcraft(inv).getStacks()) {
-                    if (filter.test(stack))
-                        manifest.add(entry, stack.stackSize);
-                }
-            });
-        }
-        return manifest;
-    }
-
     /**
      * Attempts to move a single item from one inventory to another.
      *
@@ -753,6 +709,18 @@ public abstract class InvTools {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if inventory will accept the ItemStack.
+     *
+     * @param stacks The ItemStacks
+     * @param dest   The IInventory
+     * @return true if room for stack
+     */
+    @Contract("null,_ -> false;")
+    public static boolean acceptsAnyItemStack(List<ItemStack> stacks, IInventoryComposite dest) {
+        return stacks.stream().anyMatch(stack -> acceptsItemStack(stack, dest));
     }
 
 //    /**
