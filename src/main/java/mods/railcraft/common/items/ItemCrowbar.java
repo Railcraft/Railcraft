@@ -152,7 +152,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
                 if (!player.isSneaking()) {
                     int level = RailcraftEnchantments.DESTRUCTION.getLevel(stack) * 2 + 1;
                     if (level > 1)
-                        checkBlocks(world, level, pos, player);
+                        checkBlock(world, level, pos, player);
                 }
             }
         return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
