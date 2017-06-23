@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.core.items.IFilterItem;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -37,10 +38,9 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem {
+public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem, IFilterItem {
 
     private final LocomotiveRenderType renderType;
-    //    private IIcon blankIcon;
     private final EnumColor defaultPrimary;
     private final EnumColor defaultSecondary;
 
@@ -50,6 +50,11 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         setMaxStackSize(1);
         this.defaultPrimary = primary;
         this.defaultSecondary = secondary;
+    }
+
+    @Override
+    public boolean matches(ItemStack matcher, ItemStack target) {
+        return target.getItem() == this && getPrimaryColor(matcher) == getPrimaryColor(target) && getSecondaryColor(matcher) == getSecondaryColor(target);
     }
 
     @Override
