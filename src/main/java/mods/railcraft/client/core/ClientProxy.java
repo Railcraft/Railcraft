@@ -10,7 +10,7 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.client.gui.GuiRoutingTable;
+import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
@@ -82,7 +82,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void openRoutingTableGui(EntityPlayer player, @Nullable TileEntity tile, ItemStack stack) {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, tile, stack));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiBookRoutingTable(player, tile, stack));
     }
 
     @Override

@@ -33,7 +33,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -111,15 +110,6 @@ public class BlockTrackElevator extends BlockRailcraft {
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(ROTATION, state.getValue(ROTATION) == EnumFacing.Axis.Z ? EnumFacing.Axis.X : EnumFacing.Axis.Z);
-    }
-
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     */
-    @Override
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state;
     }
 
     /**

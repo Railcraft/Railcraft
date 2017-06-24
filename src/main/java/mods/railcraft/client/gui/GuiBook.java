@@ -12,27 +12,16 @@ package mods.railcraft.client.gui;
 import mods.railcraft.client.gui.buttons.GuiButtonRoutingTableNextPage;
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketDispatcher;
-import mods.railcraft.common.util.network.PacketItemNBT;
-import mods.railcraft.common.util.routing.ITileRouting;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
@@ -43,24 +32,16 @@ import java.util.List;
 import java.util.ListIterator;
 
 @SideOnly(Side.CLIENT)
-public class GuiRoutingTable extends GuiScreen {
+public class GuiBook extends GuiScreen {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "routing_table.png");
-    public static final int MAX_PAGES = 50;
     public static final int WRAP_WIDTH = 226;
-    public static final String TABLE_LOC_TAG = "gui.railcraft.routing.table.";
-    public static final String TABLE_MANUAL_LOC_TAG = TABLE_LOC_TAG + "manual.";
-    /**
-     * The player editing the book
-     */
-    private final EntityPlayer player;
-    @Nullable
-    private final TileEntity tile;
-    private final ItemStack bookStack;
+    private final ResourceLocation texture;
+    private final String locTag;
+    private final String manualLocTag;
     /**
      * Whether the book is signed or can still be edited
      */
-    private final boolean editable = true;
+    private final boolean editable;
     private boolean bookModified;
     private boolean editingTitle;
     private boolean readingManual;
@@ -72,25 +53,23 @@ public class GuiRoutingTable extends GuiScreen {
     private final int bookImageHeight = 192;
     private final int numManualPages;
     private int currPage, currLine, currChar;
-    private final LinkedList<LinkedList<String>> bookPages;
-    private String bookTitle = "";
+    protected final LinkedList<LinkedList<String>> bookPages;
+    protected String bookTitle = "";
+    protected String author = "";
     private GuiButtonRoutingTableNextPage buttonNextPage;
     private GuiButtonRoutingTableNextPage buttonPreviousPage;
     private GuiSimpleButton buttonDone;
     private GuiSimpleButton buttonSign;
     private GuiSimpleButton buttonHelp;
 
-    public GuiRoutingTable(EntityPlayer player, ItemStack stack) {
-        this(player, null, stack);
+    public GuiBook(ResourceLocation texture, String locTag, String title, String author, @Nullable LinkedList<LinkedList<String>> pages, boolean editable) {
+        this.texture = texture;
+        this.locTag = locTag;
+        this.manualLocTag = locTag + "manual.";
+        this.bookTitle = title;
+        this.author = author;
+        this.editable = editable;
 
-    }
-
-    public GuiRoutingTable(EntityPlayer player, @Nullable TileEntity tile, ItemStack stack) {
-        this.player = player;
-        this.tile = tile;
-        this.bookStack = stack;
-
-        LinkedList<LinkedList<String>> pages = ItemRoutingTable.getPages(stack);
         if (pages == null) {
             bookPages = new LinkedList<LinkedList<String>>();
             initPages();
@@ -100,20 +79,18 @@ public class GuiRoutingTable extends GuiScreen {
                 initPages();
         }
 
-        if (stack.hasTagCompound()) {
-            NBTTagCompound nbt = stack.getTagCompound();
-            assert nbt != null;
-            bookTitle = nbt.getString("title");
+        if (editable) {
+            String pageLocTag = manualLocTag + "numPages";
+            int manualPages = 16;
+            if (LocalizationPlugin.hasTag(pageLocTag))
+                try {
+                    manualPages = Integer.valueOf(LocalizationPlugin.translate(pageLocTag));
+                } catch (NumberFormatException ignored) {
+                }
+            numManualPages = manualPages;
+        } else {
+            numManualPages = 0;
         }
-
-        String locTag = TABLE_MANUAL_LOC_TAG + "numPages";
-        int manualPages = 16;
-        if (LocalizationPlugin.hasTag(locTag))
-            try {
-                manualPages = Integer.valueOf(LocalizationPlugin.translate(locTag));
-            } catch (NumberFormatException ignored) {
-            }
-        numManualPages = manualPages;
     }
 
     private void initPages() {
@@ -142,7 +119,7 @@ public class GuiRoutingTable extends GuiScreen {
 
         if (editable) {
             List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
-            buttons.add(buttonSign = new GuiSimpleButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(TABLE_LOC_TAG + "name")));
+            buttons.add(buttonSign = new GuiSimpleButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(locTag + "name")));
             buttons.add(buttonHelp = new GuiSimpleButton(4, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate("gui.railcraft.help")));
             buttons.add(buttonDone = new GuiSimpleButton(0, 0, 4 + bookImageHeight, 65, I18n.translateToLocal("gui.done")));
             GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
@@ -170,37 +147,20 @@ public class GuiRoutingTable extends GuiScreen {
             return numManualPages;
         if (editingTitle)
             return 0;
-        return MAX_PAGES;
+        return RailcraftConstants.BOOK_MAX_PAGES;
     }
 
     private void updateButtons() {
-        buttonNextPage.visible = !editingTitle && (currPage < getMaxPages() - 1);
+        buttonNextPage.visible = !editingTitle && (currPage < getMaxPages() - 1) && (editable || currPage < bookPages.size() - 1);
         buttonPreviousPage.visible = !editingTitle && currPage > 0;
 
-        buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("gui.railcraft.help");
-
-        if (editable)
-            buttonSign.displayString = editingTitle ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate(TABLE_LOC_TAG + "name");
+        if (editable) {
+            buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("gui.railcraft.help");
+            buttonSign.displayString = editingTitle ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate(locTag + "name");
+        }
     }
 
-    private void sendBookToServer() {
-        if (editable && bookModified) {
-            ItemRoutingTable.setPages(bookStack, bookPages);
-
-            NBTTagCompound nbt = InvTools.getItemData(bookStack);
-
-            nbt.setString("author", Railcraft.proxy.getPlayerUsername(player));
-            if (!Strings.isEmpty(bookTitle))
-                nbt.setString("title", bookTitle);
-
-            PacketItemNBT pkt;
-            if (tile instanceof ITileRouting) {
-                pkt = new PacketItemNBT.RoutableTile(player, tile, bookStack);
-            } else {
-                pkt = new PacketItemNBT.CurrentItem(player, bookStack);
-            }
-            PacketDispatcher.sendToServer(pkt);
-        }
+    protected void sendBookToServer() {
     }
 
     /**
@@ -212,7 +172,8 @@ public class GuiRoutingTable extends GuiScreen {
         if (button.enabled) {
             if (button == buttonDone) {
                 mc.displayGuiScreen(null);
-                sendBookToServer();
+                if (editable && bookModified)
+                    sendBookToServer();
             } else if (button == buttonSign) {
                 editingTitle = !editingTitle;
                 readingManual = false;
@@ -257,7 +218,7 @@ public class GuiRoutingTable extends GuiScreen {
     }
 
     private void addNewPage() {
-        if (bookPages.size() < 50) {
+        if (bookPages.size() < RailcraftConstants.BOOK_MAX_PAGES) {
             LinkedList<String> page = new LinkedList<String>();
             page.add("");
             bookPages.add(page);
@@ -327,7 +288,7 @@ public class GuiRoutingTable extends GuiScreen {
             }
             case Keyboard.KEY_RETURN: {
                 List<String> page = getPage(currPage);
-                if (page.size() < ItemRoutingTable.LINES_PER_PAGE) {
+                if (page.size() < RailcraftConstants.BOOK_LINES_PER_PAGE) {
                     String line = getLine(currLine);
                     setLine(currPage, currLine, line.substring(0, currChar));
                     page.add(++currLine, line.substring(currChar));
@@ -378,7 +339,7 @@ public class GuiRoutingTable extends GuiScreen {
         }
         if (ChatAllowedCharacters.isAllowedCharacter(c)) {
             String text = getLine(currLine);
-            if (text.length() < ItemRoutingTable.LINE_LENGTH) {
+            if (text.length() < RailcraftConstants.BOOK_LINE_LENGTH) {
                 StringBuilder builder = new StringBuilder(text);
                 setLine(currPage, currLine, builder.insert(currChar++, c).toString());
             }
@@ -433,7 +394,7 @@ public class GuiRoutingTable extends GuiScreen {
         String currentText = getLine(currLine);
         String newText = currentText + string;
 
-        if (newText.length() < ItemRoutingTable.LINE_LENGTH) {
+        if (newText.length() < RailcraftConstants.BOOK_LINE_LENGTH) {
             setLine(currPage, currLine, newText);
             currChar = getLine(currLine).length();
         }
@@ -445,7 +406,7 @@ public class GuiRoutingTable extends GuiScreen {
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(TEXTURE);
+        mc.renderEngine.bindTexture(texture);
         int xOffset = (width - bookImageWidth) / 2;
         byte yOffset = 2;
         drawTexturedModalRect(xOffset, yOffset, 0, 0, bookImageWidth, bookImageHeight);
@@ -464,14 +425,14 @@ public class GuiRoutingTable extends GuiScreen {
             fontRendererObj.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
             int i1 = fontRendererObj.getStringWidth(title);
             fontRendererObj.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
-            String s2 = String.format(I18n.translateToLocal("book.byAuthor"), Railcraft.proxy.getPlayerUsername(player));
+            String s2 = String.format(I18n.translateToLocal("book.byAuthor"), author);
             int j1 = fontRendererObj.getStringWidth(s2);
             fontRendererObj.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
 //            String s3 = StatCollector.translateToLocal("book.finalizeWarning");
 //            this.fontRendererObj.drawSplitString(s3, xOffset + 36, yOffset + 80, 116, 0);
         } else if (readingManual) {
 //            GuiTools.drawCenteredString(fontRendererObj, RailcraftLanguage.translate("routing.table.manual.title"), yOffset + 16, width);
-            fontRendererObj.drawString(LocalizationPlugin.translate(TABLE_MANUAL_LOC_TAG + "title"), xOffset + 45, yOffset + 16, 0);
+            fontRendererObj.drawString(LocalizationPlugin.translate(manualLocTag + "title"), xOffset + 45, yOffset + 16, 0);
 
             String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, numManualPages);
             int pageNumStringWidth = fontRendererObj.getStringWidth(pageNumString);
@@ -480,7 +441,7 @@ public class GuiRoutingTable extends GuiScreen {
             if (currPage < 0 || currPage >= numManualPages)
                 return;
 
-            String pageTag = TABLE_MANUAL_LOC_TAG + "page" + (currPage + 1);
+            String pageTag = manualLocTag + "page" + (currPage + 1);
 
             if (LocalizationPlugin.hasTag(pageTag)) {
                 String text = LocalizationPlugin.translate(pageTag);

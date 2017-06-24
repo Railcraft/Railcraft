@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
-import mods.railcraft.client.gui.GuiRoutingTable;
+import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -37,7 +38,7 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
         if (visible) {
             boolean flag = par2 >= xPosition && par3 >= yPosition && par2 < xPosition + width && par3 < yPosition + height;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            par1Minecraft.renderEngine.bindTexture(GuiRoutingTable.TEXTURE);
+            par1Minecraft.renderEngine.bindTexture(GuiBookRoutingTable.TEXTURE);
             int k = 0;
             int l = 192;
 

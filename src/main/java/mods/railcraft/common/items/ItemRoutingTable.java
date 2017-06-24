@@ -9,7 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.client.gui.GuiRoutingTable;
+import mods.railcraft.client.gui.GuiBookRoutingTable;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -48,8 +49,6 @@ import java.util.function.Predicate;
 @SuppressWarnings("WeakerAccess")
 public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
 
-    public static final int LINE_LENGTH = 37;
-    public static final int LINES_PER_PAGE = 13;
     public static final Predicate<ItemStack> FILTER = StackFilters.of(ItemRoutingTable.class);
 
     public ItemRoutingTable() {
@@ -83,14 +82,14 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             NBTList<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
             for (NBTTagList pageNBT : pages) {
                 NBTList<NBTTagString> page = new NBTList<NBTTagString>(pageNBT);
-                if (page.size() > LINES_PER_PAGE)
+                if (page.size() > RailcraftConstants.BOOK_LINES_PER_PAGE)
                     return false;
 
                 for (NBTTagString line : page) {
                     if (line.getString() == null)
                         return false;
 
-                    if (line.getString().length() > LINE_LENGTH)
+                    if (line.getString().length() > RailcraftConstants.BOOK_LINE_LENGTH)
                         return false;
                 }
             }
@@ -225,7 +224,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (Game.isClient(world))
-            Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, stack));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiBookRoutingTable(player, stack));
         return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
     }
 

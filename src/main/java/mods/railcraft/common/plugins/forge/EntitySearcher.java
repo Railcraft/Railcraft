@@ -99,6 +99,14 @@ public class EntitySearcher {
             return this;
         }
 
+        /**
+         * @param distance Controls the size of the search box
+         */
+        public SearchParameters<T> around(BlockPos pos, float distance) {
+            searchBox = new AxisAlignedBB(pos).expandXyz(distance);
+            return this;
+        }
+
         public SearchParameters<T> with(Predicate<Entity> filter) {
             this.filter = filter;
             return this;

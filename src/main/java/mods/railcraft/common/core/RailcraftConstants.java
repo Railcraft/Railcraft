@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,4 +31,8 @@ public class RailcraftConstants {
     public static final long TICKS_PER_HOUR = 72000;
     public static final long TICKS_PER_MIN = 1200;
     public static final int IS_REVERSED_VARIABLE_INDEX = 6;
+
+    public static final int BOOK_LINE_LENGTH = 37;
+    public static final int BOOK_LINES_PER_PAGE = 13;
+    public static final int BOOK_MAX_PAGES = 50;
 }

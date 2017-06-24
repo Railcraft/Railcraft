@@ -35,6 +35,7 @@ import mods.railcraft.common.blocks.charge.BlockFrame;
 import mods.railcraft.common.blocks.charge.BlockWire;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
+import mods.railcraft.common.blocks.logbook.BlockLogbook;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
@@ -110,6 +111,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
+    LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
     MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
     MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
     MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
