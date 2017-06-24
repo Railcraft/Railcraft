@@ -1,3 +1,8 @@
+10.2.0-alpha-7
+    NEW: Added Logbook, it records any player that passes within a 16 block radius of the block and they day they visited. It can only be broken by the owner.
+    FIX: Fix Train Dispenser and Locomotive matching. Issue #1262
+    FIX: Fix some annoying edge cases and faulty assumptions in the Item Loader code.
+
 10.2.0-alpha-6
     CHANGE: Migrate Powered Rolling Machine from RF to Charge.
     CHANGE: Reworked crafting of various Charge related items. Added more intermediate items.
