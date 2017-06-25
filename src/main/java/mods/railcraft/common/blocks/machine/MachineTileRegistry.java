@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
+import mods.railcraft.common.blocks.machine.charge.TileChargeBattery;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
 import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
@@ -78,6 +79,9 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileActuatorLever.class, "actuator_lever");
         RailcraftRegistry.register(TileActuatorMotor.class, "actuator_motor");
         RailcraftRegistry.register(TileActuatorRouting.class, "actuator_router");
+
+        // Charge Batteries
+        RailcraftRegistry.register(TileChargeBattery.class, "charge_battery");
 
         // Charge Feeders
         RailcraftRegistry.register(TileChargeFeederAdmin.class, "charge_feeder_admin");

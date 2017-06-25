@@ -68,7 +68,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
     private static EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE, 0.05);
+    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE, 0.02);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {

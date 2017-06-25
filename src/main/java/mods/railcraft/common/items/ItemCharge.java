@@ -45,7 +45,11 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'B', "ingotBrass",
                 'P', "plateBrass");
 
-        CraftingPlugin.addRecipe(getStack(9, SPOOL_SMALL),
+        CraftingPlugin.addRecipe(getStack(3, SPOOL_SMALL),
+                "W",
+                'W', getStack(SPOOL_MEDIUM));
+
+        CraftingPlugin.addRecipe(getStack(3, SPOOL_MEDIUM),
                 "W",
                 'W', getStack(SPOOL_LARGE));
 
@@ -67,6 +71,20 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'S', "ingotSteel",
                 'T', RailcraftItems.CHARGE, TERMINAL,
                 'P', "plateTin");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(
+                getStack(ELECTRODE_NICKEL),
+                "P",
+                "P",
+                "P",
+                'P', "plateNickel");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(
+                getStack(ELECTRODE_IRON),
+                "P",
+                "P",
+                "P",
+                'P', "plateIron");
     }
 
     public enum EnumCharge implements IVariantEnum {
@@ -74,8 +92,11 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         COIL("blockCopper"),
         TERMINAL("plateBrass"),
         SPOOL_SMALL("ingotCopper"),
+        SPOOL_MEDIUM("blockCopper"),
         SPOOL_LARGE("blockCopper"),
-        MOTOR("blockCopper");
+        MOTOR("blockCopper"),
+        ELECTRODE_NICKEL("plateNickel"),
+        ELECTRODE_IRON("plateIron"),;
         public static EnumCharge[] VALUES = values();
         private Object alternate;
 

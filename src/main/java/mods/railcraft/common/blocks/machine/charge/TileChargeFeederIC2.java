@@ -23,15 +23,10 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChargeFeederIC2 extends TileChargeFeeder implements ISinkDelegate {
+public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024) {
-        @Override
-        public double getMaxDraw() {
-            return 512.0;
-        }
-    };
+    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.95);
 
     @Override
     public IEnumMachine<?> getMachineType() {

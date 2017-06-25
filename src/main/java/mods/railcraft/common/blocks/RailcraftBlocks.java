@@ -41,7 +41,9 @@ import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.charge.BlockChargeBattery;
 import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
+import mods.railcraft.common.blocks.machine.charge.ItemChargeBattery;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
@@ -102,7 +104,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BRICK_RED_NETHER("brick_red_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDNETHER), ItemBrick::new),
     BRICK_RED_SANDY("brick_red_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDSANDY), ItemBrick::new),
     BRICK_SANDY("brick_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    //    CHARGE_BATTERY("charge_battery", BlockChargeBattery.class, BlockChargeBattery::new, ItemMachine::new),
+    CHARGE_BATTERY("charge_battery", BlockChargeBattery.class, BlockChargeBattery::new, ItemChargeBattery::new),
     CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, BlockChargeFeeder::new, ItemMachine::new),
     CHARGE_TRAP("charge_trap", BlockChargeTrap.class, BlockChargeTrap::new, ItemBlockRailcraft::new),
     DETECTOR("detector", BlockDetector.class, BlockDetector::new, ItemDetector::new),

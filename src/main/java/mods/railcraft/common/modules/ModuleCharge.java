@@ -41,6 +41,7 @@ public class ModuleCharge extends RailcraftModulePayload {
 //                        RailcraftBlocks.track,
                         RailcraftBlocks.CHARGE_FEEDER,
                         RailcraftBlocks.CHARGE_TRAP,
+                        RailcraftBlocks.CHARGE_BATTERY,
                         RailcraftBlocks.FRAME,
                         RailcraftBlocks.WIRE
 //                        RailcraftBlocks.machine_alpha,

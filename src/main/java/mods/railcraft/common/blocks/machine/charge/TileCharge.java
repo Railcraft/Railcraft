@@ -17,12 +17,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileChargeFeeder extends TileMachineBase {
+public abstract class TileCharge extends TileMachineBase {
+    @Nullable
     public abstract IChargeBlock.ChargeBattery getChargeBattery();
 
     private int prevComparatorOutput;
@@ -33,10 +35,12 @@ public abstract class TileChargeFeeder extends TileMachineBase {
     @Override
     public void update() {
         super.update();
-        int newComparatorOutput = ChargeManager.getNetwork(worldObj).getGraph(pos).getComparatorOutput();
-        if (prevComparatorOutput != newComparatorOutput)
-            worldObj.updateComparatorOutputLevel(pos, getBlockType());
-        prevComparatorOutput = newComparatorOutput;
+        if (clock % 16 == 0) {
+            int newComparatorOutput = ChargeManager.getNetwork(worldObj).getGraph(pos).getComparatorOutput();
+            if (prevComparatorOutput != newComparatorOutput)
+                worldObj.updateComparatorOutputLevel(pos, getBlockType());
+            prevComparatorOutput = newComparatorOutput;
+        }
     }
 
     @Override

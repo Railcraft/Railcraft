@@ -10,9 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.machine.BlockMachine;
+import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -21,11 +19,9 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +33,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -45,27 +40,24 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @RailcraftBlockMetadata(variant = FeederVariant.class)
-public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IChargeBlock {
+public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
     public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
         TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
-        if (tileEntity instanceof TileChargeFeeder) {
-            return ((TileChargeFeeder) tileEntity).getChargeBattery();
+        if (tileEntity instanceof TileCharge) {
+            return ((TileCharge) tileEntity).getChargeBattery();
         }
         //noinspection ConstantConditions
         return null;
     });
 
     public BlockChargeFeeder() {
-        super(true);
         IBlockState defaultState = blockState.getBaseState().withProperty(getVariantProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
         setDefaultState(defaultState);
         setResistance(10F);
         setHardness(5F);
-        setSoundType(SoundType.METAL);
-        setTickRandomly(true);
     }
 
     @Override
@@ -119,14 +111,13 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        super.neighborChanged(state, worldIn, pos, blockIn);
-        IBlockState newState = detectRedstoneState(state, worldIn, pos);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+        super.neighborChanged(state, world, pos, blockIn);
+        IBlockState newState = detectRedstoneState(state, world, pos);
         if (state != newState)
-            WorldPlugin.setBlockState(worldIn, pos, newState);
-        TileEntity tileEntity = WorldPlugin.getBlockTile(worldIn, pos);
-        if (tileEntity instanceof TileChargeFeeder)
-            ((TileChargeFeeder) tileEntity).neighborChanged(newState, worldIn, pos, blockIn);
+            WorldPlugin.setBlockState(world, pos, newState);
+        TileManager.forTile(this::getTileClass, state, world, pos)
+                .action(TileChargeFeederAdmin.class, t -> t.neighborChanged(newState, world, pos, blockIn));
     }
 
     @Override
@@ -142,36 +133,7 @@ public class BlockChargeFeeder extends BlockMachine<FeederVariant> implements IC
     }
 
     @Override
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(REDSTONE) && rand.nextInt(50) == 25)
-            EffectManager.instance.zapEffectSurface(stateIn, worldIn, pos);
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+    protected boolean isSparking(IBlockState state) {
+        return state.getValue(REDSTONE);
     }
 }

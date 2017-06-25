@@ -1,0 +1,25 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "textures": {
+    "particle": "#bottom",
+    "side_a": "blocks/charge_battery_nickel_iron_side_a",
+    "side_b": "blocks/charge_battery_nickel_iron_side_b",
+    "bottom": "blocks/charge_battery_nickel_iron_bottom",
+    "top": "blocks/charge_battery_nickel_iron_top"
+  },
+  "elements": [
+    {
+      "__comment": "battery",
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top", "cullface": "up"},
+        "north": {"uv": [16, 0, 0, 16], "texture": "#side_a", "cullface": "north"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#side_a", "cullface": "south"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#side_b", "cullface": "west"},
+        "east": {"uv": [16, 0, 0, 16], "texture": "#side_b", "cullface": "east"}
+      }
+    }
+  ]
+}
