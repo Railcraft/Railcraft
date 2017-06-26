@@ -85,6 +85,13 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 "P",
                 "P",
                 'P', "plateIron");
+
+        RailcraftCraftingManager.rollingMachine.addRecipe(
+                getStack(ELECTRODE_ZINC),
+                "P",
+                "P",
+                "P",
+                'P', "plateZinc");
     }
 
     public enum EnumCharge implements IVariantEnum {
@@ -96,7 +103,8 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         SPOOL_LARGE("blockCopper"),
         MOTOR("blockCopper"),
         ELECTRODE_NICKEL("plateNickel"),
-        ELECTRODE_IRON("plateIron"),;
+        ELECTRODE_IRON("plateIron"),
+        ELECTRODE_ZINC("plateZinc"),;
         public static EnumCharge[] VALUES = values();
         private Object alternate;
 

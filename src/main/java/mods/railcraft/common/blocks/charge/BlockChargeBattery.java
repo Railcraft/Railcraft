@@ -8,9 +8,8 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.charge;
+package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -21,7 +20,6 @@ import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -35,7 +33,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @RailcraftBlockMetadata(variant = BatteryVariant.class)
-public class BlockChargeBattery extends BlockMachineCharge<BatteryVariant> {
+public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().raiseCeiling(-0.0625D).build();
 
     public BlockChargeBattery() {
@@ -63,6 +61,18 @@ public class BlockChargeBattery extends BlockMachineCharge<BatteryVariant> {
                         'W', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_MEDIUM,
                         'S', "dustSaltpeter",
                         'B', Items.WATER_BUCKET));
+
+        BatteryVariant.NICKEL_ZINC.ifAvailable(v ->
+                CraftingPlugin.addRecipe(getStack(v),
+                        "TWT",
+                        "NSZ",
+                        "NBZ",
+                        'T', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL,
+                        'N', RailcraftItems.CHARGE, ItemCharge.EnumCharge.ELECTRODE_NICKEL,
+                        'Z', RailcraftItems.CHARGE, ItemCharge.EnumCharge.ELECTRODE_ZINC,
+                        'W', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_MEDIUM,
+                        'S', "dustSaltpeter",
+                        'B', Items.WATER_BUCKET));
     }
 
     /**
@@ -78,11 +88,6 @@ public class BlockChargeBattery extends BlockMachineCharge<BatteryVariant> {
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return COLLISION_BOX;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileChargeBattery(getVariant(state));
     }
 
     @Nullable

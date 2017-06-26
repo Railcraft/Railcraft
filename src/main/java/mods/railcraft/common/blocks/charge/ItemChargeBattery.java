@@ -8,9 +8,9 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.charge;
+package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.blocks.machine.ItemMachine;
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemChargeBattery extends ItemMachine {
+public class ItemChargeBattery extends ItemBlockRailcraftSubtyped {
     public ItemChargeBattery(Block block) {
         super(block);
     }
