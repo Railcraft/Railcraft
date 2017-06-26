@@ -22,7 +22,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -145,14 +144,9 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
      * Called When an Entity Collided with the Block
      */
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(worldIn).getNode(pos);
-        if (MiscTools.isKillableEntity(entityIn)
-                && node.getChargeGraph().getCharge() >= ZAP_COST
-                && entityIn.attackEntityFrom(RailcraftDamageSource.ELECTRIC, 10)) {
-            node.useCharge(ZAP_COST);
-            EffectManager.instance.zapEffectDeath(worldIn, entityIn);
-        }
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        super.onEntityCollidedWithBlock(world, pos, state, entity);
+        ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 10F, ZAP_COST);
     }
 
     @Nullable

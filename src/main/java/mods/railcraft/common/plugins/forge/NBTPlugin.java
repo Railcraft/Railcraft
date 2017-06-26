@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
@@ -25,6 +26,28 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class NBTPlugin {
+    @Nullable
+    public static NBTTagCompound makeGameProfileTag(@Nullable GameProfile profile) {
+        if (profile == null || (profile.getName() == null && profile.getId() == null))
+            return null;
+        NBTTagCompound nbt = new NBTTagCompound();
+        if (profile.getName() != null)
+            nbt.setString("name", profile.getName());
+        if (profile.getId() != null)
+            nbt.setString("id", profile.getId().toString());
+        return nbt;
+    }
+
+    @Nullable
+    public static GameProfile readGameProfileTag(NBTTagCompound data) {
+        String ownerName = PlayerPlugin.UNKNOWN_PLAYER_NAME;
+        if (data.hasKey("name"))
+            ownerName = data.getString("name");
+        UUID ownerUUID = null;
+        if (data.hasKey("id"))
+            ownerUUID = UUID.fromString(data.getString("id"));
+        return new GameProfile(ownerUUID, ownerName);
+    }
 
     public static <T extends Enum<T>> void writeEnumOrdinal(NBTTagCompound data, String tag, Enum<T> e) {
         assert e.ordinal() < Byte.MAX_VALUE;

@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -59,7 +60,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
-    private EnergyStorage energyStorage;
+    private final EnergyStorage energyStorage;
+    public final RFEnergyIndicator rfIndicator;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
@@ -68,6 +70,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public TileEngravingBench() {
         super(2);
         energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
+        rfIndicator = new RFEnergyIndicator(energyStorage);
     }
 
     @Override

@@ -1,0 +1,73 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "railcraft:blocks/logbook_bottom",
+    "paper": "railcraft:blocks/logbook_paper",
+    "cover": "railcraft:blocks/logbook_cover",
+    "side": "railcraft:blocks/logbook_side",
+    "top": "railcraft:blocks/logbook_top",
+    "bottom": "railcraft:blocks/logbook_bottom"
+  },
+  "elements": [
+    {
+      "__comment": "box",
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top", "cullface": "up"},
+        "north": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "north"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "west"},
+        "east": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "east"}
+      }
+    },
+    {
+      "__comment": "cover",
+      "from": [2, 16, 2],
+      "to": [14, 16.5, 14],
+      "faces": {
+        "up": {"uv": [2, 2, 14, 14], "texture": "#cover", "cullface": "up"},
+        "north": {"uv": [2, 13.5, 14, 14], "texture": "#cover", "cullface": "up"},
+        "south": {"uv": [2, 13.5, 14, 14], "texture": "#cover", "cullface": "up"},
+        "west": {"uv": [2, 13.5, 14, 14], "texture": "#cover", "cullface": "up"},
+        "east": {"uv": [2, 13.5, 14, 14], "texture": "#cover", "cullface": "up"}
+      }
+    },
+    {
+      "__comment": "paper_1",
+      "from": [2.5, 16.5, 2.5],
+      "to": [7.5, 17.5, 13.5],
+      "faces": {
+        "up": {"uv": [2.5, 2, 7.5, 13], "texture": "#paper", "cullface": "up"},
+        "north": {"uv": [8.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "south": {"uv": [2.5, 14.5, 7.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "west": {"uv": [2.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "east": {"uv": [2.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"}
+      }
+    },
+    {
+      "__comment": "paper_2",
+      "from": [8.5, 16.5, 2.5],
+      "to": [13.5, 17.5, 13.5],
+      "faces": {
+        "up": {"uv": [8.5, 2, 13.5, 13], "texture": "#paper", "cullface": "up"},
+        "north": {"uv": [8.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "south": {"uv": [2.5, 14.5, 7.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "west": {"uv": [2.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "east": {"uv": [2.5, 14.5, 13.5, 15.5], "texture": "#paper", "cullface": "up"}
+      }
+    },
+    {
+      "__comment": "binding",
+      "from": [7.5, 16.5, 2.5],
+      "to": [8.5, 17, 13.5],
+      "faces": {
+        "up": {"uv": [7.5, 2.5, 8.5, 13.5], "texture": "#paper", "cullface": "up"},
+        "north": {"uv": [7.5, 15, 8.5, 15.5], "texture": "#paper", "cullface": "up"},
+        "south": {"uv": [7.5, 15, 8.5, 15.5], "texture": "#paper", "cullface": "up"}
+      }
+    }
+  ]
+}

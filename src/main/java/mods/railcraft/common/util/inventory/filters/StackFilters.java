@@ -76,6 +76,13 @@ public final class StackFilters {
     }
 
     /**
+     * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
+     */
+    public static Predicate<ItemStack> matchesAny(@Nonnull final IInventoryComposite inv) {
+        return stack -> inv.stackStream().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
+    }
+
+    /**
      * Matches against the provided ItemStacks.
      *
      * If no ItemStacks are provided to match against, it returns true.

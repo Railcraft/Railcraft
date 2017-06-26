@@ -108,6 +108,9 @@ public class PacketHandler {
                 case GOLDEN_TICKET_GUI:
                     pkt = new PacketTicketGui();
                     break;
+                case LOGBOOK_GUI:
+                    pkt = new PacketLogbook();
+                    break;
                 case SHUNTING_AURA:
                     pkt = new PacketShuntingAura();
                     break;

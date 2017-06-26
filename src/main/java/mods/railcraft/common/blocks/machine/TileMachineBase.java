@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
-import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -93,8 +92,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             return false;
         if (!InvTools.isEmpty(heldItem)) {
             if (heldItem.getItem() instanceof IActivationBlockingItem)
-                return false;
-            if (heldItem.getItem() instanceof ITrackItem)
                 return false;
             if (TrackTools.isRailItem(heldItem.getItem()))
                 return false;

@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.charge.TileChargeFeeder;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -22,14 +21,12 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.ai.TamingInteractHandler;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -45,15 +42,6 @@ import java.util.Random;
  */
 @RailcraftBlockMetadata(variant = EquipmentVariant.class)
 public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implements IChargeBlock {
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
-        TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
-        if (tileEntity instanceof TileRollingMachinePowered) {
-            return ((TileChargeFeeder) tileEntity).getChargeBattery();
-        }
-        //noinspection ConstantConditions
-        return null;
-    });
-
     public BlockMachineEquipment() {
         super(true);
         setDefaultState(getDefaultState());

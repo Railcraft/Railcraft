@@ -171,12 +171,21 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return worldObj.provider.getDimension();
     }
 
+    public final void clearOwner() {
+        setOwner(new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER));
+    }
+
+    protected final void setOwner(GameProfile profile) {
+        owner = profile;
+        sendUpdateToClient();
+    }
+
     @Override
     public final GameProfile getOwner() {
         return owner;
     }
 
-    public boolean isOwner(GameProfile player) {
+    public final boolean isOwner(GameProfile player) {
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
@@ -199,10 +208,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        if (owner.getName() != null)
-            data.setString("owner", owner.getName());
-        if (owner.getId() != null)
-            data.setString("ownerId", owner.getId().toString());
+        PlayerPlugin.writeOwnerToNBT(data, owner);
 
         NBTPlugin.writeUUID(data, "uuid", uuid);
         if (!customName.isEmpty())

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
+import com.google.common.collect.Multimap;
+import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
@@ -27,6 +29,7 @@ import net.minecraft.world.WorldServer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -127,6 +130,11 @@ public class PacketBuilder implements ISignalPacketBuilder {
 
     public void sendGoldenTicketGuiPacket(EntityPlayerMP player, EnumHand hand) {
         PacketTicketGui pkt = new PacketTicketGui(hand);
+        PacketDispatcher.sendToPlayer(pkt, player);
+    }
+
+    public void sendLogbookGuiPacket(EntityPlayerMP player, Multimap<LocalDate, GameProfile> log) {
+        PacketLogbook pkt = new PacketLogbook(log);
         PacketDispatcher.sendToPlayer(pkt, player);
     }
 

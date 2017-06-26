@@ -1,0 +1,22 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "#bottom"
+  },
+  "elements": [
+    {
+      "__comment": "battery",
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top", "cullface": "up"},
+        "north": {"uv": [16, 0, 0, 16], "texture": "#side_a", "cullface": "north"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#side_a", "cullface": "south"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#side_b", "cullface": "west"},
+        "east": {"uv": [16, 0, 0, 16], "texture": "#side_b", "cullface": "east"}
+      }
+    }
+  ]
+}

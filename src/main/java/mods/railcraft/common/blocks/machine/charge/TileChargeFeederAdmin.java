@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChargeFeederAdmin extends TileChargeFeeder {
+public class TileChargeFeederAdmin extends TileCharge {
     public final InfiniteBattery chargeBattery = new InfiniteBattery();
 
     private static class InfiniteBattery extends IChargeBlock.ChargeBattery {

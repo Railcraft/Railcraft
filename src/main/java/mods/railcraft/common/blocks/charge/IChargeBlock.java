@@ -159,7 +159,7 @@ public interface IChargeBlock {
             this(connectType, 0.0, batterySupplier);
         }
 
-        private ChargeDef(@Nonnull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(@Nonnull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this.connectType = connectType;
             this.cost = cost * RailcraftConfig.chargeMaintenanceCostMultiplier();
             this.batterySupplier = batterySupplier;
@@ -174,7 +174,7 @@ public interface IChargeBlock {
         }
 
         @Nullable
-        ChargeBattery makeBattery(World world, BlockPos pos) {
+        ChargeBattery getBattery(World world, BlockPos pos) {
             if (batterySupplier == null)
                 return null;
             return batterySupplier.apply(world, pos);
@@ -187,17 +187,25 @@ public interface IChargeBlock {
     }
 
     class ChargeBattery implements IChargeBattery {
-        public static final String NBT_CHARGE_TAG = "charge";
         public static final double DEFAULT_MAX_CHARGE = 1000.0;
         public static final double DEFAULT_MAX_DRAW = 20.0;
         private final double capacity;
+
+        private final double efficiency;
+        private final double maxDraw;
 
         public ChargeBattery() {
             this(DEFAULT_MAX_CHARGE);
         }
 
         public ChargeBattery(double capacity) {
+            this(capacity, DEFAULT_MAX_DRAW, 1.0);
+        }
+
+        public ChargeBattery(double capacity, double maxDraw, double efficiency) {
             this.capacity = capacity;
+            this.efficiency = efficiency;
+            this.maxDraw = maxDraw;
         }
 
         private boolean initialized;
@@ -216,8 +224,12 @@ public interface IChargeBlock {
             return charge;
         }
 
+        public double getEfficiency() {
+            return efficiency;
+        }
+
         public double getMaxDraw() {
-            return DEFAULT_MAX_DRAW;
+            return maxDraw;
         }
 
         public void initCharge(double charge) {

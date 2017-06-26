@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -68,10 +68,11 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
-        state = state.withProperty(FRONT, TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(ITileRotate.class, ITileRotate::getFacing).orElse(EnumFacing.DOWN));
-        state = state.withProperty(ACTIVE, TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(TileManipulatorCart.class, TileManipulatorCart::isProcessing).orElse(false));
+        TileManager<?> tm = TileManager.forTile(this::getTileClass, state, worldIn, pos);
+        state = state.withProperty(FRONT,
+                tm.retrieve(ITileRotate.class, ITileRotate::getFacing).orElse(EnumFacing.DOWN));
+        state = state.withProperty(ACTIVE,
+                tm.retrieve(TileManipulatorCart.class, TileManipulatorCart::isProcessing).orElse(false));
         return state;
     }
 }

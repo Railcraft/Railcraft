@@ -40,6 +40,7 @@ public abstract class RailcraftPacket {
         ITEM_NBT_TILE,
         KEY_PRESS,
         GOLDEN_TICKET_GUI,
+        LOGBOOK_GUI,
         SHUNTING_AURA,
     }
 

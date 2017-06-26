@@ -10,6 +10,10 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import net.minecraft.item.ItemStack;
+
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -25,5 +29,17 @@ public interface IInventoryComposite extends Iterable<IInventoryObject> {
 
     default int slotCount() {
         return stream().mapToInt(IInventoryObject::getNumSlots).sum();
+    }
+
+    default void forEachStack(Consumer<ItemStack> action) {
+        forEach(inv -> {
+            for (ItemStack stack : InventoryIterator.getRailcraft(inv).getStacks()) {
+                action.accept(stack);
+            }
+        });
+    }
+
+    default Stream<ItemStack> stackStream() {
+        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).getStackStream());
     }
 }
