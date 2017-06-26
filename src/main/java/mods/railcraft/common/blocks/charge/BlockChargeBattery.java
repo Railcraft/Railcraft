@@ -24,6 +24,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +35,7 @@ import javax.annotation.Nullable;
  */
 @RailcraftBlockMetadata(variant = BatteryVariant.class)
 public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
+    public static final String RECHARGEABLE_BATTERY_ORE_TAG = "blockChargeBatteryRechargeable";
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().raiseCeiling(-0.0625D).build();
 
     public BlockChargeBattery() {
@@ -45,6 +47,9 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
 
     @Override
     public void initializeDefinintion() {
+        for (BatteryVariant variant : BatteryVariant.VALUES) {
+            OreDictionary.registerOre(RECHARGEABLE_BATTERY_ORE_TAG, variant.getStack());
+        }
         ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 

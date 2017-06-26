@@ -11,6 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.common.blocks.charge.BlockChargeBattery;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.Metal;
@@ -39,10 +40,11 @@ public class ItemLocoElectric extends ItemLocomotive {
         ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
         CraftingPlugin.addRecipe(cartStack,
                 "LT ",
-                "DDD",
+                "DBD",
                 "GMG",
                 'L', Blocks.REDSTONE_LAMP,
                 'D', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR,
+                'B', BlockChargeBattery.RECHARGEABLE_BATTERY_ORE_TAG,
                 'M', Items.MINECART,
                 'G', RailcraftItems.GEAR, ItemGear.EnumGear.STEEL,
                 'T', RailcraftItems.PLATE, Metal.STEEL);
