@@ -56,12 +56,15 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
 
     public EntityCartTank(World world) {
         super(world);
-        tank.setFilter(this::getFilterFluid);
-        tankManager.add(tank);
     }
 
     public EntityCartTank(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    {
+        tank.setFilter(this::getFilterFluid);
+        tankManager.add(tank);
     }
 
     @Override
