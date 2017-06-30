@@ -26,7 +26,7 @@ import net.minecraft.util.EnumFacing;
 public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.95);
+    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65);
 
     @Override
     public IEnumMachine<?> getMachineType() {

@@ -77,15 +77,12 @@ public class BatterySaveData extends WorldSavedData {
     }
 
     public void initBattery(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        if (!chargeBattery.isInfinite())
-            chargeBattery.initCharge(chargeLevels.getOrDefault(pos, 0.0));
+        chargeBattery.initCharge(chargeLevels.getOrDefault(pos, 0.0));
     }
 
     public void updateBatteryRecord(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        if (!chargeBattery.isInfinite()) {
-            chargeLevels.put(pos, chargeBattery.getCharge());
-            markDirty();
-        }
+        chargeLevels.put(pos, chargeBattery.getCharge());
+        markDirty();
     }
 
     public void removeBattery(BlockPos pos) {

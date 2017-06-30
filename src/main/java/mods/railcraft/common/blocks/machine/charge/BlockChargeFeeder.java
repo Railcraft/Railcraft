@@ -44,7 +44,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
+    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.5, (world, pos) -> {
         TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
         if (tileEntity instanceof TileCharge) {
             return ((TileCharge) tileEntity).getChargeBattery();

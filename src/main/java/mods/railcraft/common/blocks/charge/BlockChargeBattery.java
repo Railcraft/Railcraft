@@ -15,6 +15,7 @@ import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +48,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
 
     @Override
     public void initializeDefinintion() {
+        HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
         for (BatteryVariant variant : BatteryVariant.VALUES) {
             OreDictionary.registerOre(RECHARGEABLE_BATTERY_ORE_TAG, variant.getStack());
         }
