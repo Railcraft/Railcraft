@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -197,6 +197,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
-                && ((BlockChargeFeeder) getBlockType()).getVariant(oldState) == ((BlockChargeFeeder) getBlockType()).getVariant(newSate));
+                && ((BlockContainerRailcraftSubtyped) getBlockType()).getVariant(oldState) == ((BlockContainerRailcraftSubtyped) getBlockType()).getVariant(newSate));
     }
 }
