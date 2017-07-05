@@ -7,9 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -25,6 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -32,7 +37,7 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileWayObject implements IAspectProvider {
+public abstract class TileSignalBase extends TileMachineBase implements IAspectProvider, ITileShaped, ITileRotate, ITileLit {
 
     protected static final float BOUNDS = 0.15f;
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
@@ -65,6 +70,11 @@ public abstract class TileSignalBase extends TileWayObject implements IAspectPro
     }
 
     @Override
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+        return BOUNDING_BOX.offset(pos);
+    }
+
+    @Override
     public void update() {
         super.update();
         if (Game.isClient(worldObj)) {
@@ -81,14 +91,17 @@ public abstract class TileSignalBase extends TileWayObject implements IAspectPro
         }
     }
 
+    @Override
     public int getLightValue() {
         return getSignalAspect().getLightValue();
     }
 
+    @Override
     public EnumFacing getFacing() {
         return facing;
     }
 
+    @Override
     public void setFacing(EnumFacing facing) {
         this.facing = facing;
     }

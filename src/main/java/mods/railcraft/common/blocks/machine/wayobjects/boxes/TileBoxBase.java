@@ -71,11 +71,6 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
     }
 
     @Override
-    public boolean isSideSolid(EnumFacing side) {
-        return side == EnumFacing.UP;
-    }
-
-    @Override
     public boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }

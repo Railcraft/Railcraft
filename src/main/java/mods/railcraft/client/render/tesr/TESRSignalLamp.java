@@ -11,8 +11,8 @@ package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBox;
-import mods.railcraft.common.blocks.wayobjects.TileSignalBase;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.BlockMachineSignal;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
@@ -23,10 +23,10 @@ public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
         EnumFacing side = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
-        TextureAtlasSprite texture = RenderTools.getTexture(BlockMachineSignalBox.lampTextures[aspect.getTextureIndex()]);
+        TextureAtlasSprite texture = RenderTools.getTexture(BlockMachineSignal.lampTextures[aspect.getTextureIndex()]);
         lampInfo.setTexture(side, texture);
         lampInfo.lightSource = aspect.getTextureBrightness();
-        doRenderAspect(x, y, z);
+        doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);
     }
 
 //    private final SignalAspect defaultAspect;

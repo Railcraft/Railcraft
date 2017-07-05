@@ -9,14 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
-import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.RailcraftItems;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 
 /**
@@ -47,7 +41,7 @@ public class SignalmanBackpack extends BaseBackpack {
         add(RailcraftItems.MAG_GLASS);
         add(RailcraftItems.GOGGLES);
 
-        add(RailcraftBlocks.WAY_OBJECT);
+        add(RailcraftBlocks.SIGNAL);
         add(RailcraftBlocks.DETECTOR);
         add(RailcraftBlocks.SIGNAL_BOX);
     }

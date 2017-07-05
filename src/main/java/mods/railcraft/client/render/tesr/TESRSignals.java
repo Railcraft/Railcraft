@@ -156,10 +156,9 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         public abstract int getColor(TileEntity tile, BlockPos source, BlockPos target);
     }
 
-    protected void doRenderAspect(double x, double y, double z) {
+    protected void doRenderAspect(double x, double y, double z, float depth) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
-        final float depth = 1.95F * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();
 

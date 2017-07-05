@@ -21,7 +21,7 @@ public class ModuleSignals extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-//                        RailcraftBlocks.signal,
+                        RailcraftBlocks.SIGNAL,
                         RailcraftBlocks.SIGNAL_BOX,
                         RailcraftItems.SIGNAL_BLOCK_SURVEYOR,
                         RailcraftItems.SIGNAL_TUNER,

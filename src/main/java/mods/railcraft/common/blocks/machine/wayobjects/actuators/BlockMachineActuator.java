@@ -69,6 +69,11 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     }
 
     @Override
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty(), FACING, THROWN, RED_FLAG, WHITE_FLAG);
     }

@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.beta;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyConnection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -33,7 +34,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase implements IEnergyConnection, ITileRotate {
+public abstract class TileEngine extends TileMachineBase implements IEnergyConnection, ITileRotate, ITileNonSolid {
 
     public float currentOutput;
     public int energy;

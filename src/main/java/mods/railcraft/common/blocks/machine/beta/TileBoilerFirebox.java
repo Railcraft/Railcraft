@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
+import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -39,7 +40,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory {
+public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITileLit {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;

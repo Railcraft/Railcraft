@@ -46,6 +46,7 @@ import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.BlockMachineSignalRailcraft;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
@@ -59,8 +60,6 @@ import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexElectric;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
-import mods.railcraft.common.blocks.wayobjects.BlockWayObjectRailcraft;
-import mods.railcraft.common.blocks.wayobjects.ItemWayObject;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -122,6 +121,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     POST_METAL("post_metal", BlockPostMetal.class, () -> new BlockPostMetal(false), ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetal.class, () -> new BlockPostMetal(true), ItemPostMetal::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
+    SIGNAL("signal", BlockMachineSignalRailcraft.class, BlockMachineSignalRailcraft::new, ItemMachine::new),
     SIGNAL_BOX("signal_box", BlockMachineSignalBoxRailcraft.class, BlockMachineSignalBoxRailcraft::new, ItemMachine::new),
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
@@ -135,7 +135,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TRACK_FORCE("track_force", BlockTrackForce.class, BlockTrackForce::new, ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, BlockRailcraftWall::new, ItemMaterial::new),
-    WAY_OBJECT("wayobject", BlockWayObjectRailcraft.class, BlockWayObjectRailcraft::new, ItemWayObject::new),
     WIRE("wire", BlockWire.class, BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new),
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),

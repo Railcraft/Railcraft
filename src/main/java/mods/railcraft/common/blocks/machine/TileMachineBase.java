@@ -156,10 +156,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         }
     }
 
-    public int getLightValue() {
-        return 0;
-    }
-
     public float getResistance(Entity exploder) {
         return 4.5f;
     }

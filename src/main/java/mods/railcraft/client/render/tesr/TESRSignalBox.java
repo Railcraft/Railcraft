@@ -30,7 +30,7 @@ public class TESRSignalBox extends TESRSignals<TileBoxBase> {
             lampInfo.setRenderSide(side, !tile.isConnected(side));
         }
 
-        doRenderAspect(x, y, z);
+        doRenderAspect(x, y, z, 1.95F * RenderTools.PIXEL);
     }
 
 //    @Override

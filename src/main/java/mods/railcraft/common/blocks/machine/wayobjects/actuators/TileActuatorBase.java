@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -70,11 +70,6 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
         return COLLISION_BOX;
-    }
-
-    @Override
-    public boolean isSideSolid(EnumFacing side) {
-        return false;
     }
 
     @Override

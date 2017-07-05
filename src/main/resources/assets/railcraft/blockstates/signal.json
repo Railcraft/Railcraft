@@ -1,0 +1,55 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:signal_single"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "block": {
+      },
+      "distant": {
+      },
+      "token": {
+      },
+      "block_dual": {
+      },
+      "distant_dual": {
+      },
+      "token_dual": {
+      }
+    },
+    "connection_down": {
+      "true": {
+      },
+      "false": {}
+    },
+    "connection_north": {
+      "true": {
+      },
+      "false": {}
+    },
+    "connection_east": {
+      "true": {
+      },
+      "false": {}
+    },
+    "connection_south": {
+      "true": {
+      },
+      "false": {}
+    },
+    "connection_west": {
+      "true": {
+      },
+      "false": {}
+    },
+    "front": {
+      "north": {},
+      "east": {"y": 90},
+      "south": {"y": 180},
+      "west": {"y": 270}
+    }
+  }
+}

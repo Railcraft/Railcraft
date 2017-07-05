@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,9 @@ package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.wayobjects.IDualHeadSignal;
-import mods.railcraft.common.blocks.wayobjects.TileSignalBase;
+import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import net.minecraft.util.EnumFacing;
 
 public class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
@@ -30,13 +31,13 @@ public class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
         SignalAspect aspect = tile.getSignalAspect(DualLamp.TOP).getDisplayAspect();
         lampInfo.setTexture(facing, tile.getLampTexture(DualLamp.TOP, aspect));
         lampInfo.lightSource = aspect.getTextureBrightness();
-        doRenderAspect(x, y, z);
+        doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);
 
         lampInfo.resetSidesAndLight();
         aspect = tile.getSignalAspect(DualLamp.BOTTOM).getDisplayAspect();
         lampInfo.setTexture(facing, tile.getLampTexture(DualLamp.BOTTOM, aspect));
         lampInfo.lightSource = aspect.getTextureBrightness();
-        doRenderAspect(x, y, z);
+        doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);
     }
 
 //    @Override
@@ -172,9 +173,9 @@ public class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
 //        info.texture[4] = BlockSignalRailcraft.texturesSignalDual[1];
 //        info.texture[5] = BlockSignalRailcraft.texturesSignalDual[1];
 //        RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
-//        info.texture[3] = BlockSignalRailcraft.texturesLampTop[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 0 : 2];
+//        info.texture[3] = BlockSignalRailcraft.texturesLampTop[signalType == EnumSignal.DUAL_HEAD_BLOCK ? 0 : 2];
 //        RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1, 3);
-//        info.texture[3] = BlockSignalRailcraft.texturesLampBottom[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 2 : 0];
+//        info.texture[3] = BlockSignalRailcraft.texturesLampBottom[signalType == EnumSignal.DUAL_HEAD_BLOCK ? 2 : 0];
 //        RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1, 3);
 //        info.texture[3] = BlockSignalRailcraft.texturesSignalDual[2];
 //        float temp = 13.0F * pix;

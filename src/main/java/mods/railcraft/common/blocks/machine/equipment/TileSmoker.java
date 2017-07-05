@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -30,15 +31,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSmoker extends TileMachineBase implements ITileCompare {
+public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNonSolid {
 
     private static final int SNOW_MELT_INTERVAL = 32;
     private static final Random rand = MiscTools.RANDOM;

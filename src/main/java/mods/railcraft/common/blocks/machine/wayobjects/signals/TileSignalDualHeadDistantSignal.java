@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,10 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -25,19 +26,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
-public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal implements IReceiverTile, IDualHeadSignal {
+public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BOUNDS).build();
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
+    private static final float SIZE = -0.15f;
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(SIZE).build();
+    private final DualSignalReceiver receiver = new DualSignalReceiver(getLocalizationTag(), this);
 
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.DUAL_HEAD_BLOCK_SIGNAL;
+    public IEnumMachine<?> getMachineType() {
+        return SignalVariant.DUAL_HEAD_DISTANT;
     }
 
     @Override
     public int getLightValue() {
-        return Math.max(getSignalAspect().getLightValue(), getSignalAspect(DualLamp.BOTTOM).getLightValue());
+        return Math.max(getSignalAspect(DualLamp.TOP).getLightValue(), getSignalAspect(DualLamp.BOTTOM).getLightValue());
     }
 
     @Override
@@ -47,14 +49,18 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
             receiver.tickClient();
             return;
         }
+
+        // TODO: WTF?
         receiver.tickServer();
-        SignalAspect prevAspect = receiver.getAspect();
-        if (receiver.isBeingPaired()) {
-            receiver.setAspect(SignalAspect.BLINK_YELLOW);
-        } else if (!receiver.isPaired()) {
-            receiver.setAspect(SignalAspect.BLINK_RED);
+        int numPairs = receiver.getNumPairs();
+        boolean changed = false;
+        switch (numPairs) {
+            case 0:
+                changed |= receiver.setAspect(DualLamp.TOP, SignalAspect.BLINK_RED);
+            case 1:
+                changed |= receiver.setAspect(DualLamp.BOTTOM, SignalAspect.BLINK_RED);
         }
-        if (prevAspect != receiver.getAspect()) {
+        if (changed) {
             sendUpdateToClient();
         }
     }
@@ -72,6 +78,7 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
+
         receiver.writeToNBT(data);
         return data;
     }
@@ -79,7 +86,9 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
+
         receiver.readFromNBT(data);
+
     }
 
     @Override
@@ -97,15 +106,18 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
     }
 
     @Override
-    public SimpleSignalReceiver getReceiver() {
+    public DualSignalReceiver getReceiver() {
         return receiver;
     }
 
     @Override
     public SignalAspect getSignalAspect(DualLamp lamp) {
-        if (lamp == DualLamp.BOTTOM)
-            return receiver.getAspect();
-        return getSignalAspect();
+        return receiver.getAspect(lamp);
+    }
+
+    @Override
+    public SignalAspect getSignalAspect() {
+        return receiver.getAspect(DualLamp.TOP);
     }
 
     @SideOnly(Side.CLIENT)

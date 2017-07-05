@@ -1,13 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
@@ -19,7 +21,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronGauge extends TileTankBase {
+public class TileTankIronGauge extends TileTankBase implements ITileLit {
 
     private int lightValue = 0;
     private final Timer timer = new Timer();

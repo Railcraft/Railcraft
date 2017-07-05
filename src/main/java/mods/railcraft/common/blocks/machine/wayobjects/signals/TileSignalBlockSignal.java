@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,9 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wayobjects;
+package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -24,8 +25,8 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
     private final SignalBlock signalBlock = new SignalBlockSimple(getLocalizationTag(), this);
 
     @Override
-    public EnumWayObject getSignalType() {
-        return EnumWayObject.BLOCK_SIGNAL;
+    public IEnumMachine<?> getMachineType() {
+        return SignalVariant.BLOCK;
     }
 
     @Override

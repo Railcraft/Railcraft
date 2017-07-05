@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;
@@ -31,7 +32,7 @@ import java.util.Set;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
+public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork, ITileLit {
 
     private final Set<Object> actions = new HashSet<Object>();
     protected int cookTime;

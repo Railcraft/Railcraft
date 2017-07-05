@@ -12,10 +12,7 @@ package mods.railcraft.common.blocks.machine;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
+import mods.railcraft.common.blocks.machine.interfaces.*;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -157,8 +154,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        TileEntity tile = world.getTileEntity(pos);
-        return !(tile instanceof TileMachineBase) || ((TileMachineBase) tile).isSideSolid(side);
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileNonSolid.class, t -> t.isSideSolid(side)).orElse(true);
     }
 
     //TODO: Do we need to do this anymore?
@@ -322,10 +319,8 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (pos.getY() < 0)
             return 0;
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).getLightValue();
-        return 0;
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileLit.class, ITileLit::getLightValue).orElse(0);
     }
 
     @Override
