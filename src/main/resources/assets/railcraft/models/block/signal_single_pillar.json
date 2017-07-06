@@ -1,0 +1,22 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "railcraft:blocks/signal",
+    "texture": "railcraft:blocks/signal"
+  },
+  "elements": [
+    {
+      "__comment": "pillar",
+      "from": [6, 0, 6],
+      "to": [10, 6, 10],
+      "faces": {
+        "down": {"uv": [6, 6, 10, 10], "texture": "#texture", "cullface": "down"},
+        "north": {"uv": [6, 0, 10, 6], "texture": "#texture"},
+        "south": {"uv": [6, 10, 10, 16], "texture": "#texture"},
+        "west": {"uv": [0, 5, 4, 11], "texture": "#texture"},
+        "east": {"uv": [12, 5, 16, 11], "texture": "#texture"}
+      }
+    }
+  ]
+}

@@ -21,30 +21,31 @@ import net.minecraft.block.state.BlockStateContainer;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = SignalVariant.class)
-public class BlockMachineSignalRailcraft extends BlockMachineSignal<SignalVariant> {
+@RailcraftBlockMetadata(variant = SignalDualVariant.class)
+public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDualVariant> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), FRONT, CONNECTION_DOWN, CONNECTION_NORTH, CONNECTION_SOUTH, CONNECTION_EAST, CONNECTION_WEST);
+        return new BlockStateContainer(this, getVariantProperty(), FRONT, CONNECTION_NORTH, CONNECTION_SOUTH, CONNECTION_EAST, CONNECTION_WEST);
     }
 
     @Override
     public void defineRecipes() {
-        SignalVariant.BLOCK.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+        SignalDualVariant.BLOCK.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
                 "LCI",
                 " BI",
-                "   ",
+                "LRI",
                 'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL,
+                'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                 'I', "ingotIron",
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
 
-        SignalVariant.DISTANT.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
-                "LCI",
+        SignalDualVariant.DISTANT.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+                "LRI",
                 " BI",
-                "   ",
-                'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
+                "LRI",
+                'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
                 'I', "ingotIron",
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));

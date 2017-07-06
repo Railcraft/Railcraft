@@ -22,6 +22,7 @@ public class ModuleSignals extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.SIGNAL,
+                        RailcraftBlocks.SIGNAL_DUAL,
                         RailcraftBlocks.SIGNAL_BOX,
                         RailcraftItems.SIGNAL_BLOCK_SURVEYOR,
                         RailcraftItems.SIGNAL_TUNER,

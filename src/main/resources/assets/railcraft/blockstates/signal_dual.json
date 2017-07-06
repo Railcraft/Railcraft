@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:signal_single"
+    "model": "railcraft:signal_dual"
   },
   "variants": {
     "normal": [{}],
@@ -9,19 +9,10 @@
       {
         "transform": "forge:default-block",
         "submodel": {
-          "lamp": {"model": "railcraft:signal_single_lamp"},
-          "con_down": {"model": "railcraft:signal_single_pillar"}
-      }
+          "lamp": {"model": "railcraft:signal_dual_lamps"}
+        }
       }
     ],
-    "connection_down": {
-      "true": {
-        "submodel": {
-          "con_down": {"model": "railcraft:signal_single_pillar"}
-        }
-      },
-      "false": {}
-    },
     "connection_north": {
       "true": {
       },

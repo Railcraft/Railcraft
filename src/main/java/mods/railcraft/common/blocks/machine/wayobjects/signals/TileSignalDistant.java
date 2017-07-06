@@ -10,42 +10,29 @@
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
-import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal implements IReceiverTile, IDualHeadSignal {
+public class TileSignalDistant extends TileSignalBase implements IReceiverTile {
 
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BOUNDS).build();
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
 
     @Override
     public IEnumMachine<?> getMachineType() {
-        return SignalVariant.DUAL_HEAD_BLOCK;
-    }
-
-    @Override
-    public int getLightValue() {
-        return Math.max(getSignalAspect().getLightValue(), getSignalAspect(DualLamp.BOTTOM).getLightValue());
+        return SignalVariant.DISTANT;
     }
 
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(getWorld())) {
             receiver.tickClient();
             return;
         }
@@ -66,53 +53,40 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
         sendUpdateToClient();
     }
 
+    @Nonnull
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
-        return BOUNDING_BOX;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
+
         receiver.writeToNBT(data);
         return data;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         receiver.readFromNBT(data);
     }
 
     @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-
         receiver.readPacketData(data);
     }
 
     @Override
-    public SimpleSignalReceiver getReceiver() {
+    public SignalReceiver getReceiver() {
         return receiver;
     }
 
     @Override
-    public SignalAspect getSignalAspect(DualLamp lamp) {
-        if (lamp == DualLamp.BOTTOM)
-            return receiver.getAspect();
-        return getSignalAspect();
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public TextureAtlasSprite getLampTexture(DualLamp lamp, SignalAspect aspect) {
-        return RenderTools.getMissingTexture();
+    public SignalAspect getSignalAspect() {
+        return receiver.getAspect();
     }
 }

@@ -1,0 +1,21 @@
+{
+  "__comment": "Designed by CovertJaguar with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
+  "textures": {
+    "particle": "railcraft:blocks/signal_lamp_off",
+    "texture": "railcraft:blocks/signal_lamp_off"
+  },
+  "elements": [
+    {
+      "__comment": "lamp",
+      "from": [6, 9, 2.75],
+      "to": [10, 13, 3],
+      "faces": {
+        "down": {"uv": [6, 13, 10, 13.25], "texture": "#texture"},
+        "north": {"uv": [6, 3, 10, 7], "texture": "#texture"},
+        "west": {"uv": [2.75, 3, 3, 7], "texture": "#texture"},
+        "east": {"uv": [13, 3, 13.25, 7], "texture": "#texture"}
+      }
+    }
+  ]
+}

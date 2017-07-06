@@ -26,10 +26,10 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLev
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlockSignal;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistantSignal;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDualHeadBlockSignal;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDualHeadDistantSignal;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlock;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlockDual;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistant;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistantDual;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
@@ -111,10 +111,10 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
 
         // Signals
-        RailcraftRegistry.register(TileSignalDistantSignal.class, "signal_block");
-        RailcraftRegistry.register(TileSignalBlockSignal.class, "signal_distant");
-        RailcraftRegistry.register(TileSignalDualHeadDistantSignal.class, "signal_distant_dual");
-        RailcraftRegistry.register(TileSignalDualHeadBlockSignal.class, "signal_block_dual");
+        RailcraftRegistry.register(TileSignalDistant.class, "signal_block");
+        RailcraftRegistry.register(TileSignalBlock.class, "signal_distant");
+        RailcraftRegistry.register(TileSignalDistantDual.class, "signal_distant_dual");
+        RailcraftRegistry.register(TileSignalBlockDual.class, "signal_block_dual");
 
         // Signal Boxes
         RailcraftRegistry.register(TileBoxAnalog.class, "signal_box_analog");

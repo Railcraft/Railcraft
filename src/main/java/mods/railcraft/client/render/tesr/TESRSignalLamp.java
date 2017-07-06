@@ -23,7 +23,7 @@ public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
         EnumFacing side = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
-        TextureAtlasSprite texture = RenderTools.getTexture(BlockMachineSignal.lampTextures[aspect.getTextureIndex()]);
+        TextureAtlasSprite texture = RenderTools.getTexture(BlockMachineSignal.upperLampTextures[aspect.getTextureIndex()]);
         lampInfo.setTexture(side, texture);
         lampInfo.lightSource = aspect.getTextureBrightness();
         doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);

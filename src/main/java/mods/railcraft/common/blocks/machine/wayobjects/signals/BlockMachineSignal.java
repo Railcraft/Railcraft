@@ -20,6 +20,8 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.EnumFacing;
@@ -31,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -53,18 +56,22 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     public static final PropertyBool CONNECTION_EAST = PropertyBool.create("connection_east");
     public static final PropertyBool CONNECTION_WEST = PropertyBool.create("connection_west");
     public static final PropertyBool CONNECTION_DOWN = PropertyBool.create("connection_down");
-    public static ResourceLocation[] lampTextures = new ResourceLocation[4];
+    public static ResourceLocation[] upperLampTextures = new ResourceLocation[4];
+    public static ResourceLocation[] lowerLampTextures = new ResourceLocation[4];
 
     protected BlockMachineSignal() {
         super(false);
-        setDefaultState(getDefaultState()
+        IBlockState defaultState = getDefaultState()
                 .withProperty(FRONT, EnumFacing.NORTH)
                 .withProperty(CONNECTION_NORTH, false)
                 .withProperty(CONNECTION_SOUTH, false)
                 .withProperty(CONNECTION_EAST, false)
-                .withProperty(CONNECTION_WEST, false)
-                .withProperty(CONNECTION_DOWN, true)
-        );
+                .withProperty(CONNECTION_WEST, false);
+
+        if (defaultState.getProperties().containsKey(CONNECTION_DOWN))
+            defaultState = defaultState.withProperty(CONNECTION_DOWN, true);
+
+        setDefaultState(defaultState);
         setCreativeTab(CreativeTabs.TRANSPORTATION);
         setHarvestLevel("crowbar", 0);
         setSoundType(SoundType.METAL);
@@ -75,7 +82,8 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     @Override
     public void registerTextures(TextureMap textureMap) {
         super.registerTextures(textureMap);
-        lampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_top"), new Tuple<>(4, 1));
+        upperLampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_top"), new Tuple<>(4, 1));
+        lowerLampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_bottom"), new Tuple<>(4, 1));
     }
 
 //    @Override
@@ -88,10 +96,14 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
         return 8;
     }
 
+    @Nullable
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), FRONT, CONNECTION_DOWN, CONNECTION_NORTH, CONNECTION_SOUTH, CONNECTION_EAST, CONNECTION_WEST);
+    public StateMapperBase getStateMapper() {
+        return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
+
+    @Override
+    protected abstract BlockStateContainer createBlockState();
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
@@ -99,7 +111,8 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
         Optional<TileSignalBase> tile = WorldPlugin.getTileEntity(worldIn, pos, TileSignalBase.class);
         tile.ifPresent(t -> t.getTileCache().resetTimers());
         state = state.withProperty(FRONT, tile.map(TileSignalBase::getFacing).orElse(EnumFacing.NORTH));
-        state = state.withProperty(CONNECTION_DOWN, canConnectDown(state, worldIn, pos));
+        if (state.getProperties().containsKey(CONNECTION_DOWN))
+            state = state.withProperty(CONNECTION_DOWN, canConnectDown(state, worldIn, pos));
 //        state = state.withProperty(CONNECTION_NORTH, tile.map(t -> t.isConnected(EnumFacing.NORTH)).orElse(false));
 //        state = state.withProperty(CONNECTION_EAST, tile.map(t -> t.isConnected(EnumFacing.EAST)).orElse(false));
 //        state = state.withProperty(CONNECTION_SOUTH, tile.map(t -> t.isConnected(EnumFacing.SOUTH)).orElse(false));

@@ -12,6 +12,7 @@ package mods.railcraft.client.render.tesr;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.BlockMachineSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import net.minecraft.util.EnumFacing;
@@ -29,13 +30,13 @@ public class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
         EnumFacing facing = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect(DualLamp.TOP).getDisplayAspect();
-        lampInfo.setTexture(facing, tile.getLampTexture(DualLamp.TOP, aspect));
+        lampInfo.setTexture(facing, RenderTools.getTexture(BlockMachineSignal.upperLampTextures[aspect.getTextureIndex()]));
         lampInfo.lightSource = aspect.getTextureBrightness();
         doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);
 
         lampInfo.resetSidesAndLight();
         aspect = tile.getSignalAspect(DualLamp.BOTTOM).getDisplayAspect();
-        lampInfo.setTexture(facing, tile.getLampTexture(DualLamp.BOTTOM, aspect));
+        lampInfo.setTexture(facing, RenderTools.getTexture(BlockMachineSignal.lowerLampTextures[aspect.getTextureIndex()]));
         lampInfo.lightSource = aspect.getTextureBrightness();
         doRenderAspect(x, y, z, 2.95F * RenderTools.PIXEL);
     }

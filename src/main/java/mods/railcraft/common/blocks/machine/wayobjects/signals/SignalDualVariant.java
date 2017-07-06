@@ -25,36 +25,37 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum SignalVariant implements IEnumMachine<SignalVariant> {
-    BLOCK(ModuleSignals.class, "block", TileSignalBlock.class),
-    DISTANT(ModuleSignals.class, "distant", TileSignalDistant.class),
-    TOKEN(ModuleSignals.class, "token", TileSignalDistant.class),;
+public enum SignalDualVariant implements IEnumMachine<SignalDualVariant> {
+    BLOCK(ModuleSignals.class, "block", TileSignalBlockDual.class),
+    DISTANT(ModuleSignals.class, "distant", TileSignalDistantDual.class),
+    TOKEN(ModuleSignals.class, "token", TileSignalDistantDual.class),;
 
-    private static final List<SignalVariant> creativeList = new ArrayList<>();
-    public static final SignalVariant[] VALUES = values();
+    private static final List<SignalDualVariant> creativeList = new ArrayList<>();
+    public static final SignalDualVariant[] VALUES = values();
 
     static {
-        for (SignalVariant variant : VALUES) {
+        for (SignalDualVariant variant : VALUES) {
             variant.def.passesLight = true;
         }
 
         creativeList.add(BLOCK);
         creativeList.add(DISTANT);
+//        creativeList.add(DISTANT);
     }
 
     private final Definition def;
 
-    SignalVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
+    SignalDualVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
         this.def = new Definition(tag, tile, module);
     }
 
-    public static SignalVariant fromId(int id) {
+    public static SignalDualVariant fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;
         return VALUES[id];
     }
 
-    public static List<SignalVariant> getCreativeList() {
+    public static List<SignalDualVariant> getCreativeList() {
         return creativeList;
     }
 
@@ -65,11 +66,11 @@ public enum SignalVariant implements IEnumMachine<SignalVariant> {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.signal_" + getBaseTag();
+        return "tile.railcraft.signal_dual_" + getBaseTag();
     }
 
     @Override
     public IRailcraftBlockContainer getContainer() {
-        return RailcraftBlocks.SIGNAL;
+        return RailcraftBlocks.SIGNAL_DUAL;
     }
 }

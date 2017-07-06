@@ -10,23 +10,19 @@
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
-import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
-public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
+public class TileSignalDistantDual extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
     private static final float SIZE = -0.15f;
     private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(SIZE).build();
@@ -34,7 +30,7 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
 
     @Override
     public IEnumMachine<?> getMachineType() {
-        return SignalVariant.DUAL_HEAD_DISTANT;
+        return SignalDualVariant.DISTANT;
     }
 
     @Override
@@ -120,9 +116,4 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
         return receiver.getAspect(DualLamp.TOP);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public TextureAtlasSprite getLampTexture(DualLamp lamp, SignalAspect aspect) {
-        return RenderTools.getMissingTexture();
-    }
 }
