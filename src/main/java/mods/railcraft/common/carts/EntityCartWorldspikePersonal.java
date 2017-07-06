@@ -40,6 +40,11 @@ public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
     }
 
     @Override
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.WORLDSPIKE_PERSONAL;
+    }
+
+    @Override
     public void onUpdate() {
         if (ticket != null) {
             if (PlayerPlugin.isPlayerConnected(CartToolsAPI.getCartOwner(this)))
@@ -50,11 +55,6 @@ public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
                 releaseTicket();
         }
         super.onUpdate();
-    }
-
-    @Override
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.WORLDSPIKE_PERSONAL;
     }
 
     @Override
