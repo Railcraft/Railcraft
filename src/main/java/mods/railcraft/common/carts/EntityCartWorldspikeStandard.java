@@ -34,8 +34,8 @@ public class EntityCartWorldspikeStandard extends EntityCartWorldspike {
     }
 
     @Override
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return RailcraftCarts.getCartType(stack) == RailcraftCarts.WORLDSPIKE_STANDARD;
+    public IRailcraftCartContainer getCartType() {
+        return RailcraftCarts.WORLDSPIKE_STANDARD;
     }
 
     @Override
