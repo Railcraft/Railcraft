@@ -96,15 +96,18 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
                 if (Game.isHost(worldObj)) {
                     WorldCoordinate ourCoord = new WorldCoordinate(this);
                     WorldCoordinate target = pointPairingMap.get(player);
-                    if (target == null)
+                    if (target == null) {
                         setTarget(ourCoord, player, getLocalizationTag());
-                    else if (worldObj.provider.getDimension() != target.getDim())
-                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.dimension", getLocalizationTag());
-                    else if (Objects.equals(ourCoord, target)) {
+                    } else {
+                        if (worldObj.provider.getDimension() != target.getDim()) {
+                            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.dimension", getLocalizationTag());
+                        } else if (Objects.equals(ourCoord, target)) {
+                            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.cancel", getLocalizationTag());
+                        } else {
+                            setPoint(player, target);
+                        }
                         removeTarget(player);
-                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.cancel", getLocalizationTag());
-                    } else
-                        setPoint(player, target);
+                    }
                     crowbar.onWhack(player, hand, heldItem, getPos());
                 }
                 return true;
@@ -165,13 +168,13 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
             int zPointChunk = coord.getZ() >> 4;
 
             if (xChunk != xPointChunk && zChunk != zPointChunk) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.alignment", getLocalizationTag(), state.getBlock().getUnlocalizedName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.alignment", getLocalizationTag(), state.getBlock().getLocalizedName());
                 return false;
             }
 
             int max = getMaxPointChunks();
             if (Math.abs(xChunk - xPointChunk) >= max || Math.abs(zChunk - zPointChunk) >= max) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.distance", getLocalizationTag(), state.getBlock().getUnlocalizedName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.distance", getLocalizationTag(), state.getBlock().getLocalizedName());
                 return false;
             }
 
