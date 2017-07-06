@@ -54,21 +54,22 @@ public class BlockWorldspikePoint extends BlockRailcraft {
             if (crowbar.canWhack(player, hand, heldItem, pos)) {
                 WorldCoordinate ourCoord = new WorldCoordinate(world.provider.getDimension(), pos);
                 WorldCoordinate target = TileWorldspike.getTarget(player);
-                if (target == null)
-                    TileWorldspike.setTarget(ourCoord, player, getUnlocalizedName());
-                else if (world.provider.getDimension() != target.getDim())
-                    ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.dimension", getUnlocalizedName());
-                else if (ourCoord.equals(target)) {
-                    TileWorldspike.removeTarget(player);
-                    ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.cancel", getUnlocalizedName());
+                if (target == null) {
+                    TileWorldspike.setTarget(ourCoord, player, getLocalizedName());
                 } else {
-                    if (TileWorldspike.isTargetLoaded(player, target, getUnlocalizedName())) {
+                    if (world.provider.getDimension() != target.getDim()) {
+                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.dimension", getLocalizedName());
+                    } else if (ourCoord.equals(target)) {
+                        ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.cancel", getLocalizedName());
+                    } else if (TileWorldspike.isTargetLoaded(player, target, getLocalizedName())) {
                         TileEntity tile = WorldPlugin.getBlockTile(world, target.getPos());
-                        if (tile instanceof TileWorldspike)
+                        if (tile instanceof TileWorldspike) {
                             ((TileWorldspike) tile).setPoint(player, ourCoord);
-                        else if (tile != null)
-                            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.invalid", getUnlocalizedName());
+                        } else {
+                            ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.invalid", getLocalizedName());
+                        }
                     }
+                    TileWorldspike.removeTarget(player);
                 }
                 crowbar.onWhack(player, hand, heldItem, pos);
                 return true;
@@ -86,6 +87,11 @@ public class BlockWorldspikePoint extends BlockRailcraft {
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
 //        return 60f * 3f / 5f;
         return 90f;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
