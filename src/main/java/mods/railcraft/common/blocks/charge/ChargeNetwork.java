@@ -210,15 +210,14 @@ public class ChargeNetwork {
         @Override
         public boolean add(ChargeNode chargeNode) {
             boolean added = super.add(chargeNode);
-            if (added) {
+            if (added)
                 totalMaintenanceCost += chargeNode.chargeDef.getMaintenanceCost();
-                chargeNode.chargeGraph = this;
-                if (chargeNode.chargeBattery != null)
-                    chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
-                else {
-                    chargeBatteries.remove(chargeNode);
-                    batterySaveData.removeBattery(chargeNode.pos);
-                }
+            chargeNode.chargeGraph = this;
+            if (chargeNode.chargeBattery != null)
+                chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
+            else {
+                chargeBatteries.remove(chargeNode);
+                batterySaveData.removeBattery(chargeNode.pos);
             }
             return added;
         }
