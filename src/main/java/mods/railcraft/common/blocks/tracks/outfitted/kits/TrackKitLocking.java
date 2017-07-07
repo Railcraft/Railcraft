@@ -111,8 +111,8 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
      */
     @Override
     public void update() {
-        if (Game.isHost(theWorldAsserted())) {
-            World world = theWorldAsserted();
+        World world = theWorldAsserted();
+        if (Game.isHost(world)) {
             boolean updateClient = false; // flag determines whether we send an update to the client, only update when visible changes occur
 
             // At the time we read from NBT, the chunk has not been fully loaded so we cannot

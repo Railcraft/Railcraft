@@ -34,9 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -44,12 +42,6 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> extends BlockMachine<V> {
-    @Deprecated
-    public static final Set<IEnumMachine<?>> connectionsSenders = new HashSet<>();
-    @Deprecated
-    public static final Set<IEnumMachine<?>> connectionsListeners = new HashSet<>();
-    @Deprecated
-    public static final Set<IEnumMachine<?>> connectionsSelf = new HashSet<>();
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class, EnumFacing.HORIZONTALS);
     public static final PropertyBool CONNECTION_NORTH = PropertyBool.create("connection_north");
     public static final PropertyBool CONNECTION_SOUTH = PropertyBool.create("connection_south");
