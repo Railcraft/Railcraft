@@ -35,6 +35,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -70,11 +71,6 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         super.entityInit();
 
         dataManager.register(TICKET, false);
-    }
-
-    @Override
-    public IRailcraftCartContainer getCartType() {
-        return RailcraftCarts.WORLDSPIKE_STANDARD;
     }
 
     @Override
@@ -274,7 +270,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     public ItemStack createCartItem(EntityMinecart cart) {
-        ItemStack drop = super.getCartItem();
+        ItemStack drop = super.createCartItem(cart);
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setLong("fuel", fuel);
@@ -284,7 +280,15 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     }
 
     @Override
-    public abstract boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
+    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
+        if (stack.hasDisplayName()) {
+            if (!hasCustomName())
+                return false;
+            if (!stack.getDisplayName().equals(getCustomNameTag()))
+                return false;
+        }
+        return getCartType() == RailcraftCarts.getCartType(stack);
+    }
 
     @Override
     public boolean canBeRidden() {
