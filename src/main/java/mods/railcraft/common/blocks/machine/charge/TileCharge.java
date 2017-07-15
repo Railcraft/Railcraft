@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import net.minecraft.block.Block;
@@ -17,19 +18,27 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileCharge extends TileMachineBase {
-    @Nullable
+
     public abstract IChargeBlock.ChargeBattery getChargeBattery();
 
     private int prevComparatorOutput;
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    }
+
+    protected IChargeBlock.ChargeBattery retrieve(Supplier<IChargeBlock.ChargeBattery> supplier) {
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(worldObj).chargeNodes.get(pos);
+        IChargeBlock.ChargeBattery battery = node == null ? null : node.getBattery();
+        return battery == null ? supplier.get() : battery;
     }
 
     @Override

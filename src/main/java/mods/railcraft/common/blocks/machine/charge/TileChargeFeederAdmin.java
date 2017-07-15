@@ -27,7 +27,8 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileChargeFeederAdmin extends TileCharge {
-    public final InfiniteBattery chargeBattery = new InfiniteBattery();
+    @Nullable
+    public InfiniteBattery chargeBattery;
 
     private static class InfiniteBattery extends IChargeBlock.ChargeBattery {
         private boolean enabled;
@@ -62,7 +63,10 @@ public class TileChargeFeederAdmin extends TileCharge {
     }
 
     @Override
-    public IChargeBlock.ChargeBattery getChargeBattery() {
+    public InfiniteBattery getChargeBattery() {
+        if (chargeBattery == null) {
+            chargeBattery = (InfiniteBattery) retrieve(InfiniteBattery::new);
+        }
         return chargeBattery;
     }
 
@@ -74,24 +78,24 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        chargeBattery.enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        getChargeBattery().enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        chargeBattery.enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        getChargeBattery().enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        nbt.setBoolean("enabled", chargeBattery.enabled);
+        nbt.setBoolean("enabled", getChargeBattery().enabled);
         return nbt;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        chargeBattery.enabled = nbt.getBoolean("enabled");
+        getChargeBattery().enabled = nbt.getBoolean("enabled");
     }
 }

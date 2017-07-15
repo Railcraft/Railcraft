@@ -20,13 +20,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65);
+    @Nullable
+    private IChargeBlock.ChargeBattery chargeBattery;
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -35,6 +38,9 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
 
     @Override
     public IChargeBlock.ChargeBattery getChargeBattery() {
+        if (chargeBattery == null) {
+            chargeBattery = retrieve(() -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
+        }
         return chargeBattery;
     }
 
@@ -71,8 +77,8 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public double getDemandedEnergy() {
         IBlockState state = getBlockState();
-        if (state != null && state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && chargeBattery.isInitialized()) {
-            double chargeDifference = chargeBattery.getCapacity() - chargeBattery.getCharge();
+        if (state != null && state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && getChargeBattery().isInitialized()) {
+            double chargeDifference = getChargeBattery().getCapacity() - getChargeBattery().getCharge();
             return chargeDifference > 0.0 ? chargeDifference : 0.0;
         }
         return 0.0;
@@ -85,7 +91,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-        chargeBattery.addCharge(amount);
+        getChargeBattery().addCharge(amount);
         return 0.0;
     }
 
