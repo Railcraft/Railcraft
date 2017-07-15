@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 import static net.minecraft.util.EnumParticleTypes.HEART;
 
 public class TileFeedStation extends TileMachineItem implements ITileExtraDataHandler {
@@ -84,7 +85,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
         ItemStack feed = getStackInSlot(0);
 
-        if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || feed.stackSize < feed.getMaxStackSize())) {
+        if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || sizeOf(feed) < feed.getMaxStackSize())) {
             InventoryComposite chests = InvTools.getAdjacentInventories(worldObj, getPos());
             InvTools.moveOneItem(chests, feedInv, StandardStackFilters.FEED);
         }
@@ -92,7 +93,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         feed = getStackInSlot(0);
 
         feedTime--;
-        if (!powered && feed != null && feed.stackSize > 0 && feedTime <= 0) {
+        if (!powered && feed != null && sizeOf(feed) > 0 && feedTime <= 0) {
             feedTime = MIN_FEED_INTERVAL + rand.nextInt(FEED_VARIANCE);
 
             //TODO: test (maybe we can draw this somehow?)

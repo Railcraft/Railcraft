@@ -39,6 +39,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 public class TileActuatorRouting extends TileActuatorSecured implements IRouter, ITileRouting {
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
@@ -71,7 +73,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
             if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
                 if (inv.getStackInSlot(0) == null) {
                     ItemStack copy = current.copy();
-                    copy.stackSize = 1;
+                    setSize(copy, 1);
                     inv.setInventorySlotContents(0, copy);
                     if (!player.capabilities.isCreativeMode) {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));

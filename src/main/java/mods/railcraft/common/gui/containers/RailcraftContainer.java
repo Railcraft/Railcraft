@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.*;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -143,27 +145,27 @@ public abstract class RailcraftContainer extends Container {
             return;
         int stackSize;
         if (clickType == ClickType.QUICK_MOVE)
-            stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
+            stackSize = mouseButton == 0 ? (sizeOf(stackSlot) + 1) / 2 : sizeOf(stackSlot) * 2;
         else
-            stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
+            stackSize = mouseButton == 0 ? sizeOf(stackSlot) - 1 : sizeOf(stackSlot) + 1;
 
         if (stackSize > slot.getSlotStackLimit())
             stackSize = slot.getSlotStackLimit();
 
-        stackSlot.stackSize = stackSize;
+        setSize(stackSlot, stackSize);
 
-        if (stackSlot.stackSize <= 0)
-            slot.putStack(null);
+        if (InvTools.isEmpty(stackSlot))
+            slot.putStack(InvTools.emptyStack());
     }
 
     protected void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton) {
         if (!slot.canAdjustPhantom())
             return;
-        int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
+        int stackSize = mouseButton == 0 ? sizeOf(stackHeld) : 1;
         if (stackSize > slot.getSlotStackLimit())
             stackSize = slot.getSlotStackLimit();
         ItemStack phantomStack = stackHeld.copy();
-        phantomStack.stackSize = stackSize;
+        setSize(phantomStack, stackSize);
 
         slot.putStack(phantomStack);
     }
@@ -171,34 +173,34 @@ public abstract class RailcraftContainer extends Container {
     protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
         boolean changed = false;
         if (stackToShift.isStackable())
-            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+            for (int slotIndex = start; !isEmpty(stackToShift) && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
                 if (!InvTools.isEmpty(stackInSlot) && InvTools.isItemEqual(stackInSlot, stackToShift)) {
-                    int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
+                    int resultingStackSize = sizeOf(stackInSlot) + sizeOf(stackToShift);
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     if (resultingStackSize <= max) {
-                        stackToShift.stackSize = 0;
-                        stackInSlot.stackSize = resultingStackSize;
+                        setSize(stackToShift, 0);
+                        setSize(stackInSlot, resultingStackSize);
                         slot.onSlotChanged();
                         changed = true;
-                    } else if (stackInSlot.stackSize < max) {
-                        stackToShift.stackSize -= max - stackInSlot.stackSize;
-                        stackInSlot.stackSize = max;
+                    } else if (sizeOf(stackInSlot) < max) {
+                        decSize(stackToShift, max - sizeOf(stackInSlot));
+                        setSize(stackInSlot, max);
                         slot.onSlotChanged();
                         changed = true;
                     }
                 }
             }
-        if (stackToShift.stackSize > 0)
-            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+        if (!isEmpty(stackToShift))
+            for (int slotIndex = start; !isEmpty(stackToShift) && slotIndex < end; slotIndex++) {
                 Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
                 if (InvTools.isEmpty(stackInSlot)) {
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     stackInSlot = stackToShift.copy();
-                    stackInSlot.stackSize = Math.min(stackToShift.stackSize, max);
-                    stackToShift.stackSize -= stackInSlot.stackSize;
+                    setSize(stackInSlot, Math.min(sizeOf(stackToShift), max));
+                    decSize(stackToShift, sizeOf(stackInSlot));
                     slot.putStack(stackInSlot);
                     slot.onSlotChanged();
                     changed = true;
@@ -237,20 +239,20 @@ public abstract class RailcraftContainer extends Container {
             if (!(slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots))) {
                 if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
-                        return null;
+                        return InvTools.emptyStack();
                 } else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
-                        return null;
+                        return InvTools.emptyStack();
                 } else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))
-                    return null;
+                    return InvTools.emptyStack();
             }
             slot.onSlotChange(stackInSlot, originalStack);
-            if (stackInSlot.stackSize <= 0)
-                slot.putStack(null);
+            if (isEmpty(stackInSlot))
+                slot.putStack(InvTools.emptyStack());
             else
                 slot.onSlotChanged();
-            if (stackInSlot.stackSize == originalStack.stackSize)
-                return null;
+            if (sizeOf(stackInSlot) == sizeOf(originalStack))
+                return InvTools.emptyStack();
             slot.onPickupFromSlot(player, stackInSlot);
         }
         return originalStack;

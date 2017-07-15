@@ -37,6 +37,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+
 public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftItemSimple {
 
     private final IRailcraftCartContainer type;
@@ -74,7 +76,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         if (Game.isHost(world)) {
             EntityMinecart placedCart = placeCart(player.getGameProfile(), stack, world, pos);
             if (placedCart != null) {
-                stack.stackSize--;
+                dec(stack);
             }
         }
         return EnumActionResult.SUCCESS;

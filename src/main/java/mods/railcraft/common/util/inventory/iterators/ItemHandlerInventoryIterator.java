@@ -16,6 +16,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -66,7 +68,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
         @Override
         public boolean canPutStackInSlot(ItemStack stack) {
             ItemStack remainder = inv.insertItem(slot, stack, true);
-            return InvTools.isEmpty(remainder) || remainder.stackSize < stack.stackSize;
+            return InvTools.isEmpty(remainder) || sizeOf(remainder) < sizeOf(stack);
         }
 
         @Override

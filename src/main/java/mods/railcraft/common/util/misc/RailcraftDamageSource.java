@@ -20,6 +20,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -69,7 +72,7 @@ public class RailcraftDamageSource extends DamageSource {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drop);
                     if (!InvTools.isEmpty(cooked) && MiscTools.RANDOM.nextDouble() < 0.5) {
                         cooked = cooked.copy();
-                        cooked.stackSize = drop.stackSize;
+                        setSize(cooked, sizeOf(drop));
                         entityItem.setEntityItemStack(cooked);
                     }
                 }

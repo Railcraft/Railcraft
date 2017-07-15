@@ -20,6 +20,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -76,7 +78,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        item.getEntityItem().stackSize = 1;
+        setSize(item.getEntityItem(), 1);
         item.hoverStart = 0.0F;
 
         float scale = 1.2F;
