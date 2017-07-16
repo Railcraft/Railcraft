@@ -671,10 +671,20 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             for (int inv = 0; inv < invBallast.getSizeInventory(); inv++) {
                 ItemStack stack = invBallast.getStackInSlot(inv);
                 if (!isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
-                    BlockPos searchPos = targetPos;
-                    for (int i = 0; i < MAX_FILL_DEPTH; i--) {
-                        searchPos = searchPos.down();
+                    BlockPos.PooledMutableBlockPos searchPos = BlockPos.PooledMutableBlockPos.retain();
+                    searchPos.setPos(targetPos);
+                    for (int i = 0; i < MAX_FILL_DEPTH; i++) {
+                        searchPos.setPos(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
                         if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
+                            // Break other blocks first
+                            for (; i >= 0; i--) {
+                                searchPos.setPos(searchPos.getX(), searchPos.getY() + 1, searchPos.getZ());
+                                if (!WorldPlugin.isBlockAir(worldObj, searchPos)) {
+                                    WorldPlugin.playerRemoveBlock(worldObj, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
+                                            worldObj.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
+                                }
+                            }
+                            // Fill ballast
                             invBallast.decrStackSize(inv, 1);
                             IBlockState state = InvTools.getBlockStateFromStack(stack, worldObj, targetPos);
                             if (state != null) {
@@ -683,6 +693,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             }
                         }
                     }
+                    searchPos.release();
                     return false;
                 }
             }
@@ -822,7 +833,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             if (!isEmpty(stack))
                 stack = CartToolsAPI.transferHelper.pushStack(this, stack);
 
-            if (!isEmpty(stack) && !RailcraftConfig.boreDestroysBlocks()) {
+            if (!isEmpty(stack) && !RailcraftConfig.boreDestroysBlocks() && worldObj.getGameRules().getBoolean("doTileDrops")) {
                 float f = 0.7F;
                 double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
