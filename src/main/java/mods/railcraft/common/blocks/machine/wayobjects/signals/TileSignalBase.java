@@ -71,7 +71,7 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        return BOUNDING_BOX.offset(pos);
+        return getBoundingBox(world, pos).offset(pos);
     }
 
     @Override
