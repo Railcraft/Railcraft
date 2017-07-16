@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -174,5 +175,17 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_ELECTRIC;
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound data) {
+        super.writeEntityToNBT(data);
+        ICartBattery.writeToNBT(cartBattery, data);
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound data) {
+        super.readEntityFromNBT(data);
+        ICartBattery.readFromNBT(cartBattery, data);
     }
 }
