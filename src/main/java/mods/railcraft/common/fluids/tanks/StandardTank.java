@@ -94,6 +94,8 @@ public class StandardTank extends FluidTank {
 
     @Override
     public int fillInternal(FluidStack resource, boolean doFill) {
+        if (!matchesFilter(resource))
+            return 0;
         int ret = super.fillInternal(resource, doFill);
         if (ret != 0 && updateCallback != null)
             updateCallback.accept(this);
