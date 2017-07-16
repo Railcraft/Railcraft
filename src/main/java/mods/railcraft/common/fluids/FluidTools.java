@@ -97,22 +97,14 @@ public final class FluidTools {
 
     private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
         ItemStack filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (InvTools.isEmpty(filled)) {
-            sendToOutput(inv);
-            return ProcessState.RESET;
-        }
         inv.setInventorySlotContents(1, InvTools.makeSafe(filled));
-        return ProcessState.FILLING;
+        return InvTools.isEmpty(filled) ? ProcessState.RESET : ProcessState.FILLING;
     }
 
     private static ProcessState tryDrain(IInventory inv, StandardTank tank, ItemStack container) {
         ItemStack drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (InvTools.isEmpty(drained)) {
-            sendToOutput(inv);
-            return ProcessState.RESET;
-        }
         inv.setInventorySlotContents(1, InvTools.makeSafe(drained));
-        return ProcessState.FILLING;
+        return InvTools.isEmpty(drained) ? ProcessState.RESET : ProcessState.FILLING;
     }
 
     /**
