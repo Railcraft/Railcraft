@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import cofh.api.energy.EnergyStorage;
+import net.minecraftforge.energy.EnergyStorage;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
