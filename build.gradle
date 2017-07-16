@@ -122,6 +122,7 @@ runClient {
         args "--username=${project.mcUsername}"
         args "--password=${project.mcPassword}"
     }
+    outputs.upToDateWhen { false }
 }
 
 jar {
