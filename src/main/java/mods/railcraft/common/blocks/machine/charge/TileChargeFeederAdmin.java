@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import net.minecraft.block.Block;
@@ -65,7 +66,7 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public InfiniteBattery getChargeBattery() {
         if (chargeBattery == null) {
-            chargeBattery = (InfiniteBattery) retrieve(InfiniteBattery::new);
+            chargeBattery = (InfiniteBattery) ChargeManager.getNetwork(worldObj).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));;
         }
         return chargeBattery;
     }

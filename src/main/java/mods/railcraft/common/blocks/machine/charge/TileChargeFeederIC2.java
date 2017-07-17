@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -39,7 +40,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public IChargeBlock.ChargeBattery getChargeBattery() {
         if (chargeBattery == null) {
-            chargeBattery = retrieve(() -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
+            chargeBattery = ChargeManager.getNetwork(worldObj).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
         }
         return chargeBattery;
     }
