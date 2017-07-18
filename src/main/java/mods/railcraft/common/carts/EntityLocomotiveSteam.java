@@ -88,6 +88,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
             }
         };
         tankWater.setFilter(Fluids.WATER::get);
+        tankWater.setCanDrain(false);
 
         tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16);
         tankSteam.setFilter(Fluids.STEAM::get);
