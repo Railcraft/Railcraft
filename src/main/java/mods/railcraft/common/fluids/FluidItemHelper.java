@@ -31,6 +31,7 @@ public class FluidItemHelper {
      *
      * @return The modified container and the amount of Fluid filled.
      */
+    @Deprecated
     public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
         if (InvTools.isEmpty(container))
             return new FillReturn(null, 0);
@@ -48,6 +49,7 @@ public class FluidItemHelper {
         return new FillReturn(container, 0);
     }
 
+    @Deprecated
     public static FillReturn fillContainer(@Nullable ItemStack stackToFill, Fluid fluid) {
         return fillContainer(stackToFill, new FluidStack(fluid, Integer.MAX_VALUE));
     }
@@ -57,6 +59,7 @@ public class FluidItemHelper {
      *
      * @return The modified container and any fluid drained.
      */
+    @Deprecated
     public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
         if (InvTools.isEmpty(container))
             return new DrainReturn(null, null, false);
@@ -146,6 +149,7 @@ public class FluidItemHelper {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }
 
+    @Deprecated
     public static class FillReturn {
         public final ItemStack container;
         public final int amount;
@@ -156,6 +160,7 @@ public class FluidItemHelper {
         }
     }
 
+    @Deprecated
     public static class DrainReturn {
         public final ItemStack container;
         public final FluidStack fluidDrained;
