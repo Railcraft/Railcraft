@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Created by CovertJaguar on 7/23/2016 for Railcraft.
@@ -35,10 +36,10 @@ import java.util.function.Predicate;
  */
 public class ChargeNetwork {
     private final ChargeGraph NULL_GRAPH = new NullGraph();
-    public final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
-    public final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
-    public final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
-    public final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
+    private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
+    private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
+    private final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
     private final WeakReference<World> world;
     private final BatterySaveData batterySaveData;
@@ -189,9 +190,20 @@ public class ChargeNetwork {
         return node;
     }
 
+    public ChargeNode getNodeSafe(BlockPos pos) {
+        ChargeNode node = chargeNodes.get(pos);
+        return node == null ? NULL_NODE : node;
+    }
+
     public boolean nodeMatches(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         ChargeNode node = chargeNodes.get(pos);
         return node != null && !node.isNull() && !node.invalid && node.chargeDef == chargeDef;
+    }
+
+    public IChargeBlock.ChargeBattery getTileBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
+        ChargeNetwork.ChargeNode node = chargeNodes.get(pos);
+        IChargeBlock.ChargeBattery battery = node == null ? null : node.getBattery();
+        return battery == null ? supplier.get() : battery;
     }
 
     public class ChargeGraph extends ForwardingSet<ChargeNode> {
