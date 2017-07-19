@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 public class VillagerTrades {
 
     public static void define(VillagerRegistry.VillagerCareer career) {
@@ -148,7 +150,7 @@ public class VillagerTrades {
             }
             if (offer.obj instanceof ItemStack) {
                 ItemStack stack = (ItemStack) offer.obj;
-                stack.stackSize = stackSize(rand, offer);
+                setSize(stack, stackSize(rand, offer));
                 return stack;
             }
             if (offer.obj instanceof Item) {

@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -216,7 +217,7 @@ public class CraftingPlugin {
         Object object = ingredient.getRecipeObject();
         if (object instanceof ItemStack) {
             ItemStack stack = ((ItemStack) object).copy();
-            stack.stackSize = qty;
+            setSize(stack, qty);
             return stack;
         }
         if (object instanceof Item)

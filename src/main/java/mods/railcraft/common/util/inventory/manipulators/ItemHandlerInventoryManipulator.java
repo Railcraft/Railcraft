@@ -20,8 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -58,24 +57,24 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         int injected = 0;
         injected = tryPut(filledSlots, stack, injected, doAdd);
         injected = tryPut(emptySlots, stack, injected, doAdd);
-        stack.stackSize -= injected;
-        if (stack.stackSize <= 0)
+        decSize(stack, injected);
+        if (isEmpty(stack))
             return emptyStack();
         return stack;
     }
 
     private int tryPut(List<IInvSlot> slots, ItemStack stack, int injected, boolean doAdd) {
-        if (injected >= stack.stackSize)
+        if (injected >= sizeOf(stack))
             return injected;
         for (IInvSlot slot : slots) {
             ItemStack stackToInsert = stack.copy();
-            int amountToInsert = stack.stackSize - injected;
-            stackToInsert.stackSize = amountToInsert;
+            int amountToInsert = sizeOf(stack) - injected;
+            setSize(stackToInsert, amountToInsert);
             ItemStack remainder = inv.insertItem(slot.getIndex(), stackToInsert, !doAdd);
-            if (remainder == null)
-                return stack.stackSize;
-            injected += amountToInsert - remainder.stackSize;
-            if (injected >= stack.stackSize)
+            if (isEmpty(remainder))
+                return sizeOf(stack);
+            injected += amountToInsert - sizeOf(remainder);
+            if (injected >= sizeOf(stack))
                 return injected;
         }
         return injected;
@@ -93,7 +92,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack removed = inv.extractItem(slot.getIndex(), amountNeeded, !doRemove);
                 if (!isEmpty(removed)) {
-                    amountNeeded -= removed.stackSize;
+                    amountNeeded -= sizeOf(removed);
                     outputList.add(removed);
                 }
             }

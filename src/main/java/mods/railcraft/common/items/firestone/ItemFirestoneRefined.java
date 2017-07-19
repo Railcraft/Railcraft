@@ -44,6 +44,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -124,7 +126,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 newStack.setStackDisplayName(stack.getDisplayName());
         } else
             newStack = stack.copy();
-        newStack.stackSize = 1;
+        setSize(newStack, 1);
         newStack = InvTools.damageItem(newStack, 1);
         return newStack;
     }

@@ -22,9 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import ic2.api.item.IC2Items;
 
 import java.io.IOException;
+
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public abstract class TileIC2Manipulator extends TileManipulatorCart implements ISidedInventory {
 
@@ -84,13 +85,13 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
             ItemStack stack = getStackInSlot(i);
             if (!InvTools.isEmpty(stack))
                 if (!InvTools.isEmpty(storage) && stack.isItemEqual(storage))
-                    storageUpgrades += stack.stackSize;
+                    storageUpgrades += sizeOf(stack);
                 else if (!InvTools.isEmpty(overclocker) && stack.isItemEqual(overclocker))
-                    overclockerUpgrades += stack.stackSize;
+                    overclockerUpgrades += sizeOf(stack);
                 else if (!InvTools.isEmpty(transformer) && stack.isItemEqual(transformer))
-                    transformerUpgrades += stack.stackSize;
+                    transformerUpgrades += sizeOf(stack);
                 else if (lapotron != null && stack.getItem() == lapotron)
-                    lapotronUpgrades += stack.stackSize;
+                    lapotronUpgrades += sizeOf(stack);
         }
         if (overclockerUpgrades > MAX_OVERCLOCKS)
             overclockerUpgrades = MAX_OVERCLOCKS;

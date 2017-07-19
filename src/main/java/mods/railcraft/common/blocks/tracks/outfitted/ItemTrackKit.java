@@ -48,6 +48,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+
 /**
  * Created by CovertJaguar on 8/11/2016 for Railcraft.
  *
@@ -151,7 +153,7 @@ public class ItemTrackKit extends ItemRailcraft {
                     }
                     if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
-                        stack.stackSize--;
+                        dec(stack);
                         return EnumActionResult.SUCCESS;
                     }
                 } else {

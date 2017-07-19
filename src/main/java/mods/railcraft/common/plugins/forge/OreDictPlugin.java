@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -68,7 +70,7 @@ public class OreDictPlugin {
         for (ItemStack ore : ores) {
             if (!InvTools.isWildcard(ore)) {
                 ore = ore.copy();
-                ore.stackSize = Math.min(qty, ore.getMaxStackSize());
+                setSize(ore, Math.min(qty, ore.getMaxStackSize()));
                 return ore;
             }
         }

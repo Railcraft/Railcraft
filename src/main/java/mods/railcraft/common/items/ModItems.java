@@ -22,6 +22,8 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -82,7 +84,7 @@ public enum ModItems implements IRailcraftRecipeIngredient {
         init();
         if (!InvTools.isEmpty(stack)) {
             stack = stack.copy();
-            stack.stackSize = Math.min(qty, stack.getMaxStackSize());
+            setSize(stack, Math.min(qty, stack.getMaxStackSize()));
             return stack;
         }
         return null;

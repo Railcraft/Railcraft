@@ -24,6 +24,10 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+import static mods.railcraft.common.util.inventory.InvTools.inc;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 public abstract class TileRollingMachine extends TileMachineBase {
 
     public static final int PROCESS_TIME = 100;
@@ -164,9 +168,9 @@ public abstract class TileRollingMachine extends TileMachineBase {
                 if (InvTools.isEmpty(stackB))
                     continue;
                 if (InvTools.isItemEqual(stackA, stackB))
-                    if (stackA.stackSize > stackB.stackSize + 1) {
-                        stackA.stackSize--;
-                        stackB.stackSize++;
+                    if (sizeOf(stackA) > sizeOf(stackB) + 1) {
+                        dec(stackA);
+                        inc(stackB);
                         return;
                     }
             }
@@ -187,7 +191,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return true;
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
             ItemStack slot = craftMatrix.getStackInSlot(i);
-            if (!InvTools.isEmpty(slot) && slot.stackSize <= 1)
+            if (!InvTools.isEmpty(slot) && sizeOf(slot) <= 1)
                 return false;
         }
         return true;

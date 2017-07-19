@@ -32,6 +32,9 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+import static mods.railcraft.common.util.inventory.InvTools.decSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -98,7 +101,7 @@ public class ContainerAnvil extends ContainerRepair {
 
                     int projectedMaterialCost;
 
-                    for (projectedMaterialCost = 0; damageToRepair > 0 && projectedMaterialCost < input2.stackSize; ++projectedMaterialCost) {
+                    for (projectedMaterialCost = 0; damageToRepair > 0 && projectedMaterialCost < sizeOf(input2); ++projectedMaterialCost) {
                         int repairedDamage = input1.getItemDamage() - damageToRepair;
                         input1.setItemDamage(repairedDamage);
                         ++enchantCost;
@@ -303,8 +306,8 @@ public class ContainerAnvil extends ContainerRepair {
             if (repairContainer.materialCost > 0) {
                 ItemStack itemstack = repairContainer.inputSlots.getStackInSlot(1);
 
-                if (!InvTools.isEmpty(itemstack) && itemstack.stackSize > repairContainer.materialCost) {
-                    itemstack.stackSize -= repairContainer.materialCost;
+                if (sizeOf(itemstack) > repairContainer.materialCost) {
+                    decSize(itemstack, repairContainer.materialCost);
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack);
                 } else {
                     repairContainer.inputSlots.setInventorySlotContents(1, InvTools.emptyStack());

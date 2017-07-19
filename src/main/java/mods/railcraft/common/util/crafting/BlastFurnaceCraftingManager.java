@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager {
 
     private final List<BlastFurnaceRecipe> recipes = new ArrayList<BlastFurnaceRecipe>();
@@ -77,7 +79,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
         @Override
         public boolean isRoomForOutput(ItemStack outputSlot) {
-            return (InvTools.isEmpty(outputSlot) || InvTools.isEmpty(output) || (InvTools.isItemEqual(outputSlot, output) && outputSlot.stackSize + output.stackSize <= output.getMaxStackSize()));
+            return (InvTools.isEmpty(outputSlot) || InvTools.isEmpty(output) || (InvTools.isItemEqual(outputSlot, output) && sizeOf(outputSlot) + sizeOf(output) <= output.getMaxStackSize()));
         }
 
         @Override
@@ -100,9 +102,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
         @Override
         public int getOutputStackSize() {
-            if (output == null)
-                return 0;
-            return output.stackSize;
+            return sizeOf(output);
         }
 
         @Override

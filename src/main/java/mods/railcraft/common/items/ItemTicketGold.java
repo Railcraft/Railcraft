@@ -28,6 +28,8 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -53,7 +55,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     @Override
     public ItemStack getContainerItem(ItemStack stack) {
         stack = stack.copy();
-        stack.stackSize = 1;
+        setSize(stack, 1);
         return stack;
     }
 

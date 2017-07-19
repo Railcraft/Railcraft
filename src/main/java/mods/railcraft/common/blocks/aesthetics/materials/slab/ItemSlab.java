@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.materials.Materials.MATERIAL_KEY;
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -51,7 +53,7 @@ public class ItemSlab extends ItemMaterial {
     @Nonnull
     @Override
     public EnumActionResult onItemUse(ItemStack stack, @Nonnull EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (stack.stackSize == 0) {
+        if (isEmpty(stack)) {
             return EnumActionResult.PASS;
         }
 
@@ -99,7 +101,7 @@ public class ItemSlab extends ItemMaterial {
                     SoundCategory.BLOCKS,
                     (block.getSoundType().getVolume() + 1.0F) / 2.0F,
                     block.getSoundType().getPitch() * 0.8F, state);
-            --stack.stackSize;
+            dec(stack);
         }
     }
 

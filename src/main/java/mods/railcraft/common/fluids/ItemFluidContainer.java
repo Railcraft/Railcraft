@@ -28,6 +28,8 @@ import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -68,7 +70,7 @@ public class ItemFluidContainer extends ItemRailcraft {
                 ItemStack empty = getContainerItem(stack);
                 if (InvTools.isEmpty(empty)) {
                     empty = stack.copy();
-                    empty.stackSize = 0;
+                    setSize(empty, 0);
                 }
                 return new ActionResult<>(EnumActionResult.SUCCESS, empty);
             }

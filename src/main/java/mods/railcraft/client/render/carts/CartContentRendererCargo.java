@@ -20,6 +20,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -38,7 +40,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         OpenGL.glDisable(GL11.GL_BLEND);
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        item.getEntityItem().stackSize = 1;
+        setSize(item.getEntityItem(), 1);
         item.hoverStart = 0.0F;
         IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.worldObj, null);
 
