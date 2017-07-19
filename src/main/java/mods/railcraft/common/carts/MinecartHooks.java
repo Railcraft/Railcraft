@@ -48,6 +48,7 @@ import java.util.List;
 
 import static mods.railcraft.common.core.RailcraftConstants.IS_REVERSED_VARIABLE_INDEX;
 import static mods.railcraft.common.util.inventory.InvTools.dec;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_GROUND = 0.5f;
@@ -83,9 +84,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             return;
 
         ItemStack itemStack = event.getItemStack();
-        if (itemStack != null) {
+        if (!isEmpty(itemStack)) {
             Item item = itemStack.getItem();
-            if (item != null && CartTools.vanillaCartItemMap.containsKey(item)) {
+            if (CartTools.vanillaCartItemMap.containsKey(item)) {
                 event.setUseItem(Event.Result.DENY);
                 EntityMinecart placedCart = CartTools.placeCart(
                         CartTools.vanillaCartItemMap.get(item),

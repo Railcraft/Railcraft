@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static mods.railcraft.common.util.inventory.InvTools.inc;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
@@ -89,7 +90,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && stack.isStackable() && sizeOf(stack) == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
-                if (request != null) {
+                if (!isEmpty(request)) {
                     inc(stack);
                     break;
                 }
@@ -133,7 +134,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        return getStackInSlot(slot) != null;
+        return !isEmpty(getStackInSlot(slot));
     }
 
     @Override
