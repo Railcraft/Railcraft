@@ -170,7 +170,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_INPUT);
-        return InvTools.isEmpty(fuel) || sizeOf(fuel) < 8;
+        return sizeOf(fuel) < 8;
     }
 
     @Override

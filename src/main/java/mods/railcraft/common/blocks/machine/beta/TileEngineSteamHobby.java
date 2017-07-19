@@ -190,7 +190,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
-        return InvTools.isEmpty(fuel) || sizeOf(fuel) < 8;
+        return sizeOf(fuel) < 8;
     }
 
     @Override
