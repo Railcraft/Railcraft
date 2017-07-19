@@ -265,9 +265,4 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
     }
-
-    @Override
-    protected void setWorldCreate(World worldIn) {
-        setWorldObj(worldIn);
-    }
 }

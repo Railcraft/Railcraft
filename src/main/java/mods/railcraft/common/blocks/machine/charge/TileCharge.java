@@ -49,4 +49,9 @@ public abstract class TileCharge extends TileMachineBase {
         lines.add("Graph Bat: " + ChargeManager.getNetwork(worldObj).getNode(pos).getBattery());
         return lines;
     }
+
+    @Override
+    protected void setWorldCreate(World worldIn) {
+        setWorldObj(worldIn);
+    }
 }
