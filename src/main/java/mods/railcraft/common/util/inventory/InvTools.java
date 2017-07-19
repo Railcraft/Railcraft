@@ -59,7 +59,7 @@ import java.util.function.Predicate;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class InvTools {
-    private static final String TAG_SLOT = "Slot";
+    public static final String TAG_SLOT = "Slot";
 
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {

@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
@@ -210,7 +211,15 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     }
 
     public void readFromNBT(String tag, NBTTagCompound data) {
-        InvTools.readInvFromNBT(this, tag, data);
+        NBTTagList list = data.getTagList(tag, 10);
+        for (byte entry = 0; entry < list.tagCount(); entry++) {
+            NBTTagCompound itemTag = list.getCompoundTagAt(entry);
+            int slot = itemTag.getByte(InvTools.TAG_SLOT);
+            if (slot >= 0 && slot < getSizeInventory()) {
+                ItemStack stack = InvTools.readItemFromNBT(itemTag);
+                contents[slot] = stack;
+            }
+        }
     }
 
     @Override
