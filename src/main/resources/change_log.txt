@@ -1,3 +1,9 @@
+10.2.0-alpha-9
+    NEW: Ported Block Signals and Distant Signals.
+    FIX: Fix IC2 Feeder breaking. (contribution by liach)
+    FIX: Fix Tank Cart issues. (contribution by liach)
+    FIX: Various other minor fixes by liach.
+
 10.2.0-alpha-8
     NEW: Added Nickel-Iron and Nickel-Zinc batteries. Use them to help maintain your charge network.
     FIX: Fix Tank Carts.
