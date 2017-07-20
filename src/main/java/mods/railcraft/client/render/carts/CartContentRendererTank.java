@@ -30,7 +30,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
     private void renderTank(RenderCart renderer, EntityCartTank cart, float light, float partialTicks, int x, int y, int z) {
         StandardTank tank = cart.getTankManager().get(0);
         if (tank != null) {
-            FluidStack fluidStack = tank.getFluid();
+            FluidStack fluidStack = cart.getFluidStack();
             float cap = tank.getCapacity();
             if (cap > 0 && fluidStack != null && fluidStack.amount > 0) {
                 OpenGL.glPushMatrix();
