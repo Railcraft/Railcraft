@@ -22,6 +22,8 @@ import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.Set;
 
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+
 /**
  * @author Vexatos
  */
@@ -56,7 +58,7 @@ public class ItemSignalLabel extends ItemRailcraft {
                     }
                 }
                 if (done) {
-                    --stack.stackSize;
+                    dec(stack);
                     PlayerPlugin.swingArm(playerIn, hand);
                     IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
                     worldIn.notifyBlockUpdate(pos, state, state, 3);

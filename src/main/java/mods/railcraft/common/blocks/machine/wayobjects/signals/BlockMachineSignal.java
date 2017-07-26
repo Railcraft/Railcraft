@@ -88,6 +88,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
         return 8;
     }
 
+    @SideOnly(Side.CLIENT)
     @Nullable
     @Override
     public StateMapperBase getStateMapper() {

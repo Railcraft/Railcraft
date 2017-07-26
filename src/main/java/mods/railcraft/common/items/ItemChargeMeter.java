@@ -107,12 +107,12 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
             sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
             node.startRecordingUsage(SECONDS_TO_RECORD * 20, (n, avg) -> {
                 ChargeNetwork.ChargeGraph graph = n.getChargeGraph();
-                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaxNetworkDraw(), graph.getMaintenanceCost(), graph.getNetworkEfficiency());
+                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaxNetworkDraw(), graph.getMaintenanceCost(), graph.getNetworkEfficiency() * 100.0);
                 if (n.getBattery() == null)
                     sendChat(player, "gui.railcraft.charge.meter.node", avg, n.getChargeDef().getMaintenanceCost());
                 else {
                     boolean infiniteBat = n.getBattery().isInfinite();
-                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, n.getBattery().getAvailableCharge(), n.getChargeDef().getMaintenanceCost(), n.getBattery().getEfficiency());
+                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, n.getBattery().getAvailableCharge(), n.getChargeDef().getMaintenanceCost(), n.getBattery().getEfficiency() * 100.0);
                 }
             });
             returnValue = EnumActionResult.SUCCESS;

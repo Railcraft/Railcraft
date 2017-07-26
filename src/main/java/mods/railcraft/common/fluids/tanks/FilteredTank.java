@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -47,7 +47,7 @@ public class FilteredTank extends StandardTank {
     }
 
     @Override
-    public boolean matchesFilter(FluidStack fluidStack) {
+    public boolean matchesFilter(@Nullable FluidStack fluidStack) {
         return filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluidStack);
     }
 

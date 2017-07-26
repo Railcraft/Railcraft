@@ -105,7 +105,7 @@ public class InventoryManifest extends ForwardingMap<StackKey, InventoryManifest
         }
 
         public int count() {
-            return stacks.stream().mapToInt(s -> s.stackSize).sum();
+            return stacks.stream().mapToInt(InvTools::sizeOf).sum();
         }
 
         public List<ItemStack> stacks() {

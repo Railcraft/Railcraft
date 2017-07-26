@@ -16,6 +16,8 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -48,7 +50,7 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
         if (MiscTools.RANDOM.nextDouble() < damageLevel * 0.0001)
             return RailcraftItems.FIRESTONE_RAW.getStack();
         ItemStack newStack = stack.copy();
-        newStack.stackSize = 1;
+        setSize(newStack, 1);
         newStack = InvTools.damageItem(newStack, 1);
         return newStack;
     }

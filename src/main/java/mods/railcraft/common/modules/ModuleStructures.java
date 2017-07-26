@@ -29,6 +29,8 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 @RailcraftModule(value = "railcraft:structures", description = "glass, posts, stairs, slabs, lanterns, walls")
 public class ModuleStructures extends RailcraftModulePayload {
 
@@ -64,7 +66,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
                         if ((EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() || EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) && RailcraftItems.REBAR.isEnabled()) {
-                            stack.stackSize = 8;
+                            setSize(stack, 8);
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
                                     "IWI",
@@ -73,7 +75,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                                     'I', RailcraftItems.REBAR,
                                     'S', RailcraftItems.CONCRETE);
                         } else {
-                            stack.stackSize = 4;
+                            setSize(stack, 4);
                             CraftingPlugin.addRecipe(stack,
                                     " S ",
                                     "SIS",

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,8 @@ import mods.railcraft.common.fluids.Fluids;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -24,7 +26,7 @@ public class BoilerFuelTank extends StandardTank {
     }
 
     @Override
-    public boolean matchesFilter(FluidStack fluidStack) {
-        return !Fluids.WATER.is(fluidStack) && FuelManager.getBoilerFuelValue(fluidStack.getFluid()) > 0 && super.matchesFilter(fluidStack);
+    public boolean matchesFilter(@Nullable FluidStack fluidStack) {
+        return fluidStack != null && !Fluids.WATER.is(fluidStack) && FuelManager.getBoilerFuelValue(fluidStack.getFluid()) > 0 && super.matchesFilter(fluidStack);
     }
 }

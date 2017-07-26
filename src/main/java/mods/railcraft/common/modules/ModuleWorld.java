@@ -35,6 +35,8 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.io.File;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -125,7 +127,7 @@ public class ModuleWorld extends RailcraftModulePayload {
 
                     if (!InvTools.isEmpty(fertilizer)) {
                         fertilizer = fertilizer.copy();
-                        fertilizer.stackSize = 2;
+                        setSize(fertilizer, 2);
                         CraftingPlugin.addShapelessRecipe(fertilizer,
                                 "dustSaltpeter",
                                 "sand",

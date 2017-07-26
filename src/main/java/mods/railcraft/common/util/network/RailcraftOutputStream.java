@@ -29,6 +29,8 @@ import java.util.BitSet;
 import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * Created by CovertJaguar on 5/29/2016 for Railcraft.
  *
@@ -86,7 +88,7 @@ public class RailcraftOutputStream extends DataOutputStream {
             writeShort(-1);
         else {
             writeShort(Item.getIdFromItem(stack.getItem()));
-            writeByte(stack.stackSize);
+            writeByte(sizeOf(stack));
             writeShort(stack.getItemDamage());
             NBTTagCompound nbt = null;
 

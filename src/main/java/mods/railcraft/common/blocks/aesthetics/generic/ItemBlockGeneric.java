@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,12 +11,8 @@ package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.items.ItemCoke;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class ItemBlockGeneric extends ItemBlockRailcraft {
 
@@ -34,14 +30,6 @@ public class ItemBlockGeneric extends ItemBlockRailcraft {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         return EnumGeneric.fromOrdinal(stack.getItemDamage()).getTag();
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
-        String tag = getUnlocalizedName(stack) + ".tips";
-        if (LocalizationPlugin.hasTag(tag))
-            info.add(LocalizationPlugin.translate(tag));
     }
 
     @Override

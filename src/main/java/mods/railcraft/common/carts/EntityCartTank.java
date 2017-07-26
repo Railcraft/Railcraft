@@ -66,7 +66,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
 
     {
         tank.setFilter(this::getFilterFluid);
-        tank.setUpdateCallback(tank -> EntityCartTank.this.setFluidStack(tank.getFluid()));
+        tank.setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
         tankManager.add(tank);
     }
 
@@ -83,7 +83,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Nullable
-    private FluidStack getFluidStack() {
+    public FluidStack getFluidStack() {
         return dataManager.get(FLUID_STACK).orElse(null);
     }
 
@@ -132,11 +132,6 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         if (Game.isClient(worldObj)) {
             return;
         }
-
-        FluidStack fluidStack = tank.getFluid();
-        if (!Fluids.areIdentical(fluidStack, getFluidStack()))
-            setFluidStack(fluidStack);
-
 
         update++;
 

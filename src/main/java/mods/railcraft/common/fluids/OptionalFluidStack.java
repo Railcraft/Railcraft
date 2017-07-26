@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,8 @@ public class OptionalFluidStack {
         return new OptionalFluidStack(null);
     }
 
-    public FluidStack orElse(FluidStack fluidStack) {
+    @Nullable
+    public FluidStack orElse(@Nullable FluidStack fluidStack) {
         if (this.fluidStack != null)
             return this.fluidStack;
         return fluidStack;
