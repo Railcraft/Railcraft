@@ -14,6 +14,7 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalToken;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -32,6 +33,8 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -44,17 +47,26 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
         if (tile instanceof IControllerTile) {
+            Collection<BlockPos> pairs = ((IControllerTile) tile).getController().getPairs();
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
-                renderPairs(tile, x, y, z, partialTicks, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
+                renderLines(tile, x, y, z, pairs, ColorProfile.COORD_RAINBOW);
             } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-                renderPairs(tile, x, y, z, partialTicks, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
+                renderLines(tile, x, y, z, pairs, ColorProfile.CONTROLLER_ASPECT);
             }
         }
-        if (tile instanceof ISignalBlockTile) {
+        if (tile instanceof ISignalTileBlock) {
+            Collection<BlockPos> pairs = ((ISignalTileBlock) tile).getSignalBlock().getPairs();
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
-                renderPairs(tile, x, y, z, partialTicks, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
+                renderLines(tile, x, y, z, pairs, ColorProfile.COORD_RAINBOW);
             } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-                renderPairs(tile, x, y, z, partialTicks, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
+                renderLines(tile, x, y, z, pairs, ColorProfile.CONSTANT_BLUE);
+            }
+        } else if (tile instanceof TileSignalToken) {
+            Collection<BlockPos> centroid = Collections.singletonList(((TileSignalToken) tile).getTokenRingCentroid());
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
+                renderLines(tile, x, y, z, centroid, (t, s, d) -> ((TileSignalToken) t).getTokenRingUUID().hashCode());
+            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+                renderLines(tile, x, y, z, centroid, ColorProfile.CONSTANT_BLUE);
             }
         }
         AbstractPair pair = null;
@@ -62,8 +74,8 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
             pair = ((IReceiverTile) tile).getReceiver();
         } else if (tile instanceof IControllerTile) {
             pair = ((IControllerTile) tile).getController();
-        } else if (tile instanceof ISignalBlockTile) {
-            pair = ((ISignalBlockTile) tile).getSignalBlock();
+        } else if (tile instanceof ISignalTileBlock) {
+            pair = ((ISignalTileBlock) tile).getSignalBlock();
         }
         if (pair != null) {
             String name = pair.getName();
@@ -84,8 +96,8 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         }
     }
 
-    private void renderPairs(T tile, double x, double y, double z, float partialTicks, AbstractPair pair, ColorProfile colorProfile) {
-        if (pair.getPairs().isEmpty()) {
+    private void renderLines(T tile, double x, double y, double z, Collection<BlockPos> endPoints, ColorSupplier colorProfile) {
+        if (endPoints.isEmpty()) {
             return;
         }
         OpenGL.glPushMatrix();
@@ -99,16 +111,17 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         OpenGL.glLineWidth(5F);
 
         OpenGL.glBegin(GL11.GL_LINES);
-        for (BlockPos target : pair.getPairs()) {
-            int color = colorProfile.getColor(tile, pair.getCoords(), target);
+        for (BlockPos target : endPoints) {
+            int color = colorProfile.getColor(tile, tile.getPos(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
             float c2 = (float) (color >> 8 & 255) / 255.0F;
             float c3 = (float) (color & 255) / 255.0F;
             OpenGL.glColor3f(c1, c2, c3);
 
-            OpenGL.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
-            Vec3d vec = new Vec3d(x, y, z).add(CENTER).add(new Vec3d(target).subtract(new Vec3d(tile.getPos())));
-            OpenGL.glVertex(vec);
+            Vec3d start = new Vec3d(x, y, z).add(CENTER);
+            OpenGL.glVertex(start);
+            Vec3d end = start.add(new Vec3d(target).subtract(new Vec3d(tile.getPos())));
+            OpenGL.glVertex(end);
         }
         OpenGL.glEnd();
 
@@ -116,8 +129,13 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         OpenGL.glPopMatrix();
     }
 
-    public enum ColorProfile {
-        RAINBOW {
+    @FunctionalInterface
+    public interface ColorSupplier {
+        int getColor(TileEntity tile, BlockPos source, BlockPos target);
+    }
+
+    public enum ColorProfile implements ColorSupplier {
+        COORD_RAINBOW {
             private final BlockPos[] coords = new BlockPos[2];
 
             @Override
@@ -128,13 +146,13 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
                 return Arrays.hashCode(coords);
             }
         },
-        BLUE {
+        CONSTANT_BLUE {
             @Override
             public int getColor(TileEntity tile, BlockPos source, BlockPos target) {
                 return EnumColor.BLUE.getHexColor();
             }
         },
-        ASPECT {
+        CONTROLLER_ASPECT {
             @Override
             public int getColor(TileEntity tile, BlockPos source, BlockPos target) {
                 if (tile instanceof IControllerTile) {
@@ -149,10 +167,11 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
                             return EnumColor.RED.getHexColor();
                     }
                 }
-                return BLUE.getColor(tile, source, target);
+                return CONSTANT_BLUE.getColor(tile, source, target);
             }
         };
 
+        @Override
         public abstract int getColor(TileEntity tile, BlockPos source, BlockPos target);
     }
 

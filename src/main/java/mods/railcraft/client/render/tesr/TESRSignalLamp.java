@@ -20,6 +20,7 @@ public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
 
     @Override
     public void renderTileEntityAt(TileSignalBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        super.renderTileEntityAt(tile, x, y, z, partialTicks, destroyStage);
         EnumFacing side = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();

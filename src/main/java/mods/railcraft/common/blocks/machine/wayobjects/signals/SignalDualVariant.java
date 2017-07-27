@@ -40,7 +40,7 @@ public enum SignalDualVariant implements IEnumMachine<SignalDualVariant> {
 
         creativeList.add(BLOCK);
         creativeList.add(DISTANT);
-//        creativeList.add(DISTANT);
+//        creativeList.add(TOKEN);
     }
 
     private final Definition def;

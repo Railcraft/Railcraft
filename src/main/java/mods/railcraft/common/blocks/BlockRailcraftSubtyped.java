@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> extends BlockRailcraft {
+public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> extends BlockRailcraft implements ISubtypedBlock<V> {
     private RailcraftBlockMetadata annotation;
     private Class<V> variantClass;
     private V[] variantValues;
@@ -62,13 +62,10 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
         }
     }
 
+    @Override
     public final IProperty<V> getVariantProperty() {
         setup();
         return variantProperty;
-    }
-
-    public V getVariant(IBlockState state) {
-        return state.getValue(getVariantProperty());
     }
 
     @Override

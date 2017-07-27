@@ -13,7 +13,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.core.items.InvToolsAPI;
-import mods.railcraft.api.signals.AbstractPair;
+import mods.railcraft.api.signals.IPair;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,7 +63,7 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
         InvToolsAPI.clearItemDataRailcraft(stack, PAIR_DATA_TAG);
     }
 
-    public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer player, World worldIn, Class<? extends T> clazz, Function<T, AbstractPair> transform) {
+    public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer player, World worldIn, Class<? extends T> clazz, Function<T, IPair> transform) {
         if (Game.isHost(worldIn)) {
             WorldCoordinate signalPos = getPairData(stack);
             if (signalPos != null) {
