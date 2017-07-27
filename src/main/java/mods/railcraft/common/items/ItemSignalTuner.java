@@ -64,11 +64,11 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
                 if (Game.isHost(worldIn)) {
                     SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
                     if (!Objects.equals(pos, previousTarget.getPos())) {
-                        tile = worldIn.getTileEntity(previousTarget.getPos());
-                        if (tile instanceof IControllerTile) {
-                            SignalController controller = ((IControllerTile) tile).getController();
+                        TileEntity prevTile = worldIn.getTileEntity(previousTarget.getPos());
+                        if (prevTile instanceof IControllerTile) {
+                            SignalController controller = ((IControllerTile) prevTile).getController();
                             if (receiver.getTile() != controller.getTile()) {
-                                controller.registerReceiver(receiver);
+                                controller.createPair(tile);
                                 controller.endPairing();
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "success", controller.getLocalizationTag(), receiver.getLocalizationTag());
                                 clearPairData(stack);

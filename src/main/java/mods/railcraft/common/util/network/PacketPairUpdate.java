@@ -68,8 +68,8 @@ public class PacketPairUpdate extends RailcraftPacket {
             if (tile instanceof IReceiverTile)
                 pairing = ((IReceiverTile) tile).getReceiver();
         } else if (packetType == PacketType.SIGNAL_UPDATE) {
-            if (tile instanceof ISignalBlockTile)
-                pairing = ((ISignalBlockTile) tile).getSignalBlock();
+            if (tile instanceof ISignalTileBlock)
+                pairing = ((ISignalTileBlock) tile).getSignalBlock();
         }
         if (pairing != null) {
             try {

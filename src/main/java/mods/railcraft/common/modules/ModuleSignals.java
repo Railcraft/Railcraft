@@ -11,7 +11,9 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.TokenManager;
 import mods.railcraft.common.items.RailcraftItems;
+import net.minecraftforge.common.MinecraftForge;
 
 @RailcraftModule(value = "railcraft:signals", description = "signals, signal boxes")
 public class ModuleSignals extends RailcraftModulePayload {
@@ -20,6 +22,8 @@ public class ModuleSignals extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                MinecraftForge.EVENT_BUS.register(TokenManager.getEventListener());
+
                 add(
                         RailcraftBlocks.SIGNAL,
                         RailcraftBlocks.SIGNAL_DUAL,

@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,7 +26,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnum> extends BlockRailcraftSubtyped<V> implements IChargeBlock {
+public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<V>> extends BlockRailcraftSubtyped<V> implements IChargeBlock {
 
     protected BlockChargeSubtyped() {
         super(Material.CIRCUITS);

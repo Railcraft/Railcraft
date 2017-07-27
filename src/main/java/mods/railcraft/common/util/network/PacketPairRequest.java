@@ -1,16 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.api.signals.*;
-import mods.railcraft.api.signals.ISignalBlockTile;
-import mods.railcraft.api.signals.SignalBlock;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -66,8 +65,8 @@ public class PacketPairRequest extends RailcraftPacket {
                     pairing = ((IReceiverTile) tile).getReceiver();
                 break;
             case SIGNAL_REQUEST:
-                if (tile instanceof ISignalBlockTile)
-                    pairing = ((ISignalBlockTile) tile).getSignalBlock();
+                if (tile instanceof ISignalTileBlock)
+                    pairing = ((ISignalTileBlock) tile).getSignalBlock();
                 break;
         }
         if (pairing != null && player != null) {

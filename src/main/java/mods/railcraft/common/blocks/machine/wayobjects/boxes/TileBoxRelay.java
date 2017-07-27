@@ -31,7 +31,7 @@ import java.io.IOException;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectProvider, ITileRedstoneEmitter {
+public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlock, IAspectProvider, ITileRedstoneEmitter {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);

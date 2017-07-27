@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 
-public class TileSignalBlock extends TileSignalBase implements IControllerTile, ISignalBlockTile {
+public class TileSignalBlock extends TileSignalBase implements IControllerTile, ISignalTileBlock {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockSimple(getLocalizationTag(), this);

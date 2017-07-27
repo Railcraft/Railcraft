@@ -11,8 +11,10 @@ package mods.railcraft.common.items;
 
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.signals.ISignalBlockTile;
-import mods.railcraft.api.signals.SignalBlock;
+import mods.railcraft.api.signals.IPair;
+import mods.railcraft.api.signals.ISignalTile;
+import mods.railcraft.api.signals.ISignalTileBlock;
+import mods.railcraft.api.signals.TrackLocator;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -54,19 +56,19 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 //        System.out.println("click");
-        if (actionCleanPairing(stack, playerIn, worldIn, ISignalBlockTile.class, ISignalBlockTile::getSignalBlock)) {
+        if (actionCleanPairing(stack, playerIn, worldIn, ISignalTileBlock.class, ISignalTileBlock::getSignalBlock)) {
             return EnumActionResult.SUCCESS;
         }
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile != null)
-            if (tile instanceof ISignalBlockTile) {
+            if (tile instanceof ISignalTile) {
 //            System.out.println("target found");
                 if (Game.isHost(worldIn)) {
-                    ISignalBlockTile signalTile = (ISignalBlockTile) tile;
-                    SignalBlock signalBlock = signalTile.getSignalBlock();
+                    ISignalTile signalTile = (ISignalTile) tile;
+                    IPair signalBlock = signalTile.getPair();
                     WorldCoordinate signalPos = getPairData(stack);
-                    SignalBlock.Status trackStatus = signalBlock.getTrackStatus();
-                    if (trackStatus == SignalBlock.Status.INVALID)
+                    TrackLocator.Status trackStatus = signalTile.getTrackLocator().getTrackStatus();
+                    if (trackStatus == TrackLocator.Status.INVALID)
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.track", signalTile.getDisplayName());
                     else if (signalPos == null) {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.begin");
@@ -75,10 +77,8 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
                     } else if (!Objects.equals(pos, signalPos.getPos())) {
 //                System.out.println("attempt pairing");
                         tile = WorldPlugin.getBlockTile(worldIn, signalPos.getPos());
-                        if (tile instanceof ISignalBlockTile) {
-                            ISignalBlockTile otherTile = (ISignalBlockTile) tile;
-                            SignalBlock otherSignal = otherTile.getSignalBlock();
-                            if (signalBlock.createSignalBlock(otherSignal)) {
+                        if (tile instanceof ISignalTile) {
+                            if (signalBlock.createPair(tile)) {
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "gui.railcraft.surveyor.success");
                                 clearPairData(stack);
                             } else

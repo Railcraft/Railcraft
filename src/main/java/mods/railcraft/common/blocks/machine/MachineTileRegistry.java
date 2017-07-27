@@ -26,10 +26,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLev
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorRouting;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.*;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlock;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlockDual;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistant;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistantDual;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
@@ -113,6 +110,7 @@ public class MachineTileRegistry {
         // Signals
         RailcraftRegistry.register(TileSignalDistant.class, "signal_block");
         RailcraftRegistry.register(TileSignalBlock.class, "signal_distant");
+        RailcraftRegistry.register(TileSignalToken.class, "signal_token");
         RailcraftRegistry.register(TileSignalDistantDual.class, "signal_distant_dual");
         RailcraftRegistry.register(TileSignalBlockDual.class, "signal_block_dual");
 
