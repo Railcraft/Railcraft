@@ -9,13 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.sounds;
 
+import mods.railcraft.client.util.sounds.JukeboxSound;
+import mods.railcraft.client.util.sounds.MinecartSound;
+import mods.railcraft.common.carts.EntityCartJukebox;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemRecord;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -24,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -149,5 +157,32 @@ public class SoundHelper {
                 return soundType.getStepSound();
         }
         return soundType.getStepSound();
+    }
+
+    public enum MovingSoundType {
+        CART {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart) {
+                Minecraft.getMinecraft().getSoundHandler().playSound(new MinecartSound(sound, category, cart));
+            }
+        },
+        RECORD {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart) {
+                if (!(cart instanceof EntityCartJukebox))
+                    return;
+                ItemRecord record = ItemRecord.getBySound(sound);
+                if (record != null) {
+                    Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(record.getRecordNameLocal());
+                }
+                Minecraft.getMinecraft().getSoundHandler().playSound(new JukeboxSound(sound, category, (EntityCartJukebox) cart));
+            }
+        },
+        ;
+
+        @SideOnly(Side.CLIENT)
+        public abstract void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart);
     }
 }

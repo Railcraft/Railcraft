@@ -114,6 +114,9 @@ public class PacketHandler {
                 case SHUNTING_AURA:
                     pkt = new PacketShuntingAura();
                     break;
+                case MOVING_SOUND:
+                    pkt = new PacketMovingSound();
+                    break;
                 default:
                     return;
             }

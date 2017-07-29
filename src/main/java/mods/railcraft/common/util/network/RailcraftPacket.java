@@ -42,6 +42,7 @@ public abstract class RailcraftPacket {
         GOLDEN_TICKET_GUI,
         LOGBOOK_GUI,
         SHUNTING_AURA,
+        MOVING_SOUND
     }
 
     public FMLProxyPacket getPacket() {
