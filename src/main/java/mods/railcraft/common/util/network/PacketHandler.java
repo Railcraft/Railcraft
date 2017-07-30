@@ -117,6 +117,9 @@ public class PacketHandler {
                 case MOVING_SOUND:
                     pkt = new PacketMovingSound();
                     break;
+                case STOP_RECORD:
+                    pkt = new PacketStopRecord();
+                    break;
                 default:
                     return;
             }

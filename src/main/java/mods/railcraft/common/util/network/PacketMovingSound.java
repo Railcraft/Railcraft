@@ -4,6 +4,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -13,20 +14,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
-public class PacketMovingSound extends RailcraftPacket {
+class PacketMovingSound extends RailcraftPacket {
     private String soundName;
     private SoundCategory category;
     private int id;
     private SoundHelper.MovingSoundType type;
+    private NBTTagCompound extraData;
 
-    public PacketMovingSound() {
+    PacketMovingSound() {
     }
 
-    public PacketMovingSound(SoundEvent sound, SoundCategory category, EntityMinecart cart, SoundHelper.MovingSoundType type) {
+    PacketMovingSound(SoundEvent sound, SoundCategory category, EntityMinecart cart, SoundHelper.MovingSoundType type, NBTTagCompound extraData) {
         this.soundName = ReflectionHelper.getPrivateValue(SoundEvent.class, sound, 1).toString();
         this.category = category;
         this.id = cart.getEntityId();
         this.type = type;
+        this.extraData = extraData;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class PacketMovingSound extends RailcraftPacket {
         data.writeEnum(category);
         data.writeUTF(soundName);
         data.writeEnum(type);
+        data.writeNBT(extraData);
     }
 
     @Override
@@ -44,11 +48,10 @@ public class PacketMovingSound extends RailcraftPacket {
         SoundCategory category = data.readEnum(SoundCategory.values());
         SoundEvent event = new SoundEvent(new ResourceLocation(data.readUTF()));
         SoundHelper.MovingSoundType type = data.readEnum(SoundHelper.MovingSoundType.values());
+        NBTTagCompound nbt = data.readNBT();
         if (entity == null || !(entity instanceof EntityMinecart))
             return;
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            type.handle(event, category, (EntityMinecart) entity);
-        });
+        type.handle(event, category, (EntityMinecart) entity, nbt);
     }
 
     @Override

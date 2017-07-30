@@ -16,6 +16,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.ISignalPacketBuilder;
+import mods.railcraft.common.carts.EntityCartJukebox;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.misc.Game;
@@ -24,6 +25,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
@@ -144,10 +146,21 @@ public class PacketBuilder implements ISignalPacketBuilder {
     }
 
     public void sendMovingSoundPacket(SoundEvent sound, SoundCategory category, EntityMinecart cart, SoundHelper.MovingSoundType type) {
+        sendMovingSoundPacket(sound, category, cart, type, new NBTTagCompound());
+    }
+
+    public void sendMovingSoundPacket(SoundEvent sound, SoundCategory category, EntityMinecart cart, SoundHelper.MovingSoundType type, NBTTagCompound extraData) {
         if (!RailcraftConfig.playSounds())
             return;
-        PacketMovingSound pkt = new PacketMovingSound(sound, category, cart, type);
-        PacketDispatcher.sendToAll(pkt);
+        PacketMovingSound pkt = new PacketMovingSound(sound, category, cart, type, extraData);
+        PacketDispatcher.sendToDimension(pkt, cart.worldObj.provider.getDimension());
+    }
+
+    public void stopRecord(EntityCartJukebox cart) {
+        if (!RailcraftConfig.playSounds())
+            return;
+        PacketStopRecord pkt = new PacketStopRecord(cart);
+        PacketDispatcher.sendToDimension(pkt, cart.worldObj.provider.getDimension());
     }
 
 }

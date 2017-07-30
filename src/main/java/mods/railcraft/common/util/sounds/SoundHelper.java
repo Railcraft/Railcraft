@@ -18,11 +18,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemRecord;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -36,6 +35,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -163,26 +164,26 @@ public class SoundHelper {
         CART {
             @Override
             @SideOnly(Side.CLIENT)
-            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart) {
+            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart, NBTTagCompound tag) {
                 Minecraft.getMinecraft().getSoundHandler().playSound(new MinecartSound(sound, category, cart));
             }
         },
         RECORD {
             @Override
             @SideOnly(Side.CLIENT)
-            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart) {
+            public void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart, NBTTagCompound tag) {
                 if (!(cart instanceof EntityCartJukebox))
                     return;
-                ItemRecord record = ItemRecord.getBySound(sound);
-                if (record != null) {
-                    Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(record.getRecordNameLocal());
-                }
-                Minecraft.getMinecraft().getSoundHandler().playSound(new JukeboxSound(sound, category, (EntityCartJukebox) cart));
+                EntityCartJukebox jukebox = (EntityCartJukebox) cart;
+                jukebox.music = new JukeboxSound(sound, category, (EntityCartJukebox) cart);
+                Minecraft.getMinecraft().getSoundHandler().playSound(jukebox.music);
+                String recordName = tag.getString(EntityCartJukebox.RECORD_DISPLAY_NAME).intern();
+                if (!isNullOrEmpty(recordName))
+                    Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(recordName);
             }
-        },
-        ;
+        },;
 
         @SideOnly(Side.CLIENT)
-        public abstract void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart);
+        public abstract void handle(SoundEvent sound, SoundCategory category, EntityMinecart cart, NBTTagCompound extraData);
     }
 }
