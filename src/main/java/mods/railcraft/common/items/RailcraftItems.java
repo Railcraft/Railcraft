@@ -13,10 +13,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackKit;
-import mods.railcraft.common.carts.ItemBoreHeadDiamond;
-import mods.railcraft.common.carts.ItemBoreHeadIron;
-import mods.railcraft.common.carts.ItemBoreHeadSteel;
-import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
@@ -94,6 +91,9 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }},
     BLEACHED_CLAY(ItemRailcraft::new, "bleached_clay", () -> Items.CLAY_BALL) {{
         conditions().add(RailcraftBlocks.BRICK_BLEACHED_BONE);
+    }},
+    BORE_HEAD_BRONZE(ItemBoreHeadBronze::new, "borehead_bronze") {{
+        conditions().add(RailcraftCarts.BORE);
     }},
     BORE_HEAD_IRON(ItemBoreHeadIron::new, "borehead_iron") {{
         conditions().add(RailcraftCarts.BORE);

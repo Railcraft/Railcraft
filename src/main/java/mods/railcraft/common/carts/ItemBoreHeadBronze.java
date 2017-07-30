@@ -14,12 +14,12 @@ import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class ItemBoreHeadIron extends ItemBoreHead {
+public class ItemBoreHeadBronze extends ItemBoreHead {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "tunnel_bore_iron.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "tunnel_bore_bronze.png");
 
-    public ItemBoreHeadIron() {
-        setMaxDamage(1500);
+    public ItemBoreHeadBronze() {
+        setMaxDamage(1200);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ItemBoreHeadIron extends ItemBoreHead {
                 "IDI",
                 "III",
                 'I', "ingotSteel",
-                'D', "blockIron");
+                'D', "blockBronze");
     }
 
     @Override
@@ -44,16 +44,17 @@ public class ItemBoreHeadIron extends ItemBoreHead {
 
     @Override
     public float getDigModifier() {
-        return 1.0f;
+        return .8f;
     }
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
-        return ToolMaterial.IRON.getEnchantability();
+        return 13;
     }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return OreDictPlugin.isOreType("blockIron", repair);
+        return OreDictPlugin.isOreType("blockBronze", repair);
     }
+
 }

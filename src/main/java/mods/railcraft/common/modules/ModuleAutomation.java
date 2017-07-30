@@ -45,6 +45,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftItems.FILTER_ORE_DICT,
 
                         RailcraftCarts.BORE,
+                        RailcraftItems.BORE_HEAD_BRONZE,
                         RailcraftItems.BORE_HEAD_IRON,
                         RailcraftItems.BORE_HEAD_STEEL,
                         RailcraftItems.BORE_HEAD_DIAMOND,
