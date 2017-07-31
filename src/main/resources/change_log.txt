@@ -1,3 +1,12 @@
+10.2.0-alpha-14
+    NEW: Token Signals have been added! Use to make junctions simpler and diagonals viable.
+    NEW: Jukebox Cart, with moving sounds! (contribution by liach)
+    NEW: Whistles move with Locomotives! (contribution by liach)
+    NEW: Added Bronze Borehead. (contribution by liach)
+    NEW: Added support for comments in Routing Tables: "//" or "#"
+    FIX: Fix Bore infinite loop.
+    FIX: Fix routing crash.
+
 10.2.0-alpha-9
     NEW: Ported Block Signals and Distant Signals.
     FIX: Fix IC2 Feeder breaking. (contribution by liach)
