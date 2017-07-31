@@ -11,21 +11,15 @@ package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 import java.io.IOException;
 
 public class TileSignalDistantDual extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
-    private static final float SIZE = -0.15f;
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(SIZE).build();
     private final DualSignalReceiver receiver = new DualSignalReceiver(getLocalizationTag(), this);
 
     @Override
@@ -46,13 +40,12 @@ public class TileSignalDistantDual extends TileSignalBase implements IReceiverTi
             return;
         }
 
-        // TODO: WTF?
         receiver.tickServer();
         int numPairs = receiver.getNumPairs();
         boolean changed = false;
         switch (numPairs) {
             case 0:
-                changed |= receiver.setAspect(DualLamp.TOP, SignalAspect.BLINK_RED);
+                changed = receiver.setAspect(DualLamp.TOP, SignalAspect.BLINK_RED);
             case 1:
                 changed |= receiver.setAspect(DualLamp.BOTTOM, SignalAspect.BLINK_RED);
         }
@@ -64,11 +57,6 @@ public class TileSignalDistantDual extends TileSignalBase implements IReceiverTi
     @Override
     public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
         sendUpdateToClient();
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
-        return BOUNDING_BOX;
     }
 
     @Override
@@ -90,14 +78,12 @@ public class TileSignalDistantDual extends TileSignalBase implements IReceiverTi
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-
         receiver.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-
         receiver.readPacketData(data);
     }
 

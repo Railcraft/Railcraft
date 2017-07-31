@@ -18,13 +18,13 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.IOException;
 
-public class TileSignalBlockDual extends TileSignalBlock implements IReceiverTile, IDualHeadSignal {
+public class TileSignalTokenDual extends TileSignalToken implements IReceiverTile, IDualHeadSignal {
 
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
     @Override
     public IEnumMachine<?> getMachineType() {
-        return SignalDualVariant.BLOCK;
+        return SignalDualVariant.TOKEN;
     }
 
     @Override
@@ -63,14 +63,12 @@ public class TileSignalBlockDual extends TileSignalBlock implements IReceiverTil
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-
         receiver.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-
         receiver.readPacketData(data);
     }
 

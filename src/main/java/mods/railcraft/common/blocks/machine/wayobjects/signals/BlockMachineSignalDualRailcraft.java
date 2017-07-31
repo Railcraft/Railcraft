@@ -14,7 +14,12 @@ import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Created by CovertJaguar on 7/5/2017 for Railcraft.
@@ -23,6 +28,7 @@ import net.minecraft.block.state.BlockStateContainer;
  */
 @RailcraftBlockMetadata(variant = SignalDualVariant.class)
 public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDualVariant> {
+    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BLOCK_BOUNDS).build();
 
     @Override
     protected BlockStateContainer createBlockState() {
@@ -49,5 +55,10 @@ public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDu
                 'I', "ingotIron",
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 }

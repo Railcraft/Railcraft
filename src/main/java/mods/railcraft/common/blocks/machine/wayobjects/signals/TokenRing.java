@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TokenRing implements ITokenRing {
+    private static final int MAX_DISTANCE = 256 * 256;
     private final UUID uuid;
     private final Set<BlockPos> signals = new HashSet<>();
     private final Set<UUID> trackedCarts = new HashSet<>();
@@ -61,6 +62,10 @@ public class TokenRing implements ITokenRing {
     @Override
     public boolean createPair(TileEntity other) {
         if (other instanceof TileSignalToken) {
+            BlockPos otherPos = other.getPos();
+            if (signals.stream().anyMatch(pos -> pos.distanceSq(otherPos) > MAX_DISTANCE)) {
+                return false;
+            }
             TileSignalToken tokenTile = (TileSignalToken) other;
             TokenRing otherRing = ((TileSignalToken) other).getTokenRing();
             otherRing.removeSignal(other.getPos());
