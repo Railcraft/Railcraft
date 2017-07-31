@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.client.util.sounds.JukeboxSound;
 import mods.railcraft.client.util.sounds.MinecartSound;
 import mods.railcraft.common.carts.EntityCartJukebox;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -177,9 +178,9 @@ public class SoundHelper {
                 EntityCartJukebox jukebox = (EntityCartJukebox) cart;
                 jukebox.music = new JukeboxSound(sound, category, (EntityCartJukebox) cart);
                 Minecraft.getMinecraft().getSoundHandler().playSound(jukebox.music);
-                String recordName = tag.getString(EntityCartJukebox.RECORD_DISPLAY_NAME).intern();
+                String recordName = tag.getString(EntityCartJukebox.RECORD_DISPLAY_NAME);
                 if (!isNullOrEmpty(recordName))
-                    Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(recordName);
+                    Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(LocalizationPlugin.translate(recordName));
             }
         },;
 
