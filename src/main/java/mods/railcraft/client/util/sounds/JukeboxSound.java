@@ -10,8 +10,8 @@
 
 package mods.railcraft.client.util.sounds;
 
+import mods.railcraft.common.carts.EntityCartJukebox;
 import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
@@ -20,13 +20,14 @@ import net.minecraft.util.SoundEvent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MinecartSound extends MovingSound {
-    protected final EntityMinecart cart;
+public class JukeboxSound extends MovingSound {
+    protected final EntityCartJukebox cart;
 
-    public MinecartSound(SoundEvent soundEvent, SoundCategory category, EntityMinecart cart) {
+    public JukeboxSound(SoundEvent soundEvent, SoundCategory category, EntityCartJukebox cart) {
         super(soundEvent, category);
         this.cart = cart;
         this.volume = 1f;
+        this.attenuationType = AttenuationType.LINEAR;
     }
 
     /**
@@ -34,7 +35,7 @@ public class MinecartSound extends MovingSound {
      */
     @Override
     public void update() {
-        if (cart.isDead) {
+        if (cart.isDead || cart.music != this) {
             this.donePlaying = true;
         } else {
             this.xPosF = (float) cart.posX;

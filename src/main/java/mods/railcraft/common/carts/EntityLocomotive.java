@@ -36,6 +36,7 @@ import mods.railcraft.common.util.misc.ISecureObject;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -345,8 +346,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public final void whistle() {
         if (whistleDelay <= 0) {
-            //TODO: Make moving sound
-            SoundHelper.playSoundForEntity(this, getWhistle(), 1, whistlePitch);
+            PacketBuilder.instance().sendMovingSoundPacket(getWhistle(), getSoundCategory(), this, SoundHelper.MovingSoundType.CART);
             whistleDelay = WHISTLE_DELAY;
         }
     }
