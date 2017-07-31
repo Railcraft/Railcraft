@@ -96,7 +96,7 @@ public class RoutingLogic {
                 return cart;
         }
         EntityMinecart loco = train.getLocomotive();
-        return loco == null ? train.stream().findFirst().get() : loco;
+        return loco == null ? cart : loco;
     }
 
     public boolean matches(ITileRouting tile, EntityMinecart cart) {
