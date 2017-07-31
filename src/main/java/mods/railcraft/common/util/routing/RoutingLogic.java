@@ -74,7 +74,7 @@ public class RoutingLogic {
     }
 
     private void parseTable(Deque<String> data) throws RoutingLogicException {
-        Deque<Expression> stack = new LinkedList<Expression>();
+        Deque<Expression> stack = new ArrayDeque<>();
         Iterator<String> it = data.descendingIterator();
         while (it.hasNext()) {
             String line = it.next().trim();
@@ -95,7 +95,8 @@ public class RoutingLogic {
             if (cart instanceof INeedsFuel)
                 return cart;
         }
-        return train.getLocomotive();
+        EntityMinecart loco = train.getLocomotive();
+        return loco == null ? cart : loco;
     }
 
     public boolean matches(ITileRouting tile, EntityMinecart cart) {
@@ -178,24 +179,24 @@ public class RoutingLogic {
 
     }
 
-    private abstract class Expression {
+    private interface Expression {
 
-        public abstract int evaluate(ITileRouting tile, EntityMinecart cart);
+        int evaluate(ITileRouting tile, EntityMinecart cart);
 
     }
 
-    private abstract class Condition extends Expression {
+    private interface Condition extends Expression {
 
         @Override
-        public int evaluate(ITileRouting tile, EntityMinecart cart) {
+        default int evaluate(ITileRouting tile, EntityMinecart cart) {
             return matches(tile, cart) ? FULL_POWER : NO_POWER;
         }
 
-        public abstract boolean matches(ITileRouting tile, EntityMinecart cart);
+        boolean matches(ITileRouting tile, EntityMinecart cart);
 
     }
 
-    private abstract class ParsedCondition extends Condition {
+    private abstract class ParsedCondition implements Condition {
 
         public final String value;
         final boolean isRegex;
@@ -226,7 +227,7 @@ public class RoutingLogic {
 
     }
 
-    private class IF extends Expression {
+    private class IF implements Expression {
 
         private final Condition cond;
         private final Expression then, else_;
@@ -244,7 +245,7 @@ public class RoutingLogic {
 
     }
 
-    private class NOT extends Condition {
+    private class NOT implements Condition {
 
         private final Condition a;
 
@@ -259,7 +260,7 @@ public class RoutingLogic {
 
     }
 
-    private class AND extends Condition {
+    private class AND implements Condition {
 
         private final Condition a, b;
 
@@ -275,7 +276,7 @@ public class RoutingLogic {
 
     }
 
-    private class OR extends Condition {
+    private class OR implements Condition {
 
         private final Condition a, b;
 
@@ -291,7 +292,7 @@ public class RoutingLogic {
 
     }
 
-    private class ConstantExpression extends Expression {
+    private class ConstantExpression implements Expression {
 
         private final int value;
 
@@ -308,7 +309,7 @@ public class RoutingLogic {
 
     }
 
-    private class ConstantCondition extends Condition {
+    private class ConstantCondition implements Condition {
 
         private final boolean value;
 
@@ -472,7 +473,7 @@ public class RoutingLogic {
                 case "unnamed":
                     return getPassengers(cart).stream().anyMatch(e -> !e.hasCustomName());
                 case "entity":
-                    return getPassengers(cart).stream().anyMatch(e -> EntityList.getEntityString(e).equalsIgnoreCase(tokens[1]));
+                    return getPassengers(cart).stream().anyMatch(e -> tokens[1].equalsIgnoreCase(EntityList.getEntityString(e)));
                 case "player":
                     if (tokens.length == 2) {
                         if (isRegex) {
@@ -527,14 +528,14 @@ public class RoutingLogic {
             if ("Any".equals(colors[0]) || "*".equals(colors[0]))
                 primary = null;
             else {
-                primary = EnumColor.fromName(colors[0]);
+                primary = EnumColor.fromNameStrict(colors[0]);
                 if (primary == null)
                     throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", colors[0]);
             }
             if (colors.length == 1 || Objects.equals(colors[1], "Any") || Objects.equals(colors[1], "*"))
                 secondary = null;
             else {
-                secondary = EnumColor.fromName(colors[1]);
+                secondary = EnumColor.fromNameStrict(colors[1]);
                 if (secondary == null)
                     throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", colors[1]);
             }

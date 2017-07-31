@@ -99,6 +99,11 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return color;
     }
 
+    @Nullable
+    public static EnumColor fromNameStrict(String name) {
+        return nameMap.get(name.toLowerCase(Locale.ENGLISH));
+    }
+
     public static EnumColor getRand() {
         return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
     }

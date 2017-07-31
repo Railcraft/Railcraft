@@ -104,8 +104,8 @@ public class ItemGoggles extends ItemRailcraftArmor {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        incrementAura(stack);
-        if (Game.isClient(world)) {
+        if (Game.isHost(world)) {
+            incrementAura(stack);
             GoggleAura aura = getCurrentAura(stack);
             ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "gui.railcraft.goggles.mode", "\u00A75" + aura);
         }
