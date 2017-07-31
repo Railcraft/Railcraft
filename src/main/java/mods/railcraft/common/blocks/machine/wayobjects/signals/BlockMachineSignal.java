@@ -27,6 +27,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -48,6 +49,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     public static final PropertyBool CONNECTION_EAST = PropertyBool.create("connection_east");
     public static final PropertyBool CONNECTION_WEST = PropertyBool.create("connection_west");
     public static final PropertyBool CONNECTION_DOWN = PropertyBool.create("connection_down");
+    public static final float BLOCK_BOUNDS = 0.15f;
     public static ResourceLocation[] upperLampTextures = new ResourceLocation[4];
     public static ResourceLocation[] lowerLampTextures = new ResourceLocation[4];
 
@@ -134,5 +136,15 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+        return getBoundingBox(state, world, pos);
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+        return getBoundingBox(state, world, pos).offset(pos);
     }
 }

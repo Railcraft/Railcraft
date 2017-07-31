@@ -2,4 +2,7 @@
     <item name='net.minecraft.entity.Entity T getCapability(net.minecraftforge.common.capabilities.Capability&lt;T&gt;, net.minecraft.util.EnumFacing)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
+    <item name='net.minecraft.entity.EntityList java.lang.String getEntityString(net.minecraft.entity.Entity)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
 </root>

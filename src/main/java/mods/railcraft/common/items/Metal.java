@@ -100,7 +100,8 @@ public enum Metal implements IVariantEnum {
     @Nullable
     @Override
     public Object getAlternate(IRailcraftRecipeIngredient container) {
-        return Form.containerMap.inverse().get(container).getOreDictTag(this);
+        Form form = Form.containerMap.inverse().get(container);
+        return form != null ? form.getOreDictTag(this) : null;
     }
 
     @Override
@@ -222,8 +223,9 @@ public enum Metal implements IVariantEnum {
         private final BiMap<Metal, IVariantEnum> variantMap;
 
         static {
-            containerMap.put(NUGGET, NUGGET.container);
-            containerMap.put(INGOT, INGOT.container);
+            for (Form form : Form.VALUES) {
+                containerMap.put(form, form.container);
+            }
         }
 
         Form(String orePrefix, IRailcraftObjectContainer container) {
