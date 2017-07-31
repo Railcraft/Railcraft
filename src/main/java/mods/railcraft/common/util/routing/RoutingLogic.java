@@ -78,6 +78,8 @@ public class RoutingLogic {
         Iterator<String> it = data.descendingIterator();
         while (it.hasNext()) {
             String line = it.next().trim();
+            if (line.startsWith("//") || line.startsWith("#"))
+                continue;
             stack.push(parseLine(line, stack));
         }
         expressions = stack;
