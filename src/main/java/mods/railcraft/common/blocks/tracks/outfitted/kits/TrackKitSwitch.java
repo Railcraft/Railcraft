@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
@@ -21,6 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
@@ -29,13 +31,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -87,7 +89,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         if (lockingCarts.contains(cart.getPersistentID()))
             return false; // Carts at the locking entrance always are on locked tracks
 
-        boolean sameTrain = Train.areInSameTrain(CartTools.getCartFromUUID((WorldServer) theWorldAsserted(), currentCart), cart);
+        boolean sameTrain = Train.getTrain(cart).getUUIDs().contains(currentCart);
 
         boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(cart) : false;
 
@@ -308,7 +310,8 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirectionRaw()
         // determines which direction the carts actually take.
-        List<UUID> cartsOnTrack = CartTools.getMinecartUUIDsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
+        List<EntityMinecart> cartsOnTrack = CartToolsAPI.getMinecartsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
+        Set<UUID> uuidOnTrack = cartsOnTrack.stream().map(Entity::getUniqueID).collect(Collectors.toSet());
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 
@@ -321,7 +324,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         }
 
         // Only allow cartsOnTrack to actually spring or lock the track
-        if (bestCart != null && cartsOnTrack.contains(bestCart.getPersistentID())) {
+        if (bestCart != null && uuidOnTrack.contains(bestCart.getPersistentID())) {
             if (shouldSwitchForCart(bestCart)) {
                 springTrack(bestCart.getPersistentID());
             } else {
@@ -346,12 +349,10 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     // To render the state of the track most accurately, we choose the "best" cart from our set of
     // carts based on distance.
     @Nullable
-    private EntityMinecart getBestCartForVisualState(List<UUID> cartsOnTrack) {
+    private EntityMinecart getBestCartForVisualState(List<EntityMinecart> cartsOnTrack) {
         World world = theWorldAsserted();
-        UUID cartUUID = null;
         if (!cartsOnTrack.isEmpty()) {
-            cartUUID = cartsOnTrack.get(0);
-            return CartTools.getCartFromUUID(world, cartUUID);
+            return cartsOnTrack.get(0);
         } else {
             EntityMinecart closestCart = null;
             ArrayList<UUID> allCarts = new ArrayList<UUID>();
