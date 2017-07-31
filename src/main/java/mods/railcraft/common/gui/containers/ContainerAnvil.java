@@ -32,8 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import static mods.railcraft.common.util.inventory.InvTools.decSize;
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -74,8 +73,8 @@ public class ContainerAnvil extends ContainerRepair {
         int baseCost = 0;
         int nameCost = 0;
 
-        if (input1original == null) {
-            outputSlot.setInventorySlotContents(0, null);
+        if (isEmpty(input1original)) {
+            outputSlot.setInventorySlotContents(0, emptyStack());
             this.maximumCost = 0;
         } else {
             ItemStack input1 = input1original.copy();
