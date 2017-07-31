@@ -222,6 +222,7 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileSignalBlockDual.class, TESRSignalLampDual::new);
         bindTESR(TileSignalDistantDual.class, TESRSignalLampDual::new);
+        bindTESR(TileSignalTokenDual.class, TESRSignalLampDual::new);
 
 //        registerBlockRenderer(new RenderBlockMachineBeta());
 //        registerBlockRenderer(new RenderBlockMachineDelta());

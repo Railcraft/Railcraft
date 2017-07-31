@@ -113,6 +113,7 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileSignalToken.class, "signal_token");
         RailcraftRegistry.register(TileSignalDistantDual.class, "signal_distant_dual");
         RailcraftRegistry.register(TileSignalBlockDual.class, "signal_block_dual");
+        RailcraftRegistry.register(TileSignalTokenDual.class, "signal_token_dual");
 
         // Signal Boxes
         RailcraftRegistry.register(TileBoxAnalog.class, "signal_box_analog");

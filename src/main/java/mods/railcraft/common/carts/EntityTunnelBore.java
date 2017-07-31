@@ -23,6 +23,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -668,28 +669,27 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected boolean placeBallast(BlockPos targetPos) {
         if (!worldObj.isSideSolid(targetPos, EnumFacing.UP))
-            for (int inv = 0; inv < invBallast.getSizeInventory(); inv++) {
-                ItemStack stack = invBallast.getStackInSlot(inv);
+            for (IExtInvSlot slot : InventoryIterator.getVanilla(invBallast)) {
+                ItemStack stack = slot.getStack();
                 if (!isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
                     BlockPos.PooledMutableBlockPos searchPos = BlockPos.PooledMutableBlockPos.retain();
                     searchPos.setPos(targetPos);
                     for (int i = 0; i < MAX_FILL_DEPTH; i++) {
-                        searchPos.setPos(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
+                        searchPos.move(EnumFacing.DOWN);
                         if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
-                            // Break other blocks first
-                            for (; i >= 0; i--) {
-                                searchPos.setPos(searchPos.getX(), searchPos.getY() + 1, searchPos.getZ());
-                                if (!WorldPlugin.isBlockAir(worldObj, searchPos)) {
-                                    WorldPlugin.playerRemoveBlock(worldObj, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
-                                            worldObj.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
-                                }
-                            }
                             // Fill ballast
-                            invBallast.decrStackSize(inv, 1);
                             IBlockState state = InvTools.getBlockStateFromStack(stack, worldObj, targetPos);
                             if (state != null) {
+                                slot.decreaseStack();
                                 WorldPlugin.setBlockState(worldObj, targetPos, state);
                                 return true;
+                            }
+                        } else {
+                            IBlockState state = WorldPlugin.getBlockState(worldObj, searchPos);
+                            if (!WorldPlugin.isBlockAir(worldObj, searchPos, state) && !state.getMaterial().isLiquid()) {
+                                // Break other blocks first
+                                WorldPlugin.playerRemoveBlock(worldObj, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
+                                        worldObj.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
                             }
                         }
                     }
