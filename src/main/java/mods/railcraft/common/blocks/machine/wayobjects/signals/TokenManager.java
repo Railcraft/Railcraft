@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,10 +33,11 @@ public class TokenManager {
     public static final String DATA_TAG = "railcraft.tokens";
 
     public static TokenWorldManager getManager(World world) {
-        TokenWorldManager data = (TokenWorldManager) world.getPerWorldStorage().getOrLoadData(TokenWorldManager.class, DATA_TAG);
+        MapStorage storage = world.getPerWorldStorage();
+        TokenWorldManager data = (TokenWorldManager) storage.getOrLoadData(TokenWorldManager.class, DATA_TAG);
         if (data == null) {
             data = new TokenWorldManager(DATA_TAG);
-            world.setItemData(DATA_TAG, data);
+            storage.setData(DATA_TAG, data);
         }
         return data;
     }

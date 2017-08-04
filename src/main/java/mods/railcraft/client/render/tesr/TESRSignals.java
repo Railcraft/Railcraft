@@ -111,6 +111,9 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         OpenGL.glLineWidth(5F);
 
         OpenGL.glBegin(GL11.GL_LINES);
+
+        Vec3d start = new Vec3d(x, y, z).add(CENTER);
+
         for (BlockPos target : endPoints) {
             int color = colorProfile.getColor(tile, tile.getPos(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
@@ -118,7 +121,6 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
             float c3 = (float) (color & 255) / 255.0F;
             OpenGL.glColor3f(c1, c2, c3);
 
-            Vec3d start = new Vec3d(x, y, z).add(CENTER);
             OpenGL.glVertex(start);
             Vec3d end = start.add(new Vec3d(target).subtract(new Vec3d(tile.getPos())));
             OpenGL.glVertex(end);
