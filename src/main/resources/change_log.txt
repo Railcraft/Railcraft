@@ -1,3 +1,6 @@
+10.2.0-alpha-15
+    FIX: Fix Token Signals in SMP.
+
 10.2.0-alpha-14
     NEW: Token Signals have been added! Use to make junctions simpler and diagonals viable.
     NEW: Jukebox Cart, with moving sounds! (contribution by liach)
