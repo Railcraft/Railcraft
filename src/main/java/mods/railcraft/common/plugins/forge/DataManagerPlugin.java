@@ -37,7 +37,7 @@ public class DataManagerPlugin {
 
         @Override
         public DataParameter<T> createKey(int id) {
-            return new DataParameter<T>(id, this);
+            return new DataParameter<>(id, this);
         }
     }
 
@@ -102,13 +102,9 @@ public class DataManagerPlugin {
         DataSerializers.registerSerializer(ENUM_COLOR);
     }
 
+    @SuppressWarnings("deprecation")
     public static <T> DataParameter<T> create(DataSerializer<T> serializer) {
         Class<?> clazz = sun.reflect.Reflection.getCallerClass(2);
-        return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);
-    }
-
-    @Deprecated
-    public static <T> DataParameter<T> create(Class<?> clazz, DataSerializer<T> serializer) {
         return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);
     }
 
@@ -118,37 +114,5 @@ public class DataManagerPlugin {
 
     public static <T extends Enum<T>> T readEnum(EntityDataManager dataManager, DataParameter<Byte> parameter, T[] values) {
         return values[dataManager.get(parameter)];
-    }
-
-    public interface DataWrapper<T> {
-        void set(T value);
-
-        T get();
-    }
-
-    public static class EnumDataWrapper<T extends Enum<T>> implements DataWrapper<T> {
-        public static <T extends Enum<T>> DataWrapper<T> create(Entity entity, T[] enumValues) {
-            return new EnumDataWrapper<T>(entity, enumValues);
-        }
-
-        private final EntityDataManager dataManager;
-        private final DataParameter<Byte> parameter;
-        private final T[] enumValues;
-
-        private EnumDataWrapper(Entity entity, T[] enumValues) {
-            parameter = DataManagerPlugin.create(entity.getClass(), DataSerializers.BYTE);
-            dataManager = entity.getDataManager();
-            this.enumValues = enumValues;
-        }
-
-        @Override
-        public void set(T value) {
-            dataManager.set(parameter, (byte) value.ordinal());
-        }
-
-        @Override
-        public T get() {
-            return enumValues[dataManager.get(parameter)];
-        }
     }
 }

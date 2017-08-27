@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper void setFluid(net.minecraftforge.fluids.Fluid) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

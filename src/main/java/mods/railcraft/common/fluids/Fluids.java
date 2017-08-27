@@ -13,9 +13,9 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
@@ -44,10 +44,12 @@ public enum Fluids {
         return pool == request || (pool != null && (request == null || pool.amount >= request.amount));
     }
 
+    @Contract("null -> true")
     public static boolean isEmpty(@Nullable FluidStack fluidStack) {
         return fluidStack == null || fluidStack.amount <= 0;
     }
 
+    @Contract("null -> false")
     public static boolean isNotEmpty(@Nullable FluidStack fluidStack) {
         return fluidStack != null && fluidStack.amount > 0;
     }
@@ -77,15 +79,16 @@ public enum Fluids {
     /**
      * Gets a FluidStack filled with n buckets worth of Fluid.
      */
+    @Nullable
     public FluidStack getB(int n) {
-        return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
+        return FluidRegistry.getFluidStack(tag, n * FluidTools.BUCKET_VOLUME);
     }
 
     /**
      * Gets a FluidStack filled with one buckets worth of Fluid.
      */
     public FluidStack getBucket() {
-        return FluidRegistry.getFluidStack(tag, FluidContainerRegistry.BUCKET_VOLUME);
+        return FluidRegistry.getFluidStack(tag, FluidTools.BUCKET_VOLUME);
     }
 
     public boolean is(Fluid fluid) {

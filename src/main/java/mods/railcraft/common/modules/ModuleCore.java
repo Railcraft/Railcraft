@@ -29,6 +29,7 @@ import mods.railcraft.common.commands.CommandTrack;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.CustomContainerHandler;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.*;
@@ -92,8 +93,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
                 RailcraftFluids.preInitFluids();
-                // TODO: do we need a bucket handler still?
-//                MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+                MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
                 MinecraftForge.EVENT_BUS.register(LootPlugin.INSTANCE);
 
@@ -108,6 +108,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:prototype", PrototypeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+                RecipeSorter.register("railcraft:fluid.shaped", ShapedFluidRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+                RecipeSorter.register("railcraft:fluid.shapeless", ShapelessFluidRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictPlugin.registerNewTags();
 

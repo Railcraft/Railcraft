@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
-    private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(DataSerializers.OPTIONAL_ITEM_STACK);
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
     protected CartBaseFiltered(World world) {

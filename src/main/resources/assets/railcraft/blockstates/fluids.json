@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:fluid",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "creosote": [
+      {
+        "custom": {
+          "fluid": "creosote"
+        }
+      }
+    ],
+    "steam": [
+      {
+        "custom": {
+          "fluid": "steam"
+        }
+      }
+    ]
+  }
+}

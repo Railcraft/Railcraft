@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -39,13 +38,12 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.invoke.MethodHandles;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
-    private static final DataParameter<OptionalFluidStack> FLUID_STACK = EntityDataManager.createKey(EntityCartTank.class, DataManagerPlugin.OPTIONAL_FLUID_STACK);
-    private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
+    private static final DataParameter<OptionalFluidStack> FLUID_STACK = DataManagerPlugin.create(DataManagerPlugin.OPTIONAL_FLUID_STACK);
+    private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_OUTPUT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
@@ -147,7 +145,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
             entityDropItem(bottomSlot, 1);
         }
 
-        if (update % FluidTools.BUCKET_FILL_TIME == 0){
+        if (update % FluidTools.BUCKET_FILL_TIME == 0) {
             FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
         }
 

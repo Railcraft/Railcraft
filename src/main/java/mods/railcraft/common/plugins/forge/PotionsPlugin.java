@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,7 @@ public class PotionsPlugin {
         POTIONS.clear();
         POTIONS_SPLASH.clear();
         POTIONS_LINGERING.clear();
-        for (PotionType potiontype : PotionType.REGISTRY) {
+        for (PotionType potiontype : ForgeRegistries.POTION_TYPES) {
             POTIONS.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), potiontype));
             POTIONS_SPLASH.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), potiontype));
             POTIONS_LINGERING.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.LINGERING_POTION), potiontype));

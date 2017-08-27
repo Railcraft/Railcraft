@@ -106,7 +106,7 @@ public class ForestryPlugin {
 
     public void addCarpenterRecipe(String recipeTag,
                                    int packagingTime,
-                                   FluidStack liquid,
+                                   @Nullable FluidStack liquid,
                                    @Nullable ItemStack box,
                                    @Nullable ItemStack product,
                                    Object... materials) {
@@ -323,7 +323,7 @@ public class ForestryPlugin {
 
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-        public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, @Nullable ItemStack box, @Nullable ItemStack product, Object... materials) {
+        public void addCarpenterRecipe(String recipeTag, int packagingTime, @Nullable FluidStack liquid, @Nullable ItemStack box, @Nullable ItemStack product, Object... materials) {
             if (product == null) {
                 Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", the result was null or zero. Skipping", recipeTag);
                 return;

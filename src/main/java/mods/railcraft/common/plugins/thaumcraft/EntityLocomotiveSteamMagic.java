@@ -34,6 +34,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
@@ -116,7 +117,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
 
         if (Game.isHost(worldObj)) {
             InvTools.moveOneItem(invStock, invBurn);
-            InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
+            InvTools.moveOneItem(invBurn, invWaterOutput, (stack) -> stack.getItem() == ForgeModContainer.getInstance().universalBucket);
         }
     }
 

@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.util.math.RayTraceResult blockPos'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

@@ -1,0 +1,8 @@
+<root>
+    <item name='net.minecraftforge.common.ForgeHooks net.minecraft.util.math.RayTraceResult rayTraceEyes(net.minecraft.entity.EntityLivingBase, double)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraftforge.common.ForgeHooks net.minecraft.util.math.Vec3d rayTraceEyeHitVec(net.minecraft.entity.EntityLivingBase, double)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

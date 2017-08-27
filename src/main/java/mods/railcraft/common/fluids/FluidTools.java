@@ -53,11 +53,7 @@ public final class FluidTools {
     public static final int NETWORK_UPDATE_INTERVAL = 128;
     public static final int BUCKET_VOLUME = 1000;
     public static final int PROCESS_VOLUME = BUCKET_VOLUME * 4;
-    private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
 
-    static {
-        adapters.add(ForgeFluidRegistrar.INSTANCE);
-    }
 
     private FluidTools() {
     }
@@ -313,31 +309,7 @@ public final class FluidTools {
         inv.decrStackSize(inputSlot, 1);
     }
 
-    public static boolean registerBucket(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.BUCKET);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerBottle(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
-        if (!isEmpty(empty)) {
-            FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
-            registerContainer(container);
-            return true;
-        }
-        return false;
-    }
-
-    public static void registerContainer(FluidContainerData container) {
-        for (FluidRegistrar adapter : adapters) {
-            adapter.registerContainer(container);
-        }
-    }
-
+    @Deprecated
     public static Collection<ItemStack> getContainersFilledWith(FluidStack fluidStack) {
         List<ItemStack> containers = new ArrayList<ItemStack>();
         for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
@@ -348,6 +320,7 @@ public final class FluidTools {
         return containers;
     }
 
+    @Deprecated
     public static void nerfWaterBottle() {
         for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if (data.filledContainer.getItem() == Items.POTIONITEM && data.emptyContainer.getItem() == Items.GLASS_BOTTLE && Fluids.WATER.is(data.fluid)) {

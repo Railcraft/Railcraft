@@ -56,16 +56,13 @@ public class ModuleResources extends RailcraftModulePayload {
             public void preInit() {
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    //TODO: this is wrong, needs fluid stack recipe support
-                    for (ItemStack container : FluidTools.getContainersFilledWith(creosote)) {
-                        CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
-                                "C",
-                                "W",
-                                "S",
-                                'C', container,
-                                'W', Blocks.WOOL,
-                                'S', "stickWood");
-                    }
+                    CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+                            "C",
+                            "W",
+                            "S",
+                            'C', creosote,
+                            'W', Blocks.WOOL,
+                            'S', "stickWood");
                 }
 
                 if (BlockGeneric.getBlock() != null) {

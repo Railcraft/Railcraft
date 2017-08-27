@@ -10,16 +10,25 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -28,7 +37,7 @@ public enum RailcraftFluids {
 
     CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500, false) {
         @Override
-        public Block makeBlock(Fluid fluid) {
+        Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluid(fluid, Material.WATER).setFlammable(true).setFlammability(10);
         }
     },
@@ -39,12 +48,16 @@ public enum RailcraftFluids {
         }
     };
     public static final RailcraftFluids[] VALUES = values();
-    public final String tag;
-    public final Fluids standardFluid;
-    public final int density, viscosity;
-    public final boolean isGaseous;
-    protected Fluid railcraftFluid;
-    protected Block railcraftBlock;
+    private final String tag;
+    private final String name;
+    private final Fluids standardFluid;
+    private final int density;
+    private final int viscosity;
+    private final boolean isGaseous;
+    private final ModelResourceLocation location;
+    private Fluid railcraftFluid;
+    private Block railcraftBlock;
+    private ItemBlock railcraftItem;
 
     RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity, boolean isGaseous) {
         this.tag = tag;
@@ -52,6 +65,8 @@ public enum RailcraftFluids {
         this.density = density;
         this.viscosity = viscosity;
         this.isGaseous = isGaseous;
+        this.name = name().toLowerCase();
+        this.location = new ModelResourceLocation(Railcraft.MOD_ID + ":fluids", this.name);
     }
 
     public static void preInitFluids() {
@@ -68,9 +83,10 @@ public enum RailcraftFluids {
 
     private void init() {
         initFluid();
-        //TODO: re-enable and fix
-//        initBlock();
+        initBlock();
         checkStandardFluidBlock();
+        if (FMLCommonHandler.instance().getSidedDelegate().getSide().isClient())
+            initClient();
     }
 
     private void postInit() {
@@ -89,16 +105,22 @@ public enum RailcraftFluids {
             else
                 flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
             railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(isGaseous);
-//            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
-            if (!(isGaseous))
+            if (!isGaseous)
                 FluidRegistry.addBucketForFluid(railcraftFluid);
-//            else {
-//                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
-//                        + "this may cause issues if the server/client have different mod load orders, "
-//                        + "recommended that you disable all but one instance of the fluid via your configs.", standardFluid.getTag());
-//            }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void initClient() {
+        ModelBakery.registerItemVariants(railcraftItem);
+        ModelLoader.setCustomMeshDefinition(railcraftItem, (stack) -> location);
+        ModelLoader.setCustomStateMapper(railcraftBlock, new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return location;
+            }
+        });
     }
 
     abstract Block makeBlock(Fluid fluid);
@@ -107,11 +129,11 @@ public enum RailcraftFluids {
         Fluid fluid;
         if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
             railcraftBlock = makeBlock(fluid);
-            railcraftBlock.setRegistryName(tag);
+            railcraftBlock.setRegistryName(name);
             railcraftBlock.setUnlocalizedName("railcraft." + tag);
-            ItemBlock itemBlock = new ItemBlockRailcraft(railcraftBlock);
-            itemBlock.setRegistryName(tag);
-            RailcraftRegistry.register(railcraftBlock, itemBlock);
+            railcraftItem = new ItemBlockRailcraft(railcraftBlock);
+            railcraftItem.setRegistryName(name);
+            RailcraftRegistry.register(railcraftBlock, railcraftItem);
             railcraftFluid.setBlock(railcraftBlock);
         }
     }
