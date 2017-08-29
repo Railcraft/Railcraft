@@ -27,7 +27,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
  *
  * Created by CovertJaguar on 4/2/2015.
  */
-public class FluidItemHelper {
+public final class FluidItemHelper {
     /**
      * Fill a liquid container.
      *
@@ -149,6 +149,9 @@ public class FluidItemHelper {
     @Nullable
     public static Fluid getFluidInContainer(@Nullable ItemStack stack) {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
+    }
+
+    private FluidItemHelper() {
     }
 
     @Deprecated

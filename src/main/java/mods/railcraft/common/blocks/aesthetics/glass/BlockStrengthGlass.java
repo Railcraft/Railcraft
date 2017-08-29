@@ -73,7 +73,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         for (int meta = 0; meta < 16; meta++) {

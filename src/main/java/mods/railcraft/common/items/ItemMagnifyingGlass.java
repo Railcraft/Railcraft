@@ -54,7 +54,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 

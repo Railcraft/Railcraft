@@ -1,6 +1,5 @@
 package mods.railcraft.common.plugins.jei.crafting;
 
-import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
@@ -14,11 +13,6 @@ import java.util.List;
  *
  */
 public class ShapedFluidRecipeHandler implements IRecipeHandler<ShapedFluidRecipe> {
-    private final IJeiHelpers jeiHelpers;
-
-    public ShapedFluidRecipeHandler(IJeiHelpers jeiHelpers) {
-        this.jeiHelpers = jeiHelpers;
-    }
 
     @Override
     public Class<ShapedFluidRecipe> getRecipeClass() {
@@ -37,7 +31,7 @@ public class ShapedFluidRecipeHandler implements IRecipeHandler<ShapedFluidRecip
 
     @Override
     public IRecipeWrapper getRecipeWrapper(ShapedFluidRecipe recipe) {
-        return new ShapedFluidRecipeWrapper(jeiHelpers, recipe);
+        return new ShapedFluidRecipeWrapper(recipe);
     }
 
     @Override

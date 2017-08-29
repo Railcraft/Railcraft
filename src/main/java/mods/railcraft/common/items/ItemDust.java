@@ -33,7 +33,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumDust d : EnumDust.VALUES) {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
             RailcraftRegistry.register(this, d, stack);

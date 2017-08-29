@@ -35,7 +35,7 @@ public class ItemSteelShovel extends ItemSpade implements IRailcraftItemSimple {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setToolClass(this, "shovel", 2);
     }
 

@@ -53,7 +53,7 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
 
         ForestryPlugin.addBackpackItem("forestry.builder", this);

@@ -19,7 +19,7 @@ public class ItemCoke extends ItemRailcraft {
     public static final int COKE_HEAT = 3200;
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         OreDictionary.registerOre("fuelCoke", new ItemStack(this));
     }
 

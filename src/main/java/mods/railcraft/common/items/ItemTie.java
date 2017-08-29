@@ -29,7 +29,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(this, tie, new ItemStack(this, 1, tie.ordinal()));
         }

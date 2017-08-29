@@ -91,7 +91,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 

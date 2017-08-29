@@ -237,10 +237,9 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         return null;
     }
 
-    @Nullable
     @Override
     public Optional<IRailcraftObject<TrackKit>> getObject() {
-        return null;
+        return Optional.empty();
     }
 
     public TrackKit getTrackKit() {

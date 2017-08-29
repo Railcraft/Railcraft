@@ -47,7 +47,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
         for (BatteryVariant variant : BatteryVariant.VALUES) {
             OreDictionary.registerOre(RECHARGEABLE_BATTERY_ORE_TAG, variant.getStack());

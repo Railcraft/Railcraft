@@ -2,7 +2,6 @@ package mods.railcraft.common.plugins.jei.crafting;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.plugins.vanilla.crafting.AbstractShapelessRecipeWrapper;
 import mezz.jei.util.BrokenCraftingRecipeException;
 import mezz.jei.util.ErrorUtil;
@@ -13,12 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class ShapelessFluidRecipeWrapper extends AbstractShapelessRecipeWrapper {
-    private final IJeiHelpers jeiHelpers;
     private final ShapelessFluidRecipe recipe;
 
     public ShapelessFluidRecipeWrapper(IJeiHelpers jeiHelpers, ShapelessFluidRecipe recipe) {
         super(jeiHelpers.getGuiHelper());
-        this.jeiHelpers = jeiHelpers;
         this.recipe = recipe;
         for (Object input : this.recipe.getInput()) {
             if (input instanceof ItemStack) {
@@ -32,11 +29,11 @@ public class ShapelessFluidRecipeWrapper extends AbstractShapelessRecipeWrapper 
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        IStackHelper stackHelper = jeiHelpers.getStackHelper();
         ItemStack recipeOutput = recipe.getRecipeOutput();
 
         try {
-            List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.getInput());
+            List<List<ItemStack>> inputs = FluidRecipeInterpreter.expand(recipe.getInput());
+
             ingredients.setInputLists(ItemStack.class, inputs);
 
             if (recipeOutput != null) {

@@ -12,6 +12,7 @@ package mods.railcraft.common.fluids;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.potion.RailcraftPotions;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -21,8 +22,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -38,13 +45,25 @@ public enum RailcraftFluids {
     CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500, false) {
         @Override
         Block makeBlock(Fluid fluid) {
-            return new BlockRailcraftFluid(fluid, Material.WATER).setFlammable(true).setFlammability(10);
+            return new BlockRailcraftFluid(fluid, Material.WATER) {
+                @Override
+                public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+                    super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+                    if (entityIn instanceof EntityLivingBase && RailcraftPotions.CREOSOTE.isEnabled()) {
+                        EntityLivingBase living = (EntityLivingBase) entityIn;
+                        Potion potion = RailcraftPotions.CREOSOTE.get();
+                        if (!living.isPotionActive(potion)) {
+                            living.addPotionEffect(new PotionEffect(potion, 100, 0));
+                        }
+                    }
+                }
+            }.setFlammable(true).setFlammability(10).setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f);
         }
     },
     STEAM("fluid.steam", Fluids.STEAM, -1000, 500, true) {
         @Override
         Block makeBlock(Fluid fluid) {
-            return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow();
+            return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow().setParticleColor(0xf2 / 255f, 0xf2 / 255f, 0xf2 / 255f);
         }
     };
     public static final RailcraftFluids[] VALUES = values();

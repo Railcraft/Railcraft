@@ -66,7 +66,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 
         for (EnumPost post : EnumPost.VALUES) {

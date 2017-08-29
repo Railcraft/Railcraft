@@ -28,8 +28,8 @@ public class ShapedFluidRecipe implements IRecipe {
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-    protected ItemStack output = null;
-    protected Object[] input = null;
+    protected ItemStack output;
+    protected Object[] input;
     protected int width = 0;
     protected int height = 0;
     protected boolean mirrored = true;

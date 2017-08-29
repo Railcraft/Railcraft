@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PotionsPlugin {
+public class PotionPlugin {
     private static final List<ItemStack> POTIONS = new ArrayList<>();
     private static final List<ItemStack> POTIONS_SPLASH = new ArrayList<>();
     private static final List<ItemStack> POTIONS_LINGERING = new ArrayList<>();

@@ -16,7 +16,6 @@ import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
@@ -176,7 +175,7 @@ public class ModuleCore extends RailcraftModulePayload {
                     EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
                 }
 
-                Set<Item> testSet = new HashSet<Item>();
+                Set<Item> testSet = new HashSet<>();
                 if (!RailcraftConfig.vanillaTrackRecipes()) {
                     testSet.add(Item.getItemFromBlock(Blocks.RAIL));
                     testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
@@ -236,31 +235,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void init() {
-
-                // Finish initializing ItemRegistry
-                //TODO: this is obsolete?
-//                for (EnumWayObject type : EnumWayObject.values()) {
-//                    if (type.isEnabled())
-//                        RailcraftRegistry.register(type.getItem());
-//                }
-//
-//                for (EnumGeneric type : EnumGeneric.values()) {
-//                    if (type.isEnabled())
-//                        RailcraftRegistry.register(type.getStack());
-//                }
-//
-//                Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
-//                machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
-//
-//                for (IEnumMachine machine : machines) {
-//                    if (machine.isAvailable())
-//                        RailcraftRegistry.register(machine.getItem());
-//                }
-
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
                     IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
@@ -329,9 +303,6 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 RailcraftFluids.finalizeDefinitions();
-                RailcraftBlocks.finalizeDefinitions();
-                RailcraftItems.finalizeDefinitions();
-                RailcraftCarts.finalizeDefinitions();
 
                 GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 

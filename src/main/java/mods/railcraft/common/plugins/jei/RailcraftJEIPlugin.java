@@ -21,6 +21,7 @@ import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import mods.railcraft.common.gui.containers.ContainerRollingMachinePowered;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
 import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeHandler;
 import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeHandler;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
@@ -45,10 +46,12 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
     public void register(IModRegistry registry) {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
+        FluidRecipeInterpreter.init(jeiHelpers.getStackHelper(), registry.getIngredientRegistry());
+
         registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
 
         registry.addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
-        registry.addRecipeHandlers(new ShapedFluidRecipeHandler(jeiHelpers));
+        registry.addRecipeHandlers(new ShapedFluidRecipeHandler());
         registry.addRecipeHandlers(new ShapelessFluidRecipeHandler(jeiHelpers));
 
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);

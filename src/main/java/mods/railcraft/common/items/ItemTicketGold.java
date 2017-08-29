@@ -38,7 +38,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     public static final Predicate<ItemStack> FILTER = StackFilters.of(ItemTicketGold.class);
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         setRarity(1);
     }
 

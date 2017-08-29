@@ -171,21 +171,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         return def;
     }
 
-    public static void finalizeDefinitions() {
-        for (RailcraftBlocks type : VALUES) {
-            if (type.block != null)
-                ((IRailcraftObject) type.block).finalizeDefinition();
-            if (type.item != null)
-                ((IRailcraftObject) type.item).finalizeDefinition();
-//            if (type.block != null) {
-//                List<ItemStack> subBlocks = new ArrayList<>();
-//                type.block.getSubBlocks(type.item, null, subBlocks);
-//                if (subBlocks.contains(null))
-//                    throw new RuntimeException("Null item from " + type.name());
-//            }
-        }
-    }
-
     @Override
     public void register() {
         if (block != null)
@@ -206,8 +191,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             if (!(block instanceof IRailcraftBlock))
                 throw new RuntimeException("Railcraft Blocks must implement IRailcraftBlock");
             IRailcraftBlock blockObject = (IRailcraftBlock) block;
-            blockObject.initializeDefinintion();
-            Railcraft.instance.recipeWaitList.add(blockObject);
+            blockObject.initializeDefinition();
 
             if (item != null) {
                 if (!(item instanceof IRailcraftItemBlock))
@@ -215,12 +199,27 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                 if (item instanceof IRailcraftItemSimple)
                     throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItemSimple");
                 IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
-                itemObject.initializeDefinintion();
-                Railcraft.instance.recipeWaitList.add(itemObject);
+                itemObject.initializeDefinition();
             }
         } else {
             conditions().printFailureReason(this);
         }
+    }
+
+    @Override
+    public void defineRecipes() {
+        if (block != null)
+            ((IRailcraftObject) block).defineRecipes();
+        if (item != null)
+            ((IRailcraftObject) item).defineRecipes();
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        if (block != null)
+            ((IRailcraftObject) block).finalizeDefinition();
+        if (item != null)
+            ((IRailcraftObject) item).finalizeDefinition();
     }
 
     public boolean isEqual(IVariantEnum variant, @Nullable ItemStack stack) {
@@ -268,6 +267,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public String toString() {
         return "Block{" + getBaseTag() + "}";
     }
+
 
 
 }
