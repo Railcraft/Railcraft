@@ -77,7 +77,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
         return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
-    TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCart::new),
+    TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCartTNTWood::new),
     WORK(0, "cart_work", EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
 
     // Railcraft Locomotives
