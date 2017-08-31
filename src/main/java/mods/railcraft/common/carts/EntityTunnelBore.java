@@ -10,10 +10,12 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.Train.TrainState;
@@ -55,15 +57,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
@@ -222,13 +223,14 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         mineableStates.add(blockState);
     }
 
-    public static boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
+    @Contract("null, _ -> false")
+    public boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
         if (isEmpty(head))
             return false;
 
         if (head.getItem() instanceof IBoreHead) {
-            IBoreHead boreHead = (IBoreHead) head.getItem();
 
+            /*
             boolean mappingExists = false;
 
             int blockHarvestLevel = HarvestPlugin.getHarvestLevel(targetState, "pickaxe");
@@ -254,9 +256,21 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
             if (mappingExists)
                 return false;
+            */
+            Item item = head.getItem();
+            Set<String> toolClasses = item.getToolClasses(head);
+            EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ);
+
+            for (String tool : toolClasses) {
+                if (item.getHarvestLevel(head, tool, fakePlayer, targetState) >= HarvestPlugin.getHarvestLevel(targetState, tool)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -820,31 +834,48 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
         // End of Event Fire
 
-        List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, EnchantmentHelper.getEnchantmentLevel(
-                Enchantments.FORTUNE, head));
+        boolean silk = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, head) > 0;
+        List<ItemStack> items;
+        int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, head);
 
-        for (ItemStack stack : items) {
-            if (StandardStackFilters.FUEL.test(stack))
-                stack = InvTools.moveItemStack(stack, invFuel);
-
-            if (!isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
-                stack = InvTools.moveItemStack(stack, invBallast);
-
-            if (!isEmpty(stack))
-                stack = CartToolsAPI.transferHelper.pushStack(this, stack);
-
-            if (!isEmpty(stack) && !RailcraftConfig.boreDestroysBlocks() && worldObj.getGameRules().getBoolean("doTileDrops")) {
-                float f = 0.7F;
-                double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                Vec3d spewPos = getPositionAhead(-3.2);
-                spewPos.addVector(xr, 0.3 + yr, zr);
-                EntityItem entityitem = new EntityItem(worldObj, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
-                worldObj.spawnEntityInWorld(entityitem);
-            }
+        if (silk) {
+            ItemStack stack = HarvestPlugin.getSilkTouchDrop(targetState);
+            items = isEmpty(stack) ? new ArrayList<>() : Lists.newArrayList(stack); // Use modifiable lists for events
+        } else {
+            items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, fortuneLevel);
         }
 
+        // Start of Event Fire
+        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(worldObj, targetPos, targetState, fortuneLevel, 1F, items, CartTools.getCartOwnerEntity(this), silk);
+        MinecraftForge.EVENT_BUS.post(harvestDropsEvent);
+
+        if (harvestDropsEvent.isCanceled())
+            return false;
+        // End of Event Fire
+
+        if (RailcraftConfig.boreDestroysBlocks() || !worldObj.getGameRules().getBoolean("doTileDrops")) {
+            for (ItemStack stack : items) {
+                if (StandardStackFilters.FUEL.test(stack))
+                    stack = InvTools.moveItemStack(stack, invFuel);
+
+                if (!isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
+                    stack = InvTools.moveItemStack(stack, invBallast);
+
+                if (!isEmpty(stack))
+                    stack = CartToolsAPI.transferHelper.pushStack(this, stack);
+
+                if (!isEmpty(stack)) {
+                    float f = 0.7F;
+                    double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                    double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                    double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                    Vec3d spewPos = getPositionAhead(-3.2);
+                    spewPos.addVector(xr, 0.3 + yr, zr);
+                    EntityItem entityitem = new EntityItem(worldObj, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
+                    worldObj.spawnEntityInWorld(entityitem);
+                }
+            }
+        }
         WorldPlugin.setBlockToAir(worldObj, targetPos);
 
         head.damageItem(1, CartTools.getCartOwnerEntity(this));
