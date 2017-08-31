@@ -11,7 +11,6 @@ package mods.railcraft.common.worldgen;
 
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -29,13 +28,12 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
@@ -49,7 +47,7 @@ public class VillagerTrades {
         career.addTrade(1, new GenericTrade(offer(Items.COAL, 12, 16), offer(Items.EMERALD)));
         career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(Items.COAL, 16, 24)));
 
-        career.addTrade(1, new GenericTrade(offer(RailcraftItems.COKE, 8, 12), offer(Items.EMERALD)));
+        career.addTrade(1, new GenericTrade(offer(RailcraftItems.COKE, 6, 8), offer(Items.EMERALD)));
         career.addTrade(1, new GenericTrade(offer(Items.EMERALD), offer(RailcraftItems.COKE, 8, 12)));
 
         career.addTrade(1, new GenericTrade(offer(Blocks.RAIL, 30, 34), offer(Items.EMERALD, 2, 3)));
@@ -66,7 +64,7 @@ public class VillagerTrades {
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.CROWBAR_IRON), offer(Items.EMERALD, 7, 9)));
         career.addTrade(3,
-            new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 24, 54)).setEnchanter(enchanter).setUse((t) -> 1));
+                new GenericTrade(offer(RailcraftItems.CROWBAR_STEEL), offer(Items.EMERALD, 24, 54)).setEnchanter(enchanter).setUse((t) -> 1));
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.WHISTLE_TUNER), offer(Items.EMERALD, 1, 2)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.MAG_GLASS), offer(Items.EMERALD, 1, 2)));
@@ -139,7 +137,7 @@ public class VillagerTrades {
                 recipeList.add(new MerchantRecipe(buyStack1, buyStack2, enchanter.apply(sellStack, rand), 0, maxUseSetter.applyAsInt(this)));
             } else {
                 Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping",
-                    buyStack1, buyStack2, sellStack);
+                        buyStack1, buyStack2, sellStack);
             }
         }
 
@@ -183,19 +181,19 @@ public class VillagerTrades {
 
         static {
             trackKits = TrackRegistry.TRACK_KIT.stream()
-                .filter(kit -> kit.isEnabled() && kit.isVisible())
-                .collect(Collectors.toList());
+                    .filter(kit -> kit.isEnabled() && kit.isVisible())
+                    .collect(Collectors.toList());
         }
 
         @Override
         public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
-            if (trackKits.size() == 0) 
+            if (trackKits.size() == 0)
                 return;
             ItemStack stack = trackKits.get(random.nextInt(trackKits.size())).getTrackKitItem(2);
             if (stack == null)
                 return;
             recipeList.add(new MerchantRecipe(stack, null,
-                new ItemStack(Items.EMERALD, MathHelper.getRandomIntegerInRange(random, 1, 3))));
+                    new ItemStack(Items.EMERALD, MathHelper.getRandomIntegerInRange(random, 1, 3))));
         }
     }
 }
