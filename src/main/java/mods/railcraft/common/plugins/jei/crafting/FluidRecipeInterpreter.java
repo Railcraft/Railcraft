@@ -5,6 +5,7 @@ import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
@@ -57,6 +58,7 @@ public final class FluidRecipeInterpreter {
         return Collections.emptyList();
     }
 
+    @SuppressWarnings("deprecation")
     public static List<ItemStack> getAllContainersFilledWith(@Nullable FluidStack fluid) {
         if (fluid == null)
             return Collections.emptyList();
@@ -65,13 +67,18 @@ public final class FluidRecipeInterpreter {
 
         for (ItemStack ingredient : ingredients) {
             if (ingredient.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                FluidStack drain;
-
-                ItemStack emptyStack = ingredient.copy();
-                IFluidHandler emptyCapability = emptyStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                drain = emptyCapability.drain(fluid.amount, false);
+                ItemStack toTest = ingredient.copy();
+                IFluidHandler emptyCapability = toTest.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                FluidStack drain = emptyCapability.drain(fluid.amount, false);
                 if (drain != null && drain.isFluidStackIdentical(fluid)) {
-                    ret.add(emptyStack);
+                    ret.add(toTest);
+                }
+            } else if (ingredient.getItem() instanceof IFluidContainerItem) {
+                ItemStack toTest = ingredient.copy();
+                IFluidContainerItem container = (IFluidContainerItem) ingredient.getItem();
+                FluidStack drain = container.drain(toTest, fluid.amount, false);
+                if (drain != null && drain.isFluidStackIdentical(fluid)) {
+                    ret.add(toTest);
                 }
             }
         }

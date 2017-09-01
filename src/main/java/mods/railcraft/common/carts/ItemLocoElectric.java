@@ -35,7 +35,6 @@ public class ItemLocoElectric extends ItemLocomotive {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        //TODO: Change to battery
         CraftingPlugin.addRecipe(getStack(),
                 "LT ",
                 "DBD",

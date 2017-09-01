@@ -36,13 +36,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * A version of {@link net.minecraftforge.oredict.ShapelessOreRecipe shaped ore recipe}
  * that supports fluid.
  */
 public class ShapelessFluidRecipe implements IRecipe {
-    protected ItemStack output = null;
+    protected ItemStack output;
     protected List<Object> input = new ArrayList<>();
+    protected int[] drains;
 
     public ShapelessFluidRecipe(ItemStack result, Object... recipe) {
         output = result.copy();
@@ -97,10 +101,11 @@ public class ShapelessFluidRecipe implements IRecipe {
     public boolean matches(InventoryCrafting var1, World world) {
         List<Object> required = new ArrayList<>(input);
 
+        drains = new int[var1.getSizeInventory()];
         for (int i = 0; i < var1.getSizeInventory(); i++) {
             ItemStack slot = var1.getStackInSlot(i);
 
-            if (slot != null) {
+            if (!isEmpty(slot)) {
                 boolean inRecipe = false;
 
                 for (Iterator<Object> iterator = required.iterator(); iterator.hasNext(); ) {
@@ -115,21 +120,24 @@ public class ShapelessFluidRecipe implements IRecipe {
                             match = OreDictionary.itemMatches(itr.next(), slot, false);
                         }
                     } else if (next instanceof FluidStack) {
-                        if (slot.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                            IFluidHandler handler = slot.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                        ItemStack toCheck = setSize(slot.copy(), 1);
+                        if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                            IFluidHandler handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                             FluidStack fluidStack = handler.drain((FluidStack) next, false);
-                            if (fluidStack == null || fluidStack.amount != ((FluidStack) next).amount) {
+                            if (fluidStack == null || fluidStack.amount < ((FluidStack) next).amount) {
                                 continue;
                             }
                             match = true;
-                        } else if (slot.getItem() instanceof IFluidContainerItem) {
+                            drains[i] = ((FluidStack) next).amount;
+                        } else if (toCheck.getItem() instanceof IFluidContainerItem) {
                             // legacy
-                            IFluidContainerItem handler = (IFluidContainerItem) slot.getItem();
-                            FluidStack fluidStack = handler.getFluid(slot);
+                            IFluidContainerItem handler = (IFluidContainerItem) toCheck.getItem();
+                            FluidStack fluidStack = handler.getFluid(toCheck);
                             if (fluidStack == null || fluidStack.getFluid() != ((FluidStack) next).getFluid() || fluidStack.amount < ((FluidStack) next).amount) {
                                 continue;
                             }
                             match = true;
+                            drains[i] = -((FluidStack) next).amount;
                         } else {
                             continue;
                         }
@@ -162,7 +170,26 @@ public class ShapelessFluidRecipe implements IRecipe {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
+        ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
+        for (int i = 0; i < ret.length; i++) {
+            if (drains[i] != 0) {
+                ret[i] = inv.getStackInSlot(i);
+                if (isEmpty(ret[i]))
+                    continue;
+                ret[i] = setSize(ret[i].copy(), 1);
+                if (drains[i] > 0) {
+                    ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).drain(drains[i], true);
+                } else {
+                    IFluidContainerItem fluidContainerItem = (IFluidContainerItem) ret[i].getItem();
+                    fluidContainerItem.drain(ret[i], -drains[i], true);
+                }
+                ret[i] = ret[i].copy();
+            } else {
+                ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
+            }
+        }
+        return ret;
     }
 }

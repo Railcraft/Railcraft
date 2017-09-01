@@ -31,12 +31,6 @@ public class FluidContainerCapabilityDispatcher extends FluidBucketWrapper {
         return 0;
     }
 
-    @Nullable
-    @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
-        return super.drain(resource, doDrain);
-    }
-
     @Override
     protected void setFluid(@Nullable Fluid fluid) {
         if (fluid == null)

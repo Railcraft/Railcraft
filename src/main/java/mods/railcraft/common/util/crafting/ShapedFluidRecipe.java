@@ -13,11 +13,13 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
  * A version of {@link net.minecraftforge.oredict.ShapedOreRecipe shaped ore recipe}
@@ -30,6 +32,7 @@ public class ShapedFluidRecipe implements IRecipe {
 
     protected ItemStack output;
     protected Object[] input;
+    protected int[] drains;
     protected int width = 0;
     protected int height = 0;
     protected boolean mirrored = true;
@@ -137,6 +140,7 @@ public class ShapedFluidRecipe implements IRecipe {
      */
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
+        drains = new int[inv.getSizeInventory()];
         for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
             for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {
                 if (checkMatch(inv, x, y, false)) {
@@ -154,6 +158,7 @@ public class ShapedFluidRecipe implements IRecipe {
 
     @SuppressWarnings({"unchecked", "deprecation"})
     protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
+        Arrays.fill(drains, 0);
         for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
             for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
                 int subX = x - startX;
@@ -169,6 +174,7 @@ public class ShapedFluidRecipe implements IRecipe {
                 }
 
                 ItemStack slot = inv.getStackInRowAndColumn(x, y);
+                int pos = y * inv.getWidth() + x;
 
                 if (target instanceof ItemStack) {
                     if (!OreDictionary.itemMatches((ItemStack) target, slot, false)) {
@@ -188,23 +194,26 @@ public class ShapedFluidRecipe implements IRecipe {
                 } else if (target instanceof FluidStack) {
                     if (isEmpty(slot))
                         return false;
-                    if (slot.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                        IFluidHandler handler = slot.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                    ItemStack toCheck = setSize(slot.copy(), 1);
+                    if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                        IFluidHandler handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                         FluidStack fluidStack = handler.drain((FluidStack) target, false);
-                        if (fluidStack == null || fluidStack.amount != ((FluidStack) target).amount) {
+                        if (fluidStack == null || fluidStack.amount < ((FluidStack) target).amount) {
                             return false;
                         }
-                    } else if (slot.getItem() instanceof IFluidContainerItem) {
+                        drains[pos] = ((FluidStack) target).amount;
+                    } else if (toCheck.getItem() instanceof IFluidContainerItem) {
                         // legacy
-                        IFluidContainerItem handler = (IFluidContainerItem) slot.getItem();
-                        FluidStack fluidStack = handler.getFluid(slot);
+                        IFluidContainerItem handler = (IFluidContainerItem) toCheck.getItem();
+                        FluidStack fluidStack = handler.getFluid(toCheck);
                         if (fluidStack == null || fluidStack.getFluid() != ((FluidStack) target).getFluid() || fluidStack.amount < ((FluidStack) target).amount) {
                             return false;
                         }
+                        drains[pos] = -((FluidStack) target).amount;
                     } else {
                         return false;
                     }
-                } else if (target == null && slot != null) {
+                } else if (target == null && !isEmpty(slot)) {
                     return false;
                 }
             }
@@ -230,8 +239,27 @@ public class ShapedFluidRecipe implements IRecipe {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
+        ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
+        for (int i = 0; i < ret.length; i++) {
+
+            if (drains[i] != 0) {
+                ret[i] = inv.getStackInSlot(i);
+                if (isEmpty(ret[i]))
+                    continue;
+                ret[i] = setSize(ret[i].copy(), 1);
+                if (drains[i] > 0) {
+                    ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).drain(drains[i], true);
+                } else {
+                    IFluidContainerItem fluidContainerItem = (IFluidContainerItem) ret[i].getItem();
+                    fluidContainerItem.drain(ret[i], -drains[i], true);
+                }
+            } else {
+                ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
+            }
+        }
+        return ret;
     }
 
     public int getWidth() {
