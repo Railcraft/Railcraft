@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.makeSafe;
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
@@ -243,7 +244,6 @@ public class ShapedFluidRecipe implements IRecipe {
     public ItemStack[] getRemainingItems(InventoryCrafting inv) {
         ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
         for (int i = 0; i < ret.length; i++) {
-
             if (drains[i] != 0) {
                 ret[i] = inv.getStackInSlot(i);
                 if (isEmpty(ret[i]))
@@ -255,6 +255,7 @@ public class ShapedFluidRecipe implements IRecipe {
                     IFluidContainerItem fluidContainerItem = (IFluidContainerItem) ret[i].getItem();
                     fluidContainerItem.drain(ret[i], -drains[i], true);
                 }
+                ret[i] = makeSafe(ret[i]);
             } else {
                 ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
             }

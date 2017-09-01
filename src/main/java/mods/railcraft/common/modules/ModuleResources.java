@@ -35,7 +35,12 @@ import net.minecraftforge.oredict.OreDictionary;
 
 @RailcraftModule(value = "railcraft:resources", description = "metals, fluids, raw materials")
 public class ModuleResources extends RailcraftModulePayload {
+
+    private static ModuleResources instance;
+    boolean bottleFree = false;
+
     public ModuleResources() {
+        instance = this;
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
@@ -147,20 +152,10 @@ public class ModuleResources extends RailcraftModulePayload {
                 }
             }
 
-            private void initMetalBlock(Metal m) {
-                String blockTag = m.getOreTag(Metal.Form.BLOCK);
-                OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
-                CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
-                        "III",
-                        "III",
-                        "III",
-                        'I', m.getOreTag(Metal.Form.INGOT));
-                CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
-            }
-
             @Override
             public void init() {
-                if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
+                bottleFree = RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable();
+                if (bottleFree) {
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);
                 }
@@ -179,8 +174,27 @@ public class ModuleResources extends RailcraftModulePayload {
         });
     }
 
+    private void initMetalBlock(Metal m) {
+        String blockTag = m.getOreTag(Metal.Form.BLOCK);
+        OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
+        CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
+                "III",
+                "III",
+                "III",
+                'I', m.getOreTag(Metal.Form.INGOT));
+        CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
+    }
+
     private void checkSteelBlock() {
         if (OreDictionary.getOres("blockSteel").isEmpty())
             OreDictionary.registerOre("blockSteel", Blocks.IRON_BLOCK);
+    }
+
+    public static ModuleResources getInstance() {
+        return instance;
+    }
+
+    public boolean isBottleFree() {
+        return bottleFree;
     }
 }

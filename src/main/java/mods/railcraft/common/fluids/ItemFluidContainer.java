@@ -10,6 +10,7 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -31,6 +32,7 @@ import net.minecraftforge.fluids.Fluid;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
@@ -103,11 +105,11 @@ public class ItemFluidContainer extends ItemRailcraft {
     @Nullable
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        return new ItemStack(empty);
+        return ModuleResources.getInstance().isBottleFree() ? emptyStack() : new ItemStack(empty);
     }
 
     @Override
     public boolean hasContainerItem(ItemStack stack) {
-        return true;
+        return !ModuleResources.getInstance().isBottleFree();
     }
 }

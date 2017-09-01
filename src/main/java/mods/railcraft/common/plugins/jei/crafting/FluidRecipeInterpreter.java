@@ -66,15 +66,14 @@ public final class FluidRecipeInterpreter {
         List<ItemStack> ret = new ArrayList<>();
 
         for (ItemStack ingredient : ingredients) {
+            ItemStack toTest = ingredient.copy();
             if (ingredient.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                ItemStack toTest = ingredient.copy();
                 IFluidHandler emptyCapability = toTest.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                 FluidStack drain = emptyCapability.drain(fluid.amount, false);
                 if (drain != null && drain.isFluidStackIdentical(fluid)) {
                     ret.add(toTest);
                 }
             } else if (ingredient.getItem() instanceof IFluidContainerItem) {
-                ItemStack toTest = ingredient.copy();
                 IFluidContainerItem container = (IFluidContainerItem) ingredient.getItem();
                 FluidStack drain = container.drain(toTest, fluid.amount, false);
                 if (drain != null && drain.isFluidStackIdentical(fluid)) {
