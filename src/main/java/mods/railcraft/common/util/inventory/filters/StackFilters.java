@@ -83,6 +83,14 @@ public final class StackFilters {
     }
 
     /**
+     * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
+     * However, when the filter is empty, everything is allowed.
+     */
+    public static Predicate<ItemStack> matchesFilter(@Nonnull final IInventoryComposite inv) {
+        return stack -> InvTools.isInventoryEmpty(inv) || inv.stackStream().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
+    }
+
+    /**
      * Matches against the provided ItemStacks.
      *
      * If no ItemStacks are provided to match against, it returns true.

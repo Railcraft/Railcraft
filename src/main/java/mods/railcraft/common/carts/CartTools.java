@@ -18,8 +18,10 @@ import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -37,6 +39,7 @@ import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -116,6 +119,16 @@ public class CartTools {
         }
         ItemStack cartItem = cart.getCartItem();
         return !InvTools.isEmpty(stack) && InvTools.isCartItemEqual(stack, cartItem, true);
+    }
+
+    /**
+     * Matches carts from a filter inventory.
+     *
+     * @param composite The filter inventory
+     * @return The cart checker
+     */
+    public static Predicate<EntityMinecart> matchesCartsIfFiltered(IInventoryComposite composite) {
+        return (cart) -> InvTools.isInventoryEmpty(composite) || composite.stackStream().anyMatch((stack) -> doesCartMatchFilter(stack, cart));
     }
 
     public static void explodeCart(EntityMinecart cart) {
