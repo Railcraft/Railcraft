@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * Helper functions for Fluid Items
  *
@@ -31,6 +33,7 @@ public class FluidItemHelper {
      *
      * @return The modified container and the amount of Fluid filled.
      */
+    @Deprecated
     public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
         if (InvTools.isEmpty(container))
             return new FillReturn(null, 0);
@@ -38,7 +41,7 @@ public class FluidItemHelper {
         if (fluidStack == null)
             return new FillReturn(container, 0);
         if (container.getItem() instanceof IFluidContainerItem) {
-            container.stackSize = 1;
+            setSize(container, 1);
             IFluidContainerItem fluidCon = (IFluidContainerItem) container.getItem();
             return new FillReturn(container, fluidCon.fill(container, fluidStack, true));
         }
@@ -48,6 +51,7 @@ public class FluidItemHelper {
         return new FillReturn(container, 0);
     }
 
+    @Deprecated
     public static FillReturn fillContainer(@Nullable ItemStack stackToFill, Fluid fluid) {
         return fillContainer(stackToFill, new FluidStack(fluid, Integer.MAX_VALUE));
     }
@@ -57,13 +61,14 @@ public class FluidItemHelper {
      *
      * @return The modified container and any fluid drained.
      */
+    @Deprecated
     public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
         if (InvTools.isEmpty(container))
             return new DrainReturn(null, null, false);
         container = container.copy();
         if (container.getItem() instanceof IFluidContainerItem) {
             Item item = container.getItem();
-            container.stackSize = 1;
+            setSize(container, 1);
             IFluidContainerItem fluidCon = (IFluidContainerItem) item;
             FluidStack drained = fluidCon.drain(container, maxDrain, true);
             ItemStack returnStack;
@@ -146,6 +151,7 @@ public class FluidItemHelper {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }
 
+    @Deprecated
     public static class FillReturn {
         public final ItemStack container;
         public final int amount;
@@ -156,6 +162,7 @@ public class FluidItemHelper {
         }
     }
 
+    @Deprecated
     public static class DrainReturn {
         public final ItemStack container;
         public final FluidStack fluidDrained;

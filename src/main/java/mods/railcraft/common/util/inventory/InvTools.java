@@ -59,7 +59,7 @@ import java.util.function.Predicate;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class InvTools {
-    private static final String TAG_SLOT = "Slot";
+    public static final String TAG_SLOT = "Slot";
 
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {
@@ -83,6 +83,42 @@ public abstract class InvTools {
         if (isEmpty(stack))
             return emptyStack();
         stack.stackSize = size;
+        return stack;
+    }
+
+    @Contract("!null, _ -> !null; null, _ -> null")
+    @Nullable
+    public static ItemStack incSize(@Nullable ItemStack stack, int size) {
+        if (isEmpty(stack))
+            return emptyStack();
+        stack.stackSize += size;
+        return stack;
+    }
+
+    @Contract("!null, _ -> !null; null, _ -> null")
+    @Nullable
+    public static ItemStack decSize(@Nullable ItemStack stack, int size) {
+        if (isEmpty(stack))
+            return emptyStack();
+        stack.stackSize -= size;
+        return stack;
+    }
+
+    @Contract("!null -> !null; null -> null")
+    @Nullable
+    public static ItemStack inc(@Nullable ItemStack stack) {
+        if (isEmpty(stack))
+            return emptyStack();
+        stack.stackSize++;
+        return stack;
+    }
+
+    @Contract("!null -> !null; null -> null")
+    @Nullable
+    public static ItemStack dec(@Nullable ItemStack stack) {
+        if (isEmpty(stack))
+            return emptyStack();
+        stack.stackSize--;
         return stack;
     }
 
@@ -210,7 +246,7 @@ public abstract class InvTools {
 
     @Nullable
     public static ItemStack depleteItem(ItemStack stack) {
-        if (stack.stackSize == 1)
+        if (sizeOf(stack) == 1)
             return stack.getItem().getContainerItem(stack);
         else {
             stack.splitStack(1);
@@ -225,10 +261,10 @@ public abstract class InvTools {
         curDamage += damage;
         stack.setItemDamage(curDamage);
         if (stack.getItemDamage() > stack.getMaxDamage()) {
-            stack.stackSize--;
+            dec(stack);
             stack.setItemDamage(0);
         }
-        if (stack.stackSize <= 0)
+        if (isEmpty(stack))
             stack = emptyStack();
         return stack;
     }
@@ -269,13 +305,13 @@ public abstract class InvTools {
             float xOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
             float yOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
             float zOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
-            while (stack.stackSize > 0) {
+            while (!isEmpty(stack)) {
                 int numToDrop = MiscTools.RANDOM.nextInt(21) + 10;
-                if (numToDrop > stack.stackSize)
-                    numToDrop = stack.stackSize;
+                if (numToDrop > sizeOf(stack))
+                    numToDrop = sizeOf(stack);
                 ItemStack newStack = stack.copy();
-                newStack.stackSize = numToDrop;
-                stack.stackSize -= numToDrop;
+                setSize(newStack, numToDrop);
+                decSize(stack, numToDrop);
                 EntityItem entityItem = new EntityItem(world, x + xOffset, y + yOffset, z + zOffset, newStack);
                 float variance = 0.05F;
                 entityItem.motionX = (float) MiscTools.RANDOM.nextGaussian() * variance;
@@ -355,7 +391,7 @@ public abstract class InvTools {
         for (IInventoryObject inventoryObject : inv) {
             count += InventoryIterator.getRailcraft(inventoryObject).getStackStream()
                     .filter(filter)
-                    .mapToInt(s -> s.stackSize)
+                    .mapToInt(InvTools::sizeOf)
                     .sum();
         }
         return count;
@@ -367,7 +403,7 @@ public abstract class InvTools {
             for (IInvSlot slot : InventoryIterator.getRailcraft(inventoryObject)) {
                 ItemStack stack = slot.getStack();
                 if (!isEmpty(stack))
-                    count += stack.stackSize;
+                    count += sizeOf(stack);
                 if (count >= amount)
                     return true;
             }
@@ -530,13 +566,13 @@ public abstract class InvTools {
     @SuppressWarnings("SimplifiableIfStatement")
     @Contract("null,null->true;null,!null->false;!null,null->false;")
     public static boolean isItemEqualStrict(@Nullable ItemStack a, @Nullable ItemStack b) {
-        if (a == null && b == null)
+        if (isEmpty(a) && isEmpty(b))
             return true;
-        if (a == null || b == null)
+        if (isEmpty(a) || isEmpty(b))
             return false;
         if (a.getItem() != b.getItem())
             return false;
-        if (a.stackSize != b.stackSize)
+        if (sizeOf(a) != sizeOf(b))
             return false;
         if (a.getItemDamage() != b.getItemDamage())
             return false;
@@ -645,12 +681,12 @@ public abstract class InvTools {
 
     @Contract("null,_ -> false;_,null -> false;")
     public static boolean isItemGreaterOrEqualThan(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
-        return isItemEqual(stackA, stackB) && stackA.stackSize >= stackB.stackSize;
+        return isItemEqual(stackA, stackB) && sizeOf(stackA) >= sizeOf(stackB);
     }
 
     @Contract("null,_ -> false;_,null -> false;")
     public static boolean isItemLessThanOrEqualTo(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
-        return isItemEqual(stackA, stackB) && stackA.stackSize <= stackB.stackSize;
+        return isItemEqual(stackA, stackB) && sizeOf(stackA) <= sizeOf(stackB);
     }
 
     /**
@@ -701,7 +737,7 @@ public abstract class InvTools {
         if (isEmpty(stack))
             return false;
         ItemStack newStack = stack.copy();
-        newStack.stackSize = 1;
+        setSize(newStack, 1);
         for (IInventoryObject inv : dest) {
             for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
                 if (slot.canPutStackInSlot(stack))
@@ -874,7 +910,7 @@ public abstract class InvTools {
                 ItemStack stack = slot.getStack();
                 if (!isEmpty(stack) && filter.test(stack)) {
                     stack = stack.copy();
-                    stack.stackSize = 1;
+                    setSize(stack, 1);
                     items.add(StackKey.make(stack));
                 }
             }
@@ -911,8 +947,8 @@ public abstract class InvTools {
     public static void writeItemToNBT(@Nullable ItemStack stack, NBTTagCompound data) {
         if (isEmpty(stack))
             return;
-        if (stack.stackSize > 127)
-            stack.stackSize = 127;
+        if (sizeOf(stack) > 127)
+            setSize(stack, 127);
         stack.writeToNBT(data);
     }
 
@@ -974,7 +1010,7 @@ public abstract class InvTools {
         for (IInventoryObject inventoryObject : inv) {
             int stackLimit = inventoryObject.getBackingObject() instanceof IInventory ? ((IInventory) inventoryObject.getBackingObject()).getInventoryStackLimit() : 64;
             for (ItemStack stack : InventoryIterator.getRailcraft(inventoryObject).getStacks()) {
-                average += (float) stack.stackSize / (float) Math.min(stackLimit, stack.getMaxStackSize());
+                average += (float) sizeOf(stack) / (float) Math.min(stackLimit, stack.getMaxStackSize());
                 numStacks++;
             }
         }

@@ -20,12 +20,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.function.Predicate;
+
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
  * Creates a standalone instance of IInventory.
@@ -104,14 +108,14 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (!InvTools.isEmpty(contents[i])) {
-            if (contents[i].stackSize <= j) {
+            if (sizeOf(contents[i]) <= j) {
                 ItemStack itemstack = contents[i];
                 contents[i] = InvTools.emptyStack();
                 markDirty();
                 return itemstack;
             }
             ItemStack itemStack1 = contents[i].splitStack(j);
-            if (contents[i].stackSize <= 0) {
+            if (sizeOf(contents[i]) <= 0) {
                 contents[i] = InvTools.emptyStack();
             }
             markDirty();
@@ -132,8 +136,8 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     @Override
     public void setInventorySlotContents(int i, @Nullable ItemStack stack) {
         contents[i] = stack;
-        if (!InvTools.isEmpty(stack) && stack.stackSize > getInventoryStackLimit()) {
-            stack.stackSize = getInventoryStackLimit();
+        if (sizeOf(stack) > getInventoryStackLimit()) {
+            setSize(stack, getInventoryStackLimit());
         }
         markDirty();
     }
@@ -207,7 +211,15 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     }
 
     public void readFromNBT(String tag, NBTTagCompound data) {
-        InvTools.readInvFromNBT(this, tag, data);
+        NBTTagList list = data.getTagList(tag, 10);
+        for (byte entry = 0; entry < list.tagCount(); entry++) {
+            NBTTagCompound itemTag = list.getCompoundTagAt(entry);
+            int slot = itemTag.getByte(InvTools.TAG_SLOT);
+            if (slot >= 0 && slot < getSizeInventory()) {
+                ItemStack stack = InvTools.readItemFromNBT(itemTag);
+                contents[slot] = stack;
+            }
+        }
     }
 
     @Override

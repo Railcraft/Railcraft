@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import uristqwerty.CraftGuide.api.*;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -70,7 +72,7 @@ public class CustomRecipesPlugin implements RecipeProvider {
             ItemStack[] routingTable = new ItemStack[10];
             routingTable[0] = RailcraftItems.ROUTING_TABLE.getStack();
             if (routingTable[0] != null) {
-                routingTable[0].stackSize = 2;
+                setSize(routingTable[0], 2);
                 InvTools.addItemToolTip(routingTable[0], "Edited");
                 routingTable[1] = RailcraftItems.ROUTING_TABLE.getStack();
                 InvTools.addItemToolTip(routingTable[1], "Edited");

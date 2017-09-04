@@ -29,6 +29,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -109,7 +111,7 @@ public class FilterBeesGenomeRecipe implements IRecipe {
             ItemStack stack = inv.getStackInSlot(i);
             if (!InvTools.isEmpty(stack) && !FILTER.test(stack)) {
                 stack = stack.copy();
-                stack.stackSize = 1;
+                setSize(stack, 1);
                 grid[i] = stack;
             }
         }

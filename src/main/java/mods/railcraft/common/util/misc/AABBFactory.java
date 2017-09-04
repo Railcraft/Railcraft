@@ -116,6 +116,8 @@ public class AABBFactory {
     public AABBFactory grow(double distance) {
         minX -= distance;
         minY -= distance;
+        if (minY < 0)
+            minY = 0;
         minZ -= distance;
         maxX += distance;
         maxY += distance;
@@ -234,5 +236,10 @@ public class AABBFactory {
     public AABBFactory setMaxY(double maxY) {
         this.maxY = maxY;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{%.1f,%.1f,%.1f} - {%.1f,%.1f,%.1f}", minX, minY, minZ, maxX, maxY, maxZ);
     }
 }

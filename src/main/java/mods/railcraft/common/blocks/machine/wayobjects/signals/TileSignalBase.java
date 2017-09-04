@@ -13,9 +13,7 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -24,12 +22,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -37,11 +35,9 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileMachineBase implements IAspectProvider, ITileShaped, ITileRotate, ITileLit {
+public abstract class TileSignalBase extends TileMachineBase implements IAspectProvider, ITileRotate, ITileLit {
 
-    protected static final float BOUNDS = 0.15f;
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BOUNDS).raiseFloor(0.35).build();
     private EnumFacing facing = EnumFacing.NORTH;
     private int prevLightValue;
 
@@ -62,16 +58,6 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     @Override
     public EnumFacing[] getValidRotations() {
         return UP_DOWN_AXES;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
-        return BOUNDING_BOX;
-    }
-
-    @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        return BOUNDING_BOX.offset(pos);
     }
 
     @Override
@@ -146,5 +132,17 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     @Override
     public SignalAspect getTriggerAspect() {
         return getSignalAspect();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        return 512.0 * 512.0;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return TileEntity.INFINITE_EXTENT_AABB;
     }
 }

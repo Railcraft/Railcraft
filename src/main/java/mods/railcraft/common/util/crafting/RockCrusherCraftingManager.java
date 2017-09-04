@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static mods.railcraft.common.util.inventory.InvTools.*;
+
 public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
     private static final RecipeList recipes = new RecipeList();
@@ -266,13 +268,13 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
                 ItemStack output = entry.getOutput();
                 for (ItemStack saved : list) {
                     if (InvTools.isItemEqual(saved, output)) {
-                        if (saved.stackSize + output.stackSize <= saved.getMaxStackSize()) {
-                            saved.stackSize += output.stackSize;
-                            output = null;
+                        if (sizeOf(saved) + sizeOf(output) <= saved.getMaxStackSize()) {
+                            incSize(saved, sizeOf(output));
+                            output = InvTools.emptyStack();
                         } else {
-                            int diff = saved.getMaxStackSize() - saved.stackSize;
-                            saved.stackSize = saved.getMaxStackSize();
-                            output.stackSize -= diff;
+                            int diff = saved.getMaxStackSize() - sizeOf(saved);
+                            setSize(saved, saved.getMaxStackSize());
+                            decSize(output, diff);
                         }
                         break;
                     }

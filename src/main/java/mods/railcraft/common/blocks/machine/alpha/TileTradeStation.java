@@ -42,6 +42,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -144,10 +146,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
         //noinspection ConstantConditions
-        if (recipe.getItemToBuy() != null && InvTools.countItems(invInput, recipe.getItemToBuy()) < recipe.getItemToBuy().stackSize)
+        if (recipe.getItemToBuy() != null && InvTools.countItems(invInput, recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
             return false;
         //noinspection ConstantConditions
-        if (recipe.getSecondItemToBuy() != null && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < recipe.getSecondItemToBuy().stackSize)
+        if (recipe.getSecondItemToBuy() != null && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
             return false;
         return InvTools.isRoomForStack(recipe.getItemToSell(), invOutput);
     }
@@ -156,10 +158,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         merchant.useRecipe(recipe);
         //noinspection ConstantConditions
         if (recipe.getItemToBuy() != null)
-            InvTools.removeItemsAbsolute(invInput, recipe.getItemToBuy().stackSize, recipe.getItemToBuy());
+            InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
         //noinspection ConstantConditions
         if (recipe.getSecondItemToBuy() != null)
-            InvTools.removeItemsAbsolute(invInput, recipe.getSecondItemToBuy().stackSize, recipe.getSecondItemToBuy());
+            InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
         InvTools.moveItemStack(recipe.getItemToSell().copy(), invOutput);
     }
 

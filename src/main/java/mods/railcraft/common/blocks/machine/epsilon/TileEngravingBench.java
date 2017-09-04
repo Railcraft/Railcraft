@@ -269,8 +269,6 @@ public class TileEngravingBench extends TileMachineItem implements ISidedInvento
             return false;
         if (InvTools.isEmpty(stack))
             return false;
-        if (stack.stackSize <= 0)
-            return false;
         if (OreDictPlugin.isOreType("ingotSteel", stack))
             return true;
         if (OreDictPlugin.isOreType("ingotBronze", stack))

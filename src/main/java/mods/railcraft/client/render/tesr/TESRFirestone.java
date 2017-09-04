@@ -19,6 +19,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -52,7 +54,7 @@ public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
 
         ItemStack firestone = tile.getBlockMetadata() == 0 ? ItemFirestoneRefined.getItemCharged() : ItemFirestoneCracked.getItemCharged();
         EntityItem entityitem = new EntityItem(null, 0.0D, 0.0D, 0.0D, firestone);
-        entityitem.getEntityItem().stackSize = 1;
+        setSize(entityitem.getEntityItem(), 1);
         entityitem.hoverStart = 0.0F;
 
         Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);

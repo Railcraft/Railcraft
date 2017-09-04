@@ -29,10 +29,7 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlock;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBlockDual;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistant;
-import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalDistantDual;
+import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -221,9 +218,11 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileSignalBlock.class, TESRSignalLamp::new);
         bindTESR(TileSignalDistant.class, TESRSignalLamp::new);
+        bindTESR(TileSignalToken.class, TESRSignalLamp::new);
 
         bindTESR(TileSignalBlockDual.class, TESRSignalLampDual::new);
         bindTESR(TileSignalDistantDual.class, TESRSignalLampDual::new);
+        bindTESR(TileSignalTokenDual.class, TESRSignalLampDual::new);
 
 //        registerBlockRenderer(new RenderBlockMachineBeta());
 //        registerBlockRenderer(new RenderBlockMachineDelta());

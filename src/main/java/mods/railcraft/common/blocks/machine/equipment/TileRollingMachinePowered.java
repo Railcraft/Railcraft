@@ -37,6 +37,10 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+import static mods.railcraft.common.util.inventory.InvTools.inc;
+import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * Created by CovertJaguar on 3/29/2017 for Railcraft.
  *
@@ -84,13 +88,13 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
         IInventoryComposite chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
-            if (!InvTools.isEmpty(stack) && stack.isStackable() && stack.stackSize == 1) {
+            if (!InvTools.isEmpty(stack) && stack.isStackable() && sizeOf(stack) == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
-                if (request != null) {
-                    stack.stackSize++;
+                if (!isEmpty(request)) {
+                    inc(stack);
                     break;
                 }
-                if (stack.stackSize > 1)
+                if (sizeOf(stack) > 1)
                     break;
             }
         }
@@ -130,7 +134,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        return getStackInSlot(slot) != null;
+        return !isEmpty(getStackInSlot(slot));
     }
 
     @Override

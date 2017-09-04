@@ -27,6 +27,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * Created by CovertJaguar on 10/20/2016 for Railcraft.
  *
@@ -47,7 +49,7 @@ public class FirestoneTools {
         if (InvTools.isEmpty(stack) || !SPAWNS_FIRE.test(stack))
             return false;
         boolean spawnedFire = false;
-        for (int i = 0; i < stack.stackSize; i++) {
+        for (int i = 0; i < sizeOf(stack); i++) {
             spawnedFire |= FirestoneTools.spawnFire(world, pos);
         }
         if (spawnedFire && stack.isItemStackDamageable() && stack.getItemDamage() < stack.getMaxDamage() - 1)

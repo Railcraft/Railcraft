@@ -58,12 +58,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
             return;
         }
         receiver.tickServer();
-        SignalAspect prevAspect = receiver.getAspect();
-        if (receiver.isBeingPaired())
-            receiver.setAspect(SignalAspect.BLINK_YELLOW);
-        else if (!receiver.isPaired())
-            receiver.setAspect(SignalAspect.BLINK_RED);
-        if (prevAspect != receiver.getAspect() || clock % FORCED_UPDATE == 0) {
+        if (clock % FORCED_UPDATE == 0) {
             updateNeighbors();
             sendUpdateToClient();
         }

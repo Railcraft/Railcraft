@@ -9,7 +9,9 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.items.ItemMaterials;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -46,4 +48,13 @@ public class ItemBoreHeadSteel extends ItemBoreHead {
         return 1.2f;
     }
 
+    @Override
+    public int getItemEnchantability(ItemStack stack) {
+        return ItemMaterials.STEEL_TOOL.getEnchantability();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return OreDictPlugin.isOreType("blockSteel", repair);
+    }
 }

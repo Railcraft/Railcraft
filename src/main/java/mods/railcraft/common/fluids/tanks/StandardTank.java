@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidTank;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -34,6 +35,8 @@ public class StandardTank extends FluidTank {
     };
     private int tankIndex;
     private boolean hidden;
+    @Nullable
+    private Consumer<StandardTank> updateCallback;
 
     public StandardTank(int capacity) {
         super(capacity);
@@ -42,6 +45,10 @@ public class StandardTank extends FluidTank {
     public StandardTank(int capacity, @Nullable TileEntity tile) {
         this(capacity);
         this.tile = tile;
+    }
+
+    public void setUpdateCallback(Consumer<StandardTank> callback) {
+        this.updateCallback = callback;
     }
 
     public int getTankIndex() {
@@ -81,15 +88,27 @@ public class StandardTank extends FluidTank {
         return super.canFillFluidType(fluid) && matchesFilter(fluid);
     }
 
-    public boolean matchesFilter(FluidStack fluidStack) {
+    public boolean matchesFilter(@Nullable FluidStack fluidStack) {
         return true;
+    }
+
+    @Override
+    public void setFluid(@Nullable FluidStack resource) {
+        if (!matchesFilter(resource))
+            return;
+        super.setFluid(resource);
+        if (updateCallback != null)
+            updateCallback.accept(this);
     }
 
     @Override
     public int fillInternal(FluidStack resource, boolean doFill) {
         if (!matchesFilter(resource))
             return 0;
-        return super.fillInternal(resource, doFill);
+        int ret = super.fillInternal(resource, doFill);
+        if (ret != 0 && updateCallback != null)
+            updateCallback.accept(this);
+        return ret;
     }
 
     @Override
@@ -98,14 +117,20 @@ public class StandardTank extends FluidTank {
             return 0;
         if (resource.amount <= 0)
             return 0;
-        return super.fill(resource, doFill);
+        int ret = super.fill(resource, doFill);
+        if (ret != 0 && updateCallback != null)
+            updateCallback.accept(this);
+        return ret;
     }
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
         if (maxDrain <= 0)
             return null;
-        return super.drain(maxDrain, doDrain);
+        FluidStack ret = super.drain(maxDrain, doDrain);
+        if (ret != null && updateCallback != null)
+            updateCallback.accept(this);
+        return ret;
     }
 
     public ToolTip getToolTip() {

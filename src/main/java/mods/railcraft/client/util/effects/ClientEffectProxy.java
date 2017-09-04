@@ -137,9 +137,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double py = pos.getY() + getRandomParticleOffset();
             double pz = pos.getZ() + getRandomParticleOffset();
 
-            TESRSignals.ColorProfile colorProfile = TESRSignals.ColorProfile.RAINBOW;
+            TESRSignals.ColorProfile colorProfile = TESRSignals.ColorProfile.COORD_RAINBOW;
             if (isGoggleAuraActive(GoggleAura.SIGNALLING))
-                colorProfile = TESRSignals.ColorProfile.ASPECT;
+                colorProfile = TESRSignals.ColorProfile.CONTROLLER_ASPECT;
 
             int color = colorProfile.getColor(start, start.getPos(), dest.getPos());
 

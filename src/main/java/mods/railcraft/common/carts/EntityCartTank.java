@@ -41,6 +41,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
+
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
     private static final DataParameter<OptionalFluidStack> FLUID_STACK = EntityDataManager.createKey(EntityCartTank.class, DataManagerPlugin.OPTIONAL_FLUID_STACK);
     private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
@@ -64,6 +66,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
 
     {
         tank.setFilter(this::getFilterFluid);
+        tank.setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
         tankManager.add(tank);
     }
 
@@ -80,7 +83,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Nullable
-    private FluidStack getFluidStack() {
+    public FluidStack getFluidStack() {
         return dataManager.get(FLUID_STACK).orElse(null);
     }
 
@@ -130,28 +133,24 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
             return;
         }
 
-        FluidStack fluidStack = tank.getFluid();
-        if (!Fluids.areIdentical(fluidStack, getFluidStack()))
-            setFluidStack(fluidStack);
-
-
         update++;
 
         ItemStack topSlot = invLiquids.getStackInSlot(SLOT_INPUT);
         if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
-            invLiquids.setInventorySlotContents(SLOT_INPUT, null);
+            invLiquids.setInventorySlotContents(SLOT_INPUT, emptyStack());
             entityDropItem(topSlot, 1);
         }
 
         ItemStack bottomSlot = invLiquids.getStackInSlot(SLOT_OUTPUT);
         if (!InvTools.isEmpty(bottomSlot) && !FluidItemHelper.isContainer(bottomSlot)) {
-            invLiquids.setInventorySlotContents(SLOT_OUTPUT, null);
+            invLiquids.setInventorySlotContents(SLOT_OUTPUT, emptyStack());
             entityDropItem(bottomSlot, 1);
         }
 
-        //FIXME
-//        if (update % FluidTools.BUCKET_FILL_TIME == 0)
-//            FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
+        if (update % FluidTools.BUCKET_FILL_TIME == 0){
+            FluidTools.processContainers(tank, invLiquids, SLOT_INPUT, SLOT_OUTPUT);
+        }
+
     }
 
     @Override

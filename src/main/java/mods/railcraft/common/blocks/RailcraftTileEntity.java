@@ -139,6 +139,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             WorldPlugin.notifyBlocksOfNeighborChange(worldObj, getPos(), getBlockType());
     }
 
+    @Override
     public void sendUpdateToClient() {
         PacketBuilder.instance().sendTileEntityPacket(this);
     }
@@ -265,5 +266,4 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
     }
-
 }

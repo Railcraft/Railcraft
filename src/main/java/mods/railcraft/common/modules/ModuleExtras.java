@@ -25,6 +25,7 @@ public class ModuleExtras extends RailcraftModulePayload {
                         TrackKits.LAUNCHER,
                         RailcraftCarts.TNT_WOOD,
                         RailcraftCarts.WORK,
+                        RailcraftCarts.JUKEBOX,
                         RailcraftBlocks.TRACK_ELEVATOR,
                         RailcraftBlocks.LOGBOOK
                 );

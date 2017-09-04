@@ -66,6 +66,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, ItemCart::new, ModItems.MFE::get),
     ENERGY_MFSU(1, "cart_ic2_MFSU", EntityCartEnergyMFSU.class, ItemCart::new, ModItems.MFSU::get),
     GIFT(3, "cart_gift", EntityCartGift.class, ItemCartGift::new),
+    JUKEBOX(0, "cart_jukebox", EntityCartJukebox.class, ItemCartJukebox::new, from(Blocks.JUKEBOX)),
     MOW_TRACK_LAYER(1, "mow_track_layer", EntityCartTrackLayer.class, ItemCartMOWTrackLayer::new),
     MOW_TRACK_RELAYER(1, "mow_track_relayer", EntityCartTrackRelayer.class, ItemCartMOWTrackRelayer::new),
     MOW_TRACK_REMOVER(1, "mow_track_remover", EntityCartTrackRemover.class, ItemCartMOWTrackRemover::new),
@@ -76,7 +77,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
         return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
-    TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCart::new),
+    TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCartTNTWood::new),
     WORK(0, "cart_work", EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
 
     // Railcraft Locomotives

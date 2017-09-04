@@ -44,6 +44,8 @@ import thaumcraft.api.aspects.IAspectContainer;
 import javax.annotation.Nonnull;
 import java.util.Map.Entry;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -132,7 +134,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             return true;
         for (IInvSlot slot : InventoryIterator.getVanilla((IInventory) invFuel)) {
             ItemStack stack = slot.getStack();
-            if (InvTools.isEmpty(stack) || stack.stackSize < stack.getMaxStackSize() / 4)
+            if (InvTools.isEmpty(stack) || sizeOf(stack) < stack.getMaxStackSize() / 4)
                 return true;
         }
         return false;

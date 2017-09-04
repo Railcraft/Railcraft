@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.dec;
+
 public class ItemTunnelBore extends ItemCart {
 
     public ItemTunnelBore(IRailcraftCartContainer cart) {
@@ -79,7 +81,7 @@ public class ItemTunnelBore extends ItemCart {
                     world.spawnEntityInWorld(bore);
                 }
             }
-            stack.stackSize--;
+            dec(stack);
             return EnumActionResult.SUCCESS;
         } else {
             return EnumActionResult.FAIL;

@@ -28,7 +28,7 @@ import java.util.List;
 public enum SignalVariant implements IEnumMachine<SignalVariant> {
     BLOCK(ModuleSignals.class, "block", TileSignalBlock.class),
     DISTANT(ModuleSignals.class, "distant", TileSignalDistant.class),
-    TOKEN(ModuleSignals.class, "token", TileSignalDistant.class),;
+    TOKEN(ModuleSignals.class, "token", TileSignalToken.class),;
 
     private static final List<SignalVariant> creativeList = new ArrayList<>();
     public static final SignalVariant[] VALUES = values();
@@ -40,6 +40,7 @@ public enum SignalVariant implements IEnumMachine<SignalVariant> {
 
         creativeList.add(BLOCK);
         creativeList.add(DISTANT);
+        creativeList.add(TOKEN);
     }
 
     private final Definition def;

@@ -1,9 +1,19 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
-import mods.railcraft.api.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.ISignalTileBlock;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -21,6 +31,8 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static mods.railcraft.common.util.inventory.InvTools.dec;
 
 /**
  * @author Vexatos
@@ -43,8 +55,8 @@ public class ItemSignalLabel extends ItemRailcraft {
             if (tile instanceof IControllerTile) {
                 pairs.add(((IControllerTile) tile).getController());
             }
-            if (tile instanceof ISignalBlockTile) {
-                pairs.add(((ISignalBlockTile) tile).getSignalBlock());
+            if (tile instanceof ISignalTileBlock) {
+                pairs.add(((ISignalTileBlock) tile).getSignalBlock());
             }
             if (!pairs.isEmpty()) {
                 String newName = stack.getDisplayName();
@@ -56,7 +68,7 @@ public class ItemSignalLabel extends ItemRailcraft {
                     }
                 }
                 if (done) {
-                    --stack.stackSize;
+                    dec(stack);
                     PlayerPlugin.swingArm(playerIn, hand);
                     IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
                     worldIn.notifyBlockUpdate(pos, state, state, 3);

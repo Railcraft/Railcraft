@@ -11,11 +11,18 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.core.IContainerBlock;
 import mods.railcraft.common.core.IContainerState;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
+
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -35,6 +42,22 @@ public class HarvestPlugin {
         public String getToolString(int level) {
             return name + ":" + level;
         }
+    }
+
+    private static final MethodHandle GET_SILK_TOUCH_DROP_METHOD;
+
+    static {
+        String methodName = Game.DEVELOPMENT_ENVIRONMENT ? "createStackedBlock" : "func_180643_i";
+        MethodHandle handle = null;
+        try {
+            Method method = Block.class.getDeclaredMethod(methodName, IBlockState.class);
+            method.setAccessible(true);
+            handle = MethodHandles.lookup().unreflect(method);
+            method.setAccessible(false);
+        } catch (Throwable throwable) {
+            Game.logThrowable("Cannot initialize silk touch drops", throwable);
+        }
+        GET_SILK_TOUCH_DROP_METHOD = handle;
     }
 
     private HarvestPlugin() {
@@ -74,8 +97,20 @@ public class HarvestPlugin {
             blockState.getBlock().setHarvestLevel(toolClass, level, blockState);
     }
 
-    public static int getHarvestLevel(IBlockState blockState, String toolClass) {
-//        return block.getHarvestLevel(blockState, toolClass);
-        return 0;
+    public static int getHarvestLevel(IBlockState state, String toolClass) {
+        Block block = state.getBlock();
+        return block.isToolEffective(toolClass, state) ? block.getHarvestLevel(state) : -1;
+    }
+
+    @Nullable
+    public static ItemStack getSilkTouchDrop(IBlockState state) {
+        if (GET_SILK_TOUCH_DROP_METHOD == null)
+            return emptyStack();
+        try {
+            return (ItemStack) GET_SILK_TOUCH_DROP_METHOD.invoke(state.getBlock(), state);
+        } catch (Throwable throwable) {
+            Game.logThrowable("Cannot get silk touch drops", throwable);
+        }
+        return emptyStack();
     }
 }

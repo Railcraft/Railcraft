@@ -14,7 +14,6 @@ import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Created by CovertJaguar on 5/25/2016 for Railcraft.
@@ -22,14 +21,12 @@ import net.minecraft.util.math.MathHelper;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MinecartSound extends MovingSound {
-    private final EntityMinecart minecart;
-    private float distance;
+    protected final EntityMinecart cart;
 
-    public MinecartSound(SoundEvent soundEvent, EntityMinecart minecartIn) {
-        super(soundEvent, SoundCategory.NEUTRAL);
-        this.minecart = minecartIn;
-        this.repeat = true;
-        this.repeatDelay = 0;
+    public MinecartSound(SoundEvent soundEvent, SoundCategory category, EntityMinecart cart) {
+        super(soundEvent, category);
+        this.cart = cart;
+        this.volume = 1f;
     }
 
     /**
@@ -37,22 +34,12 @@ public class MinecartSound extends MovingSound {
      */
     @Override
     public void update() {
-        if (minecart.isDead) {
+        if (cart.isDead) {
             this.donePlaying = true;
         } else {
-            this.xPosF = (float) minecart.posX;
-            this.yPosF = (float) minecart.posY;
-            this.zPosF = (float) minecart.posZ;
-            float speedMaybe = MathHelper.sqrt_double(minecart.motionX * minecart.motionX + minecart.motionZ * minecart.motionZ);
-
-            //TODO: this is wrong, its based on speed, normally we don't care about speed
-            if (speedMaybe >= 0.01F) {
-                this.distance = MathHelper.clamp_float(distance + 0.0025F, 0.0F, 1.0F);
-                this.volume = 0.0F + MathHelper.clamp_float(speedMaybe, 0.0F, 0.5F) * 0.7F;
-            } else {
-                this.distance = 0.0F;
-                this.volume = 0.0F;
-            }
+            this.xPosF = (float) cart.posX;
+            this.yPosF = (float) cart.posY;
+            this.zPosF = (float) cart.posZ;
         }
     }
 }

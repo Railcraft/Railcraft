@@ -11,22 +11,16 @@ package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 import java.io.IOException;
 
 public class TileSignalBlockDual extends TileSignalBlock implements IReceiverTile, IDualHeadSignal {
 
-    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BOUNDS).build();
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
-
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -46,25 +40,11 @@ public class TileSignalBlockDual extends TileSignalBlock implements IReceiverTil
             return;
         }
         receiver.tickServer();
-        SignalAspect prevAspect = receiver.getAspect();
-        if (receiver.isBeingPaired()) {
-            receiver.setAspect(SignalAspect.BLINK_YELLOW);
-        } else if (!receiver.isPaired()) {
-            receiver.setAspect(SignalAspect.BLINK_RED);
-        }
-        if (prevAspect != receiver.getAspect()) {
-            sendUpdateToClient();
-        }
     }
 
     @Override
     public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
         sendUpdateToClient();
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
-        return BOUNDING_BOX;
     }
 
     @Override

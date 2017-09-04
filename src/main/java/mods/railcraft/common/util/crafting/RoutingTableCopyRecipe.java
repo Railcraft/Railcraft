@@ -19,6 +19,9 @@ import net.minecraft.world.World;
 
 import java.util.stream.IntStream;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -27,7 +30,7 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (InvTools.isEmpty(source) || RailcraftItems.ROUTING_TABLE.isEqual(source) || source.stackSize > 1) {
+        if (InvTools.isEmpty(source) || RailcraftItems.ROUTING_TABLE.isEqual(source) || sizeOf(source) > 1) {
             return false;
         }
         int numCopies = 0;
@@ -47,14 +50,14 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
-        if (!InvTools.isEmpty(source) && RailcraftItems.ROUTING_TABLE.isEqual(source) && source.stackSize == 1) {
+        if (sizeOf(source) == 1 && RailcraftItems.ROUTING_TABLE.isEqual(source)) {
             int copies = (int) IntStream.range(1, grid.getSizeInventory())
                     .mapToObj(grid::getStackInSlot)
                     .filter(RailcraftItems.ROUTING_TABLE::isEqual)
                     .count();
             if (copies > 0) {
                 ItemStack dest = source.copy();
-                dest.stackSize = copies + 1;
+                setSize(dest, copies + 1);
                 return dest;
             }
         }

@@ -57,18 +57,18 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
         if (actionCleanPairing(stack, playerIn, worldIn, IControllerTile.class, IControllerTile::getController)) {
             return EnumActionResult.SUCCESS;
         }
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile != null) {
+        TileEntity recTile = worldIn.getTileEntity(pos);
+        if (recTile != null) {
             WorldCoordinate previousTarget = getPairData(stack);
-            if (tile instanceof IReceiverTile && previousTarget != null) {
+            if (recTile instanceof IReceiverTile && previousTarget != null) {
                 if (Game.isHost(worldIn)) {
-                    SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
+                    SignalReceiver receiver = ((IReceiverTile) recTile).getReceiver();
                     if (!Objects.equals(pos, previousTarget.getPos())) {
-                        tile = worldIn.getTileEntity(previousTarget.getPos());
-                        if (tile instanceof IControllerTile) {
-                            SignalController controller = ((IControllerTile) tile).getController();
-                            if (receiver.getTile() != controller.getTile()) {
-                                controller.registerReceiver(receiver);
+                        TileEntity conTile = worldIn.getTileEntity(previousTarget.getPos());
+                        if (conTile instanceof IControllerTile) {
+                            SignalController controller = ((IControllerTile) conTile).getController();
+                            if (recTile != conTile) {
+                                controller.createPair(recTile);
                                 controller.endPairing();
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "success", controller.getLocalizationTag(), receiver.getLocalizationTag());
                                 clearPairData(stack);
@@ -83,12 +83,12 @@ public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
                         }
                     }
                 }
-            } else if (tile instanceof IControllerTile) {
+            } else if (recTile instanceof IControllerTile) {
                 if (Game.isHost(worldIn)) {
-                    SignalController controller = ((IControllerTile) tile).getController();
+                    SignalController controller = ((IControllerTile) recTile).getController();
                     if (previousTarget == null || !Objects.equals(pos, previousTarget.getPos())) {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "start", controller.getLocalizationTag());
-                        setPairData(stack, tile);
+                        setPairData(stack, recTile);
                         controller.startPairing();
                     } else {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, LOC_PREFIX + "stop", controller.getLocalizationTag());

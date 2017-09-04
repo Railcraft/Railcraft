@@ -48,6 +48,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.incSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
     public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
@@ -250,7 +253,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 setLavaIdle();
 
             ItemStack input = getStackInSlot(SLOT_INPUT);
-            if (!InvTools.isEmpty(input) && input.stackSize > 0) {
+            if (!InvTools.isEmpty(input)) {
 
                 ItemStack output = getStackInSlot(SLOT_OUTPUT);
                 IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
@@ -280,7 +283,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                             if (InvTools.isEmpty(output))
                                 setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
                             else
-                                output.stackSize += recipe.getOutputStackSize();
+                                incSize(output, recipe.getOutputStackSize());
                             decrStackSize(SLOT_INPUT, 1);
                         }
                     }
@@ -340,7 +343,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
+        return sizeOf(fuel) < 8;
     }
 
     @Override

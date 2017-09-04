@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -87,7 +88,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
         if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
             if (inv.getStackInSlot(0) == null) {
                 ItemStack copy = current.copy();
-                copy.stackSize = 1;
+                setSize(copy, 1);
                 inv.setInventorySlotContents(0, copy);
                 if (!player.capabilities.isCreativeMode) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));

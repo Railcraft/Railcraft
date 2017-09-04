@@ -33,6 +33,9 @@ import net.minecraftforge.common.MinecraftForge;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -140,7 +143,7 @@ public class IC2Plugin {
         if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         output = output.copy();
-        output.stackSize = numoutput;
+        setSize(output, numoutput);
         try {
             Recipes.macerator.addRecipe(new RecipeInputItemStack(input, numinput), null, false, output);
         } catch (Throwable error) {
@@ -214,8 +217,8 @@ public class IC2Plugin {
             try {
                 ItemStack output = recipe.getRecipeOutput();
                 if (!InvTools.isEmpty(output))
-                    if (output.getItem() == Items.COAL && output.stackSize == 20)
-                        output.stackSize = 5;
+                    if (output.getItem() == Items.COAL && sizeOf(output) == 20)
+                        setSize(output, 5);
             } catch (Throwable ignored) {
             }
         }

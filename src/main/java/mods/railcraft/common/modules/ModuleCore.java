@@ -31,11 +31,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.items.CrowbarHandler;
-import mods.railcraft.common.items.EntityItemFireproof;
-import mods.railcraft.common.items.ItemRail.EnumRail;
-import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
-import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.items.*;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -189,7 +185,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.FURNACE_MINECART);
 
-//        MiscTools.addShapelessRecipe(new ItemStack(Item.coal, 20), Block.dirt);
                 Iterator it = CraftingManager.getInstance().getRecipeList().iterator();
                 while (it.hasNext()) {
                     IRecipe r = (IRecipe) it.next();
@@ -216,69 +211,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 Blocks.GOLDEN_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
                 Blocks.DETECTOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
                 Blocks.ACTIVATOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
-
-                // Define Recipes
-                if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
-                            "I I",
-                            "III",
-                            'I', "ingotBronze");
-                    CraftingPlugin.addRecipe(recipe);
-                }
-
-                if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART, 2), false,
-                            "I I",
-                            "III",
-                            'I', "ingotSteel");
-                    CraftingPlugin.addRecipe(recipe);
-                }
-
-                // Old rails
-                if (!RailcraftConfig.vanillaTrackRecipes()) {
-                    ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
-                    ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
-                    ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
-                    ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
-
-                    Object woodRailbed = RailcraftItems.RAILBED.getRecipeObject(EnumRailbed.WOOD);
-                    CraftingPlugin.addRecipe(stackRailNormal,
-                            "I I",
-                            "I#I",
-                            "I I",
-                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
-                            '#', woodRailbed);
-                    CraftingPlugin.addRecipe(stackRailBooster,
-                            "I I",
-                            "I#I",
-                            "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.ADVANCED),
-                            '#', woodRailbed,
-                            'r', "dustRedstone");
-                    CraftingPlugin.addRecipe(stackRailDetector,
-                            "IsI",
-                            "I#I",
-                            "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
-                            '#', Blocks.STONE_PRESSURE_PLATE,
-                            'r', "dustRedstone",
-                            's', woodRailbed);
-                    CraftingPlugin.addRecipe(stackRailActivator,
-                            "ItI",
-                            "I#I",
-                            "ItI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(EnumRail.STANDARD),
-                            '#', woodRailbed,
-                            't', new ItemStack(Blocks.REDSTONE_TORCH));
-
-                    CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, EnumRail.STANDARD),
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL);
-                }
 
                 MachineTileRegistry.registerTileEntities();
             }
@@ -326,6 +258,70 @@ public class ModuleCore extends RailcraftModulePayload {
 //                    if (machine.isAvailable())
 //                        RailcraftRegistry.register(machine.getItem());
 //                }
+
+                // Define Recipes
+                if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
+                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
+                            "I I",
+                            "III",
+                            'I', "ingotBronze");
+                    CraftingPlugin.addRecipe(recipe);
+                }
+
+                if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
+                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART, 2), false,
+                            "I I",
+                            "III",
+                            'I', "ingotSteel");
+                    CraftingPlugin.addRecipe(recipe);
+                }
+
+                // Old rails
+                if (!RailcraftConfig.vanillaTrackRecipes()) {
+                    ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
+                    ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
+                    ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
+                    ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
+
+                    Object woodRailbed = RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD);
+                    CraftingPlugin.addRecipe(stackRailNormal,
+                            "I I",
+                            "I#I",
+                            "I I",
+                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            '#', woodRailbed);
+                    CraftingPlugin.addRecipe(stackRailBooster,
+                            "I I",
+                            "I#I",
+                            "IrI",
+                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
+                            '#', woodRailbed,
+                            'r', "dustRedstone");
+                    CraftingPlugin.addRecipe(stackRailDetector,
+                            "IsI",
+                            "I#I",
+                            "IrI",
+                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            '#', Blocks.STONE_PRESSURE_PLATE,
+                            'r', "dustRedstone",
+                            's', woodRailbed);
+                    CraftingPlugin.addRecipe(stackRailActivator,
+                            "ItI",
+                            "I#I",
+                            "ItI",
+                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            '#', woodRailbed,
+                            't', new ItemStack(Blocks.REDSTONE_TORCH));
+
+                    CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, ItemRail.EnumRail.STANDARD),
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL);
+                }
+
             }
 
             @Override

@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -72,7 +74,7 @@ public class PrototypeRecipe implements IRecipe {
             ItemStack stack = inv.getStackInSlot(i);
             if (!InvTools.isEmpty(stack) && !PROTOTYPE_CONTAINER.test(stack)) {
                 stack = stack.copy();
-                stack.stackSize = 1;
+                setSize(stack, 1);
                 grid[i] = stack;
             }
         }

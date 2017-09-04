@@ -21,8 +21,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -90,7 +89,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack output = stack.copy();
-                output.stackSize = 1;
+                setSize(output, 1);
                 return output;
             }
         }
@@ -114,7 +113,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         List<ItemStack> outputList = removeItem(filter, maxAmount, false);
         int found = 0;
         for (ItemStack stack : outputList) {
-            found += stack.stackSize;
+            found += sizeOf(stack);
         }
         return found == maxAmount;
     }
@@ -134,7 +133,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 stack = stack.copy();
-                stack.stackSize = 1;
+                setSize(stack, 1);
                 stack = imDest.addStack(stack);
                 if (isEmpty(stack))
                     return slot.decreaseStack();

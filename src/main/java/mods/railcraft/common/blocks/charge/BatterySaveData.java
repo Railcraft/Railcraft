@@ -72,7 +72,7 @@ public class BatterySaveData extends WorldSavedData {
         for (NBTTagCompound entry : list) {
             BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");
             if (pos != null)
-                chargeLevels.put(pos, nbt.getDouble("value"));
+                chargeLevels.put(pos, entry.getDouble("value"));
         }
     }
 

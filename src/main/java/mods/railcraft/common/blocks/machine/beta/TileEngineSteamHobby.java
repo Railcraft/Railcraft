@@ -37,6 +37,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -188,7 +190,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
-        return InvTools.isEmpty(fuel) || fuel.stackSize < 8;
+        return sizeOf(fuel) < 8;
     }
 
     @Override

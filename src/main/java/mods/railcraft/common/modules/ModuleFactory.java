@@ -40,6 +40,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mods.railcraft.common.util.inventory.InvTools.setSize;
+
 @RailcraftModule(value = "railcraft:factory", description = "coke oven, blast furnace, rolling machine, rock crusher, etc...")
 public class ModuleFactory extends RailcraftModulePayload {
     private static final int COKE_COOK_TIME = 1800;
@@ -354,7 +356,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 if (InvTools.isEmpty(dust))
                     return;
                 dust = dust.copy();
-                dust.stackSize = 2;
+                setSize(dust, 2);
 
                 ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
                 addOutput(recipe, dust, 1.0f);
