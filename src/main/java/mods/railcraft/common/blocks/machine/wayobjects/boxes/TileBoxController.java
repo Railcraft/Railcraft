@@ -76,6 +76,18 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isClient(getWorld()))
             return;
+        updateRedstoneState();
+    }
+
+    @Override
+    public void onBlockAdded() {
+        super.onBlockAdded();
+        if (Game.isClient(getWorld()))
+            return;
+        updateRedstoneState();
+    }
+
+    private void updateRedstoneState() {
         boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, getPos());
         if (p != powered) {
             powered = p;
