@@ -35,6 +35,8 @@ import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.containers.ContainerTrackDumping;
+import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
@@ -179,7 +181,7 @@ public class FactoryGui {
                 case LOCO_CREATIVE:
                     return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
                 case TRACK_DUMPING:
-                    throw new UnsupportedOperationException("TODO"); //FIXME Implement
+                    return new GuiTrackDumping((ContainerTrackDumping) FactoryContainer.build(gui, inv, obj, world, x, y, z));
                 default:
                     Game.log(Level.ERROR, "Failed to retrieve a gui {0} at ({1},{2},{3})!", gui, x, y, z);
                     if (Game.DEVELOPMENT_ENVIRONMENT)

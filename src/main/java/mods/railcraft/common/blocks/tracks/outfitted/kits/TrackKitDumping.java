@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.PhantomInventory;
@@ -23,7 +22,8 @@ import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
-import mods.railcraft.common.util.misc.AdjacentTileCache;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -43,17 +43,15 @@ import java.io.IOException;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-import static mods.railcraft.common.util.inventory.InvTools.isInventoryEmpty;
 
 public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPowered {
 
     private static final int TIME_TILL_NEXT_MOUNT = 40;
     private boolean powered;
-    private PhantomInventory cartFilter = new PhantomInventory(3);
-    private PhantomInventory itemFilter = new PhantomInventory(9);
-    private Predicate<EntityMinecart> matchesCarts = CartTools.matchesCartsIfFiltered(cartFilter);
-    private Predicate<ItemStack> matchesFilters = StackFilters.matchesFilter(itemFilter);
-    private AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(new AdjacentTileCache(getTile()));
+    private PhantomInventory cartFilter = new PhantomInventory(3, this);
+    private PhantomInventory itemFilter = new PhantomInventory(9, this);
+    private Predicate<EntityMinecart> matchesCarts = ((Predicate<EntityMinecart>) (cart -> cartFilter.isEmpty())).or(CartTools.matchesCartsIfFiltered(cartFilter));
+    private Predicate<ItemStack> matchesFilters = ((Predicate<ItemStack>) (stack -> itemFilter.isEmpty())).or(StackFilters.matchesAny(itemFilter));
 
     public IInventory getCartFilter() {
         return cartFilter;
@@ -61,6 +59,11 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
 
     public IInventory getItemFilter() {
         return itemFilter;
+    }
+
+    @Override
+    public int getRenderState() {
+        return powered ? 1 : 0;
     }
 
     @Override
@@ -73,13 +76,14 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
         if (isPowered())
             return;
 
-        if (!InvTools.isInventoryEmpty(cartFilter) && !matchesCarts.test(cart)) {
+        if (!matchesCarts.test(cart)) {
             return;
         }
 
-        if (tryDumpRider(cart)) {
+        if (cart.isBeingRidden() && tryDumpRider(cart)) {
             return;
         }
+
         if (tryDumpInventory(cart)) {
             return;
         }
@@ -103,23 +107,23 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
 
     private boolean tryDumpInventory(EntityMinecart cart) {
         IInventoryObject object = InventoryFactory.get(cart);
-        if (object == null)
+        if (object == null) {
             return false;
+        }
         InventoryManipulator<?> manipulator = InventoryManipulator.get(object);
         ItemStack stack = manipulator.removeItem(matchesFilters);
         if (isEmpty(stack)) {
             return false;
         }
-        IInventoryComposite composite = inventoryCache.getInventoryOnSide(EnumFacing.DOWN);
-        if (!isInventoryEmpty(composite)) {
-            stack = InvTools.moveItemStack(stack, composite);
-            if (isEmpty(stack)) {
-                return true;
-            }
+
+        IInventoryComposite composite = InventoryComposite.of(InventoryFactory.get(theWorldAsserted(), getPos(), EnumFacing.DOWN, Predicates.alwaysTrue()));
+        stack = InvTools.moveItemStack(stack, composite);
+        if (isEmpty(stack)) {
+            return true;
         }
 
         //Dump now!
-        InvTools.spewItem(stack, theWorldAsserted(), getPos());
+        InvTools.spewItem(stack, theWorldAsserted(), getPos().down());
         return true;
     }
 
@@ -183,5 +187,4 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
             markBlockNeedsUpdate();
         }
     }
-
 }

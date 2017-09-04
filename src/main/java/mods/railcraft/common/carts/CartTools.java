@@ -36,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -128,7 +129,7 @@ public class CartTools {
      * @return The cart checker
      */
     public static Predicate<EntityMinecart> matchesCartsIfFiltered(IInventoryComposite composite) {
-        return (cart) -> InvTools.isInventoryEmpty(composite) || composite.stackStream().anyMatch((stack) -> doesCartMatchFilter(stack, cart));
+        return (cart) -> composite.stackStream().anyMatch((stack) -> doesCartMatchFilter(stack, cart));
     }
 
     public static void explodeCart(EntityMinecart cart) {
@@ -246,7 +247,15 @@ public class CartTools {
      * @return EntityMinecart
      */
     @Nullable
-    public static EntityMinecart getCartFromUUID(World world, UUID id) {
+    public static EntityMinecart getCartFromUUID(@Nullable World world, @Nullable UUID id) {
+        if (world == null) {
+            Game.log(Level.ERROR, "Getting cart without a world!", new Throwable("Stacktrace"));
+            return null;
+        }
+        if (id == null) {
+            return null;
+        }
+
         if (world instanceof WorldServer) {
             Entity entity = ((WorldServer) world).getEntityFromUuid(id);
             if (entity instanceof EntityMinecart && entity.isEntityAlive()) {

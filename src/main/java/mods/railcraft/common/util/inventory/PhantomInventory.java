@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.util.inventory;
 
+import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 
@@ -25,6 +26,10 @@ public class PhantomInventory extends StandaloneInventory {
     }
 
     public PhantomInventory(int size, IInventory callback) {
+        super(size, null, callback);
+    }
+
+    public PhantomInventory(int size, ITrackKitInstance callback) {
         super(size, null, callback);
     }
 

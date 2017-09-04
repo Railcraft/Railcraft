@@ -35,7 +35,7 @@ import java.io.IOException;
 
 public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered, ITrackKitRouting {
 
-    private final StandaloneInventory inv = new StandaloneInventory(1);
+    private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private boolean powered;
 
     @Override
