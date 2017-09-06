@@ -66,7 +66,7 @@ public abstract class RailcraftContainer extends Container {
     @Override
     public final void detectAndSendChanges() {
         super.detectAndSendChanges();
-        if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             sendUpdateToClient();
             sendWidgetsServerData();
         }

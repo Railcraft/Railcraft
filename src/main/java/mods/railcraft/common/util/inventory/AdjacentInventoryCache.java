@@ -81,20 +81,4 @@ public final class AdjacentInventoryCache {
         return sortedInvs;
     }
 
-    public InventoryComposite getInventoryOnSide(EnumFacing face) {
-        Map<EnumFacing, TileEntity> tiles = cache.refreshTiles();
-        if (changedSides.contains(face)) {
-            invs.remove(face);
-            TileEntity tile = tiles.get(face);
-            if (tile != null && (filter == null || filter.test(tile))) {
-                IInventoryObject inv = InventoryFactory.get(tile, face.getOpposite());
-                if (inv != null)
-                    invs.put(face, inv);
-            }
-
-            changedSides.clear();
-            sortedInvs.add(invs.get(face));
-        }
-        return sortedInvs;
-    }
 }
