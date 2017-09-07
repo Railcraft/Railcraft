@@ -1,3 +1,9 @@
+10.2.0
+    NEW: Metal Posts and Platforms have been restored. Other variants will come later.
+    FIX: Boxes now respond correctly to redstone. (contribution by liach)
+    FIX: Improve Bore Head enchants and tool behavior. (contribution by liach)
+    FIX: Fixed village bankrupting himself. (contribution by liach)
+
 10.2.0-alpha-15
     FIX: Fix Token Signals in SMP.
 

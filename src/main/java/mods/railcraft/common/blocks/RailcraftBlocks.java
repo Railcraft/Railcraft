@@ -24,10 +24,7 @@ import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
-import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
-import mods.railcraft.common.blocks.aesthetics.post.ItemPostMetal;
+import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
 import mods.railcraft.common.blocks.charge.*;
@@ -120,8 +117,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ORE_METAL("ore_metal", BlockOreMetal.class, BlockOreMetal::new, ItemBlockRailcraftSubtyped::new),
     ORE_METAL_POOR("ore_metal_poor", BlockOreMetalPoor.class, BlockOreMetalPoor::new, ItemBlockRailcraftSubtyped::new),
     POST("post", BlockPost.class, BlockPost::new, ItemPost::new),
-    POST_METAL("post_metal", BlockPostMetal.class, () -> new BlockPostMetal(false), ItemPostMetal::new),
-    POST_METAL_PLATFORM("post_metal_platform", BlockPostMetal.class, () -> new BlockPostMetal(true), ItemPostMetal::new),
+    POST_METAL("post_metal", BlockPostMetal.class, BlockPostMetal::new, ItemPostMetal::new),
+    POST_METAL_PLATFORM("post_metal_platform", BlockPostMetalPlatform.class, BlockPostMetalPlatform::new, ItemPostMetal::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
     SIGNAL("signal", BlockMachineSignalRailcraft.class, BlockMachineSignalRailcraft::new, ItemSignal::new),
     SIGNAL_DUAL("signal_dual", BlockMachineSignalDualRailcraft.class, BlockMachineSignalDualRailcraft::new, ItemSignal::new),

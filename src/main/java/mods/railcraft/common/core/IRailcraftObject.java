@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -66,6 +67,16 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         if (obj instanceof Block)
             return new ItemStack((Block) obj, qty, meta);
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
+    }
+
+    @Nullable
+    default ItemStack getWildcard() {
+        Object obj = getObject();
+        if (obj instanceof Item)
+            return new ItemStack((Item) obj, 1, OreDictionary.WILDCARD_VALUE);
+        if (obj instanceof Block)
+            return new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE);
+        return null;
     }
 
 //    @Nullable

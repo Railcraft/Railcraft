@@ -1,0 +1,79 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "block",
+    "textures": {
+      "particle": "railcraft:blocks/post_metal_painted",
+      "texture": "railcraft:blocks/post_metal_painted"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "column": {
+      "none": {},
+      "full": {
+        "submodel": {
+          "fullC": {"model": "railcraft:post_column"}
+        }
+      },
+      "mini": {
+        "submodel": {
+          "miniC": {"model": "railcraft:post_mini_column"}
+        }
+      }
+    },
+    "north": {
+      "none": {},
+      "single_thick": {
+        "submodel": {
+          "singleN": {"model": "railcraft:post_single_bar"}
+        }
+      },
+      "two_thin": {
+        "submodel": {
+          "doubleN": {"model": "railcraft:post_double_bar"}
+        }
+      }
+    },
+    "south": {
+      "none": {},
+      "single_thick": {
+        "submodel": {
+          "singleS": {"model": "railcraft:post_single_bar", "y": 180}
+        }
+      },
+      "two_thin": {
+        "submodel": {
+          "doubleS": {"model": "railcraft:post_double_bar", "y": 180}
+        }
+      }
+    },
+    "west": {
+      "none": {},
+      "single_thick": {
+        "submodel": {
+          "singleW": {"model": "railcraft:post_single_bar", "y": 270}
+        }
+      },
+      "two_thin": {
+        "submodel": {
+          "doubleW": {"model": "railcraft:post_double_bar", "y": 270}
+        }
+      }
+    },
+    "east": {
+      "none": {},
+      "single_thick": {
+        "submodel": {
+          "singleE": {"model": "railcraft:post_single_bar", "y": 90}
+        }
+      },
+      "two_thin": {
+        "submodel": {
+          "doubleE": {"model": "railcraft:post_double_bar", "y": 90}
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -157,6 +158,8 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                         connections[side.ordinal()] = connectType == IChargeBlock.ConnectType.WIRE ? Connection.WIRE : Connection.PLUG;
                     }
                 }
+            } else if (side.getAxis() == EnumFacing.Axis.Y && neighborBlock instanceof BlockPostBase) {
+                connections[side.ordinal()] = Connection.PLUG;
             }
         }
         for (EnumFacing side : EnumFacing.VALUES) {

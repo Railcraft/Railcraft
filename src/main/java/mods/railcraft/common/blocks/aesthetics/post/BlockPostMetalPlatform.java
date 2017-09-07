@@ -10,24 +10,21 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockPostMetal extends BlockPostMetalBase {
+public class BlockPostMetalPlatform extends BlockPostMetalBase {
 
-    public BlockPostMetal() {
+    public BlockPostMetalPlatform() {
         setDefaultState(blockState.getBaseState()
-                .withProperty(COLUMN, Column.FULL)
                 .withProperty(COLOR, EnumColor.BLACK)
                 .withProperty(NORTH, IPostConnection.ConnectStyle.NONE)
                 .withProperty(SOUTH, IPostConnection.ConnectStyle.NONE)
@@ -36,29 +33,24 @@ public class BlockPostMetal extends BlockPostMetalBase {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        state = state.withProperty(COLUMN, getColumnStyle(worldIn, state, pos));
-        return super.getActualState(state, worldIn, pos);
-    }
-
-    @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, COLUMN, NORTH, SOUTH, EAST, WEST);
+        return new BlockStateContainer(this, COLOR, NORTH, SOUTH, EAST, WEST);
     }
 
     @Override
     public void defineRecipes() {
-        // TODO: Temp recipes, remove
-        RailcraftCraftingManager.rollingMachine.addRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK),
-                "III",
-                " I ",
-                "III",
-                'I', "ingotIron");
-        RailcraftCraftingManager.rollingMachine.addRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK),
-                "I I",
-                "III",
-                "I I",
-                'I', "ingotIron");
+        for (EnumColor color : EnumColor.VALUES) {
+            CraftingPlugin.addRecipe(RailcraftBlocks.POST_METAL_PLATFORM.getStack(1, color),
+                    " T ",
+                    " I ",
+                    'T', "plateIron",
+                    'I', RailcraftBlocks.POST_METAL.getStack(color));
+        }
+    }
+
+    @Override
+    public boolean isPlatform(IBlockState state) {
+        return true;
     }
 }

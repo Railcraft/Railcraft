@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,15 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
+import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.BlockRailcraft;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,14 +28,35 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
 public abstract class BlockPostBase extends BlockRailcraft {
 
+    public static final PropertyEnum<Column> COLUMN = PropertyEnum.create("column", Column.class);
+    public static final PropertyEnum<IPostConnection.ConnectStyle> NORTH = PropertyEnum.create("north", IPostConnection.ConnectStyle.class);
+    public static final PropertyEnum<IPostConnection.ConnectStyle> SOUTH = PropertyEnum.create("south", IPostConnection.ConnectStyle.class);
+    public static final PropertyEnum<IPostConnection.ConnectStyle> EAST = PropertyEnum.create("east", IPostConnection.ConnectStyle.class);
+    public static final PropertyEnum<IPostConnection.ConnectStyle> WEST = PropertyEnum.create("west", IPostConnection.ConnectStyle.class);
+
+    public enum Column implements IStringSerializable {
+        FULL,
+        MINI,
+        NONE;
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
     private static final float SIZE = 0.15f;
     private static final float SELECT = 4F / 16F;
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.2).build();
+    private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(-SIZE).build();
+    private static final AxisAlignedBB COLLISION_BOX_FENCE = AABBFactory.start().box().expandHorizontally(-SIZE).raiseCeiling(0.5).build();
 
     protected BlockPostBase() {
         super(Material.IRON);
@@ -41,6 +65,18 @@ public abstract class BlockPostBase extends BlockRailcraft {
         setHardness(3);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    public Column getColumnStyle(IBlockAccess world, IBlockState state, BlockPos pos) {
+        if (world.isSideSolid(pos.down(), EnumFacing.UP, true) || PostConnectionHelper.connect(world, pos, state, EnumFacing.DOWN) != IPostConnection.ConnectStyle.NONE)
+            return Column.FULL;
+        BlockPos up = pos.up();
+        IBlockState above = WorldPlugin.getBlockState(world, up);
+        if (above instanceof BlockPostBase)
+            return Column.FULL;
+        if (!isPlatform(state) && !WorldPlugin.isBlockAir(world, up, above))
+            return Column.MINI;
+        return Column.NONE;
     }
 
     public boolean isPlatform(IBlockState state) {
@@ -57,19 +93,19 @@ public abstract class BlockPostBase extends BlockRailcraft {
         if (isPlatform(state))
             return FULL_BLOCK_AABB;
         else
-            return AABBFactory.start().box().expandHorizontally(-0.2F).build();
+            return BOUNDING_BOX;
     }
 
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
         if (isPlatform(blockState))
-            return AABBFactory.start().createBoxForTileAt(pos).build();
-        if (!worldIn.isAirBlock(pos.down())
-                && !(blockState.getBlock() instanceof BlockPostBase)
-                && !TrackTools.isRailBlockAt(worldIn, pos.up()))
-            return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).raiseCeiling(0.5).build();
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).build();
+            return FULL_BLOCK_AABB;
+        BlockPos down = pos.down();
+        IBlockState downState = WorldPlugin.getBlockState(worldIn, down);
+        if (!downState.getBlock().isAir(downState, worldIn, down) && !(downState.getBlock() instanceof BlockPostBase))
+            return COLLISION_BOX_FENCE;
+        return COLLISION_BOX;
     }
 
     @Nonnull
@@ -87,7 +123,12 @@ public abstract class BlockPostBase extends BlockRailcraft {
 
     @Override
     public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
-        return side == DOWN || side == UP;
+        return side == DOWN || (isPlatform(state) && side == UP);
+    }
+
+    @Override
+    public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return true;
     }
 
     @Override
