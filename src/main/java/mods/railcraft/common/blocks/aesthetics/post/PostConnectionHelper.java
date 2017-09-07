@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -16,11 +16,12 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import java.util.HashSet;
@@ -102,6 +103,14 @@ public class PostConnectionHelper {
 
         if (canConnect.contains(otherBlock))
             return ConnectStyle.TWO_THIN;
+
+//        if (otherBlock instanceof BlockFence) {
+//            return  ConnectStyle.TWO_THIN ;
+//        }
+
+        if (otherBlock instanceof BlockFenceGate) {
+            return otherState.getValue(BlockFenceGate.FACING).getAxis() != side.getAxis() ? ConnectStyle.TWO_THIN : ConnectStyle.NONE;
+        }
 
         if (otherBlock instanceof BlockWallSign) {
             return otherState.getValue(BlockWallSign.FACING) == side ? ConnectStyle.SINGLE_THICK : ConnectStyle.NONE;

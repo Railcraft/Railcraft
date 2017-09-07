@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -43,6 +44,28 @@ import java.util.List;
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
+
+    enum Texture {
+        WHITE,
+        ORANGE,
+        MAGENTA,
+        LIGHT_BLUE,
+        YELLOW,
+        LIME,
+        PINK,
+        GRAY,
+        SILVER,
+        CYAN,
+        PURPLE,
+        BLUE,
+        BROWN,
+        GREEN,
+        RED,
+        BLACK,
+        WOOD,
+        STONE,
+        RUSTY,
+    }
 
     public BlockPost() {
         setUnlocalizedName("railcraft.post");
@@ -105,41 +128,6 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             CreativePlugin.addToList(list, post.getStack());
         }
     }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        IIcon woodIcon = iconRegister.registerIcon("railcraft:post.wood");
-//        IIcon stoneIcon = iconRegister.registerIcon("railcraft:concrete");
-//        IIcon metalIcon = iconRegister.registerIcon("railcraft:post.metal");
-//        EnumPost.WOOD.setTexture(woodIcon);
-//        EnumPost.WOOD_PLATFORM.setTexture(woodIcon);
-//        EnumPost.STONE.setTexture(stoneIcon);
-//        EnumPost.STONE_PLATFORM.setTexture(stoneIcon);
-//        EnumPost.METAL_UNPAINTED.setTexture(metalIcon);
-//        EnumPost.METAL_PLATFORM_UNPAINTED.setTexture(metalIcon);
-//        EnumPost.EMBLEM.setTexture(metalIcon);
-//    }
-//
-//    @Override
-//    public IIcon getIcon(int side, int meta) {
-//        return EnumPost.fromId(meta).getIcon();
-//    }
-//
-//    @Override
-//    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side) {
-//        int meta = world.getBlockMetadata(x, y, z);
-//        if (meta == EnumPost.EMBLEM.ordinal()) {
-//            TileEntity tile = world.getTileEntity(x, y, z);
-//            if (tile instanceof TilePostEmblem) {
-//                TilePostEmblem post = (TilePostEmblem) tile;
-//                EnumColor color = post.getColor();
-//                if (color != null && BlockPostMetal.textures != null)
-//                    return BlockPostMetal.textures[color.ordinal()];
-//            }
-//        }
-//        return super.getIcon(world, x, y, z, side);
-//    }
 
     @Nonnull
     @Override
@@ -228,13 +216,13 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public boolean recolorBlock(World world, @Nonnull BlockPos pos, EnumFacing side, @Nonnull EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (isVariant(state, EnumPost.METAL_UNPAINTED))
-            if (BlockPostMetal.post != null) {
-                WorldPlugin.setBlockState(world, pos, BlockPostMetal.post.getDefaultState().withProperty(BlockPostMetal.COLOR, EnumColor.fromDye(color)));
+            if (RailcraftBlocks.POST_METAL.isLoaded()) {
+                WorldPlugin.setBlockState(world, pos, RailcraftBlocks.POST_METAL.getDefaultState().withProperty(BlockPostMetalBase.COLOR, EnumColor.fromDye(color)));
                 return true;
             }
         if (isVariant(state, EnumPost.METAL_PLATFORM_UNPAINTED))
-            if (BlockPostMetal.platform != null) {
-                WorldPlugin.setBlockState(world, pos, BlockPostMetal.platform.getDefaultState().withProperty(BlockPostMetal.COLOR, EnumColor.fromDye(color)));
+            if (RailcraftBlocks.POST_METAL_PLATFORM.isLoaded()) {
+                WorldPlugin.setBlockState(world, pos, RailcraftBlocks.POST_METAL_PLATFORM.getDefaultState().withProperty(BlockPostMetalBase.COLOR, EnumColor.fromDye(color)));
                 return true;
             }
         if (isVariant(state, EnumPost.EMBLEM)) {

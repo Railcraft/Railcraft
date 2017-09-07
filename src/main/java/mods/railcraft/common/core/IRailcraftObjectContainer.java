@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -84,13 +83,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 
     @Nullable
     default ItemStack getWildcard() {
-        return getObject().map(o -> {
-            if (o instanceof Item)
-                return new ItemStack((Item) o, 1, OreDictionary.WILDCARD_VALUE);
-            if (o instanceof Block)
-                return new ItemStack((Block) o, 1, OreDictionary.WILDCARD_VALUE);
-            return null;
-        }).orElse(null);
+        return getObject().map(o -> o.getWildcard()).orElse(null);
     }
 
     @Nullable
