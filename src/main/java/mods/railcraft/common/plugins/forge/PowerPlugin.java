@@ -9,6 +9,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +48,6 @@ public class PowerPlugin {
         return false;
     }
 
-    @Deprecated
     public static boolean isRedstonePowered(World world, BlockPos pos) {
         for (EnumFacing side : EnumFacing.VALUES) {
             if (isRedstonePowering(world, pos, 0, side) || isRedstonePowering(world, pos, -1, side))
@@ -56,14 +56,10 @@ public class PowerPlugin {
         return false;
     }
 
-    @Deprecated
     private static boolean isRedstonePowering(World world, BlockPos pos, int yOffset, EnumFacing side) {
         BlockPos wirePos = pos.up(yOffset).offset(side);
-        Block block = WorldPlugin.getBlock(world, wirePos);
-        if (block == Blocks.REDSTONE_WIRE) {
-            return block.getWeakPower(WorldPlugin.getBlockState(world, wirePos), world, wirePos, side) > 0;
-        }
-        return false;
+        IBlockState state = WorldPlugin.getBlockState(world, wirePos);
+        return state.getWeakPower(world, wirePos, side) > 0;
     }
 
 }
