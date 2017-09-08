@@ -73,7 +73,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         ForestryPlugin.addBackpackItem("forestry.builder", this);
 
         for (int meta = 0; meta < 16; meta++) {
@@ -94,18 +94,15 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
         Object[] frameTypes = {"ingotTin", "ingotNickel", "ingotInvar", "ingotBrass", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
-        // TODO: this is bogus, waiting on FluidStacks as ingredients
-        for (ItemStack container : FluidTools.getContainersFilledWith(water)) {
-            for (Object frame : frameTypes) {
-                CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
-                        "GFG",
-                        "GSG",
-                        "GWG",
-                        'G', "blockGlassColorless",
-                        'F', frame,
-                        'S', "dustSaltpeter",
-                        'W', container);
-            }
+        for (Object frame : frameTypes) {
+            CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
+                    "GFG",
+                    "GSG",
+                    "GWG",
+                    'G', "blockGlassColorless",
+                    'F', frame,
+                    'S', "dustSaltpeter",
+                    'W', water);
         }
     }
 

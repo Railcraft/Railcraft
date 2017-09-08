@@ -65,7 +65,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 

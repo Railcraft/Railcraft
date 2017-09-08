@@ -25,7 +25,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumGear gear : EnumGear.VALUES) {
             ItemStack stack = new ItemStack(this, 1, gear.ordinal());
             RailcraftRegistry.register(this, gear, stack);

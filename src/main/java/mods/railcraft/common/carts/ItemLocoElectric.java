@@ -33,12 +33,9 @@ public class ItemLocoElectric extends ItemLocomotive {
     }
 
     @Override
-    public void finalizeDefinition() {
-        super.finalizeDefinition();
-        //TODO: Change to battery
-        ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getStack();
-        ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
-        CraftingPlugin.addRecipe(cartStack,
+    public void defineRecipes() {
+        super.defineRecipes();
+        CraftingPlugin.addRecipe(getStack(),
                 "LT ",
                 "DBD",
                 "GMG",

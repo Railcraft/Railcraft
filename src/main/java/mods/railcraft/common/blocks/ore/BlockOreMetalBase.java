@@ -31,7 +31,7 @@ public abstract class BlockOreMetalBase<V extends Enum<V> & IVariantEnumBlock<V>
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         EntityTunnelBore.addMineableBlock(this);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 

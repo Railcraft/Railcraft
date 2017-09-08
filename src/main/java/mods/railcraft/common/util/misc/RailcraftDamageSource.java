@@ -35,12 +35,14 @@ public class RailcraftDamageSource extends DamageSource {
     public static final RailcraftDamageSource STEAM = new RailcraftDamageSource("steam");
     public static final RailcraftDamageSource TRACK_ELECTRIC = new RailcraftDamageSource("track.electric");
     public static final RailcraftDamageSource TRAIN = new RailcraftDamageSource("train");
+    public static final RailcraftDamageSource CREOSOTE = new RailcraftDamageSource("creosote");
 
     static {
         BORE.setDamageBypassesArmor();
         ELECTRIC.setDamageBypassesArmor();
         TRACK_ELECTRIC.setDamageBypassesArmor();
         TRAIN.setDamageBypassesArmor();
+        CREOSOTE.setDamageBypassesArmor();
     }
 
     private final int numMessages;

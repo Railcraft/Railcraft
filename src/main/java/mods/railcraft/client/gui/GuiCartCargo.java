@@ -13,8 +13,8 @@ import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartCargo;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -34,6 +34,6 @@ public class GuiCartCargo extends EntityGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRendererObj, label, 6);
         GuiTools.drawStringCenteredAtPos(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.filter"), 35, 22);
-        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRendererObj.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

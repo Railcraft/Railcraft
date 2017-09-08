@@ -199,10 +199,6 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         return def;
     }
 
-    public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(i -> i.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition));
-    }
-
     @Override
     public void register() {
         if (item != null)
@@ -225,8 +221,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             else
                 railcraftItem = new ItemWrapper(newItem);
             railcraftObject = Optional.of(railcraftItem);
-            railcraftItem.initializeDefinintion();
-            Railcraft.instance.recipeWaitList.add(railcraftItem);
+            railcraftItem.initializeDefinition();
         } else {
             conditions().printFailureReason(this);
         }

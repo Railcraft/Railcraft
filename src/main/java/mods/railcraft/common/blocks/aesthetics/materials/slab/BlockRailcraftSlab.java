@@ -126,12 +126,6 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Nonnull
     @Override
-    public ItemStack getStack(@Nullable IVariantEnum variant) {
-        return getStack(1, variant);
-    }
-
-    @Nonnull
-    @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
     }

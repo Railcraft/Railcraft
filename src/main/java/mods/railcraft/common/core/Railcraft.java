@@ -41,8 +41,6 @@ import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @SuppressWarnings("unused")
 @Mod(modid = Railcraft.MOD_ID, name = Railcraft.NAME,
@@ -74,7 +72,6 @@ public final class Railcraft {
     @SidedProxy(clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
     public static CommonProxy proxy;
     private File configFolder;
-    public Collection<IRailcraftObject> recipeWaitList = new ArrayList<>();
 
     public static CommonProxy getProxy() {
         return proxy;
@@ -88,7 +85,7 @@ public final class Railcraft {
         return VERSION;
     }
 
-    static{
+    static {
         FluidRegistry.enableUniversalBucket();
     }
 
@@ -191,8 +188,6 @@ public final class Railcraft {
 //        Game.log(Level.FINE, "Init Phase");
 
         RailcraftModuleManager.init();
-
-        recipeWaitList.forEach(IRailcraftObject::defineRecipes); // define recipes only in init
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }

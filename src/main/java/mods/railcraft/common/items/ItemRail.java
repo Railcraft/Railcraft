@@ -28,7 +28,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumRail rail : EnumRail.VALUES) {
             ItemStack stack = new ItemStack(this, 1, rail.ordinal());
             RailcraftRegistry.register(this, rail, stack);

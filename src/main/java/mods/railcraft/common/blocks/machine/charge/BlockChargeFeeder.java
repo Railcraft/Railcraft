@@ -61,7 +61,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 

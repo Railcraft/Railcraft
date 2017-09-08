@@ -50,7 +50,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         ForestryPlugin.addBackpackItem("forestry.builder", this);
         theme.initBlock(this);
 

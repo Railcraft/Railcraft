@@ -171,7 +171,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         TrackKit.blockTrackOutfitted = this;
     }
 

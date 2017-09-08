@@ -26,6 +26,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -36,6 +38,7 @@ import java.util.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class ActuatorModel implements IModel {
     public static final ActuatorModel INSTANCE = new ActuatorModel();
     private static final Set<ResourceLocation> models = new HashSet<>();

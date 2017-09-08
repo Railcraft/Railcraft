@@ -18,6 +18,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Locale;
 
@@ -28,7 +29,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(this, tie, new ItemStack(this, 1, tie.ordinal()));
         }
@@ -48,13 +49,12 @@ public class ItemTie extends ItemRailcraftSubtyped {
     @Override
     public void finalizeDefinition() {
         ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
-        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
-            CraftingPlugin.addRecipe(tieWood,
-                    " O ",
-                    "###",
-                    'O', container,
-                    '#', "slabWood");
-        }
+        FluidStack creosote = Fluids.CREOSOTE.getB(1);
+        CraftingPlugin.addRecipe(tieWood,
+                " O ",
+                "###",
+                'O', creosote,
+                '#', "slabWood");
     }
 
     public enum EnumTie implements IVariantEnum {

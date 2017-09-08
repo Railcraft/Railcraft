@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.items.IFilterItem;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
@@ -28,11 +29,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     private final LocomotiveRenderType renderType;
     private final EnumColor defaultPrimary;
     private final EnumColor defaultSecondary;
+    protected final ItemStack sample;
 
     public ItemLocomotive(IRailcraftCartContainer cart, LocomotiveRenderType renderType, EnumColor primary, EnumColor secondary) {
         super(cart);
@@ -50,6 +52,8 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         setMaxStackSize(1);
         this.defaultPrimary = primary;
         this.defaultSecondary = secondary;
+        this.sample = new ItemStack(this, 1, 0);
+        setItemColorData(this.sample, primary, secondary);
     }
 
     @Override
@@ -64,8 +68,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     @Override
     public void defineRecipes() {
-        IRecipe recipe = new LocomotivePaintingRecipe(new ItemStack(this));
-        CraftingPlugin.addRecipe(recipe);
+        CraftingPlugin.addRecipe(new LocomotivePaintingRecipe(new ItemStack(this)));
     }
 
     @SideOnly(Side.CLIENT)
@@ -76,7 +79,13 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         }
     }
 
-//    @Override
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        return this.sample.copy();
+    }
+
+    //    @Override
 //    public void registerIcons(IIconRegister iconRegister) {
 //        renderType.registerIcons(iconRegister);
 //        blankIcon = iconRegister.registerIcon("railcraft:locomotives/blank");

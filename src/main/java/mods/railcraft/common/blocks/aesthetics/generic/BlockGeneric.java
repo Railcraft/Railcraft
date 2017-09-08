@@ -55,7 +55,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_QUARRIED);

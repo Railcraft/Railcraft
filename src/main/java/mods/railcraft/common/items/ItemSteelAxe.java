@@ -35,7 +35,7 @@ public class ItemSteelAxe extends ItemAxe implements IRailcraftItemSimple {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setToolClass(this, "axe", 2);
     }
 

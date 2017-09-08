@@ -18,6 +18,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -57,10 +60,35 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         return getDef().conditions;
     }
 
+    /**
+     * Register the item. Call {@link IRailcraftObject#initializeDefinition()} in this part!
+     */
     default void register() {
     }
 
-    default boolean isEqual(ItemStack stack) {
+    /**
+     * To be called in batch by the client proxy.
+     */
+    @SideOnly(Side.CLIENT)
+    default void initializeClient() {
+        getObject().ifPresent(IRailcraftObject::initializeClient);
+    }
+
+    /**
+     * Called in the module event handlers.
+     */
+    default void defineRecipes() {
+        getObject().ifPresent(IRailcraftObject::defineRecipes);
+    }
+
+    /**
+     * Called in the module event handlers.
+     */
+    default void finalizeDefinition() {
+        getObject().ifPresent(IRailcraftObject::finalizeDefinition);
+    }
+
+    default boolean isEqual(@Nullable ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
         return getObject().map(obj -> {

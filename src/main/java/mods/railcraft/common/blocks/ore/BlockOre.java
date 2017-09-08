@@ -78,7 +78,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         EntityTunnelBore.addMineableBlock(this);
 
         for (EnumOre ore : EnumOre.VALUES) {

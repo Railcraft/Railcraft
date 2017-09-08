@@ -26,6 +26,7 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -465,6 +466,18 @@ public abstract class InvTools {
             }
         }
         return false;
+    }
+
+    /**
+     * Attempts to move a single item from one inventory to another.
+     *
+     * @param source  the source inventory
+     * @param dest    the destination inventory
+     * @return null if nothing was moved, the stack moved otherwise
+     */
+    @Nullable
+    public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest) {
+        return moveOneItem(source, dest, Predicates.alwaysTrue());
     }
 
     /**
@@ -991,7 +1004,7 @@ public abstract class InvTools {
         if (item instanceof ItemBlock) {
             int meta = item.getMetadata(stack.getMetadata());
             if (world instanceof WorldServer)
-                return ((ItemBlock) item).getBlock().onBlockPlaced(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()));
+                return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()), stack);
             else
                 return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
         }

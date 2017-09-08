@@ -55,7 +55,7 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (Map.Entry<Integer, Metal> entry : getMetalBiMap().entrySet()) {
             ItemStack stack = new ItemStack(this, 1, entry.getKey());
             RailcraftRegistry.register(this, entry.getValue(), stack);

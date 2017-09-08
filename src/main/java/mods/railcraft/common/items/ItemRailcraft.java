@@ -54,7 +54,6 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack par1ItemStack) {
         return EnumRarity.values()[rarity];
     }

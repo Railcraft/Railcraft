@@ -85,10 +85,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final Set<Block> mineableBlocks = new HashSet<>();
     public static final Set<String> mineableOreTags = new HashSet<>();
     public static final Set<Block> replaceableBlocks = new HashSet<>();
-    private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
-    private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.FACING);
-    private static final DataParameter<com.google.common.base.Optional<ItemStack>> BORE_HEAD = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(DataSerializers.BOOLEAN);
+    private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(DataSerializers.FACING);
+    private static final DataParameter<com.google.common.base.Optional<ItemStack>> BORE_HEAD = DataManagerPlugin.create(DataSerializers.OPTIONAL_ITEM_STACK);
     private static final Block[] mineable = {
             Blocks.CLAY,
             Blocks.SNOW_LAYER,

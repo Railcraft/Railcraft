@@ -16,7 +16,6 @@ import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
@@ -28,7 +27,9 @@ import mods.railcraft.common.commands.CommandTile;
 import mods.railcraft.common.commands.CommandTrack;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.CustomContainerHandler;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.*;
@@ -92,8 +93,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
                 RailcraftFluids.preInitFluids();
-                // TODO: do we need a bucket handler still?
-//                MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+                MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
                 MinecraftForge.EVENT_BUS.register(LootPlugin.INSTANCE);
 
@@ -108,6 +108,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
                 RecipeSorter.register("railcraft:prototype", PrototypeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+                RecipeSorter.register("railcraft:fluid.shaped", ShapedFluidRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+                RecipeSorter.register("railcraft:fluid.shapeless", ShapelessFluidRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictPlugin.registerNewTags();
 
@@ -174,7 +176,7 @@ public class ModuleCore extends RailcraftModulePayload {
                     EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
                 }
 
-                Set<Item> testSet = new HashSet<Item>();
+                Set<Item> testSet = new HashSet<>();
                 if (!RailcraftConfig.vanillaTrackRecipes()) {
                     testSet.add(Item.getItemFromBlock(Blocks.RAIL));
                     testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
@@ -234,31 +236,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void init() {
-
-                // Finish initializing ItemRegistry
-                //TODO: this is obsolete?
-//                for (EnumWayObject type : EnumWayObject.values()) {
-//                    if (type.isEnabled())
-//                        RailcraftRegistry.register(type.getItem());
-//                }
-//
-//                for (EnumGeneric type : EnumGeneric.values()) {
-//                    if (type.isEnabled())
-//                        RailcraftRegistry.register(type.getStack());
-//                }
-//
-//                Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
-//                machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
-//                machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
-//
-//                for (IEnumMachine machine : machines) {
-//                    if (machine.isAvailable())
-//                        RailcraftRegistry.register(machine.getItem());
-//                }
-
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
                     IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
@@ -327,16 +304,12 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 RailcraftFluids.finalizeDefinitions();
-                RailcraftBlocks.finalizeDefinitions();
-                RailcraftItems.finalizeDefinitions();
-                RailcraftCarts.finalizeDefinitions();
 
                 GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 
                 addLiquidFuels();
 
-                // TODO: restore this when you figure out the new fluid containers, with a config
-//                FluidTools.nerfWaterBottle();
+                FluidTools.initWaterBottle(RailcraftConfig.nerfWaterBottle());
 
 //----------------------------------------------
 // Boiler Test Setup

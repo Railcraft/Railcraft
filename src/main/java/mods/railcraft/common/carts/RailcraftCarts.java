@@ -194,14 +194,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return null;
     }
 
-    public static void finalizeDefinitions() {
-        Arrays.stream(VALUES).forEach(cart -> {
-            cart.getObject().ifPresent(IRailcraftItemSimple::finalizeDefinition);
-            if (cart.contentsSupplier != null)
-                CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(cart));
-        });
-    }
-
     @Override
     public String getEntityLocalizationTag() {
         return "entity.railcraft." + getBaseTag() + ".name";
@@ -292,8 +284,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     itemCart.setRarity(rarity);
                     RailcraftRegistry.register((IRailcraftItemSimple) itemCart);
 
-                    itemCart.initializeDefinintion();
-                    Railcraft.instance.recipeWaitList.add(itemCart);
+                    itemCart.initializeDefinition();
                 } else if (item != null) {
                     railcraftObject = Optional.of(new ItemWrapper(item));
                 }
@@ -301,6 +292,13 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 conditions().printFailureReason(this);
             }
         }
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        IRailcraftCartContainer.super.finalizeDefinition();
+        if (contentsSupplier != null)
+            CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
     }
 
     @Override

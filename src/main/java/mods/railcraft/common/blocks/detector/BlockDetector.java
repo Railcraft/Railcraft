@@ -71,7 +71,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         //            HarvestPlugin.setStateHarvestLevel(block, "pickaxe", 2);
         HarvestPlugin.setBlockHarvestLevel("crowbar", 0, this);
 

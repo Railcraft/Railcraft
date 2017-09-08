@@ -20,7 +20,7 @@ import java.util.LinkedHashSet;
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler();
-    private final LinkedHashSet<IRailcraftObjectContainer> objectContainers = new LinkedHashSet<>();
+    private final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
     private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
     private ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
@@ -82,11 +82,14 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void init() {
+            objectContainers.forEach(IRailcraftObjectContainer::defineRecipes);
             enabledEventHandler.init();
         }
 
         @Override
         public void postInit() {
+            // Now we don't need to call them individually!
+            objectContainers.forEach(IRailcraftObjectContainer::finalizeDefinition);
             enabledEventHandler.postInit();
         }
     }

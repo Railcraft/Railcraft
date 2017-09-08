@@ -40,9 +40,9 @@ import java.lang.invoke.MethodHandles;
 
 public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
 
-    private static final DataParameter<Integer> FUSE = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
-    private static final DataParameter<Byte> BLAST = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BYTE);
-    private static final DataParameter<Boolean> PRIMED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> FUSE = DataManagerPlugin.create(DataSerializers.VARINT);
+    private static final DataParameter<Byte> BLAST = DataManagerPlugin.create(DataSerializers.BYTE);
+    private static final DataParameter<Boolean> PRIMED = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final float BLAST_RADIUS_BYTE_MULTIPLIER = 0.5f;
     private static final float BLAST_RADIUS_MIN = 2;
     private static final float BLAST_RADIUS_MAX = 6;
