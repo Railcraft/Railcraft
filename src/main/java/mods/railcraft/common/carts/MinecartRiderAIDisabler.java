@@ -10,8 +10,10 @@
 
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,10 +34,11 @@ public class MinecartRiderAIDisabler {
         if (entity instanceof EntityLiving) {
             EntityLiving living = (EntityLiving) entity;
             if (!entity.worldObj.isRemote) {
-                if (entity.ticksExisted % 8 == 0) {
-                    boolean ridingMinecart = entity.getRidingEntity() instanceof EntityMinecart;
-                    for (int i = 0; i < 6; i++)
-                        living.tasks.setControlFlag(i, !ridingMinecart);
+                if (entity.ticksExisted % 5 == 1) { // one tick later than vanilla handle...
+                    boolean notRiddenByAiMob = !(living.getControllingPassenger() instanceof EntityLiving);
+                    Entity riding = entity.getRidingEntity();
+                    boolean notRidingVehicle = !(riding instanceof EntityMinecart) && !(riding instanceof EntityBoat);
+                    living.tasks.setControlFlag(4, notRiddenByAiMob && notRidingVehicle);
                 }
             }
         }
