@@ -9,8 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.common.carts.EntityCartBed;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.Train;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,7 +31,8 @@ public class PacketKeyPress extends RailcraftPacket {
         LOCOMOTIVE_INCREASE_SPEED,
         LOCOMOTIVE_DECREASE_SPEED,
         LOCOMOTIVE_MODE_CHANGE,
-        LOCOMOTIVE_WHISTLE;
+        LOCOMOTIVE_WHISTLE,
+        BED_CART_SLEEP;
         public static final EnumKeyBinding[] VALUES = values();
     }
 
@@ -74,6 +77,12 @@ public class PacketKeyPress extends RailcraftPacket {
                 break;
             case LOCOMOTIVE_WHISTLE:
                 applyAction(player, true, EntityLocomotive::whistle);
+                break;
+            case BED_CART_SLEEP:
+                Entity ridden = player.getRidingEntity();
+                if (ridden instanceof EntityCartBed) {
+                    ((EntityCartBed) ridden).attemptSleep();
+                }
                 break;
         }
     }

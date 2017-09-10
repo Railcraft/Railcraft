@@ -34,6 +34,7 @@ public class EntityIDs {
     public static final int CART_TNT_WOOD = 28;
     public static final int CART_WORK = 29;
     public static final int CART_JUKEBOX = 30;
+    public static final int CART_BED = 31;
 
     public static final int LOCOMOTIVE_STEAM_SOLID = 40;
     public static final int LOCOMOTIVE_STEAM_MAGIC = 41;

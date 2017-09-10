@@ -67,6 +67,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     ENERGY_MFSU(1, "cart_ic2_MFSU", EntityCartEnergyMFSU.class, ItemCart::new, ModItems.MFSU::get),
     GIFT(3, "cart_gift", EntityCartGift.class, ItemCartGift::new),
     JUKEBOX(0, "cart_jukebox", EntityCartJukebox.class, ItemCartJukebox::new, from(Blocks.JUKEBOX)),
+    BED(0, "cart_bed", EntityCartBed.class, ItemCartBed::new, from(Blocks.BED)),
     MOW_TRACK_LAYER(1, "mow_track_layer", EntityCartTrackLayer.class, ItemCartMOWTrackLayer::new),
     MOW_TRACK_RELAYER(1, "mow_track_relayer", EntityCartTrackRelayer.class, ItemCartMOWTrackRelayer::new),
     MOW_TRACK_REMOVER(1, "mow_track_remover", EntityCartTrackRemover.class, ItemCartMOWTrackRemover::new),
