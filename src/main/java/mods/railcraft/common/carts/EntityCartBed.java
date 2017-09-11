@@ -197,6 +197,12 @@ public class EntityCartBed extends EntityCartBasic {
         shouldSleep = true;
     }
 
+    @Override
+    public void setDead() {
+        super.setDead();
+        MinecraftForge.EVENT_BUS.unregister(this);
+    }
+
     @Nullable
     protected Entity getFirstPassenger() {
         List<Entity> passengers = getPassengers();
