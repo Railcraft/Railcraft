@@ -853,7 +853,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
         // End of Event Fire
 
-        if (RailcraftConfig.boreDestroysBlocks() || !worldObj.getGameRules().getBoolean("doTileDrops")) {
+        if (!RailcraftConfig.boreDestroysBlocks() && worldObj.getGameRules().getBoolean("doTileDrops")) {
             for (ItemStack stack : items) {
                 if (StandardStackFilters.FUEL.test(stack))
                     stack = InvTools.moveItemStack(stack, invFuel);
