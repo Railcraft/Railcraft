@@ -185,16 +185,21 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 //                registerRecipe();
             } catch (Error error) {
                 Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
-                return;
             }
-            List<Object[]> recipes = recipeSupplier.get();
-            if (recipes != null) {
-                recipes.stream().filter(ArrayUtils::isNotEmpty).forEach(recipe -> {
-                    Object[] commonIngredients = {"plankWood", RailcraftItems.TRACK_PARTS};
-                    Object[] finalRecipe = ObjectArrays.concat(commonIngredients, recipe, Object.class);
-                    CraftingPlugin.addShapelessRecipe(trackKit.getTrackKitItem(), finalRecipe);
-                });
-            }
+        }
+    }
+
+    @Override
+    public void defineRecipes() {
+        if (!RailcraftItems.TRACK_KIT.isLoaded() || !RailcraftModuleManager.isModuleEnabled(ModuleTracks.class))
+            return;
+        List<Object[]> recipes = recipeSupplier.get();
+        if (recipes != null) {
+            recipes.stream().filter(ArrayUtils::isNotEmpty).forEach(recipe -> {
+                Object[] commonIngredients = {"plankWood", RailcraftItems.TRACK_PARTS};
+                Object[] finalRecipe = ObjectArrays.concat(commonIngredients, recipe, Object.class);
+                CraftingPlugin.addShapelessRecipe(trackKit.getTrackKitItem(), finalRecipe);
+            });
         }
     }
 
