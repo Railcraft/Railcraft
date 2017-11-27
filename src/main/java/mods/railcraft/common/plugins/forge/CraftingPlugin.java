@@ -283,7 +283,7 @@ public final class CraftingPlugin {
         }
     }
 
-    private static boolean isBeforeInit() {
+    public static boolean isBeforeInit() {
         return RailcraftModuleManager.getStage().compareTo(RailcraftModuleManager.Stage.INIT) < 0;
     }
 
@@ -291,15 +291,15 @@ public final class CraftingPlugin {
         INSTANCE.waitingRecipes.forEach(Runnable::run);
     }
 
-    private static final CraftingPlugin INSTANCE = new CraftingPlugin();
+    public static final CraftingPlugin INSTANCE = new CraftingPlugin();
     private List<Runnable> waitingRecipes;
 
     CraftingPlugin() {
         waitingRecipes = new ArrayList<>();
     }
 
-    private void add(Runnable e) {
-        Game.logTrace(Level.WARN, 6, "Recipes registered before INIT! At:");
+    public void add(Runnable e) {
+        Game.logTrace(Level.WARN, 7, "Recipes registered before INIT! At:");
         waitingRecipes.add(e);
     }
 

@@ -16,19 +16,23 @@ import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
-import ic2.api.recipe.*;
+import ic2.api.recipe.IMachineRecipeManager;
+import ic2.api.recipe.IRecipeInput;
+import ic2.api.recipe.RecipeOutput;
+import ic2.api.recipe.Recipes;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -144,16 +148,26 @@ public class IC2Plugin {
             return;
         output = output.copy();
         setSize(output, numoutput);
-        try {
-            Recipes.macerator.addRecipe(new RecipeInputItemStack(input, numinput), null, false, output);
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
+        if (CraftingPlugin.isBeforeInit()) {
+            final ItemStack out = output; // No potential pointer changes yeah
+            CraftingPlugin.INSTANCE.add(() -> {
+                try {
+                    Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, out);
+                } catch (Throwable error) {
+                    Game.logErrorAPI("IC2", error, Recipes.class);
+                }
+            });
+        } else {
+            try {
+                Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, output);
+            } catch (Throwable error) {
+                Game.logErrorAPI("IC2", error, Recipes.class);
+            }
         }
     }
 
     public static void removeMaceratorRecipes(ItemStack... items) {
         try {
-
             Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
                 IMachineRecipeManager.RecipeIoContainer recipe = it.next();
@@ -169,7 +183,7 @@ public class IC2Plugin {
         if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         try {
-            Recipes.cannerBottle.addRecipe(new RecipeInputItemStack(container), new RecipeInputItemStack(input), output);
+            Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(container), Recipes.inputFactory.forStack(input), output);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }
@@ -196,7 +210,7 @@ public class IC2Plugin {
             Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
                 IMachineRecipeManager.RecipeIoContainer recipe = it.next();
-                if (isInputBlock(recipe.input, items) && doesRecipeProduce(recipe.output, items))
+                if (isInputBlock(recipe.input) && doesRecipeProduce(recipe.output, items))
                     it.remove();
             }
         } catch (Throwable error) {
@@ -204,9 +218,9 @@ public class IC2Plugin {
         }
     }
 
-    private static boolean isInputBlock(IRecipeInput input, ItemStack... items) {
+    private static boolean isInputBlock(IRecipeInput input) {
         for (ItemStack stack : input.getInputs()) {
-            if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemBlock)
+            if (!InvTools.isEmpty(stack) && GameData.getBlockItemMap().containsValue(stack.getItem()))
                 return true;
         }
         return false;
