@@ -56,6 +56,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
@@ -593,6 +594,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         data.setInteger("fuel", fuel);
 
+        data.setBoolean("reverse", dataManager.get(REVERSE));
+
         lockController.writeToNBT(data, "lock");
     }
 
@@ -617,6 +620,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         whistlePitch = data.getFloat("whistlePitch");
 
         fuel = data.getInteger("fuel");
+
+        if (data.hasKey("reverse", Constants.NBT.TAG_BYTE))
+            dataManager.set(REVERSE, data.getBoolean("reverse"));
 
         lockController.readFromNBT(data, "lock");
     }
