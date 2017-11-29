@@ -153,7 +153,7 @@ public class RailcraftModuleManager {
             Iterator<Class<? extends IRailcraftModule>> it = toLoad.iterator();
             while (it.hasNext()) {
                 Class<? extends IRailcraftModule> moduleClass = it.next();
-                if (loadOrder.containsAll(getAllDependencies(moduleClass))) {
+                if (loadOrder.containsAll(getAllDependencies(moduleClass, toLoad))) {
                     it.remove();
                     loadOrder.add(moduleClass);
                     changed = true;
@@ -188,7 +188,7 @@ public class RailcraftModuleManager {
         return dependencyClasses;
     }
 
-    private static Set<Class<? extends IRailcraftModule>> getSoftDependencies(Class<? extends IRailcraftModule> moduleClass) {
+    private static Set<Class<? extends IRailcraftModule>> getSoftDependencies(Class<? extends IRailcraftModule> moduleClass, Set<Class<? extends IRailcraftModule>> load) {
         RailcraftModule annotation = moduleClass.getAnnotation(RailcraftModule.class);
         String[] dependencies = annotation.softDependencies();
         Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
@@ -196,13 +196,14 @@ public class RailcraftModuleManager {
         for (String dependency : dependencies) {
             dependencyClasses.add(nameToClassMapping.get(dependency));
         }
+        dependencyClasses.retainAll(load);
         return dependencyClasses;
     }
 
-    private static Set<Class<? extends IRailcraftModule>> getAllDependencies(Class<? extends IRailcraftModule> moduleClass) {
+    private static Set<Class<? extends IRailcraftModule>> getAllDependencies(Class<? extends IRailcraftModule> moduleClass, Set<Class<? extends IRailcraftModule>> load) {
         Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
         dependencyClasses.addAll(getDependencies(moduleClass));
-        dependencyClasses.addAll(getSoftDependencies(moduleClass));
+        dependencyClasses.addAll(getSoftDependencies(moduleClass, load));
         return dependencyClasses;
     }
 

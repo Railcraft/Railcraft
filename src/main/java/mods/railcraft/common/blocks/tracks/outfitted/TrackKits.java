@@ -211,7 +211,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     @Override
     public boolean isEnabled() {
         // TODO: Convert to conditionals
-        return IRailcraftObjectContainer.super.isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getRegistryName()) && !isDeprecated();
+        return RailcraftModuleManager.isModuleEnabled(ModuleTracks.class) && IRailcraftObjectContainer.super.isEnabled() && RailcraftBlocks.TRACK_OUTFITTED.isEnabled() && RailcraftItems.TRACK_KIT.isEnabled() && RailcraftConfig.isSubBlockEnabled(getRegistryName()) && !isDeprecated();
     }
 
     @Override

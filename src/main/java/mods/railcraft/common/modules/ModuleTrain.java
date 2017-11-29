@@ -36,7 +36,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
                 if (RailcraftBlocks.DETECTOR.isLoaded()) {
                     CraftingPlugin.addRecipe(EnumDetector.TRAIN.getStack(),
                             "XXX",
@@ -45,10 +45,6 @@ public class ModuleTrain extends RailcraftModulePayload {
                             'X', Blocks.NETHER_BRICK,
                             'P', Blocks.STONE_PRESSURE_PLATE);
                 }
-            }
-
-            @Override
-            public void init() {
                 ManipulatorVariant type = ManipulatorVariant.DISPENSER_TRAIN;
                 if (type.isAvailable() && ManipulatorVariant.DISPENSER_CART.isAvailable()) {
                     CraftingPlugin.addRecipe(type.getStack(),
