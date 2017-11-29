@@ -10,9 +10,11 @@
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
@@ -71,11 +73,9 @@ public class SlotRailcraft extends Slot {
     }
 
     @Override
-    public int getSlotStackLimit() {
-        if (stackLimit < 0)
-            return super.getSlotStackLimit();
-        else
-            return stackLimit;
+    public final int getSlotStackLimit() {
+        int max = super.getSlotStackLimit();
+        return stackLimit < 0 ? max : Math.min(max, stackLimit); // issue #1347
     }
 
     public boolean isPhantom() {

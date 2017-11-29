@@ -18,11 +18,7 @@ public class SlotFuel extends SlotRailcraft
 
     public SlotFuel(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
-    }
-
-    @Override
-    public int getSlotStackLimit() {
-        return 64;
+        setStackLimit(64);
     }
 
     @Override

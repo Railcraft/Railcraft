@@ -41,11 +41,7 @@ public class SlotItemMap<V> extends SlotRailcraft {
                 }
             }
         };
-    }
-
-    @Override
-    public int getSlotStackLimit() {
-        return 64;
+        setStackLimit(64);
     }
 
     @Override
