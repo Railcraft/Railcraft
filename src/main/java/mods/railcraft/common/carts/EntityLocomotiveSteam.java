@@ -83,7 +83,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
             @Override
             public int fillInternal(FluidStack resource, boolean doFill) {
-                IBoilerContainer.onFillWater(EntityLocomotiveSteam.this);
+                EntityLocomotiveSteam.this.onFillWater();
                 return super.fillInternal(resource, doFill);
             }
         };

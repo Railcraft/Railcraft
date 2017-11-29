@@ -96,7 +96,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
             @Override
             public int fillInternal(FluidStack resource, boolean doFill) {
                 if (!isMaster()) return 0;
-                IBoilerContainer.onFillWater(TileBoiler.this);
+                TileBoiler.this.onFillWater();
                 return super.fillInternal(resource, doFill);
             }
         };
