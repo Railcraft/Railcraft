@@ -21,6 +21,9 @@ import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import mods.railcraft.common.gui.containers.ContainerRollingMachinePowered;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
+import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeHandler;
+import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeHandler;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeHandler;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
@@ -41,16 +44,15 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
-        ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
-        Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
-        if (trackOutfitted != null)
-            subtypeRegistry.registerNbtInterpreter(trackOutfitted, stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
-
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
+        FluidRecipeInterpreter.init(jeiHelpers.getStackHelper(), registry.getIngredientRegistry());
+
         registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
 
         registry.addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
+        registry.addRecipeHandlers(new ShapedFluidRecipeHandler());
+        registry.addRecipeHandlers(new ShapelessFluidRecipeHandler(jeiHelpers));
 
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
         registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 36, 23, 9, ROLLING);
@@ -84,5 +86,12 @@ public class RailcraftJEIPlugin extends BlankModPlugin {
             if (LocalizationPlugin.hasTag(locTag))
                 registry.addDescription(stack, locTag);
         }
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
+        if (trackOutfitted != null)
+            subtypeRegistry.registerSubtypeInterpreter(trackOutfitted, stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
     }
 }

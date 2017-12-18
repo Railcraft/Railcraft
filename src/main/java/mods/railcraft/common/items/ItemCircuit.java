@@ -30,7 +30,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             ItemStack stack = getStack(circuit);
             assert !InvTools.isEmpty(stack);

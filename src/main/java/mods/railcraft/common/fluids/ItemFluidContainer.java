@@ -10,6 +10,7 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -17,17 +18,21 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
@@ -35,35 +40,28 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
  */
 public class ItemFluidContainer extends ItemRailcraft {
 
-    private final Fluids fluid;
-    private final Item empty;
+    protected final Fluids fluid;
+    protected final Item empty;
 
     public ItemFluidContainer(Fluids fluid, Item empty) {
         this.fluid = fluid;
         this.empty = empty;
-    }
-
-    @Override
-    public void initializeDefinintion() {
-        FluidStack fluidStack = fluid.get(FluidTools.BUCKET_VOLUME);
-        if (fluidStack != null)
-            FluidTools.registerContainer(fluidStack, new ItemStack(this), new ItemStack(empty));
+        CustomContainerHandler.INSTANCE.addContainer(this);
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        RayTraceResult mop = rayTrace(world, player, false);
+        RayTraceResult trace = rayTrace(world, player, false);
 
-        //noinspection ConstantConditions
-        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
-            BlockPos pos = mop.getBlockPos();
+        if (trace != null && trace.typeOfHit == RayTraceResult.Type.BLOCK) {
+            BlockPos pos = trace.getBlockPos();
 
             if (!world.isBlockModifiable(player, pos))
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
 
-            pos = pos.offset(mop.sideHit);
+            pos = pos.offset(trace.sideHit);
 
-            if (!player.canPlayerEdit(pos, mop.sideHit, stack))
+            if (!player.canPlayerEdit(pos, trace.sideHit, stack))
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
 
             if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode) {
@@ -97,5 +95,21 @@ public class ItemFluidContainer extends ItemRailcraft {
 
         world.setBlockState(pos, fluidBlock.getDefaultState().withProperty(BlockFluidBase.LEVEL, fluidBlock instanceof BlockFluidFinite ? 15 : 0));
         return true;
+    }
+
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        return new FluidContainerCapabilityDispatcher(this, stack);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return ModuleResources.getInstance().isBottleFree() ? emptyStack() : new ItemStack(empty);
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        return !ModuleResources.getInstance().isBottleFree();
     }
 }

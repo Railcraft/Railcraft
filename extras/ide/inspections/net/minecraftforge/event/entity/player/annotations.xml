@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.event.entity.player.PlayerDestroyItemEvent net.minecraft.util.EnumHand getHand()'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

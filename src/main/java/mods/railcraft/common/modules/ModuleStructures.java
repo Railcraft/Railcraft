@@ -28,6 +28,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
@@ -90,9 +91,8 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
-                        for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
-                            CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
-                        }
+                        FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
+                        CraftingPlugin.addShapelessRecipe(stack, "logWood", creosote);
                     }
                 }
 
@@ -201,9 +201,8 @@ public class ModuleStructures extends RailcraftModulePayload {
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();
-                    for (ItemStack container : FluidTools.getContainersFilledWith(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME))) {
-                        CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
-                    }
+                    FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
+                    CraftingPlugin.addShapelessRecipe(stack, "logWood", creosote);
                     ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
                 }
             }

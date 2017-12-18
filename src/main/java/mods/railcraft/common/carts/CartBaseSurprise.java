@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.PotionsPlugin;
+import mods.railcraft.common.plugins.forge.PotionPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -193,11 +193,11 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             float type = rand.nextFloat();
             List<ItemStack> choices;
             if (type > 0.8F)
-                choices = PotionsPlugin.getPotionsLingering();
+                choices = PotionPlugin.getPotionsLingering();
             else if (type > 0.5F)
-                choices = PotionsPlugin.getPotionsSplash();
+                choices = PotionPlugin.getPotionsSplash();
             else
-                choices = PotionsPlugin.getPotions();
+                choices = PotionPlugin.getPotions();
             ItemStack potion = choices.get(rand.nextInt(choices.size()));
             return potion.copy();
         }

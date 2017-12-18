@@ -32,7 +32,7 @@ public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimpl
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         HarvestPlugin.setToolClass(this, "pickaxe", 2);
     }
 

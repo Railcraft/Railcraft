@@ -75,7 +75,7 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
                 if (variant instanceof IVariantEnumBlock)
                     TextureAtlasSheet.unstitchIcons(textureMap,
                             new ResourceLocation(getRegistryName() + "_" + variant.getResourcePathSuffix()),
-                            ((IVariantEnumBlock) variant).getTextureDimensions());
+                            ((IVariantEnumBlock<?>) variant).getTextureDimensions());
             }
         }
     }

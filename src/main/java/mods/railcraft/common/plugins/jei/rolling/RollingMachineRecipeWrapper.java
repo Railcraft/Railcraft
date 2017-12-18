@@ -19,6 +19,10 @@ import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapedRecipesWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapelessOreRecipeWrapper;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipesWrapper;
+import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeWrapper;
+import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeWrapper;
+import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
+import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -45,6 +49,12 @@ public class RollingMachineRecipeWrapper extends BlankRecipeWrapper {
         } else if (recipe instanceof ShapelessOreRecipe) {
             wrapper = new ShapelessOreRecipeWrapper(jeiHelpers, (ShapelessOreRecipe) recipe);
             shaped = false;
+        } else if (recipe instanceof ShapedFluidRecipe) {
+            wrapper = new ShapedFluidRecipeWrapper((ShapedFluidRecipe) recipe);
+            shaped = true;
+        } else if (recipe instanceof ShapelessFluidRecipe) {
+            wrapper = new ShapelessFluidRecipeWrapper(jeiHelpers, (ShapelessFluidRecipe) recipe);
+            shaped = true;
         } else {
             wrapper = null;
             shaped = false;

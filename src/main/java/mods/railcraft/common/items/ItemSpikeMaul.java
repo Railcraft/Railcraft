@@ -173,7 +173,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
     }
 

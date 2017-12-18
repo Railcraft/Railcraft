@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 
 public class EntityCartCargo extends CartBaseFiltered {
-    private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
+    private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(DataSerializers.VARINT);
 
     public EntityCartCargo(World world) {
         super(world);

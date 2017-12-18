@@ -32,11 +32,14 @@ import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
+import mods.railcraft.common.items.potion.RailcraftPotionTypes;
+import mods.railcraft.common.items.potion.RailcraftPotions;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
@@ -157,6 +160,9 @@ public class ClientProxy extends CommonProxy {
                     if (stack != null)
                         block.registerItemModel(stack, variant);
                 });
+
+        RailcraftPotions.VALUES.forEach(RailcraftPotions::initializeClient);
+        RailcraftPotionTypes.VALUES.forEach(RailcraftPotionTypes::initializeClient);
 
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);

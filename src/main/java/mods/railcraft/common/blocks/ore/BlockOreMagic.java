@@ -46,7 +46,7 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         EntityTunnelBore.addMineableBlock(this);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 3, this);
 

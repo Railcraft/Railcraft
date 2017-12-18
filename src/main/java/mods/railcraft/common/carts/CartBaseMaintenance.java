@@ -34,7 +34,7 @@ import java.util.List;
  */
 public abstract class CartBaseMaintenance extends CartBaseContainer {
 
-    private static final DataParameter<Byte> BLINK = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BYTE);
+    private static final DataParameter<Byte> BLINK = DataManagerPlugin.create(DataSerializers.BYTE);
     protected static final double DRAG_FACTOR = 0.9;
     protected static final float MAX_SPEED = 0.1f;
     private static final int BLINK_DURATION = 3;

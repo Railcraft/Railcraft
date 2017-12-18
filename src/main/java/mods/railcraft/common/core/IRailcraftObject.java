@@ -91,7 +91,7 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     default void defineRecipes() {
     }
 
-    default void initializeDefinintion() {
+    default void initializeDefinition() {
     }
 
     default void finalizeDefinition() {

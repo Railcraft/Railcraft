@@ -18,6 +18,10 @@ import mezz.jei.plugins.vanilla.crafting.ShapedRecipesHandler;
 import mezz.jei.plugins.vanilla.crafting.ShapelessOreRecipeHandler;
 import mezz.jei.plugins.vanilla.crafting.ShapelessRecipesHandler;
 import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
+import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeHandler;
+import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeHandler;
+import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
+import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -60,6 +64,10 @@ public class RollingMachineRecipeHandler implements IRecipeHandler<RollingMachin
             return new ShapedOreRecipeHandler(jeiHelpers).isRecipeValid((ShapedOreRecipe) recipe.getRecipe());
         } else if (recipe.getRecipe() instanceof ShapelessOreRecipe) {
             return new ShapelessOreRecipeHandler(jeiHelpers).isRecipeValid((ShapelessOreRecipe) recipe.getRecipe());
+        } else if (recipe.getRecipe() instanceof ShapedFluidRecipe) {
+            return new ShapedFluidRecipeHandler().isRecipeValid((ShapedFluidRecipe) recipe.getRecipe());
+        } else if (recipe.getRecipe() instanceof ShapelessFluidRecipe) {
+            return new ShapelessFluidRecipeHandler(jeiHelpers).isRecipeValid((ShapelessFluidRecipe) recipe.getRecipe());
         }
         return false;
     }

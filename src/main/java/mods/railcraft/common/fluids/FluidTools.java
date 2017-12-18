@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.particles.ParticleDrip;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -22,18 +23,24 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,11 +60,6 @@ public final class FluidTools {
     public static final int NETWORK_UPDATE_INTERVAL = 128;
     public static final int BUCKET_VOLUME = 1000;
     public static final int PROCESS_VOLUME = BUCKET_VOLUME * 4;
-    private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
-
-    static {
-        adapters.add(ForgeFluidRegistrar.INSTANCE);
-    }
 
     private FluidTools() {
     }
@@ -82,7 +84,7 @@ public final class FluidTools {
      * Forge is too picking here. So no {@link InvTools#isEmpty(ItemStack)} here.
      *
      * @param stack The stack to check
-     * @return True if the liquid failed to drain/fill
+     * @return True if the liquid failed to drains/fill
      */
     public static boolean isFailed(@Nullable ItemStack stack) {
         return stack == null;
@@ -161,7 +163,7 @@ public final class FluidTools {
         return state;
     }
 //    @Deprecated
-//    public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {
+//    public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drains) {
 //        if (player == null)
 //            return false;
 //        ItemStack current = player.inventory.getCurrentItem();
@@ -187,9 +189,9 @@ public final class FluidTools {
 //                    tank.fill(side, drainReturn.fluidDrained, true);
 //                    return true;
 //                }
-//            } else if (drain) {
+//            } else if (drains) {
 //
-//                FluidStack available = tank.drain(side, PROCESS_VOLUME, false);
+//                FluidStack available = tank.drains(side, PROCESS_VOLUME, false);
 //                if (available != null) {
 //                    FluidItemHelper.FillReturn fillReturn = FluidItemHelper.fillContainer(current, available);
 //                    if (fillReturn.amount > 0) {
@@ -201,7 +203,7 @@ public final class FluidTools {
 //                            player.inventory.setInventorySlotContents(player.inventory.currentItem, fillReturn.container);
 //                        }
 //                        player.inventory.markDirty();
-//                        tank.drain(side, fillReturn.amount, true);
+//                        tank.drains(side, fillReturn.amount, true);
 //                        return true;
 //                    }
 //                }
@@ -313,33 +315,9 @@ public final class FluidTools {
         inv.decrStackSize(inputSlot, 1);
     }
 
-    public static boolean registerBucket(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.BUCKET);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerBottle(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
-        return registerContainer(liquid, filled, empty);
-    }
-
-    public static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
-        if (!isEmpty(empty)) {
-            FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
-            registerContainer(container);
-            return true;
-        }
-        return false;
-    }
-
-    public static void registerContainer(FluidContainerData container) {
-        for (FluidRegistrar adapter : adapters) {
-            adapter.registerContainer(container);
-        }
-    }
-
+    @Deprecated
     public static Collection<ItemStack> getContainersFilledWith(FluidStack fluidStack) {
-        List<ItemStack> containers = new ArrayList<ItemStack>();
+        List<ItemStack> containers = new ArrayList<>();
         for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             FluidStack inContainer = FluidItemHelper.getFluidStackInContainer(data.filledContainer);
             if (inContainer != null && inContainer.containsFluid(fluidStack))
@@ -348,11 +326,19 @@ public final class FluidTools {
         return containers;
     }
 
-    public static void nerfWaterBottle() {
-        for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if (data.filledContainer.getItem() == Items.POTIONITEM && data.emptyContainer.getItem() == Items.GLASS_BOTTLE && Fluids.WATER.is(data.fluid)) {
-                data.fluid.amount = 333;
-                return;
+    @SuppressWarnings("deprecation")
+    public static void initWaterBottle(boolean nerf) {
+        //caps
+        WaterBottleEventHandler.INSTANCE.amount = nerf ? 333 : 1000;
+        MinecraftForge.EVENT_BUS.register(WaterBottleEventHandler.INSTANCE);
+
+        //legacy support
+        if (nerf) {
+            for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+                if (data.filledContainer.getItem() == Items.POTIONITEM && data.emptyContainer.getItem() == Items.GLASS_BOTTLE && Fluids.WATER.is(data.fluid)) {
+                    data.fluid.amount = 333;
+                    return;
+                }
             }
         }
     }
@@ -432,14 +418,6 @@ public final class FluidTools {
         return getFluid(state.getBlock());
     }
 
-    public static int getFluidId(@Nullable FluidStack stack) {
-        if (stack == null)
-            return -1;
-        if (stack.getFluid() == null)
-            return -1;
-        return FluidRegistry.getFluidID(stack.getFluid().getName());
-    }
-
     @SideOnly(Side.CLIENT)
     public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {
         if (rand.nextInt(10) == 0 && world.isSideSolid(pos.down(), EnumFacing.UP) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
@@ -459,5 +437,89 @@ public final class FluidTools {
         if (all)
             return Arrays.stream(properties).allMatch(test);
         return Arrays.stream(properties).anyMatch(test);
+    }
+
+    static final class WaterBottleEventHandler {
+        static final WaterBottleEventHandler INSTANCE = new WaterBottleEventHandler();
+        int amount;
+
+        private WaterBottleEventHandler() {
+        }
+
+        public void onAttachCapability(AttachCapabilitiesEvent.Item event) {
+            if (event.getObject() == Items.POTIONITEM && PotionUtils.getPotionFromItem(event.getItemStack()) == PotionTypes.WATER) {
+                event.addCapability(RailcraftConstantsAPI.locationOf("water_bottle_container"), new WaterBottleCapabilityDispatcer(event.getItemStack()));
+            }
+        }
+    }
+
+    private static final class WaterBottleCapabilityDispatcer extends FluidBucketWrapper {
+        private WaterBottleCapabilityDispatcer(ItemStack container) {
+            super(container);
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            return 0;
+        }
+
+        @Override
+        protected void setFluid(@Nullable Fluid fluid) {
+            if (fluid == null) {
+                container.deserializeNBT(new ItemStack(Items.GLASS_BOTTLE).serializeNBT());
+            }
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain) {
+            if (container.stackSize != 1 || resource == null || resource.amount < WaterBottleEventHandler.INSTANCE.amount)
+            {
+                return null;
+            }
+
+            FluidStack fluidStack = getFluid();
+            if (fluidStack != null && fluidStack.isFluidEqual(resource))
+            {
+                if (doDrain)
+                {
+                    setFluid(null);
+                }
+                return fluidStack;
+            }
+
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            if (container.stackSize != 1 || maxDrain < WaterBottleEventHandler.INSTANCE.amount)
+            {
+                return null;
+            }
+
+            FluidStack fluidStack = getFluid();
+            if (fluidStack != null)
+            {
+                if (doDrain)
+                {
+                    setFluid(null);
+                }
+                return fluidStack;
+            }
+
+            return null;
+        }
+
+        @Override
+        public FluidStack getFluid() {
+            return new FluidStack(FluidRegistry.WATER, WaterBottleEventHandler.INSTANCE.amount);
+        }
+
+        @Override
+        public IFluidTankProperties[] getTankProperties() {
+            return new FluidTankProperties[]{new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
+        }
     }
 }

@@ -57,7 +57,7 @@ import static mods.railcraft.common.util.inventory.InvTools.dec;
  */
 public class ItemTrackKit extends ItemRailcraft {
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         TrackKit.itemKit = this;
         setCreativeTab(CreativeTabs.TRANSPORTATION);
         setHasSubtypes(true);

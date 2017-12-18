@@ -1,4 +1,10 @@
 <root>
+    <item name='net.minecraftforge.fluids.FluidRegistry net.minecraftforge.fluids.Fluid getFluid(java.lang.String)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraftforge.fluids.FluidRegistry net.minecraftforge.fluids.Fluid lookupFluidForBlock(net.minecraft.block.Block)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
     <item name='net.minecraftforge.fluids.FluidTank net.minecraftforge.fluids.FluidStack drainInternal(int, boolean)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
@@ -7,5 +13,14 @@
     </item>
     <item name='net.minecraftforge.fluids.FluidUtil net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(net.minecraft.item.ItemStack) 0'>
         <annotation name='javax.annotation.Nullable'/>
+    </item>
+    <item name='net.minecraftforge.fluids.IFluidBlock net.minecraftforge.fluids.FluidStack drain(net.minecraft.world.World, net.minecraft.util.math.BlockPos, boolean)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraftforge.fluids.IFluidContainerItem net.minecraftforge.fluids.FluidStack drain(net.minecraft.item.ItemStack, int, boolean)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraftforge.fluids.IFluidContainerItem net.minecraftforge.fluids.FluidStack getFluid(net.minecraft.item.ItemStack)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
     </item>
 </root>

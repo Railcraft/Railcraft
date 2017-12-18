@@ -59,7 +59,7 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 

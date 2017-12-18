@@ -15,6 +15,8 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.items.firestone.FirestoneTickHandler;
+import mods.railcraft.common.items.potion.RailcraftPotionTypes;
+import mods.railcraft.common.items.potion.RailcraftPotions;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -32,8 +34,11 @@ public class ModuleMagic extends RailcraftModulePayload {
                         RailcraftItems.FIRESTONE_RAW,
                         RailcraftItems.FIRESTONE_REFINED,
 
-                        RailcraftBlocks.RITUAL
-//                        RailcraftBlocks.ore
+                        RailcraftBlocks.RITUAL,
+                        RailcraftPotions.CREOSOTE,
+                        RailcraftPotionTypes.CREOSOTE,
+                        RailcraftPotionTypes.LONG_CREOSOTE,
+                        RailcraftPotionTypes.STRONG_CREOSOTE
                 );
             }
 
@@ -46,6 +51,15 @@ public class ModuleMagic extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new FirestoneTickHandler());
             }
 
+            @Override
+            public void init() {
+                super.init();
+            }
+
+            @Override
+            public void postInit() {
+                super.postInit();
+            }
         });
     }
 

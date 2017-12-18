@@ -13,6 +13,8 @@ import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
+import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
+import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -23,13 +25,16 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,11 +47,11 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 public class CraftingPlugin {
 
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
-        if (isEmpty(input) && isEmpty(output)) {
-            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both null. Skipping");
-            return;
-        }
         if (isEmpty(input)) {
+            if (isEmpty(output)) {
+                Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both null. Skipping");
+                return;
+            }
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getUnlocalizedName());
             return;
         }
@@ -78,27 +83,33 @@ public class CraftingPlugin {
         return recipeList.toArray();
     }
 
-    private static boolean isOreRecipe(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
+    private static void getExtraInfo(RecipeType recipeType, ItemStack result, boolean[] extraInfo, Object... recipeArray) throws InvalidRecipeException {
+        Arrays.fill(extraInfo, false);
         for (Object obj : recipeArray) {
-            if (obj instanceof String) {
-                if (recipeType == RecipeType.SHAPELESS || ((String) obj).length() > 3)
-                    return true;
-            } else if (recipeType == RecipeType.SHAPED && obj instanceof Boolean)
-                return true;
-            else if (obj == null) {
-                throw new MissingIngredientException(recipeType, result);
+            if (!extraInfo[0]) {
+                if (obj instanceof String) {
+                    if (recipeType == RecipeType.SHAPELESS || ((String) obj).length() > 3)
+                        extraInfo[0] = true;
+                } else if (recipeType == RecipeType.SHAPED && obj instanceof Boolean)
+                    extraInfo[0] = true;
+                else if (obj == null) {
+                    throw new MissingIngredientException(recipeType, result);
+                }
             }
+            if (!extraInfo[1] && obj instanceof FluidStack)
+                extraInfo[1] = true;
         }
-        return false;
     }
 
+    @Contract("_, null, _ -> fail")
     public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         if (isEmpty(result)) {
             throw new InvalidRecipeException("Tried to define invalid {0} recipe, the result was null or zero. Skipping", recipeType);
         }
         recipeArray = cleanRecipeArray(recipeType, result, recipeArray);
-        boolean isOreRecipe = isOreRecipe(recipeType, result, recipeArray);
-        return new ProcessedRecipe(isOreRecipe, result, recipeArray);
+        boolean[] info = new boolean[2];
+        getExtraInfo(recipeType, result, info, recipeArray);
+        return new ProcessedRecipe(info[0], info[1], result, recipeArray);
     }
 
     public static void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
@@ -109,9 +120,12 @@ public class CraftingPlugin {
             Game.logTrace(Level.WARN, ex.getRawMessage());
             return;
         }
+        if (processedRecipe.hasFluid) {
+            addRecipe(new ShapedFluidRecipe(processedRecipe.result, processedRecipe.recipeArray));
+            return;
+        }
         if (processedRecipe.isOreRecipe) {
-            IRecipe recipe = new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
-            addRecipe(recipe);
+            addRecipe(new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
         } else
             GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
     }
@@ -124,9 +138,12 @@ public class CraftingPlugin {
             Game.logTrace(Level.WARN, ex.getRawMessage());
             return;
         }
+        if (processedRecipe.hasFluid) {
+            addRecipe(new ShapelessFluidRecipe(processedRecipe.result, processedRecipe.recipeArray));
+            return;
+        }
         if (processedRecipe.isOreRecipe) {
-            IRecipe recipe = new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
-            addRecipe(recipe);
+            addRecipe(new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
         } else
             GameRegistry.addShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray);
     }
@@ -155,7 +172,7 @@ public class CraftingPlugin {
                 s = (new StringBuilder()).append(s).append(s1).toString();
             }
         }
-        HashMap<Character, ItemStack> hashMap = new HashMap<Character, ItemStack>();
+        HashMap<Character, ItemStack> hashMap = new HashMap<>();
         for (; index < components.length; index += 2) {
             Character character = (Character) components[index];
             ItemStack itemStack = InvTools.emptyStack();
@@ -183,7 +200,7 @@ public class CraftingPlugin {
     }
 
     public static IRecipe makeVanillaShapelessRecipe(ItemStack output, Object... components) {
-        List<ItemStack> ingredients = new ArrayList<ItemStack>();
+        List<ItemStack> ingredients = new ArrayList<>();
         for (Object obj : components) {
             if (obj instanceof ItemStack) {
                 ingredients.add(((ItemStack) obj).copy());
@@ -243,11 +260,13 @@ public class CraftingPlugin {
         public final ItemStack result;
         public final Object[] recipeArray;
         public final boolean isOreRecipe;
+        public final boolean hasFluid;
 
-        ProcessedRecipe(boolean isOreRecipe, ItemStack result, Object... recipeArray) {
+        ProcessedRecipe(boolean isOreRecipe, boolean fluid, ItemStack result, Object... recipeArray) {
             this.isOreRecipe = isOreRecipe;
             this.result = result;
             this.recipeArray = recipeArray;
+            this.hasFluid = fluid;
         }
     }
 

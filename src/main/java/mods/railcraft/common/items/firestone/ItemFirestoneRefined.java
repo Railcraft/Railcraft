@@ -40,6 +40,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -86,23 +87,22 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'P', Items.DIAMOND_PICKAXE,
                 'F', RailcraftItems.FIRESTONE_RAW);
 
-        for (ItemStack stack : FluidTools.getContainersFilledWith(Fluids.LAVA.get(FluidTools.BUCKET_VOLUME))) {
-            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                    "LRL",
-                    "RFR",
-                    "LRL",
-                    'R', "blockRedstone",
-                    'L', stack,
-                    'F', RailcraftItems.FIRESTONE_CUT);
-            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                    "LOL",
-                    "RFR",
-                    "LRL",
-                    'R', "blockRedstone",
-                    'L', stack,
-                    'O', RailcraftItems.FIRESTONE_RAW,
-                    'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
-        }
+        FluidStack fluidStack = Fluids.LAVA.get(FluidTools.BUCKET_VOLUME);
+        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                "LRL",
+                "RFR",
+                "LRL",
+                'R', "blockRedstone",
+                'L', fluidStack,
+                'F', RailcraftItems.FIRESTONE_CUT);
+        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                "LOL",
+                "RFR",
+                "LRL",
+                'R', "blockRedstone",
+                'L', fluidStack,
+                'O', RailcraftItems.FIRESTONE_RAW,
+                'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
     }
 
     @Override

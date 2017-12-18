@@ -12,6 +12,7 @@ package mods.railcraft.common.fluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -32,20 +33,12 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     protected float particleRed;
     protected float particleGreen;
     protected float particleBlue;
-    @SideOnly(Side.CLIENT)
-//    protected IIcon[] theIcon;
     protected boolean flammable;
     protected int flammability = 0;
-    private boolean hasFlowIcon = true;
 
     public BlockRailcraftFluid(Fluid fluid, Material material) {
         super(fluid, material);
         setDensity(fluid.getDensity());
-    }
-
-    public BlockRailcraftFluid setNoFlow() {
-        hasFlowIcon = false;
-        return this;
     }
 
     @Override
@@ -54,30 +47,9 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     }
 
     @Override
-    public Fluid getFluid() {
-        return FluidRegistry.getFluid(fluidName);
-    }
-
-    @Override
     public float getFilledPercentage(World world, BlockPos pos) {
         return 1;
     }
-
-//    @Override
-//    public IIcon getIcon(int side, int meta) {
-//        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
-//    }
-//
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
-//        IIcon flowing = still;
-//        if (hasFlowIcon)
-//            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
-//        this.theIcon = new IIcon[]{still, flowing};
-//    }
-
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {

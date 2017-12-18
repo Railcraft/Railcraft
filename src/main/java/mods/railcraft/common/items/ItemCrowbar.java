@@ -281,7 +281,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
     }
 }

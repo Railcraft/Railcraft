@@ -106,12 +106,6 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
 
     @Nonnull
     @Override
-    public ItemStack getStack(@Nullable IVariantEnum variant) {
-        return getStack(1, variant);
-    }
-
-    @Nonnull
-    @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
     }

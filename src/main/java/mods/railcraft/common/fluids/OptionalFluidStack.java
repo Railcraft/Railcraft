@@ -11,6 +11,7 @@
 package mods.railcraft.common.fluids;
 
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 
@@ -22,36 +23,33 @@ import javax.annotation.Nullable;
 public class OptionalFluidStack {
     private final FluidStack fluidStack;
 
+    private static final OptionalFluidStack EMPTY = new OptionalFluidStack(null);
+
     private OptionalFluidStack(@Nullable FluidStack fluidStack) {
         this.fluidStack = fluidStack;
     }
 
     public static OptionalFluidStack of(@Nullable FluidStack fluidStack) {
-        return new OptionalFluidStack(fluidStack);
+        return fluidStack == null ? EMPTY : new OptionalFluidStack(fluidStack);
     }
 
     public static OptionalFluidStack empty() {
-        return new OptionalFluidStack(null);
+        return EMPTY;
     }
 
+    @Contract("!null -> !null")
     @Nullable
-    public FluidStack orElse(@Nullable FluidStack fluidStack) {
-        if (this.fluidStack != null)
-            return this.fluidStack;
-        return fluidStack;
+    public FluidStack orElse(@Nullable FluidStack other) {
+        return fluidStack != null ? fluidStack : other;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) return true;
+        if (!(o instanceof OptionalFluidStack)) return false;
 
         OptionalFluidStack that = (OptionalFluidStack) o;
-
-        if (fluidStack != null ? !fluidStack.isFluidStackIdentical(that.fluidStack) : that.fluidStack != null)
-            return false;
-
-        return true;
+        return fluidStack != null ? fluidStack.isFluidStackIdentical(that.fluidStack) : that.fluidStack == null;
     }
 
     @Override

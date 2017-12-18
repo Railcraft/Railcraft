@@ -97,6 +97,7 @@ public class RailcraftConfig {
     private static boolean trackingAuraEnabled;
     private static boolean enableGhostTrain;
     private static boolean generateDefaultOreConfigs;
+    private static boolean nerfWaterBottle;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -261,6 +262,7 @@ public class RailcraftConfig {
 
     private static void loadItemTweaks() {
 //        trackingAuraEnabled = get(CAT_AURAS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
+        nerfWaterBottle = get(CAT_TWEAKS_ITEMS + "bottle.water", "nerfWaterBottle", false, "adjust to make the water bottles contain only 333 milli-bucket water, default=false");
     }
 
     private static void loadTrackTweaks() {
@@ -797,6 +799,10 @@ public class RailcraftConfig {
 
     public static boolean generateDefaultOreConfigs() {
         return generateDefaultOreConfigs;
+    }
+
+    public static boolean nerfWaterBottle() {
+        return nerfWaterBottle;
     }
 
     public static float getMaxHighSpeed() {

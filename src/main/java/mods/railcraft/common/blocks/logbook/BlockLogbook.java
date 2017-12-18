@@ -60,7 +60,7 @@ public class BlockLogbook extends BlockContainerRailcraft {
     }
 
     @Override
-    public void initializeDefinintion() {
+    public void initializeDefinition() {
         RailcraftRegistry.register(TileLogbook.class, "logbook");
         HarvestPlugin.setBlockHarvestLevel("axe", 1, this);
     }
