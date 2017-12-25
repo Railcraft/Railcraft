@@ -58,9 +58,13 @@ public abstract class BlockContainerRailcraft extends BlockContainer implements 
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+    @Deprecated
+    public final TileEntity createNewTileEntity(World worldIn, int meta) {
+        return createTileEntity(worldIn, getStateFromMeta(meta));
     }
+
+    @Override
+    public abstract TileEntity createTileEntity(World world, IBlockState state);
 
     public void markBlockForUpdate(IBlockState state, World world, BlockPos pos) {
         if (world != null) {

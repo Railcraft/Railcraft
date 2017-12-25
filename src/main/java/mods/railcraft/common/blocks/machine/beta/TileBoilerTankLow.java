@@ -17,8 +17,8 @@ public class TileBoilerTankLow extends TileBoilerTank {
         super();
     }
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
+//    }
 }

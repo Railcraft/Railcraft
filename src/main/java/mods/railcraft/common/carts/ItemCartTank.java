@@ -34,13 +34,14 @@ public class ItemCartTank extends ItemCart implements IPrototypedItem {
 
     @Override
     public void defineRecipes() {
-        if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
-            CraftingPlugin.addRecipe(getStack(),
-                    "T",
-                    "M",
-                    'T', EnumMachineBeta.TANK_IRON_GAUGE.getStack(),
-                    'M', Items.MINECART);
-        } else {
+//        if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) { TODO
+//            CraftingPlugin.addRecipe(getStack(),
+//                    "T",
+//                    "M",
+//                    'T', EnumMachineBeta.TANK_IRON_GAUGE.getStack(),
+//                    'M', Items.MINECART);
+//        } else {
+        {
             CraftingPlugin.addRecipe(getStack(),
                     "GGG",
                     "GMG",

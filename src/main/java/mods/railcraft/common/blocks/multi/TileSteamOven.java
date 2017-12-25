@@ -7,12 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -114,7 +112,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
+        //TODO
+//        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;
@@ -125,11 +124,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                     master.inv.setInventorySlotContents(TileSteamOven.SLOT_OUTPUT + slot, output.get(slot));
             }
         }
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.STEAM_OVEN;
     }
 
     @Nullable

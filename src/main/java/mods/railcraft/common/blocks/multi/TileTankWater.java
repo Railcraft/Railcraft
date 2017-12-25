@@ -7,10 +7,9 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.TileTank;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -115,17 +114,13 @@ public class TileTankWater extends TileTank {
     public static void placeWaterTank(World world, BlockPos pos, int water) {
         MultiBlockPattern pattern = TileTankWater.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getDefaultState());
+        //TODO
+//        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankWater) {
             TileTankWater master = (TileTankWater) tile;
             master.tank.setFluid(Fluids.WATER.get(water));
         }
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.TANK_WATER;
     }
 
     @Override

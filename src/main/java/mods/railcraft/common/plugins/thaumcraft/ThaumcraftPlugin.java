@@ -217,39 +217,39 @@ public class ThaumcraftPlugin {
             addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.IRON), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 4));
             addItemAspect(RailcraftItems.GEAR.getStack(EnumGear.STEEL), new AspectList().add(Aspect.METAL, 8).add(Aspect.ORDER, 2).add(Aspect.MECHANISM, 4));
 
-            addItemAspect(EquipmentVariant.ROLLING_MACHINE_POWERED.getStack(), new AspectList().add(Aspect.CRAFT, 6).add(Aspect.MECHANISM, 2));
-            addItemAspect(EnumMachineAlpha.ROCK_CRUSHER.getStack(), new AspectList().add(Aspect.CRAFT, 2).add(Aspect.MECHANISM, 4).add(Aspect.EARTH, 4).add(Aspect.EARTH, 4));
-            addItemAspect(EquipmentVariant.FEED_STATION.getStack(), new AspectList().add(Aspect.PLANT, 4).add(Aspect.BEAST, 4).add(Aspect.MECHANISM, 2));
-            addItemAspect(EquipmentVariant.SMOKER.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
-            addItemAspect(EquipmentVariant.SMOKER.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
+//            addItemAspect(EquipmentVariant.ROLLING_MACHINE_POWERED.getStack(), new AspectList().add(Aspect.CRAFT, 6).add(Aspect.MECHANISM, 2));
+//            addItemAspect(EnumMachineAlpha.ROCK_CRUSHER.getStack(), new AspectList().add(Aspect.CRAFT, 2).add(Aspect.MECHANISM, 4).add(Aspect.EARTH, 4).add(Aspect.EARTH, 4));
+//            addItemAspect(EquipmentVariant.FEED_STATION.getStack(), new AspectList().add(Aspect.PLANT, 4).add(Aspect.BEAST, 4).add(Aspect.MECHANISM, 2));
+//            addItemAspect(EquipmentVariant.SMOKER.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
+//            addItemAspect(EquipmentVariant.SMOKER.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.AIR, 4).add(Aspect.MECHANISM, 2));
 
-            addItemAspect(EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(), steamAspects.copy().add(Aspect.TRAP, 4));
-            addItemAspect(EnumMachineAlpha.STEAM_TRAP_AUTO.getStack(), steamAspects.copy().add(Aspect.TRAP, 4).add(Aspect.MIND, 2));
-            addItemAspect(EnumMachineAlpha.STEAM_OVEN.getStack(), steamAspects.copy().add(Aspect.FIRE, 3));
-            addItemAspect(EnumMachineAlpha.TURBINE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
+//            addItemAspect(EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(), steamAspects.copy().add(Aspect.TRAP, 4));
+//            addItemAspect(EnumMachineAlpha.STEAM_TRAP_AUTO.getStack(), steamAspects.copy().add(Aspect.TRAP, 4).add(Aspect.MIND, 2));
+//            addItemAspect(EnumMachineAlpha.STEAM_OVEN.getStack(), steamAspects.copy().add(Aspect.FIRE, 3));
+//            addItemAspect(EnumMachineAlpha.TURBINE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
 
-            addItemAspect(WorldspikeVariant.ADMIN.getStack(), worldspikeAspects);
-            addItemAspect(WorldspikeVariant.PERSONAL.getStack(), worldspikeAspects);
-            addItemAspect(WorldspikeVariant.STANDARD.getStack(), worldspikeAspects);
-            addItemAspect(RailcraftBlocks.WORLDSPIKE_POINT.getStack(), worldspikeAspects);
+//            addItemAspect(WorldspikeVariant.ADMIN.getStack(), worldspikeAspects);
+//            addItemAspect(WorldspikeVariant.PERSONAL.getStack(), worldspikeAspects);
+//            addItemAspect(WorldspikeVariant.STANDARD.getStack(), worldspikeAspects);
+//            addItemAspect(RailcraftBlocks.WORLDSPIKE_POINT.getStack(), worldspikeAspects);
 
-            addItemAspect(EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
-            addItemAspect(EnumMachineBeta.BOILER_FIREBOX_FLUID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
-            addItemAspect(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
-            addItemAspect(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
-            addItemAspect(EnumMachineBeta.ENGINE_STEAM_HOBBY.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
-            addItemAspect(EnumMachineBeta.ENGINE_STEAM_LOW.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
-            addItemAspect(EnumMachineBeta.ENGINE_STEAM_HIGH.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
+//            addItemAspect(EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
+//            addItemAspect(EnumMachineBeta.BOILER_FIREBOX_FLUID.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
+//            addItemAspect(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
+//            addItemAspect(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack(), steamAspects.copy().add(Aspect.ENERGY, 2));
+//            addItemAspect(EnumMachineBeta.ENGINE_STEAM_HOBBY.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
+//            addItemAspect(EnumMachineBeta.ENGINE_STEAM_LOW.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
+//            addItemAspect(EnumMachineBeta.ENGINE_STEAM_HIGH.getStack(), steamAspects.copy().add(Aspect.ENERGY, 4));
 
-            addItemAspect(EnumMachineAlpha.TANK_WATER.getStack(), tankAspects.copy().add(Aspect.PLANT, 2).add(Aspect.WATER, 2));
+//            addItemAspect(EnumMachineAlpha.TANK_WATER.getStack(), tankAspects.copy().add(Aspect.PLANT, 2).add(Aspect.WATER, 2));
 
-            AspectList ironTankAspects = tankAspects.copy().add(Aspect.METAL, 2);
-            addItemAspect(EnumMachineBeta.TANK_IRON_GAUGE.getStack(), ironTankAspects);
-            addItemAspect(EnumMachineBeta.TANK_IRON_VALVE.getStack(), ironTankAspects);
-            addItemAspect(EnumMachineBeta.TANK_IRON_WALL.getStack(), ironTankAspects);
-            addItemAspect(EnumMachineBeta.TANK_STEEL_GAUGE.getStack(), ironTankAspects);
-            addItemAspect(EnumMachineBeta.TANK_STEEL_VALVE.getStack(), ironTankAspects);
-            addItemAspect(EnumMachineBeta.TANK_STEEL_WALL.getStack(), ironTankAspects);
+//            AspectList ironTankAspects = tankAspects.copy().add(Aspect.METAL, 2);
+//            addItemAspect(EnumMachineBeta.TANK_IRON_GAUGE.getStack(), ironTankAspects);
+//            addItemAspect(EnumMachineBeta.TANK_IRON_VALVE.getStack(), ironTankAspects);
+//            addItemAspect(EnumMachineBeta.TANK_IRON_WALL.getStack(), ironTankAspects);
+//            addItemAspect(EnumMachineBeta.TANK_STEEL_GAUGE.getStack(), ironTankAspects);
+//            addItemAspect(EnumMachineBeta.TANK_STEEL_VALVE.getStack(), ironTankAspects);
+//            addItemAspect(EnumMachineBeta.TANK_STEEL_WALL.getStack(), ironTankAspects);
 
             AspectList detectorAspects = new AspectList().add(Aspect.SENSES, 4).add(Aspect.MECHANISM, 4);
             for (EnumDetector detector : EnumDetector.VALUES) {

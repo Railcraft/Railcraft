@@ -74,8 +74,9 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     PUMPKIN(3, "cart_pumpkin", EntityCartPumpkin.class, ItemCartPumpkin::new),
     REDSTONE_FLUX(0, "cart_redstone_flux", EntityCartRF.class, ItemCartRF::new),
     TANK(0, "cart_tank", EntityCartTank.class, ItemCartTank::new, () -> {
-        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
-        return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
+//        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
+//        return !InvTools.isEmpty(stack) ? stack : TODO
+               return new ItemStack(Blocks.GLASS, 8);
     }),
     TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCartTNTWood::new),
     WORK(0, "cart_work", EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
@@ -217,9 +218,9 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     @Nullable
     public ItemStack getContents() {
         switch (this) {
-            case TANK:
-                if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable())
-                    return EnumMachineBeta.TANK_IRON_GAUGE.getStack();
+//            case TANK:
+//                if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable())
+//                    return EnumMachineBeta.TANK_IRON_GAUGE.getStack();
             default: {
                 if (contentsSupplier == null)
                     return null;

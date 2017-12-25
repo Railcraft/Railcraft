@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.blocks.TileTradeStation;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.alpha.*;
+import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;

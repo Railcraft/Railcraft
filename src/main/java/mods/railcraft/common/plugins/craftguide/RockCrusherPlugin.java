@@ -40,7 +40,7 @@ public class RockCrusherPlugin implements RecipeProvider {
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack crafter = EnumMachineAlpha.ROCK_CRUSHER.getStack();
+        ItemStack crafter = null; //TODO EnumMachineAlpha.ROCK_CRUSHER.getStack();
         if (crafter != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, crafter, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_craft_guide.png", 1, 61, 82, 61);
 

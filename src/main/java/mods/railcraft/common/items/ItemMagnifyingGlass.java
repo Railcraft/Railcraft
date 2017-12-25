@@ -14,10 +14,10 @@ import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -102,9 +102,10 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         }
         if (t instanceof TileMultiBlock) {
             TileMultiBlock tile = (TileMultiBlock) t;
-            if (tile.isStructureValid())
+            if (tile.isStructureValid()) {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
-            else
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master" + (tile.isMaster() ? "true" : "false"));
+            } else
                 for (MultiBlockStateReturn returnState : EnumSet.complementOf(EnumSet.of(MultiBlockStateReturn.VALID))) {
                     List<Integer> pats = tile.patternStates.get(returnState);
                     if (!pats.isEmpty())

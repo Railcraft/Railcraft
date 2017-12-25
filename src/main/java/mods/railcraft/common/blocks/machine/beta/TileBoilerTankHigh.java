@@ -17,9 +17,4 @@ public class TileBoilerTankHigh extends TileBoilerTank {
         super();
     }
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE;
-    }
-
 }

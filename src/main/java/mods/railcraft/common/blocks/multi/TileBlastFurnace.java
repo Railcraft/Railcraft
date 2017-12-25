@@ -7,14 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -138,8 +136,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
-        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
+        //TODO
+//        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
+//        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileBlastFurnace) {
             TileBlastFurnace master = (TileBlastFurnace) tile;
@@ -147,11 +146,6 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.BLAST_FURNACE;
     }
 
     @Override

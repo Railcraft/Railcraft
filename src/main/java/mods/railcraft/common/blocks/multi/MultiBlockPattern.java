@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks.multi;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -24,6 +25,7 @@ public class MultiBlockPattern {
 
     public final char[][][] pattern;
     private final BlockPos masterOffset;
+    @Nullable
     private final AxisAlignedBB entityCheckBounds;
 
     public MultiBlockPattern(char[][][] pattern) {
@@ -34,12 +36,13 @@ public class MultiBlockPattern {
         this(pattern, offsetX, offsetY, offsetZ, null);
     }
 
-    public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, AxisAlignedBB entityCheckBounds) {
+    public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, @Nullable AxisAlignedBB entityCheckBounds) {
         this.pattern = pattern;
         this.masterOffset = new BlockPos(offsetX, offsetY, offsetZ);
         this.entityCheckBounds = entityCheckBounds;
     }
 
+    @Nullable
     public AxisAlignedBB getEntityCheckBounds(BlockPos masterPos) {
         if (entityCheckBounds == null)
             return null;

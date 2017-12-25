@@ -206,18 +206,17 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
             return other.getEntityBoundingBox();
-        if (other instanceof EntityPlayer)
-            return other.canBePushed() ? other.getEntityBoundingBox() : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
-        return null;
+        return other.canBePushed() ? other.getEntityBoundingBox() : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
     }
 
     @Override
     public AxisAlignedBB getMinecartCollisionBox(EntityMinecart cart) {
-        double yaw = Math.toRadians(cart.rotationYaw);
-        double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
-        double x = diff * Math.abs(Math.cos(yaw));
-        double z = diff * Math.abs(Math.sin(yaw));
-        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
+        return cart.getEntityBoundingBox().expand(MinecartHooks.COLLISION_EXPANSION, 0, MinecartHooks.COLLISION_EXPANSION);
+//        double yaw = Math.toRadians(cart.rotationYaw);
+//        double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
+//        double x = diff * Math.abs(Math.cos(yaw));
+//        double z = diff * Math.abs(Math.sin(yaw));
+//        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
     @Nullable

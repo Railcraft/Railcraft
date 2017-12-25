@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -63,12 +63,12 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     private boolean explode;
 
     static {
-        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
-        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
+//        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
+//        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
 
         boilerBlocks.addAll(fireboxBlocks);
-        boilerBlocks.add(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
-        boilerBlocks.add(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal());
+//        boilerBlocks.add(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
+//        boilerBlocks.add(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal());
 
         patterns.add(buildMap(3, 4, 2, 'H', TICKS_HIGH, HEAT_HIGH, STEAM_HIGH));
         patterns.add(buildMap(3, 3, 2, 'H', TICKS_HIGH, HEAT_HIGH, STEAM_HIGH));
@@ -258,14 +258,14 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
                 if (block == getBlockType() && boilerBlocks.contains(meta))
                     return false;
                 break;
-            case 'L': // Tank
-                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal())
-                    return false;
-                break;
-            case 'H': // Tank
-                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal())
-                    return false;
-                break;
+//            case 'L': // Tank
+//                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal())
+//                    return false;
+//                break;
+//            case 'H': // Tank
+//                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal())
+//                    return false;
+//                break;
             case 'F': // Firebox
                 if (block != getBlockType() || meta != getBlockMetadata() || !fireboxBlocks.contains(meta))
                     return false;

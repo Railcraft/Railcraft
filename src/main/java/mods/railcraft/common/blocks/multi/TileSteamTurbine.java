@@ -7,10 +7,8 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
 import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
@@ -159,11 +157,6 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         tankManager.add(tankSteam); // Steam
         tankManager.add(tankWater); // Water
 
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.TURBINE;
     }
 
 //    @Override
@@ -370,8 +363,9 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<TileEntity> getSubTiles() {
-        return getComponents();
+        return (List<TileEntity>) (List) getComponents();
     }
 
     public StandaloneInventory getInventory() {

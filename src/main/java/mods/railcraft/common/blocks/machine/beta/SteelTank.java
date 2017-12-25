@@ -23,9 +23,9 @@ public class SteelTank extends MetalTank {
     private final Set<Integer> tankBlocks = new HashSet<Integer>();
 
     public SteelTank() {
-        tankBlocks.add(EnumMachineBeta.TANK_STEEL_WALL.ordinal());
-        tankBlocks.add(EnumMachineBeta.TANK_STEEL_VALVE.ordinal());
-        tankBlocks.add(EnumMachineBeta.TANK_STEEL_GAUGE.ordinal());
+//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_WALL.ordinal());
+//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_VALVE.ordinal());
+//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_GAUGE.ordinal());
     }
 
     @Override
@@ -40,7 +40,8 @@ public class SteelTank extends MetalTank {
 
     @Override
     public boolean isWallBlock(int meta) {
-        return meta == EnumMachineBeta.TANK_STEEL_WALL.ordinal();
+//        return meta == EnumMachineBeta.TANK_STEEL_WALL.ordinal();
+        return false;
     }
 
     @Override

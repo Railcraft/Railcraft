@@ -202,7 +202,7 @@ public class ClientProxy extends CommonProxy {
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
-        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
+//        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.blocks.TileTradeStation;
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
@@ -31,6 +32,7 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
+import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -67,7 +69,7 @@ public class MachineTileRegistry {
         GameRegistry.registerTileEntity(TileTankSteelValve.class, "RCSteelTankValveTile");
         GameRegistry.registerTileEntity(TileChestVoid.class, "RCVoidChestTile");
         GameRegistry.registerTileEntity(TileChestMetals.class, "RCMetalsChestTile");
-        GameRegistry.registerTileEntity(TileSawmill.class, "RCSawmillTile");
+//        GameRegistry.registerTileEntity(TileSawmill.class, "RCSawmillTile");
 
         // Epsilon
         GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");

@@ -12,7 +12,10 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ITickable;
+
+import java.util.Random;
 
 /**
  * Created by CovertJaguar on 7/13/2016 for Railcraft.
@@ -37,5 +40,18 @@ public abstract class RailcraftTickingTileEntity extends RailcraftTileEntity imp
     @Override
     public void sendUpdateToClient() {
         sendClientUpdate = true;
+    }
+
+    public void onBlockAdded() {
+    }
+
+    public void onBlockRemoval() {
+    }
+
+    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
+        return false;
+    }
+
+    public void randomDisplayTick(Random rand) {
     }
 }

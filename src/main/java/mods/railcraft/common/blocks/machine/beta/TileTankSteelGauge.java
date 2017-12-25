@@ -15,10 +15,10 @@ import static mods.railcraft.common.blocks.machine.beta.TileTankSteelWall.STEEL_
  */
 public class TileTankSteelGauge extends TileTankIronGauge {
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.TANK_STEEL_GAUGE;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.TANK_STEEL_GAUGE;
+//    }
 
     @Override
     public MetalTank getTankType() {

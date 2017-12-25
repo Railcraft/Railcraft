@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -89,8 +89,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getDefaultState());
-        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getDefaultState());
+//        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getDefaultState());
+//        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
@@ -101,8 +101,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.getDefaultState());
-        blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.getDefaultState());
+//        blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.getDefaultState());
+//        blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
@@ -416,8 +416,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public List<ItemStack> getDrops(int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack drop = getMachineType().getStack();
+        ArrayList<ItemStack> items = new ArrayList<>();
+        ItemStack drop = InvTools.emptyStack(); //TODO fix
         if (drop != null) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
@@ -427,9 +427,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public ArrayList<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack drop = getMachineType().getStack();
+    public List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
+        ArrayList<ItemStack> items = new ArrayList<>();
+        ItemStack drop = InvTools.emptyStack(); //TODO fix
         if (!InvTools.isEmpty(drop)) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) color.ordinal());

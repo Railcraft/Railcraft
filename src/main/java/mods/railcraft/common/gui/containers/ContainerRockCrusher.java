@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.alpha.TileRockCrusher;
+import mods.railcraft.common.blocks.multi.TileRockCrusher;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;

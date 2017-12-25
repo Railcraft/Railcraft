@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.fuel.FuelManager;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -52,8 +52,9 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.getDefaultState());
-                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
+//              //TODO
+//                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.getDefaultState());
+//                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
                 TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
                 if (tile instanceof TileBoilerFireboxFluid) {
                     TileBoilerFireboxFluid master = (TileBoilerFireboxFluid) tile;
@@ -65,10 +66,10 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         }
     }
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.BOILER_FIREBOX_FLUID;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.BOILER_FIREBOX_FLUID;
+//    }
 
     @Override
     public boolean openGui(EntityPlayer player) {

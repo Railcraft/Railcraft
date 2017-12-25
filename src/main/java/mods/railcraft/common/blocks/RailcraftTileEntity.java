@@ -145,6 +145,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        if (placer != null)
+            placer.addChatMessage(new TextComponentString("Hey, block placed!"));
         if (placer instanceof EntityPlayer)
             owner = ((EntityPlayer) placer).getGameProfile();
         notifyBlocksOfNeighborChange();

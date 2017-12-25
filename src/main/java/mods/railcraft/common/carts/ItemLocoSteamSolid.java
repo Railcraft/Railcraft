@@ -35,13 +35,14 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
     public void defineRecipes() {
         super.defineRecipes();
         Object tank;
-        if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
-            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
-        else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
-            tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack();
-        else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
-            tank = EnumMachineBeta.TANK_IRON_WALL.getStack();
-        else if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
+        //TODO fix
+//        if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
+//            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
+//        else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
+//            tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack();
+//        else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
+//            tank = EnumMachineBeta.TANK_IRON_WALL.getStack();
+        if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
             tank = Metal.STEEL.getStack(Metal.Form.PLATE);
         else if (OreDictPlugin.oreExists("ingotSteel"))
             tank = "ingotSteel";
@@ -49,11 +50,11 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
             tank = new ItemStack(Items.IRON_INGOT);
 
         ItemStack firebox;
-        if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
-            firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack();
-        else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-            firebox = EnumMachineAlpha.BLAST_FURNACE.getStack();
-        else
+//        if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
+//            firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack();
+//        else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
+//            firebox = EnumMachineAlpha.BLAST_FURNACE.getStack();
+//        else
             firebox = new ItemStack(Blocks.FURNACE);
 
         CraftingPlugin.addRecipe(getStack(),

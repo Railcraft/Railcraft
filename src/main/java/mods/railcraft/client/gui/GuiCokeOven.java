@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
+import mods.railcraft.common.blocks.multi.TileCokeOven;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
 import net.minecraft.entity.player.InventoryPlayer;

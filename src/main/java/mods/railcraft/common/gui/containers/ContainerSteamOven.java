@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
+import mods.railcraft.common.blocks.multi.TileSteamOven;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotSmelting;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;

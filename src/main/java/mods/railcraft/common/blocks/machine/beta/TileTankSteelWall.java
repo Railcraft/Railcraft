@@ -15,10 +15,10 @@ public class TileTankSteelWall extends TileTankIronWall {
 
     public static final MetalTank STEEL_TANK = new SteelTank();
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.TANK_STEEL_WALL;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.TANK_STEEL_WALL;
+//    }
 
     @Override
     public MetalTank getTankType() {

@@ -14,7 +14,7 @@ import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.beta.TileTankIronValve;
 import mods.railcraft.common.core.RailcraftConfig;

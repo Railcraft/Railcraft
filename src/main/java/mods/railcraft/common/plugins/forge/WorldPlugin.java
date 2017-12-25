@@ -48,8 +48,6 @@ public class WorldPlugin {
 
     @Nullable
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
-        if (pos.getY() < 0)
-            return null;
         return world.getTileEntity(pos);
     }
 
@@ -57,7 +55,7 @@ public class WorldPlugin {
         return Optional.ofNullable(getBlockTile(world, pos));
     }
 
-    public static <T extends TileEntity> Optional<T> getTileEntity(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+    public static <T> Optional<T> getTileEntity(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
         TileEntity tileEntity = getBlockTile(world, pos);
         if (tileClass.isInstance(tileEntity))
             return Optional.of(tileClass.cast(tileEntity));

@@ -11,10 +11,11 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import cofh.api.energy.IEnergyReceiver;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,12 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO: migrate to new charge API
 public class TileFluxTransformer extends TileMultiBlock implements IEnergyReceiver {
 
     public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+
+    private IChargeBlock.ChargeBattery battery;
 
     static {
         char[][][] map = {
@@ -58,52 +60,35 @@ public class TileFluxTransformer extends TileMultiBlock implements IEnergyReceiv
         patterns.add(new MultiBlockPattern(map));
     }
 
-//    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 0.25);
-
     public TileFluxTransformer() {
         super(patterns);
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {
         MultiBlockPattern pattern = TileFluxTransformer.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getDefaultState());
+        Map<Character, IBlockState> blockMapping = new HashMap<>();
+//        blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getDefaultState()); TODO
         pattern.placeStructure(world, pos, blockMapping);
     }
 
-//    @Override
-//    public void update() {
-//        super.update();
-//        if (Game.isClient(getWorld()))
-//            return;
-//        chargeHandler.tick();
-//    }
-
-    @Override
-    public EnumMachineEpsilon getMachineType() {
-        return EnumMachineEpsilon.FLUX_TRANSFORMER;
-    }
-
-//    @Override
-//    public ChargeHandler getChargeHandler() {
-//        return chargeHandler;
-//    }
-
-    //    @Override
-    public TileEntity getTile() {
-        return this;
+    private IChargeBlock.ChargeBattery getBattery() {
+        if (battery == null) {
+            battery = ChargeManager.getNetwork(worldObj).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, .7));
+        }
+        return battery;
     }
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-//        if (!isStructureValid())
-//            return 0;
-//        double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
-//        if (chargeDifference > 0.0) {
-//            if (!simulate)
-//                chargeHandler.addCharge((maxReceive / EU_RF_RATIO) * EFFICIENCY);
-//            return maxReceive;
-//        }
+        if (!isStructureValid())
+            return 0;
+        IChargeBlock.ChargeBattery battery = getBattery();
+        double chargeDifference = battery.getCapacity() - battery.getCharge();
+        if (chargeDifference > 0.0) {
+            if (!simulate)
+                battery.addCharge((maxReceive / EU_RF_RATIO) * EFFICIENCY);
+            return maxReceive;
+        }
         return 0;
     }
 
@@ -122,17 +107,9 @@ public class TileFluxTransformer extends TileMultiBlock implements IEnergyReceiv
         return true;
     }
 
-//    @Override
-//    public void readFromNBT(NBTTagCompound data) {
-//        super.readFromNBT(data);
-//        chargeHandler.readFromNBT(data);
-//    }
-//
-//    @Override
-//    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-//        super.writeToNBT(data);
-//        chargeHandler.writeToNBT(data);
-//        return data;
-//    }
+    @Override
+    protected void setWorldCreate(World worldIn) {
+        setWorldObj(worldIn);
+    }
 
 }

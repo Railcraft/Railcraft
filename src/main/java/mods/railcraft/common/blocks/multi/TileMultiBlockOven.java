@@ -7,12 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
-import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -24,17 +23,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork, ITileLit {
 
-    private final Set<Object> actions = new HashSet<Object>();
     protected int cookTime;
     private boolean cooking;
     protected boolean paused;
@@ -174,8 +170,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     private void processActions() {
-        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
-        actions.clear();
+//        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
+//        actions.clear();
     }
 
     @Override
@@ -185,9 +181,9 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
-        if (mBlock != null) {
-            mBlock.actions.add(action);
-        }
+//        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
+//        if (mBlock != null) {
+//            mBlock.actions.add(action);
+//        }
     }
 }

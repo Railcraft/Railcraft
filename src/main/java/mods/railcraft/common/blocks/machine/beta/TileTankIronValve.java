@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
@@ -65,10 +65,10 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         return fillTank;
     }
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.TANK_IRON_VALVE;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.TANK_IRON_VALVE;
+//    }
 
     @Override
     public void update() {

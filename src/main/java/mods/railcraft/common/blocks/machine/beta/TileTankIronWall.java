@@ -13,8 +13,8 @@ package mods.railcraft.common.blocks.machine.beta;
  */
 public class TileTankIronWall extends TileTankBase {
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.TANK_IRON_WALL;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.TANK_IRON_WALL;
+//    }
 }

@@ -7,13 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -112,8 +110,10 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getDefaultState());
-        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getState(null));
+        blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getState(null));
+//        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getDefaultState());
+//        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileCokeOven) {
             TileCokeOven master = (TileCokeOven) tile;
@@ -121,11 +121,6 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
             master.inv.setInventorySlotContents(TileCokeOven.SLOT_INPUT, input);
             master.inv.setInventorySlotContents(TileCokeOven.SLOT_OUTPUT, output);
         }
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.COKE_OVEN;
     }
 
     @Nullable
@@ -190,7 +185,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
 
                         if (recipe != null)
-                            if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && sizeOf(output)+ sizeOf(recipe.getOutput()) <= output.getMaxStackSize()))
+                            if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && sizeOf(output) + sizeOf(recipe.getOutput()) <= output.getMaxStackSize()))
                                     && tank.fill(recipe.getFluidOutput(), false) >= recipe.getFluidOutput().amount) {
                                 cookTimeTotal = recipe.getCookTime();
                                 cookTime += COOK_STEP_LENGTH;
@@ -291,5 +286,20 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_OUTPUT || index == SLOT_LIQUID_OUTPUT;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return getPatternMarker() == 'W' && isStructureValid()
+                ? isBurning()
+                ? base.withProperty(BlockCokeOven.ICON, 2)
+                : base.withProperty(BlockCokeOven.ICON, 1)
+                : base.withProperty(BlockCokeOven.ICON, 0);
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.COKE_OVEN;
     }
 }

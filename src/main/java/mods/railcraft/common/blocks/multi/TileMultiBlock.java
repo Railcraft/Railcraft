@@ -1,15 +1,17 @@
-/* 
+/*
  * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks.multi;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -27,28 +29,27 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class TileMultiBlock extends TileMachineBase {
+public abstract class TileMultiBlock extends RailcraftTickingTileEntity implements ISmartTile {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 64;
     private final Timer netTimer = new Timer();
     private final List<? extends MultiBlockPattern> patterns;
-    private final List<TileEntity> components = new LinkedList<TileEntity>();
-    private final List<TileEntity> componentsImmutable = Collections.unmodifiableList(components);
+    private final List<TileMultiBlock> components = new ArrayList<>();
+    private final List<TileMultiBlock> componentsView = Collections.unmodifiableList(components);
     public ListMultimap<MultiBlockStateReturn, Integer> patternStates = ArrayListMultimap.create();
     protected boolean isMaster;
     private BlockPos posInPattern;
@@ -69,8 +70,8 @@ public abstract class TileMultiBlock extends TileMachineBase {
         return uuidMaster;
     }
 
-    public List<TileEntity> getComponents() {
-        return componentsImmutable;
+    public List<TileMultiBlock> getComponents() {
+        return componentsView;
     }
 
     protected void onMasterChanged() {
@@ -208,21 +209,22 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-        Block block = state.getBlock();
-        int meta = block.getMetaFromState(state);
+        IBlockState self = getBlockState();
+        IBlockState other = WorldPlugin.getBlockState(worldObj, pos);
+//        Block block = other.getBlock();
+//        int meta = block.getMetaFromState(other);
         switch (mapPos) {
             case 'O': // Other
-                if (block == getBlockType() && meta == getBlockMetadata())
+                if (self == other)
                     return false;
                 break;
             case 'W': // Window
             case 'B': // Block
-                if (block != getBlockType() || meta != getBlockMetadata())
+                if (self != other)
                     return false;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(this.pos))
+                if (!other.getBlock().isAir(other, worldObj, pos))
                     return false;
                 break;
             case '*': // Anything
@@ -256,20 +258,22 @@ public abstract class TileMultiBlock extends TileMachineBase {
 
         BlockPos offset = getPos().subtract(map.getMasterOffset());
 
+        BlockPos.PooledMutableBlockPos now = BlockPos.PooledMutableBlockPos.retain();
         for (int patX = 0; patX < xWidth; patX++) {
             for (int patY = 0; patY < height; patY++) {
                 for (int patZ = 0; patZ < zWidth; patZ++) {
                     int x = patX + offset.getX();
                     int y = patY + offset.getY();
                     int z = patZ + offset.getZ();
-                    BlockPos pos = new BlockPos(x, y, z);
-                    if (!worldObj.isBlockLoaded(pos))
+                    now.setPos(x, y, z);
+                    if (!worldObj.isBlockLoaded(now))
                         return MultiBlockStateReturn.NOT_LOADED;
-                    if (!isMapPositionValid(pos, map.getPatternMarker(patX, patY, patZ)))
+                    if (!isMapPositionValid(now, map.getPatternMarker(patX, patY, patZ)))
                         return MultiBlockStateReturn.PATTERN_DOES_NOT_MATCH;
                 }
             }
         }
+        now.release();
 
         AxisAlignedBB entityCheckBounds = map.getEntityCheckBounds(getPos());
 //                if(entityCheckBounds != null) {
@@ -355,9 +359,8 @@ public abstract class TileMultiBlock extends TileMachineBase {
         }
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("master", isMaster);
@@ -368,7 +371,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         isMaster = data.getBoolean("master");
@@ -382,7 +385,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData( RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         boolean hasMaster = getMasterBlock() != null;
         data.writeBoolean(hasMaster);
@@ -397,7 +400,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void readPacketData( RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         requestPacket = false;

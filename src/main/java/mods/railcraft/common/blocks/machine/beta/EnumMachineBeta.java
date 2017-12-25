@@ -28,36 +28,36 @@ import java.util.List;
  */
 public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
-    TANK_IRON_WALL(ModuleTransport.class, "tank.iron.wall", TileTankIronWall.class, true, 2, 1),
-    TANK_IRON_GAUGE(ModuleTransport.class, "tank.iron.gauge", TileTankIronGauge.class, true, 1, 5),
-    TANK_IRON_VALVE(ModuleTransport.class, "tank.iron.valve", TileTankIronValve.class, true, 4, 1),
-    BOILER_TANK_LOW_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.low", TileBoilerTankLow.class, true, 2, 1),
-    BOILER_TANK_HIGH_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.high", TileBoilerTankHigh.class, true, 2, 1),
-    BOILER_FIREBOX_SOLID(ModuleSteam.class, "boiler.firebox.solid", TileBoilerFireboxSolid.class, false, 3, 1),
-    BOILER_FIREBOX_FLUID(ModuleSteam.class, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, false, 3, 1),
+//    TANK_IRON_WALL(ModuleTransport.class, "tank.iron.wall", TileTankIronWall.class, true, 2, 1),
+//    TANK_IRON_GAUGE(ModuleTransport.class, "tank.iron.gauge", TileTankIronGauge.class, true, 1, 5),
+//    TANK_IRON_VALVE(ModuleTransport.class, "tank.iron.valve", TileTankIronValve.class, true, 4, 1),
+//    BOILER_TANK_LOW_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.low", TileBoilerTankLow.class, true, 2, 1),
+//    BOILER_TANK_HIGH_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.high", TileBoilerTankHigh.class, true, 2, 1),
+//    BOILER_FIREBOX_SOLID(ModuleSteam.class, "boiler.firebox.solid", TileBoilerFireboxSolid.class, false, 3, 1),
+//    BOILER_FIREBOX_FLUID(ModuleSteam.class, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, false, 3, 1),
     ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, true, 1, 1),
     ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, true, 1, 1),
     ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, true, 1, 1),
     VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, true, 1, 1),
-    METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1),
-    TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1),
-    TANK_STEEL_GAUGE(ModuleTransport.class, "tank.steel.gauge", TileTankSteelGauge.class, true, 1, 5),
-    TANK_STEEL_VALVE(ModuleTransport.class, "tank.steel.valve", TileTankSteelValve.class, true, 4, 1);
+    METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1);
+//    TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1),
+//    TANK_STEEL_GAUGE(ModuleTransport.class, "tank.steel.gauge", TileTankSteelGauge.class, true, 1, 5),
+//    TANK_STEEL_VALVE(ModuleTransport.class, "tank.steel.valve", TileTankSteelValve.class, true, 4, 1);
     public static final PropertyEnum<EnumMachineBeta> VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
 
     static {
-        creativeList.add(TANK_IRON_WALL);
-        creativeList.add(TANK_IRON_GAUGE);
-        creativeList.add(TANK_IRON_VALVE);
-        creativeList.add(TANK_STEEL_WALL);
-        creativeList.add(TANK_STEEL_GAUGE);
-        creativeList.add(TANK_STEEL_VALVE);
-        creativeList.add(BOILER_FIREBOX_SOLID);
-        creativeList.add(BOILER_FIREBOX_FLUID);
-        creativeList.add(BOILER_TANK_LOW_PRESSURE);
-        creativeList.add(BOILER_TANK_HIGH_PRESSURE);
+//        creativeList.add(TANK_IRON_WALL);
+//        creativeList.add(TANK_IRON_GAUGE);
+//        creativeList.add(TANK_IRON_VALVE);
+//        creativeList.add(TANK_STEEL_WALL);
+//        creativeList.add(TANK_STEEL_GAUGE);
+//        creativeList.add(TANK_STEEL_VALVE);
+//        creativeList.add(BOILER_FIREBOX_SOLID);
+//        creativeList.add(BOILER_FIREBOX_FLUID);
+//        creativeList.add(BOILER_TANK_LOW_PRESSURE);
+//        creativeList.add(BOILER_TANK_HIGH_PRESSURE);
         creativeList.add(ENGINE_STEAM_HOBBY);
         creativeList.add(ENGINE_STEAM_LOW);
         creativeList.add(ENGINE_STEAM_HIGH);

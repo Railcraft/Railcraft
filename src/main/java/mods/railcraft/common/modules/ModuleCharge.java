@@ -52,21 +52,21 @@ public class ModuleCharge extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
-                if (alpha.isAvailable()) {
-                    CraftingPlugin.addRecipe(alpha.getStack(3),
-                            "BPB",
-                            "P P",
-                            "BPB",
-                            'P', RailcraftItems.PLATE, Metal.STEEL,
-                            'B', "blockSteel");
+//                EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
+//                if (alpha.isAvailable()) {
+//                    CraftingPlugin.addRecipe(alpha.getStack(3),
+//                            "BPB",
+//                            "P P",
+//                            "BPB",
+//                            'P', RailcraftItems.PLATE, Metal.STEEL,
+//                            'B', "blockSteel");
 
-                    CraftingPlugin.addRecipe(new RotorRepairRecipe());
+//                    CraftingPlugin.addRecipe(new RotorRepairRecipe());
 
 //                ItemStack rotor = RailcraftPartItems.getTurbineRotor();
 //                rotor.setItemDamage(25000);
 //                CraftingPlugin.addShapelessRecipe(rotor, RailcraftPartItems.getTurbineRotor());
-                }
+//                }
 
                 EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
                 if (epsilon.isAvailable()) {
@@ -79,15 +79,15 @@ public class ModuleCharge extends RailcraftModulePayload {
                             'C', "ingotCopper");
                 }
 
-                epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
-                if (epsilon.isAvailable())
-                    CraftingPlugin.addRecipe(epsilon.getStack(2),
-                            "PGP",
-                            "GRG",
-                            "PGP",
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.COPPER),
-                            'G', "ingotGold",
-                            'R', "blockRedstone");
+//                epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
+//                if (epsilon.isAvailable())
+//                    CraftingPlugin.addRecipe(epsilon.getStack(2),
+//                            "PGP",
+//                            "GRG",
+//                            "PGP",
+//                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.COPPER),
+//                            'G', "ingotGold",
+//                            'R', "blockRedstone");
             }
         });
     }

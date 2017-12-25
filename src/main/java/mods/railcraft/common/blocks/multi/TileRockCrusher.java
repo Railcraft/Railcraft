@@ -7,16 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
@@ -39,6 +37,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -156,7 +155,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        IBlockState state = EnumMachineAlpha.ROCK_CRUSHER.getDefaultState();
+        IBlockState state = Blocks.AIR.getDefaultState(); //TODO
         blockMapping.put('B', state);
         blockMapping.put('D', state);
         blockMapping.put('a', state);
@@ -176,11 +175,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_OUTPUT + slot, output.get(slot));
             }
         }
-    }
-
-    @Override
-    public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ROCK_CRUSHER;
     }
 
     @Override
@@ -255,7 +249,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
                 ItemStack input = InvTools.emptyStack();
                 ICrusherCraftingManager.ICrusherRecipe recipe = null;
-                for (IInvSlot slot : InventoryIterator.getVanilla((IInventory) invInput)) {
+                for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
                     input = slot.getStack();
                     if (!InvTools.isEmpty(input)) {
                         recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);

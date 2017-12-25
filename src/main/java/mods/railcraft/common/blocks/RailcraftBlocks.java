@@ -49,6 +49,9 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.ItemSignal;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
+import mods.railcraft.common.blocks.multi.BlockCokeOven;
+import mods.railcraft.common.blocks.multi.BlockMultiBlockInventory;
+import mods.railcraft.common.blocks.multi.ItemMultiBlock;
 import mods.railcraft.common.blocks.ore.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -108,8 +111,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
+    @Deprecated
     MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
+    @Deprecated
     MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
+    @Deprecated
     MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
@@ -138,7 +144,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WIRE("wire", BlockWire.class, BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new),
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),
-    WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),;
+    WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
+    // multiblocks
+    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemMultiBlock::new),
+    ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;

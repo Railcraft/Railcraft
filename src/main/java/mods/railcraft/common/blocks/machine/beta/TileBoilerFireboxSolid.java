@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
-import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileCokeOven;
+import mods.railcraft.common.blocks.multi.TileSteamOven;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -73,8 +73,9 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
-                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
+                //TODO
+//                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
+//                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
                 TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
                 if (tile instanceof TileBoilerFireboxSolid) {
                     TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
@@ -89,10 +90,10 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
         }
     }
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.BOILER_FIREBOX_SOLID;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.BOILER_FIREBOX_SOLID;
+//    }
 
     @Override
     public boolean openGui(EntityPlayer player) {

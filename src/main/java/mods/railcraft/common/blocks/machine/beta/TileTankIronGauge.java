@@ -26,10 +26,10 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
     private int lightValue = 0;
     private final Timer timer = new Timer();
 
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.TANK_IRON_GAUGE;
-    }
+//    @Override
+//    public EnumMachineBeta getMachineType() {
+//        return EnumMachineBeta.TANK_IRON_GAUGE;
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)
