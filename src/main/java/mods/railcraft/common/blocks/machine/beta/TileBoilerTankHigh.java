@@ -8,6 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.gui.EnumGui;
+
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -17,4 +21,9 @@ public class TileBoilerTankHigh extends TileBoilerTank {
         super();
     }
 
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TANK;
+    }
 }

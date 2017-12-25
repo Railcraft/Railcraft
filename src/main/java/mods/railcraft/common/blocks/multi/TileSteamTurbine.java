@@ -427,4 +427,10 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         }
         return false;
     }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TURBINE;
+    }
 }

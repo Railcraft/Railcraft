@@ -1,6 +1,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.ISmartBlock;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.MapColor;
@@ -18,7 +19,7 @@ import java.util.Random;
 /**
  *
  */
-public abstract class BlockMultiBlock extends BlockContainerRailcraft implements ISmartBlock {
+public abstract class BlockMultiBlock extends BlockEntityDelegate implements ISmartBlock {
 
     protected BlockMultiBlock(Material materialIn) {
         super(materialIn);
@@ -36,24 +37,4 @@ public abstract class BlockMultiBlock extends BlockContainerRailcraft implements
     @Override
     public abstract TileMultiBlock createTileEntity(World world, IBlockState state);
 
-    @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return WorldPlugin.getTileEntity(world, pos, TileMultiBlock.class).map(t -> t.canCreatureSpawn(type)).orElse(super.canCreatureSpawn(state, world, pos, type));
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        WorldPlugin.getTileEntity(worldIn, pos, TileMultiBlock.class).ifPresent(TileMultiBlock::onBlockAdded);
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
-        WorldPlugin.getTileEntity(worldIn, pos, TileMultiBlock.class).ifPresent(t -> t.randomDisplayTick(rand));
-    }
 }

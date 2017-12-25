@@ -15,6 +15,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.tileentity.TileEntity;
@@ -215,4 +216,9 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         return 0;
     }
 
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TANK;
+    }
 }

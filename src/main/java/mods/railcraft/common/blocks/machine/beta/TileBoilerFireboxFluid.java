@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,4 +134,9 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
     }
 
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.BOILER_LIQUID;
+    }
 }

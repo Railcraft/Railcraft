@@ -362,6 +362,12 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
             mBlock.actions.add(action);
     }
 
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.STEAN_OVEN;
+    }
+
     enum Texture {
 
         DOOR_TL(6), DOOR_TR(7), DOOR_BL(8), DOOR_BR(9), SIDE(2), CAP(0);

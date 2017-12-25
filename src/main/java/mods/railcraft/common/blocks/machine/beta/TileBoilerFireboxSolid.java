@@ -33,6 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,5 +167,11 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
     @Override
     public boolean hasCustomName() {
         return false;
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.BOILER_SOLID;
     }
 }

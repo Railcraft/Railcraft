@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -219,5 +220,11 @@ public class TileTankWater extends TileTank {
                 return FluidItemHelper.isRoomInContainer(stack, Fluids.WATER.get()) || FluidItemHelper.containsFluid(stack, Fluids.WATER.get());
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TANK;
     }
 }

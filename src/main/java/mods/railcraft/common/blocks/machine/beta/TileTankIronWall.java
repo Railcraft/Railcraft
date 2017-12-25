@@ -8,6 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.gui.EnumGui;
+
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -17,4 +21,10 @@ public class TileTankIronWall extends TileTankBase {
 //    public EnumMachineBeta getMachineType() {
 //        return EnumMachineBeta.TANK_IRON_WALL;
 //    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TANK;
+    }
 }

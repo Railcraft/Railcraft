@@ -10,12 +10,14 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -49,5 +51,11 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
     private void updateLightValue() {
         Fluid fluid = getTank().getFluidType();
         lightValue = fluid != null ? fluid.getLuminosity() : 0;
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.TANK;
     }
 }

@@ -39,6 +39,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -379,5 +380,11 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_OUTPUT;
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.BLAST_FURNACE;
     }
 }

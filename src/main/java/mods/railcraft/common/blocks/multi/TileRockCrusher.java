@@ -433,4 +433,10 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.ROCK_CRUSHER;
+    }
 }

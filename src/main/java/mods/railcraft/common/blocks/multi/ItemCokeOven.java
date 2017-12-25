@@ -1,6 +1,5 @@
-package mods.railcraft.common.blocks.tracks;
+package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.multi.ItemMultiBlock;
 import net.minecraft.block.Block;
 
 /**

@@ -50,9 +50,8 @@ import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
 import mods.railcraft.common.blocks.multi.BlockCokeOven;
-import mods.railcraft.common.blocks.multi.BlockMultiBlockInventory;
-import mods.railcraft.common.blocks.multi.ItemMultiBlock;
 import mods.railcraft.common.blocks.ore.*;
+import mods.railcraft.common.blocks.multi.ItemCokeOven;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -63,7 +62,6 @@ import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.firestone.BlockRitual;
@@ -146,7 +144,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
     // multiblocks
-    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemMultiBlock::new),
+    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;

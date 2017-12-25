@@ -1,6 +1,8 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
+import mods.railcraft.common.blocks.ISmartBlock;
+import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;

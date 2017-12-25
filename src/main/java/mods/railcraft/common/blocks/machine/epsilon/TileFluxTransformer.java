@@ -15,11 +15,13 @@ import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
 import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,4 +114,9 @@ public class TileFluxTransformer extends TileMultiBlock implements IEnergyReceiv
         setWorldObj(worldIn);
     }
 
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return null;
+    }
 }
