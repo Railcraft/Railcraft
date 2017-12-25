@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,7 +33,7 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
     private final ResourceLocation LAMP_TEX_OFF;
 
     public LocomotiveRendererElectric() {
-        super("railcraft:default", "locomotive.model.electric.default", new ModelLocomotiveElectric());
+        super("railcraft:default", "locomotive.model.electric.default", new ModelLocomotiveElectric(), new ModelLocomotiveElectric(0.125F));
         LAMP_TEX_ON = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.on.png");
         LAMP_TEX_OFF = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.off.png");
         setEmblemPosition(0.2F, -0.03F, -0.41F, -0.505F);

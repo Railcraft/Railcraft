@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,5 +27,9 @@ public class MathTools {
         while (angle < -180F) angle += 360F;
         while (angle > 180F) angle -= 360F;
         return angle;
+    }
+
+    public static boolean nearZero(double f) {
+        return Math.abs(f) < 0.001;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,6 +32,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 
     protected final String modelTag;
     private final ModelBase model;
+    private final ModelBase snowLayer;
     private final ResourceLocation[] textures;
     private final int[] color = new int[3];
     //    protected final IIcon[] itemIcons = new IIcon[3];
@@ -40,17 +41,20 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     private float emblemOffsetY = -0.17F;
     private float emblemOffsetZ = -0.515F;
 
-    public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model) {
-        this(rendererTag, modelTag, model, new ResourceLocation[]{
+    public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model, ModelBase snowLayer) {
+        this(rendererTag, modelTag, model, snowLayer, new ResourceLocation[]{
                 new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".primary.png"),
                 new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".secondary.png"),
-                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".nocolor.png")});
+                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".nocolor.png"),
+                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".snow.png")
+        });
     }
 
-    public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model, ResourceLocation[] textures) {
+    public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model, ModelBase snowLayer, ResourceLocation[] textures) {
         super(rendererTag);
         this.modelTag = modelTag;
         this.model = model;
+        this.snowLayer = snowLayer;
         this.textures = textures;
         color[2] = 0xFFFFFF;
         setRenderItemIn3D(false);
@@ -92,7 +96,9 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
         color[0] = primaryColor;
         color[1] = secondaryColor;
 
-        for (int pass = 0; pass < textures.length; pass++) {
+        float alpha = SeasonPlugin.isGhostTrain(cart) ? 0.5F : 1F;
+
+        for (int pass = 0; pass < 3; pass++) {
             renderer.bindTex(textures[pass]);
 
             int c = color[pass];
@@ -101,9 +107,15 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             float c1 = (float) (c >> 16 & 255) / 255.0F;
             float c2 = (float) (c >> 8 & 255) / 255.0F;
             float c3 = (float) (c & 255) / 255.0F;
-            OpenGL.glColor4f(c1 * dim, c2 * dim, c3 * dim, SeasonPlugin.isGhostTrain(cart) ? 0.5F : 1);
+            OpenGL.glColor4f(c1 * dim, c2 * dim, c3 * dim, alpha);
             model.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
+
+        if (SeasonPlugin.isPolarExpress(cart)) {
+            renderer.bindTex(textures[3]);
+            snowLayer.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        }
+
         OpenGL.glPopAttrib();
 
         if (emblemTexture != null) {

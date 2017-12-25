@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,11 +40,24 @@ public class EntityCartCommand extends EntityMinecartCommandBlock implements IRa
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
+        saveToNBT(compound);
         // Command block logic overrode this and the custom name is
         // somewhat set to the command block's name ("@")
         compound.setString("CustomName", getCustomNameTag());
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     /**

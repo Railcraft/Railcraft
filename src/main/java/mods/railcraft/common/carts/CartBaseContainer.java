@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -58,6 +59,24 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     protected CartBaseContainer(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     @Nonnull
@@ -225,4 +244,5 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     public Iterator<IInventoryObject> iterator() {
         return Iterators.singletonIterator(this);
     }
+
 }

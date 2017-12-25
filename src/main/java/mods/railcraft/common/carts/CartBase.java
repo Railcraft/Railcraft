@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -34,12 +35,31 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartBase extends EntityMinecart implements IRailcraftCart, IItemCart {
+
     protected CartBase(World world) {
         super(world);
     }
 
     protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     @Nonnull

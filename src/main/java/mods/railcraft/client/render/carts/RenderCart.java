@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -211,7 +211,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         OpenGL.glTranslatef((float) x, (float) y + 0.375F, (float) z);
 
         boolean name = false;
-        if (cart.hasCustomName() && !SeasonPlugin.isGhostTrain(cart)) {
+        if (cart.hasCustomName() && !SeasonPlugin.GHOST_TRAIN.equals(cart.getCustomNameTag()) && !SeasonPlugin.POLAR_EXPRESS.equals(cart.getCustomNameTag())) {
             renderHaloText(cart, cart.getName(), 0, 0, 0, 64);
             name = true;
         }
