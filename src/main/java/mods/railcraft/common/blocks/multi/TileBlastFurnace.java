@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
 import static mods.railcraft.common.util.inventory.InvTools.incSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
@@ -137,9 +138,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        //TODO
-//        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
-//        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getState(null));
+        blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getState(null));
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileBlastFurnace) {
             TileBlastFurnace master = (TileBlastFurnace) tile;
@@ -151,21 +151,20 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
+        IBlockState self = getBlockState();
         IBlockState state = worldObj.getBlockState(pos);
-        Block block = state.getBlock();
-        int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O':
-                if (block != RailcraftBlocks.MACHINE_ALPHA.block() || meta != getBlockMetadata())
+                if (self != state)
                     return true;
                 break;
             case 'B':
             case 'W':
-                if (block == RailcraftBlocks.MACHINE_ALPHA.block() && meta == getBlockMetadata())
+                if (self == state)
                     return true;
                 break;
             case 'A':
-                if (block.isAir(state, worldObj, pos) || state.getMaterial() == Material.LAVA)
+                if (worldObj.isAirBlock(pos) || state.getMaterial() == Material.LAVA)
                     return true;
                 break;
         }
@@ -386,5 +385,14 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public EnumGui getGui() {
         return EnumGui.BLAST_FURNACE;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return getPatternMarker() == 'W'
+                ? isBurning()
+                ? base.withProperty(ICON, 2)
+                : base.withProperty(ICON, 1)
+                : base.withProperty(ICON, 0);
     }
 }

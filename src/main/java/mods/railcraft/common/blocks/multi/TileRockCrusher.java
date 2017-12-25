@@ -10,14 +10,14 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
+import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -32,12 +32,10 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -53,23 +51,25 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyReceiver, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
     private static final int PROCESS_TIME = 100;
-    private static final int CRUSHING_POWER_COST_PER_TICK = 160;
-    private static final int SUCKING_POWER_COST = 5000;
-    private static final int KILLING_POWER_COST = 10000;
-    private static final int MAX_RECEIVE = 5000;
-    private static final int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
+    private static final double CRUSHING_POWER_COST_PER_TICK = 160;
+    private static final double SUCKING_POWER_COST = 5000;
+    private static final double KILLING_POWER_COST = 10000;
+    private static final double MAX_RECEIVE = 5000;
+    private static final double MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
     private static final int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
     private static final int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map1 = {
@@ -137,25 +137,27 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<Object> actions = new HashSet<Object>();
     private int processTime;
-    @Nullable
-    private final EnergyStorage energyStorage;
-    @Nullable
-    public final RFEnergyIndicator rfIndicator;
+//    @Nullable
+//    private final EnergyStorage energyStorage;
+//    @Nullable
+//    public final RFEnergyIndicator rfIndicator;
     private boolean isWorking;
     private boolean paused;
+    @Nullable
+    private ChargeNetwork.ChargeNode node;
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
         super(18, patterns);
 
-        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
-        rfIndicator = new RFEnergyIndicator(energyStorage);
+//        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
+//        rfIndicator = new RFEnergyIndicator(energyStorage);
     }
 
-    public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
+    public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        IBlockState state = Blocks.AIR.getDefaultState(); //TODO
+        IBlockState state = RailcraftBlocks.ROCK_CRUSHER.getState(null);
         blockMapping.put('B', state);
         blockMapping.put('D', state);
         blockMapping.put('a', state);
@@ -179,13 +181,12 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-        Block block = state.getBlock();
-        int meta = block.getMetaFromState(state);
+        IBlockState self = getBlockState();
+        IBlockState other = WorldPlugin.getBlockState(worldObj, pos);
         switch (mapPos) {
             case 'O': // Other
-                if (block == getBlockType() && meta == getBlockMetadata())
-                    return false;
+                if (self != other)
+                    return true;
                 break;
             case 'D': // Window
             case 'B': // Block
@@ -197,20 +198,38 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             case 'f': // Block
             case 'g': // Block
             case 'h': // Block
-                if (block != getBlockType() || meta != getBlockMetadata())
-                    return false;
+                if (self == other)
+                    return true;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(pos))
-                    return false;
+                if (worldObj.isAirBlock(pos))
+                    return true;
                 break;
         }
-        return true;
+        return false;
     }
 
-    private boolean useMasterEnergy(int amount, boolean doRemove) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        return mBlock != null && (mBlock.energyStorage == null || mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount);
+//    private boolean useMasterEnergy(double amount, boolean doRemove) {
+//        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
+//
+//        if (master == null)
+//            return false;
+//        return mBlock != null && (mBlock.energyStorage == null || mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount);
+//        return false;
+//    }
+
+    private boolean useMasterEnergy(double amount) {
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
+        if (master == null)
+            return false;
+        return master.node().useCharge(amount);
+    }
+
+    private boolean canUseMasterEnergy(double amount) {
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
+        if (master == null)
+            return false;
+        return master.node().canUseCharge(amount);
     }
 
     @Override
@@ -226,18 +245,17 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             if (isStructureValid()) {
                 // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
                 for (EntityItem item : TileEntityHopper.getCaptureItems(getWorld(), x, y + 1, z)) {
-                    if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
+                    if (item != null && useMasterEnergy(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getEntityItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
-                        useMasterEnergy(SUCKING_POWER_COST, true);
                         item.setDead();
                     }
                 }
 
                 EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getPos().up());
-                if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
+                if (entity != null && canUseMasterEnergy(KILLING_POWER_COST))
                     if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
-                        useMasterEnergy(KILLING_POWER_COST, true);
+                        useMasterEnergy(KILLING_POWER_COST);
             }
 
             if (isMaster()) {
@@ -286,14 +304,20 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                         }
                     } else {
                         isWorking = true;
-                        if (energyStorage != null) {
-                            int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
-                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
-                                processTime++;
-                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
-                            }
-                        } else
+                        boolean success = node().useCharge(CRUSHING_POWER_COST_PER_TICK);
+                        if (success) {
                             processTime++;
+                        }
+//                        if (!node().isNull()) { //TODO: no charge
+
+
+//                            int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
+//                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
+//                                processTime++;
+//                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
+//                            }
+//                        } else
+//                            processTime++;
                     }
                 else {
                     processTime = 0;
@@ -318,8 +342,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
-        if (energyStorage != null)
-            energyStorage.writeToNBT(data);
+//        if (energyStorage != null)
+//            energyStorage.writeToNBT(data);
         return data;
     }
 
@@ -328,8 +352,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
 
-        if (energyStorage != null)
-            energyStorage.readFromNBT(data);
+//        if (energyStorage != null)
+//            energyStorage.readFromNBT(data);
     }
 
     public int getProcessTime() {
@@ -400,43 +424,69 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         return false;
     }
 
-    @Nullable
-    public EnergyStorage getEnergyStorage() {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null && mBlock.energyStorage != null)
-            return mBlock.energyStorage;
-        return energyStorage;
+    private ChargeNetwork.ChargeNode node() {
+        if (node == null) {
+            node = ChargeManager.getNetwork(worldObj).getNode(pos);
+        }
+        return node;
     }
 
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
-    }
+//    @Nullable
+//    public EnergyStorage getEnergyStorage() {
+//        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+//        if (mBlock != null && mBlock.energyStorage != null)
+//            return mBlock.energyStorage;
+//        return energyStorage;
+//    }
 
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getEnergyStored();
-    }
+//    @Override
+//    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+//        if (getEnergyStorage() == null)
+//            return 0;
+//        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
+//    }
 
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getMaxEnergyStored();
-    }
+//    @Override
+//    public int getEnergyStored(EnumFacing from) {
+//        if (getEnergyStorage() == null)
+//            return 0;
+//        return getEnergyStorage().getEnergyStored();
+//    }
 
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
-    }
+//    @Override
+//    public int getMaxEnergyStored(EnumFacing from) {
+//        if (getEnergyStorage() == null)
+//            return 0;
+//        return getEnergyStorage().getMaxEnergyStored();
+//    }
+
+//    @Override
+//    public boolean canConnectEnergy(EnumFacing from) {
+//        return true;
+//    }
 
     @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.ROCK_CRUSHER;
     }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return base.withProperty(ICON, getPatternMarker());
+    }
+
+    //    public IIcon getIcon(int side) {
+//        if (isStructureValid()) {
+//            if (side > 1 && getPatternMarker() == 'D')
+//                return getMachineType().getTexture(6);
+//            if (side == 1) {
+//                char m = getPatternMarker();
+//                return getMachineType().getTexture(m - 'a' + 7);
+//            }
+//        }
+//        if (side > 1)
+//            return getMachineType().getTexture(0);
+//        return getMachineType().getTexture(side);
+//    }
 }

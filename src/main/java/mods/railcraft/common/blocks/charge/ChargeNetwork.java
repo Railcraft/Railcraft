@@ -366,6 +366,10 @@ public class ChargeNetwork {
             return false;
         }
 
+        public boolean canUseCharge(double amount) {
+            return getMaxNetworkDraw() >= amount / getNetworkEfficiency();
+        }
+
         /**
          * Remove up to the requested amount of charge and returns the amount
          * removed.
@@ -490,6 +494,10 @@ public class ChargeNetwork {
                 ticksRecorded = 0;
             }
             return recording;
+        }
+
+        public boolean canUseCharge(double amount) {
+            return chargeGraph.canUseCharge(amount);
         }
 
         /**

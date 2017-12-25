@@ -14,11 +14,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public class BlockCokeOven extends BlockMultiBlockInventory {
+public class BlockBlastFurnace extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
-    public BlockCokeOven() {
+    public BlockBlastFurnace() {
         super(Material.ROCK);
     }
 
@@ -29,7 +29,7 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
 
     @Override
     public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
-        return new TileCokeOven();
+        return new TileBlastFurnace();
     }
 
     @Override
@@ -39,8 +39,8 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Class<TileCokeOven> getTileClass(IBlockState state) {
-        return TileCokeOven.class;
+    public Class<TileBlastFurnace> getTileClass(IBlockState state) {
+        return TileBlastFurnace.class;
     }
 
     @Override

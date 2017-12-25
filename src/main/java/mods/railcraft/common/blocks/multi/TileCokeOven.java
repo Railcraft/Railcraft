@@ -290,8 +290,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        System.out.println("callign getactualstate");
-        return getPatternMarker() == 'W' && isStructureValid()
+        return getPatternMarker() == 'W'
                 ? isBurning()
                 ? base.withProperty(BlockCokeOven.ICON, 2)
                 : base.withProperty(BlockCokeOven.ICON, 1)

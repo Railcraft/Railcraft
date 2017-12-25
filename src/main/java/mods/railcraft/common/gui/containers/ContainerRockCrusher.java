@@ -13,6 +13,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.multi.TileRockCrusher;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -32,8 +33,9 @@ public class ContainerRockCrusher extends RailcraftContainer {
         super(crusher);
         this.tile = crusher;
 
-        if (tile.rfIndicator != null)
-            addWidget(new IndicatorWidget(tile.rfIndicator, 157, 23, 176, 53, 6, 48));
+//        if (tile.rfIndicator != null) TODO: charge
+//            addWidget(new IndicatorWidget(tile.rfIndicator, 157, 23, 176, 53, 6, 48));
+        addWidget(new IndicatorWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 157, 23, 176, 53, 6, 48));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
@@ -67,8 +69,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        for (Object crafter : listeners) {
-            IContainerListener listener = (IContainerListener) crafter;
+        for (IContainerListener listener : listeners) {
             if (lastProcessTime != tile.getProcessTime())
                 listener.sendProgressBarUpdate(this, 0, tile.getProcessTime());
         }
