@@ -1,4 +1,4 @@
-10.2.1:
+10.3.0:
     INFO: Merry Christmas!
     NEW: Added Snow to carts!
     NEW: Added Crowbar of Seasons, used to switch carts to Christmas or Halloween mode, found in Workshops or in Gift and Pumpkin Carts.
