@@ -1,3 +1,9 @@
+10.2.1:
+    INFO: Merry Christmas!
+    NEW: Added Snow to carts!
+    NEW: Added Crowbar of Seasons, used to switch carts to Christmas or Halloween mode, found in Workshops or in Gift and Pumpkin Carts.
+    CHANGE: "NeedsRefuel" routing condition now looks at the entire train and considers Worldspike Carts as well.
+
 10.2.0
     NEW: Metal Posts and Platforms have been restored. Other variants will come later.
     FIX: Boxes now respond correctly to redstone. (contribution by liach)
