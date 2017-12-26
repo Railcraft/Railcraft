@@ -13,13 +13,13 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
@@ -70,18 +70,16 @@ public interface IRailcraftCart {
         }
     }
 
-    EntityDataManager getDataManager();
-
     default void cartInit() {
-        getDataManager().register(SEASON, (byte) 0);
+        ((Entity) this).getDataManager().register(SEASON, (byte) 0);
     }
 
     default SeasonPlugin.Season getSeason() {
-        return SeasonPlugin.Season.VALUES[getDataManager().get(SEASON)];
+        return SeasonPlugin.Season.VALUES[((Entity) this).getDataManager().get(SEASON)];
     }
 
     default void setSeason(SeasonPlugin.Season season) {
-        getDataManager().set(SEASON, (byte) season.ordinal());
+        ((Entity) this).getDataManager().set(SEASON, (byte) season.ordinal());
     }
 
     default NBTTagCompound saveToNBT(NBTTagCompound nbt) {
