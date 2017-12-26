@@ -1,60 +1,70 @@
 package mods.railcraft.common.util.property;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyHelper;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * A character property. Useful for multiblocks.
+ * Stupid things happen because vanilla doesn't allow upper case letter names!
  */
 public final class PropertyCharacter extends PropertyHelper<Character> {
 
     private final Set<Character> allowed;
-    private final Set<Character> view;
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-z0-9_]+$");
 
-    PropertyCharacter(String name) {
+    private PropertyCharacter(String name, Set<Character> allowed) {
         super(name, Character.class);
-        allowed = new HashSet<>();
-        view = Collections.unmodifiableSet(allowed);
+        this.allowed = allowed;
     }
 
     public static IProperty<Character> create(String name, Iterable<Character> characters) {
-        PropertyCharacter ret = new PropertyCharacter(name);
-        if (characters instanceof Collection) {
-            ret.allowed.addAll((Collection<Character>) characters);
-        } else {
-            for (Character c : characters)
-                ret.allowed.add(c);
-        }
-        return ret;
+        ImmutableSet.Builder<Character> builder = ImmutableSet.builder();
+        builder.addAll(characters);
+        return new PropertyCharacter(name, builder.build());
+    }
+
+    public static IProperty<Character> create(String name, Character... characters) {
+        ImmutableSet.Builder<Character> builder = ImmutableSet.builder();
+        builder.add(characters);
+        return new PropertyCharacter(name, builder.build());
     }
 
     public static IProperty<Character> create(String name, char... characters) {
-        PropertyCharacter ret = new PropertyCharacter(name);
-        for (Character c : characters)
-            ret.allowed.add(c);
-        return ret;
+        ImmutableSet.Builder<Character> builder = ImmutableSet.builder();
+        for (char c : characters) {
+            builder.add(c);
+        }
+        return new PropertyCharacter(name, builder.build());
     }
 
     @Override
     public Collection<Character> getAllowedValues() {
-        return view;
+        return allowed;
     }
 
     @Override
     public Optional<Character> parseValue(String value) {
-        if (value.length() != 1)
+        if (value.length() == 1) {
+            char c = value.charAt(0);
+            if (allowed.contains(c))
+                return Optional.of(c);
+        }
+        try {
+            return Optional.of((char) Integer.parseUnsignedInt(value, 16));
+        } catch (NumberFormatException ex) {
             return Optional.absent();
-        return Optional.of(value.charAt(0));
+        }
     }
 
     @Override
     public String getName(Character value) {
-        return value.toString();
+        String s = value.toString();
+        return NAME_PATTERN.matcher(s).matches() ? s : Integer.toHexString(value);
     }
 }

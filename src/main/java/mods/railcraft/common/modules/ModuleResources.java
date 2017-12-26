@@ -151,7 +151,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     }
                 }
 
-                bottleFree = true; //TODO: RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable();
+                bottleFree = RailcraftConfig.useCreosoteFurnaceRecipes() || !RailcraftBlocks.COKE_OVEN.isLoaded();
                 if (bottleFree) {
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);

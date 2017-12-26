@@ -38,7 +38,6 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Class<TileCokeOven> getTileClass(IBlockState state) {
         return TileCokeOven.class;
     }

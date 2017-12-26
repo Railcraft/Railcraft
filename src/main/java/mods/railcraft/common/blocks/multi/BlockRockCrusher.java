@@ -23,7 +23,7 @@ import java.util.Random;
  */
 public class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
-    public static final IProperty<Character> ICON = PropertyCharacter.create("icon", 'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D');
+    public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[] {'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
     private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
@@ -53,7 +53,6 @@ public class BlockRockCrusher extends BlockMultiBlockInventory implements ICharg
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Class<TileRockCrusher> getTileClass(IBlockState state) {
         return TileRockCrusher.class;
     }

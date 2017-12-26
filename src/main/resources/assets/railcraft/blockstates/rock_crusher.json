@@ -13,7 +13,7 @@
       }
     ],
     "icon": {
-      "O": {
+      "4f": {
         "textures": {
           "side": "railcraft:blocks/rock_crusher_3",
           "top": "railcraft:blocks/rock_crusher_11",
@@ -76,14 +76,14 @@
           "bottom": "railcraft:blocks/rock_crusher_3"
         }
       },
-      "B": {
+      "42": {
         "textures": {
           "side": "railcraft:blocks/rock_crusher_3",
           "top": "railcraft:blocks/rock_crusher_11",
           "bottom": "railcraft:blocks/rock_crusher_3"
         }
       },
-      "D": {
+      "44": {
         "textures": {
           "side": "railcraft:blocks/rock_crusher_7",
           "top": "railcraft:blocks/rock_crusher_11",

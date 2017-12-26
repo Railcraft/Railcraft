@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -60,6 +61,19 @@ public class WorldPlugin {
         if (tileClass.isInstance(tileEntity))
             return Optional.of(tileClass.cast(tileEntity));
         return Optional.empty();
+    }
+
+    public static <T, V> Optional<V> retrieveFromTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, Function<T, V> function) {
+        TileEntity tileEntity = getBlockTile(world, pos);
+        if (tileClass.isInstance(tileEntity))
+            return Optional.of(tileClass.cast(tileEntity)).map(function);
+        return Optional.empty();
+    }
+
+    public static <T> void doForTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, Consumer<T> consumer) {
+        TileEntity tileEntity = getBlockTile(world, pos);
+        if (tileClass.isInstance(tileEntity))
+            consumer.accept(tileClass.cast(tileEntity));
     }
 
     public static Material getBlockMaterial(IBlockAccess world, BlockPos pos) {

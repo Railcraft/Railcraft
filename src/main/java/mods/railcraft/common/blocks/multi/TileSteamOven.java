@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -56,19 +55,18 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int STEAM_PER_BATCH = 8000;
     private static final int TOTAL_COOK_TIME = 256;
     private static final int COOK_STEP = 16;
     private static final int ITEMS_SMELTED = 9;
     private static final int[] SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private final TankManager tankManager = new TankManager();
     private final FilteredTank tank;
     private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
-    private final Set<Object> actions = new HashSet<Object>();
+    private final Set<Object> actions = new HashSet<>();
 
     static {
         char[][][] map = {
@@ -76,7 +74,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                         {'*', 'O', 'O', '*'},
                         {'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O'},
-                        {'*', 'O', 'O', '*'},},
+                        {'*', 'O', 'O', '*'},
+                },
                 {
                         {'*', 'O', 'O', '*'},
                         {'O', 'B', 'B', 'O'},
@@ -93,7 +92,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                         {'*', 'O', 'O', '*'},
                         {'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O'},
-                        {'*', 'O', 'O', '*'},},};
+                        {'*', 'O', 'O', '*'},
+                },
+        };
         patterns.add(new MultiBlockPattern(map));
     }
 
@@ -111,7 +112,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        Map<Character, IBlockState> blockMapping = new HashMap<>();
         //TODO
 //        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
@@ -148,11 +149,20 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return -1;
     }
 
+    @Override
     public EnumFacing getFacing() {
         TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
         return facing;
+    }
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
+        if (masterOven != null)
+            masterOven.facing = facing;
+        this.facing = facing;
     }
 
     private boolean hasFinishedCycle() {
@@ -269,7 +279,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     @Override
     public EnumFacing[] getValidRotations() {
-        return UP_DOWN_AXES;
+        return Plane.HORIZONTAL.facings();
     }
 
     @Override
@@ -368,13 +378,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return EnumGui.STEAN_OVEN;
     }
 
-    enum Texture {
-
-        DOOR_TL(6), DOOR_TR(7), DOOR_BL(8), DOOR_BR(9), SIDE(2), CAP(0);
-        private final int index;
-
-        Texture(int index) {
-            this.index = index;
-        }
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return base.withProperty(BlockSteamOven.FACING, getFacing());
     }
 }

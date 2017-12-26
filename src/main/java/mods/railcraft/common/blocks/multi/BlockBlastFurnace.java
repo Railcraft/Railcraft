@@ -38,7 +38,6 @@ public class BlockBlastFurnace extends BlockMultiBlockInventory {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Class<TileBlastFurnace> getTileClass(IBlockState state) {
         return TileBlastFurnace.class;
     }

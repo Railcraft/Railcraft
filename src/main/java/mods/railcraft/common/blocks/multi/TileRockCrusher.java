@@ -331,7 +331,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getPos().getX(), mBlock.getPos().getY(), mBlock.getPos().getZ());
+            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
@@ -475,18 +475,4 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     public IBlockState getActualState(IBlockState base) {
         return base.withProperty(ICON, getPatternMarker());
     }
-
-    //    public IIcon getIcon(int side) {
-//        if (isStructureValid()) {
-//            if (side > 1 && getPatternMarker() == 'D')
-//                return getMachineType().getTexture(6);
-//            if (side == 1) {
-//                char m = getPatternMarker();
-//                return getMachineType().getTexture(m - 'a' + 7);
-//            }
-//        }
-//        if (side > 1)
-//            return getMachineType().getTexture(0);
-//        return getMachineType().getTexture(side);
-//    }
 }
