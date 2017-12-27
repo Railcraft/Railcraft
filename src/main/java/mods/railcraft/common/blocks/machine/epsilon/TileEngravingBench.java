@@ -10,8 +10,6 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -37,15 +35,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
+public class TileEngravingBench extends TileMachineItem implements ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
 
     public enum GuiPacketType {
 
@@ -86,9 +89,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         data.setBoolean("isCrafting", isCrafting);
         data.setInteger("progress", progress);
         data.setString("currentEmblem", currentEmblem);
-
-        if (energyStorage != null)
-            energyStorage.writeToNBT(data);
+        data.setTag("energy", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
         return data;
     }
 
@@ -101,8 +102,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         progress = data.getInteger("progress");
         currentEmblem = data.getString("currentEmblem");
 
-        if (energyStorage != null)
-            energyStorage.readFromNBT(data);
+        if (data.hasKey("energy"))
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, data.getTag("energy"));
     }
 
     @Override
@@ -299,28 +300,12 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return energyStorage != null;
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getMaxEnergyStored();
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        return capability == ENERGY ? ENERGY.cast(energyStorage) : super.getCapability(capability, facing);
     }
 }

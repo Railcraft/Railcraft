@@ -10,8 +10,6 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
@@ -50,15 +48,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 
 import javax.annotation.Nullable;
 import java.util.*;
+
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyReceiver, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -138,9 +141,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<Object> actions = new HashSet<Object>();
     private int processTime;
-    @Nullable
     private final EnergyStorage energyStorage;
-    @Nullable
     public final RFEnergyIndicator rfIndicator;
     private boolean isWorking;
     private boolean paused;
@@ -323,9 +324,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
-
-        if (energyStorage != null)
-            energyStorage.writeToNBT(data);
+        data.setTag("energy", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
         return data;
     }
 
@@ -333,9 +332,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
-
-        if (energyStorage != null)
-            energyStorage.readFromNBT(data);
+        if (data.hasKey("energy"))
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, data.getTag("energy"));
     }
 
     public int getProcessTime() {
@@ -415,28 +413,12 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     }
 
     @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public int getEnergyStored(EnumFacing from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        return capability == ENERGY ? ENERGY.cast(energyStorage) : super.getCapability(capability, facing);
     }
 }
