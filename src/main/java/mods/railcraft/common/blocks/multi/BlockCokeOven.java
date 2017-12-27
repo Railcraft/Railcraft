@@ -44,12 +44,6 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerTextures(TextureMap textureMap) {
-        TextureAtlasSheet.unstitchIcons(textureMap, getBlockTexture(), getTextureDimensions());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
     }

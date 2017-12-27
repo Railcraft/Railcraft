@@ -1,6 +1,5 @@
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.multi.TileMultiBlockInventory;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

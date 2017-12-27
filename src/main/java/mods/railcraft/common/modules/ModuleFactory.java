@@ -59,7 +59,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftItems.COKE,
                         RailcraftBlocks.COKE_OVEN,
                         RailcraftBlocks.BLAST_FURNACE,
-                        RailcraftBlocks.ROCK_CRUSHER
+                        RailcraftBlocks.ROCK_CRUSHER,
+                        RailcraftBlocks.STEAM_OVEN
                 );
             }
 

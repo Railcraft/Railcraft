@@ -146,6 +146,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
+    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
     ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;

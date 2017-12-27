@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube"
+    "model": "railcraft:steam_oven"
   },
   "variants": {
     "normal": [
@@ -25,9 +25,29 @@
       }
     },
     "icon": {
-      "0": {
+      "default": {
         "textures": {
-          "all": "railcraft:blocks/steam_oven_0"
+          "face": "railcraft:blocks/steam_oven_6"
+        }
+      },
+      "door_tl": {
+        "textures": {
+          "face": "railcraft:blocks/steam_oven_0"
+        }
+      },
+      "door_tr": {
+        "textures": {
+          "face": "railcraft:blocks/steam_oven_1"
+        }
+      },
+      "door_bl": {
+        "textures": {
+          "face": "railcraft:blocks/steam_oven_4"
+        }
+      },
+      "door_br": {
+        "textures": {
+          "face": "railcraft:blocks/steam_oven_5"
         }
       }
     }

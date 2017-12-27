@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "railcraft:blocks/steam_oven_3",
+    "down": "railcraft:blocks/steam_oven_3",
+    "up": "railcraft:blocks/steam_oven_2",
+    "north": "#face",
+    "east": "railcraft:blocks/steam_oven_3",
+    "south": "railcraft:blocks/steam_oven_3",
+    "west": "railcraft:blocks/steam_oven_3"
+  }
+}

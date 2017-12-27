@@ -58,12 +58,6 @@ public class BlockRockCrusher extends BlockMultiBlockInventory implements ICharg
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerTextures(TextureMap textureMap) {
-        TextureAtlasSheet.unstitchIcons(textureMap, getBlockTexture(), getTextureDimensions());
-    }
-
-    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         super.updateTick(worldIn, pos, state, rand);
         registerNode(state, worldIn, pos);

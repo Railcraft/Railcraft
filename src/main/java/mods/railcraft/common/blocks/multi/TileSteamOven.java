@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -38,16 +39,21 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
+import static mods.railcraft.common.blocks.multi.BlockSteamOven.FACING;
+import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
@@ -113,8 +119,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<>();
-        //TODO
-//        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;
@@ -262,15 +267,15 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     }
 
     @Override
-    public boolean rotateBlock(EnumFacing axis) {
-        if (axis == UP || axis == DOWN)
+    public boolean rotateBlock(EnumFacing face) {
+        if (face.getAxis() == Axis.Y)
             return false;
         TileSteamOven master = (TileSteamOven) getMasterBlock();
         if (master != null) {
-            if (master.facing == axis)
-                master.facing = axis.getOpposite();
+            if (master.facing == face)
+                master.facing = face.getOpposite();
             else
-                master.facing = axis;
+                master.facing = face;
             master.scheduleMasterRetest();
             return true;
         }
@@ -378,8 +383,83 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return EnumGui.STEAN_OVEN;
     }
 
+    enum Icon implements IStringSerializable {
+
+        DOOR_TL, DOOR_TR, DOOR_BL, DOOR_BR, DEFAULT;
+
+        IBlockState getActual(IBlockState state) {
+            return state.withProperty(ICON, this);
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase();
+        }
+    }
+
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return base.withProperty(BlockSteamOven.FACING, getFacing());
+        EnumFacing side = getFacing();
+        base = base.withProperty(FACING, side);
+        if (!isStructureValid()) {
+            return Icon.DEFAULT.getActual(base);
+        }
+        BlockPos pos = getPatternPosition();
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+        switch (side) {
+            case NORTH:
+                if (y == 2) {
+                    if (x == 2)
+                        return Icon.DOOR_TL.getActual(base);
+                    return Icon.DOOR_TR.getActual(base);
+                }
+                if (x == 2)
+                    return Icon.DOOR_BL.getActual(base);
+                return Icon.DOOR_BR.getActual(base);
+            case SOUTH:
+                if (y == 2) {
+                    if (z == 1)
+                        return Icon.DOOR_TL.getActual(base);
+                    return Icon.DOOR_TR.getActual(base);
+                }
+                if (z == 1)
+                    return Icon.DOOR_BL.getActual(base);
+                return Icon.DOOR_BR.getActual(base);
+            case EAST:
+                if (y == 2) {
+                    if (x == 1)
+                        return Icon.DOOR_TL.getActual(base);
+                    return Icon.DOOR_TR.getActual(base);
+                }
+                if (x == 1)
+                    return Icon.DOOR_BL.getActual(base);
+                return Icon.DOOR_BR.getActual(base);
+            case WEST:
+                if (y == 2) {
+                    if (z == 2)
+                        return Icon.DOOR_TL.getActual(base);
+                    return Icon.DOOR_TR.getActual(base);
+                }
+                if (z == 2)
+                    return Icon.DOOR_BL.getActual(base);
+                return Icon.DOOR_BR.getActual(base);
+            default:
+                return Icon.DEFAULT.getActual(base);
+        }
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+        return super.getCapability(capability, facing);
     }
 }
