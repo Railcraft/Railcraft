@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.incSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
@@ -52,7 +53,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     private static final int COOK_STEP_LENGTH = 50;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
 //    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
@@ -110,10 +111,8 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getState(null));
-        blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getState(null));
-//        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getDefaultState());
-//        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getDefaultState());
+        blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileCokeOven) {
             TileCokeOven master = (TileCokeOven) tile;
@@ -209,7 +208,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         else {
                             cookTime = 0;
                             setCooking(false);
-                            setInventorySlotContents(SLOT_INPUT, null);
+                            setInventorySlotContents(SLOT_INPUT, emptyStack());
                             dropItem(input);
                         }
                     }
@@ -220,19 +219,18 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
 
                 ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
                 if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
-                    setInventorySlotContents(SLOT_LIQUID_INPUT, null);
+                    setInventorySlotContents(SLOT_LIQUID_INPUT, emptyStack());
                     dropItem(topSlot);
                 }
 
                 ItemStack bottomSlot = getStackInSlot(SLOT_LIQUID_OUTPUT);
                 if (!InvTools.isEmpty(bottomSlot) && !FluidItemHelper.isContainer(bottomSlot)) {
-                    setInventorySlotContents(SLOT_LIQUID_OUTPUT, null);
+                    setInventorySlotContents(SLOT_LIQUID_OUTPUT, emptyStack());
                     dropItem(bottomSlot);
                 }
 
-                // FIXME
-//                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-//                    FluidTools.fillContainers(this, this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT, Fluids.CREOSOTE.get());
+                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+                    FluidTools.fillContainers(getTankManager(), this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT, Fluids.CREOSOTE.get());
             }
     }
 

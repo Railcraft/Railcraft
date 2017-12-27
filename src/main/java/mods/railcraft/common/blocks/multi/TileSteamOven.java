@@ -418,7 +418,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                 if (x == 2)
                     return Icon.DOOR_BL.getActual(base);
                 return Icon.DOOR_BR.getActual(base);
-            case SOUTH:
+            case WEST:
                 if (y == 2) {
                     if (z == 1)
                         return Icon.DOOR_TL.getActual(base);
@@ -427,7 +427,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                 if (z == 1)
                     return Icon.DOOR_BL.getActual(base);
                 return Icon.DOOR_BR.getActual(base);
-            case EAST:
+            case SOUTH:
                 if (y == 2) {
                     if (x == 1)
                         return Icon.DOOR_TL.getActual(base);
@@ -436,7 +436,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                 if (x == 1)
                     return Icon.DOOR_BL.getActual(base);
                 return Icon.DOOR_BR.getActual(base);
-            case WEST:
+            case EAST:
                 if (y == 2) {
                     if (z == 2)
                         return Icon.DOOR_TL.getActual(base);
@@ -452,6 +452,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        //TODO: front/top no fluid?
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
@@ -459,7 +460,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 }
