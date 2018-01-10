@@ -69,18 +69,18 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);
 
-                EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
-                if (alpha.isAvailable()) {
-                    ItemStack stack = alpha.getStack();
-                    CraftingPlugin.addRecipe(stack,
-                            "SGS",
-                            "EDE",
-                            "SGS",
-                            'D', new ItemStack(Blocks.DISPENSER),
-                            'G', "paneGlass",
-                            'E', "gemEmerald",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron");
-                }
+//                EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
+//                if (alpha.isAvailable()) {
+//                    ItemStack stack = alpha.getStack();
+//                    CraftingPlugin.addRecipe(stack,
+//                            "SGS",
+//                            "EDE",
+//                            "SGS",
+//                            'D', new ItemStack(Blocks.DISPENSER),
+//                            'G', "paneGlass",
+//                            'E', "gemEmerald",
+//                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.PLATE.getRecipeObject(Metal.STEEL) : "blockIron");
+//                }
             }
         });
     }

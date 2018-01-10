@@ -42,16 +42,4 @@ public abstract class RailcraftTickingTileEntity extends RailcraftTileEntity imp
         sendClientUpdate = true;
     }
 
-    public void onBlockAdded() {
-    }
-
-    public void onBlockRemoval() {
-    }
-
-    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
-        return false;
-    }
-
-    public void randomDisplayTick(Random rand) {
-    }
 }

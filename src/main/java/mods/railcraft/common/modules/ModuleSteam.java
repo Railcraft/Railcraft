@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.items.Metal;
@@ -19,7 +20,6 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -33,7 +33,7 @@ public class ModuleSteam extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-//                        RailcraftBlocks.machine_beta
+                        RailcraftBlocks.EQUIPMENT
                 );
             }
 
@@ -123,35 +123,35 @@ public class ModuleSteam extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                EnumMachineAlpha alpha = EnumMachineAlpha.STEAM_TRAP_MANUAL;
-                if (alpha.isAvailable()) {
-                    CraftingPlugin.addRecipe(alpha.getStack(),
-                            " G ",
-                            " T ",
-                            " D ",
-                            'G', new ItemStack(Blocks.IRON_BARS),
-                            'T', getTankItem(),
-                            'D', new ItemStack(Blocks.DISPENSER));
-                }
-
-                alpha = EnumMachineAlpha.STEAM_TRAP_AUTO;
-                if (alpha.isAvailable()) {
-                    CraftingPlugin.addRecipe(alpha.getStack(),
-                            " G ",
-                            "RTR",
-                            " D ",
-                            'G', new ItemStack(Blocks.IRON_BARS),
-                            'T', getTankItem(),
-                            'R', "dustRedstone",
-                            'D', new ItemStack(Blocks.DISPENSER));
-                    if (EnumMachineAlpha.STEAM_TRAP_MANUAL.isAvailable()) {
-                        CraftingPlugin.addRecipe(alpha.getStack(),
-                                "RTR",
-                                'T', EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(),
-                                'R', "dustRedstone");
-                        CraftingPlugin.addShapelessRecipe(EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(), alpha.getStack());
-                    }
-                }
+//                EnumMachineAlpha alpha = EnumMachineAlpha.STEAM_TRAP_MANUAL;
+//                if (alpha.isAvailable()) {
+//                    CraftingPlugin.addRecipe(alpha.getStack(),
+//                            " G ",
+//                            " T ",
+//                            " D ",
+//                            'G', new ItemStack(Blocks.IRON_BARS),
+//                            'T', getTankItem(),
+//                            'D', new ItemStack(Blocks.DISPENSER));
+//                }
+//
+//                alpha = EnumMachineAlpha.STEAM_TRAP_AUTO;
+//                if (alpha.isAvailable()) {
+//                    CraftingPlugin.addRecipe(alpha.getStack(),
+//                            " G ",
+//                            "RTR",
+//                            " D ",
+//                            'G', new ItemStack(Blocks.IRON_BARS),
+//                            'T', getTankItem(),
+//                            'R', "dustRedstone",
+//                            'D', new ItemStack(Blocks.DISPENSER));
+//                    if (EnumMachineAlpha.STEAM_TRAP_MANUAL.isAvailable()) {
+//                        CraftingPlugin.addRecipe(alpha.getStack(),
+//                                "RTR",
+//                                'T', EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(),
+//                                'R', "dustRedstone");
+//                        CraftingPlugin.addShapelessRecipe(EnumMachineAlpha.STEAM_TRAP_MANUAL.getStack(), alpha.getStack());
+//                    }
+//                }
             }
 
             private ItemStack getTankItem() {
@@ -161,7 +161,7 @@ public class ModuleSteam extends RailcraftModulePayload {
 //                else if (EnumMachineBeta.TANK_STEEL_WALL.isAvailable())
 //                    tank = EnumMachineBeta.TANK_STEEL_WALL.getStack();
 //                else
-                    tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
+                tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
                 if (InvTools.isEmpty(tank))
                     tank = RailcraftItems.INGOT.getStack(1, Metal.STEEL);
                 if (InvTools.isEmpty(tank))

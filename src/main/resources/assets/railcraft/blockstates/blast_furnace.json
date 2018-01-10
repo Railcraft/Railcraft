@@ -7,17 +7,29 @@
     }
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{"transform": "forge:default-block"}],
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
     "icon": {
       "0": {
-        "textures": {"side": "railcraft:blocks/blast_furnace_0"}
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_0"
+        }
       },
       "1": {
-        "textures": {"side": "railcraft:blocks/blast_furnace_1"}
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_1"
+        }
       },
       "2": {
-        "textures": {"side": "railcraft:blocks/blast_furnace_2"}
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_2"
+        }
       }
     }
   }

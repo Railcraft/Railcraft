@@ -1,8 +1,8 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.IStatementParameter;
-import mods.railcraft.common.blocks.machine.beta.TileEngine;
-import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
+import mods.railcraft.common.blocks.machine.single.TileEngine;
+import mods.railcraft.common.blocks.machine.single.TileEngine.EnergyStage;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 

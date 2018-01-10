@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
+import mods.railcraft.common.blocks.machine.single.TileEngineSteam;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEngineSteam;
 import net.minecraft.entity.player.InventoryPlayer;

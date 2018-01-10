@@ -12,10 +12,11 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.TileTradeStation;
+import mods.railcraft.common.blocks.machine.single.TileTradeStation;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.machine.equipment.TileSteamTrapAuto;
+import mods.railcraft.common.blocks.machine.equipment.TileSteamTrapManual;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -29,13 +30,14 @@ import java.util.List;
  * @author CovertJaguar
  */
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
+    ;
 
 //    TURBINE(ModuleCharge.class, "turbine", TileSteamTurbine.class, 3, 3),
 //    STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
-    TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
+//    TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
 //    COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
-    STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
-    STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1);
+//    STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
+//    STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1);
 //    BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1),
 //    TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1),
 //    ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3);
@@ -53,10 +55,10 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 //        creativeList.add(STEAM_OVEN);
 //        creativeList.add(TANK_WATER);
 //        creativeList.add(ROCK_CRUSHER);
-        creativeList.add(TRADE_STATION);
+//        creativeList.add(TRADE_STATION);
 //        creativeList.add(TURBINE);
-        creativeList.add(STEAM_TRAP_MANUAL);
-        creativeList.add(STEAM_TRAP_AUTO);
+//        creativeList.add(STEAM_TRAP_MANUAL);
+//        creativeList.add(STEAM_TRAP_AUTO);
     }
 
     private final int textureWidth, textureHeight;
@@ -107,7 +109,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
      */
     @Override
     public boolean isAvailable() {
-        return block() != null && isEnabled();
+        return false;
     }
 
     @Override

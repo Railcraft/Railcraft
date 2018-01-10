@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMultiBlock extends ItemBlockRailcraftSubtyped {
+public class ItemMultiBlock extends ItemBlockRailcraft {
 
     protected final BlockMultiBlock multiBlock;
 

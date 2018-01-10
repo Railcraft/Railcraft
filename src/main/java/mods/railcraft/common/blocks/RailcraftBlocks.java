@@ -40,6 +40,8 @@ import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
+import mods.railcraft.common.blocks.machine.single.BlockTradeStation;
+import mods.railcraft.common.blocks.machine.single.ItemTradeStation;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
@@ -142,11 +144,16 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new),
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
+    // singles
+    TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemTradeStation::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
+    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemTankIronGauge::new),
+    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemTankIronValve::new),
+    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemTankIronWall::new),
     ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;

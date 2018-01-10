@@ -9,9 +9,6 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.helpers.StructureHelper;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;

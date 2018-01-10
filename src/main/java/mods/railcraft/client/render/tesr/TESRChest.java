@@ -11,7 +11,7 @@ package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.beta.TileChestRailcraft;
+import mods.railcraft.common.blocks.machine.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

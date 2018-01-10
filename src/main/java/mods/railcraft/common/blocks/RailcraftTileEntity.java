@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks;
 
+import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
@@ -145,7 +146,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        System.out.println("Hey, block placed!");
         if (placer instanceof EntityPlayer)
             owner = ((EntityPlayer) placer).getGameProfile();
         notifyBlocksOfNeighborChange();
@@ -254,8 +254,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public void setCustomName(@Nullable String name) {
-        if (name != null)
-            customName = name;
+        customName = Strings.nullToEmpty(name);
     }
 
     @Override

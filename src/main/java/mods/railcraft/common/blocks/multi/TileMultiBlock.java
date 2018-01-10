@@ -286,14 +286,12 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
 
     @Override
     public void onBlockAdded() {
-        super.onBlockAdded();
         if (Game.isClient(worldObj)) return;
         onBlockChange();
     }
 
     @Override
     public void onBlockRemoval() {
-        super.onBlockRemoval();
         if (Game.isClient(worldObj)) return;
         onBlockChange();
         isMaster = false;
@@ -482,7 +480,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
 
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
-        return (!(isStructureValid() && getPatternPosition().getY() < 2)) && super.canCreatureSpawn(type);
+        return (!(isStructureValid() && getPatternPosition().getY() < 2));
     }
 
     public enum MultiBlockState {

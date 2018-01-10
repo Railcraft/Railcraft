@@ -10,8 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
-import mods.railcraft.common.blocks.TileTradeStation;
-import mods.railcraft.common.blocks.TileTradeStation.GuiPacketType;
+import mods.railcraft.common.blocks.machine.single.TileTradeStation;
+import mods.railcraft.common.blocks.machine.single.TileTradeStation.GuiPacketType;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
@@ -28,8 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static mods.railcraft.common.blocks.TileTradeStation.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.blocks.TileTradeStation.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.blocks.machine.single.TileTradeStation.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.blocks.machine.single.TileTradeStation.GuiPacketType.SET_PROFESSION;
 
 public class GuiTradeStation extends TileGui {
 

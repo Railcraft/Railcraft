@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
+import mods.railcraft.common.blocks.machine.single.TileEngineSteam;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.EntityPlayer;

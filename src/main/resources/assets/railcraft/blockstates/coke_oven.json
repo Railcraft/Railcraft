@@ -1,20 +1,35 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_all"
+    "model": "cube_column",
+    "textures": {
+      "end": "railcraft:blocks/coke_oven_0"
+    }
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{"transform": "forge:default-block"}],
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
     "icon": {
       "0": {
-        "textures": {"all": "railcraft:blocks/coke_oven_0"}
+        "textures": {
+          "side": "railcraft:blocks/coke_oven_0"
+        }
       },
       "1": {
-        "textures": {"all": "railcraft:blocks/coke_oven_1"}
+        "textures": {
+          "side": "railcraft:blocks/coke_oven_1"
+        }
       },
       "2": {
-        "textures": {"all": "railcraft:blocks/coke_oven_2"}
+        "textures": {
+          "side": "railcraft:blocks/coke_oven_2"
+        }
       }
     }
   }

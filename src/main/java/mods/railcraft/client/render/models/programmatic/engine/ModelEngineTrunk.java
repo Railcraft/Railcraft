@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.models.programmatic.engine;
 
-import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
+import mods.railcraft.common.blocks.machine.single.TileEngine.EnergyStage;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 

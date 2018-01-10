@@ -9,19 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.TileTradeStation;
-import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.beta.*;
+import mods.railcraft.common.blocks.machine.single.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
 import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
 import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
-import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
-import mods.railcraft.common.blocks.machine.equipment.TileRollingMachineManual;
-import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.blocks.machine.equipment.TileSmoker;
+import mods.railcraft.common.blocks.machine.equipment.*;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
@@ -43,15 +38,15 @@ public class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha
-        GameRegistry.registerTileEntity(TileTradeStation.class, "RCTradeStationTile");
-        GameRegistry.registerTileEntity(TileSteamTurbine.class, "RCSteamTurbineTile");
-        GameRegistry.registerTileEntity(TileBlastFurnace.class, "RCBlastFurnaceTile");
-        GameRegistry.registerTileEntity(TileCokeOven.class, "RCCokeOvenTile");
-        GameRegistry.registerTileEntity(TileRockCrusher.class, "RCRockCrusherTile");
-        GameRegistry.registerTileEntity(TileTankWater.class, "RCWaterTankTile");
-        GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
-        GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
-        GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
+        RailcraftRegistry.register(TileTradeStation.class, "trade_station");
+        RailcraftRegistry.register(TileSteamTurbine.class, "steam_turbine");
+        RailcraftRegistry.register(TileBlastFurnace.class, "blast_furnace");
+        RailcraftRegistry.register(TileCokeOven.class, "coke_oven");
+        RailcraftRegistry.register(TileRockCrusher.class, "rock_crusher");
+        RailcraftRegistry.register(TileTankWater.class, "water_tank");
+        RailcraftRegistry.register(TileSteamOven.class, "steam_oven");
+        RailcraftRegistry.register(TileSteamTrapManual.class, "steam_trap_manual");
+        RailcraftRegistry.register(TileSteamTrapAuto.class, "steam_trap_auto");
 
         // Beta
         GameRegistry.registerTileEntity(TileEngineSteamHobby.class, "RCEngineSteamHobby");
