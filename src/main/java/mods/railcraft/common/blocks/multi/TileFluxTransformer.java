@@ -8,13 +8,11 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.epsilon;
+package mods.railcraft.common.blocks.multi;
 
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.multi.MultiBlockPattern;
-import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

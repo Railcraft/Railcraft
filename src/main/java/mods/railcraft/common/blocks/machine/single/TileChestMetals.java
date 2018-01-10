@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine.single;
 
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
@@ -19,6 +20,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -44,17 +46,18 @@ public class TileChestMetals extends TileChestRailcraft {
     private Target target = Target.NUGGET_CONDENSE;
 
     @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.METALS_CHEST;
-    }
-
-    @Override
     public void update() {
         super.update();
 
         if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
             if (!target.evaluate(this))
                 target = target.next();
+    }
+
+    @Nullable
+    @Override
+    public EnumGui getGui() {
+        return null;
     }
 
     enum Target {

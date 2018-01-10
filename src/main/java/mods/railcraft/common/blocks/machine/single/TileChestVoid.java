@@ -9,9 +9,12 @@
 package mods.railcraft.common.blocks.machine.single;
 
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -21,9 +24,10 @@ public class TileChestVoid extends TileChestRailcraft {
 
     private static final int TICK_PER_VOID = 8;
 
+    @Nullable
     @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.VOID_CHEST;
+    public EnumGui getGui() {
+        return null;
     }
 
     @Override

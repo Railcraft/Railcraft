@@ -7,12 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.epsilon;
+package mods.railcraft.common.blocks.machine.single;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;

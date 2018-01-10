@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.single;
 
-import mods.railcraft.common.blocks.machine.TileMachineItem;
+import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -40,7 +40,7 @@ import static net.minecraft.util.EnumFacing.UP;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: investigate chest locking
-public abstract class TileChestRailcraft extends TileMachineItem implements ITileRotate {
+public abstract class TileChestRailcraft extends TileSmartItemTicking implements ITileRotate {
 
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int TICK_PER_SYNC = 64;

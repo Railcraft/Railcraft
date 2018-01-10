@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.single;
 
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.steam.Steam;
 
 /**
@@ -22,8 +23,8 @@ public class TileEngineSteamLow extends TileEngineSteam {
     }
 
     @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.ENGINE_STEAM_LOW;
+    public EnumGui getGui() {
+        return EnumGui.ENGINE_STEAM;
     }
 
     @Override

@@ -91,8 +91,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.ENGINE_STEAM_HOBBY;
+    public EnumGui getGui() {
+        return EnumGui.ENGINE_HOBBY;
     }
 
     @Override

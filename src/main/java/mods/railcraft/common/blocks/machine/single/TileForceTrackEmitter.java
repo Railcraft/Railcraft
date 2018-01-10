@@ -7,13 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.epsilon;
+package mods.railcraft.common.blocks.machine.single;
 
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;

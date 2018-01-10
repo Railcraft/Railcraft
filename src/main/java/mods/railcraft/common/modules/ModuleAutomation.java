@@ -39,6 +39,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
 //                        RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.EQUIPMENT,
+                        RailcraftBlocks.TRADE_STATION,
 
                         RailcraftItems.FILTER_BLANK,
                         RailcraftItems.FILTER_TYPE,

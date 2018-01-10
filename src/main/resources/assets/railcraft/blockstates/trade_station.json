@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+      ""
+      "particle": "railcraft:blocks/trade_station_0"
+    }
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "facing": {
+      "north": {},
+      "east": {"y": 90},
+      "south": {"y": 180},
+      "west": {"y": 270}
+    }
+  }
+}

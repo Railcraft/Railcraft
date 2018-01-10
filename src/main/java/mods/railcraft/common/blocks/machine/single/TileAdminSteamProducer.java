@@ -8,9 +8,10 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.epsilon;
+package mods.railcraft.common.blocks.machine.single;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;

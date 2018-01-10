@@ -18,11 +18,15 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.single.TileEngine;
 import mods.railcraft.common.blocks.machine.single.TileEngine.EnergyStage;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
@@ -44,11 +48,19 @@ public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
     public TESRPneumaticEngine(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
-        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
+        final Item type = null; //TODO
+        RailcraftCustomItemRenderer.INSTANCE.registerItemStackHandler((stack) -> {
+            if (stack.getItem() != type)
+                return false;
+            renderTileEntityAt(null, 0, 0, 0, 0, -1);
+            return true;
+        });
+//        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     @Override
-    public void renderTileEntityAt(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+        //TODO
         render(engine.getEnergyStage(), engine.getProgress(), engine.getOrientation(), x, y, z);
     }
 

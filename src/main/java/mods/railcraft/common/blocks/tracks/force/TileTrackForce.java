@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
+import mods.railcraft.common.blocks.machine.single.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockRailBase;
