@@ -12,14 +12,12 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IronTank implements MetalTank {
@@ -44,7 +42,7 @@ public class IronTank implements MetalTank {
 
     @Override
     public boolean isWallBlock(IBlockState meta) {
-        return meta.getBlock() == RailcraftBlocks.TANK_IRON_WALL.block();
+        return RailcraftBlocks.TANK_IRON_WALL.isEqual(meta.getBlock());
     }
 
     @Override

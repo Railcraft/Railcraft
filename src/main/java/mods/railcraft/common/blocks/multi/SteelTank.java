@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -24,9 +25,9 @@ public class SteelTank implements MetalTank {
     private final Set<IBlockState> tankBlocks = new HashSet<>();
 
     public SteelTank() {
-//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_WALL.ordinal());
-//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_VALVE.ordinal());
-//        tankBlocks.add(EnumMachineBeta.TANK_STEEL_GAUGE.ordinal());
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_VALVE.getDefaultState());
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
     }
 
     @Override
@@ -41,8 +42,7 @@ public class SteelTank implements MetalTank {
 
     @Override
     public boolean isWallBlock(IBlockState meta) {
-//        return meta == EnumMachineBeta.TANK_STEEL_WALL.ordinal(); TODO
-        return false;
+        return RailcraftBlocks.TANK_STEEL_WALL.isEqual(meta.getBlock());
     }
 
     @Override

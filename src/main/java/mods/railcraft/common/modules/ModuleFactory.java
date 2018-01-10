@@ -63,7 +63,10 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftBlocks.STEAM_OVEN,
                         RailcraftBlocks.TANK_IRON_GAUGE,
                         RailcraftBlocks.TANK_IRON_VALVE,
-                        RailcraftBlocks.TANK_IRON_WALL
+                        RailcraftBlocks.TANK_IRON_WALL,
+                        RailcraftBlocks.TANK_STEEL_GAUGE,
+                        RailcraftBlocks.TANK_STEEL_VALVE,
+                        RailcraftBlocks.TANK_STEEL_WALL
                 );
             }
 

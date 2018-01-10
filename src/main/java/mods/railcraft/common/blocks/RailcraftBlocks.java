@@ -154,6 +154,9 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemTankIronGauge::new),
     TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemTankIronValve::new),
     TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemTankIronWall::new),
+    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemTankSteelGauge::new),
+    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemTankSteelValve::new),
+    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemTankSteelWall::new),
     ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
