@@ -205,12 +205,12 @@ public class ClientProxy extends CommonProxy {
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
 
-        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
-        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
 
 //        bindTESR(EnumMachineDelta.CAGE, TESRCagedEntity::new);
 

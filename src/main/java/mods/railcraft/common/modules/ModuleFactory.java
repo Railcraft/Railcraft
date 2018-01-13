@@ -284,15 +284,15 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
-                if (metalsChest.isAvailable())
-                    CraftingPlugin.addRecipe(metalsChest.getStack(),
-                            "GPG",
-                            "PAP",
-                            "GPG",
-                            'A', new ItemStack(Blocks.ANVIL),
-                            'P', new ItemStack(Blocks.PISTON),
-                            'G', "gearSteel");
+//                EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
+//                if (metalsChest.isAvailable())
+//                    CraftingPlugin.addRecipe(metalsChest.getStack(),
+//                            "GPG",
+//                            "PAP",
+//                            "GPG",
+//                            'A', new ItemStack(Blocks.ANVIL),
+//                            'P', new ItemStack(Blocks.PISTON),
+//                            'G', "gearSteel");
             }
 
             private void addWorldspikeOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {

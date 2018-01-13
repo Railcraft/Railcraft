@@ -59,14 +59,14 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                initIronTank();
 //                initSteelTank();
 
-                EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
-                if (voidChest.isAvailable())
-                    CraftingPlugin.addRecipe(voidChest.getStack(),
-                            "OOO",
-                            "OPO",
-                            "OOO",
-                            'O', new ItemStack(Blocks.OBSIDIAN),
-                            'P', new ItemStack(Items.ENDER_PEARL));
+//                EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
+//                if (voidChest.isAvailable())
+//                    CraftingPlugin.addRecipe(voidChest.getStack(),
+//                            "OOO",
+//                            "OPO",
+//                            "OOO",
+//                            'O', new ItemStack(Blocks.OBSIDIAN),
+//                            'P', new ItemStack(Items.ENDER_PEARL));
 
                 ManipulatorVariant itemLoader = ManipulatorVariant.ITEM_LOADER;
                 if (itemLoader.isAvailable()) {
