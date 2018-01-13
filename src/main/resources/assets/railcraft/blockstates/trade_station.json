@@ -3,7 +3,12 @@
   "defaults": {
     "model": "cube",
     "textures": {
-      ""
+      "down": "railcraft:blocks/trade_station_0",
+      "up": "railcraft:blocks/trade_station_0",
+      "north": "railcraft:blocks/trade_station_2",
+      "south": "railcraft:blocks/trade_station_1",
+      "west": "railcraft:blocks/trade_station_0",
+      "east": "railcraft:blocks/trade_station_0",
       "particle": "railcraft:blocks/trade_station_0"
     }
   },

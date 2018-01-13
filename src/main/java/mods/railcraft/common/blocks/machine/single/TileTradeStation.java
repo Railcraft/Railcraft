@@ -165,7 +165,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        direction = placer == null ? EnumFacing.NORTH : MiscTools.getSideFacingPlayer(getPos(), placer);
+        direction = placer == null ? EnumFacing.NORTH : MiscTools.getHorizontalSideFacingPlayer(placer);
     }
 
     @Override
