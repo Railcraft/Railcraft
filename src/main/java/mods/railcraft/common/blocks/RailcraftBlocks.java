@@ -157,6 +157,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemTankSteelGauge::new),
     TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemTankSteelValve::new),
     TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemTankSteelWall::new),
+    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemFluxTransformer::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();

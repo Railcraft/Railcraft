@@ -8,6 +8,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +48,16 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     protected BlockEntityDelegate(Material material, MapColor mapColor) {
         super(material, mapColor);
+    }
+
+    {
+        setResistance(4.5F);
+        setHardness(2.0F);
+        // TODO: This can't be right
+        setSoundType(SoundType.STONE);
+        setTickRandomly(true);
+        this.fullBlock = true;
+        lightOpacity = 255;
     }
 
     public abstract Class<? extends TileEntity> getTileClass(IBlockState state);
