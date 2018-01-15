@@ -23,6 +23,7 @@ public class BlockSteamOven extends BlockMultiBlockInventory {
 
     public BlockSteamOven() {
         super(Material.ROCK);
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Override

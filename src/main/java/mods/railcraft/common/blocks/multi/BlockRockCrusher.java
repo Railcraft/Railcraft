@@ -1,13 +1,11 @@
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.util.property.PropertyCharacter;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,12 +21,13 @@ import java.util.Random;
  */
 public class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
-    public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[] {'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
+    public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
     private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
         super(Material.ROCK);
         setDefaultState(getDefaultState().withProperty(ICON, 'O'));
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Nullable

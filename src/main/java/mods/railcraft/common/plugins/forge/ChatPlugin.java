@@ -14,6 +14,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -72,7 +73,7 @@ public class ChatPlugin {
             if (args[i] instanceof String) {
                 args[i] = translateMessage((String) args[i]);
             } else if (args[i] instanceof GameProfile) {
-                String username = ((GameProfile) args[i]).getName();
+                String username = TileEntitySkull.updateGameprofile(((GameProfile) args[i])).getName();
                 args[i] = username != null ? username : "[unknown]";
             }
         }

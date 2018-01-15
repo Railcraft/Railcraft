@@ -16,18 +16,17 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -45,21 +44,20 @@ public interface ISmartTile {
     }
 
     default List<ItemStack> getDrops(int fortune) {
-        World world = tile().getWorld();
-        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
-        List<ItemStack> ret = new ArrayList<>();
-        Random rand = world.rand;
-
-        int count = state.getBlock().quantityDropped(state, fortune, rand);
-        for(int i = 0; i < count; i++)
-        {
-            Item item = state.getBlock().getItemDropped(state, rand, fortune);
-            if (item != null)
-            {
-                ret.add(new ItemStack(item, 1, state.getBlock().damageDropped(state)));
-            }
-        }
-        return ret;
+        return Collections.singletonList(new ItemStack(tile().getBlockType())); // fast and furious
+//        World world = tile().getWorld();
+//        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
+//        List<ItemStack> ret = new ArrayList<>();
+//        Random rand = world.rand;
+//
+//        int count = state.getBlock().quantityDropped(state, fortune, rand);
+//        int damage = state.getBlock().damageDropped(state);
+//        Item item = state.getBlock().getItemDropped(state, rand, fortune);
+//        if (item != null)
+//            for (int i = 0; i < count; i++) {
+//                ret.add(new ItemStack(item, 1, damage));
+//            }
+//        return ret;
     }
 
     default List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
@@ -67,9 +65,10 @@ public interface ISmartTile {
     }
 
     default boolean canSilkHarvest(EntityPlayer player) {
-        return false;
+        return true;
     }
 
+    @OverridingMethodsMustInvokeSuper
     default void initFromItem(ItemStack stack) {
     }
 
@@ -120,10 +119,6 @@ public interface ISmartTile {
 
     default float getHardness() {
         return 2.0f;
-    }
-
-    default boolean isPoweringTo(EnumFacing side) {
-        return false;
     }
 
     default boolean canConnectRedstone(EnumFacing dir) {

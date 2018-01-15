@@ -20,6 +20,7 @@ public class BlockTankSteelValve extends BlockMultiBlock {
             state = state.withProperty(touch, false);
         }
         setDefaultState(state);
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Override

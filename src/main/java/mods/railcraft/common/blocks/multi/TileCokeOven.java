@@ -32,6 +32,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
@@ -40,9 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
-import static mods.railcraft.common.util.inventory.InvTools.incSize;
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory {
 
@@ -110,7 +109,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        Map<Character, IBlockState> blockMapping = new HashMap<>();
         blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
@@ -183,9 +182,10 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
                         ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
 
-                        if (recipe != null)
+                        if (recipe != null) {
+                            FluidStack fluidOutput = recipe.getFluidOutput();
                             if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && sizeOf(output) + sizeOf(recipe.getOutput()) <= output.getMaxStackSize()))
-                                    && tank.fill(recipe.getFluidOutput(), false) >= recipe.getFluidOutput().amount) {
+                                    && (fluidOutput == null || tank.fill(recipe.getFluidOutput(), false) >= fluidOutput.amount)) {
                                 cookTimeTotal = recipe.getCookTime();
                                 cookTime += COOK_STEP_LENGTH;
                                 setCooking(true);
@@ -205,7 +205,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                                 cookTime = 0;
                                 setCooking(false);
                             }
-                        else {
+                        } else {
                             cookTime = 0;
                             setCooking(false);
                             setInventorySlotContents(SLOT_INPUT, emptyStack());
@@ -258,7 +258,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {

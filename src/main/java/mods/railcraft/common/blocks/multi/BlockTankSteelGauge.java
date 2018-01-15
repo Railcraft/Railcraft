@@ -25,6 +25,7 @@ public class BlockTankSteelGauge extends BlockMultiBlock {
         setDefaultState(state);
         fullBlock = false;
         lightOpacity = 0;
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Override

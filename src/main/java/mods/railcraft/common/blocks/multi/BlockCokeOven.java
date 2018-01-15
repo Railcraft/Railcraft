@@ -1,11 +1,9 @@
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,6 +18,7 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
 
     public BlockCokeOven() {
         super(Material.ROCK);
+        setHarvestLevel("pickaxe", 0);
     }
 
     @Override

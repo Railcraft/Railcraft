@@ -25,6 +25,7 @@ public class BlockFluxTransformer extends BlockMultiBlock implements IChargeBloc
     public BlockFluxTransformer() {
         super(Material.ROCK);
         setTickRandomly(true);
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Override

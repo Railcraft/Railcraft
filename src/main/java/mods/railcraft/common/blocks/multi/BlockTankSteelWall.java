@@ -13,6 +13,7 @@ public class BlockTankSteelWall extends BlockMultiBlock {
 
     public BlockTankSteelWall() {
         super(Material.ROCK);
+        setHarvestLevel("pickaxe", 1);
     }
 
     @Override

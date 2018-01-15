@@ -244,6 +244,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return worldObj;
     }
 
+    @Deprecated //useless
     public short getId() {
         return -1;
     }

@@ -413,7 +413,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         List<ItemStack> items = super.getDrops(fortune);
         if (items.isEmpty())
             return Collections.emptyList();
-        ItemStack drop = items.get(0); //TODO fix
+        ItemStack drop = new ItemStack(getBlockType());
         if (!InvTools.isEmpty(drop)) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
@@ -428,7 +428,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         List<ItemStack> old = getBlockType().getDrops(worldObj, getPos(), getBlockState(), fortune);
         if (old.isEmpty())
             return Collections.emptyList();
-        ItemStack drop = old.get(0); //TODO fix
+        ItemStack drop = new ItemStack(getBlockType());
         if (!InvTools.isEmpty(drop)) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) color.ordinal());
