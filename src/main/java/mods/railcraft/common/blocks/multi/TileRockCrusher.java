@@ -182,7 +182,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         IBlockState self = getBlockState();
-        IBlockState other = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState other = WorldPlugin.getBlockState(world, pos);
         switch (mapPos) {
             case 'O': // Other
                 if (self != other)
@@ -202,7 +202,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                     return true;
                 break;
             case 'A': // Air
-                if (worldObj.isAirBlock(pos))
+                if (world.isAirBlock(pos))
                     return true;
                 break;
         }
@@ -252,7 +252,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                     }
                 }
 
-                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getPos().up());
+                EntityLivingBase entity = MiscTools.getEntityAt(world, EntityLivingBase.class, getPos().up());
                 if (entity != null && canUseMasterEnergy(KILLING_POWER_COST))
                     if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useMasterEnergy(KILLING_POWER_COST);
@@ -298,7 +298,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
                             InvTools.removeOneItem(invInput, input);
 
-                            SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
@@ -331,7 +331,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos());
             return true;
         }
         return false;
@@ -426,7 +426,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     private ChargeNetwork.ChargeNode node() {
         if (node == null) {
-            node = ChargeManager.getNetwork(worldObj).getNode(pos);
+            node = ChargeManager.getNetwork(world).getNode(pos);
         }
         return node;
     }

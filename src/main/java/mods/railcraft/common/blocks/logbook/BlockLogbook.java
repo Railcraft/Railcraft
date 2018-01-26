@@ -109,7 +109,7 @@ public class BlockLogbook extends BlockContainerRailcraft {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing.Axis axis = facing.getAxis();
         if (axis.isVertical()) {
             IBlockState state = WorldPlugin.getBlockState(worldIn, pos.offset(facing.getOpposite()));

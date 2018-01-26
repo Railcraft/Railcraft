@@ -425,7 +425,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
         List<ItemStack> items = new ArrayList<>();
-        List<ItemStack> old = getBlockType().getDrops(worldObj, getPos(), getBlockState(), fortune);
+        List<ItemStack> old = getBlockType().getDrops(world, getPos(), getBlockState(), fortune);
         if (old.isEmpty())
             return Collections.emptyList();
         ItemStack drop = new ItemStack(getBlockType());
@@ -460,7 +460,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             TankManager tankManager = getTankManager();
             if (isStructureValid() && tankManager != null && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
@@ -479,7 +479,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
             return true;
         }
         return false;
@@ -525,7 +525,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
         switch (mapPos) {
             case 'O': // Other
                 return !getTankType().isTankBlock(state);
@@ -537,14 +537,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             case 'T': // Top Block
                 if (!getTankType().isTankBlock(state))
                     return false;
-                TileEntity tile = worldObj.getTileEntity(pos);
+                TileEntity tile = world.getTileEntity(pos);
                 if (!(tile instanceof TileMultiBlock)) {
-                    worldObj.removeTileEntity(pos);
+                    world.removeTileEntity(pos);
                     return true;
                 }
                 return !((TileMultiBlock) tile).isStructureValid();
             case 'A': // Air
-                return worldObj.isAirBlock(pos);
+                return world.isAirBlock(pos);
         }
         return true;
     }
@@ -553,13 +553,13 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public void update() {
         super.update();
 
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             if (isMaster) {
 
                 if (clock % FluidTools.BUCKET_FILL_TIME == 0)
                     FluidTools.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
 
-                if (networkTimer.hasTriggered(worldObj, NETWORK_UPDATE_INTERVAL))
+                if (networkTimer.hasTriggered(world, NETWORK_UPDATE_INTERVAL))
                     syncClient();
             }
     }

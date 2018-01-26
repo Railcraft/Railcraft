@@ -40,7 +40,7 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void teleportEffect(Entity entity, Vec3d destination) {
-        if (Game.isClient(entity.worldObj))
+        if (Game.isClient(entity.world))
             return;
 
         try {
@@ -48,7 +48,7 @@ public class CommonEffectProxy implements IEffectManager {
             RailcraftOutputStream data = pkt.getOutputStream();
             data.writeVec3d(entity.getPositionVector());
             data.writeVec3d(destination);
-            pkt.sendPacket(entity.worldObj, entity.getPositionVector());
+            pkt.sendPacket(entity.world, entity.getPositionVector());
         } catch (IOException ignored) {
         }
 

@@ -38,7 +38,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_ENERGY, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.UNLOADER_ENERGY, player, world, getPos());
         return true;
     }
 

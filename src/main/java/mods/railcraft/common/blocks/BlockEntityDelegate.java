@@ -120,7 +120,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     public List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getBlockDroppedSilkTouch(fortune)).orElse(Collections.singletonList(createStackedBlock(state)));
+        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getBlockDroppedSilkTouch(fortune)).orElse(Collections.singletonList(getSilkTouchDrop(state)));
     }
 
     @Override

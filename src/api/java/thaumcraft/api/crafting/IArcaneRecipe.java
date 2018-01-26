@@ -7,9 +7,10 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import thaumcraft.api.aspects.AspectList;
 
-public interface IArcaneRecipe extends IRecipe
+public interface IArcaneRecipe extends IRecipe, ITCRecipe
 {
 	
+
 	boolean matches(InventoryCrafting inv, World worldIn);
 	boolean matches(InventoryCrafting inv, World world, EntityPlayer player);
 
@@ -21,8 +22,9 @@ public interface IArcaneRecipe extends IRecipe
 
     ItemStack[] getRemainingItems(InventoryCrafting inv);
     
-    AspectList getAspects();
-    AspectList getAspects(InventoryCrafting inv);
-    String[] getResearch();
+    int getVis();
+    int getVis(InventoryCrafting inv);
+    String getResearch();
     
+    ItemStack[] getCrystals();
 }

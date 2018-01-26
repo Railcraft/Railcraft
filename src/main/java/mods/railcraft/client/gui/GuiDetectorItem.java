@@ -115,8 +115,8 @@ public class GuiDetectorItem extends TileGui {
             for (int slotNum = 0; slotNum < 9; slotNum++) {
                 Slot slot = this.inventorySlots.inventorySlots.get(slotNum);
 
-                int displayX = slot.xDisplayPosition;
-                displayY = slot.yDisplayPosition;
+                int displayX = slot.xPos;
+                displayY = slot.yPos;
                 this.drawGradientRect(displayX, displayY, displayX + 16, displayY + 16, color.getRGB(), color.getRGB());
             }
             OpenGL.glEnable(GL11.GL_LIGHTING);

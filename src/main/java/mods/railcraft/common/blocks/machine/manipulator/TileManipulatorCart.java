@@ -75,7 +75,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
 
     @Nullable
     public EntityMinecart getCart() {
-        return CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, getFacing());
+        return CartToolsAPI.getMinecartOnSide(world, getPos(), 0.1f, getFacing());
     }
 
     public boolean canHandleCart(EntityMinecart cart) {
@@ -258,7 +258,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     public final int getPowerOutput(EnumFacing side) {
         boolean emit = false;
         if (isPowered()) {
-            Block block = WorldPlugin.getBlock(worldObj, getPos().offset(side.getOpposite()));
+            Block block = WorldPlugin.getBlock(world, getPos().offset(side.getOpposite()));
             emit = TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
         }
         return emit ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;

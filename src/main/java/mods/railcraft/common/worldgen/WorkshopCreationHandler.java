@@ -24,7 +24,7 @@ public class WorkshopCreationHandler implements IVillageCreationHandler {
 
     @Override
     public PieceWeight getVillagePieceWeight(Random random, int size) {
-        return new PieceWeight(ComponentWorkshop.class, 3, MathHelper.getRandomIntegerInRange(random, size, 1 + size));
+        return new PieceWeight(ComponentWorkshop.class, 3, MathHelper.getInt(random, size, 1 + size));
     }
 
     @Override

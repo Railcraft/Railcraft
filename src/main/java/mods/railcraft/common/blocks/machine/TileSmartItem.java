@@ -45,7 +45,7 @@ public abstract class TileSmartItem extends RailcraftTileEntity implements ISmar
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, getPos());
+        InvTools.dropItem(stack, world, getPos());
     }
 
     @Override
@@ -107,7 +107,7 @@ public abstract class TileSmartItem extends RailcraftTileEntity implements ISmar
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 

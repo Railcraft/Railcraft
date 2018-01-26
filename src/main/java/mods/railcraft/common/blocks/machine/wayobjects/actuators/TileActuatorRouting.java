@@ -68,7 +68,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
             }
             return false;
         }
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
                 if (inv.getStackInSlot(0) == null) {
@@ -91,7 +91,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ROUTING, player, world, getPos());
         return true;
     }
 
@@ -109,7 +109,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     @Override

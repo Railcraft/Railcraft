@@ -46,23 +46,23 @@ public class ChatPlugin {
      * Don't use this from the server thread! It will not translate stuff correctly!
      */
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
-        player.addChatMessage(makeMessage(String.format(LocalizationPlugin.translate(msg), args)));
+        player.sendMessage(makeMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
     public static void sendLocalizedChatFromClient(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player != null && Game.isClient(player.worldObj))
+        if (player != null && Game.isClient(player.world))
             sendLocalizedChat(player, msg, args);
     }
 
     public static void sendLocalizedChatFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player != null && Game.isHost(player.worldObj)) {
+        if (player != null && Game.isHost(player.world)) {
             modifyArgs(args);
-            player.addChatMessage(translateMessage(msg, args));
+            player.sendMessage(translateMessage(msg, args));
         }
     }
 
     public static void sendLocalizedHotBarMessageFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player instanceof EntityPlayerMP && Game.isHost(player.worldObj)) {
+        if (player instanceof EntityPlayerMP && Game.isHost(player.world)) {
             modifyArgs(args);
             ((EntityPlayerMP) player).connection.sendPacket(new SPacketChat(translateMessage(msg, args), (byte) 2));
         }

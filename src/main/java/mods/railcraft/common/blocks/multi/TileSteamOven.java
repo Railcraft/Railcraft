@@ -188,7 +188,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
 
         if (Game.isClient(getWorld())) {
             if (hasFinishedCycle())
-                EffectManager.instance.steamEffect(worldObj, this, +0.25);
+                EffectManager.instance.steamEffect(world, this, +0.25);
             return;
         }
 
@@ -207,7 +207,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                                 if (smeltItems()) {
                                     cookTime = 0;
                                     setHasFinishedCycle(true);
-                                    SoundHelper.playSound(worldObj, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 1F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
+                                    SoundHelper.playSound(world, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 1F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
                                 }
                         }
                     } else
@@ -291,7 +291,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
-            GuiHandler.openGui(EnumGui.STEAN_OVEN, player, worldObj, masterBlock.getPos());
+            GuiHandler.openGui(EnumGui.STEAN_OVEN, player, world, masterBlock.getPos());
             return true;
         }
         return false;

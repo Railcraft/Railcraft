@@ -109,9 +109,9 @@ public class TileFluidLoader extends TileFluidManipulator {
     protected void upkeep() {
         super.upkeep();
 
-        InvTools.validateInventory(this, SLOT_INPUT, worldObj, getPos(), s -> isItemValidForSlot(SLOT_INPUT, s));
-        InvTools.validateInventory(this, SLOT_PROCESSING, worldObj, getPos(), FluidItemHelper::isContainer);
-        InvTools.validateInventory(this, SLOT_OUTPUT, worldObj, getPos(), FluidItemHelper::isContainer);
+        InvTools.validateInventory(this, SLOT_INPUT, world, getPos(), s -> isItemValidForSlot(SLOT_INPUT, s));
+        InvTools.validateInventory(this, SLOT_PROCESSING, world, getPos(), FluidItemHelper::isContainer);
+        InvTools.validateInventory(this, SLOT_OUTPUT, world, getPos(), FluidItemHelper::isContainer);
 
         tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }
@@ -122,7 +122,7 @@ public class TileFluidLoader extends TileFluidManipulator {
         needsPipe = false;
         EntityMinecart cart = super.getCart();
         if (cart == null) {
-            cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos().down(), 0.2f, EnumFacing.DOWN);
+            cart = CartToolsAPI.getMinecartOnSide(world, getPos().down(), 0.2f, EnumFacing.DOWN);
             needsPipe = true;
         }
         return cart;
@@ -206,8 +206,8 @@ public class TileFluidLoader extends TileFluidManipulator {
             p = false;
         if (p) {
             resetPipe();
-            if (worldObj != null) {
-                TileEntity tile = worldObj.getTileEntity(getPos().down(2));
+            if (world != null) {
+                TileEntity tile = world.getTileEntity(getPos().down(2));
                 if (tile instanceof TileTrackOutfitted) {
                     TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
                     ITrackKitInstance track = trackTile.getTrackKitInstance();
@@ -267,7 +267,7 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, world, getPos());
         return true;
     }
 }

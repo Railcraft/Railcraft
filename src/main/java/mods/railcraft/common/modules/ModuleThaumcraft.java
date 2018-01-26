@@ -38,8 +38,8 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                ThaumcraftPlugin.registerAspects();
-                ThaumcraftPlugin.setupResearch();
+//                ThaumcraftPlugin.registerAspects();
+//                ThaumcraftPlugin.setupResearch();
             }
         });
     }

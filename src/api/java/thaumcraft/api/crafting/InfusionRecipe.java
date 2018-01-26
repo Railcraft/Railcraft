@@ -8,22 +8,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.research.ResearchHelper;
+import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
-public class InfusionRecipe
+public class InfusionRecipe implements ITCRecipe
 {
 	public AspectList aspects;
-	public String[] research;
+	public String research;
+	private String name;
 	public Object[] components;
 	public Object recipeInput;
 	public Object recipeOutput;
 	public int instability;
 	
-	public InfusionRecipe(String research, Object output, int inst, AspectList aspects2, Object input, Object[] recipe) {
-		this(new String[]{research},output,inst,aspects2,input,recipe);
-	}
+	/**
+	 * @param research the research key required for this recipe to work. Leave blank if it will work without research<br>
+	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
+	 * @param result the recipe output. It can either be an itemstack or an nbt compound tag that will be added to the central item
+	 * 		If nbt it needs to be in the format Object[] {"nbttagname", NBT Tag Object}  eg. new Object[] { "mask", new NBTTagInt(1) }
+	 * @param instability a number that represents the N in 1000 chance for the infusion altar to spawn an
+	 * 		  instability effect each second while the crafting is in progress
+	 * @param aspects the essentia cost per aspect. 
+	 * @param aspects input the central item to be infused. If string is passed it will look up oredictionary entries
+	 * @param recipe An array of items required to craft this. Input itemstacks are NBT sensitive. 
+	 * 				If string is passed it will look up oredictionary entries.
+	 */
 	
-	public InfusionRecipe(String[] research, Object output, int inst, AspectList aspects2, Object input, Object[] recipe) {
+	public InfusionRecipe(String research, Object output, int inst, AspectList aspects2, Object input, Object[] recipe) {
+		this.name="";
 		this.research = research;
 		this.recipeOutput = output;
 		this.recipeInput = input;
@@ -39,7 +50,7 @@ public class InfusionRecipe
 	public boolean matches(ArrayList<ItemStack> input, ItemStack central, World world, EntityPlayer player) {
 		if (getRecipeInput()==null) return false;
 			
-		if (research!=null && research[0].length()>0 && !ResearchHelper.isResearchComplete(player.getName(), research)) {
+		if (!ThaumcraftCapabilities.getKnowledge(player).isResearchKnown(research)) {
     		return false;
     	}
 		
@@ -71,7 +82,7 @@ public class InfusionRecipe
 		return ii.size()==0?true:false;
     }
     
-    public String[] getResearch() {
+    public String getResearch() {
 		return research;
     }
     
@@ -103,4 +114,14 @@ public class InfusionRecipe
     public int getInstability(EntityPlayer player, ItemStack input, ArrayList<ItemStack> comps) {
 		return instability;
     }
+
+	@Override
+	public String getRecipeName() {
+		return name;
+	}
+	
+	@Override
+	public void setRecipeName(String name) {
+		this.name=name;
+	}
 }

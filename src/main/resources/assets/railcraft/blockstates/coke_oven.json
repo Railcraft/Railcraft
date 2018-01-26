@@ -7,14 +7,11 @@
     }
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
+    "inventory": {
+      "textures": {
+        "side": "railcraft:blocks/coke_oven_1"
       }
-    ],
+    },
     "icon": {
       "0": {
         "textures": {

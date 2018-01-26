@@ -133,10 +133,10 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
                 currentEmblem = data.readUTF();
                 break;
             case OPEN_UNLOCK:
-                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH_UNLOCK, sender, worldObj, getPos());
+                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH_UNLOCK, sender, world, getPos());
                 break;
             case OPEN_NORMAL:
-                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, sender, worldObj, getPos());
+                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, sender, world, getPos());
                 break;
             case UNLOCK_EMBLEM:
                 if (EmblemToolsServer.manager != null) {
@@ -153,7 +153,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         BlockPos offsetPos = getPos().add(0.5, 0.5, 0.5);
         if (player.getDistanceSq(offsetPos) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, player, world, getPos());
         return true;
     }
 
@@ -173,7 +173,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (clock % 16 == 0)

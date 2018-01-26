@@ -7,12 +7,6 @@
 //import net.minecraft.item.ItemStack;
 //import net.minecraft.init.Items;
 
-/**
- * Created by GeneralCamo on 4/27/2017.
- *
- * @author GeneralCamo
- *         Created for Railcraft <http://www.railcraft.info>
- */
 //public class CropCreosote extends RailcraftCropCard {
 //
 //    public String getId() {

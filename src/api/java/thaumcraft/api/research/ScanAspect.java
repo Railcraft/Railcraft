@@ -6,9 +6,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.capabilities.IPlayerKnowledge.EnumKnowledgeType;
 
 public class ScanAspect implements IScanThing {
 	
@@ -18,8 +20,7 @@ public class ScanAspect implements IScanThing {
 	/**
 	 * NOTE: You should not have to add your own entry for aspects since a trigger research is added automatically for each aspect in the format "![tagname]"
 	 * for example: "!vitium"	  
-	 */
-	
+	 */	
 
 	public ScanAspect(String research, Aspect aspect) {
 		this.research = research;
@@ -41,8 +42,8 @@ public class ScanAspect implements IScanThing {
 			if (obj instanceof EntityItem && ((EntityItem)obj).getEntityItem()!=null) 
 				is = ((EntityItem)obj).getEntityItem();
 			if (obj instanceof BlockPos) {
-				Block b = player.worldObj.getBlockState((BlockPos) obj).getBlock();
-				is = new ItemStack(b,1,b.getMetaFromState(player.worldObj.getBlockState((BlockPos) obj)));
+				Block b = player.world.getBlockState((BlockPos) obj).getBlock();
+				is = new ItemStack(b,1,b.getMetaFromState(player.world.getBlockState((BlockPos) obj)));
 			}
 			
 			if (is!=null) {
@@ -54,7 +55,15 @@ public class ScanAspect implements IScanThing {
 	}
 	
 	@Override
-	public String getResearchKey() {
+	public void onSuccess(EntityPlayer player, Object obj) {
+		ThaumcraftApi.internalMethods.addKnowledge(player, EnumKnowledgeType.OBSERVATION, ResearchCategories.getResearchCategory("AUROMANCY"), 1);
+		ThaumcraftApi.internalMethods.addKnowledge(player, EnumKnowledgeType.OBSERVATION, ResearchCategories.getResearchCategory("BASICS"), 1);
+		ThaumcraftApi.internalMethods.addKnowledge(player, EnumKnowledgeType.OBSERVATION, ResearchCategories.getResearchCategory("ALCHEMY"), 1);
+		ThaumcraftApi.internalMethods.addKnowledge(player, EnumKnowledgeType.EPIPHANY, null, 1);
+	}
+	
+	@Override
+	public String getResearchKey(EntityPlayer player, Object object) {
 		return research;
 	}
 	

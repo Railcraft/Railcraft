@@ -47,7 +47,7 @@ public class TrackKitMessenger extends TrackKitPowered {
         if (!isPowered())
             return;
         if (lastCart != null && lastCart.get() == cart) {
-            if (timer.hasTriggered(cart.worldObj, 100)) {
+            if (timer.hasTriggered(cart.world, 100)) {
                 sendMessage(cart);
             }
         } else {
@@ -97,12 +97,12 @@ public class TrackKitMessenger extends TrackKitPowered {
 
     public void setTitle(ICommandSender setter, ITextComponent title) {
         setTitle(title);
-        setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.set"));
+        setter.sendMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.set"));
     }
 
     public void setSubtitle(ICommandSender setter, ITextComponent subtitle) {
         setSubtitle(subtitle);
-        setter.addChatMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set"));
+        setter.sendMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set"));
     }
 
     protected void sendMessage(EntityMinecart cart) {

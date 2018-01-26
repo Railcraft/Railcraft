@@ -167,7 +167,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     public void update() {
         super.update();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (isStructureValid()) {
                 if (isMaster())
                     addToNet();
@@ -210,7 +210,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 //                System.out.println("addedEnergy=" + addedEnergy);
                 if (clock % 4 == 0) {
                     gaugeState = (byte) getOutput();
-                    WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, gaugeState);
+                    WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, gaugeState);
                 }
             }
         }
@@ -258,14 +258,14 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     @Override
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TURBINE, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.TURBINE, player, world, mBlock.getPos());
             return true;
         }
         return false;

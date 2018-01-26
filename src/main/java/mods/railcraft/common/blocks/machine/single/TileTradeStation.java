@@ -81,7 +81,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.TRADE_STATION, player, worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
+        GuiHandler.openGui(EnumGui.TRADE_STATION, player, world, getPos().getX(), getPos().getY(), getPos().getZ());
         return true;
     }
 
@@ -109,7 +109,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         float x = getPos().getX();
         float y = getPos().getY();
         float z = getPos().getZ();
-        return MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, range);
+        return MiscTools.getNearbyEntities(world, EntityVillager.class, x, y - 1, y + 3, z, range);
     }
 
     private boolean attemptTrade(List<EntityVillager> villagers, int tradeSet) {
@@ -240,7 +240,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     }
 
     public void nextTrade(int tradeSet) {
-        EntityVillager villager = new EntityVillager(worldObj);
+        EntityVillager villager = new EntityVillager(world);
         villager.setProfession(profession);
         MerchantRecipeList recipes = villager.getRecipes(null);
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));

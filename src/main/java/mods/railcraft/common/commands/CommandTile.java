@@ -42,7 +42,7 @@ public class CommandTile extends SubCommand {
 
             TileEntity tile = WorldPlugin.getBlockTile(sender.getEntityWorld(), pos);
             if (tile instanceof RailcraftTileEntity) {
-                sender.addChatMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
+                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
             } else {
                 throw new BlockNotFoundException();
             }
@@ -63,7 +63,7 @@ public class CommandTile extends SubCommand {
             TileEntity tile = WorldPlugin.getBlockTile(sender.getEntityWorld(), pos);
             if (tile instanceof RailcraftTileEntity) {
                 ((RailcraftTileEntity) tile).clearOwner();
-                sender.addChatMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
+                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
             } else {
                 throw new BlockNotFoundException();
             }

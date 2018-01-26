@@ -216,9 +216,9 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (explode) {
-                worldObj.createExplosion(null, getX(), getY(), getZ(), 5f + 0.1f * getNumTanks(), true);
+                world.createExplosion(null, getX(), getY(), getZ(), 5f + 0.1f * getNumTanks(), true);
                 explode = false;
                 return;
             }
@@ -247,7 +247,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos());
+        IBlockState state = WorldPlugin.getBlockState(world, getPos());
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
 
@@ -269,7 +269,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
                     return false;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(pos))
+                if (!world.isAirBlock(pos))
                     return false;
                 break;
         }

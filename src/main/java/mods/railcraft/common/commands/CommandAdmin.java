@@ -62,7 +62,7 @@ public class CommandAdmin extends SubCommand {
 
     private static void kill(ICommandSender sender, Class<? extends Entity> entityClass) {
         sender.getEntityWorld()
-                .getLoadedEntityList()
+                .loadedEntityList
                 .stream()
                 .filter(entityClass::isInstance)
                 .forEach(Entity::setDead);

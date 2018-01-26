@@ -51,14 +51,14 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, world, getPos());
         return true;
     }
 
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             receiver.tickClient();
             return;
         }

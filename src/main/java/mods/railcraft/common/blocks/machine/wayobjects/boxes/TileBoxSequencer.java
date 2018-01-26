@@ -48,9 +48,9 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
-        if (worldObj.isRemote)
+        if (world.isRemote)
             return;
-        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
+        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos());
         if (!powerState && p) {
             powerState = true;
             incrementSequencer(true, new HashSet<TileEntity>(), 0);
@@ -60,7 +60,7 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
 
     @Override
     public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
-        if (worldObj.isRemote)
+        if (world.isRemote)
             return;
         if (neighbor instanceof TileBoxSequencer)
             return;
@@ -108,7 +108,7 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
             return true;
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
-        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos().offset(side));
+        IBlockState state = WorldPlugin.getBlockState(world, getPos().offset(side));
         Block block = state.getBlock();
         if (block == Blocks.REDSTONE_WIRE)
             return true;

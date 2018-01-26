@@ -31,7 +31,7 @@ public class GuiManipulatorCartRF extends GuiManipulatorCart {
         if (t instanceof TileRFManipulator)
             tile = (TileRFManipulator) t;
         else
-            mc.thePlayer.closeScreen();
+            mc.player.closeScreen();
     }
 
 }

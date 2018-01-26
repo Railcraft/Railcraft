@@ -64,7 +64,7 @@ public final class EntityCartJukebox extends CartBase {
 
     @Override
     public boolean doInteract(EntityPlayer player) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (!isEmpty(record)) {
                 entityDropItem(record.copy(), 0.5f);
                 record = emptyStack();

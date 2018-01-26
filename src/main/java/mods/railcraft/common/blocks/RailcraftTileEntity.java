@@ -128,16 +128,16 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public void markBlockForUpdate() {
 //        System.out.println("updating");
-        if (worldObj != null) {
+        if (world != null) {
             IBlockState state = getBlockState();
             if (state != null)
-                worldObj.notifyBlockUpdate(getPos(), state, state, 8);
+                world.notifyBlockUpdate(getPos(), state, state, 8);
         }
     }
 
     public void notifyBlocksOfNeighborChange() {
-        if (worldObj != null)
-            WorldPlugin.notifyBlocksOfNeighborChange(worldObj, getPos(), getBlockType());
+        if (world != null)
+            WorldPlugin.notifyBlocksOfNeighborChange(world, getPos(), getBlockType());
     }
 
     @Override
@@ -168,9 +168,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public final int getDimension() {
-        if (worldObj == null || worldObj.provider == null)
+        if (world == null || world.provider == null)
             return 0;
-        return worldObj.provider.getDimension();
+        return world.provider.getDimension();
     }
 
     public final void clearOwner() {
@@ -200,7 +200,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         List<String> debug = new ArrayList<>();
         debug.add("Railcraft Tile Entity Data Dump");
         debug.add("Object: " + this);
-        if (!worldObj.getGameRules().getBoolean("reducedDebugInfo"))
+        if (!world.getGameRules().getBoolean("reducedDebugInfo"))
             debug.add(String.format("Coordinates: d=%d, %s", getDimension(), getPos()));
         debug.add("Owner: " + owner.getName());
         debug.addAll(tileCache.getDebugOutput());
@@ -241,7 +241,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Nullable
     @Override
     public final World theWorld() {
-        return worldObj;
+        return world;
     }
 
     @Deprecated //useless

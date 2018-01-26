@@ -41,10 +41,10 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
         if (!isStructureValid())
             return;
         int oldLightValue = lightValue;
-        if (timer.hasTriggered(worldObj, 80))
+        if (timer.hasTriggered(world, 80))
             updateLightValue();
         if (oldLightValue != lightValue)
-            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
+            world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
         for (Map.Entry<EnumFacing, PropertyEnum<BlockTankIronGauge.RenderState>> entry : BlockTankIronGauge.TOUCHES.entrySet()) {
             EnumFacing face = entry.getKey();
             PropertyEnum<BlockTankIronGauge.RenderState> property = entry.getValue();
-            if (WorldPlugin.getBlock(worldObj, getPos().offset(face)) == getBlockType()) {
+            if (WorldPlugin.getBlock(world, getPos().offset(face)) == getBlockType()) {
                 base = base.withProperty(property, BlockTankIronGauge.RenderState.TRANSPARENT);
                 continue;
             }
@@ -79,8 +79,8 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
             if (face.getAxis() == EnumFacing.Axis.Y) {
                 base = base.withProperty(property, BlockTankIronGauge.RenderState.DEFAULT);
             } else {
-                boolean upConnected = WorldPlugin.getBlock(worldObj, this.pos.offset(EnumFacing.UP)) == getBlockType();
-                boolean downConnected = WorldPlugin.getBlock(worldObj, this.pos.offset(EnumFacing.DOWN)) == getBlockType();
+                boolean upConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.UP)) == getBlockType();
+                boolean downConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.DOWN)) == getBlockType();
                 if (upConnected) {
                     if (downConnected) {
                         base = base.withProperty(property, BlockTankIronGauge.RenderState.MIDDLE);

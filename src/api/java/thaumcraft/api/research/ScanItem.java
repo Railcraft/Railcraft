@@ -28,10 +28,12 @@ public class ScanItem implements IScanThing {
 		
 		return is!=null && ThaumcraftApiHelper.areItemStacksEqualForCrafting(is, stack);
 	}
-	
+
 	@Override
-	public String getResearchKey() {
+	public String getResearchKey(EntityPlayer player, Object object) {
 		return research;
 	}
+	
+	
 	
 }

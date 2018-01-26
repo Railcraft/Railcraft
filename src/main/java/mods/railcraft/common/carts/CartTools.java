@@ -90,7 +90,7 @@ public class CartTools {
                 if (cartStack.hasDisplayName())
                     cart.setCustomNameTag(cartStack.getDisplayName());
                 CartToolsAPI.setCartOwner(cart, owner);
-                world.spawnEntityInWorld(cart);
+                world.spawnEntity(cart);
                 return cart;
             }
         return null;
@@ -124,10 +124,10 @@ public class CartTools {
         setTravellingHighSpeed(cart, false);
         cart.motionX = 0;
         cart.motionZ = 0;
-        if (Game.isClient(cart.worldObj))
+        if (Game.isClient(cart.world))
             return;
         removePassengers(cart, cart.getPositionVector().addVector(0.0, 1.5, 0.0));
-        cart.worldObj.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
+        cart.world.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
     }
@@ -183,9 +183,9 @@ public class CartTools {
         GameProfile owner = CartToolsAPI.getCartOwner(cart);
         EntityPlayer player = null;
         if (!RailcraftConstantsAPI.UNKNOWN_PLAYER.equals(owner.getName()))
-            player = PlayerPlugin.getPlayer(cart.worldObj, owner);
+            player = PlayerPlugin.getPlayer(cart.world, owner);
         if (player == null)
-            player = RailcraftFakePlayer.get((WorldServer) cart.worldObj, cart.posX, cart.posY, cart.posZ);
+            player = RailcraftFakePlayer.get((WorldServer) cart.world, cart.posX, cart.posY, cart.posZ);
         return player;
     }
 
@@ -208,7 +208,7 @@ public class CartTools {
         debug.add("Railcraft Minecart Data Dump");
         String cartInfo;
         if (cart.getEntityWorld().getGameRules().getBoolean("reducedDebugInfo")) {
-            cartInfo = String.format("%s[\'%s\'/%d, l=\'%s\']", cart.getClass().getSimpleName(), cart.getName(), cart.getEntityId(), cart.worldObj.getWorldInfo().getWorldName());
+            cartInfo = String.format("%s[\'%s\'/%d, l=\'%s\']", cart.getClass().getSimpleName(), cart.getName(), cart.getEntityId(), cart.world.getWorldInfo().getWorldName());
         } else {
             cartInfo = cart.toString();
         }
@@ -249,7 +249,7 @@ public class CartTools {
     }
 
     public static boolean startBoost(EntityMinecart cart, BlockPos pos, BlockRailBase.EnumRailDirection dir, double startBoost) {
-        World world = cart.worldObj;
+        World world = cart.world;
         if (dir == BlockRailBase.EnumRailDirection.EAST_WEST) {
             if (world.isSideSolid(pos.west(), EnumFacing.EAST)) {
                 cart.motionX = startBoost;

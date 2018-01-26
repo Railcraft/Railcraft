@@ -122,20 +122,24 @@ public class Aspect {
 	}
 	
 	///////////////////////////////
+	private static ArrayList<Aspect> primals = new ArrayList<Aspect>();
 	public static ArrayList<Aspect> getPrimalAspects() {
-		ArrayList<Aspect> primals = new ArrayList<Aspect>();
-		Collection<Aspect> pa = aspects.values();
-		for (Aspect aspect:pa) {
-			if (aspect.isPrimal())  primals.add(aspect);
+		if (primals.isEmpty()) {
+			Collection<Aspect> pa = aspects.values();
+			for (Aspect aspect:pa) {
+				if (aspect.isPrimal())  primals.add(aspect);
+			}
 		}
 		return primals;
 	}
 	
+	private static ArrayList<Aspect> compounds = new ArrayList<Aspect>();	
 	public static ArrayList<Aspect> getCompoundAspects() {
-		ArrayList<Aspect> compounds = new ArrayList<Aspect>();
-		Collection<Aspect> pa = aspects.values();
-		for (Aspect aspect:pa) {
-			if (!aspect.isPrimal())  compounds.add(aspect);
+		if (compounds.isEmpty()) {
+			Collection<Aspect> pa = aspects.values();
+			for (Aspect aspect:pa) {
+				if (!aspect.isPrimal())  compounds.add(aspect);
+			}
 		}
 		return compounds;
 	}
@@ -162,13 +166,13 @@ public class Aspect {
 	
 	//SECONDARY (PRIMAL + PRIMAL)  	
 		public static final Aspect VOID = new Aspect("vacuos",0x888888, new Aspect[] {AIR, ENTROPY},771);
-		public static final Aspect LIGHT = new Aspect("lux",0xffd585, new Aspect[] {AIR, FIRE});
+		public static final Aspect LIGHT = new Aspect("lux",0xffffc0, new Aspect[] {AIR, FIRE});
 		public static final Aspect MOTION = new Aspect("motus",0xcdccf4, new Aspect[] {AIR, ORDER});
 		public static final Aspect COLD = new Aspect("gelum",0xe1ffff, new Aspect[] {FIRE, ENTROPY});
 		public static final Aspect CRYSTAL = new Aspect("vitreus",0x80ffff, new Aspect[] {EARTH, AIR});
 		public static final Aspect METAL = new Aspect("metallum",0xb5b5cd, new Aspect[] {EARTH, ORDER});
 		public static final Aspect LIFE = new Aspect("victus",0xde0005, new Aspect[] {EARTH, WATER});
-		public static final Aspect DEATH = new Aspect("mortuus",0x887788, new Aspect[] {WATER, ENTROPY});
+		public static final Aspect DEATH = new Aspect("mortuus",0x6a0005, new Aspect[] {WATER, ENTROPY});
 		public static final Aspect ENERGY = new Aspect("potentia",0xc0ffff, new Aspect[] {ORDER, FIRE});
 		public static final Aspect EXCHANGE = new Aspect("permutatio",0x578357, new Aspect[] {ENTROPY, ORDER});
 		
@@ -179,8 +183,11 @@ public class Aspect {
 //		public static final Aspect ?? = new Aspect("??",0xcdccf4, new Aspect[] {EARTH, ENTROPY});
 		
 	//TERTIARY 
-		public static final Aspect AURA = new Aspect("auram",0xffc0ff, new Aspect[] {ENERGY, AIR});
-		public static final Aspect FLUX = new Aspect("vitium",0x800080, new Aspect[] {ENTROPY, ENERGY});
+		public static final Aspect MAGIC = new Aspect("praecantatio",0xcf00ff, new Aspect[] {ENERGY, AIR});
+		public static final Aspect AURA = new Aspect("auram",0xffc0ff, new Aspect[] {MAGIC, AIR});
+		public static final Aspect ALCHEMY = new Aspect("alkimia",0x23ac9d, new Aspect[] {MAGIC, WATER});
+		public static final Aspect FLUX = new Aspect("vitium",0x800080, new Aspect[] {ENTROPY, MAGIC});
+		
 		public static final Aspect DARKNESS = new Aspect("tenebrae",0x222222, new Aspect[] {VOID, LIGHT});
 		public static final Aspect ELDRITCH = new Aspect("alienis",0x805080, new Aspect[] {VOID, DARKNESS});
 		public static final Aspect FLIGHT = new Aspect("volatus",0xe7e7d7, new Aspect[] {AIR, MOTION});
@@ -192,8 +199,8 @@ public class Aspect {
 		public static final Aspect TRAP = new Aspect("vinculum",0x9a8080, new Aspect[] {MOTION, ENTROPY});			
 		
 		public static final Aspect SOUL = new Aspect("spiritus",0xebebfb, new Aspect[] {LIFE, DEATH});
-		public static final Aspect MIND = new Aspect("cognitio",0xffc2b3, new Aspect[] {FIRE, SOUL});
-		public static final Aspect SENSES = new Aspect("sensus",0x0fd9ff, new Aspect[] {AIR, SOUL});
+		public static final Aspect MIND = new Aspect("cognitio",0xf9967f, new Aspect[] {FIRE, SOUL});
+		public static final Aspect SENSES = new Aspect("sensus",0xc0ffc0, new Aspect[] {AIR, SOUL});
 		public static final Aspect AVERSION = new Aspect("aversio",0xc05050, new Aspect[] {SOUL, ENTROPY});
 		public static final Aspect PROTECT = new Aspect("praemunio",0x00c0c0, new Aspect[] {SOUL, EARTH});
 		public static final Aspect DESIRE = new Aspect("desiderium",0xe6be44, new Aspect[] {SOUL, VOID});

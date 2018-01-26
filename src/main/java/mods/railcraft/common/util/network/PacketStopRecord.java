@@ -28,7 +28,7 @@ class PacketStopRecord extends RailcraftPacket {
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         int id = data.readInt();
-        Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(id);
+        Entity entity = Minecraft.getMinecraft().world.getEntityByID(id);
         if (!(entity instanceof EntityCartJukebox))
             return;
         ((EntityCartJukebox) entity).music = null;

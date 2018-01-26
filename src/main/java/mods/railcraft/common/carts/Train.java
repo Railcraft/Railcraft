@@ -47,7 +47,7 @@ public class Train implements Iterable<EntityMinecart> {
 
     public Train(EntityMinecart cart) {
         uuid = UUID.randomUUID();
-        world = cart.worldObj;
+        world = cart.world;
 
         buildTrain(cart);
     }
@@ -57,9 +57,9 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public static Train getTrain(EntityMinecart cart) {
-        Map<UUID, Train> trainMap = getTrainMap(cart.worldObj);
+        Map<UUID, Train> trainMap = getTrainMap(cart.world);
         Train train = trainMap.get(getTrainUUID(cart));
-        if (train != null && (!train.containsCart(cart) || !train.isValid(cart.worldObj) || train.isEmpty())) {
+        if (train != null && (!train.containsCart(cart) || !train.isValid(cart.world) || train.isEmpty())) {
             train.buildTrain(cart);
         }
         if (train == null) {
@@ -73,7 +73,7 @@ public class Train implements Iterable<EntityMinecart> {
     private static Train getTrainUnsafe(@Nullable EntityMinecart cart) {
         if (cart == null)
             return null;
-        return getTrainMap(cart.worldObj).get(getTrainUUID(cart));
+        return getTrainMap(cart.world).get(getTrainUUID(cart));
     }
 
     @Nullable
@@ -197,7 +197,7 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public static void deleteTrain(EntityMinecart cart) {
-        Train train = getTrainMap(cart.worldObj).remove(getTrainUUID(cart));
+        Train train = getTrainMap(cart.world).remove(getTrainUUID(cart));
         if (train != null)
             train.deleteTrain();
         removeTrainTag(cart);

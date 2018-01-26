@@ -238,7 +238,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null && isStructureValid()) {
-            GuiHandler.openGui(EnumGui.COKE_OVEN, player, worldObj, masterBlock.getPos());
+            GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, masterBlock.getPos());
             return true;
         }
         return false;

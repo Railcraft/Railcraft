@@ -43,7 +43,7 @@ public class ParticlePumpkin extends ParticleBaseSmoke {
     public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float par3, float par4, float par5, float par6, float par7) {
         float age = ((float) particleAge) / (float) particleMaxAge;
 
-        age = MathHelper.clamp_float(age, 0.0F, 1.0F);
+        age = MathHelper.clamp(age, 0.0F, 1.0F);
 
 //        setSize(0.2F * age, 0.2F * age);
         this.particleScale = oScale * (float) Math.sin(age * Math.PI);

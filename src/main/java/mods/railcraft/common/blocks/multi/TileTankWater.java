@@ -140,9 +140,9 @@ public class TileTankWater extends TileTank {
 
         if (Game.isHost(getWorld())) {
             if (isMaster()) {
-                if (worldObj.provider.getDimension() != -1 && clock % REFILL_INTERVAL == 0) {
+                if (world.provider.getDimension() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
-                    Biome biome = worldObj.getBiome(getPos());
+                    Biome biome = world.getBiome(getPos());
                     float humidity = biome.getRainfall();
                     rate *= humidity;
 //                    String debug = "Biome=" + biome.biomeName + ", Humidity=" + humidity;
@@ -150,7 +150,7 @@ public class TileTankWater extends TileTank {
                     boolean outside = false;
                     for (int x = getX() - 1; x <= getX() + 1; x++) {
                         for (int z = getZ() - 1; z <= getZ() + 1; z++) {
-                            outside = worldObj.canBlockSeeSky(new BlockPos(x, getY() + 3, z));
+                            outside = world.canBlockSeeSky(new BlockPos(x, getY() + 3, z));
 //                            System.out.println(x + ", " + (yCoord + 3) + ", " + z);
                             if (outside)
                                 break;
@@ -160,12 +160,12 @@ public class TileTankWater extends TileTank {
 //                    debug += ", Outside=" + outside;
                     if (!outside)
                         rate *= REFILL_PENALTY_INSIDE;
-                    else if (worldObj.isRaining())
+                    else if (world.isRaining())
                         if (biome.getEnableSnow())
                             rate *= REFILL_PENALTY_SNOW; //                            debug += ", Snow=true";
                         else
                             rate *= REFILL_BOOST_RAIN; //                            debug += ", Rain=true";
-                    int rateFinal = MathHelper.floor_float(rate);
+                    int rateFinal = MathHelper.floor(rate);
                     if (rateFinal < REFILL_RATE_MIN)
                         rateFinal = REFILL_RATE_MIN;
 //                    debug += ", Refill=" + rateFinal;
@@ -190,7 +190,7 @@ public class TileTankWater extends TileTank {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
+            GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
             return true;
         }
         return false;

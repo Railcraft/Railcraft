@@ -97,7 +97,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, world, getPos());
         return true;
     }
 
@@ -119,9 +119,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (explode) {
-                worldObj.createExplosion(null, getX(), getY(), getZ(), 2, true);
+                world.createExplosion(null, getX(), getY(), getZ(), 2, true);
                 explode = false;
             }
         }
@@ -174,7 +174,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 

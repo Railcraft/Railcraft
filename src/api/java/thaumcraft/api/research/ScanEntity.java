@@ -50,7 +50,7 @@ public class ScanEntity implements IScanThing {
 	}
 
 	@Override
-	public String getResearchKey() {
+	public String getResearchKey(EntityPlayer player, Object object) {
 		return research;
 	}
 	

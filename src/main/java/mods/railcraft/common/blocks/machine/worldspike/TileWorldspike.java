@@ -93,13 +93,13 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                if (Game.isHost(worldObj)) {
+                if (Game.isHost(world)) {
                     WorldCoordinate ourCoord = new WorldCoordinate(this);
                     WorldCoordinate target = pointPairingMap.get(player);
                     if (target == null) {
                         setTarget(ourCoord, player, getLocalizationTag());
                     } else {
-                        if (worldObj.provider.getDimension() != target.getDim()) {
+                        if (world.provider.getDimension() != target.getDim()) {
                             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.dimension", getLocalizationTag());
                         } else if (Objects.equals(ourCoord, target)) {
                             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.cancel", getLocalizationTag());
@@ -133,7 +133,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     @Override
     public boolean openGui(EntityPlayer player) {
         if (needsFuel()) {
-            GuiHandler.openGui(EnumGui.WORLDSPIKE, player, worldObj, getPos());
+            GuiHandler.openGui(EnumGui.WORLDSPIKE, player, world, getPos());
             return true;
         }
         return false;
@@ -148,7 +148,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Nullable
     public static boolean isTargetLoaded(EntityPlayer player, WorldCoordinate coord, String locTag) {
-        if (!WorldPlugin.isBlockLoaded(player.worldObj, coord.getPos())) {
+        if (!WorldPlugin.isBlockLoaded(player.world, coord.getPos())) {
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.unloaded", locTag);
             return false;
         }
@@ -159,7 +159,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         if (!isTargetLoaded(player, coord, getLocalizationTag())) {
             return false;
         }
-        IBlockState state = WorldPlugin.getBlockState(worldObj, coord.getPos());
+        IBlockState state = WorldPlugin.getBlockState(world, coord.getPos());
         if (RailcraftBlocks.WORLDSPIKE_POINT.isEqual(state)) {
             int xChunk = getPos().getX() >> 4;
             int zChunk = getPos().getZ() >> 4;
@@ -231,15 +231,15 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             if (chunks != null)
-                EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
+                EffectManager.instance.chunkLoaderEffect(world, this, chunks);
             return;
         }
 
         if (RailcraftConfig.deleteWorldspikes()) {
             releaseTicket();
-            worldObj.setBlockState(getPos(), Blocks.OBSIDIAN.getDefaultState());
+            world.setBlockState(getPos(), Blocks.OBSIDIAN.getDefaultState());
             return;
         }
 
@@ -273,7 +273,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         }
 
         if (clock % WORLDSPIKE_POINT_CHECK == 0 && hasPoint()) {
-            IBlockState pointState = worldObj.getBlockState(pointPos);
+            IBlockState pointState = world.getBlockState(pointPos);
             if (!RailcraftBlocks.WORLDSPIKE_POINT.isEqual(pointState))
                 clearPoint();
         }
@@ -284,8 +284,8 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         if (RailcraftConfig.printWorldspikeDebug() && hasActiveTicket())
             if (clock % 64 == 0) {
                 int numChunks = chunks == null ? 0 : chunks.size();
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), worldObj.provider.getDimension(), worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), worldObj.provider.getDimension(), worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
             }
     }
 
@@ -337,7 +337,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Nullable
     protected Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, Type.NORMAL);
+        return ForgeChunkManager.requestTicket(Railcraft.getMod(), world, Type.NORMAL);
     }
 
     protected void setTicketData(Ticket chunkTicket) {
@@ -349,11 +349,11 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     public boolean isTicketInvalid() {
         Ticket ticket = getTicket();
-        return ticket != null && (ticket.world != worldObj || refreshTicket || powered);
+        return ticket != null && (ticket.world != world || refreshTicket || powered);
     }
 
     public boolean hasActiveTicket() {
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return hasTicket;
         return getTicket() != null;
     }
@@ -368,9 +368,9 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         Ticket ticket = getTicket();
         if (ticket != t) {
             if (ticket != null) {
-                if (ticket.world == worldObj) {
+                if (ticket.world == world) {
                     for (ChunkPos chunk : ticket.getChunkList()) {
-                        if (ForgeChunkManager.getPersistentChunksFor(worldObj).keys().contains(chunk))
+                        if (ForgeChunkManager.getPersistentChunksFor(world).keys().contains(chunk))
                             ForgeChunkManager.unforceChunk(ticket, chunk);
                     }
                     ForgeChunkManager.releaseTicket(ticket);
@@ -419,7 +419,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         super.onNeighborBlockChange(state, block);
         if (Game.isClient(getWorld()))
             return;
-        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        boolean newPower = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != newPower)
             powered = newPower;
     }

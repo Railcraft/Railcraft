@@ -45,7 +45,7 @@ public class TileDispenserCart extends TileManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.CART_DISPENSER, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.CART_DISPENSER, player, world, getPos());
         return true;
     }
 
@@ -57,7 +57,7 @@ public class TileDispenserCart extends TileManipulator {
     }
 
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing);
         if (cart == null) {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
@@ -71,7 +71,7 @@ public class TileDispenserCart extends TileManipulator {
                                 canPlace = ((IMinecartItem) cartStack.getItem()).canBePlacedByNonPlayer(cartStack);
                             if (canPlace) {
                                 ItemStack placedStack = cartStack.copy();
-                                EntityMinecart placedCart = CartTools.placeCart(getOwner(), placedStack, (WorldServer) worldObj, pos);
+                                EntityMinecart placedCart = CartTools.placeCart(getOwner(), placedStack, (WorldServer) world, pos);
                                 if (placedCart != null) {
                                     decrStackSize(ii, 1);
                                     timeSinceLastSpawn = 0;
@@ -79,7 +79,7 @@ public class TileDispenserCart extends TileManipulator {
                                 }
                             }
                         } else {
-                            InvTools.spewItem(cartStack, worldObj, pos.getX(), pos.getY(), pos.getZ());
+                            InvTools.spewItem(cartStack, world, pos.getX(), pos.getY(), pos.getZ());
                             setInventorySlotContents(ii, null);
                         }
                     }
@@ -104,7 +104,7 @@ public class TileDispenserCart extends TileManipulator {
         super.onNeighborBlockChange(state, block);
         if (Game.isClient(getWorld()))
             return;
-        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        boolean newPower = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (!powered && newPower) {
             powered = true;
             onPulse();

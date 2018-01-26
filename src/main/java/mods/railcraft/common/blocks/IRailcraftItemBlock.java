@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +29,7 @@ import java.util.Map;
 public interface IRailcraftItemBlock extends IRailcraftItem {
 
     @SideOnly(Side.CLIENT)
-    default ModelResourceLocation getModelLocation(IBlockState state) {
+    default ModelResourceLocation getModelLocation(ItemStack stack, IBlockState state) {
         StateMapperBase stateMapper = null;
 
         if (state.getBlock() instanceof IRailcraftBlock)

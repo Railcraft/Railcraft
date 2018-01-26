@@ -185,10 +185,10 @@ public class ItemFirestoneRefined extends ItemFirestone {
         if (!target.isImmuneToFire()) {
             target.setFire(5);
             stack.damageItem(1, playerIn);
-            SoundHelper.playSound(playerIn.worldObj, null, target.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+            SoundHelper.playSound(playerIn.world, null, target.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
             playerIn.swingArm(hand);
             BlockPos pos = new BlockPos(target);
-            playerIn.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
+            playerIn.world.setBlockState(pos, Blocks.FIRE.getDefaultState());
             return true;
         }
         return false;

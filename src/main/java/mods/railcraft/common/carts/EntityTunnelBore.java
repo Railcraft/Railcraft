@@ -259,7 +259,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             */
             Item item = head.getItem();
             Set<String> toolClasses = item.getToolClasses(head);
-            EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ);
+            EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) world, posX, posY, posZ);
 
             for (String tool : toolClasses) {
                 if (item.getHarvestLevel(head, tool, fakePlayer, targetState) >= HarvestPlugin.getHarvestLevel(targetState, tool)) {
@@ -312,7 +312,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (!worldObj.isRemote && !isDead)
+        if (!world.isRemote && !isDead)
             if (isEntityInvulnerable(source))
                 return false;
             else {
@@ -402,7 +402,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public void onUpdate() {
         clock++;
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (clock % 64 == 0) {
                 forceUpdateBoreHead();
                 setMinecartPowered(false);
@@ -419,7 +419,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             part.onUpdate();
         }
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
 
             updateFuel();
 //            if(update % 64 == 0){
@@ -447,7 +447,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             setActive(false);
                         }
                         placeBallast = false;
-                    } else if (!worldObj.isSideSolid(targetPos, EnumFacing.UP)) {
+                    } else if (!world.isSideSolid(targetPos, EnumFacing.UP)) {
                         placeBallast = true;
                         setDelay(BALLAST_DELAY);
                     }
@@ -456,7 +456,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 if (getDelay() == 0) {
                     float offset = 0.8f;
                     BlockPos targetPos = new BlockPos(getPositionAhead(offset));
-                    IBlockState existingState = WorldPlugin.getBlockState(worldObj, targetPos);
+                    IBlockState existingState = WorldPlugin.getBlockState(world, targetPos);
 
                     if (placeRail) {
                         boolean placed = placeTrack(targetPos, existingState, dir);
@@ -468,11 +468,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                         }
                         placeRail = false;
                     } else if (TrackTools.isRailBlock(existingState)) {
-                        if (dir != TrackTools.getTrackDirection(worldObj, targetPos, this)) {
-                            TrackTools.setTrackDirection(worldObj, targetPos, dir);
+                        if (dir != TrackTools.getTrackDirection(world, targetPos, this)) {
+                            TrackTools.setTrackDirection(world, targetPos, dir);
                             setDelay(STANDARD_DELAY);
                         }
-                    } else if (WorldPlugin.isBlockAir(worldObj, targetPos, existingState) || replaceableBlocks.contains(existingState.getBlock())) {
+                    } else if (WorldPlugin.isBlockAir(world, targetPos, existingState) || replaceableBlocks.contains(existingState.getBlock())) {
                         placeRail = true;
                         setDelay(STANDARD_DELAY);
                     } else {
@@ -510,7 +510,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
                 List<EntityLivingBase> entities = EntitySearcher.find(EntityLivingBase.class)
-                        .andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(worldObj);
+                        .andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(world);
                 entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
 
                 ItemStack head = getStackInSlot(0);
@@ -547,7 +547,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     private void updateFuel() {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (isMinecartPowered())
                 spendFuel();
             stockFuel();
@@ -663,12 +663,12 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             }
 
             if (rand.nextInt(4) == 0) {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX1, posY + smokeYOffset, smokeZ1, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle(EnumParticleTypes.FLAME, flameX1, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ1, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX1, posY + smokeYOffset, smokeZ1, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, flameX1, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ1, 0.0D, 0.0D, 0.0D);
             }
             if (rand.nextInt(4) == 0) {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX2, posY + smokeYOffset, smokeZ2, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle(EnumParticleTypes.FLAME, flameX2, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ2, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX2, posY + smokeYOffset, smokeZ2, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, flameX2, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ2, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -682,7 +682,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeBallast(BlockPos targetPos) {
-        if (!worldObj.isSideSolid(targetPos, EnumFacing.UP))
+        if (!world.isSideSolid(targetPos, EnumFacing.UP))
             for (IExtInvSlot slot : InventoryIterator.getVanilla(invBallast)) {
                 ItemStack stack = slot.getStack();
                 if (!isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
@@ -690,20 +690,20 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                     searchPos.setPos(targetPos);
                     for (int i = 0; i < MAX_FILL_DEPTH; i++) {
                         searchPos.move(EnumFacing.DOWN);
-                        if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
+                        if (world.isSideSolid(searchPos, EnumFacing.UP)) {
                             // Fill ballast
-                            IBlockState state = InvTools.getBlockStateFromStack(stack, worldObj, targetPos);
+                            IBlockState state = InvTools.getBlockStateFromStack(stack, world, targetPos);
                             if (state != null) {
                                 slot.decreaseStack();
-                                WorldPlugin.setBlockState(worldObj, targetPos, state);
+                                WorldPlugin.setBlockState(world, targetPos, state);
                                 return true;
                             }
                         } else {
-                            IBlockState state = WorldPlugin.getBlockState(worldObj, searchPos);
-                            if (!WorldPlugin.isBlockAir(worldObj, searchPos, state) && !state.getMaterial().isLiquid()) {
+                            IBlockState state = WorldPlugin.getBlockState(world, searchPos);
+                            if (!WorldPlugin.isBlockAir(world, searchPos, state) && !state.getMaterial().isLiquid()) {
                                 // Break other blocks first
-                                WorldPlugin.playerRemoveBlock(worldObj, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
-                                        worldObj.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
+                                WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
+                                        world.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
                             }
                         }
                     }
@@ -726,13 +726,13 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         EntityPlayer owner = CartTools.getCartOwnerEntity(this);
 
         if (replaceableBlocks.contains(oldState.getBlock()))
-            WorldPlugin.destroyBlockSafe(worldObj, targetPos, owner, true);
+            WorldPlugin.destroyBlockSafe(world, targetPos, owner, true);
 
-        if (WorldPlugin.isBlockAir(worldObj, targetPos, oldState) && worldObj.isSideSolid(targetPos.down(), EnumFacing.UP))
+        if (WorldPlugin.isBlockAir(world, targetPos, oldState) && world.isSideSolid(targetPos.down(), EnumFacing.UP))
             for (IInvSlot slot : InventoryIterator.getVanilla(invRails)) {
                 ItemStack stack = slot.getStack();
                 if (!isEmpty(stack)) {
-                    boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) worldObj, targetPos, shape);
+                    boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) world, targetPos, shape);
                     if (placed) {
                         slot.decreaseStack();
                     }
@@ -760,7 +760,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         for (int yy = y; yy < y + 4; yy++) {
             for (int xx = xStart; xx <= xEnd; xx++) {
                 for (int zz = zStart; zz <= zEnd; zz++) {
-                    Block block = WorldPlugin.getBlock(worldObj, new BlockPos(xx, yy, zz));
+                    Block block = WorldPlugin.getBlock(world, new BlockPos(xx, yy, zz));
                     if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
                         return true;
                 }
@@ -808,12 +808,12 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
      * @return true if the target block is clear
      */
     protected boolean mineBlock(BlockPos targetPos, BlockRailBase.EnumRailDirection preferredShape) {
-        if (WorldPlugin.isBlockAir(worldObj, targetPos))
+        if (WorldPlugin.isBlockAir(world, targetPos))
             return true;
 
-        IBlockState targetState = WorldPlugin.getBlockState(worldObj, targetPos);
+        IBlockState targetState = WorldPlugin.getBlockState(world, targetPos);
         if (TrackTools.isRailBlock(targetState)) {
-            BlockRailBase.EnumRailDirection targetShape = TrackTools.getTrackDirection(worldObj, targetPos, targetState, this);
+            BlockRailBase.EnumRailDirection targetShape = TrackTools.getTrackDirection(world, targetPos, targetState, this);
             if (preferredShape == targetShape)
                 return true;
         } else if (targetState.getBlock() == Blocks.TORCH)
@@ -827,7 +827,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
 
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, CartTools.getCartOwnerEntity(this));
+        BreakEvent breakEvent = new BreakEvent(world, targetPos, targetState, CartTools.getCartOwnerEntity(this));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
@@ -842,18 +842,18 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             ItemStack stack = HarvestPlugin.getSilkTouchDrop(targetState);
             items = isEmpty(stack) ? new ArrayList<>() : Lists.newArrayList(stack); // Use modifiable lists for events
         } else {
-            items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, fortuneLevel);
+            items = targetState.getBlock().getDrops(world, targetPos, targetState, fortuneLevel);
         }
 
         // Start of Event Fire
-        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(worldObj, targetPos, targetState, fortuneLevel, 1F, items, CartTools.getCartOwnerEntity(this), silk);
+        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(world, targetPos, targetState, fortuneLevel, 1F, items, CartTools.getCartOwnerEntity(this), silk);
         MinecraftForge.EVENT_BUS.post(harvestDropsEvent);
 
         if (harvestDropsEvent.isCanceled())
             return false;
         // End of Event Fire
 
-        if (RailcraftConfig.boreDestroysBlocks() || !worldObj.getGameRules().getBoolean("doTileDrops")) {
+        if (RailcraftConfig.boreDestroysBlocks() || !world.getGameRules().getBoolean("doTileDrops")) {
             for (ItemStack stack : items) {
                 if (StandardStackFilters.FUEL.test(stack))
                     stack = InvTools.moveItemStack(stack, invFuel);
@@ -866,17 +866,17 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
                 if (!isEmpty(stack)) {
                     float f = 0.7F;
-                    double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                    double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                    double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                    double xr = (world.rand.nextFloat() - 0.5D) * f;
+                    double yr = (world.rand.nextFloat() - 0.5D) * f;
+                    double zr = (world.rand.nextFloat() - 0.5D) * f;
                     Vec3d spewPos = getPositionAhead(-3.2);
                     spewPos.addVector(xr, 0.3 + yr, zr);
-                    EntityItem entityitem = new EntityItem(worldObj, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
-                    worldObj.spawnEntityInWorld(entityitem);
+                    EntityItem entityitem = new EntityItem(world, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
+                    world.spawnEntity(entityitem);
                 }
             }
         }
-        WorldPlugin.setBlockToAir(worldObj, targetPos);
+        WorldPlugin.setBlockToAir(world, targetPos);
 
         head.damageItem(1, CartTools.getCartOwnerEntity(this));
         if (head.getItemDamage() > head.getMaxDamage())
@@ -888,9 +888,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     private boolean canMineBlock(BlockPos targetPos, IBlockState existingState) {
         ItemStack head = getStackInSlot(0);
         if (existingState.getBlock() instanceof IMineable) {
-            return head != null && ((IMineable) existingState.getBlock()).canMineBlock(worldObj, targetPos, this, head);
+            return head != null && ((IMineable) existingState.getBlock()).canMineBlock(world, targetPos, this, head);
         }
-        if (existingState.getBlockHardness(worldObj, targetPos) < 0)
+        if (existingState.getBlockHardness(world, targetPos) < 0)
             return false;
         return isMineableBlock(existingState) && canHeadHarvestBlock(head, existingState);
     }
@@ -914,12 +914,12 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected float getBlockHardness(BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        if (WorldPlugin.isBlockAir(worldObj, pos))
+        if (WorldPlugin.isBlockAir(world, pos))
             return 0;
 
-        IBlockState blockState = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState blockState = WorldPlugin.getBlockState(world, pos);
         if (TrackTools.isRailBlock(blockState)) {
-            BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(worldObj, pos, blockState, this);
+            BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(world, pos, blockState, this);
             if (dir == trackMeta)
                 return 0;
         }
@@ -933,7 +933,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (!canMineBlock(pos, blockState))
             return 0.1f;
 
-        float hardness = blockState.getBlockHardness(worldObj, pos);
+        float hardness = blockState.getBlockHardness(world, pos);
         if (hardness <= 0)
             hardness = 0.1f;
         return hardness;
@@ -1104,8 +1104,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     @Override
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_BORE, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_BORE, player, world, this);
         return true;
     }
 

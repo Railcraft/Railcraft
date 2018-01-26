@@ -43,7 +43,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, getPos());
+        InvTools.dropItem(stack, world, getPos());
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 

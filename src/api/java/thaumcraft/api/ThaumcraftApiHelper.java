@@ -1,7 +1,13 @@
 package thaumcraft.api;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -13,13 +19,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaTransport;
-
-import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.List;
+import thaumcraft.api.items.ItemGenericEssentiaContainer;
+import thaumcraft.api.items.ItemsTC;
 
 public class ThaumcraftApiHelper {
+	
+	public static final IAttribute CHAMPION_MOD = (new RangedAttribute((IAttribute)null, "tc.mobmod", -2D, -2D, 100D)).setDescription("Champion modifier").setShouldWatch(true);
 	
 	public static boolean areItemsEqual(ItemStack s1,ItemStack s2)
     {
@@ -29,17 +37,7 @@ public class ThaumcraftApiHelper {
 		} else
 			return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
     }
-	
-	/**
-	 * Notifies thaumcraft that something with regards to runic shielding has changed and that it should
-	 * rescan worn items to determine what the max shielding value is. 
-	 * It automatically rescans once every 5 seconds, but this makes it happen sooner.
-	 * @param entity
-	 */
-	public static void markRunicDirty(Entity entity) {
-		ThaumcraftApi.internalMethods.markRunicDirty(entity);
-	}
-	
+		
 	public static boolean containsMatch(boolean strict, ItemStack[] inputs, List<ItemStack> targets)
     {
         for (ItemStack input : inputs)
@@ -64,14 +62,14 @@ public class ThaumcraftApiHelper {
 		if (in instanceof Object[]) return true;
 		
 		if (in instanceof String) {
-			List<ItemStack> l = OreDictionary.getOres((String) in);
+			List<ItemStack> l = OreDictionary.getOres((String) in,false);
 			return containsMatch(false, new ItemStack[]{stack0}, l);
 		}
 		
 		if (in instanceof ItemStack) {
 			//nbt
-			boolean t1=areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);
-			if (!t1) return false;
+			boolean t1=areItemStackTagsEqualForCrafting(stack0, (ItemStack) in);		
+			if (!t1) return false;	
 	        return OreDictionary.itemMatches((ItemStack) in, stack0, false);
 		}
 		
@@ -104,7 +102,7 @@ public class ThaumcraftApiHelper {
     
     public static TileEntity getConnectableTile(World world, BlockPos pos, EnumFacing face) {
 		TileEntity te = world.getTileEntity(pos.offset(face));
-		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite()))
+		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite())) 
 			return te;
 		else
 			return null;
@@ -112,7 +110,7 @@ public class ThaumcraftApiHelper {
     
     public static TileEntity getConnectableTile(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		TileEntity te = world.getTileEntity(pos.offset(face));
-		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite()))
+		if (te instanceof IEssentiaTransport && ((IEssentiaTransport)te).isConnectable(face.getOpposite())) 
 			return te;
 		else
 			return null;
@@ -144,22 +142,22 @@ public class ThaumcraftApiHelper {
 //    }
     
     
-	public static RayTraceResult rayTraceIgnoringSource(World world, Vec3d v1, Vec3d v2,
-														boolean bool1, boolean bool2, boolean bool3)
+	public static RayTraceResult rayTraceIgnoringSource(World world, Vec3d v1, Vec3d v2, 
+			boolean bool1, boolean bool2, boolean bool3)
 	{
 	    if (!Double.isNaN(v1.xCoord) && !Double.isNaN(v1.yCoord) && !Double.isNaN(v1.zCoord))
 	    {
 	        if (!Double.isNaN(v2.xCoord) && !Double.isNaN(v2.yCoord) && !Double.isNaN(v2.zCoord))
 	        {
-	            int i = MathHelper.floor_double(v2.xCoord);
-	            int j = MathHelper.floor_double(v2.yCoord);
-	            int k = MathHelper.floor_double(v2.zCoord);
-	            int l = MathHelper.floor_double(v1.xCoord);
-	            int i1 = MathHelper.floor_double(v1.yCoord);
-	            int j1 = MathHelper.floor_double(v1.zCoord);
+	            int i = MathHelper.floor(v2.xCoord);
+	            int j = MathHelper.floor(v2.yCoord);
+	            int k = MathHelper.floor(v2.zCoord);
+	            int l = MathHelper.floor(v1.xCoord);
+	            int i1 = MathHelper.floor(v1.yCoord);
+	            int j1 = MathHelper.floor(v1.zCoord);
 	            IBlockState block = world.getBlockState(new BlockPos(l, i1, j1));
 	
-	            RayTraceResult movingobjectposition2 = null;
+	            RayTraceResult rayTraceResult2 = null;
 	            int k1 = 200;
 	
 	            while (k1-- >= 0)
@@ -275,31 +273,31 @@ public class ThaumcraftApiHelper {
                         v1 = new Vec3d(v1.xCoord + d6 * d5, v1.yCoord + d7 * d5, d2);
                     }
 
-                    l = MathHelper.floor_double(v1.xCoord) - (enumfacing == EnumFacing.EAST ? 1 : 0);
-                    i1 = MathHelper.floor_double(v1.yCoord) - (enumfacing == EnumFacing.UP ? 1 : 0);
-                    j1 = MathHelper.floor_double(v1.zCoord) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
+                    l = MathHelper.floor(v1.xCoord) - (enumfacing == EnumFacing.EAST ? 1 : 0);
+                    i1 = MathHelper.floor(v1.yCoord) - (enumfacing == EnumFacing.UP ? 1 : 0);
+                    j1 = MathHelper.floor(v1.zCoord) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 	
 	                IBlockState block1 = world.getBlockState(new BlockPos(l, i1, j1));
 	
-	                if (!bool2 || block1.getBlock().getCollisionBoundingBox(block1, world, new BlockPos(l, i1, j1)) != null)
+	                if (!bool2 || block1.getCollisionBoundingBox(world, new BlockPos(l, i1, j1)) != null)
 	                {
 	                    if (block1.getBlock().canCollideCheck(block1, bool1))
 	                    {
+	                        RayTraceResult rayTraceResult1 = block1.collisionRayTrace(world, new BlockPos(l, i1, j1), v1, v2);
 	
-	                        RayTraceResult movingobjectposition1 = block1.getBlock().collisionRayTrace(block1, world, new BlockPos(l, i1, j1), v1, v2);
-	                        if (movingobjectposition1 != null)
+	                        if (rayTraceResult1 != null)
 	                        {
-	                            return movingobjectposition1;
+	                            return rayTraceResult1;
 	                        }
 	                    }
 	                    else
 	                    {
-	                        movingobjectposition2 = new RayTraceResult(RayTraceResult.Type.MISS, v1, enumfacing, new BlockPos(l, i1, j1));
+	                        rayTraceResult2 = new RayTraceResult(RayTraceResult.Type.MISS, v1, enumfacing, new BlockPos(l, i1, j1));
 	                    }
 	                }
 	            }
 	
-	            return bool3 ? movingobjectposition2 : null;
+	            return bool3 ? rayTraceResult2 : null;
 	        }
 	        else
 	        {
@@ -365,5 +363,46 @@ public class ThaumcraftApiHelper {
 	
 	public static int getNibbleInInt(int data, int nibbleIndex) {
 		return (data >> (nibbleIndex << 2)) & 0xF;
-	}	
+	}
+
+	/**
+	 * Create a crystal itemstack from a sent aspect. 
+	 * @param aspect
+	 * @param stackSize stack size
+	 * @return
+	 */
+	public static ItemStack makeCrystal(Aspect aspect, int stackSize) {
+		if (aspect==null) return null;
+		ItemStack is = new ItemStack(ItemsTC.crystalEssence,stackSize,0);
+		((ItemGenericEssentiaContainer)ItemsTC.crystalEssence).setAspects(is, new AspectList().add(aspect, 1));
+		return is;
+	}
+
+	/**
+	 * Create a crystal itemstack from a sent aspect. Sending a null will result in a balanced shard (one of each primal).
+	 * @param aspect
+	 * @return
+	 */
+	public static ItemStack makeCrystal(Aspect aspect) {
+		return makeCrystal(aspect,1);
+	}
+
+	public static List<ItemStack> getOresWithWildCards(String oreDict) {
+		if (oreDict.trim().endsWith("*")) {
+			ArrayList<ItemStack> ores = new ArrayList<>(); 
+			String[] names = OreDictionary.getOreNames();
+			String m = oreDict.trim().replaceAll("\\*", "");
+			for (String name:names) {
+				if (name.startsWith(m)) {
+					ores.addAll(OreDictionary.getOres(name,false));
+				}
+			}
+			return ores;
+		} else
+			return  OreDictionary.getOres(oreDict,false);
+	}
+
+	
+
+	
 }

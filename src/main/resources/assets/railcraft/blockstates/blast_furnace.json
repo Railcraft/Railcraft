@@ -7,14 +7,12 @@
     }
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
+    "inventory": {
+      "transform": "forge:default-block",
+      "textures": {
+        "side": "railcraft:blocks/blast_furnace_1"
       }
-    ],
+    },
     "icon": {
       "0": {
         "textures": {

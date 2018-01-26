@@ -66,7 +66,7 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public InfiniteBattery getChargeBattery() {
         if (chargeBattery == null) {
-            chargeBattery = (InfiniteBattery) ChargeManager.getNetwork(worldObj).getTileBattery(pos, InfiniteBattery::new);
+            chargeBattery = (InfiniteBattery) ChargeManager.getNetwork(world).getTileBattery(pos, InfiniteBattery::new);
         }
         return chargeBattery;
     }

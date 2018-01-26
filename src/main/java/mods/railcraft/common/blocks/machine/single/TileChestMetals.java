@@ -9,13 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.single;
 
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -49,7 +48,7 @@ public class TileChestMetals extends TileChestRailcraft {
     public void update() {
         super.update();
 
-        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
+        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(world))
             if (!target.evaluate(this))
                 target = target.next();
     }

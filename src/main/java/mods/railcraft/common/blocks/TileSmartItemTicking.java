@@ -43,7 +43,7 @@ public abstract class TileSmartItemTicking extends RailcraftTickingTileEntity im
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, getPos());
+        InvTools.dropItem(stack, world, getPos());
     }
 
     @Override
@@ -105,7 +105,7 @@ public abstract class TileSmartItemTicking extends RailcraftTickingTileEntity im
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 

@@ -83,18 +83,18 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
 
     @Override
     public final boolean openGui(EntityPlayer player) {
-        if (worldObj.isSideSolid(getPos().up(), DOWN))
+        if (world.isSideSolid(getPos().up(), DOWN))
             return false;
         else if (isCatOnChest())
             return false;
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             player.displayGUIChest(this);
         return true;
     }
 
     private boolean isCatOnChest() {
         AxisAlignedBB searchBox = AABBFactory.start().createBoxForTileAt(getPos()).offset(0.0, 1.0, 0.0).build();
-        List<EntityOcelot> cats = worldObj.getEntitiesWithinAABB(EntityOcelot.class, searchBox);
+        List<EntityOcelot> cats = world.getEntitiesWithinAABB(EntityOcelot.class, searchBox);
         return cats.stream().anyMatch(EntityTameable::isSitting);
     }
 
@@ -103,13 +103,13 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
         super.update();
 
         if (clock % TICK_PER_SYNC == 0)
-            WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
+            WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
 
         this.prevLidAngle = lidAngle;
         float angleChange = 0.1F;
 
         if (numUsingPlayers > 0 && lidAngle == 0.0F)
-            SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
         if (numUsingPlayers == 0 && lidAngle > 0.0F || numUsingPlayers > 0 && lidAngle < 1.0F) {
             float angle = lidAngle;
@@ -125,7 +125,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
             float openAngle = 0.5F;
 
             if (lidAngle < openAngle && angle >= openAngle)
-                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
             if (lidAngle < 0.0F)
                 this.lidAngle = 0.0F;
@@ -144,13 +144,13 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     @Override
     public void openInventory(EntityPlayer player) {
         ++this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
+        WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory(EntityPlayer player) {
         --this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
+        WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
     @Override

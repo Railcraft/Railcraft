@@ -93,11 +93,11 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
             if (jet == 0)
                 sendUpdateToClient();
         }
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             if (isJetting()) {
                 double speedFactor = 0.2;
                 for (int i = 0; i < 10; i++) {
-                    EffectManager.instance.steamJetEffect(worldObj, this, new Vec3d(direction.getDirectionVec()).scale(speedFactor));
+                    EffectManager.instance.steamJetEffect(world, this, new Vec3d(direction.getDirectionVec()).scale(speedFactor));
                 }
             }
             return;
@@ -113,7 +113,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     public List<EntityLivingBase> getEntitiesInSteamArea() {
         Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).addVector(0.5D, 0.5D, 0.5D);
         AxisAlignedBB area = AABBFactory.start().box().expandToCoordinate(jetVector).offset(getPos()).build();
-        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
+        return world.getEntitiesWithinAABB(EntityLivingBase.class, area);
     }
 
     protected abstract void triggerCheck();
@@ -122,7 +122,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
         if (!canJet()) return;
         jet = JET_TIME;
         tank.setFluid(null);
-        SoundHelper.playSound(worldObj, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_HISS, SoundCategory.BLOCKS, 1, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSound(world, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_HISS, SoundCategory.BLOCKS, 1, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
         sendUpdateToClient();
     }
 
@@ -144,7 +144,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     @Override
     public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        powered = PowerPlugin.isBlockBeingPowered(world, getPos());
     }
 
     @Override

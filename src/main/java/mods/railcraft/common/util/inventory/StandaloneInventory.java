@@ -184,7 +184,7 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
         return callback == null || callback.isUsableByPlayer(entityplayer);
     }
 
@@ -294,7 +294,7 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
 
         @Override
         public boolean isUsableByPlayer(EntityPlayer player) {
-            return inv.isUseableByPlayer(player);
+            return inv.isUsableByPlayer(player);
         }
 
         @Override

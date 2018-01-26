@@ -75,7 +75,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
             thePlayer.swingArm(event.getHand());
 
-        if (Game.isClient(thePlayer.worldObj))
+        if (Game.isClient(thePlayer.world))
             return;
 
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)

@@ -85,14 +85,14 @@ public class TileFluxTransformer extends TileMultiBlock implements IEnergyStorag
 
     private IChargeBlock.ChargeBattery getBattery() {
         if (battery == null) {
-            battery = ChargeManager.getNetwork(worldObj).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
+            battery = ChargeManager.getNetwork(world).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
         }
         return battery;
     }
 
     @Override
     protected void setWorldCreate(World worldIn) {
-        setWorldObj(worldIn);
+        setWorld(worldIn);
     }
 
     @Nullable

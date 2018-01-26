@@ -35,9 +35,9 @@ public abstract class TileCharge extends TileMachineBase {
     public void update() {
         super.update();
         if (clock % 16 == 0) {
-            int newComparatorOutput = ChargeManager.getNetwork(worldObj).getGraph(pos).getComparatorOutput();
+            int newComparatorOutput = ChargeManager.getNetwork(world).getGraph(pos).getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
-                worldObj.updateComparatorOutputLevel(pos, getBlockType());
+                world.updateComparatorOutputLevel(pos, getBlockType());
             prevComparatorOutput = newComparatorOutput;
         }
     }
@@ -46,12 +46,12 @@ public abstract class TileCharge extends TileMachineBase {
     public List<String> getDebugOutput() {
         List<String> lines = super.getDebugOutput();
         lines.add("Our Bat: " + getChargeBattery());
-        lines.add("Graph Bat: " + ChargeManager.getNetwork(worldObj).getNode(pos).getBattery());
+        lines.add("Graph Bat: " + ChargeManager.getNetwork(world).getNode(pos).getBattery());
         return lines;
     }
 
     @Override
     protected void setWorldCreate(World worldIn) {
-        setWorldObj(worldIn);
+        setWorld(worldIn);
     }
 }

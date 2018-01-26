@@ -31,7 +31,7 @@ public class EntityTunnelBorePart extends Entity {
     }
 
     public EntityTunnelBorePart(EntityTunnelBore parent, String partName, float width, float height, float forwardOffset, float sideOffset) {
-        super(parent.worldObj);
+        super(parent.world);
         setSize(width, height);
         this.parent = parent;
         this.partName = partName;
