@@ -359,7 +359,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         if (Game.isClient(world)) {
             if (SeasonPlugin.isPolarExpress(this) && (!MathTools.nearZero(motionX) || !MathTools.nearZero(motionZ)))
-                EffectManager.instance.snowEffect(worldObj, this, getEntityBoundingBox().minY - posY);
+                EffectManager.instance.snowEffect(world, this, getEntityBoundingBox().minY - posY);
             return;
         }
 

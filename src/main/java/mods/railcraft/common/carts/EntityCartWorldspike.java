@@ -271,8 +271,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj) && usesFuel())
-            GuiHandler.openGui(EnumGui.CART_WORLDSPIKE, player, worldObj, this);
+        if (Game.isHost(world) && usesFuel())
+            GuiHandler.openGui(EnumGui.CART_WORLDSPIKE, player, world, this);
         return true;
     }
 
