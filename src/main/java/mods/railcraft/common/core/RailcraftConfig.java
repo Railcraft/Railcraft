@@ -96,6 +96,7 @@ public class RailcraftConfig {
     private static boolean routingOpsOnly;
     private static boolean trackingAuraEnabled;
     private static boolean enableGhostTrain;
+    private static boolean enablePolarExpress;
     private static boolean generateDefaultOreConfigs;
     private static boolean nerfWaterBottle;
     private static int minecartTankCapacity = 32;
@@ -203,6 +204,7 @@ public class RailcraftConfig {
 
     private static void loadClient() {
         enableGhostTrain = get(configClient, "client", "enableGhostTrain", true, "change to '{t}=false' to disable Ghost Train rendering");
+        enablePolarExpress = get(configClient, "client", "enablePolarExpress", true, "change to '{t}=false' to disable Polar Express (snow) rendering");
         locomotiveLightLevel = get(configClient, "client", "locomotiveLightLevel", 0, 14, 15, "change '14' to a number ranging from '0' to '15' to represent the dynamic lighting of the locomotive when Dynamic Lights mod is present.\nIf it is '0' then locomotive lightning will be disabled.");
     }
 
@@ -791,6 +793,10 @@ public class RailcraftConfig {
 
     public static boolean isGhostTrainEnabled() {
         return enableGhostTrain;
+    }
+
+    public static boolean isPolarExpressEnabled() {
+        return enablePolarExpress;
     }
 
     public static boolean playSounds() {

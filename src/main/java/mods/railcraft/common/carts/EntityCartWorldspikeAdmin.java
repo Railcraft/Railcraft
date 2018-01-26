@@ -12,8 +12,6 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
@@ -35,7 +33,7 @@ public class EntityCartWorldspikeAdmin extends EntityCartWorldspikeStandard {
     }
 
     @Override
-    public boolean needsFuel() {
+    public boolean usesFuel() {
         return false;
     }
 

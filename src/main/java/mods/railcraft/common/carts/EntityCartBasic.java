@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,6 +31,24 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 
     public EntityCartBasic(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     @Nonnull

@@ -34,6 +34,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -230,6 +231,18 @@ public class ClientEffectProxy extends CommonEffectProxy {
                 spawnParticle(particle);
             }
         }
+    }
+
+    @Override
+    public void snowEffect(World world, Object source, double yOffset) {
+        if (thinParticles(true))
+            return;
+        IEffectSource es = EffectManager.getEffectSource(source);
+        double vx = rand.nextGaussian() * 0.1;
+        double vy = rand.nextDouble() * 0.01;
+        double vz = rand.nextGaussian() * 0.1;
+        Vec3d start = es.getPosF().addVector(0.0, yOffset, 0.0);
+        world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.xCoord, start.yCoord, start.zCoord, vx, vy, vz);
     }
 
     @Override

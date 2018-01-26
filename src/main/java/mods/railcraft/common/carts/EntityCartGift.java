@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -47,6 +47,8 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.CLOCK, 25);
         gifts.add(RailcraftItems.CROWBAR_IRON, 20);
         gifts.add(RailcraftItems.CROWBAR_STEEL, 10);
+        gifts.add(RailcraftItems.CROWBAR_DIAMOND, 5);
+        gifts.add(RailcraftItems.CROWBAR_SEASONS, 1);
 
         gifts.add(Items.EXPERIENCE_BOTTLE, 32, 5);
         gifts.add(Items.EXPERIENCE_BOTTLE, 16, 10);
@@ -68,6 +70,7 @@ public class EntityCartGift extends CartBaseSurprise {
 
         gifts.add(Items.ENDER_PEARL, 30);
         gifts.add(Items.NETHER_STAR, 2);
+
 
         int recordChance = 1;
 

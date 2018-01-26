@@ -14,6 +14,11 @@
         },
         {
           "type": "item",
+          "name": "railcraft:tool_crowbar_seasons",
+          "weight": 1
+        },
+        {
+          "type": "item",
           "name": "railcraft:tool_spike_maul_iron",
           "weight": 5
         },

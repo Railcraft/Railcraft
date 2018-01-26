@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.items.RailcraftItems;
 
 @RailcraftModule(value = "railcraft:seasonal", description = "christmas, halloween")
 public class ModuleSeasonal extends RailcraftModulePayload {
@@ -20,6 +21,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftItems.CROWBAR_SEASONS,
                         RailcraftCarts.PUMPKIN,
                         RailcraftCarts.GIFT
                 );

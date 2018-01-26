@@ -1,0 +1,87 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.items;
+
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+/**
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public class ItemCrowbarSeasons extends ItemCrowbar {
+
+    public ItemCrowbarSeasons() {
+        super(ItemMaterials.Material.DIAMOND, ToolMaterial.DIAMOND);
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    public static SeasonPlugin.Season getCurrentSeason(@Nullable ItemStack crowbar) {
+        SeasonPlugin.Season aura = SeasonPlugin.Season.NONE;
+        if (crowbar != null && crowbar.getItem() instanceof ItemCrowbarSeasons) {
+            NBTTagCompound data = crowbar.getTagCompound();
+            if (data != null)
+                aura = SeasonPlugin.Season.VALUES[data.getByte("season")];
+        }
+        return aura;
+    }
+
+    public static void incrementSeason(@Nullable ItemStack crowbar) {
+        if (crowbar != null && crowbar.getItem() instanceof ItemCrowbarSeasons) {
+            NBTTagCompound data = crowbar.getTagCompound();
+            if (data == null) {
+                data = new NBTTagCompound();
+                crowbar.setTagCompound(data);
+            }
+            byte aura = data.getByte("season");
+            aura++;
+            if (aura >= SeasonPlugin.Season.VALUES.length)
+                aura = 0;
+            data.setByte("season", aura);
+        }
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+        if (Game.isHost(world)) {
+            incrementSeason(stack);
+            SeasonPlugin.Season aura = getCurrentSeason(stack);
+            ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "item.railcraft.tool.crowbar.seasons.tips.mode", "\u00A75" + aura);
+        }
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
+        SeasonPlugin.Season aura = getCurrentSeason(stack);
+        String mode = LocalizationPlugin.translate("item.railcraft.tool.crowbar.seasons.tips.mode");
+
+        list.add(String.format(mode, "\u00A75" + aura));
+        addToolTips(stack, player, list, adv);
+    }
+
+}

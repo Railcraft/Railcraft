@@ -14,7 +14,6 @@ import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
-import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.render.models.resource.*;
 import mods.railcraft.client.render.tesr.*;
@@ -182,10 +181,10 @@ public class ClientProxy extends CommonProxy {
         Game.log(Level.TRACE, "Init Start: Renderer");
 
 
-        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid()));
+        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid(), new ModelLocomotiveSteamSolid(0.125F)));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:magic", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:electric", "locomotive.model.electric.default", new ModelLocomotiveElectric()));
-        LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
+//        LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
 
 //        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");

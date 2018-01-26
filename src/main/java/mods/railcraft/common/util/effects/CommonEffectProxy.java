@@ -116,6 +116,10 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
+    public void snowEffect(World world, Object source, double yOffset) {
+    }
+
+    @Override
     public void steamEffect(World world, Object source, double yOffset) {
     }
 

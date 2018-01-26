@@ -34,6 +34,8 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void handleEffectPacket(RailcraftInputStream data) throws IOException;
 
+    void snowEffect(World world, Object source, double yOffset);
+
     void steamEffect(World world, Object source, double yOffset);
 
     void steamJetEffect(World world, Object source, Vec3d vel);
