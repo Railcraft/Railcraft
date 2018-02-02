@@ -10,25 +10,22 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nullable;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -49,7 +46,8 @@ public class WorldPlugin {
 
     @Nullable
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
-        return world.getTileEntity(pos);
+        // see flowerpot source code
+        return world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
     }
 
     public static Optional<TileEntity> getTileEntity(IBlockAccess world, BlockPos pos) {
