@@ -14,10 +14,7 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.single.*;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.ModuleSteam;
-import mods.railcraft.common.modules.ModuleTransport;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.Tuple;
 
@@ -27,6 +24,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
+@Deprecated
 public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     ;

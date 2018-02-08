@@ -40,8 +40,10 @@ import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
-import mods.railcraft.common.blocks.machine.single.BlockTradeStation;
-import mods.railcraft.common.blocks.machine.single.ItemTradeStation;
+import mods.railcraft.common.blocks.single.BlockAdminSteamProducer;
+import mods.railcraft.common.blocks.single.BlockTradeStation;
+import mods.railcraft.common.blocks.single.ItemAdminSteamProducer;
+import mods.railcraft.common.blocks.single.ItemTradeStation;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
@@ -146,6 +148,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
     // singles
     TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemTradeStation::new),
+    ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),

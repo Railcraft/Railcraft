@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.InvTools;

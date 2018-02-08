@@ -9,13 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.machine.single.*;
+import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
-import mods.railcraft.common.blocks.machine.single.TileAdminSteamProducer;
-import mods.railcraft.common.blocks.machine.single.TileEngravingBench;
+import mods.railcraft.common.blocks.single.TileAdminSteamProducer;
+import mods.railcraft.common.blocks.single.TileEngravingBench;
 import mods.railcraft.common.blocks.multi.TileFluxTransformer;
-import mods.railcraft.common.blocks.machine.single.TileForceTrackEmitter;
+import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.machine.equipment.*;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;

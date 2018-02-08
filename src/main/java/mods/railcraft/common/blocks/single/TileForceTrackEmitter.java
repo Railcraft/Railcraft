@@ -7,12 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
@@ -20,6 +21,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -43,7 +45,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: migrate to new charge API
-public class TileForceTrackEmitter extends TileMachineBase implements ITileRotate {
+public class TileForceTrackEmitter extends TileSmartItemTicking implements ITileRotate {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
@@ -248,9 +250,10 @@ public class TileForceTrackEmitter extends TileMachineBase implements ITileRotat
         return this;
     }
 
+    @Nullable
     @Override
-    public EnumMachineEpsilon getMachineType() {
-        return EnumMachineEpsilon.FORCE_TRACK_EMITTER;
+    public EnumGui getGui() {
+        return null;
     }
 
     @Override

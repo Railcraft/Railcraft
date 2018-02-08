@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "railcraft:admin_steam_producer_on"
+    },
+    "powered=false": {
+      "model": "railcraft:admin_steam_producer_off"
+    }
+  }
+}

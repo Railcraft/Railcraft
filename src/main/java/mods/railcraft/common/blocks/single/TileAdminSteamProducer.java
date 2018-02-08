@@ -8,14 +8,14 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
+import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends TileMachineBase {
+public class TileAdminSteamProducer extends TileSmartItemTicking {
 
     private final TankManager tankManager = new TankManager();
     private boolean powered;
@@ -77,11 +77,10 @@ public class TileAdminSteamProducer extends TileMachineBase {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) getTankManager();
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 
@@ -98,7 +97,7 @@ public class TileAdminSteamProducer extends TileMachineBase {
     }
 
     private void checkRedstone() {
-        if (Game.isClient(getWorld()))
+        if (Game.isClient(world))
             return;
         boolean p = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != p) {
@@ -117,9 +116,10 @@ public class TileAdminSteamProducer extends TileMachineBase {
             tankManager.push(tileCache, Predicates.alwaysTrue(), EnumFacing.VALUES, 0, FluidTools.BUCKET_VOLUME);
     }
 
+    @Nullable
     @Override
-    public EnumMachineEpsilon getMachineType() {
-        return EnumMachineEpsilon.ADMIN_STEAM_PRODUCER;
+    public EnumGui getGui() {
+        return null;
     }
 
     @Override

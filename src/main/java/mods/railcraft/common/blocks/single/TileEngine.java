@@ -7,13 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyConnection;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;

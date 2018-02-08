@@ -11,11 +11,11 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.blocks.machine.single.TileForceTrackEmitter;
+import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -82,7 +82,7 @@ public class TileTrackForce extends RailcraftTileEntity {
     private boolean isValidEmitter(BlockPos pos, EnumFacing facing) {
         World world = theWorld();
         assert world != null;
-        if (!WorldPlugin.isBlockAt(world, pos, EnumMachineEpsilon.FORCE_TRACK_EMITTER.block()))
+        if (!WorldPlugin.isBlockAt(world, pos, Blocks.LAPIS_BLOCK/* TODO EnumMachineEpsilon.FORCE_TRACK_EMITTER.block())*/))
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {

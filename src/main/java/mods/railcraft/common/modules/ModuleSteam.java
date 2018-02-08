@@ -33,7 +33,8 @@ public class ModuleSteam extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.EQUIPMENT
+                        RailcraftBlocks.EQUIPMENT,
+                        RailcraftBlocks.ADMIN_STEAM_PRODUCER
                 );
             }
 

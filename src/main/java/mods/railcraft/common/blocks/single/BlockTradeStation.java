@@ -1,4 +1,4 @@
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.material.Material;
@@ -10,9 +10,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 
-/**
- *
- */
 public class BlockTradeStation extends BlockEntityDelegate {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);

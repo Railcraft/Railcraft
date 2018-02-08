@@ -7,13 +7,12 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
+import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
@@ -46,7 +45,7 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
+public class TileEngravingBench extends TileSmartItemTicking implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
 
     public enum GuiPacketType {
 
@@ -66,17 +65,12 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
-    private final Set<Object> actions = new HashSet<Object>();
+    private final Set<Object> actions = new HashSet<>();
 
     public TileEngravingBench() {
         super(2);
         energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
         rfIndicator = new RFEnergyIndicator(energyStorage);
-    }
-
-    @Override
-    public EnumMachineEpsilon getMachineType() {
-        return EnumMachineEpsilon.ENGRAVING_BENCH;
     }
 
     @Override
@@ -323,5 +317,10 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.ENGRAVING_BENCH;
     }
 }

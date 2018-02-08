@@ -15,15 +15,13 @@ import mods.railcraft.client.render.models.programmatic.engine.ModelEnginePiston
 import mods.railcraft.client.render.models.programmatic.engine.ModelEngineTrunk;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.single.TileEngine;
-import mods.railcraft.common.blocks.machine.single.TileEngine.EnergyStage;
+import mods.railcraft.common.blocks.single.TileEngine;
+import mods.railcraft.common.blocks.single.TileEngine.EnergyStage;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;

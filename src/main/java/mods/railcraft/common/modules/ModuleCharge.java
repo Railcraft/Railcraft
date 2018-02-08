@@ -68,16 +68,16 @@ public class ModuleCharge extends RailcraftModulePayload {
 //                CraftingPlugin.addShapelessRecipe(rotor, RailcraftPartItems.getTurbineRotor());
 //                }
 
-                EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
-                if (epsilon.isAvailable()) {
-                    CraftingPlugin.addRecipe(epsilon.getStack(),
-                            "PCP",
-                            "CDC",
-                            "PCP",
-                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.TIN),
-                            'D', "blockDiamond",
-                            'C', "ingotCopper");
-                }
+//                EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
+//                if (epsilon.isAvailable()) {
+//                    CraftingPlugin.addRecipe(epsilon.getStack(),
+//                            "PCP",
+//                            "CDC",
+//                            "PCP",
+//                            'P', RailcraftItems.PLATE.getRecipeObject(Metal.TIN),
+//                            'D', "blockDiamond",
+//                            'C', "ingotCopper");
+//                }
 
 //                epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
 //                if (epsilon.isAvailable())

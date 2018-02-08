@@ -12,13 +12,9 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.single.TileTradeStation;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.equipment.TileSteamTrapAuto;
-import mods.railcraft.common.blocks.machine.equipment.TileSteamTrapManual;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.Tuple;
@@ -29,6 +25,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
+@Deprecated
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     ;
 

@@ -6,25 +6,24 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine.single;
+package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.steam.Steam;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileEngineSteamHigh extends TileEngineSteam {
+public class TileEngineSteamLow extends TileEngineSteam {
 
-    private static final int OUTPUT_RF = 80;
+    private static final int OUTPUT_RF = 40;
 
-    public TileEngineSteamHigh() {
+    public TileEngineSteamLow() {
     }
 
     @Override
     public EnumGui getGui() {
-        return EnumGui.ENGINE_HOBBY;
+        return EnumGui.ENGINE_STEAM;
     }
 
     @Override
@@ -39,11 +38,11 @@ public class TileEngineSteamHigh extends TileEngineSteam {
 
     @Override
     public int maxEnergy() {
-        return 300000;
+        return 200000;
     }
 
     @Override
     public int maxEnergyReceived() {
-        return 12000;
+        return 6000;
     }
 }

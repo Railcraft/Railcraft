@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.single.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWater;
