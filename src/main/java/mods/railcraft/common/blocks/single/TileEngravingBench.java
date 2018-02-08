@@ -323,4 +323,9 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
     public EnumGui getGui() {
         return EnumGui.ENGRAVING_BENCH;
     }
+
+    @Override
+    public EnumFacing getFacing() {
+        return flippedAxis ? EnumFacing.WEST : EnumFacing.NORTH;
+    }
 }

@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:detector"
+  },
+  "variants": {
+    "inventory": [{"transform": "forge:default-block"}],
+    "powered": {
+      "true": {
+        "textures": {
+          "front": "railcraft:blocks/force_track_emitter_facing",
+          "side": "railcraft:blocks/force_track_emitter_side"
+        }
+      },
+      "false": {
+        "textures": {
+          "front": "railcraft:blocks/force_track_emitter_facing_unpowered",
+          "side": "railcraft:blocks/force_track_emitter_side_unpowered"
+        }
+      }
+    },
+    "facing": {
+      "north": {},
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "east": {
+        "y": 90
+      }
+    }
+  }
+}

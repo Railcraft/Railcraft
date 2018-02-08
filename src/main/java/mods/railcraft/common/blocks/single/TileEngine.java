@@ -398,6 +398,11 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
         return from == direction;
     }
 
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
     public enum EnergyStage {
 
         BLUE, GREEN, YELLOW, ORANGE, RED, OVERHEAT;

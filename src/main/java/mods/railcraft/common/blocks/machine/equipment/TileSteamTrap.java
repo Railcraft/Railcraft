@@ -188,4 +188,9 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
         direction = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();
     }
+
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
 }

@@ -76,7 +76,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return tileCache;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());

@@ -13,15 +13,21 @@ package mods.railcraft.common.blocks.tracks.force;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 
 /**
  * Created by CovertJaguar on 8/15/2016 for Railcraft.
@@ -29,11 +35,44 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTrackForce extends RailcraftTileEntity {
-    public TileForceTrackEmitter emitter;
+
+    @Nullable
+    private TileForceTrackEmitter emitter;
+
+    private boolean zAxis = true;
+    private EnumColor color = EnumColor.CYAN;
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeEnum(color);
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        color = data.readEnum(EnumColor.VALUES);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setBoolean("Z-Axis", zAxis);
+        data.setInteger("Color", color.ordinal());
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (data.hasKey("Z-Axis", Constants.NBT.TAG_BYTE))
+            zAxis = data.getBoolean("Z-Axis");
+        if (data.hasKey("Color", Constants.NBT.TAG_INT))
+            color = EnumColor.VALUES[data.getInteger("Color")];
+    }
 
     public void checkForEmitter() {
-        World world = theWorld();
-        assert world != null;
+        assert emitter != null;
         BlockRailBase.EnumRailDirection meta = TrackTools.getTrackDirectionRaw(world, getPos());
         BlockPos checkPos = getPos().down();
         if (meta == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {

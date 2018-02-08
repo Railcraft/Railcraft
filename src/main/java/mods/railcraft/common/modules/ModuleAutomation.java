@@ -11,18 +11,15 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.PrototypeRecipe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 @RailcraftModule(value = "railcraft:automation", description = "tunnel bore, maintenance carts, feed station, trade station, detectors")
@@ -40,6 +37,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.EQUIPMENT,
                         RailcraftBlocks.TRADE_STATION,
+                        RailcraftBlocks.FORCE_TRACK_EMITTER,
 
                         RailcraftItems.FILTER_BLANK,
                         RailcraftItems.FILTER_TYPE,

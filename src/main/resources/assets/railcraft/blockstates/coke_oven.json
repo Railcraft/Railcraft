@@ -10,9 +10,9 @@
     "inventory": [
       {
         "transform": "forge:default-block",
-        "model": "railcraft:oven_inventory",
+        "model": "railcraft:detector",
         "textures": {
-          "window": "railcraft:blocks/coke_oven_1",
+          "front": "railcraft:blocks/coke_oven_1",
           "side": "railcraft:blocks/coke_oven_0"
         }
       }

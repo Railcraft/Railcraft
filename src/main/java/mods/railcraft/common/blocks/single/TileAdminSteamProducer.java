@@ -10,7 +10,8 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.TileSmartItemTicking;
+import mods.railcraft.common.blocks.ISmartTile;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -34,7 +35,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends TileSmartItemTicking {
+public class TileAdminSteamProducer extends RailcraftTickingTileEntity implements ISmartTile {
 
     private final TankManager tankManager = new TankManager();
     private boolean powered;
@@ -151,4 +152,8 @@ public class TileAdminSteamProducer extends TileSmartItemTicking {
         }
     }
 
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return base.withProperty(BlockAdminSteamProducer.POWERED, powered);
+    }
 }

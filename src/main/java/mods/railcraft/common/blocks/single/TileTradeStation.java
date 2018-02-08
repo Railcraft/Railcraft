@@ -279,4 +279,9 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     public IBlockState getActualState(IBlockState base) {
         return base.withProperty(BlockTradeStation.FACING, direction);
     }
+
+    @Override
+    public EnumFacing getFacing() {
+        return direction;
+    }
 }

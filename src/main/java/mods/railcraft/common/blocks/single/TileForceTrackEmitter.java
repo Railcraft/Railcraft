@@ -14,14 +14,15 @@ import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -44,52 +45,76 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-//TODO: migrate to new charge API
 public class TileForceTrackEmitter extends TileSmartItemTicking implements ITileRotate {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
     private static final int TICKS_PER_ACTION = 4;
-    private static final int TICKS_PER_REFRESH = 64;
+    static final int TICKS_PER_REFRESH = 64;
     public static final int MAX_TRACKS = 64;
-    //    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 0.0);
     private boolean powered;
     private EnumFacing facing = EnumFacing.NORTH;
     private int numTracks;
     private State state = State.RETRACTED;
+    private EnumColor colorEmitting = EnumColor.CYAN;
 
     private enum State {
 
-        EXTENDED, RETRACTED, EXTENDING, RETRACTING, HALTED;
-
-        private void doAction(TileForceTrackEmitter emitter) {
-            switch (this) {
-                case EXTENDING:
-                    emitter.extend();
-                    break;
-                case RETRACTING: {
-                    if (emitter.numTracks <= 0)
-                        emitter.state = State.RETRACTED;
-                    else if (emitter.clock % TICKS_PER_ACTION == 0) {
-                        int x = emitter.numTracks * emitter.facing.getFrontOffsetX();
-                        int z = emitter.numTracks * emitter.facing.getFrontOffsetZ();
-                        emitter.removeTrack(emitter.getPos().add(x, 1, z));
-                    }
-                    break;
-                }
-                case EXTENDED: {
-                    TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
-                    if (tile instanceof TileTrackOutfitted) {
-                        TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
-                        ITrackKitInstance track = trackTile.getTrackKitInstance();
-                        if (track instanceof ITrackKitLockdown)
-                            ((ITrackKitLockdown) track).releaseCart();
-                    }
-                    break;
+        EXTENDED() {
+            @Override
+            void doAction(TileForceTrackEmitter emitter) {
+                TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
+                if (tile instanceof TileTrackOutfitted) {
+                    TileTrackOutfitted trackTile = (TileTrackOutfitted) tile;
+                    ITrackKitInstance track = trackTile.getTrackKitInstance();
+                    if (track instanceof ITrackKitLockdown)
+                        ((ITrackKitLockdown) track).releaseCart();
                 }
             }
+
+            @Override
+            State afterUseCharge(TileForceTrackEmitter emitter) {
+                if (emitter.clock % TICKS_PER_REFRESH == 0)
+                    return State.EXTENDING;
+                return this;
+            }
+        },
+        RETRACTED() {
+            @Override
+            State whenNoCharge() {
+                return this;
+            }
+        },
+        EXTENDING() {
+            @Override
+            void doAction(TileForceTrackEmitter emitter) {
+                emitter.extend();
+            }
+        },
+        RETRACTING() {
+            @Override
+            void doAction(TileForceTrackEmitter emitter) {
+                if (emitter.numTracks <= 0)
+                    emitter.state = State.RETRACTED;
+                else if (emitter.clock % TICKS_PER_ACTION == 0) {
+                    int x = emitter.numTracks * emitter.facing.getFrontOffsetX();
+                    int z = emitter.numTracks * emitter.facing.getFrontOffsetZ();
+                    emitter.removeTrack(emitter.getPos().add(x, 1, z));
+                }
+            }
+        },
+        HALTED;
+
+        void doAction(TileForceTrackEmitter emitter) {
         }
 
+        State afterUseCharge(TileForceTrackEmitter emitter) {
+            return State.EXTENDING;
+        }
+
+        State whenNoCharge() {
+            return State.RETRACTING;
+        }
     }
 
     @Override
@@ -102,7 +127,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         if (entityLiving != null)
-            facing = entityLiving.getHorizontalFacing();
+            facing = entityLiving.getHorizontalFacing().getOpposite();
         checkRedstone();
     }
 
@@ -135,25 +160,14 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
         double draw = getDraw(numTracks);
 
-//TODO: migrate to new charge API
-        if (powered /*&& chargeHandler.removeCharge(draw) >= draw*/)
-            switch (state) {
-                case RETRACTED:
-                case RETRACTING:
-                case HALTED:
-                    state = State.EXTENDING;
-                    break;
-                case EXTENDED:
-                    if (clock % TICKS_PER_REFRESH == 0)
-                        state = State.EXTENDING;
-                    break;
-            }
-        else if (state == State.EXTENDED || state == State.EXTENDING || state == State.HALTED)
-            state = State.RETRACTING;
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        if (powered && node.canUseCharge(draw)) {
+            node.useCharge(draw);
+            state = state.afterUseCharge(this);
+        } else
+            state = state.whenNoCharge();
 
         state.doAction(this);
-
-//        chargeHandler.tick();
     }
 
     private void spawnParticles(BlockPos pos) {
@@ -173,7 +187,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             if (WorldPlugin.isBlockLoaded(world, offset)) {
                 IBlockState blockState = WorldPlugin.getBlockState(world, offset);
                 EnumRailDirection direction;
-                if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
+                if (facing.getAxis() == EnumFacing.Axis.Z)
                     direction = EnumRailDirection.NORTH_SOUTH;
                 else
                     direction = EnumRailDirection.EAST_WEST;
@@ -228,8 +242,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     public boolean hasPowerToExtend() {
-        return true;
-//        return chargeHandler.getCharge() >= getDraw(numTracks + 1);
+        return ChargeManager.getNetwork(world).getNode(pos).canUseCharge(getDraw(numTracks + 1));
     }
 
     private void removeTrack(BlockPos pos) {
@@ -238,16 +251,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             WorldPlugin.setBlockToAir(world, pos);
         }
         numTracks--;
-    }
-
-//    @Override
-//    public ChargeHandler getChargeHandler() {
-//        return chargeHandler;
-//    }
-
-    //    @Override
-    public TileEntity getTile() {
-        return this;
     }
 
     @Nullable
@@ -277,7 +280,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-//        chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
@@ -288,7 +290,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-//        chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
         facing = EnumFacing.getFront(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
@@ -300,6 +301,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         super.writePacketData(data);
         data.writeBoolean(powered);
         data.writeByte((byte) facing.ordinal());
+        data.writeEnum(colorEmitting);
     }
 
     @Override
@@ -319,11 +321,21 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             update = true;
         }
 
+        EnumColor color = data.readEnum(EnumColor.VALUES);
+        if (color != colorEmitting) {
+            colorEmitting = color;
+        }
+
         if (update)
             markBlockForUpdate();
     }
 
     public EnumFacing getFacing() {
         return facing;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return base.withProperty(BlockForceTrackEmitter.FACING, facing).withProperty(BlockForceTrackEmitter.POWERED, powered);
     }
 }
