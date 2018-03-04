@@ -42,7 +42,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
         setSize(item.getEntityItem(), 1);
         item.hoverStart = 0.0F;
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.worldObj, null);
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.world, null);
 
         boolean renderIn3D = model.isGui3d();
 
@@ -60,7 +60,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
                 numIterations = 0;
             } else {
                 numIterations = (int) Math.ceil(slotsFilled / 2);
-                numIterations = MathHelper.clamp_int(numIterations, 1, 6);
+                numIterations = MathHelper.clamp(numIterations, 1, 6);
             }
             yOffset = -1.1F;
         } else {

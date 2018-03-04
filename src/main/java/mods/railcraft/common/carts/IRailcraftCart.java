@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,16 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
@@ -22,6 +28,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IRailcraftCart {
+    DataParameter<Byte> SEASON = DataSerializers.BYTE.createKey(225);
 
     IRailcraftCartContainer getCartType();
 
@@ -52,7 +59,7 @@ public interface IRailcraftCart {
 
     default void killAndDrop(EntityMinecart cart) {
         cart.setDead();
-        if (!cart.worldObj.getGameRules().getBoolean("doEntityDrops"))
+        if (!cart.world.getGameRules().getBoolean("doEntityDrops"))
             return;
         ItemStack[] drops = getItemsDropped(cart);
         if (!RailcraftConfig.doCartsBreakOnDrop() && cart.hasCustomName() && !ArrayUtils.isEmpty(drops))
@@ -61,6 +68,27 @@ public interface IRailcraftCart {
             if (!InvTools.isEmpty(item))
                 cart.entityDropItem(item, 0.0F);
         }
+    }
+
+    default void cartInit() {
+        ((Entity) this).getDataManager().register(SEASON, (byte) 0);
+    }
+
+    default SeasonPlugin.Season getSeason() {
+        return SeasonPlugin.Season.VALUES[((Entity) this).getDataManager().get(SEASON)];
+    }
+
+    default void setSeason(SeasonPlugin.Season season) {
+        ((Entity) this).getDataManager().set(SEASON, (byte) season.ordinal());
+    }
+
+    default NBTTagCompound saveToNBT(NBTTagCompound nbt) {
+        NBTPlugin.writeEnumOrdinal(nbt, "season", getSeason());
+        return nbt;
+    }
+
+    default void loadFromNBT(NBTTagCompound nbt) {
+        setSeason(NBTPlugin.readEnumOrdinal(nbt, "season", SeasonPlugin.Season.VALUES, SeasonPlugin.Season.NONE));
     }
 
 }

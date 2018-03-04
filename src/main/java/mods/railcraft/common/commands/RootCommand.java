@@ -14,10 +14,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * This is the command that will be registered with Minecraft, it will delegate execution to our sub-commands.
@@ -26,7 +23,7 @@ import java.util.TreeSet;
  */
 public class RootCommand extends CommandBase implements IModCommand {
     public static final String ROOT_COMMAND_NAME = "railcraft";
-    private final SortedSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
+    private final NavigableSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
 
     public void addChildCommand(SubCommand child) {
         child.setParent(this);
@@ -34,12 +31,12 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public SortedSet<SubCommand> getChildren() {
+    public NavigableSet<SubCommand> getChildren() {
         return children;
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return ROOT_COMMAND_NAME;
     }
 
@@ -59,7 +56,7 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         List<String> aliases = new ArrayList<>();
         aliases.add("rc");
         aliases.add("rail");
@@ -67,8 +64,8 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/" + getCommandName() + " help";
+    public String getUsage(ICommandSender sender) {
+        return "/" + getName() + " help";
     }
 
     @Override
@@ -78,8 +75,8 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public String getFullCommandString() {
-        return getCommandName();
+    public String getFullString() {
+        return getName();
     }
 
     @Override

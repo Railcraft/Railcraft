@@ -110,7 +110,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
             case DARK_DIAMOND:
             case DARK_EMERALD:
             case DARK_LAPIS: {
-                int xp = MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+                int xp = MathHelper.getInt(worldIn.rand, 2, 5);
                 dropXpOnBlockBreak(worldIn, pos, xp);
             }
         }
@@ -201,7 +201,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
 
     @Nullable
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         switch (getVariant(state)) {
             case COPPER: {
                 return EnumOreMetal.COPPER.getStack();
@@ -234,7 +234,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
                 return EnumOreMetalPoor.TIN.getStack();
             }
             default:
-                return super.createStackedBlock(state);
+                return super.getSilkTouchDrop(state);
         }
     }
 

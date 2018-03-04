@@ -34,6 +34,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -117,7 +118,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
         if (RailcraftItems.GOGGLES.item() != null) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
+            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().player);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }
         return AuraKeyHandler.isAuraEnabled(aura);
@@ -152,7 +153,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public void trailEffect(BlockPos start, TileEntity dest, long colorSeed) {
         if (thinParticles(false))
             return;
-        if (Minecraft.getMinecraft().thePlayer.getDistanceSq(start) > TRACKING_DISTANCE)
+        if (Minecraft.getMinecraft().player.getDistanceSq(start) > TRACKING_DISTANCE)
             return;
         if (rand.nextInt(3) == 0) {
             double px = start.getX() + 0.5 + rand.nextGaussian() * 0.1;
@@ -176,7 +177,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     private void doFireSpark(RailcraftInputStream data) throws IOException {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
-        fireSparkEffect(Minecraft.getMinecraft().theWorld, start, destination);
+        fireSparkEffect(Minecraft.getMinecraft().world, start, destination);
     }
 
     @Override
@@ -210,7 +211,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         IEffectSource es = EffectManager.getEffectSource(source);
 
         Vec3d sourcePos = es.getPosF();
-        if (FMLClientHandler.instance().getClient().thePlayer.getDistanceSq(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord) > 25600)
+        if (FMLClientHandler.instance().getClient().player.getDistanceSq(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord) > 25600)
             return;
 
         for (ChunkPos chunk : chunks) {
@@ -230,6 +231,18 @@ public class ClientEffectProxy extends CommonEffectProxy {
                 spawnParticle(particle);
             }
         }
+    }
+
+    @Override
+    public void snowEffect(World world, Object source, double yOffset) {
+        if (thinParticles(true))
+            return;
+        IEffectSource es = EffectManager.getEffectSource(source);
+        double vx = rand.nextGaussian() * 0.1;
+        double vy = rand.nextDouble() * 0.01;
+        double vz = rand.nextGaussian() * 0.1;
+        Vec3d start = es.getPosF().addVector(0.0, yOffset, 0.0);
+        world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.xCoord, start.yCoord, start.zCoord, vx, vy, vz);
     }
 
     @Override
@@ -309,7 +322,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     private void doZapDeath(RailcraftInputStream data) throws IOException {
         Vec3d pos = data.readVec3d();
-        zapEffectDeath(Minecraft.getMinecraft().theWorld, pos);
+        zapEffectDeath(Minecraft.getMinecraft().world, pos);
     }
 
     @Override

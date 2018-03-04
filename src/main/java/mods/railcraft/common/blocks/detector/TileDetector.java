@@ -48,7 +48,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     public void setDetector(EnumDetector type) {
         this.detector = type.buildHandler();
         detector.setTile(this);
-        if (worldObj != null) {
+        if (world != null) {
             markBlockForUpdate();
             notifyBlocksOfNeighborChange();
         }
@@ -78,7 +78,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     }
 
     public List<EntityMinecart> getCarts() {
-        return CartToolsAPI.getMinecartsOnAllSides(worldObj, getPos(), SENSITIVITY);
+        return CartToolsAPI.getMinecartsOnAllSides(world, getPos(), SENSITIVITY);
     }
 
     public boolean blockActivated(EntityPlayer player) {
@@ -139,13 +139,13 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
         // Legacy stuff?
 //        if (!tested) {
 //            tested = true;
-//            int meta = worldObj.getBlockMetadata(getPos());
-//            IBlockState state = WorldPlugin.getBlockState(worldObj, getPos());
+//            int meta = world.getBlockMetadata(getPos());
+//            IBlockState state = WorldPlugin.getBlockState(world, getPos());
 //            if (meta != 0) {
-//                worldObj.removeTileEntity(getPos());
+//                world.removeTileEntity(getPos());
 //                Block block = RailcraftBlocks.detector.block();
 //                if (block != null)
-//                    worldObj.setBlockState(getPos(), newState, 3);
+//                    world.setBlockState(getPos(), newState, 3);
 //            }
 //        }
         if (powerDelay > 0)
@@ -157,10 +157,10 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
                 if (powerState > PowerPlugin.NO_POWER)
                     powerDelay = CartConstants.DETECTED_POWER_OUTPUT_FADE;
                 sendUpdateToClient();
-                worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+                world.notifyNeighborsOfStateChange(getPos(), getBlockType());
                 IBlockState state = getBlockState();
                 if (state != null)
-                    WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));
+                    WorldPlugin.notifyBlocksOfNeighborChangeOnSide(world, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));
             }
         }
     }

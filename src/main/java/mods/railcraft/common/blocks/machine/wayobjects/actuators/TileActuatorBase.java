@@ -87,7 +87,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             return;
 
         if (clock % ARROW_UPDATE_INTERVAL == 0)
@@ -99,13 +99,13 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
             if (isSwitched)
-                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, world.rand.nextFloat() * 0.25F + 0.7F);
             else
-                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(world, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, world.rand.nextFloat() * 0.25F + 0.7F);
 
             WorldPlugin.neighborAction(getPos(), EnumFacing.HORIZONTALS, pos -> {
-                if (WorldPlugin.isBlockAt(worldObj, pos, BlockRedstoneComparator.class)) {
-                    WorldPlugin.notifyBlockOfStateChange(worldObj, pos, getBlockType());
+                if (WorldPlugin.isBlockAt(world, pos, BlockRedstoneComparator.class)) {
+                    WorldPlugin.notifyBlockOfStateChange(world, pos, getBlockType());
                 }
             });
         }
@@ -220,7 +220,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
     private void determineOrientation() {
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (TrackTools.isTrackInstanceAt(worldObj, getPos().offset(side), ITrackKitSwitch.class)) {
+            if (TrackTools.isTrackInstanceAt(world, getPos().offset(side), ITrackKitSwitch.class)) {
                 setFacing(side);
                 return;
             }
@@ -237,6 +237,6 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     protected boolean isBeingPoweredByRedstone() {
-        return PowerPlugin.isBlockBeingPowered(worldObj, getPos()) || PowerPlugin.isRedstonePowered(worldObj, getPos());
+        return PowerPlugin.isBlockBeingPowered(world, getPos()) || PowerPlugin.isRedstonePowered(world, getPos());
     }
 }

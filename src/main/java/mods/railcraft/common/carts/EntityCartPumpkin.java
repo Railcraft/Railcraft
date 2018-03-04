@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -34,6 +35,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
 
     static {
         POTIONS.add(new SurprisePotion(100));
+        POTIONS.add(RailcraftItems.CROWBAR_SEASONS, 1);
 
         MOBS.add(SurpriseEntity.create(EntityBat.class, 75, 3));
         MOBS.add(SurpriseEntity.create(EntityWitch.class, 25, 1));
@@ -61,7 +63,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
                     horse.setGrowingAge(0);
                     horse.tasks.addTask(1, new EntityAIHalloweenKnights(horse));
                 },
-                (cart, horse) -> cart.worldObj.addWeatherEffect(new EntityLightningBolt(horse.worldObj, horse.posX, horse.posY, horse.posZ, true))
+                (cart, horse) -> cart.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true))
         ));
 
         MOBS.add(SurpriseEntity.create(EntityHorse.class, 20, 1,

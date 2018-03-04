@@ -62,7 +62,7 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             return;
         }
@@ -97,9 +97,9 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
                 continue;
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos(), side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(world, getPos(), side)) > p)
                 p = tmp;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos().down(), side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(world, getPos().down(), side)) > p)
                 p = tmp;
         }
         return p;

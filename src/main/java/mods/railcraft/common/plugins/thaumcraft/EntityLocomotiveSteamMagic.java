@@ -115,7 +115,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, (stack) -> stack.getItem() == ForgeModContainer.getInstance().universalBucket);
         }
@@ -123,7 +123,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
 
     @Override
     protected void openGui(@Nonnull EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, worldObj, this);
+        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, world, this);
     }
 
     @Override

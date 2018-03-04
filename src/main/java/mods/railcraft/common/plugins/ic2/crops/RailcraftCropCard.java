@@ -6,12 +6,6 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-///**
-// * Created by GeneralCamo on 4/27/2017.
-// *
-// * @author GeneralCamo
-// *         Created for Railcraft <http://www.railcraft.info>
-// */
 //public abstract class RailcraftCropCard extends CropCard {
 //
 //    public RailcraftCropCard() {

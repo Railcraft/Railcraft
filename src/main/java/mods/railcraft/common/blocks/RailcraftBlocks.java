@@ -40,6 +40,7 @@ import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
+import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
@@ -49,6 +50,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.ItemSignal;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
+import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.ore.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -60,7 +62,6 @@ import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.firestone.BlockRitual;
@@ -108,8 +109,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
+    @Deprecated
     MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
+    @Deprecated
     MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
+    @Deprecated
     MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
@@ -138,7 +142,25 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WIRE("wire", BlockWire.class, BlockWire::new, ItemBlockRailcraft::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic.class, BlockWorldLogic::new, ItemBlockRailcraft::new),
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),
-    WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),;
+    WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
+    // singles
+    TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemTradeStation::new),
+    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
+    ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
+    // multiblocks
+    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
+    BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
+    ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
+    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
+    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemTankIronGauge::new),
+    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemTankIronValve::new),
+    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemTankIronWall::new),
+    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemTankSteelGauge::new),
+    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemTankSteelValve::new),
+    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemTankSteelWall::new),
+    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemFluxTransformer::new),
+    // others
+    ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;

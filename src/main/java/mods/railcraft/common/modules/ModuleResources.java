@@ -58,7 +58,7 @@ public class ModuleResources extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
                 if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
                     CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
@@ -75,8 +75,8 @@ public class ModuleResources extends RailcraftModulePayload {
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
 
-                        if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-                            RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
+//                        if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
+//                            RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
                     }
 
                     type = EnumGeneric.BLOCK_COPPER;
@@ -150,11 +150,8 @@ public class ModuleResources extends RailcraftModulePayload {
                         }
                     }
                 }
-            }
 
-            @Override
-            public void init() {
-                bottleFree = RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable();
+                bottleFree = RailcraftConfig.useCreosoteFurnaceRecipes() || !RailcraftBlocks.COKE_OVEN.isLoaded();
                 if (bottleFree) {
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);

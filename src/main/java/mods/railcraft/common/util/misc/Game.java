@@ -71,7 +71,7 @@ public class Game {
     public static World getWorld() {
         Minecraft mc = FMLClientHandler.instance().getClient();
         if (mc != null)
-            return mc.theWorld;
+            return mc.world;
         return null;
     }
 

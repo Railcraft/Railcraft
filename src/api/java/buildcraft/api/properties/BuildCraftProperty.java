@@ -67,7 +67,7 @@ public class BuildCraftProperty<T extends Comparable<T>> extends PropertyHelper<
      */
     public static BuildCraftProperty<Integer> create(String name, int first, int last, int difference) {
         int actualDiff = Math.abs(difference);
-        int number = MathHelper.floor_float(Math.abs(first - last) / (float) actualDiff + 1);
+        int number = MathHelper.floor(Math.abs(first - last) / (float) actualDiff + 1);
         Integer[] array = new Integer[number];
         int addedDiff = actualDiff * (first > last ? -1 : 1);
         int current = first;

@@ -8,23 +8,42 @@ import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
-public class CrucibleRecipe {
+public class CrucibleRecipe implements ITCRecipe {
 
 	private ItemStack recipeOutput;
 	
 	public Object catalyst;
 	public AspectList aspects;
 	public String[] research;
-	
+	private String name;
 	public int hash;
 	
+	/**
+	 * @param researchKey the research key required for this recipe to work.<br>
+	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
+	 * @param result the output result
+     * @param cat an itemstack of the catalyst or a string if it is an ore dictionary item
+     * @param tags the aspects required to craft this
+     */
+	public CrucibleRecipe(String researchKey, ItemStack result, Object cat, AspectList tags) {
+		this(new String[] {researchKey}, result, cat, tags);
+	}
+	
+	/**
+	 * @param researchKey the research key required for this recipe to work.<br>
+	 * 		  Can specify stage like IPlayerKnowledge.isResearchKnown
+	 * @param result the output result
+     * @param cat an itemstack of the catalyst or a string if it is an ore dictionary item
+     * @param tags the aspects required to craft this
+     */
 	public CrucibleRecipe(String[] researchKey, ItemStack result, Object cat, AspectList tags) {
 		recipeOutput = result;
+		this.name="";
 		this.aspects = tags;
 		this.research = researchKey;
 		this.catalyst = cat;
 		if (cat instanceof String) {
-			this.catalyst = OreDictionary.getOres((String) cat);
+			this.catalyst = OreDictionary.getOres((String) cat,false);
 		}
 		String hc = "";
 		for (String ss:research) hc+=ss;
@@ -86,6 +105,23 @@ public class CrucibleRecipe {
 	public ItemStack getRecipeOutput() {
 		return recipeOutput;
 	}
+
+
+
+	@Override
+	public String getRecipeName() {
+		return name;
+	}
+
+
+
+	@Override
+	public void setRecipeName(String name) {
+		this.name=name;
+	}
+
+
+
 	
 
 }

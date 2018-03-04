@@ -40,7 +40,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public IChargeBlock.ChargeBattery getChargeBattery() {
         if (chargeBattery == null) {
-            chargeBattery = ChargeManager.getNetwork(worldObj).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
+            chargeBattery = ChargeManager.getNetwork(world).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
         }
         return chargeBattery;
     }

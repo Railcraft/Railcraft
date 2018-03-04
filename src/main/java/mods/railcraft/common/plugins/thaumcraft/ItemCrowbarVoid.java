@@ -17,14 +17,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
-import thaumcraft.api.items.IRepairable;
 import thaumcraft.api.items.IWarpingGear;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "thaumcraft.api.items.IRepairable", modid = "Thaumcraft"),
         @Optional.Interface(iface = "thaumcraft.api.items.IWarpingGear", modid = "Thaumcraft")
 })
-public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpingGear {
+public class ItemCrowbarVoid extends ItemCrowbar implements /*IRepairable,*/ IWarpingGear {
 
     public ItemCrowbarVoid() {
         super(ItemMaterials.Material.VOID, ThaumcraftPlugin.getVoidmetalToolMaterial());

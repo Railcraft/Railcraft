@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.machine.ItemMachine;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,7 +30,7 @@ public class ItemSignal extends ItemMachine {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelResourceLocation getModelLocation(IBlockState state) {
-        return new ModelResourceLocation(state.getBlock().getRegistryName(), "inventory");
+    public ModelResourceLocation getModelLocation(ItemStack stack, IBlockState state) {
+        return new ModelResourceLocation(block.getRegistryName(), "inventory");
     }
 }

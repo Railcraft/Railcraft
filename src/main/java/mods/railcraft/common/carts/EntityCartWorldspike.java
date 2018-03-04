@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
@@ -35,7 +36,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart {
+public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart, INeedsFuel {
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -85,7 +85,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     }
 
     public boolean hasActiveTicket() {
-        return ticket != null || (Game.isClient(worldObj) && hasTicketFlag());
+        return ticket != null || (Game.isClient(world) && hasTicketFlag());
     }
 
     private void setTicketFlag(boolean flag) {
@@ -99,10 +99,10 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             if (hasTicketFlag())
                 if (chunks != null)
-                    EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
+                    EffectManager.instance.chunkLoaderEffect(world, this, chunks);
                 else
                     setupChunks(chunkCoordX, chunkCoordZ);
             return;
@@ -116,7 +116,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (disabled > 0)
             disabled--;
 
-        if (needsFuel()) {
+        if (usesFuel()) {
             if (ticket != null && fuel > 0)
                 fuel--;
             if (fuel <= 0) {
@@ -138,8 +138,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (RailcraftConfig.printWorldspikeDebug() && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, world.provider.getDimension(), world.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, world.provider.getDimension(), world.getWorldTime());
             }
         }
     }
@@ -161,15 +161,23 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     protected abstract Ticket getTicketFromForge();
 
-    public boolean needsFuel() {
+    public boolean usesFuel() {
         return !getFuelMap().isEmpty();
+    }
+
+    @Override
+    public boolean needsFuel() {
+        if (!usesFuel())
+            return false;
+        ItemStack stack = getStackInSlot(0);
+        return InvTools.isEmpty(stack) || (stack.getMaxStackSize() > 1 && InvTools.sizeOf(stack) <= 1);
     }
 
     @Override
     public abstract ItemMap<Float> getFuelMap();
 
     protected boolean meetsTicketRequirements() {
-        return !isDead && !teleported && disabled <= 0 && (hasFuel() || !needsFuel());
+        return !isDead && !teleported && disabled <= 0 && (hasFuel() || !usesFuel());
     }
 
     protected void releaseTicket() {
@@ -183,7 +191,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
             Ticket chunkTicket = getTicketFromForge();
             //noinspection ConstantConditions
             if (chunkTicket != null) {
-//                System.out.println("Request Ticket: " + worldObj.getClass().getSimpleName());
+//                System.out.println("Request Ticket: " + world.getClass().getSimpleName());
                 chunkTicket.getModData();
                 chunkTicket.setChunkListDepth(MAX_CHUNKS);
                 chunkTicket.bindEntity(this);
@@ -244,7 +252,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
-        if (needsFuel())
+        if (usesFuel())
             fuel = data.getLong("fuel");
     }
 
@@ -263,15 +271,15 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj) && needsFuel())
-            GuiHandler.openGui(EnumGui.CART_WORLDSPIKE, player, worldObj, this);
+        if (Game.isHost(world) && usesFuel())
+            GuiHandler.openGui(EnumGui.CART_WORLDSPIKE, player, world, this);
         return true;
     }
 
     @Override
     public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack drop = super.createCartItem(cart);
-        if (needsFuel() && hasFuel()) {
+        if (usesFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setLong("fuel", fuel);
             drop.setTagCompound(nbt);
@@ -297,7 +305,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     public int getSizeInventory() {
-        return needsFuel() ? 1 : 0;
+        return usesFuel() ? 1 : 0;
     }
 
     @Override

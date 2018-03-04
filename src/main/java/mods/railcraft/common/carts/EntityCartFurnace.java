@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -22,9 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-
-import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 
 public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart {
 
@@ -39,6 +39,24 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.FURNACE;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     /**

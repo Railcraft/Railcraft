@@ -42,7 +42,7 @@ public class PacketGuiWidget extends RailcraftPacket {
         windowId = data.readByte();
         byte widgetId = data.readByte();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId) {
             RailcraftContainer railcraftContainer = ((RailcraftContainer) player.openContainer);

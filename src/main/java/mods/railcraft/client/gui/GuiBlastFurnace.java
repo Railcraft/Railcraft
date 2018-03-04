@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.alpha.TileBlastFurnace;
+import mods.railcraft.common.blocks.multi.TileBlastFurnace;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;

@@ -38,10 +38,10 @@ public class TamingInteractHandler {
                     tamable.setOwnerId(event.getEntityPlayer().getUniqueID());
                     playTameEffect(tamable, true);
                     tamable.getAISit().setSitting(true);
-                    tamable.worldObj.setEntityState(tamable, (byte) 7);
+                    tamable.world.setEntityState(tamable, (byte) 7);
                 } else {
                     playTameEffect(tamable, false);
-                    tamable.worldObj.setEntityState(tamable, (byte) 6);
+                    tamable.world.setEntityState(tamable, (byte) 6);
                 }
                 event.setCanceled(true);
             }
@@ -58,7 +58,7 @@ public class TamingInteractHandler {
             double var4 = rand.nextGaussian() * 0.02D;
             double var6 = rand.nextGaussian() * 0.02D;
             double var8 = rand.nextGaussian() * 0.02D;
-            tamable.worldObj.spawnParticle(particleType, tamable.posX + (double) (rand.nextFloat() * tamable.width * 2.0F) - (double) tamable.width, tamable.posY + 0.5D + (double) (rand.nextFloat() * tamable.height), tamable.posZ + (double) (rand.nextFloat() * tamable.width * 2.0F) - (double) tamable.width, var4, var6, var8);
+            tamable.world.spawnParticle(particleType, tamable.posX + (double) (rand.nextFloat() * tamable.width * 2.0F) - (double) tamable.width, tamable.posY + 0.5D + (double) (rand.nextFloat() * tamable.height), tamable.posZ + (double) (rand.nextFloat() * tamable.width * 2.0F) - (double) tamable.width, var4, var6, var8);
         }
     }
 }

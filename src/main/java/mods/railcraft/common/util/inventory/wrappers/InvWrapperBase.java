@@ -88,8 +88,8 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject, II
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return inv.isUseableByPlayer(entityplayer);
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+        return inv.isUsableByPlayer(entityplayer);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class PacketGuiData extends RailcraftPacket {
         windowId = data.readByte();
         dataId = data.readByte();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId)
             ((RailcraftContainer) player.openContainer).updateData(dataId, data);

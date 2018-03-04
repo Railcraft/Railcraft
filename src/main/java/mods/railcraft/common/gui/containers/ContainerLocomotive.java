@@ -51,12 +51,7 @@ public class ContainerLocomotive extends RailcraftContainer {
     public final void init() {
         defineSlotsAndWidgets();
 
-        SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111) {
-            @Override
-            public int getSlotStackLimit() {
-                return 1;
-            }
-        };
+        SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111).setStackLimit(1);
         slotTicket.setToolTips(ToolTip.buildToolTip("gui.locomotive.tips.slot.ticket"));
         addSlot(slotTicket);
         // TODO: make some way to clear this?

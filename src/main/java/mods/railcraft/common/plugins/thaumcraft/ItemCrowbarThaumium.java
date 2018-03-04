@@ -12,14 +12,13 @@ package mods.railcraft.common.plugins.thaumcraft;
 import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.items.ItemMaterials;
 import net.minecraftforge.fml.common.Optional;
-import thaumcraft.api.items.IRepairable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 
 @Optional.Interface(iface = "thaumcraft.api.items.IRepairable", modid = "Thaumcraft")
-public class ItemCrowbarThaumium extends ItemCrowbar implements IRepairable {
+public class ItemCrowbarThaumium extends ItemCrowbar /*implements IRepairable*/ {
     public ItemCrowbarThaumium() {
         super(ItemMaterials.Material.THAUMIUM, ThaumcraftPlugin.getThaumiumToolMaterial());
     }

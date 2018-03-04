@@ -74,7 +74,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
         @Override
         protected void readLocationData(RailcraftInputStream data) throws IOException {
             BlockPos pos = data.readBlockPos();
-            tile = WorldPlugin.getBlockTile(player.worldObj, pos);
+            tile = WorldPlugin.getBlockTile(player.world, pos);
         }
 
         @Override

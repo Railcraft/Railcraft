@@ -83,7 +83,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
             @Override
             public int fillInternal(FluidStack resource, boolean doFill) {
-                IBoilerContainer.onFillWater(EntityLocomotiveSteam.this);
+                EntityLocomotiveSteam.this.onFillWater();
                 return super.fillInternal(resource, doFill);
             }
         };
@@ -150,7 +150,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             update++;
 
             if (tankWater.isEmpty())
@@ -173,10 +173,10 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
             if (isSmoking()) {
                 double rads = renderYaw * Math.PI / 180D;
                 float offset = 0.4f;
-                EffectManager.instance.locomotiveEffect(worldObj, posX - Math.cos(rads) * offset, posY + 1.5f, posZ - Math.sin(rads) * offset);
+                EffectManager.instance.locomotiveEffect(world, posX - Math.cos(rads) * offset, posY + 1.5f, posZ - Math.sin(rads) * offset);
             }
             if (isSteaming())
-                EffectManager.instance.steamEffect(worldObj, this, getEntityBoundingBox().minY - posY - 0.3);
+                EffectManager.instance.steamEffect(world, this, getEntityBoundingBox().minY - posY - 0.3);
         }
     }
 

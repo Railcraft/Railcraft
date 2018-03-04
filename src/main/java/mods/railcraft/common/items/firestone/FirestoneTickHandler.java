@@ -28,9 +28,9 @@ public class FirestoneTickHandler {
     @SubscribeEvent
     public void tick(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (Game.isClient(entity.worldObj))
+        if (Game.isClient(entity.world))
             return;
-        if ((entity.worldObj.getTotalWorldTime() + entity.getEntityId()) % 4 != 0)
+        if ((entity.world.getTotalWorldTime() + entity.getEntityId()) % 4 != 0)
             return;
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
             return;
@@ -38,7 +38,7 @@ public class FirestoneTickHandler {
         if (inv != null) {
             for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
                 ItemStack stack = slot.getStack();
-                FirestoneTools.trySpawnFire(entity.worldObj, entity.getPosition(), stack);
+                FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack);
             }
         }
     }

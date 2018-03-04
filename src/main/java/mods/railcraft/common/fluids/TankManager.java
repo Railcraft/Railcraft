@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -94,8 +93,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        List<IFluidTankProperties> info = stream().filter(tank -> !tank.isHidden()).flatMap(t -> Arrays.stream(t.getTankProperties())).collect(Collectors.toList());
-        return info.toArray(new IFluidTankProperties[info.size()]);
+        return stream().filter(tank -> !tank.isHidden()).flatMap(t -> Arrays.stream(t.getTankProperties())).toArray(IFluidTankProperties[]::new);
     }
 
     @Override

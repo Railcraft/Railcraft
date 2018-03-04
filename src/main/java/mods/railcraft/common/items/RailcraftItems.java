@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackKit;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.ItemBottle;
@@ -40,7 +39,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -120,6 +118,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         conditions().add(Mod.THAUMCRAFT);
     }},
     CROWBAR_DIAMOND(ItemCrowbarDiamond::new, "tool_crowbar_diamond"),
+    CROWBAR_SEASONS(ItemCrowbarSeasons::new, "tool_crowbar_seasons"),
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
@@ -169,13 +168,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }},
     TRACK_PARTS(ItemTrackParts::new, "track_parts", () -> "ingotIron"),
     TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", () -> "ingotSteel") {{
-        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE);
     }},
     TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", () -> "blockSteel") {{
-        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE);
     }},
     TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor") {{
-        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE);
     }},
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();

@@ -53,7 +53,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
     public void entityEnteredChunk(EntityEvent.EnteringChunk event) {
         Entity entity = event.getEntity();
         if (entity instanceof EntityCartWorldspike) {
-            if (Game.isHost(entity.worldObj)) {
+            if (Game.isHost(entity.world)) {
 //                System.out.println("Worldspike Cart Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
                 ((EntityCartWorldspike) entity).forceChunkLoading(event.getNewChunkX(), event.getNewChunkZ());
             } else {
@@ -62,7 +62,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
             }
         }
 //        if (entity instanceof EntityTunnelBore) {
-//            if (Game.isHost(entity.worldObj)) {
+//            if (Game.isHost(entity.world)) {
 //                System.out.println("Bore Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
 //            }
 //        }

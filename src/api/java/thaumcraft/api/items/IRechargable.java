@@ -1,45 +1,42 @@
 package thaumcraft.api.items;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
 
 /**
  * 
  * @author Azanor
  * 
- * Items with this interface can be recharged in wand pedestals and similar devices. 
- * The recharging needs to occur in handleRecharge and the passed in pos will be the 
- * player pos or the pos of the device doing the charging.
- * The recharge pedestal will simply call handleRecharge and let the item do whatever 
- * it would normally to recharge.
- * HandleRecharge should under normal conditions always be called every 5 ticks.
+ * Items with this interface can be recharged in wand pedestals and similar devices.
+ * All values are automatically stored in the items nbt data. 
+ * 
+ * See RechargableItemHelper for methods to handle actualy recharging of the item.
  * 
  */
 public interface IRechargable {
-	/**
-	 * @param world
-	 * @param is
-	 * @param pos
-	 * @param player The passed in player can be null
-	 * @param amount how much vis to recharge - modified by things like the node tapper research
-	 * @return the last aspect that was recharged
-	 */
-	@Deprecated
-	public Aspect handleRecharge(World world, ItemStack is, BlockPos pos, EntityPlayer player, int amount);
-	
-	@Deprecated
-	public AspectList getAspectsInChargable(ItemStack is);
 	
 	/**
-	 * @param is
-	 * @return the amount of charge in this item expressed as a float (0f - 1f)
-	 * returning -1 will prevent this items charge from being displayed in the hud
+	 * @param stack
+	 * @param player passed player may be null so check first
+	 * @return how much vis this item can hold
 	 */
-	@Deprecated
-	public float getChargeLevel(ItemStack is);
+	public int getMaxCharge(ItemStack stack, EntityLivingBase player);
 	
+	/**
+	 * @param stack
+	 * @param player
+	 * @return when the charge will be displayed in the built-in hud display for chargable items
+	 */
+	public EnumChargeDisplay showInHud(ItemStack stack, EntityLivingBase player);
+	
+	enum EnumChargeDisplay {
+    	NEVER, NORMAL, PERIODIC;
+    }
+	/*
+	 * NEVER = never
+	 * NORMAL = whenever the charge changes
+	 * PERIODIC = whenever charge changes to 0%, 25%, 50%, 75% or 100%
+	 * 
+	 */
+		
 }

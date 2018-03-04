@@ -75,7 +75,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, getPos());
+        InvTools.dropInventory(inv, world, getPos());
     }
 
     public int getProgress() {
@@ -110,7 +110,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         balanceSlots();
@@ -119,7 +119,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return;
 
         if (clock % 8 == 0) {
-            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
             if (currentRecipe != null)
                 findMoreStuff();
         }
@@ -128,7 +128,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
                 if (InvTools.isRoomForStack(currentRecipe, invResult)) {
-                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
                     if (currentRecipe != null) {
                         // TODO: Replace with IRecipe.getRemainder()
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
@@ -185,7 +185,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj) == null)
+        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world) == null)
             return false;
         if (useLast)
             return true;

@@ -70,7 +70,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
 
     @Override
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             player.displayGUIChest(this);
         }
         return true;
@@ -103,11 +103,11 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     }
 
     /**
-     * Returns the worldObj for this tileEntity.
+     * Returns the world for this tileEntity.
      */
     @Override
     public World getWorld() {
-        return this.worldObj;
+        return this.world;
     }
 
     /**
@@ -141,7 +141,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isHost(worldObj) && this.isEntityAlive() && this.getBlocked()) {
+        if (Game.isHost(world) && this.isEntityAlive() && this.getBlocked()) {
             BlockPos blockpos = new BlockPos(this);
 
             if (blockpos.equals(this.lastPosition)) {
@@ -165,7 +165,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         if (TileEntityHopper.captureDroppedItems(this)) {
             return true;
         } else {
-            List<EntityItem> list = this.worldObj.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
+            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
 
             if (!list.isEmpty()) {
                 TileEntityHopper.putDropInInventoryAllSlots(this, list.get(0));

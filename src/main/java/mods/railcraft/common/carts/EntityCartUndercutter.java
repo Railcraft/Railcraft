@@ -64,7 +64,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             return false;
         if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(block))
             return false;
-        if (block.isVisuallyOpaque())
+        if (block.causesSuffocation())
             return true;
         return stack.getItem() instanceof ItemPost;
     }
@@ -90,20 +90,20 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         stockItems(SLOT_REPLACE_UNDER, SLOT_STOCK_UNDER);
         stockItems(SLOT_REPLACE_SIDE, SLOT_STOCK_SIDE);
 
         BlockPos pos = getPosition();
-        if (TrackTools.isRailBlockAt(worldObj, pos.down()))
+        if (TrackTools.isRailBlockAt(world, pos.down()))
             pos = pos.down();
 
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
 
         if (TrackTools.isRailBlock(state)) {
-            BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(worldObj, pos, state, this);
+            BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, state, this);
             pos = pos.down();
 
             boolean slotANull = true;
@@ -157,21 +157,21 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         if (!isValidBallast(stock))
             return;
 
-        IBlockState oldState = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState oldState = WorldPlugin.getBlockState(world, pos);
 
         if (oldState == null || !blockMatches(oldState, exist))
             return;
 
         if (safeToReplace(pos)) {
             Block stockBlock = InvTools.getBlockFromStack(stock);
-            List<ItemStack> drops = oldState.getBlock().getDrops(worldObj, pos, oldState, 0);
+            List<ItemStack> drops = oldState.getBlock().getDrops(world, pos, oldState, 0);
             ItemBlock item = (ItemBlock) stock.getItem();
             int newMeta = 0;
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
             IBlockState newState;
-            if (stockBlock != null && WorldPlugin.setBlockState(worldObj, pos, (newState = stockBlock.getStateFromMeta(newMeta)))) {
-                SoundHelper.playBlockSound(worldObj, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
+            if (stockBlock != null && WorldPlugin.setBlockState(world, pos, (newState = stockBlock.getStateFromMeta(newMeta)))) {
+                SoundHelper.playBlockSound(world, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
                     CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
@@ -198,24 +198,24 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean safeToReplace(BlockPos pos) {
-        if (WorldPlugin.isBlockAir(worldObj, pos))
+        if (WorldPlugin.isBlockAir(world, pos))
             return false;
 
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
 
         if (state.getMaterial().isLiquid())
             return false;
 
-        if (state.getBlockHardness(worldObj, pos) < 0)
+        if (state.getBlockHardness(world, pos) < 0)
             return false;
 
-        return !state.getBlock().isReplaceable(worldObj, pos);
+        return !state.getBlock().isReplaceable(world, pos);
     }
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_UNDERCUTTER, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_UNDERCUTTER, player, world, this);
         return true;
     }
 

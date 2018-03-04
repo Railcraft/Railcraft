@@ -76,7 +76,7 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
             cart.motionY = getLaunchForce() * 0.1;
             cart.getEntityData().setInteger("Launched", 1);
             cart.setCanUseRail(false);
-            cart.moveEntity(cart.motionX, 1.5, cart.motionZ);
+            cart.move(cart.motionX, 1.5, cart.motionZ);
         }
     }
 

@@ -94,7 +94,7 @@ public abstract class MiscTools {
         Vec3d lookVec = player.getLook(1);
         Vec3d rayVec = eyePos.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
         Vec3d hitPos = null;
-        List<Entity> foundEntities = player.worldObj.getEntitiesInAABBexcluding(player,
+        List<Entity> foundEntities = player.world.getEntitiesInAABBexcluding(player,
                 player.getEntityBoundingBox().addCoord(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach)
                         .expand(1.0D, 1.0D, 1.0D),
                 com.google.common.base.Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
@@ -168,7 +168,7 @@ public abstract class MiscTools {
      */
     @Nonnull
     public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
-        int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
+        int dir = MathHelper.floor((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
             case 0:
                 return EnumFacing.NORTH;

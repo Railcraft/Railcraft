@@ -45,7 +45,7 @@ public class TileItemLoader extends TileItemManipulator {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_ITEM, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_ITEM, player, world, getPos());
         return true;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,11 @@
 
 package mods.railcraft.common.plugins.misc;
 
+import mods.railcraft.common.carts.IRailcraftCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleSeasonal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 
 import java.util.Calendar;
@@ -25,8 +27,9 @@ import java.util.Calendar;
 public class SeasonPlugin {
     public static final boolean HARVEST;
     public static final boolean HALLOWEEN;
-    public static final boolean HOLIDAYS;
+    public static final boolean CHRISTMAS;
     public static final String GHOST_TRAIN = "Ghost Train";
+    public static final String POLAR_EXPRESS = "Polar Express";
 
     static {
         if (RailcraftModuleManager.isModuleEnabled(ModuleSeasonal.class)) {
@@ -37,15 +40,46 @@ public class SeasonPlugin {
             int day = cal.get(Calendar.DAY_OF_MONTH);
             HALLOWEEN = (month == Calendar.OCTOBER && day >= 21) || (month == Calendar.NOVEMBER && day <= 10);
 
-            HOLIDAYS = month == Calendar.DECEMBER || month == Calendar.JANUARY;
+            CHRISTMAS = month == Calendar.DECEMBER || month == Calendar.JANUARY;
         } else {
             HARVEST = false;
             HALLOWEEN = false;
-            HOLIDAYS = false;
+            CHRISTMAS = false;
         }
     }
 
     public static boolean isGhostTrain(EntityMinecart cart) {
-        return RailcraftConfig.isGhostTrainEnabled() && (cart.hasCustomName() && GHOST_TRAIN.equals(cart.getCustomNameTag()) || HALLOWEEN);
+        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.NONE;
+        if (season == Season.NONE)
+            return (RailcraftConfig.isPolarExpressEnabled() && HALLOWEEN)
+                    || cart.hasCustomName() && GHOST_TRAIN.equals(cart.getCustomNameTag());
+        return season == Season.HALLOWEEN;
+    }
+
+    public static boolean isPolarExpress(EntityMinecart cart) {
+        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.NONE;
+        if (season == Season.NONE)
+            return (RailcraftConfig.isPolarExpressEnabled() && CHRISTMAS)
+                    || cart.hasCustomName() && POLAR_EXPRESS.equals(cart.getCustomNameTag());
+        return season == Season.CHRISTMAS;
+    }
+
+    public enum Season {
+
+        NONE("gui.railcraft.season.none"),
+        HALLOWEEN("gui.railcraft.season.halloween"),
+        CHRISTMAS("gui.railcraft.season.christmas"),;
+        public static final Season[] VALUES = values();
+        private final String locTag;
+
+        Season(String locTag) {
+            this.locTag = locTag;
+        }
+
+        @Override
+        public String toString() {
+            return LocalizationPlugin.translate(locTag);
+        }
+
     }
 }

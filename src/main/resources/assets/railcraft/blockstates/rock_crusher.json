@@ -1,0 +1,95 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_bottom_top"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "icon": {
+      "4f": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_11",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "a": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_0",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "b": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_1",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "c": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_2",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "d": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_4",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "e": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_6",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "f": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_8",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "g": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_9",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "h": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_10",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "42": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_3",
+          "top": "railcraft:blocks/rock_crusher_11",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      },
+      "44": {
+        "textures": {
+          "side": "railcraft:blocks/rock_crusher_7",
+          "top": "railcraft:blocks/rock_crusher_11",
+          "bottom": "railcraft:blocks/rock_crusher_3"
+        }
+      }
+    }
+  }
+}

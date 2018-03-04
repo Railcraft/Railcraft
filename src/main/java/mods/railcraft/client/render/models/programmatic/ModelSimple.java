@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,14 +14,15 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModelSimple extends ModelBase {
 
     protected final ModelRenderer renderer;
+    private final String name;
 
     public ModelSimple(String name) {
+        this.name = name;
         this.renderer = new ModelRenderer(this, name);
     }
 
@@ -30,8 +31,8 @@ public class ModelSimple extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float time) {
-        renderer.render(time);
+    public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float scale) {
+        renderer.render(scale);
     }
 
     public void setRotation(float x, float y, float z) {

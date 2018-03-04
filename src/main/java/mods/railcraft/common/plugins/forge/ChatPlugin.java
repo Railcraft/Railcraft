@@ -14,6 +14,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -45,23 +46,23 @@ public class ChatPlugin {
      * Don't use this from the server thread! It will not translate stuff correctly!
      */
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
-        player.addChatMessage(makeMessage(String.format(LocalizationPlugin.translate(msg), args)));
+        player.sendMessage(makeMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
     public static void sendLocalizedChatFromClient(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player != null && Game.isClient(player.worldObj))
+        if (player != null && Game.isClient(player.world))
             sendLocalizedChat(player, msg, args);
     }
 
     public static void sendLocalizedChatFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player != null && Game.isHost(player.worldObj)) {
+        if (player != null && Game.isHost(player.world)) {
             modifyArgs(args);
-            player.addChatMessage(translateMessage(msg, args));
+            player.sendMessage(translateMessage(msg, args));
         }
     }
 
     public static void sendLocalizedHotBarMessageFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
-        if (player instanceof EntityPlayerMP && Game.isHost(player.worldObj)) {
+        if (player instanceof EntityPlayerMP && Game.isHost(player.world)) {
             modifyArgs(args);
             ((EntityPlayerMP) player).connection.sendPacket(new SPacketChat(translateMessage(msg, args), (byte) 2));
         }
@@ -72,7 +73,7 @@ public class ChatPlugin {
             if (args[i] instanceof String) {
                 args[i] = translateMessage((String) args[i]);
             } else if (args[i] instanceof GameProfile) {
-                String username = ((GameProfile) args[i]).getName();
+                String username = TileEntitySkull.updateGameprofile(((GameProfile) args[i])).getName();
                 args[i] = username != null ? username : "[unknown]";
             }
         }

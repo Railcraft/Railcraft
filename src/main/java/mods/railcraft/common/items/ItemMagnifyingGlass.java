@@ -14,14 +14,11 @@ import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
-import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -78,7 +75,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
             thePlayer.swingArm(event.getHand());
 
-        if (Game.isClient(thePlayer.worldObj))
+        if (Game.isClient(thePlayer.world))
             return;
 
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
@@ -93,7 +90,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
             return EnumActionResult.PASS;
-        TileEntity t = world.getTileEntity(pos);
+        TileEntity t = WorldPlugin.getBlockTile(world, pos);
         EnumActionResult returnValue = EnumActionResult.PASS;
         if (t instanceof IOwnable) {
             IOwnable ownable = (IOwnable) t;
@@ -102,9 +99,11 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         }
         if (t instanceof TileMultiBlock) {
             TileMultiBlock tile = (TileMultiBlock) t;
-            if (tile.isStructureValid())
+            if (tile.isStructureValid()) {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
-            else
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isMaster() ? "true" : "false"));
+            } else
+                //TODO fix return state, it is currently wrong
                 for (MultiBlockStateReturn returnState : EnumSet.complementOf(EnumSet.of(MultiBlockStateReturn.VALID))) {
                     List<Integer> pats = tile.patternStates.get(returnState);
                     if (!pats.isEmpty())

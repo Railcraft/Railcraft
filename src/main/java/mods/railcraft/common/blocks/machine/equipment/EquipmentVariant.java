@@ -16,7 +16,9 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.modules.ModuleAutomation;
 import mods.railcraft.common.modules.ModuleFactory;
+import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.ModuleStructures;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     FEED_STATION(ModuleAutomation.class, "feed_station", TileFeedStation.class),
     SMOKER(ModuleStructures.class, "smoker", TileSmoker.class),;
 
-    private static final List<EquipmentVariant> creativeList = new ArrayList<EquipmentVariant>();
+    private static final List<EquipmentVariant> creativeList = new ArrayList<>();
     public static final EquipmentVariant[] VALUES = values();
 
     static {
@@ -42,9 +44,19 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     }
 
     private final Definition def;
+    private final int w;
+    private final int h;
 
     EquipmentVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
         this.def = new Definition(tag, tile, module);
+        this.w = 1;
+        this.h = 1;
+    }
+
+    EquipmentVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int w, int h) {
+        this.def = new Definition(tag, tile, module);
+        this.w = w;
+        this.h = h;
     }
 
     public static EquipmentVariant fromId(int id) {
@@ -65,6 +77,11 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     @Override
     public String getTag() {
         return "tile.railcraft.equipment_" + getBaseTag();
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(w, h);
     }
 
     @Override

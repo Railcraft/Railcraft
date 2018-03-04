@@ -30,11 +30,10 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ISecureObject;
-import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import mods.railcraft.common.util.misc.*;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -55,7 +54,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
@@ -188,7 +189,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemWhistleTuner) {
                 if (whistleDelay <= 0) {
                     whistlePitch = getNewWhistlePitch();
@@ -356,14 +357,17 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         super.onUpdate();
         update++;
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world)) {
+            if (SeasonPlugin.isPolarExpress(this) && (!MathTools.nearZero(motionX) || !MathTools.nearZero(motionZ)))
+                EffectManager.instance.snowEffect(world, this, getEntityBoundingBox().minY - posY);
             return;
+        }
 
 //        {
 //            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, IS_REVERSED_INDEX);
 //            if (reverse != preReverse || prevRotationYaw != rotationYaw) {
 //                preReverse = reverse;
-//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", worldObj.getTotalWorldTime(), reverse, rotationYaw);
+//                Game.log(Level.INFO, "tick={0}, reverse={1}, yaw={2}", world.getTotalWorldTime(), reverse, rotationYaw);
 //            }
 //        }
 
@@ -509,7 +513,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void applyEntityCollision(Entity entity) {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (!entity.isEntityAlive())
                 return;
             if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && MiscTools.isKillableEntity(entity)) {
@@ -593,6 +597,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         data.setInteger("fuel", fuel);
 
+        data.setBoolean("reverse", dataManager.get(REVERSE));
+
         lockController.writeToNBT(data, "lock");
     }
 
@@ -617,6 +623,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         whistlePitch = data.getFloat("whistlePitch");
 
         fuel = data.getInteger("fuel");
+
+        if (data.hasKey("reverse", Constants.NBT.TAG_BYTE))
+            dataManager.set(REVERSE, data.getBoolean("reverse"));
 
         lockController.readFromNBT(data, "lock");
     }
@@ -745,7 +754,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public World theWorld() {
-        return worldObj;
+        return world;
     }
 
     public enum LocoMode implements IStringSerializable {

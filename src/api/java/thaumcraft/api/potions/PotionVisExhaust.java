@@ -15,8 +15,13 @@ public class PotionVisExhaust extends Potion
     public PotionVisExhaust(boolean par2, int par3)
     {
     	super(par2,par3);
-    	setIconIndex(0, 0);
+    	setIconIndex(5, 1);
     }
+    
+    @Override
+	public String getName() {
+		return "vis_exhaust";
+	}
     
     public static void init()
     {

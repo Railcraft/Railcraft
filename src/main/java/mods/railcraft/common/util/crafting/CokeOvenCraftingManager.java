@@ -98,7 +98,7 @@ public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
     }
 
     @Override
-    public ICokeOvenRecipe getRecipe(ItemStack input) {
+    public ICokeOvenRecipe getRecipe(@Nullable ItemStack input) {
         if (InvTools.isEmpty(input)) return null;
         for (CokeOvenRecipe r : recipes) {
             if (!r.matchDamage || InvTools.isWildcard(r.input)) continue;

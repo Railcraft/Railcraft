@@ -36,7 +36,7 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        return !executed && horse.worldObj.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
+        return !executed && horse.world.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
     }
 
     @Override
@@ -50,11 +50,11 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
     @Override
     public void updateTask() {
         executed = true;
-        DifficultyInstance difficultyinstance = horse.worldObj.getDifficultyForLocation(new BlockPos(horse));
+        DifficultyInstance difficultyinstance = horse.world.getDifficultyForLocation(new BlockPos(horse));
         horse.setType(HorseType.SKELETON);
         horse.setHorseTamed(true);
         horse.setGrowingAge(0);
-        horse.worldObj.addWeatherEffect(new EntityLightningBolt(horse.worldObj, horse.posX, horse.posY, horse.posZ, true));
+        horse.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true));
         EntitySkeleton entityskeleton = createSkeleton(difficultyinstance, horse);
         entityskeleton.startRiding(horse);
 
@@ -67,7 +67,7 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
     }
 
     private EntityHorse createHorse(DifficultyInstance difficultyInstance) {
-        EntityHorse entityhorse = new EntityHorse(horse.worldObj);
+        EntityHorse entityhorse = new EntityHorse(horse.world);
         entityhorse.onInitialSpawn(difficultyInstance, null);
         entityhorse.setPosition(horse.posX, horse.posY, horse.posZ);
         entityhorse.hurtResistantTime = 60;
@@ -75,12 +75,12 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
         entityhorse.setType(HorseType.SKELETON);
         entityhorse.setHorseTamed(true);
         entityhorse.setGrowingAge(0);
-        entityhorse.worldObj.spawnEntityInWorld(entityhorse);
+        entityhorse.world.spawnEntity(entityhorse);
         return entityhorse;
     }
 
     private EntitySkeleton createSkeleton(DifficultyInstance difficultyInstance, EntityHorse entityHorse) {
-        EntitySkeleton skeleton = new EntitySkeleton(entityHorse.worldObj);
+        EntitySkeleton skeleton = new EntitySkeleton(entityHorse.world);
         skeleton.onInitialSpawn(difficultyInstance, null);
         skeleton.setPosition(entityHorse.posX, entityHorse.posY, entityHorse.posZ);
         skeleton.hurtResistantTime = 60;
@@ -90,7 +90,7 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
 
         EnchantmentHelper.addRandomEnchantment(skeleton.getRNG(), skeleton.getHeldItemMainhand(), (int) (5.0F + difficultyInstance.getClampedAdditionalDifficulty() * (float) skeleton.getRNG().nextInt(18)), false);
 //        EnchantmentHelper.addRandomEnchantment(skeleton.getRNG(), skeleton.getItemStackFromSlot(EntityEquipmentSlot.HEAD), (int)(5.0F + difficultyInstance.getClampedAdditionalDifficulty() * (float)skeleton.getRNG().nextInt(18)), false);
-        skeleton.worldObj.spawnEntityInWorld(skeleton);
+        skeleton.world.spawnEntity(skeleton);
         return skeleton;
     }
 }

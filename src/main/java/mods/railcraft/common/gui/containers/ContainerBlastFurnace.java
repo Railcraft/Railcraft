@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.alpha.TileBlastFurnace;
+import mods.railcraft.common.blocks.multi.TileBlastFurnace;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;

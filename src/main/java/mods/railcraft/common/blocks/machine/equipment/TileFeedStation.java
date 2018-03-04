@@ -72,7 +72,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.FEED_STATION, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.FEED_STATION, player, world, getPos());
         return true;
     }
 
@@ -87,7 +87,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         ItemStack feed = getStackInSlot(0);
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || sizeOf(feed) < feed.getMaxStackSize())) {
-            InventoryComposite chests = InvTools.getAdjacentInventories(worldObj, getPos());
+            InventoryComposite chests = InvTools.getAdjacentInventories(world, getPos());
             InvTools.moveOneItem(chests, feedInv, StandardStackFilters.FEED);
         }
 
@@ -99,7 +99,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
             //TODO: test (maybe we can draw this somehow?)
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).raiseFloor(-1).raiseCeiling(2).expandHorizontally(AREA).build();
-            List<EntityAnimal> animals = worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
+            List<EntityAnimal> animals = world.getEntitiesWithinAABB(EntityAnimal.class, box);
 
             for (EntityAnimal target : animals) {
                 if (target.isBreedingItem(getStackInSlot(0)) && feedAnimal(target)) {
@@ -121,7 +121,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
             DataOutputStream data = pkt.getDataStream();
             data.writeInt(animal.getEntityId());
 
-            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), getX(), getY(), getZ(), 80));
+            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(world.provider.getDimension(), getX(), getY(), getZ(), 80));
         } catch (IOException ignored) {
         }
     }
@@ -129,7 +129,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     @SideOnly(Side.CLIENT)
     @Override
     public void onUpdatePacket(DataInputStream data) throws IOException {
-        Entity e = worldObj.getEntityByID(data.readInt());
+        Entity e = world.getEntityByID(data.readInt());
         if (e instanceof EntityAnimal) {
             feedAnimal((EntityAnimal) e);
         }
@@ -142,9 +142,9 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         try {
             if (animal.getGrowingAge() == 0 && !animal.isInLove()) {
                 EntityPlayer player;
-                if (Game.isHost(worldObj)) {
+                if (Game.isHost(world)) {
                     EntityAIMateBreeding.modifyAI(animal);
-                    player = RailcraftFakePlayer.get((WorldServer) worldObj, getPos());
+                    player = RailcraftFakePlayer.get((WorldServer) world, getPos());
                 } else {
                     player = null;
                 }
@@ -156,7 +156,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                     double d = rand.nextGaussian() * 0.02D;
                     double d1 = rand.nextGaussian() * 0.02D;
                     double d2 = rand.nextGaussian() * 0.02D;
-                    worldObj.spawnParticle(HEART, (animal.posX + rand.nextFloat() * animal.width * 2.0F) - animal.width, animal.posY + 0.5D + rand.nextFloat() * animal.height, (animal.posZ + rand.nextFloat() * animal.width * 2.0F) - animal.width, d, d1, d2);
+                    world.spawnParticle(HEART, (animal.posX + rand.nextFloat() * animal.width * 2.0F) - animal.width, animal.posY + 0.5D + rand.nextFloat() * animal.height, (animal.posZ + rand.nextFloat() * animal.width * 2.0F) - animal.width, d, d1, d2);
                 }
 
                 return true;
@@ -170,7 +170,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     @Override
     public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        powered = PowerPlugin.isBlockBeingPowered(world, getPos());
     }
 
     @Override

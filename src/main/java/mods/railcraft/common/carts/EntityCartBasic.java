@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,6 +31,24 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 
     public EntityCartBasic(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
     }
 
     @Nonnull
@@ -71,15 +90,15 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //    }
 //    @Override
 //    public void onUpdate() {
-//        if (Game.isHost(worldObj) && worldObj instanceof WorldServer) {
-//            int blockId = worldObj.getBlockId((int) posX, (int) posY, (int) posZ);
+//        if (Game.isHost(world) && world instanceof WorldServer) {
+//            int blockId = world.getBlockId((int) posX, (int) posY, (int) posZ);
 //
 //            if (blockId == Block.portal.blockID) {
 //                setInPortal();
 //            }
 //
 //            if (inPortal) {
-//                MinecraftServer mc = ((WorldServer) worldObj).getMinecraftServer();
+//                MinecraftServer mc = ((WorldServer) world).getMinecraftServer();
 //                if (mc.getAllowNether()) {
 //                    int maxPortalTime = getMaxInPortalTime();
 //                    if (ridingEntity == null && field_82153_h++ >= maxPortalTime) {
@@ -87,7 +106,7 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //                        timeUntilPortal = getPortalCooldown();
 //                        byte dim;
 //
-//                        if (worldObj.provider.getDimensionId() == -1) {
+//                        if (world.provider.getDimensionId() == -1) {
 //                            dim = 0;
 //                        } else {
 //                            dim = -1;
@@ -122,8 +141,8 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
 //        }
 
         double max = getMaxSpeed();
-        mX = MathHelper.clamp_double(mX, -max, max);
-        mZ = MathHelper.clamp_double(mZ, -max, max);
-        moveEntity(mX, 0.0D, mZ);
+        mX = MathHelper.clamp(mX, -max, max);
+        mZ = MathHelper.clamp(mZ, -max, max);
+        move(mX, 0.0D, mZ);
     }
 }

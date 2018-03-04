@@ -2,13 +2,16 @@ package thaumcraft.api.potions;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.damagesource.DamageSourceThaumcraft;
 import thaumcraft.api.entities.ITaintedMob;
+//import thaumcraft.common.lib.utils.EntityUtils;
 
 public class PotionFluxTaint extends Potion
 {
@@ -18,10 +21,15 @@ public class PotionFluxTaint extends Potion
     public PotionFluxTaint(boolean par2, int par3)
     {
     	super(par2,par3);
-    	setIconIndex(0, 0);
+    	setIconIndex(3, 1);
     }
     
-    public static void init()
+    @Override
+	public String getName() {
+		return "flux_taint";
+	}
+
+	public static void init()
     {
     	instance.setPotionName("potion.fluxtaint");
     	instance.setIconIndex(3, 1);
@@ -43,19 +51,24 @@ public class PotionFluxTaint extends Potion
 	static final ResourceLocation rl = new ResourceLocation("thaumcraft","textures/misc/potions.png");
 	
 	@Override
-	public void performEffect(EntityLivingBase target, int par2) {
-		if (target instanceof ITaintedMob) {
+	public void performEffect(EntityLivingBase target, int strength) {
+		IAttributeInstance cai = target.getEntityAttribute(ThaumcraftApiHelper.CHAMPION_MOD);
+		if (target instanceof ITaintedMob || (cai!=null && (int) cai.getAttributeValue() == 13)) {
 			target.heal(1);
-		} else
-		if (!target.isEntityUndead() && !(target instanceof EntityPlayer))
-        {
-			target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);
-        } 
-		else
-		if (!target.isEntityUndead() && (target.getMaxHealth() > 1 || (target instanceof EntityPlayer)))
-        {
-			target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);
-        } 
+		} else {
+			if (!target.isEntityUndead() && !(target instanceof EntityPlayer))
+	        {
+				target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);				
+				if (!target.isDead && target.getHealth()<2 && target.getRNG().nextBoolean()) {
+//					EntityUtils.makeTainted(target);
+				}
+	        } 
+			else
+			if (!target.isEntityUndead() && (target.getMaxHealth() > 1 || (target instanceof EntityPlayer)))
+	        {
+				target.attackEntityFrom(DamageSourceThaumcraft.taint, 1);
+	        } 
+		}
 	}
     
 	public boolean isReady(int par1, int par2)

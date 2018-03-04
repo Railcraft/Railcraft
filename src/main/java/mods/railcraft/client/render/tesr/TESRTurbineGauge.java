@@ -10,7 +10,7 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
+import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;

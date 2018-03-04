@@ -46,7 +46,7 @@ public class LocomotiveKeyHandler {
 
     @SubscribeEvent
     public void tick(InputEvent.KeyInputEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         if (player == null)
             return;
         if (!(player.getRidingEntity() instanceof EntityMinecart))

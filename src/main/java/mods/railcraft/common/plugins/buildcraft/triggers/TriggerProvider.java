@@ -15,7 +15,7 @@ import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import mods.railcraft.api.fuel.INeedsFuel;
-import mods.railcraft.common.blocks.machine.beta.TileEngine;
+import mods.railcraft.common.blocks.single.TileEngine;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 

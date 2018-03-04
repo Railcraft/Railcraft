@@ -14,7 +14,6 @@ import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
-import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.render.models.resource.*;
 import mods.railcraft.client.render.tesr.*;
@@ -24,15 +23,13 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.beta.TileTankBase;
+import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -71,7 +68,7 @@ import java.util.function.Supplier;
 public class ClientProxy extends CommonProxy {
     @Override
     public World getClientWorld() {
-        return FMLClientHandler.instance().getClient().theWorld;
+        return FMLClientHandler.instance().getClient().world;
     }
 
     @Override
@@ -184,10 +181,10 @@ public class ClientProxy extends CommonProxy {
         Game.log(Level.TRACE, "Init Start: Renderer");
 
 
-        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid()));
+        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid(), new ModelLocomotiveSteamSolid(0.125F)));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:magic", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:electric", "locomotive.model.electric.default", new ModelLocomotiveElectric()));
-        LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
+//        LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
 
 //        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
@@ -202,17 +199,17 @@ public class ClientProxy extends CommonProxy {
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
-        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
+//        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
 
-        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
-        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
 
 //        bindTESR(EnumMachineDelta.CAGE, TESRCagedEntity::new);
 

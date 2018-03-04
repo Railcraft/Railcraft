@@ -39,9 +39,9 @@ class PacketTicketGui extends RailcraftPacket {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void readData(RailcraftInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) {
         try {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
             ItemStack heldItem = player.getHeldItem(data.readEnum(EnumHand.values()));
             if (!InvTools.isEmpty(heldItem) && RailcraftItems.TICKET_GOLD.isEqual(heldItem))
                 Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, heldItem));

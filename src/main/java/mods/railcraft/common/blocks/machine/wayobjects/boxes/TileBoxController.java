@@ -55,7 +55,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             return;
         }
@@ -88,7 +88,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     private void updateRedstoneState() {
-        boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, getPos());
+        boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(world, getPos());
         if (p != powered) {
             powered = p;
             sendUpdateToClient();
@@ -99,9 +99,9 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         for (EnumFacing side : powerSides) {
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
-            if (PowerPlugin.isBlockBeingPowered(worldObj, getPos(), side))
+            if (PowerPlugin.isBlockBeingPowered(world, getPos(), side))
                 return true;
-//            if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord - 1, zCoord, side))
+//            if (PowerPlugin.isBlockBeingPowered(world, xCoord, yCoord - 1, zCoord, side))
 //                return true;
         }
         return false;

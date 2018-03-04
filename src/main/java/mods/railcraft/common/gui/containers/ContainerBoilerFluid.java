@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
 import mods.railcraft.common.gui.slots.SlotFluidContainerFilled;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;

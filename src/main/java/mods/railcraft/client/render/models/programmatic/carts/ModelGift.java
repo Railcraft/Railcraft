@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,7 +54,7 @@ public class ModelGift extends ModelTextured {
     }
 
     @Override
-    public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float time) {
+    public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float scale) {
         OpenGL.glPushMatrix();
         OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
         OpenGL.glTranslatef(0, 1, 1);

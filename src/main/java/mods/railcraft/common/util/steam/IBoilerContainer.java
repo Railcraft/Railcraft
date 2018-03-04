@@ -29,13 +29,13 @@ public interface IBoilerContainer extends ITemperature, INeedsFuel {
 
     void explode();
 
-    static void onFillWater(IBoilerContainer tileBoiler) {
-        SteamBoiler boiler = tileBoiler.getBoiler();
+    default void onFillWater() {
+        SteamBoiler boiler = getBoiler();
         if (boiler != null && boiler.isSuperHeated() && Steam.BOILERS_EXPLODE) {
             FluidStack water = boiler.getTankWater().getFluid();
             if (Fluids.isEmpty(water)) {
                 boiler.setHeat(Steam.SUPER_HEATED - 1);
-                tileBoiler.explode();
+                explode();
             }
         }
     }

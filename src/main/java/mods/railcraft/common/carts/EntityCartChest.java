@@ -50,7 +50,7 @@ public class EntityCartChest extends CartBaseContainer {
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             player.displayGUIChest(this);
         return true;
     }

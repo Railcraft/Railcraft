@@ -57,7 +57,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.TRAIN_DISPENSER, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.TRAIN_DISPENSER, player, world, getPos());
         return true;
     }
 
@@ -81,12 +81,12 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
         BlockPos offset = getPos().offset(facing);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
-                && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing) == null) {
+                && CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (!InvTools.isEmpty(cartItem)) {
-                EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
+                EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
-                    CartToolsAPI.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
+                    CartToolsAPI.getLinkageManager(world).createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())
@@ -115,7 +115,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, facing);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing);
         if (cart == null)
             if (!spawningTrain && canBuildTrain())
                 if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)

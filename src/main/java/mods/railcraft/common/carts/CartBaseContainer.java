@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -60,6 +61,24 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         super(world, x, y, z);
     }
 
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        cartInit();
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        saveToNBT(compound);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        loadFromNBT(compound);
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -83,7 +102,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public void setDead() {
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 setInventorySlotContents(slot, null);
             }
@@ -196,7 +215,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
-        return FactoryContainer.build(getGuiType(), playerInventory, this, worldObj, (int) posX, (int) posY, (int) posZ);
+        return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
     @Nonnull
@@ -225,4 +244,5 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     public Iterator<IInventoryObject> iterator() {
         return Iterators.singletonIterator(this);
     }
+
 }

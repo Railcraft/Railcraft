@@ -74,7 +74,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (isBlinking())
@@ -115,7 +115,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
 
     protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
         IBlockState state = WorldPlugin.getBlockState(getEntityWorld(), pos);
-        List<ItemStack> drops = block.getDrops(worldObj, pos, state, 0);
+        List<ItemStack> drops = block.getDrops(world, pos, state, 0);
 
         for (ItemStack stack : drops) {
             CartToolsAPI.transferHelper.offerOrDropItem(this, stack);

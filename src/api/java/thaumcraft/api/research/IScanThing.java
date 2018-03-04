@@ -10,14 +10,27 @@ public interface IScanThing {
 	 * @param player
 	 * @param obj
 	 * @return the research key that will be unlocked if the object is scanned. 
-	 * This need not be an actual defined research item - any text string will do. 
+	 * This need not be an actual defined research item - any text string will do, though note that 
+	 * some characters like '@' have special meanings within the whole research system as a whole.
+	 * I generally use "!" as a prefix for these research key's.
 	 * You can then use this research key (fake or otherwise) as a parent for research or for whatever.
 	 */
 	public boolean checkThing(EntityPlayer player, Object obj);
 	
 	/**
-	 * @return the research linked to this 'thing'
+	 * @param object 
+	 * @param player 
+	 * @return the research key linked to this 'thing'. 
 	 */
-	public String getResearchKey();
+	public String getResearchKey(EntityPlayer player, Object object);
 
+	
+	/**
+	 * @param object 
+	 * @param player 
+	 * @return the research key linked to this 'thing'
+	 */
+	public default void onSuccess(EntityPlayer player, Object object) {
+		
+	}
 }

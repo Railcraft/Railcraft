@@ -8,6 +8,7 @@ public class BlocksTC {
 	// World
 	public static Block oreAmber;
 	public static Block oreCinnabar;
+	public static Block oreQuartz;
 	public static Block log;
 	public static Block leaf;
 	public static Block sapling;
@@ -15,7 +16,17 @@ public class BlocksTC {
 	public static Block cinderpearl;
 	public static Block vishroom;	
 	public static Block plank;
-	public static Block stone;
+	
+	public static Block stoneArcane;
+	public static Block stoneArcaneBrick;
+	public static Block stoneAncient;
+	public static Block stoneAncientTile;
+	public static Block stoneAncientRock;
+	public static Block stoneAncientDoorway;
+	public static Block stoneAncientGlyphed;
+	public static Block stoneEldritchTile;	
+	public static Block stonePorous;		
+	
 	public static Block translucent;
 	public static Block stairsArcane;
 	public static Block stairsArcaneBrick;
@@ -29,7 +40,6 @@ public class BlocksTC {
 	public static Block doubleSlabStone;
 	public static Block taintBlock;
 	public static Block taintFibre;
-	public static Block taintDust;
 	public static Block taintLog;
 	public static Block taintFeature;
 	public static Block lootCrate;
@@ -59,6 +69,8 @@ public class BlocksTC {
 	public static Block pavingStone;
 	public static Block pillar;	
 	public static Block redstoneRelay;
+	public static Block matrixSpeed;
+	public static Block matrixCost;
 	
 	// Machines
 	public static Block arcaneEar;
@@ -71,10 +83,16 @@ public class BlocksTC {
 	public static Block rechargePedestal;
 	public static Block researchTable;
 	public static Block tube;
+	public static Block tubeValve;
+	public static Block tubeRestrict;
+	public static Block tubeOneway;
+	public static Block tubeFilter;
+	public static Block tubeBuffer;
 	public static Block centrifuge;
-	public static Block crystallizer;
 	public static Block hungryChest;
-	public static Block jar;
+	public static Block jarNormal;
+	public static Block jarVoid;
+	public static Block jarBrain;
 	public static Block bellows;
 	public static Block smelterBasic;
 	public static Block smelterThaumium;
@@ -84,23 +102,22 @@ public class BlocksTC {
 	public static Block alembic;
 	public static Block infusionMatrix;
 	public static Block infernalFurnace;
-	public static Block arcaneBore;
-	public static Block arcaneBoreBase;
 	public static Block thaumatorium;
+	public static Block thaumatoriumTop;
 	public static Block brainBox;
 	public static Block mirror;
 	public static Block mirrorEssentia;
 	public static Block auraTotem;
 	public static Block spa;
-	public static Block waterJug;
+	public static Block everfullUrn;
 	public static Block lampArcane;
 	public static Block lampFertility;
 	public static Block lampGrowth;
 	public static Block golemBuilder;
-	public static Block nodeStabilizer;
 	public static Block essentiaTransportInput;
 	public static Block essentiaTransportOutput;
 	public static Block patternCrafter;
+	public static Block activatorRail;
 	
 	// Fluids
 	public static Block fluxGoo;	
@@ -109,10 +126,13 @@ public class BlocksTC {
 		
 	// Misc
 	public static Block hole;
-	public static Block vacuum;
 	public static Block effect;
 	public static Block barrier;
 	public static Block placeholder;
+	
+	
+	
+	
 	
 	
 	

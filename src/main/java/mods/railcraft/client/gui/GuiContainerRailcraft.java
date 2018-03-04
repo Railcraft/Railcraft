@@ -59,7 +59,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
 
-        InventoryPlayer playerInv = mc.thePlayer.inventory;
+        InventoryPlayer playerInv = mc.player.inventory;
 
         if (playerInv.getItemStack() == null) {
             int mX = mouseX - left;
@@ -158,7 +158,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         int var5 = guiTop;
         par2 -= var4;
         par3 -= var5;
-        return par2 >= par1Slot.xDisplayPosition - 1 && par2 < par1Slot.xDisplayPosition + 16 + 1 && par3 >= par1Slot.yDisplayPosition - 1 && par3 < par1Slot.yDisplayPosition + 16 + 1;
+        return par2 >= par1Slot.xPos - 1 && par2 < par1Slot.xPos + 16 + 1 && par3 >= par1Slot.yPos - 1 && par3 < par1Slot.yPos + 16 + 1;
     }
 
     @Override
