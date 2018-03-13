@@ -529,9 +529,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         switch (mapPos) {
             case 'O': // Other
                 return !getTankType().isTankBlock(state);
-            case 'W': // Gauge or Valve
+            case 'W': // Wall, Gauge, or Valve
                 return getTankType().isTankBlock(state);
-            case 'B': // Block
+            case 'B': // Wall
                 return getTankType().isWallBlock(state);
             case 'M': // Master
             case 'T': // Top Block
@@ -544,7 +544,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 }
                 return !((TileMultiBlock) tile).isStructureValid();
             case 'A': // Air
-                return world.isAirBlock(pos);
+                return state.getBlock().isAir(state, world, pos);
         }
         return true;
     }

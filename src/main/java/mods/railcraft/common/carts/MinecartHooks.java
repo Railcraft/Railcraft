@@ -211,12 +211,12 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
     @Override
     public AxisAlignedBB getMinecartCollisionBox(EntityMinecart cart) {
-        return cart.getEntityBoundingBox().expand(MinecartHooks.COLLISION_EXPANSION, 0, MinecartHooks.COLLISION_EXPANSION);
-//        double yaw = Math.toRadians(cart.rotationYaw);
-//        double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
-//        double x = diff * Math.abs(Math.cos(yaw));
-//        double z = diff * Math.abs(Math.sin(yaw));
-//        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
+//        return cart.getEntityBoundingBox().expand(MinecartHooks.COLLISION_EXPANSION, 0, MinecartHooks.COLLISION_EXPANSION);
+        double yaw = Math.toRadians(cart.rotationYaw);
+        double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
+        double x = diff * Math.abs(Math.cos(yaw));
+        double z = diff * Math.abs(Math.sin(yaw));
+        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
     @Nullable

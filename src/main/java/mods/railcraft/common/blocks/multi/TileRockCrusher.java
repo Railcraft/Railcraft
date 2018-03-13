@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -202,7 +201,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                     return true;
                 break;
             case 'A': // Air
-                if (world.isAirBlock(pos))
+                if (other.getBlock().isAir(other, world, pos))
                     return true;
                 break;
         }

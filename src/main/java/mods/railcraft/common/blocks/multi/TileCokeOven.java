@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -155,7 +155,6 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
         return 3600;
     }
 
-    @Override
     public int getBurnProgressScaled(int i) {
         return ((getTotalCookTime() - getCookTime()) * i) / getTotalCookTime();
     }
