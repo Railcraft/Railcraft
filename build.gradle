@@ -93,7 +93,7 @@ dependencies {
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     provided "org.jetbrains:annotations:15.0"
-    classpath fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 processResources {
