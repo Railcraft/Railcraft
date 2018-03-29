@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
@@ -18,10 +17,10 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.buildcraft.actions.Actions;
-import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -50,14 +49,17 @@ import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.FACING;
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileSteamOven extends TileMultiBlockInventory implements ISidedInventory, ISteamUser, IHasWork, ITileRotate {
+public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory, ISteamUser, ITileRotate {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -72,7 +74,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     private final FilteredTank tank;
     private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
-    private final Set<Object> actions = new HashSet<>();
 
     static {
         char[][][] map = {
@@ -140,20 +141,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return null;
     }
 
-    public int getCookProgressScaled(int i) {
-        int scale = (getCookTime() * i) / TOTAL_COOK_TIME;
-        scale = Math.min(scale, i);
-        scale = Math.max(scale, 0);
-        return scale;
-    }
-
-    public int getCookTime() {
-        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
-        if (masterOven != null)
-            return masterOven.cookTime;
-        return -1;
-    }
-
     @Override
     public EnumFacing getFacing() {
         TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
@@ -170,33 +157,19 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         this.facing = facing;
     }
 
-    private boolean hasFinishedCycle() {
-        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
-        return mBlock != null && mBlock.finishedCycle;
-    }
-
-    private void setHasFinishedCycle(boolean finished) {
-        if (finishedCycle != finished) {
-            finishedCycle = finished;
-            sendUpdateToClient();
-        }
-    }
-
     @Override
     public void update() {
         super.update();
 
         if (Game.isClient(getWorld())) {
-            if (hasFinishedCycle())
+            if (isCooking())
                 EffectManager.instance.steamEffect(world, this, +0.25);
             return;
         }
 
         if (isMaster()) {
-            if (clock % 16 == 0)
-                processActions();
             if (clock % COOK_STEP == 0) {
-                setHasFinishedCycle(false);
+                setCooking(false);
                 if (!paused)
                     if (hasRecipe()) {
                         if (cookTime <= 0 && drainSteam())
@@ -206,7 +179,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                             if (cookTime >= TOTAL_COOK_TIME)
                                 if (smeltItems()) {
                                     cookTime = 0;
-                                    setHasFinishedCycle(true);
+                                    setCooking(true);
                                     SoundHelper.playSound(world, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 1F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
                                 }
                         }
@@ -214,6 +187,11 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
                         cookTime = 0;
             }
         }
+    }
+
+    @Override
+    public int getTotalCookTime() {
+        return TOTAL_COOK_TIME;
     }
 
     private boolean drainSteam() {
@@ -225,9 +203,15 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
         return false;
     }
 
+    @Override
+    public boolean needsFuel() {
+        FluidStack steam = tank.drain(STEAM_PER_BATCH, false);
+        return steam == null || steam.amount < STEAM_PER_BATCH;
+    }
+
     private boolean hasRecipe() {
-        for (int slot = 0; slot < 9; slot++) {
-            ItemStack stack = invInput.getStackInSlot(slot);
+        for (IExtInvSlot slot : InventoryIterator.getVanilla(invInput)) {
+            ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack)))
                 return true;
         }
@@ -301,7 +285,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
-        data.setInteger("cookTime", cookTime);
         data.setByte("facing", (byte) facing.ordinal());
         return data;
     }
@@ -310,7 +293,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
-        cookTime = data.getInteger("cookTime");
         facing = EnumFacing.getFront(data.getByte("facing"));
     }
 
@@ -363,18 +345,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements ISidedInve
     public boolean hasWork() {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         return mBlock != null && mBlock.cookTime > 0;
-    }
-
-    private void processActions() {
-        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
-        actions.clear();
-    }
-
-    @Override
-    public void actionActivated(IActionExternal action) {
-        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
-        if (mBlock != null)
-            mBlock.actions.add(action);
     }
 
     @Nullable

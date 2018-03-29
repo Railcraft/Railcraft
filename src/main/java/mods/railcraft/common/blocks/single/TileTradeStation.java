@@ -122,10 +122,10 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
                 if (recipe.isRecipeDisabled())
                     continue;
                 //noinspection ConstantConditions
-                if (recipe.getItemToBuy() != InvTools.emptyStack() && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
+                if (!InvTools.isEmpty(recipe.getItemToBuy()) && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
                     continue;
                 //noinspection ConstantConditions
-                if (recipe.getSecondItemToBuy() != InvTools.emptyStack() && !InvTools.isItemLessThanOrEqualTo(recipe.getSecondItemToBuy(), buy2))
+                if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && !InvTools.isItemLessThanOrEqualTo(recipe.getSecondItemToBuy(), buy2))
                     continue;
                 if (!InvTools.isItemGreaterOrEqualThan(recipe.getItemToSell(), sell))
                     continue;
@@ -143,10 +143,10 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
         //noinspection ConstantConditions
-        if (recipe.getItemToBuy() != InvTools.emptyStack() && InvTools.countItems(invInput, recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
+        if (!InvTools.isEmpty(recipe.getItemToBuy()) && InvTools.countItems(invInput, recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
             return false;
         //noinspection ConstantConditions
-        if (recipe.getSecondItemToBuy() != InvTools.emptyStack() && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
+        if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
             return false;
         return InvTools.isRoomForStack(recipe.getItemToSell(), invOutput);
     }
@@ -154,10 +154,10 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
         merchant.useRecipe(recipe);
         //noinspection ConstantConditions
-        if (recipe.getItemToBuy() != InvTools.emptyStack())
+        if (!InvTools.isEmpty(recipe.getItemToBuy()))
             InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
         //noinspection ConstantConditions
-        if (recipe.getSecondItemToBuy() != InvTools.emptyStack())
+        if (!InvTools.isEmpty(recipe.getSecondItemToBuy()))
             InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
         InvTools.moveItemStack(recipe.getItemToSell().copy(), invOutput);
     }
