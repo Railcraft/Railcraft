@@ -14,7 +14,6 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -75,8 +74,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
 
-//                        if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-//                            RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
+                        RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.IRON_BLOCK), false, false, 11520, EnumGeneric.BLOCK_STEEL.getStack());
                     }
 
                     type = EnumGeneric.BLOCK_COPPER;

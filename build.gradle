@@ -15,7 +15,6 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath fileTree(dir: 'libs', include: '*.jar')
     }
 }
 
@@ -93,7 +92,8 @@ dependencies {
     runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
-    compile "org.jetbrains:annotations:15.0"
+    provided "org.jetbrains:annotations:15.0"
+    classpath fileTree(dir: 'libs', include: '*.jar')
 }
 
 processResources {
@@ -205,7 +205,7 @@ task devJar(type: Jar, dependsOn: 'classes') {
 }
 
 class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
-    public JarSigner() {
+    JarSigner() {
         onlyIf {
             project.hasProperty('signingStorepass')
         }
@@ -279,5 +279,5 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "2.7"
+    gradleVersion = "3.5"
 }
