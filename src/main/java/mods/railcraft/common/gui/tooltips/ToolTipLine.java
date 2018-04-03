@@ -10,6 +10,8 @@ package mods.railcraft.common.gui.tooltips;
 
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nullable;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -17,6 +19,7 @@ import net.minecraft.util.text.TextFormatting;
 public class ToolTipLine {
 
     public String text;
+    @Nullable
     public TextFormatting format;
     public int spacing;
 

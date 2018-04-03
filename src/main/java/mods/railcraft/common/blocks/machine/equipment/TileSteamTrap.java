@@ -38,6 +38,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -142,8 +143,8 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos pos) {
+        super.onNeighborBlockChange(state, block, pos);
         powered = PowerPlugin.isBlockBeingPowered(world, getPos());
     }
 

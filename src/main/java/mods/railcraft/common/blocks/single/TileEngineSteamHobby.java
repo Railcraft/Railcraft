@@ -23,7 +23,7 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
-import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamConstants;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -32,8 +32,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
 
@@ -48,7 +48,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     public static final byte SLOT_LIQUID_INPUT = 1;
     public static final byte SLOT_LIQUID_OUTPUT = 2;
     private static final int OUTPUT_RF = 20;
-    private static final int STEAM_USED = Steam.STEAM_PER_10RF * (OUTPUT_RF / 10);
+    private static final int STEAM_USED = SteamConstants.STEAM_PER_10RF * (OUTPUT_RF / 10);
     private static final float FUEL_PER_CONVERSION_MULTIPLIER = 1.25F;
     private static final byte TICKS_PER_BOILER_CYCLE = 20;
     private static final byte TANK_WATER = 1;
@@ -142,6 +142,11 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public int getSizeInventory() {
         return inv.getSizeInventory();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 
     @Override
@@ -263,7 +268,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
             case SLOT_FUEL:
                 return FuelPlugin.getBurnTime(stack) > 0;
             case SLOT_LIQUID_INPUT:
-                return Fluids.WATER.is(FluidContainerRegistry.getFluidForFilledItem(stack));
+                return Fluids.WATER.is(FluidUtil.getFluidContained(stack));
         }
         return false;
     }

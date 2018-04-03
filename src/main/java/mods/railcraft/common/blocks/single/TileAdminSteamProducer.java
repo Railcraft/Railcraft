@@ -28,6 +28,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -86,8 +87,8 @@ public class TileAdminSteamProducer extends RailcraftTickingTileEntity implement
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos pos) {
+        super.onNeighborBlockChange(state, block, pos);
         checkRedstone();
     }
 

@@ -24,10 +24,10 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
+public final class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
 
     @Override
-    public void renderTileEntityAt(TileRitual tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileRitual tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
@@ -53,11 +53,11 @@ public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
         OpenGL.glRotatef(yaw, 0, 1, 0);
 
         ItemStack firestone = tile.getBlockMetadata() == 0 ? ItemFirestoneRefined.getItemCharged() : ItemFirestoneCracked.getItemCharged();
-        EntityItem entityitem = new EntityItem(null, 0.0D, 0.0D, 0.0D, firestone);
-        setSize(entityitem.getEntityItem(), 1);
+        EntityItem entityitem = new EntityItem(tile.getWorld(), 0.0D, 0.0D, 0.0D, firestone);
+        setSize(entityitem.getItem(), 1);
         entityitem.hoverStart = 0.0F;
 
-        Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+        Minecraft.getMinecraft().getRenderManager().renderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

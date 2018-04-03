@@ -29,7 +29,7 @@ public class GeneratorSulfur extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        return world.provider.getDimension() == 0 && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN) && TerrainGen.generateOre(world, rand, generator, targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM);
+        return world.provider.getDimension() == 0 && BiomeDictionary.hasType(biome, BiomeDictionary.Type.MOUNTAIN) && TerrainGen.generateOre(world, rand, generator, targetPos, OreGenEvent.GenerateMinable.EventType.CUSTOM);
     }
 
     @Override

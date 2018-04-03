@@ -36,13 +36,13 @@ public class GuiBookPlayerLog extends GuiBook {
         super(TEXTURE, LOG_TAG, LocalizationPlugin.translate(LOG_TAG + "title"), "CovertJaguar", getPages(log), false);
     }
 
-    private static LinkedList<LinkedList<String>> getPages(Multimap<LocalDate, GameProfile> log) {
-        LinkedList<LinkedList<String>> pages = new LinkedList<>();
+    private static List<List<String>> getPages(Multimap<LocalDate, GameProfile> log) {
+        List<List<String>> pages = new ArrayList<>();
         List<LocalDate> days = new ArrayList<>(log.keySet());
         days.sort(Comparator.reverseOrder());
         try {
             for (LocalDate day : days) {
-                LinkedList<String> page = makePage(pages, day);
+                List<String> page = makePage(pages, day);
                 for (GameProfile profile : log.get(day)) {
                     if (page.size() > RailcraftConstants.BOOK_LINES_PER_PAGE)
                         page = makePage(pages, day);
@@ -54,7 +54,7 @@ public class GuiBookPlayerLog extends GuiBook {
         return pages;
     }
 
-    private static LinkedList<String> makePage(LinkedList<LinkedList<String>> pages, LocalDate date) throws TooManyPagesException {
+    private static List<String> makePage(List<List<String>> pages, LocalDate date) throws TooManyPagesException {
         if (pages.size() >= RailcraftConstants.BOOK_MAX_PAGES)
             throw new TooManyPagesException();
         LinkedList<String> page = new LinkedList<>();

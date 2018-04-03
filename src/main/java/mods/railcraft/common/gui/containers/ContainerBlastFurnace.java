@@ -48,7 +48,7 @@ public class ContainerBlastFurnace extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        player.sendProgressBarUpdate(this, 0, furnace.getCookTime());
+        player.sendWindowProperty(this, 0, furnace.getCookTime());
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.burnTime);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 2, furnace.currentItemBurnTime);
     }
@@ -62,7 +62,7 @@ public class ContainerBlastFurnace extends RailcraftContainer {
 
         for (IContainerListener listener : listeners) {
             if (lastCookTime != furnace.getCookTime())
-                listener.sendProgressBarUpdate(this, 0, furnace.getCookTime());
+                listener.sendWindowProperty(this, 0, furnace.getCookTime());
 
             if (lastBurnTime != furnace.burnTime)
                 PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 1, furnace.burnTime);

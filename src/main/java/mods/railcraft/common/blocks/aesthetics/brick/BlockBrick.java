@@ -25,6 +25,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -105,7 +106,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BrickVariant variant : BrickVariant.VALUES) {
             CreativePlugin.addToList(list, theme.getStack(1, variant));
         }
@@ -120,7 +121,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
      * Get the MapColor for this Block and the given BlockState
      */
     @Override
-    public MapColor getMapColor(IBlockState state) {
+    public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return theme.getMapColor();
     }
 

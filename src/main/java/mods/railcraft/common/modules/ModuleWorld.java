@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
@@ -163,7 +164,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     villagerRegistry.registerVillageCreationHandler(workshop);
 
                     villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
-                    villagerRegistry.register(villagerTrackman);
+                    ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerTrackman); //TODO registry event
 
                     VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
                     VillagerTrades.define(trackmanCareer);

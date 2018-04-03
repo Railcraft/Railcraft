@@ -26,6 +26,7 @@ import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 public class CraftingHandler {
 
     //TODO: get rid of this if possible
+    //TODO fix
     @SubscribeEvent
     public void onCrafting(ItemCraftedEvent event) {
         EntityPlayer player = event.player;

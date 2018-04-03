@@ -23,7 +23,7 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FilterBeesGenomeRecipe implements IRecipe {
+public class FilterBeesGenomeRecipe extends BaseRecipe {
     private static Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterBeeGenome.class);
     private static Predicate<ItemStack> BEE = s -> ForestryPlugin.instance().isAnalyzedBee(s);
     private static char[] MAP = {
@@ -42,6 +42,10 @@ public class FilterBeesGenomeRecipe implements IRecipe {
             'B', 'F', 'B',
             '_', '_', '_'
     };
+
+    public FilterBeesGenomeRecipe() {
+        super("filter_bees_species");
+    }
 
     @Override
     public boolean matches(InventoryCrafting grid, @Nullable World world) {
@@ -94,8 +98,8 @@ public class FilterBeesGenomeRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 10;
+    public boolean canFit(int width, int height) {
+        return true;
     }
 
     @Override
@@ -104,7 +108,7 @@ public class FilterBeesGenomeRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (int i = 0; i < grid.length; ++i) {
@@ -116,6 +120,6 @@ public class FilterBeesGenomeRecipe implements IRecipe {
             }
         }
 
-        return grid;
+        return NonNullList.from(ItemStack.EMPTY, grid);
     }
 }

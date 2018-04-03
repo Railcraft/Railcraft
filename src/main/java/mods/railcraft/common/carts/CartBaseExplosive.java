@@ -36,7 +36,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 
 public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
 
@@ -77,7 +76,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     public void onUpdate() {
         super.onUpdate();
 
-        if (isCollidedHorizontally) {
+        if (collidedHorizontally) {
             double d0 = motionX * motionX + motionZ * motionZ;
 
             if (d0 >= 0.01) {

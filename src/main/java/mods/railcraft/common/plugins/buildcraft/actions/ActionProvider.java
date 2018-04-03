@@ -1,14 +1,12 @@
 package mods.railcraft.common.plugins.buildcraft.actions;
 
-import buildcraft.api.statements.IActionExternal;
-import buildcraft.api.statements.IActionInternal;
-import buildcraft.api.statements.IActionProvider;
-import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.*;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasCart;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -22,6 +20,11 @@ public class ActionProvider implements IActionProvider {
 
     @Override
     public void addInternalActions(Collection<IActionInternal> actions, IStatementContainer container) {
+
+    }
+
+    @Override
+    public void addInternalSidedActions(Collection<IActionInternalSided> actions, IStatementContainer container, @Nonnull EnumFacing side) {
 
     }
 

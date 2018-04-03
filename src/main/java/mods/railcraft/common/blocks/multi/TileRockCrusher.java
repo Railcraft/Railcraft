@@ -245,7 +245,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                 // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
                 for (EntityItem item : TileEntityHopper.getCaptureItems(getWorld(), x, y + 1, z)) {
                     if (item != null && useMasterEnergy(SUCKING_POWER_COST)) {
-                        ItemStack stack = item.getEntityItem().copy();
+                        ItemStack stack = item.getItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
                         item.setDead();
                     }
@@ -401,6 +401,11 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
         if (side == EnumFacing.UP)
             return SLOTS_INPUT;
         return SLOTS_OUTPUT;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 
     @Override

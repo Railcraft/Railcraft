@@ -27,8 +27,8 @@ public class GuiBoilerFluid extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.steam.boiler"), 6);
-        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.boiler"), 6);
+        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

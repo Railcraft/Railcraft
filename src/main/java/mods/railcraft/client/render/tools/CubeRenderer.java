@@ -55,7 +55,7 @@ public class CubeRenderer {
         }
 
         public final RenderInfo lightSource(Entity entity, float partialTicks) {
-            lightSource = entity.getBrightness(partialTicks);
+            lightSource = entity.getBrightness();
             return this;
         }
 
@@ -115,7 +115,7 @@ public class CubeRenderer {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
 
 //        Tessellator tessellator = Tessellator.getInstance();
-//        VertexBuffer vertexBuffer = tessellator.getBuffer();
+//        BufferBuilder vertexBuffer = tessellator.getBuffer();
 //        vertexBuffer.pos(renderInfo.boundingBox.minX, renderInfo.boundingBox.minY, renderInfo.boundingBox.minZ).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
 //        vertexBuffer.pos(0, 1, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
 //        vertexBuffer.pos(1, 1, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();

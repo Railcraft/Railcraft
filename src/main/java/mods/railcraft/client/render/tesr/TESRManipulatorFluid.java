@@ -25,13 +25,13 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRManipulatorFluid extends TileEntitySpecialRenderer<TileFluidManipulator> {
+public final class TESRManipulatorFluid extends TileEntitySpecialRenderer<TileFluidManipulator> {
 
     public static final ResourceLocation PIPE_MODEL = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "block/manipulator_pipe");
     private static final float PIPE_OFFSET = 5 * RenderTools.PIXEL;
 
     @Override
-    public void renderTileEntityAt(TileFluidManipulator tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileFluidManipulator tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         StandardTank tank = tile.getTankManager().get(0);
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null && fluidStack.amount > 0) {

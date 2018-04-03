@@ -237,7 +237,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             World world = cart.world;
 
             for (int i = 0; i < numToSpawn; i++) {
-                Entity entity = EntityList.createEntityByName(EntityList.getEntityStringFromClass(entityType), world);
+                Entity entity = EntityList.createEntityByIDFromName(EntityList.getKey(entityType), world);
 
                 if (entityType.isInstance(entity)) {
                     T living = entityType.cast(entity);

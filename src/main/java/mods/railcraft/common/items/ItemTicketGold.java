@@ -60,7 +60,8 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (Game.isHost(world))
             if (canPlayerEdit(player, stack)) {
                 PacketBuilder.instance().sendGoldenTicketGuiPacket((EntityPlayerMP) player, hand);

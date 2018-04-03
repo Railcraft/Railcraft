@@ -13,8 +13,8 @@ package mods.railcraft.client.render.models.resource;
 import mods.railcraft.client.render.tools.RenderTools;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -67,7 +67,7 @@ public class FluidModelRenderer {
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         Tessellator tess = Tessellator.getInstance();
-        VertexBuffer buffer = tess.getBuffer();
+        BufferBuilder buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
         IExtendedBlockState state = (IExtendedBlockState) new ExtendedBlockState(Blocks.WATER, new IProperty[]{BlockFluidBase.LEVEL}, BlockFluidBase.FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).getBaseState();
         for (int i = 0; i < 4; i++)
@@ -83,7 +83,7 @@ public class FluidModelRenderer {
         mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
     }
 
-    private void putQuads(VertexBuffer buffer, List<BakedQuad> quads) {
+    private void putQuads(BufferBuilder buffer, List<BakedQuad> quads) {
         for (BakedQuad quad : quads) {
             buffer.addVertexData(quad.getVertexData());
         }

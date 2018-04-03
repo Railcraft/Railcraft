@@ -63,7 +63,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, tile.getProcessTime());
+        listener.sendWindowProperty(this, 0, tile.getProcessTime());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
         super.sendUpdateToClient();
         for (IContainerListener listener : listeners) {
             if (lastProcessTime != tile.getProcessTime())
-                listener.sendProgressBarUpdate(this, 0, tile.getProcessTime());
+                listener.sendWindowProperty(this, 0, tile.getProcessTime());
         }
 
         lastProcessTime = tile.getProcessTime();

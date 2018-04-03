@@ -54,7 +54,7 @@ public class ItemTunnelBore extends ItemCart {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState existingState = WorldPlugin.getBlockState(world, pos);
         if (TrackTools.isRailBlock(existingState)) {
             if (Game.isHost(world) && !CartToolsAPI.isMinecartAt(world, pos, 0)) {
@@ -81,7 +81,7 @@ public class ItemTunnelBore extends ItemCart {
                     world.spawnEntity(bore);
                 }
             }
-            dec(stack);
+            dec(player.getHeldItem(hand));
             return EnumActionResult.SUCCESS;
         } else {
             return EnumActionResult.FAIL;

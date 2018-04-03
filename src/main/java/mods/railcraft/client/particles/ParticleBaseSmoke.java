@@ -26,9 +26,9 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
         this.motionX *= 0.1;
         this.motionY *= 0.1;
         this.motionZ *= 0.1;
-        this.motionX += vel.xCoord;
-        this.motionY += vel.yCoord;
-        this.motionZ += vel.zCoord;
+        this.motionX += vel.x;
+        this.motionY += vel.y;
+        this.motionZ += vel.z;
         this.particleScale *= 0.75F;
         this.particleScale *= scale;
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));
@@ -62,7 +62,7 @@ public abstract class ParticleBaseSmoke extends ParticleBase {
         this.motionY *= 0.96D;
         this.motionZ *= 0.96D;
 
-        if (isCollided) {
+        if (onGround) {
             this.motionX *= 0.67D;
             this.motionZ *= 0.67D;
         }

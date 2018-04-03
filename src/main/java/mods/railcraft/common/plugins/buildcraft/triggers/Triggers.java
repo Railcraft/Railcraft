@@ -4,6 +4,7 @@
  */
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
+import buildcraft.api.core.render.ISprite;
 import buildcraft.api.statements.*;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.single.TileEngine.EnergyStage;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**
@@ -69,20 +71,15 @@ public enum Triggers implements ITriggerExternal {
         return LocalizationPlugin.translate("gates.trigger." + tag);
     }
 
+    @Nullable
+    @Override
+    public ISprite getSprite() {
+        return null; //TODO Implement this
+    }
+
     @Override
     public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer isc, IStatementParameter[] parameter) {
         return trigger.isTriggerActive(side, tile, parameter);
-    }
-
-    @Override
-    public void registerIcons(TextureMap register) {
-        sprite = register.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.trigger." + tag));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getGuiSprite() {
-        return sprite;
     }
 
     @Override
@@ -103,6 +100,11 @@ public enum Triggers implements ITriggerExternal {
     @Override
     public IStatement rotateLeft() {
         return this;
+    }
+
+    @Override
+    public IStatement[] getPossible() {
+        return new IStatement[] {this}; //TODO Implement this
     }
 
 }

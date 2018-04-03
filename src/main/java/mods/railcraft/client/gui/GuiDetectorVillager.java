@@ -21,6 +21,7 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class GuiDetectorVillager extends GuiBasic {
@@ -42,7 +43,7 @@ public class GuiDetectorVillager extends GuiBasic {
         villager = new EntityVillager(tile.getWorld());
         mode = detector.getMode();
 
-        professions.addAll(VillagerRegistry.instance().getRegistry().getValues());
+        professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValues());
 
         professions.setCurrent(detector.getProfession());
         villager.setProfession(professions.getCurrent());

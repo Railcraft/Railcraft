@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class SteelTank implements MetalTank {
     }
 
     @Override
-    public float getResistance(Entity exploder) {
+    public float getResistance(@Nullable Entity exploder) {
         return 25F;
     }
 }

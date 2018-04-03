@@ -14,13 +14,17 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RotorRepairRecipe implements IRecipe {
+public class RotorRepairRecipe extends BaseRecipe {
+
+    public RotorRepairRecipe() {
+        super("rotor_repair");
+    }
 
     private static final int REPAIR_PER_BLADE = 2500;
     private final ItemStack ROTOR = RailcraftItems.TURBINE_ROTOR.getStack();
@@ -66,8 +70,8 @@ public class RotorRepairRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 9;
+    public boolean canFit(int width, int height) {
+        return width >= 3 && height >= 3;
     }
 
     @Override
@@ -76,7 +80,7 @@ public class RotorRepairRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         return CraftingPlugin.emptyContainers(inv);
     }
 }

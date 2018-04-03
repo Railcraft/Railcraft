@@ -39,6 +39,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -196,9 +197,9 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int meta = 0; meta < 16; meta++) {
-            list.add(new ItemStack(item, 1, meta));
+            list.add(new ItemStack(this, 1, meta));
         }
     }
 
@@ -226,7 +227,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
      * Get the MapColor for this Block and the given BlockState
      */
     @Override
-    public MapColor getMapColor(IBlockState state) {
+    public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getColor(state).getMapColor();
     }
 

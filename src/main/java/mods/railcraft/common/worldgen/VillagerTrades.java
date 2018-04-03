@@ -17,6 +17,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -118,7 +119,7 @@ public class VillagerTrades {
         }
 
         @Override
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random rand) {
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random rand) {
             if (offers.length <= 0 || sale.obj == null) {
                 return;
             }
@@ -186,7 +187,7 @@ public class VillagerTrades {
         }
 
         @Override
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
             if (trackKits.size() == 0)
                 return;
             ItemStack stack = trackKits.get(random.nextInt(trackKits.size())).getTrackKitItem(2);

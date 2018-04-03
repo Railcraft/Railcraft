@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RailcraftGuiConfig extends GuiConfig {
+final class RailcraftGuiConfig extends GuiConfig {
 
-    public RailcraftGuiConfig(GuiScreen parent) {
+    RailcraftGuiConfig(GuiScreen parent) {
         super(parent, generateConfig(), Railcraft.MOD_ID, true, true, Railcraft.MOD_ID);
     }
 

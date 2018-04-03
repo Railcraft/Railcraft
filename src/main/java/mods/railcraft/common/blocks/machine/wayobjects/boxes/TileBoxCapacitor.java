@@ -30,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -133,8 +134,8 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, neighborBlock, neighborPos);
         if (world.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos());

@@ -21,7 +21,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
-import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -104,7 +104,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
         if (getEnergyStage() != EnergyStage.OVERHEAT) {
             if (isPowered()) {
                 FluidStack steam = tankSteam.getFluid();
-                if (steam != null && steam.amount >= tankSteam.getCapacity() / 2 - Steam.STEAM_PER_UNIT_WATER) {
+                if (steam != null && steam.amount >= tankSteam.getCapacity() / 2 - SteamConstants.STEAM_PER_UNIT_WATER) {
                     steam = tankManager.drain(0, steamUsedPerTick() - 1, true);
                     if (steam != null)
                         steamUsed += steam.amount;

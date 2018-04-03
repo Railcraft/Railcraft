@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
@@ -46,8 +46,8 @@ public class ParticleFireSpark extends ParticleBase {
 
     private double getHorizontalDistSq(Vec3d point) {
         Vec3d pos = getPos();
-        double xDiff = pos.xCoord - point.xCoord;
-        double zDiff = pos.zCoord - point.zCoord;
+        double xDiff = pos.x - point.x;
+        double zDiff = pos.z - point.z;
         return xDiff * xDiff + zDiff * zDiff;
     }
 
@@ -58,9 +58,9 @@ public class ParticleFireSpark extends ParticleBase {
         vel = vel.normalize();
 
         float velScale = 0.1f;
-        this.motionX = vel.xCoord * velScale;
-        this.motionY = vel.yCoord * velScale + 0.4 * (dist / maxHorizontalDist);
-        this.motionZ = vel.zCoord * velScale;
+        this.motionX = vel.x * velScale;
+        this.motionY = vel.y * velScale + 0.4 * (dist / maxHorizontalDist);
+        this.motionZ = vel.z * velScale;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ParticleFireSpark extends ParticleBase {
 //    }
 
     @Override
-    public void renderParticle(VertexBuffer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+    public void renderParticle(BufferBuilder world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
         float f6 = ((float) particleAge + par2) / (float) particleMaxAge;
         this.particleScale = lavaParticleScale * (1.0F - f6 * f6);
         super.renderParticle(world, entity, par2, par3, par4, par5, par6, par7);

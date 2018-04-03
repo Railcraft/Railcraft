@@ -566,8 +566,8 @@ public class RoutingLogic {
                     return loco.getCartType() == RailcraftCarts.LOCO_STEAM_SOLID;
                 if ("Creative".equalsIgnoreCase(value))
                     return loco.getCartType() == RailcraftCarts.LOCO_CREATIVE;
-                if ("Steam_Magic".equalsIgnoreCase(value))
-                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_MAGIC;
+//                if ("Steam_Magic".equalsIgnoreCase(value))
+//                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_MAGIC;
                 if ("None".equalsIgnoreCase(value))
                     return false;
             }

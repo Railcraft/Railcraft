@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
+import com.google.common.base.Strings;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -19,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nullable;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://railcraft.info/wiki/info:license>
  */
 @SideOnly(Side.CLIENT)
-public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton<GuiMultiButton<T>> {
+public final class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton<GuiMultiButton<T>> {
 
     private final MultiButtonController<T> control;
     public boolean canChange = true;
@@ -39,7 +39,7 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
     }
 
     public static <T extends IMultiButtonState> GuiMultiButton<T> create(int id, int x, int y, int width, MultiButtonController<T> control) {
-        return new GuiMultiButton<T>(id, x, y, width, control);
+        return new GuiMultiButton<>(id, x, y, width, control);
     }
 
     @Override
@@ -53,11 +53,11 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
     }
 
     @Override
-    public void drawButton(Minecraft minecraft, int x, int y) {
+    public void drawButton(Minecraft minecraft, int x, int y, float partialTicks) {
         if (!visible) {
             return;
         }
-        FontRenderer fontrenderer = minecraft.fontRendererObj;
+        FontRenderer fontrenderer = minecraft.fontRenderer;
         bindButtonTextures(minecraft);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         IMultiButtonState state = control.getButtonState();
@@ -66,19 +66,19 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
         int yOffset = tex.getY();
         int h = tex.getHeight();
         int w = tex.getWidth();
-        boolean flag = x >= xPosition && y >= yPosition && x < xPosition + width && y < yPosition + h;
+        boolean flag = x >= this.x && y >= this.y && x < this.x + width && y < this.y + h;
         int hoverState = getHoverState(flag);
-        drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, width / 2, h);
-        drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+        drawTexturedModalRect(this.x, this.y, xOffset, yOffset + hoverState * h, width / 2, h);
+        drawTexturedModalRect(this.x + width / 2, this.y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
         mouseDragged(minecraft, x, y);
         displayString = state.getLabel();
-        if (!Strings.isEmpty(displayString)) {
+        if (!Strings.isNullOrEmpty(displayString)) {
             if (!enabled) {
-                drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, 0xffa0a0a0);
+                drawCenteredString(fontrenderer, displayString, this.x + width / 2, this.y + (h - 8) / 2, 0xffa0a0a0);
             } else if (flag) {
-                drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, 0xffffa0);
+                drawCenteredString(fontrenderer, displayString, this.x + width / 2, this.y + (h - 8) / 2, 0xffffa0);
             } else {
-                drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, 0xe0e0e0);
+                drawCenteredString(fontrenderer, displayString, this.x + width / 2, this.y + (h - 8) / 2, 0xe0e0e0);
             }
         }
     }

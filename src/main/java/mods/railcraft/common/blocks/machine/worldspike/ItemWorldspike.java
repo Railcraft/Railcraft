@@ -16,8 +16,9 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -32,8 +33,8 @@ public class ItemWorldspike extends ItemMachine {
     }
 
     @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        ToolTip tips = super.getToolTip(stack, player, adv);
+    public ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag adv) {
+        ToolTip tips = super.getToolTip(stack, world, adv);
         WorldspikeVariant variant = (WorldspikeVariant) getVariant(stack);
         if (variant != null && !variant.getFuelList().isEmpty()) {
             tips = addFuelInfo(tips, stack);

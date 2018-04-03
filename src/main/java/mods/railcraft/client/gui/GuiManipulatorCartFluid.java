@@ -30,7 +30,7 @@ public class GuiManipulatorCartFluid extends GuiManipulatorCart {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-//        fontRendererObj.drawString(FILTER_LABEL, 62, 25, 0x404040);
-        fontRendererObj.drawString(inv.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
+//        fontRenderer.drawString(FILTER_LABEL, 62, 25, 0x404040);
+        fontRenderer.drawString(inv.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
     }
 }

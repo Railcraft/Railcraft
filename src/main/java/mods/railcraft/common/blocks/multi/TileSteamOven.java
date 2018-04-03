@@ -421,6 +421,11 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
     }
 
     @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
+
+    @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         //TODO: front/top no fluid?
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);

@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL12;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
+public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     /**
      * The Ender Chest Chest's model.
@@ -35,13 +35,14 @@ public class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
     public TESRChest(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
         ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
+        //TODO switch to tile entity item stack renderer
     }
 
     /**
      * Helps to render Ender Chest.
      */
     @Override
-    public void renderTileEntityAt(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         int facing = tile.getFacing().ordinal();
 
         if (destroyStage >= 0) {

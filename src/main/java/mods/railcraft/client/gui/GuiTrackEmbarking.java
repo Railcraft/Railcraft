@@ -39,7 +39,7 @@ public class GuiTrackEmbarking extends GuiBasic {
     @Override
     protected void drawExtras(int x, int y, float f) {
         if (track != null) {
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.track.embarking.radius") + " = " + radius, 25);
+            GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.track.embarking.radius") + " = " + radius, 25);
         }
     }
 

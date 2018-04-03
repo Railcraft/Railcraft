@@ -38,7 +38,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static mods.railcraft.common.util.inventory.InvTools.inc;
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
@@ -51,7 +50,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
-    private final Set<Object> actions = new HashSet<Object>();
+    private final Set<Object> actions = new HashSet<>();
 
     public TileRollingMachinePowered() {
     }
@@ -90,7 +89,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && stack.isStackable() && sizeOf(stack) == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
-                if (!isEmpty(request)) {
+                if (!InvTools.isEmpty(request)) {
                     inc(stack);
                     break;
                 }
@@ -134,7 +133,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        return !isEmpty(getStackInSlot(slot));
+        return !getStackInSlot(slot).isEmpty();
     }
 
     @Override
@@ -177,20 +176,27 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     public int getField(int id) {
-        return 0;
+        return inv.getField(id);
     }
 
     @Override
     public int getFieldCount() {
-        return 0;
+        return inv.getFieldCount();
     }
 
     @Override
     public void setField(int id, int value) {
+        inv.setField(id, value);
     }
 
     @Override
     public void clear() {
+        inv.clear();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 
     @Override

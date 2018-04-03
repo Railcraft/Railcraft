@@ -18,8 +18,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -38,7 +39,6 @@ public class NBTPlugin {
         return nbt;
     }
 
-    @Nullable
     public static GameProfile readGameProfileTag(NBTTagCompound data) {
         String ownerName = PlayerPlugin.UNKNOWN_PLAYER_NAME;
         if (data.hasKey("name"))
@@ -112,13 +112,12 @@ public class NBTPlugin {
         data.setTag(tag, nbt);
     }
 
-    @Nullable
     public static ItemStack readItemStack(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
             NBTTagCompound nbt = data.getCompoundTag(tag);
-            return ItemStack.loadItemStackFromNBT(nbt);
+            return new ItemStack(nbt);
         }
-        return null;
+        return InvTools.emptyStack();
     }
 
     public enum EnumNBTType {
@@ -136,32 +135,39 @@ public class NBTPlugin {
         COMPOUND(NBTTagCompound.class),
         INT_ARRAY(NBTTagIntArray.class);
         public static final EnumNBTType[] VALUES = values();
+        private static final Map<Class<? extends NBTBase>, EnumNBTType> classToType = new HashMap<>();
         public final Class<? extends NBTBase> classObject;
 
         EnumNBTType(Class<? extends NBTBase> c) {
             this.classObject = c;
         }
 
-        public static EnumNBTType fromClass(Class<? extends NBTBase> c) {
-            for (EnumNBTType type : VALUES) {
-                if (type.classObject == c)
-                    return type;
+        static {
+            for (EnumNBTType each : VALUES) {
+                classToType.put(each.classObject, each);
             }
-            return null;
+        }
+
+        public static EnumNBTType fromClass(Class<? extends NBTBase> c) {
+            return classToType.get(c);
         }
 
     }
 
-    public static <T extends NBTBase> NBTList<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
+    public static <T extends NBTBase> List<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
         NBTTagList nbtList = nbt.getTagList(tag, type.ordinal());
-        return new NBTList<T>(nbtList);
+        return new NBTList<>(nbtList);
     }
 
-    public static class NBTList<T extends NBTBase> extends ForwardingList<T> {
+    public static <T extends NBTBase> List<T> asList(NBTTagList list) {
+        return new NBTList<>(list);
+    }
 
-        private final ArrayList<T> backingList;
+    private static final class NBTList<T extends NBTBase> extends ForwardingList<T> {
 
-        public NBTList(NBTTagList nbtList) {
+        private final List<T> backingList;
+
+        NBTList(NBTTagList nbtList) {
             backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
         }
 

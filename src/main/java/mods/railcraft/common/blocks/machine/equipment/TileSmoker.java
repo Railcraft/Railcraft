@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -71,8 +72,8 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, block, neighborPos);
         powered = PowerPlugin.isBlockBeingPowered(world, getPos());
         sendUpdateToClient();
     }
@@ -114,12 +115,13 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY,
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY,
                                   float hitZ) {
-        if (super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ))
+        if (super.blockActivated(player, hand, side, hitX, hitY, hitZ))
             return true;
         if (player.isSneaking())
             return false;
+        ItemStack heldItem = player.getHeldItem(hand);
         if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
             return false;
         EnumColor color = EnumColor.dyeColorOf(heldItem);

@@ -33,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +60,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             ItemStack table = inv.getStackInSlot(0);
             if (!InvTools.isEmpty(table)) {
@@ -71,7 +72,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         if (Game.isHost(world)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
-                if (inv.getStackInSlot(0) == null) {
+                if (inv.getStackInSlot(0).isEmpty()) {
                     ItemStack copy = current.copy();
                     setSize(copy, 1);
                     inv.setInventorySlotContents(0, copy);
@@ -86,7 +87,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
                         return true;
                 }
         }
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -113,8 +114,8 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos pos) {
+        super.onNeighborBlockChange(state, neighborBlock, pos);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
             setPowered(power);
@@ -147,7 +148,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     }
 
     private void refreshLogic() {
-        if (logic == null && inv.getStackInSlot(0) != null)
+        if (logic == null && !inv.getStackInSlot(0).isEmpty())
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 

@@ -24,7 +24,7 @@ import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
@@ -116,7 +116,7 @@ public class RailcraftConfig {
     private static float chargeMaintenanceCostMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
     private static float boilerMultiplierBiofuel = 1F;
-    private static float fuelPerSteamMultiplier = Steam.FUEL_PER_BOILER_CYCLE;
+    private static float fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
     private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
     public static Configuration configMain;

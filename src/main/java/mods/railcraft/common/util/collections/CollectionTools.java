@@ -20,7 +20,7 @@ import java.util.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CollectionTools {
+public final class CollectionTools {
     private CollectionTools() {
     }
 
@@ -35,14 +35,6 @@ public class CollectionTools {
             biMap.put(i, elements.get(i));
         }
         return biMap;
-    }
-
-    public static <V> Map<StackKey, V> createItemStackMap() {
-        return new HashMap<StackKey, V>();
-    }
-
-    public static Set<StackKey> createItemStackSet() {
-        return new HashSet<StackKey>();
     }
 
     public static <T> boolean intersects(Collection<T> collection, T[] array) {

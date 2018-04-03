@@ -4,3 +4,7 @@
 [submodule "api/railcraft"]
 	path = api/railcraft
 	url = https://github.com/Railcraft/Railcraft-API.git
+[submodule "buildcraft-api"]
+	path = api/buildcraft
+	url = https://github.com/BuildCraft/BuildCraftAPI
+	branch = 8.0.x

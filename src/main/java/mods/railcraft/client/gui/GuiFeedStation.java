@@ -30,7 +30,7 @@ public class GuiFeedStation extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(feed, 85, 29, 0x404040);
+        fontRenderer.drawString(feed, 85, 29, 0x404040);
     }
 
 }

@@ -16,8 +16,8 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
@@ -121,7 +121,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
         if (emblemTexture != null) {
             renderer.bindTex(emblemTexture);
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer vertexBuffer = tess.getBuffer();
+            BufferBuilder vertexBuffer = tess.getBuffer();
 
 //            float size = 0.22F;
 //            float offsetX = -0.25F;

@@ -26,7 +26,6 @@ import mods.railcraft.common.modules.ModuleThaumcraft;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartDisassemblyRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EntityIDs;
@@ -88,12 +87,12 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             conditions().add(ModuleSteam.class);
         }
     },
-    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
-        {
-            conditions().add(ModuleLocomotives.class);
-            conditions().add(ModuleThaumcraft.class);
-        }
-    },
+//    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
+//        {
+//            conditions().add(ModuleLocomotives.class);
+//            conditions().add(ModuleThaumcraft.class);
+//        }
+//    },
     LOCO_ELECTRIC(1, "locomotive_electric", EntityLocomotiveElectric.class, ItemLocoElectric::new) {
         {
             conditions().add(ModuleLocomotives.class);
@@ -215,7 +214,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    @Nullable
     public ItemStack getContents() {
         switch (this) {
 //            case TANK:
@@ -223,7 +221,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
 //                    return EnumMachineBeta.TANK_IRON_GAUGE.getStack();
             default: {
                 if (contentsSupplier == null)
-                    return null;
+                    return ItemStack.EMPTY;
                 return contentsSupplier.get();
             }
         }
@@ -262,7 +260,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private void registerEntity() {
         if (id < 0)
             return;
-        EntityRegistry.registerModEntity(type, getBaseTag(), id, Railcraft.getMod(), 256, 2, true);
+        EntityRegistry.registerModEntity(def.registryName, type, getBaseTag(), id, Railcraft.getMod(), 256, 2, true);
 
         // Legacy stuff
 //        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);

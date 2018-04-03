@@ -23,7 +23,7 @@ import javax.vecmath.Vector3f;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class Transforms {
+public final class Transforms {
     private static final TRSRTransformation flipX = new TRSRTransformation(null, null, new Vector3f(-1, 1, 1), null);
 
     public static IModelState getItem() {
@@ -50,4 +50,6 @@ public class Transforms {
                 new Vector3f(s, s, s),
                 null));
     }
+
+    private Transforms() {}
 }

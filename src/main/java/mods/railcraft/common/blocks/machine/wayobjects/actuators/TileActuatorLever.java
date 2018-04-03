@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 
@@ -26,7 +25,7 @@ public class TileActuatorLever extends TileActuatorBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         setPowered(!isPowered());
         sendUpdateToClient();
         return true;

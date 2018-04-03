@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.IOException;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -76,8 +77,10 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         return true;
     }
 
+
+
     @Override
-    public boolean load(IResourceManager manager, ResourceLocation location) {
+    public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> resourceGetter) {
         // Remove the index from the resource path so we can find the original texture.
         location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().replace("_" + index, ""));
 

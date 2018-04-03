@@ -157,7 +157,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
                 if (powerState > PowerPlugin.NO_POWER)
                     powerDelay = CartConstants.DETECTED_POWER_OUTPUT_FADE;
                 sendUpdateToClient();
-                world.notifyNeighborsOfStateChange(getPos(), getBlockType());
+                world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
                 IBlockState state = getBlockState();
                 if (state != null)
                     WorldPlugin.notifyBlocksOfNeighborChangeOnSide(world, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));

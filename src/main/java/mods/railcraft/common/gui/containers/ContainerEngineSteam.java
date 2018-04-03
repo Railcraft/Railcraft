@@ -47,7 +47,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
     public void addListener(IContainerListener crafter) {
         super.addListener(crafter);
 
-        crafter.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
+        crafter.sendWindowProperty(this, 14, Math.round(tile.currentOutput * 100));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
 
         for (IContainerListener crafter : listeners) {
             if (lastOutput != tile.currentOutput)
-                crafter.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
+                crafter.sendWindowProperty(this, 14, Math.round(tile.currentOutput * 100));
         }
 
         this.lastOutput = tile.currentOutput;

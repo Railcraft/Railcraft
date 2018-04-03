@@ -66,7 +66,7 @@ public class EntityCartCargo extends CartBaseFiltered {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
             GuiHandler.openGui(EnumGui.CART_CARGO, player, world, this);
         }

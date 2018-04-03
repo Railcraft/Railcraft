@@ -33,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,7 +46,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 import static net.minecraft.util.EnumParticleTypes.HEART;
 
@@ -86,7 +86,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
         ItemStack feed = getStackInSlot(0);
 
-        if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || sizeOf(feed) < feed.getMaxStackSize())) {
+        if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed.isEmpty() || sizeOf(feed) < feed.getMaxStackSize())) {
             InventoryComposite chests = InvTools.getAdjacentInventories(world, getPos());
             InvTools.moveOneItem(chests, feedInv, StandardStackFilters.FEED);
         }
@@ -94,7 +94,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         feed = getStackInSlot(0);
 
         feedTime--;
-        if (!powered && !isEmpty(feed) && feedTime <= 0) {
+        if (!powered && !InvTools.isEmpty(feed) && feedTime <= 0) {
             feedTime = MIN_FEED_INTERVAL + rand.nextInt(FEED_VARIANCE);
 
             //TODO: test (maybe we can draw this somehow?)
@@ -136,9 +136,6 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     private boolean feedAnimal(EntityAnimal animal) {
-        if (animal == null) {
-            return false;
-        }
         try {
             if (animal.getGrowingAge() == 0 && !animal.isInLove()) {
                 EntityPlayer player;
@@ -168,8 +165,8 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos neighbor) {
+        super.onNeighborBlockChange(state, block, neighbor);
         powered = PowerPlugin.isBlockBeingPowered(world, getPos());
     }
 

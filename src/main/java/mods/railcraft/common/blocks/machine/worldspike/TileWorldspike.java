@@ -89,8 +89,9 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 if (Game.isHost(world)) {
@@ -113,7 +114,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
                 return true;
             }
         }
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Nullable
@@ -146,7 +147,6 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         return Math.min(ticket.getMaxChunkListDepth(), MAX_CHUNKS);
     }
 
-    @Nullable
     public static boolean isTargetLoaded(EntityPlayer player, WorldCoordinate coord, String locTag) {
         if (!WorldPlugin.isBlockLoaded(player.world, coord.getPos())) {
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.worldspike.pair.fail.unloaded", locTag);
@@ -210,7 +210,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Override
     public List<ItemStack> getDrops(int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
         ItemStack drop = getMachineType().getStack();
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
@@ -341,9 +341,9 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     protected void setTicketData(Ticket chunkTicket) {
-        chunkTicket.getModData().setInteger("xCoord", getPos().getX());
-        chunkTicket.getModData().setInteger("yCoord", getPos().getY());
-        chunkTicket.getModData().setInteger("zCoord", getPos().getZ());
+        chunkTicket.getModData().setInteger("x", getPos().getX());
+        chunkTicket.getModData().setInteger("y", getPos().getY());
+        chunkTicket.getModData().setInteger("z", getPos().getZ());
         chunkTicket.getModData().setString("type", getMachineType().getTag());
     }
 
@@ -415,8 +415,8 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, block, neighborPos);
         if (Game.isClient(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(world, getPos());

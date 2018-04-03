@@ -22,6 +22,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.io.ByteArrayOutputStream;
@@ -49,7 +50,7 @@ public class GuiTradeStation extends TileGui {
 
         villager = new EntityVillager(tile.getWorld());
 
-        professions.addAll(VillagerRegistry.instance().getRegistry().getValues());
+        professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValuesCollection());
 
         professions.setCurrent(tile.getProfession());
         villager.setProfession(professions.getCurrent());

@@ -55,9 +55,9 @@ public class ContainerBoilerFluid extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
-        listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
+        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
+        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendWindowProperty(this, 13, tile.boiler.isBurning() ? 1 : 0);
     }
 
     @Override
@@ -66,13 +66,13 @@ public class ContainerBoilerFluid extends RailcraftContainer {
 
         for (IContainerListener listener : listeners) {
             if (lastBurnTime != tile.boiler.burnTime)
-                listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+                listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
 
             if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
-                listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+                listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
             if (wasBurning != tile.boiler.isBurning())
-                listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
+                listener.sendWindowProperty(this, 13, tile.boiler.isBurning() ? 1 : 0);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;

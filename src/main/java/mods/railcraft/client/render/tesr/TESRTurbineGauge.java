@@ -11,17 +11,18 @@ package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.multi.TileSteamTurbine;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
-public class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine> {
+public final class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine> {
+
     @Override
-    public void renderTileEntityAt(TileSteamTurbine turbine, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileSteamTurbine turbine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (!turbine.isStructureValid()
                 || turbine.getPatternMarker() != 'W')
             // not a gauge block
@@ -75,7 +76,7 @@ public class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine
         OpenGL.glDisable(GL11.GL_LIGHTING);
 
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         // move the origin to the center of the gauge
@@ -99,12 +100,12 @@ public class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine
         int red = 100;
         int green = 0;
         int blue = 0;
-        int alpha = 255;
+        int alphaOne = 255;
 
-        vertexBuffer.pos(-rx * baseOffset, 0, -rz * baseOffset).color(red, green, blue, alpha).endVertex();
-        vertexBuffer.pos(rx * baseOffset, 0, rz * baseOffset).color(red, green, blue, alpha).endVertex();
-        vertexBuffer.pos(-rx * glx + rx * gwx, gly + gwy, -rz * glx + rz * gwx).color(red, green, blue, alpha).endVertex();
-        vertexBuffer.pos(-rx * glx - rx * gwx, gly - gwy, -rz * glx - rz * gwx).color(red, green, blue, alpha).endVertex();
+        vertexBuffer.pos(-rx * baseOffset, 0, -rz * baseOffset).color(red, green, blue, alphaOne).endVertex();
+        vertexBuffer.pos(rx * baseOffset, 0, rz * baseOffset).color(red, green, blue, alphaOne).endVertex();
+        vertexBuffer.pos(-rx * glx + rx * gwx, gly + gwy, -rz * glx + rz * gwx).color(red, green, blue, alphaOne).endVertex();
+        vertexBuffer.pos(-rx * glx - rx * gwx, gly - gwy, -rz * glx - rz * gwx).color(red, green, blue, alphaOne).endVertex();
 
         tessellator.draw();
 

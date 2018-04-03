@@ -57,8 +57,8 @@ public class ContainerBore extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, bore.getBurnTime());
-        listener.sendProgressBarUpdate(this, 1, bore.getFuel());
+        listener.sendWindowProperty(this, 0, bore.getBurnTime());
+        listener.sendWindowProperty(this, 1, bore.getFuel());
     }
 
     @Override
@@ -67,11 +67,11 @@ public class ContainerBore extends RailcraftContainer {
 
         for (IContainerListener var2 : listeners) {
             if (lastBurnTime != bore.getBurnTime()) {
-                var2.sendProgressBarUpdate(this, 0, bore.getBurnTime());
+                var2.sendWindowProperty(this, 0, bore.getBurnTime());
             }
 
             if (lastFuel != bore.getFuel()) {
-                var2.sendProgressBarUpdate(this, 1, bore.getFuel());
+                var2.sendWindowProperty(this, 1, bore.getFuel());
             }
         }
 

@@ -22,8 +22,8 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.steam.IBoilerContainer;
-import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
+import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -118,15 +118,14 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         return RailcraftSoundEvents.ENTITY_LOCOMOTIVE_STEAM_WHISTLE.getSoundEvent();
     }
 
-    @Nullable
     @Override
     protected ItemStack getCartItemBase() {
         return RailcraftCarts.LOCO_STEAM_SOLID.getStack();
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        return FluidTools.interactWithFluidHandler(stack, getTankManager(), player) || super.doInteract(player, stack, hand);
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
+        return FluidTools.interactWithFluidHandler(player, hand, getTankManager()) || super.doInteract(player, hand);
     }
 
     public TankManager getTankManager() {
@@ -134,13 +133,13 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
@@ -157,7 +156,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                 setMode(LocoMode.SHUTDOWN);
 
             setSteaming(tankSteam.getFluidAmount() > 0);
-            if (tankSteam.getRemainingSpace() >= Steam.STEAM_PER_UNIT_WATER || isShutdown()) {
+            if (tankSteam.getRemainingSpace() >= SteamConstants.STEAM_PER_UNIT_WATER || isShutdown()) {
                 boiler.tick(1);
 
                 setSmoking(boiler.isBurning());
@@ -217,7 +216,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     public int getMoreGoJuice() {
         FluidStack steam = tankSteam.getFluid();
         if (steam != null && steam.amount >= tankSteam.getCapacity() / 2) {
-            tankSteam.drainInternal(Steam.STEAM_PER_UNIT_WATER, true);
+            tankSteam.drainInternal(SteamConstants.STEAM_PER_UNIT_WATER, true);
             return FUEL_PER_REQUEST;
         }
         return 0;

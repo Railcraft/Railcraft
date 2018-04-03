@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -191,8 +192,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos pos) {
+        super.onNeighborBlockChange(state, block, pos);
         if (Game.isClient(getWorld()))
             return;
         checkPower();

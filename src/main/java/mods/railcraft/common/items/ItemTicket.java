@@ -13,14 +13,17 @@ import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -32,33 +35,33 @@ public class ItemTicket extends ItemRailcraft {
     public static final Predicate<ItemStack> FILTER = stack -> stack != null && stack.getItem() instanceof ItemTicket;
     public static final int LINE_LENGTH = 32;
 
-    public static boolean isNBTValid(NBTTagCompound nbt) {
+    public static boolean isNBTValid(@Nullable NBTTagCompound nbt) {
         if (nbt == null)
             return false;
         else if (!nbt.hasKey("dest"))
             return false;
 
         NBTTagString dest = (NBTTagString) nbt.getTag("dest");
-        return dest.getString() != null && dest.getString().length() <= LINE_LENGTH;
+        return !dest.getString().isEmpty() && dest.getString().length() <= LINE_LENGTH;
 
     }
 
     public static ItemStack copyTicket(ItemStack source) {
         if (InvTools.isEmpty(source))
-            return null;
+            return ItemStack.EMPTY;
         if (source.getItem() instanceof ItemTicket) {
             ItemStack ticket = RailcraftItems.TICKET.getStack();
             if(InvTools.isEmpty(ticket))
-                return null;
+                return ItemStack.EMPTY;
             NBTTagCompound nbt = source.getTagCompound();
             if (nbt != null)
                 ticket.setTagCompound((NBTTagCompound) nbt.copy());
             return ticket;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
-    public static boolean setTicketData(ItemStack ticket, String dest, String title, GameProfile owner) {
+    public static boolean setTicketData(ItemStack ticket, String dest, String title, @Nullable GameProfile owner) {
         if (InvTools.isEmpty(ticket) || !(ticket.getItem() instanceof ItemTicket))
             return false;
         if (dest.length() > LINE_LENGTH)
@@ -116,12 +119,12 @@ public class ItemTicket extends ItemRailcraft {
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag par4) {
         if (stack.hasTagCompound()) {
             GameProfile owner = getOwner(stack);
             if (owner.getId() != null) {
                 list.add(TextFormatting.WHITE + LocalizationPlugin.translate("gui.railcraft.routing.ticket.tips.issuer"));
-                list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(player.world, owner));
+                list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(world, owner));
             }
 
             String dest = getDestination(stack);

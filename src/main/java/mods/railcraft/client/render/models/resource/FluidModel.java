@@ -10,8 +10,6 @@
 
 package mods.railcraft.client.render.models.resource;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -40,10 +38,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings("Guava")
 public final class FluidModel implements IModel {
@@ -73,7 +69,7 @@ public final class FluidModel implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new BakedFluid(Optional.absent(), format, fluidStack, sideFlowing, Optional.absent());
+        return new BakedFluid(Optional.empty(), format, fluidStack, sideFlowing, Optional.empty());
     }
 
     @Override
@@ -115,7 +111,7 @@ public final class FluidModel implements IModel {
         private static final LoadingCache<Key, BakedFluid> modelCache = CacheBuilder.newBuilder().maximumSize(200).build(new CacheLoader<BakedFluid.Key, BakedFluid>() {
             @Override
             public BakedFluid load(Key key) throws Exception {
-                return new BakedFluid(Optional.absent(), DefaultVertexFormats.BLOCK, key.color, key.still, key.flowing, key.gas, key.sideFlowing, key.cornerRound, key.flowRound);
+                return new BakedFluid(Optional.empty(), DefaultVertexFormats.BLOCK, key.color, key.still, key.flowing, key.gas, key.sideFlowing, key.cornerRound, key.flowRound);
             }
         });
         private final EnumMap<EnumFacing, List<BakedQuad>> faceQuads;

@@ -17,10 +17,10 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import net.minecraft.util.EnumFacing;
 
-public class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
+public final class TESRSignalLampDual extends TESRSignals<TileSignalBase> {
     @Override
-    public void renderTileEntityAt(TileSignalBase te, double x, double y, double z, float partialTicks, int destroyStage) {
-        super.renderTileEntityAt(te, x, y, z, partialTicks, destroyStage);
+    public void render(TileSignalBase te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
         if (!(te instanceof IDualHeadSignal)) {
             return;
         }

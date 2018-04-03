@@ -118,8 +118,8 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos pos) {
+        super.onNeighborBlockChange(state, block, pos);
         checkRedstone();
     }
 

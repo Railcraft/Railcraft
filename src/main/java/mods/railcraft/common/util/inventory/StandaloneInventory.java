@@ -25,6 +25,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -48,20 +49,17 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     private int inventoryStackLimit = 64;
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable IInventory callback) {
-        this.name = name;
-        contents = new ItemStack[size];
-        this.callback = callback == null ? null : new InventoryCallback(callback);
+        this(size, name, callback == null ? null : new InventoryCallback(callback));
     }
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable RailcraftTileEntity callback) {
-        this.name = name;
-        contents = new ItemStack[size];
-        this.callback = callback == null ? null : new TileCallback(callback);
+        this(size, name, callback == null ? null : new TileCallback(callback));
     }
 
     public StandaloneInventory(int size, @Nullable String name, @Nullable Callback callback) {
         this.name = name;
         contents = new ItemStack[size];
+        Arrays.fill(contents, ItemStack.EMPTY);
         this.callback = callback;
     }
 
@@ -93,6 +91,15 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     @Override
     public int getNumSlots() {
         return getSizeInventory();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : contents) {
+            if (!InvTools.isEmpty(stack))
+                return false;
+        }
+        return true;
     }
 
     @Override

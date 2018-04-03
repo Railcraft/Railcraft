@@ -131,9 +131,10 @@ public class BlockLogbook extends BlockContainerRailcraft {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
+        ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem)) {
             if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;

@@ -110,7 +110,6 @@ public class BlockRitual extends BlockContainerRailcraft {
 //        return null;
 //    }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return null;
@@ -169,7 +168,7 @@ public class BlockRitual extends BlockContainerRailcraft {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 

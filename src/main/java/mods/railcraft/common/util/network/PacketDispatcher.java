@@ -48,7 +48,7 @@ public class PacketDispatcher {
     }
 
     public static TargetPoint targetPoint(int dim, Vec3d vec, double range) {
-        return new TargetPoint(dim, vec.xCoord, vec.yCoord, vec.zCoord, range);
+        return new TargetPoint(dim, vec.x, vec.y, vec.z, range);
     }
 
     public static TargetPoint targetPoint(int dim, double x, double y, double z, double range) {

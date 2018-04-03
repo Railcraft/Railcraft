@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) CovertJaguar, 2011-2016
  * http://railcraft.info
  *
@@ -6,7 +6,7 @@
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ */
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.tools.CubeRenderer;
@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
+public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
     private static final RenderInfo fillBlock = new RenderInfo();
 
     public TESRHollowTank() {
@@ -82,7 +82,7 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
     }
 
     @Override
-    public void renderTileEntityAt(TileTankBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileTankBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (!tile.isStructureValid())
             return;
 

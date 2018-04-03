@@ -49,7 +49,7 @@ public class GuiDetectorTank extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.filter"), 50, 29, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.filter"), 50, 29, 0x404040);
     }
 
     @Override

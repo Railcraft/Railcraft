@@ -148,7 +148,6 @@ public enum Materials implements IVariantEnum {
     ZINC("zinc", EnumGeneric.BLOCK_ZINC::getDefaultState),
     BRASS("brass", EnumGeneric.BLOCK_BRASS::getDefaultState),
 
-
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
     CONCRETE("concrete", EnumGeneric.BLOCK_CONCRETE::getDefaultState),
@@ -320,14 +319,14 @@ public enum Materials implements IVariantEnum {
     public static void tagItemStack(ItemStack stack, String key, Materials material) {
         if (InvTools.isEmpty(stack))
             return;
-        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(Railcraft.MOD_ID);
         nbt.setString(key, material.getName());
     }
 
     public static Materials from(ItemStack stack, String key) {
         if (InvTools.isEmpty(stack))
             return getPlaceholder();
-        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(Railcraft.MOD_ID);
         if (nbt.hasKey(key))
             return fromName(nbt.getString(key));
         Materials material = OLD_ORDINALS.inverse().get(stack.getItemDamage());

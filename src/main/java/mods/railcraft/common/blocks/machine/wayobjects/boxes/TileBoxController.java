@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,8 +73,8 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+        super.onNeighborBlockChange(state, neighborBlock, pos);
         if (Game.isClient(getWorld()))
             return;
         updateRedstoneState();
@@ -101,7 +102,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
                 continue;
             if (PowerPlugin.isBlockBeingPowered(world, getPos(), side))
                 return true;
-//            if (PowerPlugin.isBlockBeingPowered(world, xCoord, yCoord - 1, zCoord, side))
+//            if (PowerPlugin.isBlockBeingPowered(world, x, y - 1, z, side))
 //                return true;
         }
         return false;

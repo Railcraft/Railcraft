@@ -70,14 +70,6 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
-    @Override
-    public boolean continueExecuting() {
-        return !entity.getNavigator().noPath();
-    }
-
-    /**
      * Execute a one shot task or start executing a continuous task
      */
     @Override
@@ -86,7 +78,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
             Vec3d vec1 = new Vec3d(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5);
             Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, vec1);
             if (vec3 != null)
-                move(vec3.xCoord, vec3.yCoord, vec3.zCoord);
+                move(vec3.x, vec3.y, vec3.z);
         } else
             move(watchedBlock.getX() + 0.5D, watchedBlock.getY() + 0.5D, watchedBlock.getZ() + 0.5D);
     }

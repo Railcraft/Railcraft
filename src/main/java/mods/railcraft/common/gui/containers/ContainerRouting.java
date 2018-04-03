@@ -76,12 +76,12 @@ public class ContainerRouting extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 0, router.getLockController().getCurrentState());
-        listener.sendProgressBarUpdate(this, 1, router.getRoutingController().getCurrentState());
+        listener.sendWindowProperty(this, 0, router.getLockController().getCurrentState());
+        listener.sendWindowProperty(this, 1, router.getRoutingController().getCurrentState());
 
         canLock = PlayerPlugin.isOwnerOrOp(router.getOwner(), playerInv.player);
         slotTicket.locked = router.isSecure() && !canLock;
-        listener.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
+        listener.sendWindowProperty(this, 2, canLock ? 1 : 0);
 
         String username = router.getOwner().getName();
         if (username != null)
@@ -95,11 +95,11 @@ public class ContainerRouting extends RailcraftContainer {
         for (IContainerListener crafter : listeners) {
             int lock = router.getLockController().getCurrentState();
             if (lastLockState != lock)
-                crafter.sendProgressBarUpdate(this, 0, lock);
+                crafter.sendWindowProperty(this, 0, lock);
 
             int railwayType = router.getRoutingController().getCurrentState();
             if (lastRoutingState != railwayType)
-                crafter.sendProgressBarUpdate(this, 1, railwayType);
+                crafter.sendWindowProperty(this, 1, railwayType);
         }
 
         this.lastLockState = router.getLockController().getCurrentState();

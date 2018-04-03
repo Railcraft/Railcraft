@@ -151,4 +151,8 @@ public abstract class TileSmartItemTicking extends RailcraftTickingTileEntity im
         return Container.calcRedstoneFromInventory(this);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
 }

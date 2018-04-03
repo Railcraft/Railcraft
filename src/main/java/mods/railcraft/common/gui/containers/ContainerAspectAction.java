@@ -34,8 +34,8 @@ public class ContainerAspectAction extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 0, actionManager.getLockController().getCurrentState());
-        listener.sendProgressBarUpdate(this, 1, PlayerPlugin.isOwnerOrOp(actionManager.getOwner(), player) ? 1 : 0);
+        listener.sendWindowProperty(this, 0, actionManager.getLockController().getCurrentState());
+        listener.sendWindowProperty(this, 1, PlayerPlugin.isOwnerOrOp(actionManager.getOwner(), player) ? 1 : 0);
 
         String username = actionManager.getOwner().getName();
         if (username != null)
@@ -49,7 +49,7 @@ public class ContainerAspectAction extends RailcraftContainer {
         for (IContainerListener crafter : listeners) {
             int lock = actionManager.getLockController().getCurrentState();
             if (lastLockState != lock)
-                crafter.sendProgressBarUpdate(this, 0, lock);
+                crafter.sendWindowProperty(this, 0, lock);
         }
 
         this.lastLockState = actionManager.getLockController().getCurrentState();

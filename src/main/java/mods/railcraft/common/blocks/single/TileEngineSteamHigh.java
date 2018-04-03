@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamConstants;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -33,7 +33,7 @@ public class TileEngineSteamHigh extends TileEngineSteam {
 
     @Override
     public int steamUsedPerTick() {
-        return Steam.STEAM_PER_10RF * (OUTPUT_RF / 10);
+        return SteamConstants.STEAM_PER_10RF * (OUTPUT_RF / 10);
     }
 
     @Override

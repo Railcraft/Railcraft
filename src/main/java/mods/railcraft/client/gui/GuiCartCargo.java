@@ -32,8 +32,8 @@ public class GuiCartCargo extends EntityGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, label, 6);
-        GuiTools.drawStringCenteredAtPos(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.filter"), 35, 22);
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        GuiTools.drawCenteredString(fontRenderer, label, 6);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, LocalizationPlugin.translate("gui.railcraft.filter"), 35, 22);
+        fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

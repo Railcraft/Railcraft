@@ -234,6 +234,11 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
+    public boolean isEmpty() {
+        return inventory.isEmpty();
+    }
+
+    @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }

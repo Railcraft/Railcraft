@@ -24,10 +24,10 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
@@ -36,20 +36,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-import static mods.railcraft.common.util.inventory.InvTools.makeSafe;
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * A version of {@link net.minecraftforge.oredict.ShapelessOreRecipe shaped ore recipe}
  * that supports fluid.
  */
-public class ShapelessFluidRecipe implements IRecipe {
+@Deprecated
+public class ShapelessFluidRecipe extends BaseRecipe {
     protected ItemStack output;
     protected List<Object> input = new ArrayList<>();
     protected int[] drains;
 
     public ShapelessFluidRecipe(ItemStack result, Object... recipe) {
+        super("aaaaaa.");
         output = result.copy();
         for (Object in : recipe) {
             if (in instanceof ItemStack) {
@@ -73,12 +73,9 @@ public class ShapelessFluidRecipe implements IRecipe {
         }
     }
 
-    /**
-     * Returns the size of the recipe area
-     */
     @Override
-    public int getRecipeSize() {
-        return input.size();
+    public boolean canFit(int width, int height) {
+        return width * height >= input.size();
     }
 
     @Override
@@ -130,15 +127,6 @@ public class ShapelessFluidRecipe implements IRecipe {
                             }
                             match = true;
                             drains[i] = ((FluidStack) next).amount;
-                        } else if (toCheck.getItem() instanceof IFluidContainerItem) {
-                            // legacy
-                            IFluidContainerItem handler = (IFluidContainerItem) toCheck.getItem();
-                            FluidStack fluidStack = handler.getFluid(toCheck);
-                            if (fluidStack == null || fluidStack.getFluid() != ((FluidStack) next).getFluid() || fluidStack.amount < ((FluidStack) next).amount) {
-                                continue;
-                            }
-                            match = true;
-                            drains[i] = -((FluidStack) next).amount;
                         } else {
                             continue;
                         }
@@ -171,8 +159,7 @@ public class ShapelessFluidRecipe implements IRecipe {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
         for (int i = 0; i < ret.length; i++) {
             if (drains[i] != 0) {
@@ -180,17 +167,12 @@ public class ShapelessFluidRecipe implements IRecipe {
                 if (isEmpty(ret[i]))
                     continue;
                 ret[i] = setSize(ret[i].copy(), 1);
-                if (drains[i] > 0) {
-                    ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).drain(drains[i], true);
-                } else {
-                    IFluidContainerItem fluidContainerItem = (IFluidContainerItem) ret[i].getItem();
-                    fluidContainerItem.drain(ret[i], -drains[i], true);
-                }
-                ret[i] = makeSafe(ret[i]);;
+                ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).drain(drains[i], true);
+                ret[i] = makeSafe(ret[i]);
             } else {
                 ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
             }
         }
-        return ret;
+        return NonNullList.from(ItemStack.EMPTY, ret);
     }
 }

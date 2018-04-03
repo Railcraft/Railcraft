@@ -23,11 +23,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
-
 public class ContainerRollingMachine extends RailcraftContainer {
 
-    private final TileRollingMachine tile;
+    final TileRollingMachine tile;
     private final InventoryCrafting craftMatrix;
     private final IInventory craftResult;
     private int lastProgress;
@@ -42,9 +40,9 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftMatrix = tile.getCraftMatrix(this);
         craftResult = new InventoryCraftResult() {
             @Override
-            public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
+            public void setInventorySlotContents(int slot, ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
-                if (stack != null && Game.isClient(tile.getWorld()))
+                if (!stack.isEmpty() && Game.isClient(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("gui.railcraft.rolling.machine.tips.craft"));
             }
 
@@ -75,7 +73,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, tile.getProgress());
+        listener.sendWindowProperty(this, 0, tile.getProgress());
     }
 
     @Override
@@ -84,13 +82,13 @@ public class ContainerRollingMachine extends RailcraftContainer {
         for (Object crafter : listeners) {
             IContainerListener listener = (IContainerListener) crafter;
             if (lastProgress != tile.getProgress())
-                listener.sendProgressBarUpdate(this, 0, tile.getProgress());
+                listener.sendWindowProperty(this, 0, tile.getProgress());
         }
 
         ItemStack output = tile.getInvResult().getStackInSlot(0);
         if (!InvTools.isItemEqualStrict(output, prevOutput)) {
             onCraftMatrixChanged(craftMatrix);
-            prevOutput = output != null ? output.copy() : null;
+            prevOutput = InvTools.copy(output);
         }
 
         lastProgress = tile.getProgress();
@@ -124,13 +122,15 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     private class SlotRollingMachine extends SlotUntouchable {
 
-        public SlotRollingMachine(IInventory contents, int id, int x, int y) {
+        SlotRollingMachine(IInventory contents, int id, int x, int y) {
             super(contents, id, x, y);
         }
 
         @Override
-        public void onPickupFromSlot(EntityPlayer player, ItemStack itemstack) {
+        public ItemStack onTake(EntityPlayer player, ItemStack stack) {
+            super.onTake(player, stack);
             tile.useLast = true;
+            return stack;
         }
 
     }

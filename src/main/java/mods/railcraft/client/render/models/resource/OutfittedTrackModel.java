@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.models.resource;
 
-import com.google.common.base.Function;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
@@ -33,6 +32,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by CovertJaguar on 8/18/2016 for Railcraft.
@@ -129,7 +129,6 @@ public class OutfittedTrackModel implements IModel {
         return Collections.emptyList();
     }
 
-    @SuppressWarnings("Guava")
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         getDependencies();

@@ -49,6 +49,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -187,7 +188,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (Tuple<TrackType, TrackKit> combination : TrackRegistry.getCombinations()) {
             CreativePlugin.addToList(list, combination.getSecond().getOutfittedTrack(combination.getFirst()));
         }
@@ -233,7 +234,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrackOutfitted) {
@@ -374,9 +375,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-        return tile instanceof TileTrackOutfitted && ((TileTrackOutfitted) tile).getTrackKitInstance().blockActivated(playerIn, hand, heldItem);
+        return tile instanceof TileTrackOutfitted && ((TileTrackOutfitted) tile).getTrackKitInstance().blockActivated(playerIn, hand);
     }
 
     @Override
@@ -409,7 +410,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
         ChargeManager.getNetwork(world).deregisterChargeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
-        world.notifyBlockOfStateChange(pos, this);
+        world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
         for (EnumFacing face : EnumFacing.VALUES) {
             Block block = WorldPlugin.getBlock(world, pos.offset(face));
@@ -421,7 +422,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return b;
     }
 
-    @Override
+//    @Override
+    //TODO obsolete
     public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
         if (TrackTools.isRailBlockAt(worldIn, pos.up()) || TrackTools.isRailBlockAt(worldIn, pos.down()))
             return false;
@@ -472,17 +474,17 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         try {
             if (Game.isClient(world))
                 return;
             TileEntity t = WorldPlugin.getBlockTile(world, pos);
             if (t instanceof TileTrackOutfitted) {
                 TileTrackOutfitted tile = (TileTrackOutfitted) t;
-                tile.onNeighborBlockChange(state, neighborBlock);
+                tile.onNeighborBlockChange(state, neighborBlock, neighborPos);
                 tile.getTrackKitInstance().onNeighborBlockChange(state, neighborBlock);
             }
-            super.neighborChanged(state, world, pos, neighborBlock);
+            super.neighborChanged(state, world, pos, neighborBlock, neighborPos);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
             if (Game.DEVELOPMENT_ENVIRONMENT)

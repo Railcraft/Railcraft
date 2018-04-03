@@ -20,11 +20,14 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GenTools {
+public final class GenTools {
     public static final Predicate<IBlockState> STONE = input -> input.getBlock() == Blocks.STONE;
     public static final Predicate<IBlockState> GRAVEL = input -> input.getBlock() == Blocks.GRAVEL;
     public static final Predicate<IBlockState> DIRT = input -> input.getBlock() == Blocks.DIRT;
     public static final Predicate<IBlockState> SAND = input -> input.getBlock() == Blocks.SAND;
     public static final Predicate<IBlockState> NETHERRACK = input -> input.getBlock() == Blocks.NETHERRACK;
     public static final Predicate<IBlockState> AIR_STONE = input -> input.getBlock() == Blocks.AIR || STONE.test(input);
+
+    private GenTools() {
+    }
 }

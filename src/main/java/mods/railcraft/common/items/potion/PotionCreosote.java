@@ -38,8 +38,8 @@ public class PotionCreosote extends PotionRailcraft {
             public void onEntityAttacked(LivingAttackEvent event) {
                 if (event.getSource() instanceof EntityDamageSource) {
                     EntityDamageSource source = (EntityDamageSource) event.getSource();
-                    if (source.getEntity() instanceof EntityLivingBase) {
-                        EntityLivingBase entity = (EntityLivingBase) source.getEntity();
+                    if (source.getTrueSource() instanceof EntityLivingBase) {
+                        EntityLivingBase entity = (EntityLivingBase) source.getTrueSource();
                         PotionEffect effect = event.getEntityLiving().getActivePotionEffect(PotionCreosote.this);
                         if (effect != null && entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD) {
                             entity.addPotionEffect(new PotionEffect(effect.getPotion(), effect.getDuration() / 2, effect.getAmplifier()));

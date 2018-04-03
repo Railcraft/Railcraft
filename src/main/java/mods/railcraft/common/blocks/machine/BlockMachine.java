@@ -39,6 +39,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -120,11 +121,11 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand == EnumHand.OFF_HAND)
             return false;
         return TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ)).orElse(false);
+                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, side, hitX, hitY, hitZ)).orElse(false);
     }
 
     @Override
@@ -245,7 +246,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         if (needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
             WorldPlugin.destroyBlock(worldIn, pos, true);
             return;
@@ -253,7 +254,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileMachineBase)
-                ((TileMachineBase) tile).onNeighborBlockChange(state, neighborBlock);
+                ((TileMachineBase) tile).onNeighborBlockChange(state, neighborBlock, neighborPos);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()");
             if (Game.DEVELOPMENT_ENVIRONMENT)
@@ -298,7 +299,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
                 .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
     }
@@ -332,14 +333,13 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
         }
     }
 
-    @SuppressWarnings("Convert2MethodRef")
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         list.addAll(
                 // leave this as lambda's instead of method references, it breaks otherwise.
                 getCreativeList().stream()
-                        .filter(m -> m.isAvailable())
-                        .map(m -> m.getStack())
+                        .filter(IEnumMachine::isAvailable)
+                        .map(IEnumMachine::getStack)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList())
         );

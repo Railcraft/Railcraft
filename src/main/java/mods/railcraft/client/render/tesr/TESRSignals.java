@@ -20,7 +20,7 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -45,7 +45,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
     protected final RenderInfo lampInfo = new RenderInfo();
 
     @Override
-    public void renderTileEntityAt(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (tile instanceof IControllerTile) {
             Collection<BlockPos> pairs = ((IControllerTile) tile).getController().getPairs();
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
@@ -179,7 +179,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
 
     protected void doRenderAspect(double x, double y, double z, float depth) {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
 
         OpenGL.glPushMatrix();
 

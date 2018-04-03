@@ -12,10 +12,13 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -36,8 +39,8 @@ public class ItemCartWorldspike extends ItemCart {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
         if ((getCartType() == RailcraftCarts.WORLDSPIKE_STANDARD && !RailcraftConfig.worldspikeFuelStandard.isEmpty()) || (getCartType() == RailcraftCarts.WORLDSPIKE_PERSONAL && !RailcraftConfig.worldspikeFuelPersonal.isEmpty())) {
             long fuel = getFuel(stack);
             double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;

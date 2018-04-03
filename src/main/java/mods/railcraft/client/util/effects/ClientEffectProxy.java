@@ -81,9 +81,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
             float vX = (rand.nextFloat() - 0.5F) * 0.2F;
             float vY = (rand.nextFloat() - 0.5F) * 0.2F;
             float vZ = (rand.nextFloat() - 0.5F) * 0.2F;
-            double pX = start.xCoord + (destination.xCoord - start.xCoord) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
-            double pY = start.yCoord + (destination.yCoord - start.yCoord) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
-            double pZ = start.zCoord + (destination.zCoord - start.zCoord) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
+            double pX = start.x + (destination.x - start.x) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
+            double pY = start.y + (destination.y - start.y) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
+            double pZ = start.z + (destination.z - start.z) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
             world.spawnParticle(PORTAL, pX, pY, pZ, vX, vY, vZ);
         }
     }
@@ -211,13 +211,13 @@ public class ClientEffectProxy extends CommonEffectProxy {
         IEffectSource es = EffectManager.getEffectSource(source);
 
         Vec3d sourcePos = es.getPosF();
-        if (FMLClientHandler.instance().getClient().player.getDistanceSq(sourcePos.xCoord, sourcePos.yCoord, sourcePos.zCoord) > 25600)
+        if (FMLClientHandler.instance().getClient().player.getDistanceSq(sourcePos.x, sourcePos.y, sourcePos.z) > 25600)
             return;
 
         for (ChunkPos chunk : chunks) {
-            int xCorner = chunk.chunkXPos * 16;
-            int zCorner = chunk.chunkZPos * 16;
-            double yCorner = sourcePos.yCoord - 8;
+            int xCorner = chunk.x * 16;
+            int zCorner = chunk.z * 16;
+            double yCorner = sourcePos.y - 8;
 
 //            System.out.println(xCorner + ", " + zCorner);
             if (rand.nextInt(3) == 0) {
@@ -242,7 +242,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
         Vec3d start = es.getPosF().addVector(0.0, yOffset, 0.0);
-        world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.xCoord, start.yCoord, start.zCoord, vx, vy, vz);
+        world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.x, start.y, start.z, vx, vy, vz);
     }
 
     @Override

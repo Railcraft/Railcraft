@@ -72,7 +72,7 @@ public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailc
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         return 1F;
     }
 

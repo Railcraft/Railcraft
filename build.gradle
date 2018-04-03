@@ -14,7 +14,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
@@ -26,15 +26,16 @@ targetCompatibility = 1.8
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.version_minecraft
 
-ext.apiRailcraft = "./api/railcraft"
-// ext.apiForestry = "./api/forestry"
-// ext.apiRedstoneFlux = "./api/redstoneflux"
-// ext.apiThaumcraft = "./api/thaumcraft"
-// ext.apiBuildcraft = "./api/buildcraft"
+ext {
+    apiRailcraft = "./api/railcraft"
+    // apiForestry = "./api/forestry"
+    // apiRedstoneFlux = "./api/redstoneflux"
+    // apiThaumcraft = "./api/thaumcraft"
+    // apiBuildcraft = "./api/buildcraft"
+    dirLang = "./lang"
 
-ext.dirLang = "./lang"
-
-ext.dirDest = './build/distributions'
+    dirDest = './build/distributions'
+}
 
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
@@ -55,7 +56,6 @@ sourceSets {
     }
     api {
         java {
-            srcDir project.apiRailcraft
             // srcDir project.apiRedstoneFlux + "/src/main/java"
             // srcDir project.apiThaumcraft
         }
@@ -84,6 +84,7 @@ repositories {
 
 configurations {
     api
+    api.transitive = false
     compile.extendsFrom api
 }
 
@@ -93,6 +94,8 @@ dependencies {
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     provided "org.jetbrains:annotations:15.0"
+    api project(':api:buildcraft')
+    compile project(':api:railcraft')
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
@@ -279,5 +282,5 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "3.5"
+    gradleVersion = "4.6"
 }

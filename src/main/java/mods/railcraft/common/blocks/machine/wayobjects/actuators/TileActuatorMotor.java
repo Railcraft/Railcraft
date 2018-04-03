@@ -27,6 +27,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,8 +75,8 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+        super.onNeighborBlockChange(state, neighborBlock, pos);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
             setPowered(power);

@@ -93,7 +93,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return COLLISION_BOX;
     }
 

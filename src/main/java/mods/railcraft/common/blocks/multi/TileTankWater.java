@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.TileTank;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -151,7 +150,7 @@ public class TileTankWater extends TileTank {
                     for (int x = getX() - 1; x <= getX() + 1; x++) {
                         for (int z = getZ() - 1; z <= getZ() + 1; z++) {
                             outside = world.canBlockSeeSky(new BlockPos(x, getY() + 3, z));
-//                            System.out.println(x + ", " + (yCoord + 3) + ", " + z);
+//                            System.out.println(x + ", " + (y + 3) + ", " + z);
                             if (outside)
                                 break;
                         }

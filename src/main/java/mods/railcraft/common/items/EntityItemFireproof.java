@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.misc.EntityIDs;
 import net.minecraft.block.material.Material;
@@ -23,7 +24,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class EntityItemFireproof extends EntityItem {
 
     public static void register() {
-        EntityRegistry.registerModEntity(EntityItemFireproof.class, "ItemFireproof", EntityIDs.ENTITY_ITEM_FIREPROOF, Railcraft.getMod(), 64, 20, true);
+        EntityRegistry.registerModEntity(RailcraftConstantsAPI.locationOf("fireproof_item"), EntityItemFireproof.class, "ItemFireproof", EntityIDs.ENTITY_ITEM_FIREPROOF, Railcraft.getMod(), 64, 20, true);
     }
 
     public EntityItemFireproof(World world) {

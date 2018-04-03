@@ -121,7 +121,7 @@ public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, I
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         if (Game.isClient(worldIn))
             return;
         if (!isRailValid(state, worldIn, pos, getMaxSupportedDistance(worldIn, pos))) {

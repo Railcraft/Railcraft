@@ -26,6 +26,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -93,8 +94,9 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         playerIn.swingArm(hand);
+        ItemStack stack = playerIn.getHeldItem(hand);
         if (ISpikeMaulTarget.spikeMaulTargets.isEmpty())
             return EnumActionResult.PASS;
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
@@ -160,9 +162,9 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> info, boolean advanced) {
-        super.addInformation(stack, playerIn, info, advanced);
-        addToolTips(stack, playerIn, info, advanced);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag advanced) {
+        super.addInformation(stack, world, info, advanced);
+        addToolTips(stack, world, info, advanced);
         info.add(LocalizationPlugin.translate("item.railcraft.tool.spike.maul.tips"));
     }
 

@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.multi;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -22,6 +24,6 @@ public interface MetalTank {
 
     boolean isWallBlock(IBlockState meta);
 
-    float getResistance(Entity exploder);
+    float getResistance(@Nullable Entity exploder);
 
 }

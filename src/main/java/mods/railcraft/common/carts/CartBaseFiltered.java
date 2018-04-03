@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.base.Optional;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
@@ -25,7 +24,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
-    private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(DataSerializers.ITEM_STACK);
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
     protected CartBaseFiltered(World world) {
@@ -39,10 +38,9 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(FILTER, Optional.absent());
+        dataManager.register(FILTER, ItemStack.EMPTY);
     }
 
-    @Nullable
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
         if (cart.getItem() instanceof IPrototypedItem)
             return ((IPrototypedItem) cart.getItem()).getPrototype(cart);
@@ -100,19 +98,18 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     }
 
     public boolean hasFilter() {
-        return getFilterItem() != null;
+        return !getFilterItem().isEmpty();
     }
 
-    @Nullable
     public ItemStack getFilterItem() {
-        return dataManager.get(FILTER).orNull();
+        return dataManager.get(FILTER);
     }
 
     public PhantomInventory getFilterInv() {
         return invFilter;
     }
 
-    public void setFilter(@Nullable ItemStack filter) {
+    public void setFilter(ItemStack filter) {
 //        dataManager.set(FILTER_DATA_ID, filter);
         getFilterInv().setInventorySlotContents(0, filter);
     }
@@ -125,6 +122,6 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
     @Override
     public void markDirty() {
         super.markDirty();
-        dataManager.set(FILTER, Optional.fromNullable(getFilterInv().getStackInSlot(0)));
+        dataManager.set(FILTER, getFilterInv().getStackInSlot(0));
     }
 }

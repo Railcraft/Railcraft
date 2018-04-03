@@ -17,7 +17,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
-import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamConstants;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -50,8 +50,8 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     public static final int TICKS_HIGH = 8;
     public static final int STEAM_LOW = 16;
     public static final int STEAM_HIGH = 32;
-    public static final float HEAT_LOW = Steam.MAX_HEAT_LOW;
-    public static final float HEAT_HIGH = Steam.MAX_HEAT_HIGH;
+    public static final float HEAT_LOW = SteamConstants.MAX_HEAT_LOW;
+    public static final float HEAT_HIGH = SteamConstants.MAX_HEAT_HIGH;
     protected static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private static final Set<Integer> boilerBlocks = new HashSet<Integer>();
     private static final Set<Integer> fireboxBlocks = new HashSet<Integer>();
@@ -181,7 +181,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return (float) mBlock.boiler.getHeat();
-        return Steam.COLD_TEMP;
+        return SteamConstants.COLD_TEMP;
     }
 
     @Override

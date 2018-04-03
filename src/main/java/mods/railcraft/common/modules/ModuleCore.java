@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
@@ -27,9 +28,9 @@ import mods.railcraft.common.commands.CommandTile;
 import mods.railcraft.common.commands.CommandTrack;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.CustomContainerHandler;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.CustomContainerHandler;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.*;
@@ -47,28 +48,30 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
 import org.apache.logging.log4j.Level;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @RailcraftModule("railcraft:core")
 public class ModuleCore extends RailcraftModulePayload {
@@ -101,6 +104,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 EntityItemFireproof.register();
 
+                //TODO move all these mess
                 RecipeSorter.register("railcraft:rotor.repair", RotorRepairRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
                 RecipeSorter.register("railcraft:locomotive.painting", LocomotivePaintingRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
                 RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
@@ -187,26 +191,48 @@ public class ModuleCore extends RailcraftModulePayload {
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.FURNACE_MINECART);
 
-                Iterator it = CraftingManager.getInstance().getRecipeList().iterator();
-                while (it.hasNext()) {
-                    IRecipe r = (IRecipe) it.next();
+                IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+                Collection<ResourceLocation> toRemove = new ArrayList<>();
+                for (IRecipe each : registry) {
                     ItemStack output = InvTools.emptyStack();
                     try {
-                        output = r.getRecipeOutput();
+                        output = each.getRecipeOutput();
                     } catch (Exception ignored) {
                     }
-                    if (!InvTools.isEmpty(output))
-                        if (testSet.contains(output.getItem()))
-                            it.remove();
+                    if (!InvTools.isEmpty(output) && testSet.contains(output.getItem())) {
+                        toRemove.add(each.getRegistryName());
+                    }
                 }
 
+                for (ResourceLocation each : toRemove) {
+                    registry.remove(each);
+                }
+
+//                register(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecart.Type.COMMAND_BLOCK.getName());
+//                register(41, "boat", EntityBoat.class, "Boat");
+//                register(42, "minecart", EntityMinecartEmpty.class, EntityMinecart.Type.RIDEABLE.getName());
+//                register(43, "chest_minecart", EntityMinecartChest.class, EntityMinecart.Type.CHEST.getName());
+//                register(44, "furnace_minecart", EntityMinecartFurnace.class, EntityMinecart.Type.FURNACE.getName());
+//                register(45, "tnt_minecart", EntityMinecartTNT.class, EntityMinecart.Type.TNT.getName());
+//                register(46, "hopper_minecart", EntityMinecartHopper.class, EntityMinecart.Type.HOPPER.getName());
+//                register(47, "spawner_minecart", EntityMinecartMobSpawner.class, EntityMinecart.Type.SPAWNER.getName());
+
+                Map<EntityMinecart.Type, ResourceLocation> names = new EnumMap<>(EntityMinecart.Type.class);
+                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart"));
+                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart"));
+                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart"));
+                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart"));
+                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart"));
+                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart"));
+                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart"));
+
                 // Items
-                replaceVanillaCart(RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
-                replaceVanillaCart(RailcraftCarts.BASIC, Items.MINECART, EntityMinecart.Type.RIDEABLE, 42);
-                replaceVanillaCart(RailcraftCarts.CHEST, Items.CHEST_MINECART, EntityMinecart.Type.CHEST, 43);
-                replaceVanillaCart(RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
-                replaceVanillaCart(RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
-                replaceVanillaCart(RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
+                replaceVanillaCart(names, RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
+                replaceVanillaCart(names, RailcraftCarts.BASIC, Items.MINECART, EntityMinecart.Type.RIDEABLE, 42);
+                replaceVanillaCart(names, RailcraftCarts.CHEST, Items.CHEST_MINECART, EntityMinecart.Type.CHEST, 43);
+                replaceVanillaCart(names, RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
+                replaceVanillaCart(names, RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
+                replaceVanillaCart(names, RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
@@ -217,16 +243,23 @@ public class ModuleCore extends RailcraftModulePayload {
                 MachineTileRegistry.registerTileEntities();
             }
 
-            private void replaceVanillaCart(RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
+            private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.register();
 
-                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
+                //TODO fix this
+                ResourceLocation key = names.get(minecartType);
+                EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
+                Class<? extends Entity> minecartClass = old.getEntityClass();
+//                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
                 CartTools.classReplacements.put(minecartClass, cartType);
                 CartTools.vanillaCartItemMap.put(original, cartType);
 
-                EntityList.ID_TO_CLASS.remove(entityId);
-                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
+                EntityEntry substitute = new EntityEntry(cartType.getCartClass(), old.getName());
+                substitute.setRegistryName(key);
+                ForgeRegistries.ENTITIES.register(substitute);
+//                EntityList.ID_TO_CLASS.remove(entityId);
+//                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
@@ -238,7 +271,7 @@ public class ModuleCore extends RailcraftModulePayload {
             public void init() {
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
+                    IRecipe recipe = new ShapedOreRecipe(RailcraftConstantsAPI.locationOf("cart_bronze"), new ItemStack(Items.MINECART), false,
                             "I I",
                             "III",
                             'I', "ingotBronze");
@@ -246,7 +279,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART, 2), false,
+                    IRecipe recipe = new ShapedOreRecipe(RailcraftConstantsAPI.locationOf("cart_steel"), new ItemStack(Items.MINECART, 2), false,
                             "I I",
                             "III",
                             'I', "ingotSteel");

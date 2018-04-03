@@ -25,13 +25,13 @@ public abstract class TileGui extends GuiContainerRailcraft {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRendererObj, tile);
+        GuiTools.drawCenteredString(fontRenderer, tile);
     }
 
 //    @Override
 //    public void updateScreen() {
 //        super.updateScreen();
-//        TileEntity t = tile.getWorld().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord);
+//        TileEntity t = tile.getWorld().getTileEntity(tile.x, tile.y, tile.z);
 //        if (t != tile) {
 //            mc.thePlayer.closeScreen();
 //        }

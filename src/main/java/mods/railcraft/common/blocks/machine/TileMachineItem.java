@@ -135,6 +135,11 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
+
+    @Override
     public Object getBackingObject() {
         return this;
     }

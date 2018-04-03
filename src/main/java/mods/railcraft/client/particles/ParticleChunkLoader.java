@@ -50,9 +50,9 @@ public class ParticleChunkLoader extends ParticleBase {
         vel = vel.normalize();
 
         float velScale = 0.04f;
-        this.motionX = vel.xCoord * velScale;
-        this.motionY = vel.yCoord * velScale;
-        this.motionZ = vel.zCoord * velScale;
+        this.motionX = vel.x * velScale;
+        this.motionY = vel.y * velScale;
+        this.motionZ = vel.z * velScale;
     }
 
     /**

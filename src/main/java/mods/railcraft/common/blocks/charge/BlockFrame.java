@@ -92,7 +92,8 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
         if (RailcraftBlocks.WIRE.isEqual(heldItem))
             //noinspection ConstantConditions
             if (WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.WIRE.getDefaultState().withProperty(BlockWire.ADDON, BlockWire.Addon.FRAME), 2)) {

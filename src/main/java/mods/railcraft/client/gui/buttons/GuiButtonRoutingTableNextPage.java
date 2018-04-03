@@ -34,9 +34,9 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
+    public void drawButton(Minecraft par1Minecraft, int par2, int par3, float partialTicks) {
         if (visible) {
-            boolean flag = par2 >= xPosition && par3 >= yPosition && par2 < xPosition + width && par3 < yPosition + height;
+            boolean flag = par2 >= x && par3 >= y && par2 < x + width && par3 < y + height;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             par1Minecraft.renderEngine.bindTexture(GuiBookRoutingTable.TEXTURE);
             int k = 0;
@@ -50,7 +50,7 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
                 l += 13;
             }
 
-            drawTexturedModalRect(xPosition, yPosition, k, l, 23, 13);
+            drawTexturedModalRect(x, y, k, l, 23, 13);
         }
     }
 }

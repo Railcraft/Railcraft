@@ -22,6 +22,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -57,7 +58,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
         Keyboard.enableRepeatEvents(true);
         int i = (width - xSize) / 2;
         int j = (height - ySize) / 2;
-        this.itemNameField = new GuiTextField(0, fontRendererObj, i + 62, j + 24, 103, 12);
+        this.itemNameField = new GuiTextField(0, fontRenderer, i + 62, j + 24, 103, 12);
         itemNameField.setTextColor(-1);
         itemNameField.setDisabledTextColour(-1);
         itemNameField.setEnableBackgroundDrawing(false);
@@ -84,7 +85,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         OpenGL.glDisable(GL11.GL_LIGHTING);
-        fontRendererObj.drawString(I18n.format("container.repair"), 60, 6, 4210752);
+        fontRenderer.drawString(I18n.format("container.repair"), 60, 6, 4210752);
 
         if (repairContainer.maximumCost > 0) {
             int msgColor = 8453920;
@@ -101,19 +102,19 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
 
             if (flag) {
                 int color = -16777216 | (msgColor & 16579836) >> 2 | msgColor & -16777216;
-                int x = xSize - 8 - fontRendererObj.getStringWidth(msg);
+                int x = xSize - 8 - fontRenderer.getStringWidth(msg);
                 byte y = 67;
 
-                if (fontRendererObj.getUnicodeFlag()) {
+                if (fontRenderer.getUnicodeFlag()) {
                     drawRect(x - 3, y - 2, xSize - 7, y + 10, -16777216);
                     drawRect(x - 2, y - 1, xSize - 8, y + 9, -12895429);
                 } else {
-                    fontRendererObj.drawString(msg, x, y + 1, color);
-                    fontRendererObj.drawString(msg, x + 1, y, color);
-                    fontRendererObj.drawString(msg, x + 1, y + 1, color);
+                    fontRenderer.drawString(msg, x, y + 1, color);
+                    fontRenderer.drawString(msg, x + 1, y, color);
+                    fontRenderer.drawString(msg, x + 1, y + 1, color);
                 }
 
-                fontRendererObj.drawString(msg, x, y, msgColor);
+                fontRenderer.drawString(msg, x, y, msgColor);
             }
         }
 
@@ -180,7 +181,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
     }
 
     @Override
-    public void updateCraftingInventory(Container container, List<ItemStack> itemStackList) {
+    public void sendAllContents(Container container, NonNullList<ItemStack> itemStackList) {
         sendSlotContents(container, 0, container.getSlot(0).getStack());
     }
 
@@ -207,7 +208,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
      * contains the new value. Both are truncated to shorts in non-local SMP.
      */
     @Override
-    public void sendProgressBarUpdate(Container par1Container, int par2, int par3) {
+    public void sendWindowProperty(Container par1Container, int par2, int par3) {
     }
 
     @Override

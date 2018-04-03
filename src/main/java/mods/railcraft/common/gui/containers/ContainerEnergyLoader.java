@@ -52,9 +52,9 @@ public class ContainerEnergyLoader extends RailcraftContainer {
     public void addListener(IContainerListener player) {
         super.addListener(player);
         PacketBuilder.instance().sendGuiIntegerPacket( player, windowId, 0, (int) device.getEnergy());
-        player.sendProgressBarUpdate(this, 1, device.storageUpgrades);
-        player.sendProgressBarUpdate(this, 2, device.lapotronUpgrades);
-        player.sendProgressBarUpdate(this, 3, device.transferRate);
+        player.sendWindowProperty(this, 1, device.storageUpgrades);
+        player.sendWindowProperty(this, 2, device.lapotronUpgrades);
+        player.sendWindowProperty(this, 3, device.transferRate);
     }
 
     /**
@@ -69,13 +69,13 @@ public class ContainerEnergyLoader extends RailcraftContainer {
                 PacketBuilder.instance().sendGuiIntegerPacket( listener, windowId, 0, (int) device.getEnergy());
 
             if (lastStorage != device.storageUpgrades)
-                listener.sendProgressBarUpdate(this, 1, device.storageUpgrades);
+                listener.sendWindowProperty(this, 1, device.storageUpgrades);
 
             if (lastLapotron != device.lapotronUpgrades)
-                listener.sendProgressBarUpdate(this, 2, device.lapotronUpgrades);
+                listener.sendWindowProperty(this, 2, device.lapotronUpgrades);
 
             if (lastTransferRate != device.transferRate)
-                listener.sendProgressBarUpdate(this, 3, device.transferRate);
+                listener.sendWindowProperty(this, 3, device.transferRate);
         }
 
         lastEnergy = (int) device.getEnergy();

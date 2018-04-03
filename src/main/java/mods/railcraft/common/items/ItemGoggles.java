@@ -15,6 +15,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -103,13 +104,14 @@ public class ItemGoggles extends ItemRailcraftArmor {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (Game.isHost(world)) {
             incrementAura(stack);
             GoggleAura aura = getCurrentAura(stack);
             ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "gui.railcraft.goggles.mode", "\u00A75" + aura);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override
@@ -123,7 +125,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag adv) {
         GoggleAura aura = getCurrentAura(stack);
         String mode = LocalizationPlugin.translate("gui.railcraft.goggles.mode");
         String tip = LocalizationPlugin.translate("gui.railcraft.goggles.tips");

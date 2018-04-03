@@ -41,7 +41,7 @@ public class GuiTrackPriming extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.track.priming.fuse", fuse), 25);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.track.priming.fuse", fuse), 25);
     }
 
     @Override

@@ -18,6 +18,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
@@ -25,11 +26,12 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartDisassemblyRecipe implements IRecipe {
+public class CartDisassemblyRecipe extends BaseRecipe {
     private final ItemStack contents;
     private final Item fullCart, emptyCart;
 
-    public CartDisassemblyRecipe(ItemStack contents, Item fullCart, Item emptyCart) {
+    public CartDisassemblyRecipe(String name, ItemStack contents, Item fullCart, Item emptyCart) {
+        super(name);
         this.contents = contents;
         this.fullCart = fullCart;
         this.emptyCart = emptyCart;
@@ -55,8 +57,8 @@ public class CartDisassemblyRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 1;
+    public boolean canFit(int width, int height) {
+        return width * height >= 1;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class CartDisassemblyRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (IInvSlot slot : InventoryIterator.getVanilla(inv)) {
@@ -73,14 +75,14 @@ public class CartDisassemblyRecipe implements IRecipe {
                 grid[slot.getIndex()] = new ItemStack(emptyCart);
         }
 
-        return grid;
+        return NonNullList.from(ItemStack.EMPTY, grid);
     }
 
     public static class RailcraftVariant extends CartDisassemblyRecipe {
         private final RailcraftCarts cart;
 
         public RailcraftVariant(RailcraftCarts cart) {
-            super(cart.getContents(), cart.getItem(), Items.MINECART);
+            super(cart.getDef().registryName.getResourcePath() + "_recipe", cart.getContents(), cart.getItem(), Items.MINECART);
             this.cart = cart;
         }
 

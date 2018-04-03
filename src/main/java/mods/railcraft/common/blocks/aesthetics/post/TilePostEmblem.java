@@ -49,8 +49,6 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     public void setFacing(EnumFacing f) {
-        if (f == null)
-            return;
         switch (f) {
             case UP:
             case DOWN:

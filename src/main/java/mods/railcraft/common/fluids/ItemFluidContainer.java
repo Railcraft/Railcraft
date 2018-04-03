@@ -50,7 +50,8 @@ public class ItemFluidContainer extends ItemRailcraft {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         RayTraceResult trace = rayTrace(world, player, false);
 
         if (trace != null && trace.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -102,7 +103,6 @@ public class ItemFluidContainer extends ItemRailcraft {
         return new FluidContainerCapabilityDispatcher(this, stack);
     }
 
-    @Nullable
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         return ModuleResources.getInstance().isBottleFree() ? emptyStack() : new ItemStack(empty);

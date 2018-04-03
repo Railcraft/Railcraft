@@ -31,10 +31,10 @@ public interface IBoilerContainer extends ITemperature, INeedsFuel {
 
     default void onFillWater() {
         SteamBoiler boiler = getBoiler();
-        if (boiler != null && boiler.isSuperHeated() && Steam.BOILERS_EXPLODE) {
+        if (boiler != null && boiler.isSuperHeated() && SteamConstants.BOILERS_EXPLODE) {
             FluidStack water = boiler.getTankWater().getFluid();
             if (Fluids.isEmpty(water)) {
-                boiler.setHeat(Steam.SUPER_HEATED - 1);
+                boiler.setHeat(SteamConstants.SUPER_HEATED - 1);
                 explode();
             }
         }

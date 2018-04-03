@@ -18,6 +18,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Locale;
@@ -54,7 +55,8 @@ public enum RailcraftEnchantments {
         for (RailcraftEnchantments enchantment : VALUES) {
             if (RailcraftConfig.isEnchantmentEnabled(enchantment.getTag())) {
                 enchantment.enchantment = enchantment.factory.get();
-                GameRegistry.register(enchantment.enchantment, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, enchantment.getTag()));
+                enchantment.enchantment.setRegistryName(RailcraftConstantsAPI.locationOf(enchantment.getTag()));
+                ForgeRegistries.ENCHANTMENTS.register(enchantment.enchantment);
             }
         }
     }

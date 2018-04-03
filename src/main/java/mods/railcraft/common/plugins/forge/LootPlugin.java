@@ -49,7 +49,7 @@ public class LootPlugin {
         }
 
         ResourceLocation resourceLocation = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, event.getName().getResourcePath());
-        LootTable lootTable = LootTableLoader.loadBuiltinLootTable(resourceLocation);
+        LootTable lootTable = LootTableLoader.loadBuiltinLootTable(resourceLocation, event.getLootTableManager());
         if (lootTable != null) {
             for (String poolName : poolNames) {
                 LootPool pool = lootTable.getPool(RailcraftConstants.RESOURCE_DOMAIN + "_" + poolName);
@@ -70,7 +70,7 @@ public class LootPlugin {
         private static final Gson GSON_INSTANCE = (new GsonBuilder()).registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer()).registerTypeAdapter(LootPool.class, new LootPool.Serializer()).registerTypeAdapter(LootTable.class, new LootTable.Serializer()).registerTypeHierarchyAdapter(LootEntry.class, new LootEntry.Serializer()).registerTypeHierarchyAdapter(LootFunction.class, new LootFunctionManager.Serializer()).registerTypeHierarchyAdapter(LootCondition.class, new LootConditionManager.Serializer()).registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new LootContext.EntityTarget.Serializer()).create();
 
         @Nullable
-        public static LootTable loadBuiltinLootTable(ResourceLocation resource) {
+        public static LootTable loadBuiltinLootTable(ResourceLocation resource, LootTableManager manager) {
             URL url = LootTableLoader.class.getResource("/assets/" + resource.getResourceDomain() + "/loot_tables/" + resource.getResourcePath() + ".json");
 
             if (url != null) {
@@ -84,7 +84,7 @@ public class LootPlugin {
                 }
 
                 try {
-                    return net.minecraftforge.common.ForgeHooks.loadLootTable(GSON_INSTANCE, resource, s, false);
+                    return net.minecraftforge.common.ForgeHooks.loadLootTable(GSON_INSTANCE, resource, s, false, manager);
                 } catch (JsonParseException jsonparseexception) {
                     Game.logThrowable("Couldn\'t load loot table {0} from {1}", jsonparseexception, resource, url);
                     return LootTable.EMPTY_LOOT_TABLE;

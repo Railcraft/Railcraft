@@ -19,6 +19,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nonnull;
@@ -26,13 +27,14 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorVillager extends Detector {
 
     @Nonnull
-    private VillagerRegistry.VillagerProfession profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
+    private VillagerRegistry.VillagerProfession profession = VillagerRegistry.FARMER;
     private Mode mode = Mode.ANY;
 
     @Override
@@ -99,7 +101,7 @@ public class DetectorVillager extends Detector {
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setString("ProfessionName", profession.getRegistryName().toString());
+        data.setString("ProfessionName", checkNotNull(profession.getRegistryName()).toString());
         data.setByte("mode", (byte) mode.ordinal());
     }
 
@@ -109,9 +111,9 @@ public class DetectorVillager extends Detector {
 
         if (data.hasKey("ProfessionName")) {
             VillagerRegistry.VillagerProfession p =
-                    VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.getString("ProfessionName")));
+                    ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.getString("ProfessionName")));
             if (p == null)
-                p = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
+                p = VillagerRegistry.FARMER;
             setProfession(p);
         }
         mode = Mode.values()[data.getByte("mode")];
@@ -121,7 +123,7 @@ public class DetectorVillager extends Detector {
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeUTF(profession.getRegistryName().toString());
+        data.writeUTF(checkNotNull(profession.getRegistryName()).toString());
         data.writeByte((byte) mode.ordinal());
     }
 
@@ -129,19 +131,19 @@ public class DetectorVillager extends Detector {
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
+        profession = checkNotNull(ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.readUTF())));
         mode = Mode.values()[data.readByte()];
     }
 
     @Override
     public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
-        data.writeUTF(profession.getRegistryName().toString());
+        data.writeUTF(checkNotNull(profession.getRegistryName()).toString());
         data.writeByte(mode.ordinal());
     }
 
     @Override
     public void readGuiData(@Nonnull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
-        profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
+        profession = checkNotNull(ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.readUTF())));
         mode = Mode.values()[data.readByte()];
     }
 

@@ -34,7 +34,7 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockAccess world, BlockPos pos) {
         return SELECTION_BOX.offset(pos);
     }
 

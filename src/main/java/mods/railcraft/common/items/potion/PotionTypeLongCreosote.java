@@ -12,6 +12,6 @@ public class PotionTypeLongCreosote extends PotionTypeRailcraft {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        RailcraftPotionTypes.CREOSOTE.getObject().ifPresent(creosote -> PotionHelper.registerPotionTypeConversion(creosote, new PotionHelper.ItemPredicateInstance(Items.REDSTONE), this));
+        RailcraftPotionTypes.CREOSOTE.getObject().ifPresent(creosote -> PotionHelper.addMix(creosote, Items.REDSTONE, this));
     }
 }

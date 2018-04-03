@@ -47,10 +47,10 @@ public class GuiBoxController extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.default"), 25);
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(defaultAspect.getLocalizationTag()), 35);
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.redstone"), 60);
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate(poweredAspect.getLocalizationTag()), 70);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.default"), 25);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate(defaultAspect.getLocalizationTag()), 35);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.box.controller.aspect.redstone"), 60);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate(poweredAspect.getLocalizationTag()), 70);
     }
 
     @Override

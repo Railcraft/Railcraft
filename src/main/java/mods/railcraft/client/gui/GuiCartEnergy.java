@@ -25,14 +25,14 @@ public class GuiCartEnergy extends EntityGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String entityName = device.getName();
-        int sWidth = fontRendererObj.getStringWidth(entityName);
+        int sWidth = fontRenderer.getStringWidth(entityName);
         int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(entityName, sPos, 6, 0x404040);
-        fontRendererObj.drawString("Power Level:", 80, 25, 0x404040);
-        fontRendererObj.drawString(Integer.toString((int) device.getEnergy()), 115, 35, 0x404040);
+        fontRenderer.drawString(entityName, sPos, 6, 0x404040);
+        fontRenderer.drawString("Power Level:", 80, 25, 0x404040);
+        fontRenderer.drawString(Integer.toString((int) device.getEnergy()), 115, 35, 0x404040);
 
         String capacity = "/" + device.getCapacity();
-        fontRendererObj.drawString(capacity, 115, 45, 0x404040);
+        fontRenderer.drawString(capacity, 115, 45, 0x404040);
     }
 
     @Override

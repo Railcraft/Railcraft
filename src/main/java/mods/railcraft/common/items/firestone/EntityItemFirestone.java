@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
@@ -46,7 +47,7 @@ public class EntityItemFirestone extends EntityItemFireproof {
     }
 
     public static void register() {
-        EntityRegistry.registerModEntity(EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
+        EntityRegistry.registerModEntity(RailcraftConstantsAPI.locationOf("firestone"), EntityItemFirestone.class, "ItemFirestone", EntityIDs.ENTITY_ITEM_FIRESTONE, Railcraft.getMod(), 64, 20, true);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class EntityItemFirestone extends EntityItemFireproof {
             clock++;
             if (clock % 4 != 0)
                 return;
-            ItemStack stack = getEntityItem();
+            ItemStack stack = getItem();
             FirestoneTools.trySpawnFire(world, getPosition(), stack);
         }
     }
@@ -73,12 +74,12 @@ public class EntityItemFirestone extends EntityItemFireproof {
             for (int i = 0; i < 10; i++) {
                 surface = surface.up();
                 if (WorldPlugin.isBlockAir(world, surface) && WorldPlugin.getBlockMaterial(world, surface.down()) == Material.LAVA) {
-                    boolean cracked = getEntityItem().getItem() instanceof ItemFirestoneCracked;
+                    boolean cracked = getItem().getItem() instanceof ItemFirestoneCracked;
                     WorldPlugin.setBlockState(world, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
                     TileEntity tile = WorldPlugin.getBlockTile(world, surface);
                     if (tile instanceof TileRitual) {
                         TileRitual fireTile = (TileRitual) tile;
-                        ItemStack firestone = getEntityItem();
+                        ItemStack firestone = getItem();
                         fireTile.charge = firestone.getMaxDamage() - firestone.getItemDamage();
                         if (firestone.hasDisplayName())
                             fireTile.setItemName(firestone.getDisplayName());

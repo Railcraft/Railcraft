@@ -35,7 +35,6 @@ public interface IRailcraftCart {
     default void initEntityFromItem(ItemStack stack) {
     }
 
-    @Nullable
     default ItemStack createCartItem(EntityMinecart cart) {
         ItemStack stack = RailcraftCarts.fromCart(cart).getStack();
         if (!InvTools.isEmpty(stack) && cart.hasCustomName())

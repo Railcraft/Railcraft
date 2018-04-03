@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,10 +97,10 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         if (TrackTools.isRailBlock(state))
-            return efficiencyOnProperMaterial;
-        return super.getStrVsBlock(stack, state);
+            return efficiency;
+        return super.getDestroySpeed(stack, state);
     }
 
     @Override
@@ -124,7 +125,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
 
         if (WorldPlugin.isBlockAir(world, pos, blockState))
@@ -234,8 +236,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        addToolTips(stack, player, info, adv);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        addToolTips(stack, world, info, adv);
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tips"));
     }
 

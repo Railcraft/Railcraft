@@ -283,7 +283,7 @@ public class OpenGL {
     }
 
     public static void glVertex(Vec3d vertex) {
-        GL11.glVertex3f((float) vertex.xCoord, (float) vertex.yCoord, (float) vertex.zCoord);
+        GL11.glVertex3f((float) vertex.x, (float) vertex.y, (float) vertex.z);
     }
 
     public static void glLineWidth(float width) {

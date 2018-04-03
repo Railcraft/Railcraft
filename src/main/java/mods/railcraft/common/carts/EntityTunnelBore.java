@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
@@ -63,11 +62,8 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.function.BiFunction;
-
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
 public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart {
     public static final float SPEED = 0.03F;
@@ -88,7 +84,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(DataSerializers.FACING);
-    private static final DataParameter<com.google.common.base.Optional<ItemStack>> BORE_HEAD = DataManagerPlugin.create(DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final DataParameter<ItemStack> BORE_HEAD = DataManagerPlugin.create(DataSerializers.ITEM_STACK);
     private static final Block[] mineable = {
             Blocks.CLAY,
             Blocks.SNOW_LAYER,
@@ -224,8 +220,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Contract("null, _ -> false")
-    public boolean canHeadHarvestBlock(@Nullable ItemStack head, IBlockState targetState) {
-        if (isEmpty(head))
+    public boolean canHeadHarvestBlock(ItemStack head, IBlockState targetState) {
+        if (InvTools.isEmpty(head))
             return false;
 
         if (head.getItem() instanceof IBoreHead) {
@@ -297,7 +293,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         super.entityInit();
         dataManager.register(HAS_FUEL, false);
         dataManager.register(MOVING, false);
-        dataManager.register(BORE_HEAD, Optional.absent());
+        dataManager.register(BORE_HEAD, ItemStack.EMPTY);
         dataManager.register(FACING, EnumFacing.NORTH);
 //        dataManager.register(WATCHER_ID_BURN_TIME, Integer.valueOf(0));
     }
@@ -318,9 +314,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             else {
                 setRollingDirection(-getRollingDirection());
                 setRollingAmplitude(10);
-                setBeenAttacked();
+                markVelocityChanged();
                 setDamage(getDamage() + damage * 10);
-                boolean flag = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
+                boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).capabilities.isCreativeMode;
 
                 if (flag || getDamage() > 120) {
                     removePassengers();
@@ -514,7 +510,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
 
                 ItemStack head = getStackInSlot(0);
-                if (!isEmpty(head)) {
+                if (!InvTools.isEmpty(head)) {
                     head.damageItem(entities.size(), CartTools.getCartOwnerEntity(this));
                 }
             }
@@ -676,7 +672,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockBallast() {
         if (InvTools.hasEmptySlot(invBallast)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.BALLAST);
-            if (!isEmpty(stack))
+            if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invBallast);
         }
     }
@@ -685,7 +681,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (!world.isSideSolid(targetPos, EnumFacing.UP))
             for (IExtInvSlot slot : InventoryIterator.getVanilla(invBallast)) {
                 ItemStack stack = slot.getStack();
-                if (!isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
+                if (!InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
                     BlockPos.PooledMutableBlockPos searchPos = BlockPos.PooledMutableBlockPos.retain();
                     searchPos.setPos(targetPos);
                     for (int i = 0; i < MAX_FILL_DEPTH; i++) {
@@ -717,7 +713,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockTracks() {
         if (InvTools.hasEmptySlot(invRails)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.TRACK);
-            if (!isEmpty(stack))
+            if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invRails);
         }
     }
@@ -731,7 +727,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (WorldPlugin.isBlockAir(world, targetPos, oldState) && world.isSideSolid(targetPos.down(), EnumFacing.UP))
             for (IInvSlot slot : InventoryIterator.getVanilla(invRails)) {
                 ItemStack stack = slot.getStack();
-                if (!isEmpty(stack)) {
+                if (!InvTools.isEmpty(stack)) {
                     boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) world, targetPos, shape);
                     if (placed) {
                         slot.decreaseStack();
@@ -820,7 +816,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return true;
 
         ItemStack head = getStackInSlot(0);
-        if (isEmpty(head))
+        if (InvTools.isEmpty(head))
             return false;
 
         if (!canMineBlock(targetPos, targetState))
@@ -840,7 +836,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
         if (silk) {
             ItemStack stack = HarvestPlugin.getSilkTouchDrop(targetState);
-            items = isEmpty(stack) ? new ArrayList<>() : Lists.newArrayList(stack); // Use modifiable lists for events
+            items = InvTools.isEmpty(stack) ? new ArrayList<>() : Lists.newArrayList(stack); // Use modifiable lists for events
         } else {
             items = targetState.getBlock().getDrops(world, targetPos, targetState, fortuneLevel);
         }
@@ -858,20 +854,20 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 if (StandardStackFilters.FUEL.test(stack))
                     stack = InvTools.moveItemStack(stack, invFuel);
 
-                if (!isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
+                if (!InvTools.isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
                     stack = InvTools.moveItemStack(stack, invBallast);
 
-                if (!isEmpty(stack))
+                if (!InvTools.isEmpty(stack))
                     stack = CartToolsAPI.transferHelper.pushStack(this, stack);
 
-                if (!isEmpty(stack)) {
+                if (!InvTools.isEmpty(stack)) {
                     float f = 0.7F;
                     double xr = (world.rand.nextFloat() - 0.5D) * f;
                     double yr = (world.rand.nextFloat() - 0.5D) * f;
                     double zr = (world.rand.nextFloat() - 0.5D) * f;
                     Vec3d spewPos = getPositionAhead(-3.2);
                     spewPos.addVector(xr, 0.3 + yr, zr);
-                    EntityItem entityitem = new EntityItem(world, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
+                    EntityItem entityitem = new EntityItem(world, spewPos.x, spewPos.y, spewPos.z, stack);
                     world.spawnEntity(entityitem);
                 }
             }
@@ -888,7 +884,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     private boolean canMineBlock(BlockPos targetPos, IBlockState existingState) {
         ItemStack head = getStackInSlot(0);
         if (existingState.getBlock() instanceof IMineable) {
-            return head != null && ((IMineable) existingState.getBlock()).canMineBlock(world, targetPos, this, head);
+            return ((IMineable) existingState.getBlock()).canMineBlock(world, targetPos, this, head);
         }
         if (existingState.getBlockHardness(world, targetPos) < 0)
             return false;
@@ -900,7 +896,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         hardness *= HARDNESS_MULTIPLIER;
 
         ItemStack boreSlot = getStackInSlot(0);
-        if (!isEmpty(boreSlot) && boreSlot.getItem() instanceof IBoreHead) {
+        if (!InvTools.isEmpty(boreSlot) && boreSlot.getItem() instanceof IBoreHead) {
             IBoreHead head = (IBoreHead) boreSlot.getItem();
             float dig = 2f - head.getDigModifier();
             hardness *= dig;
@@ -1037,7 +1033,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockFuel() {
         if (InvTools.hasEmptySlot(invFuel)) {
             ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
-            if (!isEmpty(stack))
+            if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invFuel);
         }
     }
@@ -1046,7 +1042,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         int burn = 0;
         for (int slot = 0; slot < invFuel.getSizeInventory(); slot++) {
             ItemStack stack = invFuel.getStackInSlot(slot);
-            if (!isEmpty(stack)) {
+            if (!InvTools.isEmpty(stack)) {
                 burn = FuelPlugin.getBurnTime(stack);
                 if (burn > 0) {
                     if (stack.getItem().hasContainerItem(stack))
@@ -1077,15 +1073,15 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected void forceUpdateBoreHead() {
         ItemStack boreStack = getStackInSlot(0);
-        if (!isEmpty(boreStack))
+        if (!InvTools.isEmpty(boreStack))
             boreStack = boreStack.copy();
-        dataManager.set(BORE_HEAD, Optional.fromNullable(boreStack));
+        dataManager.set(BORE_HEAD, boreStack);
     }
 
     @Nullable
     public IBoreHead getBoreHead() {
-        ItemStack boreStack = dataManager.get(BORE_HEAD).orNull();
-        if (!isEmpty(boreStack) && boreStack.getItem() instanceof IBoreHead)
+        ItemStack boreStack = dataManager.get(BORE_HEAD);
+        if (boreStack.getItem() instanceof IBoreHead)
             return (IBoreHead) boreStack.getItem();
         return null;
     }
@@ -1103,7 +1099,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, @Nullable EnumHand hand) {
         if (Game.isHost(world))
             GuiHandler.openGui(EnumGui.CART_BORE, player, world, this);
         return true;
@@ -1135,7 +1131,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         Vec3d pos = getPositionAhead(-LENGTH / 2.0);
         float dist = LinkageManager.LINKAGE_DISTANCE * 2;
         dist = dist * dist;
-        return cart.getDistanceSq(pos.xCoord, pos.yCoord, pos.zCoord) < dist;
+        return cart.getDistanceSq(pos.x, pos.y, pos.z) < dist;
     }
 
     @Override

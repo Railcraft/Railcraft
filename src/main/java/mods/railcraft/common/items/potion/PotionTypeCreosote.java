@@ -13,6 +13,6 @@ public class PotionTypeCreosote extends PotionTypeRailcraft {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        PotionHelper.registerPotionTypeConversion(PotionTypes.AWKWARD, RailcraftItems.BOTTLE_CREOSOTE::isEqual, this);
+        PotionHelper.addMix(PotionTypes.AWKWARD, RailcraftItems.BOTTLE_CREOSOTE.getIngredient(), this);
     }
 }

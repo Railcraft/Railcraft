@@ -28,7 +28,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager {
 
-    private final List<BlastFurnaceRecipe> recipes = new ArrayList<BlastFurnaceRecipe>();
+    private final List<BlastFurnaceRecipe> recipes = new ArrayList<>();
     private List<ItemStack> fuels;
 
     public static IBlastFurnaceCraftingManager getInstance() {

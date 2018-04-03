@@ -40,9 +40,9 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         OpenGL.glDisable(GL11.GL_BLEND);
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        setSize(item.getEntityItem(), 1);
+        setSize(item.getItem(), 1);
         item.hoverStart = 0.0F;
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getEntityItem(), cart.world, null);
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getItem(), cart.world, null);
 
         boolean renderIn3D = model.isGui3d();
 
@@ -91,7 +91,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
 
     private void renderEntityItem(RenderManager renderManager, EntityItem item) {
         try {
-            renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+            renderManager.renderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
         } catch (Exception ignored) {
         }
     }

@@ -349,6 +349,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
+                //TODO this is not right
                 if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
                 if (/*!EnumMachineAlpha.BLAST_FURNACE.isAvailable() || */RailcraftConfig.forceEnableSteelRecipe())

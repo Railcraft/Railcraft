@@ -33,7 +33,7 @@ public class GuiTurbine extends TileGui
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.turbine.rotor"), 20, 29, 0x404040);
-        fontRendererObj.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.turbine.rotor"), 20, 29, 0x404040);
+        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
     }
 }

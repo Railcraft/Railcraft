@@ -29,8 +29,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.ItemLapotronUpgrade;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
-import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -111,12 +109,12 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool_crowbar_steel"),
-    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
-        conditions().add(Mod.THAUMCRAFT);
-    }},
-    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{
-        conditions().add(Mod.THAUMCRAFT);
-    }},
+//    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
+//        conditions().add(Mod.THAUMCRAFT);
+//    }},
+//    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{
+//        conditions().add(Mod.THAUMCRAFT);
+//    }},
     CROWBAR_DIAMOND(ItemCrowbarDiamond::new, "tool_crowbar_diamond"),
     CROWBAR_SEASONS(ItemCrowbarSeasons::new, "tool_crowbar_seasons"),
     DUST(ItemDust::new, "dust"),
@@ -248,7 +246,6 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         return "railcraft." + getBaseTag();
     }
 
-    @Nullable
     public ItemStack getStack(int qty, int meta) {
         if (item == null)
             return InvTools.emptyStack();
@@ -259,11 +256,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         getObject().ifPresent(o -> o.checkVariant(variant));
     }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariantObject(variant);
-        return getObject().map(i -> i.getStack(qty, variant)).orElse(null);
+        return getObject().map(i -> i.getStack(qty, variant)).orElse(ItemStack.EMPTY);
     }
 
     @Override

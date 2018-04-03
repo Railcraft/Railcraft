@@ -111,8 +111,8 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
-        super.neighborChanged(state, world, pos, blockIn);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos neighborPos) {
+        super.neighborChanged(state, world, pos, blockIn, neighborPos);
         IBlockState newState = detectRedstoneState(state, world, pos);
         if (state != newState)
             WorldPlugin.setBlockState(world, pos, newState);

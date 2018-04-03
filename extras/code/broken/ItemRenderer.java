@@ -68,7 +68,7 @@ public class ItemRenderer implements IItemRenderer {
         rand.setSeed(187L);
         byte num = 1;
 
-        ItemStack stack = item.getEntityItem();
+        ItemStack stack = item.getItem();
 
         if (stack.stackSize > 1)
             num = 2;

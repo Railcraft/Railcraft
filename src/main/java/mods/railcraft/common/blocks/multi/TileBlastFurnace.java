@@ -58,7 +58,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public static final int SLOT_OUTPUT = 2;
     private static final int FUEL_PER_TICK = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map = {
@@ -205,9 +205,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     /*private void destroyLava() {
-        int xLava = xCoord + 1;
-        int yLava = yCoord + 2;
-        int zLava = zCoord + 1;
+        int xLava = x + 1;
+        int yLava = y + 2;
+        int zLava = z + 1;
         if (world.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
             world.setBlockToAir(xLava, yLava, zLava);
         yLava -= 1;
@@ -376,6 +376,11 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_OUTPUT;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
     }
 
     @Nullable

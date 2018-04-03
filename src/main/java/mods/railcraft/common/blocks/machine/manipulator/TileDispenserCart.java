@@ -100,8 +100,8 @@ public class TileDispenserCart extends TileManipulator {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
-        super.onNeighborBlockChange(state, block);
+    public void onNeighborBlockChange(IBlockState state, Block block, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, block, neighborPos);
         if (Game.isClient(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(world, getPos());

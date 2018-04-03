@@ -61,7 +61,7 @@ public class GuiCartTNTFuse extends GuiBasic {
     @Override
     public void drawExtras(int x, int y, float f) {
         if (cart != null)
-            GuiTools.drawCenteredString(fontRendererObj, FUSE + fuse + TICKS, 25);
+            GuiTools.drawCenteredString(fontRenderer, FUSE + fuse + TICKS, 25);
     }
 
     @Override

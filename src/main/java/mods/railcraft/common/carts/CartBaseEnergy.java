@@ -80,7 +80,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     public abstract int getTier();
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             GuiHandler.openGui(EnumGui.CART_ENERGY, player, world, this);
         return true;

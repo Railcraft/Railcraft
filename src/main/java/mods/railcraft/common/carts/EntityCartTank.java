@@ -152,8 +152,8 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        if (FluidTools.interactWithFluidHandler(stack, getTankManager(), player))
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
+        if (FluidTools.interactWithFluidHandler(player, hand, getTankManager()))
             return true;
         if (Game.isHost(world)) {
             GuiHandler.openGui(EnumGui.CART_TANK, player, world, this);

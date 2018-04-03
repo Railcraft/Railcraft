@@ -10,15 +10,18 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -31,6 +34,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO totally broke
 public enum Remapper {
     RENAMED {
         private final Map<String, IRailcraftObjectContainer<?>> names = new HashMap<>();
@@ -54,50 +58,51 @@ public enum Remapper {
         }
 
         @Override
-        protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {
-            IRailcraftObjectContainer<?> objectContainer = names.get(MiscTools.cleanTag(mapping.name));
+        protected void attemptRemap(FMLModIdMappingEvent.ModRemapping mapping) {
+            IRailcraftObjectContainer<?> objectContainer = names.get(MiscTools.cleanTag(mapping.key.toString()));
             if (objectContainer != null)
-                if (mapping.type == GameRegistry.Type.BLOCK && objectContainer instanceof IContainerBlock)
+                if (mapping.registry.equals(GameData.BLOCKS) && objectContainer instanceof IContainerBlock)
                     remap(mapping, ((IContainerBlock) objectContainer).block());
-                else if (mapping.type == GameRegistry.Type.ITEM && objectContainer instanceof IContainerItem)
+                else if (mapping.registry.equals(GameData.ITEMS) && objectContainer instanceof IContainerItem)
                     remap(mapping, ((IContainerItem) objectContainer).item());
         }
     },
     RENAMED_PARTS {
         @Override
-        protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {
-            if (mapping.type == GameRegistry.Type.ITEM)
-                findItem(mapping.name.replace("part.", "")).ifPresent(item -> remap(mapping, item));
+        protected void attemptRemap(FMLModIdMappingEvent.ModRemapping mapping) {
+            if (mapping.registry.equals(GameData.ITEMS))
+                findItem(mapping.key.toString().replace("part.", "")).ifPresent(item -> remap(mapping, item));
         }
     },
     RENAMED_CARTS {
         @Override
-        protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {
-            if (mapping.type == GameRegistry.Type.ITEM)
-                findItem(mapping.name.replace("entity_", "")).ifPresent(item -> remap(mapping, item));
+        protected void attemptRemap(FMLModIdMappingEvent.ModRemapping mapping) {
+            if (mapping.registry.equals(GameData.ITEMS))
+                findItem(mapping.key.toString().replace("entity_", "")).ifPresent(item -> remap(mapping, item));
         }
     },
     REFORMATTED {
         @Override
-        protected void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping) {
-            if (mapping.type == GameRegistry.Type.BLOCK)
-                findBlock(mapping.name).ifPresent(block -> remap(mapping, block));
-            else if (mapping.type == GameRegistry.Type.ITEM) {
-                findBlock(mapping.name).ifPresent(block -> remap(mapping, Item.getItemFromBlock(block)));
-                if (mapping.getAction() == FMLMissingMappingsEvent.Action.DEFAULT)
-                    findItem(mapping.name).ifPresent(item -> remap(mapping, item));
+        protected void attemptRemap(FMLModIdMappingEvent.ModRemapping mapping) {
+            if (mapping.registry.equals(GameData.BLOCKS))
+                findBlock(mapping.key.toString()).ifPresent(block -> remap(mapping, block));
+            else if (mapping.registry.equals(GameData.ITEMS)) {
+                findBlock(mapping.key.toString()).ifPresent(block -> remap(mapping, Item.getItemFromBlock(block)));
+//                if (mapping.getAction() == FMLMissingMappingsEvent.Action.DEFAULT)
+//                    findItem(mapping.key.toString()).ifPresent(item -> remap(mapping, item));
             }
         }
 
     };
 
-    public static void handle(FMLMissingMappingsEvent event) {
-        for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
+    public static void handle(FMLModIdMappingEvent event) {
+        //TODO this already breaks.
+        for (FMLModIdMappingEvent.ModRemapping mapping : new FMLModIdMappingEvent.ModRemapping[0]) {
             for (Remapper remapper : Remapper.values()) {
                 try {
                     remapper.attemptRemap(mapping);
-                    if (mapping.getAction() != FMLMissingMappingsEvent.Action.DEFAULT)
-                        break;
+//                    if (mapping.getAction() != FMLMissingMappingsEvent.Action.DEFAULT)
+//                        break;
                 } catch (Exception ex) {
                     Game.logThrowable("Remapper Error", ex);
                 }
@@ -107,7 +112,7 @@ public enum Remapper {
 
     protected Optional<Block> findBlock(String oldName) {
         String newName = MiscTools.cleanTag(oldName).replace(".", "_");
-        Block block = GameRegistry.findBlock(Railcraft.MOD_ID, newName);
+        Block block = Block.REGISTRY.getObject(RailcraftConstantsAPI.locationOf(newName));
         if (block != null && block != Blocks.AIR)
             return Optional.of(block);
         return Optional.empty();
@@ -115,23 +120,23 @@ public enum Remapper {
 
     protected Optional<Item> findItem(String oldName) {
         String newName = MiscTools.cleanTag(oldName).replace(".", "_");
-        Item item = GameRegistry.findItem(Railcraft.MOD_ID, newName);
+        Item item = Item.REGISTRY.getObject(RailcraftConstantsAPI.locationOf(newName));
         if (item != null)
             return Optional.of(item);
         return Optional.empty();
     }
 
-    protected abstract void attemptRemap(FMLMissingMappingsEvent.MissingMapping mapping);
+    protected abstract void attemptRemap(FMLModIdMappingEvent.ModRemapping mapping);
 
-    protected final void remap(FMLMissingMappingsEvent.MissingMapping mapping, @Nullable IForgeRegistryEntry<?> object) {
+    protected final void remap(FMLModIdMappingEvent.ModRemapping mapping, @Nullable IForgeRegistryEntry<?> object) {
         if (object != null) {
-            if (object instanceof Block)
-                mapping.remap((Block) object);
-            else if (object instanceof Item)
-                mapping.remap((Item) object);
-            else
-                throw new IllegalArgumentException("unknown object");
-            Game.log(Level.WARN, "Remapping " + mapping.type + " named " + mapping.name + " to " + object.getRegistryName());
+//            if (object instanceof Block)
+//                mapping.remap((Block) object);
+//            else if (object instanceof Item)
+//                mapping.remap((Item) object);
+//            else
+//                throw new IllegalArgumentException("unknown object");
+            Game.log(Level.WARN, "Remapping " + mapping.registry + " named " + mapping.key + " to " + object.getRegistryName());
         }
     }
 }

@@ -27,23 +27,19 @@ import java.util.function.Function;
 public class ItemStackCache {
     private static final Map<String, ItemStack> itemCache = new HashMap<>();
     private final String modId;
-    private final Class<?> sourceClass;
     private final BooleanSupplier condition;
     private final Function<String, ItemStack> findItem;
 
-    public ItemStackCache(String modId, Class<?> sourceClass, BooleanSupplier condition, Function<String, ItemStack> findItem) {
+    public ItemStackCache(String modId, BooleanSupplier condition, Function<String, ItemStack> findItem) {
         this.modId = modId;
-        this.sourceClass = sourceClass;
         this.condition = condition;
         this.findItem = findItem;
     }
 
-    @Nullable
     public ItemStack get(String tag) {
         return get(tag, -1);
     }
 
-    @Nullable
     public ItemStack get(String tag, int meta) {
         if (!condition.getAsBoolean())
             return InvTools.emptyStack();
@@ -55,7 +51,7 @@ public class ItemStackCache {
                 stack = findItem.apply(tag);
                 itemCache.put(tag, stack);
             } catch (Throwable error) {
-                Game.logErrorAPI(modId, error, sourceClass);
+                Game.logErrorAPI(modId, error);
             }
         }
         if (!InvTools.isEmpty(stack)) {

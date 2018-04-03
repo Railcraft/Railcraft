@@ -11,7 +11,6 @@ package mods.railcraft.common.util.misc;
 
 import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -31,7 +30,7 @@ import java.util.function.Predicate;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public abstract class MiscTools {
+public final class MiscTools {
 
     public static final Random RANDOM = new Random();
 
@@ -74,15 +73,15 @@ public abstract class MiscTools {
     }
 
     private static boolean isVecOutsideYZBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.yCoord < 0 || vec3d.yCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
+        return vec3d == null || vec3d.y < 0 || vec3d.y > 1 || vec3d.z < 0 || vec3d.z > 1;
     }
 
     private static boolean isVecOutsideXZBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
+        return vec3d == null || vec3d.x < 0 || vec3d.x > 1 || vec3d.z < 0 || vec3d.z > 1;
     }
 
     private static boolean isVecOutsideXYBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.yCoord < 0 || vec3d.yCoord > 1;
+        return vec3d == null || vec3d.x < 0 || vec3d.x > 1 || vec3d.y < 0 || vec3d.y > 1;
     }
 
     @Nullable
@@ -92,19 +91,19 @@ public abstract class MiscTools {
         Vec3d eyePos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
 
         Vec3d lookVec = player.getLook(1);
-        Vec3d rayVec = eyePos.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
+        Vec3d rayVec = eyePos.addVector(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
         Vec3d hitPos = null;
         List<Entity> foundEntities = player.world.getEntitiesInAABBexcluding(player,
-                player.getEntityBoundingBox().addCoord(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach)
+                player.getEntityBoundingBox().grow(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach)
                         .expand(1.0D, 1.0D, 1.0D),
                 com.google.common.base.Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
         double smallestDistance = reach;
 
         for (Entity entity : foundEntities) {
-            AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expandXyz(entity.getCollisionBorderSize());
+            AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize());
             RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(eyePos, rayVec);
 
-            if (axisalignedbb.isVecInside(eyePos)) {
+            if (axisalignedbb.contains(eyePos)) {
                 if (smallestDistance >= 0.0D) {
                     pointedEntity = entity;
                     hitPos = raytraceresult == null ? eyePos : raytraceresult.hitVec;
@@ -155,9 +154,8 @@ public abstract class MiscTools {
      *
      * @return a side
      */
-    @Nonnull
     public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase entity) {
-        return BlockPistonBase.getFacingFromEntity(pos, entity);
+        return EnumFacing.getDirectionFromEntityLiving(pos, entity);
     }
 
     /**
@@ -197,6 +195,9 @@ public abstract class MiscTools {
 
     public static boolean isKillableEntity(Entity entity) {
         return entity.isEntityAlive() && !(entity.getRidingEntity() instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
+    }
+
+    private MiscTools() {
     }
 
 }

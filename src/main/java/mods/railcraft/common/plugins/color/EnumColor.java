@@ -160,7 +160,7 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
     }
 
     public MapColor getMapColor() {
-        return getDye().getMapColor();
+        return MapColor.getBlockColor(getDye());
     }
 
     public int getHexColor() {

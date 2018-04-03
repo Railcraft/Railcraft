@@ -53,7 +53,7 @@ public class GuiBook extends GuiScreen {
     private final int bookImageHeight = 192;
     private final int numManualPages;
     private int currPage, currLine, currChar;
-    protected final LinkedList<LinkedList<String>> bookPages;
+    protected final List<List<String>> bookPages;
     protected String bookTitle = "";
     protected String author = "";
     private GuiButtonRoutingTableNextPage buttonNextPage;
@@ -62,7 +62,7 @@ public class GuiBook extends GuiScreen {
     private GuiSimpleButton buttonSign;
     private GuiSimpleButton buttonHelp;
 
-    public GuiBook(ResourceLocation texture, String locTag, String title, String author, @Nullable LinkedList<LinkedList<String>> pages, boolean editable) {
+    public GuiBook(ResourceLocation texture, String locTag, String title, String author, @Nullable List<List<String>> pages, boolean editable) {
         this.texture = texture;
         this.locTag = locTag;
         this.manualLocTag = locTag + "manual.";
@@ -71,7 +71,7 @@ public class GuiBook extends GuiScreen {
         this.editable = editable;
 
         if (pages == null) {
-            bookPages = new LinkedList<LinkedList<String>>();
+            bookPages = new ArrayList<>();
             initPages();
         } else {
             bookPages = pages;
@@ -94,7 +94,7 @@ public class GuiBook extends GuiScreen {
     }
 
     private void initPages() {
-        LinkedList<String> page = new LinkedList<String>();
+        List<String> page = new ArrayList<>();
         bookPages.add(page);
         page.add("");
     }
@@ -421,22 +421,22 @@ public class GuiBook extends GuiScreen {
                     title = title + "" + TextFormatting.GRAY + "_";
 
             String s1 = I18n.translateToLocal("book.editTitle");
-            int l = fontRendererObj.getStringWidth(s1);
-            fontRendererObj.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
-            int i1 = fontRendererObj.getStringWidth(title);
-            fontRendererObj.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
+            int l = fontRenderer.getStringWidth(s1);
+            fontRenderer.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
+            int i1 = fontRenderer.getStringWidth(title);
+            fontRenderer.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
             String s2 = String.format(I18n.translateToLocal("book.byAuthor"), author);
-            int j1 = fontRendererObj.getStringWidth(s2);
-            fontRendererObj.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
+            int j1 = fontRenderer.getStringWidth(s2);
+            fontRenderer.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
 //            String s3 = StatCollector.translateToLocal("book.finalizeWarning");
-//            this.fontRendererObj.drawSplitString(s3, xOffset + 36, yOffset + 80, 116, 0);
+//            this.fontRenderer.drawSplitString(s3, xOffset + 36, yOffset + 80, 116, 0);
         } else if (readingManual) {
-//            GuiTools.drawCenteredString(fontRendererObj, RailcraftLanguage.translate("routing.table.manual.title"), yOffset + 16, width);
-            fontRendererObj.drawString(LocalizationPlugin.translate(manualLocTag + "title"), xOffset + 45, yOffset + 16, 0);
+//            GuiTools.drawCenteredString(fontRenderer, RailcraftLanguage.translate("routing.table.manual.title"), yOffset + 16, width);
+            fontRenderer.drawString(LocalizationPlugin.translate(manualLocTag + "title"), xOffset + 45, yOffset + 16, 0);
 
             String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, numManualPages);
-            int pageNumStringWidth = fontRendererObj.getStringWidth(pageNumString);
-            fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
+            int pageNumStringWidth = fontRenderer.getStringWidth(pageNumString);
+            fontRenderer.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
 
             if (currPage < 0 || currPage >= numManualPages)
                 return;
@@ -445,12 +445,12 @@ public class GuiBook extends GuiScreen {
 
             if (LocalizationPlugin.hasTag(pageTag)) {
                 String text = LocalizationPlugin.translate(pageTag);
-                fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
+                fontRenderer.drawSplitString(text, xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
             }
         } else {
             String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, bookPages.size());
-            int pageNumStringWidth = fontRendererObj.getStringWidth(pageNumString);
-            fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
+            int pageNumStringWidth = fontRenderer.getStringWidth(pageNumString);
+            fontRenderer.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
 
             if (currPage < 0 || currPage >= bookPages.size())
                 return;
@@ -473,7 +473,7 @@ public class GuiBook extends GuiScreen {
 
                 text.append("\n");
             }
-            fontRendererObj.drawSplitString(text.toString(), xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
+            fontRenderer.drawSplitString(text.toString(), xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
         }
 
         super.drawScreen(par1, par2, par3);

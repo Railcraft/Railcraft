@@ -39,6 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -178,7 +179,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 

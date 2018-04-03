@@ -47,9 +47,9 @@ public class RailcraftOutputStream extends DataOutputStream {
     }
 
     public void writeVec3d(Vec3d vec) throws IOException {
-        writeDouble(vec.xCoord);
-        writeDouble(vec.yCoord);
-        writeDouble(vec.zCoord);
+        writeDouble(vec.x);
+        writeDouble(vec.y);
+        writeDouble(vec.z);
     }
 
     public void writeUUID(@Nullable UUID uuid) throws IOException {

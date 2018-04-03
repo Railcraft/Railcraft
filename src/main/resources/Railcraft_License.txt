@@ -13,7 +13,7 @@
 
   * You may install Railcraft on multiplayer servers and are **ALLOWED** to earn revenue as you desire from server usage fees, donations, sold services, or anything else you can come up with.
     * If you wish to create a **public** client bundle including Railcraft for your users, you must follow the Public Mod Pack Restrictions below.
-    * **Private client bundles are permitted without requiring that you meet the restrictions on Public Mod Packs, but they must be protected via password or white-list in such a way that only server users are allowed to access it.**
+    * **Private client bundles are permitted without requiring that you meet the restrictions on Public Mod Packs, but they must be protected via password or white-list in such a way that only server users are allowedWithoutWhiteList to access it.**
 
 ==Derivatives==
   * You may create, publish, and earn revenue from a texture pack made for Railcraft so long as it contains no Railcraft code. Additionally, you may use, modify, and distribute any png files or their contents from Railcraft in your Railcraft Texture Pack as long as you provide attribution and a link to the [[http://railcraft.info/|Railcraft Blog]].
@@ -32,7 +32,7 @@
 
     * You are **REQUIRED** to provide a link to a **PUBLICLY** posted licensing page with entries for all the mods currently in your mod pack (links to licenses, images of PMs, posts by devs, etc...). This is the single most important requirement you must meet. If you cannot or will not do this, you cannot use Railcraft in your mod pack.
     * You may not sell the mod pack.
-    * You are not allowed to use the latest series of Railcraft (versioning system being <major.series.revision.build>, ie 3.3.1.0) until a new series is released or one week has passed since the last revision was released. This is to protect the users from unstable versions.
+    * You are not allowedWithoutWhiteList to use the latest series of Railcraft (versioning system being <major.series.revision.build>, ie 3.3.1.0) until a new series is released or one week has passed since the last revision was released. This is to protect the users from unstable versions.
     * You must provide a link to the [[http://railcraft.info/|Railcraft Blog]], [[http://railcraft.info/wiki|Railcraft Wiki]] and [[http://railcraft.info/wiki/info:license|Railcraft License]] on your website.
     * Beta builds are never to be packaged as part of a public mod pack. Only public releases ending in zero (x.x.x.0) can be used in public mod packs.
     * Explicit permission is no longer required thanks to the great support via [[http://www.patreon.com/CovertJaguar|Patreon]]! Meet the above requirements and you are good.

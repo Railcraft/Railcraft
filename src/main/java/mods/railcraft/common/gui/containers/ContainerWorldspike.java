@@ -44,7 +44,7 @@ public class ContainerWorldspike extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, getMinutesRemaining(worldspike.getFuelAmount()));
+        listener.sendWindowProperty(this, 0, getMinutesRemaining(worldspike.getFuelAmount()));
     }
 
     private short getMinutesRemaining(long fuel) {
@@ -61,7 +61,7 @@ public class ContainerWorldspike extends RailcraftContainer {
 
         for (IContainerListener listener : listeners) {
             if (prevMinutesRemaining != minutes)
-                listener.sendProgressBarUpdate(this, 0, minutes);
+                listener.sendWindowProperty(this, 0, minutes);
         }
 
         this.prevMinutesRemaining = minutes;

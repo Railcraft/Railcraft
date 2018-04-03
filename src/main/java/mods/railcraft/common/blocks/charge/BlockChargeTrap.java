@@ -151,13 +151,13 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return COLLISION_BOX;
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        super.neighborChanged(state, worldIn, pos, blockIn);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos posIn) {
+        super.neighborChanged(state, worldIn, pos, blockIn, posIn);
         IBlockState newState = detectRedstoneState(state, worldIn, pos);
         if (state != newState)
             WorldPlugin.setBlockState(worldIn, pos, newState);

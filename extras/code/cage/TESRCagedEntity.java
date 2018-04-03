@@ -37,7 +37,7 @@ public class TESRCagedEntity extends TileEntitySpecialRenderer<TileCage> {
 //            entity.setRotationYawHead(0);
 
             float yaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
-            Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, yaw, partialTicks, false);
+            Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, yaw, partialTicks, false);
         }
         OpenGL.glPopMatrix();
     }

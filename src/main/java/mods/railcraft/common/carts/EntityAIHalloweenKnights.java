@@ -15,8 +15,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.HorseType;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -24,10 +23,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 
 public class EntityAIHalloweenKnights extends EntityAIBase {
-    private final EntityHorse horse;
+    private final EntitySkeletonHorse horse;
     private boolean executed;
 
-    public EntityAIHalloweenKnights(EntityHorse horseIn) {
+    public EntityAIHalloweenKnights(EntitySkeletonHorse horseIn) {
         this.horse = horseIn;
     }
 
@@ -39,11 +38,6 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
         return !executed && horse.world.isAnyPlayerWithinRangeAt(horse.posX, horse.posY, horse.posZ, 10.0D);
     }
 
-    @Override
-    public boolean continueExecuting() {
-        return !executed;
-    }
-
     /**
      * Updates the task
      */
@@ -51,7 +45,6 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
     public void updateTask() {
         executed = true;
         DifficultyInstance difficultyinstance = horse.world.getDifficultyForLocation(new BlockPos(horse));
-        horse.setType(HorseType.SKELETON);
         horse.setHorseTamed(true);
         horse.setGrowingAge(0);
         horse.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true));
@@ -59,27 +52,26 @@ public class EntityAIHalloweenKnights extends EntityAIBase {
         entityskeleton.startRiding(horse);
 
         for (int i = 0; i < 3; ++i) {
-            EntityHorse entityhorse = createHorse(difficultyinstance);
-            EntitySkeleton skeleton = createSkeleton(difficultyinstance, entityhorse);
-            skeleton.startRiding(entityhorse);
-            entityhorse.addVelocity(horse.getRNG().nextGaussian() * 0.5D, 0.0D, horse.getRNG().nextGaussian() * 0.5D);
+            EntitySkeletonHorse createdHorse = createHorse(difficultyinstance);
+            EntitySkeleton skeleton = createSkeleton(difficultyinstance, createdHorse);
+            skeleton.startRiding(createdHorse);
+            createdHorse.addVelocity(horse.getRNG().nextGaussian() * 0.5D, 0.0D, horse.getRNG().nextGaussian() * 0.5D);
         }
     }
 
-    private EntityHorse createHorse(DifficultyInstance difficultyInstance) {
-        EntityHorse entityhorse = new EntityHorse(horse.world);
-        entityhorse.onInitialSpawn(difficultyInstance, null);
-        entityhorse.setPosition(horse.posX, horse.posY, horse.posZ);
-        entityhorse.hurtResistantTime = 60;
-        entityhorse.enablePersistence();
-        entityhorse.setType(HorseType.SKELETON);
-        entityhorse.setHorseTamed(true);
-        entityhorse.setGrowingAge(0);
-        entityhorse.world.spawnEntity(entityhorse);
-        return entityhorse;
+    private EntitySkeletonHorse createHorse(DifficultyInstance difficultyInstance) {
+        EntitySkeletonHorse horse = new EntitySkeletonHorse(this.horse.world);
+        horse.onInitialSpawn(difficultyInstance, null);
+        horse.setPosition(this.horse.posX, this.horse.posY, this.horse.posZ);
+        horse.hurtResistantTime = 60;
+        horse.enablePersistence();
+        horse.setHorseTamed(true);
+        horse.setGrowingAge(0);
+        horse.world.spawnEntity(horse);
+        return horse;
     }
 
-    private EntitySkeleton createSkeleton(DifficultyInstance difficultyInstance, EntityHorse entityHorse) {
+    private EntitySkeleton createSkeleton(DifficultyInstance difficultyInstance, EntitySkeletonHorse entityHorse) {
         EntitySkeleton skeleton = new EntitySkeleton(entityHorse.world);
         skeleton.onInitialSpawn(difficultyInstance, null);
         skeleton.setPosition(entityHorse.posX, entityHorse.posY, entityHorse.posZ);

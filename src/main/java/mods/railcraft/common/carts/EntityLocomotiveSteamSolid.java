@@ -18,6 +18,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -29,7 +30,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -96,7 +96,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
         if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
-            InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
+            InvTools.moveOneItem(invBurn, invWaterOutput, StandardStackFilters.FUEL.negate()); //TODO fix filter
             if (InvTools.hasEmptySlot(invStock)) {
                 ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
                 if (!InvTools.isEmpty(stack))

@@ -104,7 +104,7 @@ public class GuiDetectorItem extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GuiTools.drawCenteredString(fontRendererObj, detector.getPrimaryMode().toString(), 25);
+        GuiTools.drawCenteredString(fontRenderer, detector.getPrimaryMode().toString(), 25);
 
         if (detector.getPrimaryMode() != DetectorItem.PrimaryMode.FILTERED) {
             Color color = new Color(0, 0, 0, 80);
@@ -122,7 +122,7 @@ public class GuiDetectorItem extends TileGui {
             OpenGL.glEnable(GL11.GL_LIGHTING);
             OpenGL.glEnable(GL11.GL_DEPTH_TEST);
         } else
-            GuiTools.drawCenteredString(fontRendererObj, detector.getFilterMode().toString(), 45);
+            GuiTools.drawCenteredString(fontRenderer, detector.getFilterMode().toString(), 45);
     }
 
 }

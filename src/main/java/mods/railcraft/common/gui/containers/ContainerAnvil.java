@@ -23,6 +23,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -87,7 +88,7 @@ public class ContainerAnvil extends ContainerRepair {
             if (!InvTools.isEmpty(input2)) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
                     return;
-                isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
+                isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && ItemEnchantedBook.getEnchantments(input2).tagCount() > 0;
 
                 if (input1.isItemStackDamageable() && input1.getItem().getIsRepairable(input1original, input2)) {
                     int damageToRepair = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
@@ -147,7 +148,7 @@ public class ContainerAnvil extends ContainerRepair {
 
                             for (@Nullable Enchantment input1Enchantment : input1Enchantments.keySet()) {
                                 // Null check to prevent crash
-                                if (input1Enchantment != null && input1Enchantment != input2Enchantment && !(input2Enchantment.canApplyTogether(input1Enchantment) && input1Enchantment.canApplyTogether(input2Enchantment))) //Forge BugFix: Let Both enchantments veto being together
+                                if (input1Enchantment != null && input1Enchantment != input2Enchantment && !(input2Enchantment.isCompatibleWith(input1Enchantment) && input1Enchantment.isCompatibleWith(input2Enchantment))) //Forge BugFix: Let Both enchantments veto being together
                                 {
                                     canApplyEnchants = false;
                                     ++enchantCost;
@@ -290,7 +291,7 @@ public class ContainerAnvil extends ContainerRepair {
         }
 
         @Override
-        public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
+        public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
             if (!playerIn.capabilities.isCreativeMode) {
                 playerIn.addExperienceLevel(-repairContainer.maximumCost);
             }
@@ -332,6 +333,7 @@ public class ContainerAnvil extends ContainerRepair {
             } else if (!worldIn.isRemote) {
                 worldIn.playEvent(1030, blockPosIn, 0);
             }
+            return stack;
         }
 
     }

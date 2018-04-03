@@ -60,7 +60,7 @@ public class ContainerSteamOven extends RailcraftContainer {
 
         for (IContainerListener listener : listeners) {
             if (lastCookTime != cookTime) {
-                listener.sendProgressBarUpdate(this, 0, cookTime);
+                listener.sendWindowProperty(this, 0, cookTime);
             }
         }
 
@@ -70,7 +70,7 @@ public class ContainerSteamOven extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, tile.cookTime);
+        listener.sendWindowProperty(this, 0, tile.cookTime);
     }
 
     @Override

@@ -40,12 +40,12 @@ public class GuiCartWorldspike extends EntityGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String label = cartWorldspike.getName();
-        int sWidth = fontRendererObj.getStringWidth(label);
+        int sWidth = fontRenderer.getStringWidth(label);
         int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(label, sPos, 6, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel"), 85, 24, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining", timeFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
-        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(label, sPos, 6, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel"), 85, 24, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining", timeFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
+        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

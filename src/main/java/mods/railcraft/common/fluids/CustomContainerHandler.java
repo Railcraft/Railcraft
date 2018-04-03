@@ -25,7 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.RegistryDelegate;
+import net.minecraftforge.registries.IRegistryDelegate;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +35,7 @@ public final class CustomContainerHandler {
 
     public static final CustomContainerHandler INSTANCE = new CustomContainerHandler();
 
-    private final Table<RegistryDelegate<Item>, String, RegistryDelegate<Item>> containerTable = HashBasedTable.create();
+    private final Table<IRegistryDelegate<Item>, String, IRegistryDelegate<Item>> containerTable = HashBasedTable.create();
 
     private CustomContainerHandler() {
         containerTable.put(Items.GLASS_BOTTLE.delegate, "water", Items.POTIONITEM.delegate);
@@ -74,7 +74,7 @@ public final class CustomContainerHandler {
         FluidStack fluidStack = fluidBlock.drain(world, pos, false);
         if (fluidStack == null || fluidStack.amount != Fluid.BUCKET_VOLUME)
             return;
-        RegistryDelegate<Item> contained = containerTable.get(stack.getItem().delegate, fluidStack.getFluid().getName());
+        IRegistryDelegate<Item> contained = containerTable.get(stack.getItem().delegate, fluidStack.getFluid().getName());
         if (contained != null) {
             fluidBlock.drain(world, pos, true);
             if (!player.capabilities.isCreativeMode)
@@ -86,23 +86,23 @@ public final class CustomContainerHandler {
     @Nullable
     private static RayTraceResult trace(EntityLivingBase entity, double length) {
         Vec3d startPos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
-        Vec3d endPos = startPos.add(new Vec3d(entity.getLookVec().xCoord * length, entity.getLookVec().yCoord * length, entity.getLookVec().zCoord * length));
+        Vec3d endPos = startPos.add(new Vec3d(entity.getLookVec().x * length, entity.getLookVec().y * length, entity.getLookVec().z * length));
         return entity.world.rayTraceBlocks(startPos, endPos, true);
     }
 
     @SubscribeEvent
-    public void onAttachCapability(AttachCapabilitiesEvent.Item event) {
-        RegistryDelegate<Item> item = event.getObject().delegate;
+    public void onAttachCapability(AttachCapabilitiesEvent<ItemStack> event) {
+        IRegistryDelegate<Item> item = event.getObject().getItem().delegate;
         if (containerTable.containsRow(item)) {
-            event.addCapability(RailcraftConstantsAPI.locationOf("glass_bottle_empty_container"), new EmptyContainerCapabilityDispatcher(item, event.getItemStack()));
+            event.addCapability(RailcraftConstantsAPI.locationOf("glass_bottle_empty_container"), new EmptyContainerCapabilityDispatcher(item, event.getObject()));
         }
     }
 
     class EmptyContainerCapabilityDispatcher extends FluidBucketWrapper {
 
-        private final RegistryDelegate<Item> item;
+        private final IRegistryDelegate<Item> item;
 
-        public EmptyContainerCapabilityDispatcher(RegistryDelegate<Item> item, ItemStack container) {
+        EmptyContainerCapabilityDispatcher(IRegistryDelegate<Item> item, ItemStack container) {
             super(container);
             this.item = item;
         }
@@ -132,7 +132,7 @@ public final class CustomContainerHandler {
 
         @Override
         public int fill(FluidStack resource, boolean doFill) {
-            if (container.stackSize != 1 || resource == null || !canFillFluidType(resource)) {
+            if (container.getCount() != 1 || resource == null || !canFillFluidType(resource)) {
                 return 0;
             }
 

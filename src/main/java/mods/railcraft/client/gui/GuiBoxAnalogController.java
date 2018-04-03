@@ -119,7 +119,7 @@ public class GuiBoxAnalogController extends GuiBasic {
         int h = (height - ySize) / 2;
 
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-            GuiTextField textField = new GuiTextField(entry.getKey().ordinal(), fontRendererObj, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
+            GuiTextField textField = new GuiTextField(entry.getKey().ordinal(), fontRenderer, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
             textField.setMaxStringLength(37);
             textField.setText(rangeToString(entry.getValue()));
             textBox.put(entry.getKey(), textField);
@@ -137,7 +137,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     @Override
     protected void drawExtras(int x, int y, float f) {
         for (SignalAspect aspect : SignalAspect.VALUES) {
-            drawAlignedString(fontRendererObj, LocalizationPlugin.translate(aspect.getLocalizationTag()), 10, getYPosFromIndex(aspect.ordinal()) + 1, 50);
+            drawAlignedString(fontRenderer, LocalizationPlugin.translate(aspect.getLocalizationTag()), 10, getYPosFromIndex(aspect.ordinal()) + 1, 50);
         }
     }
 

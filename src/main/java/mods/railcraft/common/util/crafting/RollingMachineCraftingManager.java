@@ -16,7 +16,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;
@@ -27,14 +29,15 @@ import java.util.List;
 
 public class RollingMachineCraftingManager implements IRollingMachineCraftingManager {
 
-    private final List<IRecipe> recipes = new ArrayList<IRecipe>();
+    private final List<IRecipe> recipes = new ArrayList<>();
+    private static final ResourceLocation INVALID = new ResourceLocation("invalid", "invalid");
 
     public static IRollingMachineCraftingManager instance() {
         return RailcraftCraftingManager.rollingMachine;
     }
 
     public static void copyRecipesToWorkbench() {
-        CraftingManager.getInstance().getRecipeList().addAll(instance().getRecipeList());
+        ForgeRegistries.RECIPES.registerAll(instance().getRecipeList().toArray(new IRecipe[0]));
     }
 
     @Override
@@ -52,7 +55,7 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
             return;
         }
         if (processedRecipe.isOreRecipe) {
-            IRecipe recipe = new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
+            IRecipe recipe = new ShapedOreRecipe(INVALID, processedRecipe.result, processedRecipe.recipeArray);
             addRecipe(recipe);
         } else
             addRecipe(CraftingPlugin.makeVanillaShapedRecipe(processedRecipe.result, processedRecipe.recipeArray));
@@ -68,7 +71,7 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
             return;
         }
         if (processedRecipe.isOreRecipe) {
-            addRecipe(new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
+            addRecipe(new ShapelessOreRecipe(INVALID, processedRecipe.result, processedRecipe.recipeArray));
         } else
             addRecipe(CraftingPlugin.makeVanillaShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray));
     }
@@ -80,7 +83,7 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
                 return irecipe.getCraftingResult(inv);
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

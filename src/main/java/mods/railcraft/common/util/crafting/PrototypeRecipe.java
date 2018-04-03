@@ -15,9 +15,10 @@ import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
@@ -25,11 +26,15 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PrototypeRecipe implements IRecipe {
+public class PrototypeRecipe extends BaseRecipe {
     private static Predicate<ItemStack> PROTOTYPE_CONTAINER = StackFilters.of(IPrototypedItem.class);
 
+    public PrototypeRecipe() {
+        super("prototype");
+    }
+
     @Override
-    public boolean matches(InventoryCrafting grid, World world) {
+    public boolean matches(InventoryCrafting grid, @Nullable World world) {
         InventoryComposite inv = InventoryComposite.of(grid);
         int containerStacks = InvTools.countStacks(inv, PROTOTYPE_CONTAINER);
         if (containerStacks != 1)
@@ -57,8 +62,8 @@ public class PrototypeRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 2;
+    public boolean canFit(int width, int height) {
+        return width * height >= 2;
     }
 
     @Override
@@ -67,7 +72,7 @@ public class PrototypeRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (int i = 0; i < grid.length; ++i) {
@@ -79,6 +84,6 @@ public class PrototypeRecipe implements IRecipe {
             }
         }
 
-        return grid;
+        return NonNullList.from(ItemStack.EMPTY, grid);
     }
 }

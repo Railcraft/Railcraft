@@ -56,9 +56,9 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
-        listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        listener.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
+        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
+        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
     }
 
     @Override
@@ -67,13 +67,13 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
 
         for (IContainerListener crafter : listeners) {
             if (lastBurnTime != tile.boiler.burnTime)
-                crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+                crafter.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
 
             if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
-                crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+                crafter.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
             if (lastOutput != tile.currentOutput)
-                crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
+                crafter.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
         }
 
         this.lastBurnTime = tile.boiler.burnTime;

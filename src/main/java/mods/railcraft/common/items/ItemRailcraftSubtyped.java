@@ -17,7 +17,9 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -37,20 +39,18 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
         setMaxDamage(0);
     }
 
-    @Nullable
     @Override
     public Class<? extends IVariantEnum> getVariantEnum() {
         return variantClass;
     }
 
-    @Nullable
     @Override
     public IVariantEnum[] getVariants() {
         return variantValues;
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         IVariantEnum[] variants = getVariants();
         if (variants != null) {
             for (IVariantEnum variant : variants) {

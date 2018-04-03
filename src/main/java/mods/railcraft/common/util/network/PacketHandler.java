@@ -43,7 +43,7 @@ public class PacketHandler {
 
     @SubscribeEvent
     public void onPacket(ServerCustomPacketEvent event) {
-        EntityPlayerMP player = ((NetHandlerPlayServer) event.getHandler()).playerEntity;
+        EntityPlayerMP player = ((NetHandlerPlayServer) event.getHandler()).player;
         onPacketData(event.getPacket().payload(), player, player.getServer());
     }
 

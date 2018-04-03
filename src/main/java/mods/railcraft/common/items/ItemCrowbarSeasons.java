@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,7 +62,8 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (Game.isHost(world)) {
             incrementSeason(stack);
             SeasonPlugin.Season aura = getCurrentSeason(stack);
@@ -76,12 +78,12 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag adv) {
         SeasonPlugin.Season aura = getCurrentSeason(stack);
         String mode = LocalizationPlugin.translate("item.railcraft.tool.crowbar.seasons.tips.mode");
 
         list.add(String.format(mode, "\u00A75" + aura));
-        addToolTips(stack, player, list, adv);
+        addToolTips(stack, world, list, adv);
     }
 
 }

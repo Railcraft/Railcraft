@@ -16,7 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  *
  * Created by CovertJaguar on 3/14/2016.
  */
-public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
+public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRailcraftRegistryEntry<T> {
     T getObject();
 
     @Nullable
@@ -36,28 +36,24 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
         return getStack(1, variant);
     }
 
-    @Nullable
     default ItemStack getStack() {
         return getStack(1, null);
     }
 
-    @Nullable
     default ItemStack getStack(int qty) {
         return getStack(qty, null);
     }
 
-    @Nullable
     default ItemStack getStack(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }
 
-    @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         int meta;
         if (variant != null) {
             checkVariant(variant);
             if (!variant.isEnabled())
-                return null;
+                return ItemStack.EMPTY;
             meta = variant.ordinal();
         } else
             meta = 0;
@@ -93,7 +89,7 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     default void checkVariant(@Nullable IVariantEnum variant) {
-        Class clazz = variant == null ? null : variant.getClass();
+        Class<?> clazz = variant == null ? null : variant.getClass();
         if (clazz != null && clazz.isAnonymousClass())
             clazz = clazz.getEnclosingClass();
         if (getVariantEnum() != clazz)
@@ -115,7 +111,7 @@ public interface IRailcraftObject<T> extends IRailcraftRegistryEntry<T> {
     }
 
     default String getResourcePath() {
-        return ((IForgeRegistryEntry) getObject()).getRegistryName().getResourcePath();
+        return getRegistryName().getResourcePath();
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -46,8 +47,8 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+        super.onNeighborBlockChange(state, neighborBlock, pos);
         if (world.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos());

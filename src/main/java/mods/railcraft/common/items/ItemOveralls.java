@@ -14,12 +14,15 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -45,15 +48,15 @@ public class ItemOveralls extends ItemRailcraftArmor {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tips");
         if (tip != null)
             info.addAll(tip.convertToStrings());
     }
 
     @Override
-    public Object getRecipeObject(IVariantEnum meta) {
+    public Object getRecipeObject(@Nullable IVariantEnum meta) {
         return this;
     }
 

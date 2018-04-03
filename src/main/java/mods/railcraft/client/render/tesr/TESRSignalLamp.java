@@ -16,11 +16,11 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
+public final class TESRSignalLamp extends TESRSignals<TileSignalBase> {
 
     @Override
-    public void renderTileEntityAt(TileSignalBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        super.renderTileEntityAt(tile, x, y, z, partialTicks, destroyStage);
+    public void render(TileSignalBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        super.render(tile, x, y, z, partialTicks, destroyStage, alpha);
         EnumFacing side = tile.getFacing();
 
         SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();

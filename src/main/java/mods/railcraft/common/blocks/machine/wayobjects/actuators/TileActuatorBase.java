@@ -68,7 +68,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockAccess world, BlockPos pos) {
         return COLLISION_BOX;
     }
 
@@ -79,8 +79,8 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, neighborBlock, neighborPos);
         determineOrientation();
     }
 

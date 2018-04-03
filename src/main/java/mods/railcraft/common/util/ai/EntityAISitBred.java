@@ -45,7 +45,7 @@ public class EntityAISitBred extends EntityAISit {
                 return true;
 
             //noinspection ConstantConditions
-            if (owner != null && theEntity.getDistanceSqToEntity(owner) > 144.0D && ((EntityLivingBase) owner).getAITarget() != null)
+            if (owner != null && theEntity.getDistanceSq(owner) > 144.0D && ((EntityLivingBase) owner).getRevengeTarget() != null)
                 return false;
 
             return isSitting;

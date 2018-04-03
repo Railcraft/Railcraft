@@ -128,13 +128,13 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
                 int compValue = masterTileTankBase.getComparatorValue();
                 if (previousComparatorValue != compValue) {
                     previousComparatorValue = compValue;
-                    getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType());
+                    getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
                 }
             }
         }
 
         if (previousStructureValidity != isStructureValid())
-            getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType());
+            getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
         previousStructureValidity = isStructureValid();
     }
 

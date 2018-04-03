@@ -10,37 +10,31 @@
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.ThaumcraftMaterials;
-import thaumcraft.api.blocks.BlocksTC;
-import thaumcraft.api.items.ItemsTC;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ThaumcraftPlugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("Thaumcraft", ItemsTC.class, Mod.THAUMCRAFT::isLoaded, tag -> {
-        try {
-            return new ItemStack((Item) ItemsTC.class.getField(tag).get(null));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            if (Game.DEVELOPMENT_ENVIRONMENT)
-                throw new RuntimeException(e);
-            return null;
-        }
+    public static final ItemStackCache ITEMS = new ItemStackCache("Thaumcraft", Mod.THAUMCRAFT::isLoaded, tag -> {
+//        try {
+//            return nullnew ItemStack((Item) ItemsTC.class.getField(tag).get(null));
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            if (Game.DEVELOPMENT_ENVIRONMENT)
+//                throw new RuntimeException(e);
+//            return null;
+//        }
+        return null;
     });
-    public static final ItemStackCache BLOCKS = new ItemStackCache("Thaumcraft", BlocksTC.class, Mod.THAUMCRAFT::isLoaded, tag -> {
-        try {
-            return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            if (Game.DEVELOPMENT_ENVIRONMENT)
-                throw new RuntimeException(e);
-            return null;
-        }
+    public static final ItemStackCache BLOCKS = new ItemStackCache("Thaumcraft", Mod.THAUMCRAFT::isLoaded, tag -> {
+        return null;
+//        try {
+//            return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            if (Game.DEVELOPMENT_ENVIRONMENT)
+//                throw new RuntimeException(e);
+//            return null;
+//        }
     });
     public static final String RESEARCH_CATEGORY = "RAILCRAFT";
 //    private static Map<String, ResearchPage> researchPages = new HashMap<String, ResearchPage>();
@@ -287,21 +281,21 @@ public class ThaumcraftPlugin {
 //        ThaumcraftApi.registerObjectTag(brick.getStack(BrickVariant.ETCHED), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.DESIRE, 2));
 //    }
 
-    public static Item.ToolMaterial getThaumiumToolMaterial() {
-        try {
-            return ThaumcraftMaterials.TOOLMAT_THAUMIUM;
-        } catch (Throwable error) {
-            Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
-        }
-        return Item.ToolMaterial.IRON;
-    }
+//    public static Item.ToolMaterial getThaumiumToolMaterial() {
+//        try {
+//            return ThaumcraftMaterials.TOOLMAT_THAUMIUM;
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
+//        }
+//        return Item.ToolMaterial.IRON;
+//    }
 
-    public static Item.ToolMaterial getVoidmetalToolMaterial() {
-        try {
-            return ThaumcraftMaterials.TOOLMAT_VOID;
-        } catch (Throwable error) {
-            Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
-        }
-        return Item.ToolMaterial.IRON;
-    }
+//    public static Item.ToolMaterial getVoidmetalToolMaterial() {
+//        try {
+//            return ThaumcraftMaterials.TOOLMAT_VOID;
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
+//        }
+//        return Item.ToolMaterial.IRON;
+//    }
 }

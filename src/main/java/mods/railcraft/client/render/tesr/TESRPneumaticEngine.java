@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
+public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
     private static final float[] angleMap = new float[6];
     private static final ModelEngineFrame frame = new ModelEngineFrame();
@@ -50,14 +50,14 @@ public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
         RailcraftCustomItemRenderer.INSTANCE.registerItemStackHandler((stack) -> {
             if (stack.getItem() != type)
                 return false;
-            renderTileEntityAt(null, 0, 0, 0, 0, -1);
+            render(null, 0, 0, 0, 0, -1, 255);
             return true;
         });
 //        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     @Override
-    public void renderTileEntityAt(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         //TODO
         render(engine.getEnergyStage(), engine.getProgress(), engine.getOrientation(), x, y, z);
     }

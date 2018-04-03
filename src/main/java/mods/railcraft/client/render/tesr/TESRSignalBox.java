@@ -16,11 +16,11 @@ import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class TESRSignalBox extends TESRSignals<TileBoxBase> {
+public final class TESRSignalBox extends TESRSignals<TileBoxBase> {
 
     @Override
-    public void renderTileEntityAt(TileBoxBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
-        super.renderTileEntityAt(tile, x, y, z, partialTicks, destroyStage);
+    public void render(TileBoxBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        super.render(tile, x, y, z, partialTicks, destroyStage, alpha);
         // Aspect
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
             SignalAspect aspect = tile.getBoxSignalAspect(side).getDisplayAspect();

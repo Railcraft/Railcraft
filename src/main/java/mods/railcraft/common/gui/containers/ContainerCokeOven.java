@@ -62,11 +62,11 @@ public class ContainerCokeOven extends RailcraftContainer {
 
             int cookTime = tile.getCookTime();
             if (lastCookTime != cookTime)
-                listener.sendProgressBarUpdate(this, 10, cookTime);
+                listener.sendWindowProperty(this, 10, cookTime);
 
             int cookTimeTotal = tile.getTotalCookTime();
             if (lastCookTimeTotal != cookTimeTotal)
-                listener.sendProgressBarUpdate(this, 11, cookTimeTotal);
+                listener.sendWindowProperty(this, 11, cookTimeTotal);
         }
 
         lastCookTime = tile.getCookTime();
@@ -77,8 +77,8 @@ public class ContainerCokeOven extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 10, tile.getCookTime());
-        listener.sendProgressBarUpdate(this, 11, tile.getTotalCookTime());
+        listener.sendWindowProperty(this, 10, tile.getCookTime());
+        listener.sendWindowProperty(this, 11, tile.getTotalCookTime());
     }
 
     @Override

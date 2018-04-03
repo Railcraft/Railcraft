@@ -18,6 +18,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +71,8 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         if (!TrackTools.isRailBlockAt(world, pos))
             return EnumActionResult.FAIL;
         if (Game.isHost(world)) {
@@ -98,9 +100,9 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
-        addToolTips(stack, player, info, adv);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
+        addToolTips(stack, world, info, adv);
         ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         if (!InvTools.isEmpty(filter)) {
             info.add(TextFormatting.BLUE + LocalizationPlugin.translate("gui.railcraft.filter") + ": " + filter.getDisplayName());

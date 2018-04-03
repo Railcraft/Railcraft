@@ -29,7 +29,7 @@ public class GuiManipulatorCartItem extends GuiManipulatorCart {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(FILTER_LABEL, 18, 16, 0x404040);
-        fontRendererObj.drawString(BUFFER_LABEL, 126, 16, 0x404040);
+        fontRenderer.drawString(FILTER_LABEL, 18, 16, 0x404040);
+        fontRenderer.drawString(BUFFER_LABEL, 126, 16, 0x404040);
     }
 }

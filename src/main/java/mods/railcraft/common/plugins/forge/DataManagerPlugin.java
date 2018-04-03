@@ -36,6 +36,11 @@ public class DataManagerPlugin {
     public abstract static class DataSerializerIO<T> implements DataSerializer<T> {
 
         @Override
+        public T copyValue(T value) {
+            return value;
+        }
+
+        @Override
         public DataParameter<T> createKey(int id) {
             return new DataParameter<>(id, this);
         }
@@ -66,6 +71,11 @@ public class DataManagerPlugin {
                     throw new RuntimeException(e);
             }
             return OptionalFluidStack.empty();
+        }
+
+        @Override
+        public OptionalFluidStack copyValue(OptionalFluidStack value) {
+            return value.copy();
         }
     };
 

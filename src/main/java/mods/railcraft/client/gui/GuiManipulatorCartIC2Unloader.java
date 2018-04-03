@@ -58,12 +58,12 @@ public class GuiManipulatorCartIC2Unloader extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(Integer.toString((int) tile.getEnergy()), 30, 55, 0x404040);
+        fontRenderer.drawString(Integer.toString((int) tile.getEnergy()), 30, 55, 0x404040);
 
         String capacity = "/" + tile.getCapacity();
-        fontRendererObj.drawString(capacity, 28, 65, 0x404040);
+        fontRenderer.drawString(capacity, 28, 65, 0x404040);
 
-        fontRendererObj.drawString(LocalizationPlugin.translate("gui.railcraft.ic2.energy.rate", tile.getTransferRate()), 90, 67, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.ic2.energy.rate", tile.getTransferRate()), 90, 67, 0x404040);
     }
 
     @Override

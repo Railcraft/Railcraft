@@ -25,7 +25,6 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
 
     public static int HEAT = 100;
 
-    @Nullable
     public static ItemStack getItemCharged() {
         return RailcraftItems.FIRESTONE_CRACKED.getStack();
     }

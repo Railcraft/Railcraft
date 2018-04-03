@@ -16,25 +16,26 @@ import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
-import ic2.api.recipe.IMachineRecipeManager;
 import ic2.api.recipe.IRecipeInput;
-import ic2.api.recipe.RecipeOutput;
+import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Iterator;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
@@ -44,7 +45,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
+    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
         String[] tokens = s.split("#");
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
@@ -168,10 +169,10 @@ public class IC2Plugin {
 
     public static void removeMaceratorRecipes(ItemStack... items) {
         try {
-            Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
+            Iterator<? extends MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
-                IMachineRecipeManager.RecipeIoContainer recipe = it.next();
-                if (doesRecipeRequire(recipe.input, items) || doesRecipeProduce(recipe.output, items))
+                MachineRecipe<? extends IRecipeInput, Collection<ItemStack>> recipe = it.next();
+                if (doesRecipeRequire(recipe.getInput(), items) || doesRecipeProduce(recipe.getOutput(), items))
                     it.remove();
             }
         } catch (Throwable error) {
@@ -179,11 +180,11 @@ public class IC2Plugin {
         }
     }
 
-    public static void addCanningRecipe(ItemStack container, @Nullable ItemStack input, @Nullable ItemStack output) {
+    public static void addCanningRecipe(ItemStack container, ItemStack input, ItemStack output) {
         if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         try {
-            Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(container), Recipes.inputFactory.forStack(input), output);
+            Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(container), Recipes.inputFactory.forStack(input), output, true);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }
@@ -197,8 +198,8 @@ public class IC2Plugin {
         return false;
     }
 
-    private static boolean doesRecipeProduce(RecipeOutput recipe, ItemStack... items) {
-        for (ItemStack output : recipe.items) {
+    private static boolean doesRecipeProduce(Collection<ItemStack> recipe, ItemStack... items) {
+        for (ItemStack output : recipe) {
             if (InvTools.isItemEqual(output, items))
                 return true;
         }
@@ -207,10 +208,10 @@ public class IC2Plugin {
 
     public static void removeMaceratorDustRecipes(ItemStack... items) {
         try {
-            Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
+            Iterator<? extends MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
-                IMachineRecipeManager.RecipeIoContainer recipe = it.next();
-                if (isInputBlock(recipe.input) && doesRecipeProduce(recipe.output, items))
+                MachineRecipe<? extends IRecipeInput, Collection<ItemStack>> recipe = it.next();
+                if (isInputBlock(recipe.getInput()) && doesRecipeProduce(recipe.getOutput(), items))
                     it.remove();
             }
         } catch (Throwable error) {
@@ -220,14 +221,14 @@ public class IC2Plugin {
 
     private static boolean isInputBlock(IRecipeInput input) {
         for (ItemStack stack : input.getInputs()) {
-            if (!InvTools.isEmpty(stack) && GameData.getBlockItemMap().containsValue(stack.getItem()))
+            if (!InvTools.isEmpty(stack) && Block.getBlockFromItem(stack.getItem()) != Blocks.AIR)
                 return true;
         }
         return false;
     }
 
     public static void nerfSyntheticCoal() {
-        for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
+        for (IRecipe recipe : CraftingManager.REGISTRY) {
             try {
                 ItemStack output = recipe.getRecipeOutput();
                 if (!InvTools.isEmpty(output))

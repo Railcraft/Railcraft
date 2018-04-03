@@ -173,9 +173,9 @@ public class CartTools {
         for (Entity entity : passengers) {
             if (entity instanceof EntityPlayerMP) {
                 EntityPlayerMP player = ((EntityPlayerMP) entity);
-                player.setPositionAndUpdate(resultingPosition.xCoord, resultingPosition.yCoord, resultingPosition.zCoord);
+                player.setPositionAndUpdate(resultingPosition.x, resultingPosition.y, resultingPosition.z);
             } else
-                entity.setLocationAndAngles(resultingPosition.xCoord, resultingPosition.yCoord, resultingPosition.zCoord, entity.rotationYaw, entity.rotationPitch);
+                entity.setLocationAndAngles(resultingPosition.x, resultingPosition.y, resultingPosition.z, entity.rotationYaw, entity.rotationPitch);
         }
     }
 

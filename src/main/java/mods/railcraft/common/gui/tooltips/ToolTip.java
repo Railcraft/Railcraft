@@ -27,7 +27,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     private static final Splitter lineSplitter = Splitter.on("\n").trimResults();
     private static final Splitter keyValueSplitter = Splitter.on('=').trimResults();
-    private final List<ToolTipLine> delegate = new ArrayList<ToolTipLine>();
+    private final List<ToolTipLine> delegate = new ArrayList<>();
     private final long delay;
     private long mouseOverStart;
 

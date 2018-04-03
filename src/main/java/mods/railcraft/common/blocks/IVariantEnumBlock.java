@@ -96,12 +96,10 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
         return IVariantEnum.super.isDeprecated();
     }
 
-    @Nullable
     default ItemStack getStack() {
         return getStack(1);
     }
 
-    @Nullable
     default ItemStack getStack(int qty) {
         Block block = block();
         if (block == null)

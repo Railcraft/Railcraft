@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
+@SuppressWarnings("unchecked")
 public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiButton {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
@@ -43,22 +44,22 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
 
     public T setClickConsumer(Consumer<T> clickConsumer) {
         this.clickConsumer = clickConsumer;
-        return getThis();
+        return (T) this;
     }
 
     public void consumeClick() {
         if (clickConsumer != null)
-            clickConsumer.accept(getThis());
+            clickConsumer.accept((T) this);
     }
 
     public T setStatusUpdater(Consumer<T> statusUpdater) {
         this.statusUpdater = statusUpdater;
-        return getThis();
+        return (T) this;
     }
 
     public void updateStatus() {
         if (statusUpdater != null)
-            statusUpdater.accept(getThis());
+            statusUpdater.accept((T) this);
     }
 
     public int getWidth() {
@@ -79,7 +80,7 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
     }
 
     public boolean isMouseOverButton(int mouseX, int mouseY) {
-        return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + getHeight();
+        return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + getHeight();
     }
 
     protected void bindButtonTextures(Minecraft minecraft) {
@@ -87,10 +88,10 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
     }
 
     @Override
-    public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
+    public void drawButton(Minecraft minecraft, int mouseX, int mouseY, float partialTick) {
         if (!visible)
             return;
-        FontRenderer fontrenderer = minecraft.fontRendererObj;
+        FontRenderer fontrenderer = minecraft.fontRenderer;
         bindButtonTextures(minecraft);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         int xOffset = texture.getX();
@@ -99,10 +100,10 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
         int w = texture.getWidth();
         boolean mouseOver = isMouseOverButton(mouseX, mouseY);
         int hoverState = getHoverState(mouseOver);
-        drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, width / 2, h);
-        drawTexturedModalRect(xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+        drawTexturedModalRect(x, y, xOffset, yOffset + hoverState * h, width / 2, h);
+        drawTexturedModalRect(x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
         mouseDragged(minecraft, mouseX, mouseY);
-        drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, getTextColor(mouseOver));
+        drawCenteredString(fontrenderer, displayString, x + width / 2, y + (h - 8) / 2, getTextColor(mouseOver));
     }
 
     @Nullable

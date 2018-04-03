@@ -36,7 +36,7 @@ public class CartContentRenderer<T extends EntityMinecart> {
             GlStateManager.pushMatrix();
             renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
             OpenGL.glTranslatef(-0.5F, (float) (blockOffset - 8) / 16.0F, 0.5F);
-            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(blockState, cart.getBrightness(light));
+            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(blockState, cart.getBrightness());
             GlStateManager.popMatrix();
             renderer.bindTex(cart);
             return;

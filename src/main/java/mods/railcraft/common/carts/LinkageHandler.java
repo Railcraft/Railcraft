@@ -97,7 +97,7 @@ public class LinkageHandler {
         }
         cart1.getEntityData().setShort(timer, (short) 0);
 
-        double dist = cart1.getDistanceToEntity(cart2);
+        double dist = cart1.getDistance(cart2);
         if (dist > MAX_DISTANCE) {
             LinkageManager.instance().breakLink(cart1, cart2);
             LinkageManager.printDebug("Reason For Broken Link: Max distance exceeded.");
@@ -264,7 +264,7 @@ public class LinkageHandler {
 //        double optimalDist = getOptimalDistance(current, linked);
 //        optimalDist *= optimalDist;
 //
-//        double currentDistance = linked.getDistanceSqToEntity(current);
+//        double currentDistance = linked.getDistanceSq(current);
 //
 //        // Search the history for the point closest to the optimal distance.
 //        // There may be some issues with it choosing the wrong side of the cart.
@@ -284,7 +284,7 @@ public class LinkageHandler {
 //
 //        // If we found a point closer to our desired distance, move us there
 //        if (closestPoint != null)
-//            current.setPosition(closestPoint.xCoord, closestPoint.yCoord, closestPoint.zCoord);
+//            current.setPosition(closestPoint.x, closestPoint.y, closestPoint.z);
 //    }
 
 //    /**

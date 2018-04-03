@@ -78,7 +78,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
-        setSize(item.getEntityItem(), 1);
+        setSize(item.getItem(), 1);
         item.hoverStart = 0.0F;
 
         float scale = 1.2F;
@@ -105,10 +105,10 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
     private void renderItem(EntityItem item) {
 //        RenderItem.renderInFrame = true;
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-        renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+        renderManager.renderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
         if (!renderManager.options.fancyGraphics) {
             OpenGL.glRotatef(180, 0, 1, 0);
-            renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+            renderManager.renderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
             OpenGL.glRotatef(-180, 0, 1, 0);
         }
 //        RenderItem.renderInFrame = false;

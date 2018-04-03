@@ -59,12 +59,12 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     public static boolean isValidBallast(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
-        Block block = InvTools.getBlockFromStack(stack);
-        if (block == null)
+        IBlockState state = InvTools.getBlockStateFromStack(stack);
+        if (state == null)
             return false;
-        if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(block))
+        if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(state.getBlock()))
             return false;
-        if (block.causesSuffocation())
+        if (state.causesSuffocation())
             return true;
         return stack.getItem() instanceof ItemPost;
     }
@@ -213,7 +213,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             GuiHandler.openGui(EnumGui.CART_UNDERCUTTER, player, world, this);
         return true;

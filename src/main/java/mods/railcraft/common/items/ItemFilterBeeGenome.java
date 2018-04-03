@@ -25,6 +25,7 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -93,7 +94,8 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "filter");
         if (nbt != null) {
             try {
@@ -120,7 +122,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, player, info, adv);
         try {
             BeeFilter beeFilter = getBeeFilter(stack);
@@ -136,7 +138,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
                 if (beeFilter.active != null) {
                     IAllele allele = beeFilter.getActiveChromosome(beeFilter.active);
                     if (allele != null)
-                        active = StringUtils.capitalize(allele.getName());
+                        active = StringUtils.capitalize(allele.getAlleleName());
                     else
                         active = wildcard();
                 } else

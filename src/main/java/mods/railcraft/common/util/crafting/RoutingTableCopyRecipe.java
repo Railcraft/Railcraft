@@ -14,7 +14,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import java.util.stream.IntStream;
@@ -25,7 +25,11 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RoutingTableCopyRecipe implements IRecipe {
+public class RoutingTableCopyRecipe extends BaseRecipe {
+
+    public RoutingTableCopyRecipe() {
+        super("routing_table_copy");
+    }
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
@@ -65,17 +69,17 @@ public class RoutingTableCopyRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 2;
+    public boolean canFit(int width, int height) {
+        return width * height >= 2;
     }
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         return CraftingPlugin.emptyContainers(inv);
     }
 }

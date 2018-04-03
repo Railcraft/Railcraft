@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.models.resource;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import mods.railcraft.api.tracks.TrackKit;
@@ -23,13 +22,13 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.model.IModelState;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted.MODEL_PREFIX;
 
@@ -38,7 +37,7 @@ import static mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted.M
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class OutfittedTrackItemModel implements IRetexturableModel {
+public class OutfittedTrackItemModel implements IModel {
     private final ItemLayerModel model;
 
     public OutfittedTrackItemModel(ImmutableList<ResourceLocation> textures) {
@@ -65,7 +64,6 @@ public class OutfittedTrackItemModel implements IRetexturableModel {
         return model.retexture(textures);
     }
 
-    @SuppressWarnings("Guava")
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         return model.bake(state, format, bakedTextureGetter);

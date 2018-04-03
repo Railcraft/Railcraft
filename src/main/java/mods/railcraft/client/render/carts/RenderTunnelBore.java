@@ -84,7 +84,7 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
             angle = Math.copySign(angle, bore.getRollingDirection());
             OpenGL.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
-        float light = bore.getBrightness(partialTicks);
+        float light = bore.getBrightness();
         light = light + ((1.0f - light) * 0.4f);
 
 //        boolean ghost = SeasonPlugin.isGhostTrain(bore);

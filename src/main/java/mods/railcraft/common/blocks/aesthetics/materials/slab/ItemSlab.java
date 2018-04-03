@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -52,7 +53,8 @@ public class ItemSlab extends ItemMaterial {
      */
     @Nonnull
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, @Nonnull EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
         if (isEmpty(stack)) {
             return EnumActionResult.PASS;
         }
@@ -71,7 +73,7 @@ public class ItemSlab extends ItemMaterial {
                 return EnumActionResult.SUCCESS;
             }
 
-            return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+            return super.onItemUse(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 
         }
     }
@@ -96,11 +98,12 @@ public class ItemSlab extends ItemMaterial {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         AxisAlignedBB box = state.getCollisionBoundingBox(world, pos);
         if ((box == null || world.checkNoEntityCollision(box)) && slab.addSlab(getMat(stack))) {
+            SoundType type = block.getSoundType(state, world, pos, null);
             SoundHelper.playBlockSound(world, pos,
-                    block.getSoundType().getPlaceSound(),
+                    type.getPlaceSound(),
                     SoundCategory.BLOCKS,
-                    (block.getSoundType().getVolume() + 1.0F) / 2.0F,
-                    block.getSoundType().getPitch() * 0.8F, state);
+                    (type.getVolume() + 1.0F) / 2.0F,
+                    type.getPitch() * 0.8F, state);
             dec(stack);
         }
     }

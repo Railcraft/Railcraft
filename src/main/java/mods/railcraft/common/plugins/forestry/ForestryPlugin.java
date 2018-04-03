@@ -30,6 +30,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
@@ -63,7 +64,7 @@ public class ForestryPlugin {
     public static ItemStack getItem(String tag) {
         if (!Mod.FORESTRY.isLoaded())
             return InvTools.emptyStack();
-        Item item = GameRegistry.findItem("forestry", tag);
+        Item item = Item.REGISTRY.getObject(new ResourceLocation(Mod.FORESTRY.modId, tag));
         if (item == null)
             return InvTools.emptyStack();
         return new ItemStack(item, 1);

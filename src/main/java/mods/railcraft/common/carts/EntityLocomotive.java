@@ -188,7 +188,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     protected abstract ItemStack getCartItemBase();
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (Game.isHost(world)) {
             if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemWhistleTuner) {
                 if (whistleDelay <= 0) {

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,11 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ */
 
 package mods.railcraft.client.render.tesr;
 
+import com.google.common.base.Strings;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
@@ -22,10 +23,10 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESREmblemPost extends TileEntitySpecialRenderer<TilePostEmblem> {
+public final class TESREmblemPost extends TileEntitySpecialRenderer<TilePostEmblem> {
     @Override
-    public void renderTileEntityAt(TilePostEmblem post, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (post.getEmblem() == null || post.getEmblem().equals(""))
+    public void render(TilePostEmblem post, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        if (Strings.isNullOrEmpty(post.getEmblem()))
             return;
 
         OpenGL.glPushMatrix();

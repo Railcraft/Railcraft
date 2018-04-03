@@ -70,12 +70,12 @@ public class AABBFactory {
     }
 
     public AABBFactory setBoundsToPoint(Vec3d vector) {
-        minX = vector.xCoord;
-        minY = vector.yCoord;
-        minZ = vector.zCoord;
-        maxX = vector.xCoord;
-        maxY = vector.yCoord;
-        maxZ = vector.zCoord;
+        minX = vector.x;
+        minY = vector.y;
+        minZ = vector.z;
+        maxX = vector.x;
+        maxY = vector.y;
+        maxZ = vector.z;
         return this;
     }
 
@@ -188,7 +188,7 @@ public class AABBFactory {
     }
 
     public AABBFactory expandToCoordinate(Vec3d point) {
-        return expandToCoordinate(point.xCoord, point.yCoord, point.zCoord);
+        return expandToCoordinate(point.x, point.y, point.z);
     }
 
     public AABBFactory expandToCoordinate(BlockPos point) {

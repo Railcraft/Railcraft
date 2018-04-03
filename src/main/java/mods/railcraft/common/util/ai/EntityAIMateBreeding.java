@@ -18,6 +18,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -95,21 +96,13 @@ public class EntityAIMateBreeding extends EntityAIBase {
             return false;
         }
 
-        List nearbyEntities = theAnimal.world.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
+        List<EntityAnimal> nearbyEntities = theAnimal.world.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
         if (nearbyEntities.size() > MAX_ANIMALS) {
             return false;
         }
 
         targetMate = getNearbyMate();
         return targetMate != null;
-    }
-
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
-    @Override
-    public boolean continueExecuting() {
-        return targetMate.isEntityAlive() && targetMate.isInLove() && spawnBabyDelay < 60;
     }
 
     /**
@@ -149,10 +142,11 @@ public class EntityAIMateBreeding extends EntityAIBase {
      * Loops through nearby animals and finds another animal of the same type that can be mated with. Returns the first
      * valid mate found.
      */
+    @Nullable
     private EntityAnimal getNearbyMate() {
         float var1 = 8.0F;
-        List var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().expand((double) var1, (double) var1, (double) var1));
-        Iterator entity = var2.iterator();
+        List<EntityAnimal> var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().expand((double) var1, (double) var1, (double) var1));
+        Iterator<EntityAnimal> entity = var2.iterator();
         EntityAnimal target;
 
         do {
@@ -160,7 +154,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
                 return null;
             }
 
-            target = (EntityAnimal) entity.next();
+            target = entity.next();
         } while (!canMateWith(theAnimal, target));
 
         return target;

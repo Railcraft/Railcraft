@@ -49,7 +49,7 @@ public class GuiManipulatorCart extends TileGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         if (((ContainerManipulatorCart) container).hasCartFilter)
-            fontRendererObj.drawString(CART_FILTER_LABEL, 75, 16, 0x404040);
+            fontRenderer.drawString(CART_FILTER_LABEL, 75, 16, 0x404040);
     }
 
     @Override

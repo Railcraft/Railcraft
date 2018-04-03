@@ -24,6 +24,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -138,7 +139,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         String contentString;
         EnumMap<Contents, NBTTagCompound> contents = getContents(stack);
         if (contents.isEmpty()) {
@@ -155,11 +156,12 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         PasteMode pasteMode = getPasteMode(stack);
         info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.mode", TextFormatting.DARK_PURPLE + pasteMode.toString()));
 
-        super.addInformation(stack, player, info, adv);
+        super.addInformation(stack, world, info, adv);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if (player.isSneaking()) {
             InvToolsAPI.clearItemDataRailcraft(stack, "contents");
         } else {
@@ -171,9 +173,10 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (Game.isClient(world))
             return EnumActionResult.SUCCESS;
+        ItemStack stack = player.getHeldItem(hand);
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null) {
             if (player.isSneaking()) // COPY

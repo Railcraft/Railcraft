@@ -165,7 +165,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 
@@ -216,8 +216,8 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-        super.neighborChanged(state, worldIn, pos, neighborBlock);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
+        super.neighborChanged(state, worldIn, pos, neighborBlock, neighborPos);
         boolean powered = getPowered(state);
         if (powered != isPowered(worldIn, pos, state))
             WorldPlugin.setBlockState(worldIn, pos, state.withProperty(POWERED, !powered));

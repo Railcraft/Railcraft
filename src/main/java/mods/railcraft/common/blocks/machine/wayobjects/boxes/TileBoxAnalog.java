@@ -25,6 +25,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,8 +80,8 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(state, neighborBlock);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos pos) {
+        super.onNeighborBlockChange(state, neighborBlock, pos);
         if (Game.isClient(getWorld()))
             return;
         int s = getPowerLevel();

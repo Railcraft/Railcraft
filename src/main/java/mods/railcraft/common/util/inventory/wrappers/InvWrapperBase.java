@@ -150,5 +150,10 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject, II
     public Iterator<IInventoryObject> iterator() {
         return Iterators.singletonIterator(this);
     }
+
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
 }
 

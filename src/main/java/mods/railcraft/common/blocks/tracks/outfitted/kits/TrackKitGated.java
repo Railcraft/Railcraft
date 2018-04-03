@@ -22,7 +22,6 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -60,8 +59,8 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (!super.blockActivated(player, hand, heldItem))
+    public boolean blockActivated(EntityPlayer player, EnumHand hand) {
+        if (!super.blockActivated(player, hand))
             setOpen(!open);
         return true;
     }

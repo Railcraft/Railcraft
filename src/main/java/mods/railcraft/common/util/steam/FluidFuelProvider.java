@@ -28,7 +28,7 @@ public class FluidFuelProvider implements IFuelProvider {
 
     @Override
     public double getHeatStep() {
-        return Steam.HEAT_STEP;
+        return SteamConstants.HEAT_STEP;
     }
 
     @Override

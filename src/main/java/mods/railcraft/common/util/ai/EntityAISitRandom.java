@@ -40,14 +40,6 @@ public class EntityAISitRandom extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
-    @Override
-    public boolean continueExecuting() {
-        return currentTick <= maxSittingTicks && !theAnimal.isInLove();
-    }
-
-    /**
      * Execute a one shot task or start executing a continuous task
      */
     @Override

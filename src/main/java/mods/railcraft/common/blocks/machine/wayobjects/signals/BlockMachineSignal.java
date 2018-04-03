@@ -139,7 +139,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getBoundingBox(state, world, pos);
     }
 

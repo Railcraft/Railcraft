@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import joptsimple.internal.Objects;
 import mods.railcraft.api.crafting.ICokeOvenCraftingManager;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -22,9 +21,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
 
-    private final List<CokeOvenRecipe> recipes = new ArrayList<CokeOvenRecipe>();
+    private final List<CokeOvenRecipe> recipes = new ArrayList<>();
 
     public static ICokeOvenCraftingManager getInstance() {
         return RailcraftCraftingManager.cokeOven;
@@ -91,7 +92,7 @@ public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
 
     @Override
     public void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, FluidStack fluidOutput, int cookTime) {
-        Objects.ensureNotNull(input);
+        checkNotNull(input);
         recipes.add(new CokeOvenRecipe(input, matchDamage, matchNBT, output, fluidOutput, cookTime));
 
 //        Game.log(Level.DEBUG, "Adding Coke Oven recipe: {0}, {1}, {2}", input.getItem().getClass().getName(), input, input.getItemDamage());

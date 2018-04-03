@@ -10,15 +10,13 @@
 
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerProvider;
+import buildcraft.api.statements.*;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.single.TileEngine;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -32,6 +30,10 @@ public class TriggerProvider implements ITriggerProvider {
 
     @Override
     public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+    }
+
+    @Override
+    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
     }
 
     @Override

@@ -21,8 +21,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
-import java.lang.invoke.MethodHandles;
-
 public final class EntityCartRF extends CartBase {
     private static final DataParameter<Integer> RF = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final int RF_CAP = 2000000;

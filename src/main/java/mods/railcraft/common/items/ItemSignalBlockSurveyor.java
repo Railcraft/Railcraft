@@ -54,8 +54,9 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
     //TODO: Add chat name highlighting formatting styles
     //TODO: This function could probably be picked apart and pulled into the super class, but meh...
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 //        System.out.println("click");
+        ItemStack stack = playerIn.getHeldItem(hand);
         if (actionCleanPairing(stack, playerIn, worldIn, ISignalTileBlock.class, ISignalTileBlock::getSignalBlock)) {
             return EnumActionResult.SUCCESS;
         }

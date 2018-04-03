@@ -70,12 +70,12 @@ public class RailcraftDamageSource extends DamageSource {
         public void modifyDrops(LivingDropsEvent event) {
             if (event.getSource() == STEAM)
                 for (EntityItem entityItem : event.getDrops()) {
-                    ItemStack drop = entityItem.getEntityItem();
+                    ItemStack drop = entityItem.getItem();
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drop);
                     if (!InvTools.isEmpty(cooked) && MiscTools.RANDOM.nextDouble() < 0.5) {
                         cooked = cooked.copy();
                         setSize(cooked, sizeOf(drop));
-                        entityItem.setEntityItemStack(cooked);
+                        entityItem.setItem(cooked);
                     }
                 }
         }

@@ -72,13 +72,13 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         Entity entity = event.getTarget();
 
         ItemStack stack = event.getItemStack();
-        if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
+        if (stack.getItem() instanceof ItemMagnifyingGlass)
             thePlayer.swingArm(event.getHand());
 
         if (Game.isClient(thePlayer.world))
             return;
 
-        if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
+        if (stack.getItem() instanceof ItemMagnifyingGlass)
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
@@ -87,7 +87,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
             return EnumActionResult.PASS;
         TileEntity t = WorldPlugin.getBlockTile(world, pos);

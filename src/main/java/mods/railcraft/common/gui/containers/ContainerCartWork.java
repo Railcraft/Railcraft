@@ -56,7 +56,7 @@ public final class ContainerCartWork extends RailcraftContainer {
      */
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory) {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, cart.world));
+        craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftMatrix, cart.world));
     }
 
     /**

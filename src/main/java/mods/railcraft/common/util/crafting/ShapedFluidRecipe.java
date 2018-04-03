@@ -4,11 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
@@ -18,15 +17,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-import static mods.railcraft.common.util.inventory.InvTools.makeSafe;
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * A version of {@link net.minecraftforge.oredict.ShapedOreRecipe shaped ore recipe}
  * that supports fluid.
  */
-public class ShapedFluidRecipe implements IRecipe {
+//TODO
+@Deprecated
+public class ShapedFluidRecipe extends BaseRecipe {
     //Added in for future ease of change, but hard coded for now.
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
@@ -39,6 +38,7 @@ public class ShapedFluidRecipe implements IRecipe {
     protected boolean mirrored = true;
 
     public ShapedFluidRecipe(ItemStack result, Object... recipe) {
+        super("aaaaaaa");
         output = result.copy();
 
         StringBuilder sb = new StringBuilder();
@@ -123,12 +123,9 @@ public class ShapedFluidRecipe implements IRecipe {
         return output.copy();
     }
 
-    /**
-     * Returns the size of the recipe area
-     */
     @Override
-    public int getRecipeSize() {
-        return input.length;
+    public boolean canFit(int width, int height) {
+        return width * height >= input.length;
     }
 
     @Override
@@ -203,14 +200,6 @@ public class ShapedFluidRecipe implements IRecipe {
                             return false;
                         }
                         drains[pos] = ((FluidStack) target).amount;
-                    } else if (toCheck.getItem() instanceof IFluidContainerItem) {
-                        // legacy
-                        IFluidContainerItem handler = (IFluidContainerItem) toCheck.getItem();
-                        FluidStack fluidStack = handler.getFluid(toCheck);
-                        if (fluidStack == null || fluidStack.getFluid() != ((FluidStack) target).getFluid() || fluidStack.amount < ((FluidStack) target).amount) {
-                            return false;
-                        }
-                        drains[pos] = -((FluidStack) target).amount;
                     } else {
                         return false;
                     }
@@ -240,8 +229,7 @@ public class ShapedFluidRecipe implements IRecipe {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
         for (int i = 0; i < ret.length; i++) {
             if (drains[i] != 0) {
@@ -249,18 +237,13 @@ public class ShapedFluidRecipe implements IRecipe {
                 if (isEmpty(ret[i]))
                     continue;
                 ret[i] = setSize(ret[i].copy(), 1);
-                if (drains[i] > 0) {
-                    ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).drain(drains[i], true);
-                } else {
-                    IFluidContainerItem fluidContainerItem = (IFluidContainerItem) ret[i].getItem();
-                    fluidContainerItem.drain(ret[i], -drains[i], true);
-                }
+                ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).drain(drains[i], true);
                 ret[i] = makeSafe(ret[i]);
             } else {
                 ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
             }
         }
-        return ret;
+        return NonNullList.from(ItemStack.EMPTY, ret);
     }
 
     public int getWidth() {

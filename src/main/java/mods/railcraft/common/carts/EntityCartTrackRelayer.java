@@ -106,7 +106,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             GuiHandler.openGui(EnumGui.CART_TRACK_RELAYER, player, world, this);
         return true;

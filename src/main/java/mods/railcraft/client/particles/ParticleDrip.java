@@ -82,7 +82,7 @@ public class ParticleDrip extends ParticleBase {
             setExpired();
         this.particleMaxAge--;
 
-        if (isCollided) {
+        if (onGround) {
             setParticleTextureIndex(114);
 
             this.motionX *= 0.699999988079071D;

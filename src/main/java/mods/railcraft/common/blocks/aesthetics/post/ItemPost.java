@@ -14,12 +14,15 @@ import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -57,7 +60,7 @@ public class ItemPost extends ItemBlockRailcraft {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         if (stack.getItemDamage() == EnumPost.EMBLEM.ordinal() && stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");

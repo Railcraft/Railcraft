@@ -16,7 +16,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import java.util.stream.IntStream;
@@ -24,7 +24,11 @@ import java.util.stream.IntStream;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RoutingTicketCopyRecipe implements IRecipe {
+public class RoutingTicketCopyRecipe extends BaseRecipe {
+
+    public RoutingTicketCopyRecipe() {
+        super("routing_ticket_copy");
+    }
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
@@ -58,8 +62,8 @@ public class RoutingTicketCopyRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 2;
+    public boolean canFit(int width, int height) {
+        return width * height >= 2;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         return CraftingPlugin.emptyContainers(inv);
     }
 }

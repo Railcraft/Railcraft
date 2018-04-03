@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartCommandBlock;
@@ -133,7 +134,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         Vec2D unit = Vec2D.subtract(otherPos, cartPos);
         unit.normalize();
 
-        double distance = cart.getDistanceToEntity(other);
+        double distance = cart.getDistance(other);
         double depth = distance - OPTIMAL_DISTANCE;
 
         double forceX = 0;
@@ -354,7 +355,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (EntityMinecart.getCollisionHandler() != this)
             if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
                 if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
-                    other.move(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
+                    other.move(MoverType.SELF, 0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
 
@@ -403,7 +404,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (!CartToolsAPI.doesCartHaveOwner(cart))
             CartToolsAPI.setCartOwner(cart, player);
 
-        if (!(cart instanceof EntityTunnelBore) && player.getDistanceSqToEntity(cart) > MAX_INTERACT_DIST_SQ) {
+        if (!(cart instanceof EntityTunnelBore) && player.getDistanceSq(cart) > MAX_INTERACT_DIST_SQ) {
             event.setCanceled(true);
             return;
         }

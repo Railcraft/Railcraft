@@ -45,10 +45,11 @@ public class ItemSignalLabel extends ItemRailcraft {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
         if (Game.isHost(worldIn) && playerIn.isSneaking() && stack.hasDisplayName()) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            Set<AbstractPair> pairs = new HashSet<AbstractPair>();
+            Set<AbstractPair> pairs = new HashSet<>();
             if (tile instanceof IReceiverTile) {
                 pairs.add(((IReceiverTile) tile).getReceiver());
             }
@@ -76,6 +77,6 @@ public class ItemSignalLabel extends ItemRailcraft {
                 }
             }
         }
-        return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return super.onItemUse(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 }

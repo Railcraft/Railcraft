@@ -1,2 +1,4 @@
 rootProject.name = "Railcraft"
 include 'version'
+include 'api:buildcraft'
+include 'api:railcraft'

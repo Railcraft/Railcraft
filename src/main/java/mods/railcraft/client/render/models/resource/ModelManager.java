@@ -27,6 +27,8 @@ import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Created by CovertJaguar on 7/18/2016 for Railcraft.
  *
@@ -34,7 +36,7 @@ import java.util.Arrays;
  */
 public class ModelManager {
     public static void registerItemModel(Item item, int meta) {
-        ModelResourceLocation location = new ModelResourceLocation(item.getRegistryName(), "inventory");
+        ModelResourceLocation location = new ModelResourceLocation(checkNotNull(item.getRegistryName()), "inventory");
         registerItemModel(item, meta, location);
     }
 

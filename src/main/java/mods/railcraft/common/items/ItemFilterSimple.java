@@ -14,9 +14,12 @@ import mods.railcraft.api.core.items.IFilterItem;
 import mods.railcraft.api.core.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -29,7 +32,7 @@ public class ItemFilterSimple extends ItemRailcraft implements IFilterItem, IPro
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, player, info, adv);
         ItemStack prototype = getPrototype(stack);
         if (!InvTools.isEmpty(prototype)) {
@@ -40,6 +43,6 @@ public class ItemFilterSimple extends ItemRailcraft implements IFilterItem, IPro
         }
     }
 
-    protected void addAdditionalInfo(ItemStack stack, ItemStack prototype, List<String> info, boolean adv) {
+    protected void addAdditionalInfo(ItemStack stack, ItemStack prototype, List<String> info, ITooltipFlag adv) {
     }
 }

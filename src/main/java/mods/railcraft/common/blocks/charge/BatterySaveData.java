@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -17,13 +19,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.Level;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by CovertJaguar on 8/1/2016 for Railcraft.
@@ -32,19 +32,23 @@ import java.util.Map;
  */
 public class BatterySaveData extends WorldSavedData {
     private static final String NAME = "railcraft.batteries";
-    private Map<BlockPos, Double> chargeLevels = new LinkedHashMap<>();
+    private Long2DoubleMap chargeLevels = new Long2DoubleLinkedOpenHashMap();
 
     public static BatterySaveData forWorld(World world) {
         MapStorage storage = world.getPerWorldStorage();
         BatterySaveData result = (BatterySaveData) storage.getOrLoadData(BatterySaveData.class, NAME);
         if (result == null) {
-            result = new BatterySaveData(NAME);
+            result = new BatterySaveData();
             storage.setData(NAME, result);
         }
         return result;
     }
 
-    @Deprecated
+    BatterySaveData() {
+        super(NAME);
+    }
+
+    @Deprecated // called by reflection
     public BatterySaveData(String name) {
         super(name);
     }
@@ -54,10 +58,10 @@ public class BatterySaveData extends WorldSavedData {
         if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
-        for (Map.Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
+        for (Long2DoubleMap.Entry entry : chargeLevels.long2DoubleEntrySet()) {
             NBTTagCompound dataEntry = new NBTTagCompound();
-            NBTPlugin.writeBlockPos(dataEntry, "pos", entry.getKey());
-            dataEntry.setDouble("value", entry.getValue());
+            NBTPlugin.writeBlockPos(dataEntry, "pos", BlockPos.fromLong(entry.getLongKey()));
+            dataEntry.setDouble("value", entry.getDoubleValue());
             list.appendTag(dataEntry);
         }
         nbt.setTag("batteries", list);
@@ -72,16 +76,16 @@ public class BatterySaveData extends WorldSavedData {
         for (NBTTagCompound entry : list) {
             BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");
             if (pos != null)
-                chargeLevels.put(pos, entry.getDouble("value"));
+                chargeLevels.put(pos.toLong(), entry.getDouble("value"));
         }
     }
 
     public void initBattery(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        chargeBattery.initCharge(chargeLevels.getOrDefault(pos, 0.0));
+        chargeBattery.initCharge(chargeLevels.getOrDefault(pos.toLong(), 0.0));
     }
 
     public void updateBatteryRecord(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        chargeLevels.put(pos, chargeBattery.getCharge());
+        chargeLevels.put(pos.toLong(), chargeBattery.getCharge());
         markDirty();
     }
 

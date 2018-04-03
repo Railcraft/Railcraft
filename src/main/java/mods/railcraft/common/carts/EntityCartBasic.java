@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.item.ItemStack;
@@ -62,7 +63,6 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
         return RailcraftCarts.BASIC;
     }
 
-    @Nullable
     @Override
     public ItemStack getCartItem() {
         return createCartItem(this);
@@ -143,6 +143,6 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
         double max = getMaxSpeed();
         mX = MathHelper.clamp(mX, -max, max);
         mZ = MathHelper.clamp(mZ, -max, max);
-        move(mX, 0.0D, mZ);
+        move(MoverType.SELF, mX, 0.0D, mZ);
     }
 }

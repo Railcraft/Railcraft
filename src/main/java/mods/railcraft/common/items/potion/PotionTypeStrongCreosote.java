@@ -1,6 +1,7 @@
 package mods.railcraft.common.items.potion;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 
@@ -12,6 +13,6 @@ public class PotionTypeStrongCreosote extends PotionTypeRailcraft {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        RailcraftPotionTypes.CREOSOTE.getObject().ifPresent(creosote -> PotionHelper.registerPotionTypeConversion(creosote, new PotionHelper.ItemPredicateInstance(Items.GLOWSTONE_DUST), this));
+        RailcraftPotionTypes.CREOSOTE.getObject().ifPresent(creosote -> PotionHelper.addMix(creosote, Items.GLOWSTONE_DUST, this));
     }
 }

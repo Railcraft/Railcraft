@@ -27,11 +27,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -122,7 +122,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (EnumPost post : EnumPost.values()) {
             if (post == EnumPost.EMBLEM) continue;
             CreativePlugin.addToList(list, post.getStack());
@@ -263,8 +263,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
      * Get the MapColor for this Block and the given BlockState
      */
     @Override
-    @Nonnull
-    public MapColor getMapColor(IBlockState state) {
+    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return getVariant(state).getMapColor();
     }
 

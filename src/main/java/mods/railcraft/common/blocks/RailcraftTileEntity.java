@@ -33,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -151,7 +152,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         notifyBlocksOfNeighborChange();
     }
 
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
         tileCache.resetTimers();
     }
 

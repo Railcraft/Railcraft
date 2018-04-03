@@ -95,7 +95,7 @@ public class EntitySearcher {
         }
 
         public SearchParameters<T> around(Entity entity, float distance) {
-            searchBox = entity.getEntityBoundingBox().expandXyz(distance);
+            searchBox = entity.getEntityBoundingBox().grow(distance);
             return this;
         }
 
@@ -103,7 +103,7 @@ public class EntitySearcher {
          * @param distance Controls the size of the search box
          */
         public SearchParameters<T> around(BlockPos pos, float distance) {
-            searchBox = new AxisAlignedBB(pos).expandXyz(distance);
+            searchBox = new AxisAlignedBB(pos).grow(distance);
             return this;
         }
 

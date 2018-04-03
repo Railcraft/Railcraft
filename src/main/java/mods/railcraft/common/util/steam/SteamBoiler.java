@@ -32,8 +32,8 @@ public class SteamBoiler {
     protected boolean isBurning;
     protected byte burnCycle;
     private double partialConversions;
-    private double heat = Steam.COLD_TEMP;
-    private double maxHeat = Steam.MAX_HEAT_LOW;
+    private double heat = SteamConstants.COLD_TEMP;
+    private double maxHeat = SteamConstants.MAX_HEAT_LOW;
     private double efficiencyModifier = 1;
     private int ticksPerCycle = 16;
     private RailcraftTileEntity tile;
@@ -84,11 +84,11 @@ public class SteamBoiler {
     public double getHeatStep() {
         if (fuelProvider != null)
             return fuelProvider.getHeatStep();
-        return Steam.HEAT_STEP;
+        return SteamConstants.HEAT_STEP;
     }
 
     public void reset() {
-        heat = Steam.COLD_TEMP;
+        heat = SteamConstants.COLD_TEMP;
     }
 
     public double getHeat() {
@@ -97,8 +97,8 @@ public class SteamBoiler {
 
     public void setHeat(double heat) {
         this.heat = heat;
-        if (this.heat < Steam.COLD_TEMP)
-            this.heat = Steam.COLD_TEMP;
+        if (this.heat < SteamConstants.COLD_TEMP)
+            this.heat = SteamConstants.COLD_TEMP;
     }
 
     public double getHeatLevel() {
@@ -117,21 +117,21 @@ public class SteamBoiler {
     }
 
     public void reduceHeat(int numTanks) {
-        if (heat == Steam.COLD_TEMP)
+        if (heat == SteamConstants.COLD_TEMP)
             return;
-        double step = Steam.HEAT_STEP;
+        double step = SteamConstants.HEAT_STEP;
         double change = step + ((heat / getMaxHeat()) * step * 3);
         change /= numTanks;
         heat -= change;
-        heat = Math.max(heat, Steam.COLD_TEMP);
+        heat = Math.max(heat, SteamConstants.COLD_TEMP);
     }
 
     public boolean isBoiling() {
-        return getHeat() >= Steam.BOILING_POINT;
+        return getHeat() >= SteamConstants.BOILING_POINT;
     }
 
     public boolean isSuperHeated() {
-        return getHeat() >= Steam.SUPER_HEATED;
+        return getHeat() >= SteamConstants.SUPER_HEATED;
     }
 
     public boolean isBurning() {
@@ -167,10 +167,10 @@ public class SteamBoiler {
     }
 
     public double getFuelPerCycle(int numTanks) {
-        double fuel = Steam.FUEL_PER_BOILER_CYCLE;
-        fuel -= numTanks * Steam.FUEL_PER_BOILER_CYCLE * 0.0125F;
-        fuel += Steam.FUEL_HEAT_INEFFICIENCY * getHeatLevel();
-        fuel += Steam.FUEL_PRESSURE_INEFFICIENCY * (getMaxHeat() / Steam.MAX_HEAT_HIGH);
+        double fuel = SteamConstants.FUEL_PER_BOILER_CYCLE;
+        fuel -= numTanks * SteamConstants.FUEL_PER_BOILER_CYCLE * 0.0125F;
+        fuel += SteamConstants.FUEL_HEAT_INEFFICIENCY * getHeatLevel();
+        fuel += SteamConstants.FUEL_PRESSURE_INEFFICIENCY * (getMaxHeat() / SteamConstants.MAX_HEAT_HIGH);
         fuel *= numTanks;
         fuel *= efficiencyModifier;
         fuel *= RailcraftConfig.fuelPerSteamMultiplier();
@@ -217,7 +217,7 @@ public class SteamBoiler {
             return 0;
 
         waterCost = Math.min(waterCost, water.amount);
-        FluidStack steam = Fluids.STEAM.get(Steam.STEAM_PER_UNIT_WATER * waterCost);
+        FluidStack steam = Fluids.STEAM.get(SteamConstants.STEAM_PER_UNIT_WATER * waterCost);
         if (steam == null)
             return 0;
 
@@ -250,7 +250,7 @@ public class SteamBoiler {
 
         @Override
         public double getMeasurement() {
-            return (getHeat() - Steam.COLD_TEMP) / (getMaxHeat() - Steam.COLD_TEMP);
+            return (getHeat() - SteamConstants.COLD_TEMP) / (getMaxHeat() - SteamConstants.COLD_TEMP);
         }
 
         @Override

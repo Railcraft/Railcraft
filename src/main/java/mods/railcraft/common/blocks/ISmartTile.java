@@ -113,7 +113,7 @@ public interface ISmartTile {
         return true;
     }
 
-    default float getResistance(Entity exploder) {
+    default float getResistance(@Nullable Entity exploder) {
         return 4.5f;
     }
 
@@ -145,7 +145,9 @@ public interface ISmartTile {
 
     void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack);
 
-    void onNeighborBlockChange(IBlockState state, Block neighborBlock);
+    default void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
+
+    }
 
     default void notifyBlocksOfNeighborChange() {
         WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());

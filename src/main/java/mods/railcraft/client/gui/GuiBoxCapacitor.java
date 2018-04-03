@@ -47,7 +47,7 @@ public class GuiBoxCapacitor extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.box.capacitor.duration", ticksToPower / 20), 25);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.box.capacitor.duration", ticksToPower / 20), 25);
     }
 
     @Override

@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 public abstract class TrackKitSuspended extends TrackKitUnsupported {
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         if (!TrackSupportTools.isSupported(theWorldAsserted(), getPos()))
             breakRail();
@@ -36,7 +36,7 @@ public abstract class TrackKitSuspended extends TrackKitUnsupported {
         if (TrackSupportTools.isSupported(world, getPos())) {
             if (neighborBlock != getTile().getBlockType()) {
                 for (BlockPos connectedTrack : TrackTools.getConnectedTracks(world, getPos())) {
-                    world.notifyBlockOfStateChange(connectedTrack, getTile().getBlockType());
+                    world.notifyNeighborsOfStateChange(connectedTrack, getTile().getBlockType(), true);
                 }
             }
         } else

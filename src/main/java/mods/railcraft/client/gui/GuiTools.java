@@ -72,7 +72,7 @@ public class GuiTools {
         int pointer = 0;
         for (GuiBetterButton<?> b : buttons) {
             pointer += spacing;
-            b.xPosition = xStart + pointer;
+            b.x = xStart + pointer;
             pointer += b.getWidth();
             buttonList.add(b);
         }
@@ -88,7 +88,7 @@ public class GuiTools {
         int pointer = 0;
         for (GuiBetterButton<?> b : buttons) {
             pointer += spacing;
-            b.xPosition = xStart + pointer;
+            b.x = xStart + pointer;
             pointer += b.getWidth();
             buttonList.add(b);
         }
@@ -97,7 +97,7 @@ public class GuiTools {
     public static void newButtonRow(List<GuiButton> buttonList, int xStart, int spacing, Collection<? extends GuiBetterButton<?>> buttons) {
         int pointer = 0;
         for (GuiBetterButton<?> b : buttons) {
-            b.xPosition = xStart + pointer;
+            b.x = xStart + pointer;
             pointer += b.getWidth() + spacing;
             buttonList.add(b);
         }
@@ -123,7 +123,7 @@ public class GuiTools {
         villager.rotationYawHead = villager.rotationYaw;
         OpenGL.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
         Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
-        Minecraft.getMinecraft().getRenderManager().doRenderEntity(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+        Minecraft.getMinecraft().getRenderManager().renderEntity(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         OpenGL.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         OpenGL.glDisable(GL12.GL_RESCALE_NORMAL);

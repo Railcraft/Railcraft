@@ -14,7 +14,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -34,22 +33,17 @@ public class CreativePlugin {
     });
     public static final CreativeTabs TRACK_TAB = new RailcraftTab("railcraft.track", () -> new ItemStack(Blocks.DETECTOR_RAIL));
 
-    private static class RailcraftTab extends CreativeTabs {
+    private static final class RailcraftTab extends CreativeTabs {
         private final Supplier<ItemStack> tabItem;
 
-        public RailcraftTab(String label, Supplier<ItemStack> tabItem) {
+        RailcraftTab(String label, Supplier<ItemStack> tabItem) {
             super(label);
             this.tabItem = tabItem;
         }
 
         @Override
-        public ItemStack getIconItemStack() {
+        public ItemStack getTabIconItem() {
             return tabItem.get();
-        }
-
-        @Override
-        public Item getTabIconItem() {
-            return tabItem.get().getItem();
         }
 
     }

@@ -20,7 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityCartHopper extends CartBaseContainer implements IHopper {
@@ -69,7 +68,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
             player.displayGUIChest(this);
         }
@@ -162,13 +161,13 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     }
 
     public boolean captureDroppedItems() {
-        if (TileEntityHopper.captureDroppedItems(this)) {
+        if (TileEntityHopper.pullItems(this)) {
             return true;
         } else {
             List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
 
             if (!list.isEmpty()) {
-                TileEntityHopper.putDropInInventoryAllSlots(this, list.get(0));
+                TileEntityHopper.putDropInInventoryAllSlots(null, this, list.get(0));
             }
 
             return false;

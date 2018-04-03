@@ -24,11 +24,12 @@ import java.util.Set;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class InventoryConcatenator implements IInventory {
+//TODO use fastutil stuff
+public final class InventoryConcatenator implements IInventory {
 
-    private final List<Integer> slotMap = new ArrayList<Integer>();
-    private final List<IInventory> invMap = new ArrayList<IInventory>();
-    private final Set<IInventory> invSet = new HashSet<IInventory>();
+    private final List<Integer> slotMap = new ArrayList<>();
+    private final List<IInventory> invMap = new ArrayList<>();
+    private final Set<IInventory> invSet = new HashSet<>();
 
     private InventoryConcatenator() {
     }
@@ -76,6 +77,15 @@ public class InventoryConcatenator implements IInventory {
         for (IInventory inv : invSet) {
             inv.clear();
         }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (IInventory inv : invSet) {
+            if (!inv.isEmpty())
+                return false;
+        }
+        return true;
     }
 
     @Override

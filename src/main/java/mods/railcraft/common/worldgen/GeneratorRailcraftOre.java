@@ -13,10 +13,10 @@ package mods.railcraft.common.worldgen;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Random;
 import java.util.function.BooleanSupplier;
@@ -56,7 +56,7 @@ public class GeneratorRailcraftOre implements IWorldGenerator, BooleanSupplier, 
     }
 
     @Override
-    public Class<? super IWorldGenerator> getRegistryType() {
+    public Class<IWorldGenerator> getRegistryType() {
         return IWorldGenerator.class;
     }
 

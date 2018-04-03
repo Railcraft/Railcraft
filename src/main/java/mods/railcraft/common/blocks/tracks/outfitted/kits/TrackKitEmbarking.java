@@ -48,7 +48,7 @@ import java.util.Set;
 
 public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHandler {
 
-    public static final Set<Class> excludedEntities = new HashSet<Class>();
+    public static final Set<Class<? extends EntityLivingBase>> excludedEntities = new HashSet<>();
     public static final byte MIN_AREA = 1;
     public static final byte MAX_AREA = 5;
 
@@ -76,7 +76,8 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand) {
+        ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());

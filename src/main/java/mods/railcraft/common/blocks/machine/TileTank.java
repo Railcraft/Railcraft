@@ -134,4 +134,8 @@ public abstract class TileTank extends TileMultiBlockInventory implements ITankT
         super.readPacketData(data);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
 }

@@ -27,7 +27,7 @@ public class ParticleBase extends Particle {
     }
 
     public ParticleBase(World par1World, Vec3d start, Vec3d vel) {
-        super(par1World, start.xCoord, start.yCoord, start.zCoord, vel.xCoord, vel.yCoord, vel.zCoord);
+        super(par1World, start.x, start.y, start.z, vel.x, vel.y, vel.z);
     }
 
     public void setParticleGravity(float particleGravity) {

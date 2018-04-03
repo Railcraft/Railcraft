@@ -43,6 +43,10 @@ public class OptionalFluidStack {
         return fluidStack != null ? fluidStack : other;
     }
 
+    public OptionalFluidStack copy() {
+        return fluidStack == null ? EMPTY : new OptionalFluidStack(fluidStack.copy());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

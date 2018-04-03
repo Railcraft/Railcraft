@@ -33,8 +33,8 @@ public class SolidFuelProvider implements IFuelProvider {
     @Override
     public double getHeatStep() {
         if (lastItem instanceof ItemFirestoneRefined)
-            return Steam.HEAT_STEP * 30;
-        return Steam.HEAT_STEP;
+            return SteamConstants.HEAT_STEP * 30;
+        return SteamConstants.HEAT_STEP;
     }
 
     @Override

@@ -54,11 +54,11 @@ public class ContainerTrackRouting extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 0, track.getLockController().getCurrentState());
+        listener.sendWindowProperty(this, 0, track.getLockController().getCurrentState());
 
         canLock = PlayerPlugin.isOwnerOrOp(track.getOwner(), playerInv.player.getGameProfile());
         slotTicket.locked = track.isSecure() && !canLock;
-        listener.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
+        listener.sendWindowProperty(this, 2, canLock ? 1 : 0);
 
         String username = track.getOwner().getName();
         if (username != null)
@@ -72,7 +72,7 @@ public class ContainerTrackRouting extends RailcraftContainer {
         for (IContainerListener var2 : listeners) {
             int lock = track.getLockController().getCurrentState();
             if (lastLockState != lock)
-                var2.sendProgressBarUpdate(this, 0, lock);
+                var2.sendWindowProperty(this, 0, lock);
         }
 
         this.lastLockState = track.getLockController().getCurrentState();

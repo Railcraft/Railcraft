@@ -127,7 +127,7 @@ public abstract class RailcraftContainer extends Container {
                     fillPhantomSlot(slot, stackHeld, mouseButton);
             } else if (InvTools.isEmpty(stackHeld)) {
                 adjustPhantomSlot(slot, mouseButton, clickType);
-                slot.onPickupFromSlot(player, playerInv.getItemStack());
+                slot.onTake(player, playerInv.getItemStack());
             } else if (slot.isItemValid(stackHeld))
                 if (InvTools.isItemEqual(stackSlot, stackHeld))
                     adjustPhantomSlot(slot, mouseButton, clickType);
@@ -253,7 +253,7 @@ public abstract class RailcraftContainer extends Container {
                 slot.onSlotChanged();
             if (sizeOf(stackInSlot) == sizeOf(originalStack))
                 return InvTools.emptyStack();
-            slot.onPickupFromSlot(player, stackInSlot);
+            slot.onTake(player, stackInSlot);
         }
         return originalStack;
     }

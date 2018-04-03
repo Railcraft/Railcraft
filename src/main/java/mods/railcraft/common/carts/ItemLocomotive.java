@@ -22,14 +22,16 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.crafting.LocomotivePaintingRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -73,13 +75,12 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (String skin : renderType.getRendererTags()) {
             CreativePlugin.addToList(list, renderType.getItemWithRenderer(skin, new ItemStack(this)));
         }
     }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return this.sample.copy();
@@ -129,8 +130,8 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 //    }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        super.addInformation(stack, player, info, adv);
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
         GameProfile owner = getOwner(stack);
         if (owner.getName() != null && !owner.getName().equals("[Unknown]")) {
             String format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.owner");

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import com.google.common.base.Strings;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemRoutingTable;
@@ -23,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.core.helpers.Strings;
 
 import javax.annotation.Nullable;
 
@@ -76,7 +76,7 @@ public class GuiBookRoutingTable extends GuiBook {
         NBTTagCompound nbt = InvTools.getItemData(bookStack);
 
         nbt.setString("author", author);
-        if (!Strings.isEmpty(bookTitle))
+        if (!Strings.isNullOrEmpty(bookTitle))
             nbt.setString("title", bookTitle);
 
         PacketItemNBT pkt;

@@ -195,9 +195,9 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
 
         if (data.hasKey("ProfessionName")) {
             VillagerRegistry.VillagerProfession p =
-                    VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.getString("ProfessionName")));
+                    ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.getString("ProfessionName")));
             if (p == null)
-                p = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
+                p = VillagerRegistry.FARMER;
             profession = p;
         }
         direction = EnumFacing.getFront(data.getByte("direction"));

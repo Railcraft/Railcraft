@@ -218,8 +218,9 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null && InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.FRAME.block()))
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if (InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.FRAME.block()))
             if (setAddon(worldIn, pos, state, Addon.FRAME)) {
                 if (!playerIn.capabilities.isCreativeMode)
                     playerIn.setHeldItem(hand, InvTools.depleteItem(heldItem));

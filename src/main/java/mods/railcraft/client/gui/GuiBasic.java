@@ -59,7 +59,7 @@ public abstract class GuiBasic extends GuiScreen {
         RenderHelper.disableStandardItemLighting();
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_DEPTH_TEST);
-        GuiTools.drawCenteredString(fontRendererObj, label, 6, xSize);
+        GuiTools.drawCenteredString(fontRenderer, label, 6, xSize);
         drawExtras(x, y, f);
         OpenGL.glPopMatrix();
         super.drawScreen(x, y, f);

@@ -104,7 +104,7 @@ public final class EntityCartJukebox extends CartBase {
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        record = ItemStack.loadItemStackFromNBT(compound.getCompoundTag(RECORD_ITEM_KEY));
+        record = new ItemStack(compound.getCompoundTag(RECORD_ITEM_KEY));
     }
 
     @Override

@@ -164,9 +164,9 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 continue;
             Entity entity = ticket.getEntity();
             if (entity == null) {
-                int x = ticket.getModData().getInteger("xCoord");
-                int y = ticket.getModData().getInteger("yCoord");
-                int z = ticket.getModData().getInteger("zCoord");
+                int x = ticket.getModData().getInteger("x");
+                int y = ticket.getModData().getInteger("y");
+                int z = ticket.getModData().getInteger("z");
 
                 if (y >= 0) {
                     TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -197,7 +197,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
         for (Ticket ticket : tickets) {
             Entity entity = ticket.getEntity();
             if (entity == null) {
-                int y = ticket.getModData().getInteger("yCoord");
+                int y = ticket.getModData().getInteger("y");
                 String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
@@ -229,9 +229,9 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
             for (Ticket ticket : tickets.values()) {
                 Entity entity = ticket.getEntity();
                 if (entity == null) {
-                    int x = ticket.getModData().getInteger("xCoord");
-                    int y = ticket.getModData().getInteger("yCoord");
-                    int z = ticket.getModData().getInteger("zCoord");
+                    int x = ticket.getModData().getInteger("x");
+                    int y = ticket.getModData().getInteger("y");
+                    int z = ticket.getModData().getInteger("z");
                     String type = ticket.getModData().getString("type");
 
                     if (y >= 0) {

@@ -14,9 +14,11 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -37,20 +39,21 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
     }
 
     @Nullable
-    default ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
+    default ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag flag) {
         String tipTag = getTooltipTag(stack);
         if (LocalizationPlugin.hasTag(tipTag))
             return ToolTip.buildToolTip(tipTag);
         return null;
     }
 
-    default void addToolTips(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        ToolTip toolTip = getToolTip(stack, player, adv);
+    default void addToolTips(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag flag) {
+        ToolTip toolTip = getToolTip(stack, world, flag);
         if (toolTip != null)
             info.addAll(toolTip.convertToStrings());
     }
 
     @Override
+    @Deprecated
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         checkVariant(variant);
         String oreTag = getOreTag(variant);

@@ -17,10 +17,11 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -91,7 +92,8 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     default boolean isEqual(@Nullable ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
-        return getObject().map(obj -> {
+        // java generics broke so we must use function that takes object
+        return getObject().map((Object obj) -> {
             if (obj instanceof Item) {
                 return obj == stack.getItem();
             } else if (obj instanceof Block) {
@@ -109,17 +111,14 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         return getDef().tag;
     }
 
-    @Nullable
     default ItemStack getWildcard() {
         return getObject().map(o -> o.getWildcard()).orElse(null);
     }
 
-    @Nullable
     default ItemStack getStack() {
         return getStack(1);
     }
 
-    @Nullable
     default ItemStack getStack(int qty) {
         return getStack(qty, null);
     }
@@ -129,26 +128,26 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 //        return getObject().map(o -> o.getStack(qty, meta)).orElse(null);
 //    }
 
-    @Nullable
     default ItemStack getStack(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }
 
-    @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return getObject().map(o -> o.getStack(qty, variant)).orElse(null);
+        return getObject().map(o -> o.getStack(qty, variant)).orElse(ItemStack.EMPTY);
     }
 
     Optional<T> getObject();
 
     @Override
     @Nullable
+    @Deprecated
     default Object getRecipeObject() {
         return getRecipeObject(null);
     }
 
     @Override
     @Nullable
+    @Deprecated // Use ingredient
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         Object obj = getObject().map(o -> {
             o.checkVariant(variant);
@@ -161,6 +160,12 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;
+    }
+
+    default Ingredient getIngredient() {
+        Object object = getRecipeObject();
+        Ingredient result = CraftingHelper.getIngredient(object);
+        return result == null ? Ingredient.EMPTY : result;
     }
 
     default boolean isEnabled() {

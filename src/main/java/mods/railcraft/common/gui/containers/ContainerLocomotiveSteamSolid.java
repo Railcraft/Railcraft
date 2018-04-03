@@ -56,9 +56,9 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
-        listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
-        listener.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
+        listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.burnTime));
+        listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
+        listener.sendWindowProperty(this, 22, (int) Math.round(loco.boiler.getHeat()));
     }
 
     @Override
@@ -66,10 +66,10 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
         super.sendUpdateToClient();
         for (IContainerListener listener : listeners) {
             if (lastBurnTime != loco.boiler.burnTime)
-                listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
+                listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.burnTime));
 
             if (lastItemBurnTime != loco.boiler.currentItemBurnTime)
-                listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
+                listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
         }
 
         this.lastBurnTime = loco.boiler.burnTime;

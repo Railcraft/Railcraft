@@ -14,6 +14,7 @@ import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -44,7 +45,7 @@ public class Predicates {
     }
 
     public static Predicate<ItemStack> distinctStack() {
-        Map<StackKey, Boolean> seen = CollectionTools.createItemStackMap();
+        Map<StackKey, Boolean> seen = new HashMap<>();
         return stack -> seen.putIfAbsent(StackKey.make(stack), Boolean.TRUE) == null;
     }
 

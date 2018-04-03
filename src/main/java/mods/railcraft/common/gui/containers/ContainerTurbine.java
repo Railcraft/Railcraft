@@ -46,7 +46,7 @@ public class ContainerTurbine extends RailcraftContainer {
         super.sendUpdateToClient();
         for (IContainerListener listener : listeners) {
             if (lastOutput != Math.round(tile.output))
-                listener.sendProgressBarUpdate(this, 0, Math.round(tile.output));
+                listener.sendWindowProperty(this, 0, Math.round(tile.output));
         }
         lastOutput = Math.round(tile.output);
     }
@@ -54,7 +54,7 @@ public class ContainerTurbine extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, 0, Math.round(tile.output));
+        listener.sendWindowProperty(this, 0, Math.round(tile.output));
     }
 
     @Override

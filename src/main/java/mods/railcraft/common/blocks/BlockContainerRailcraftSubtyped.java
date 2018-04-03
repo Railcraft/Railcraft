@@ -24,6 +24,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -115,18 +116,12 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        V[] variants = getVariants();
-        if (variants != null) {
-            for (V variant : variants) {
-                CreativePlugin.addToList(list, getStack(variant));
-            }
-        } else {
-            CreativePlugin.addToList(list, getStack(null));
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (V variant : getVariants()) {
+            CreativePlugin.addToList(list, getStack(variant));
         }
     }
 
-    @Nullable
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return getStack(getVariant(state));

@@ -175,28 +175,28 @@ public class GuiTicket extends GuiScreen {
         drawTexturedModalRect(xOffset, yOffset, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         if (readingManual) {
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.manual.title"), yOffset + 14, width);
+            GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.routing.ticket.manual.title"), yOffset + 14, width);
 
             String text = LocalizationPlugin.translate("gui.railcraft.routing.ticket.manual");
-            fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 30, WRAP_WIDTH, 0);
+            fontRenderer.drawSplitString(text, xOffset + 16, yOffset + 30, WRAP_WIDTH, 0);
         } else {
             OpenGL.glPushMatrix();
             OpenGL.glScalef(2F, 2F, 2F);
-            GuiTools.drawCenteredString(fontRendererObj, TextFormatting.BOLD + LocalizationPlugin.translate("gui.railcraft.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
+            GuiTools.drawCenteredString(fontRenderer, TextFormatting.BOLD + LocalizationPlugin.translate("gui.railcraft.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
             OpenGL.glPopMatrix();
 
 
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line1"), yOffset + 50, width);
-            GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line2"), yOffset + 65, width);
+            GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line1"), yOffset + 50, width);
+            GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.routing.ticket.line2"), yOffset + 65, width);
             String text = TextFormatting.BLACK + "Dest=" + dest;
-            if (fontRendererObj.getBidiFlag()) {
+            if (fontRenderer.getBidiFlag()) {
                 text = text + "_";
             } else if (updateCount / 6 % 2 == 0) {
                 text = text + "" + TextFormatting.BLACK + "_";
             } else {
                 text = text + "" + TextFormatting.GRAY + "_";
             }
-            fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 98, WRAP_WIDTH, 0);
+            fontRenderer.drawSplitString(text, xOffset + 16, yOffset + 98, WRAP_WIDTH, 0);
         }
 
         super.drawScreen(par1, par2, par3);

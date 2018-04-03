@@ -76,10 +76,10 @@ public class ContainerLocomotive extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendProgressBarUpdate(this, 10, loco.getSpeed().ordinal());
-        listener.sendProgressBarUpdate(this, 11, loco.getMode().ordinal());
-        listener.sendProgressBarUpdate(this, 12, loco.getLockController().getCurrentState());
-        listener.sendProgressBarUpdate(this, 13, PlayerPlugin.isOwnerOrOp(loco.getOwner(), playerInv.player) ? 1 : 0);
+        listener.sendWindowProperty(this, 10, loco.getSpeed().ordinal());
+        listener.sendWindowProperty(this, 11, loco.getMode().ordinal());
+        listener.sendWindowProperty(this, 12, loco.getLockController().getCurrentState());
+        listener.sendWindowProperty(this, 13, PlayerPlugin.isOwnerOrOp(loco.getOwner(), playerInv.player) ? 1 : 0);
 
         String oName = loco.getOwner().getName();
         if (oName != null)
@@ -93,15 +93,15 @@ public class ContainerLocomotive extends RailcraftContainer {
         for (IContainerListener crafter : listeners) {
             LocoSpeed speed = loco.getSpeed();
             if (lastSpeed != speed)
-                crafter.sendProgressBarUpdate(this, 10, speed.ordinal());
+                crafter.sendWindowProperty(this, 10, speed.ordinal());
 
             LocoMode mode = loco.getMode();
             if (lastMode != mode)
-                crafter.sendProgressBarUpdate(this, 11, mode.ordinal());
+                crafter.sendWindowProperty(this, 11, mode.ordinal());
 
             int lock = loco.getLockController().getCurrentState();
             if (lastLockState != lock)
-                crafter.sendProgressBarUpdate(this, 12, lock);
+                crafter.sendWindowProperty(this, 12, lock);
         }
 
         this.lastSpeed = loco.getSpeed();

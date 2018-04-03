@@ -43,7 +43,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
         BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain().setPos(getTile().getPos());
         for (int i = 0; i < 2; i++) {
             pos.move(EnumFacing.DOWN);
-            if (world.getBlockState(pos).getBlock().causesSuffocation())
+            if (world.getBlockState(pos).getBlock().causesSuffocation(world.getBlockState(pos)))
                 return;
         }
         if (cart.isBeingRidden()) {

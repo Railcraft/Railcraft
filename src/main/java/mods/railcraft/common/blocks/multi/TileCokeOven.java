@@ -276,6 +276,11 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     }
 
     @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
+
+    @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }

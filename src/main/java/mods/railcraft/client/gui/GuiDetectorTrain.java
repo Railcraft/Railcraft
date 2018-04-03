@@ -44,7 +44,7 @@ public class GuiDetectorTrain extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("gui.railcraft.detector.train.size", trainSize), 25);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.detector.train.size", trainSize), 25);
     }
 
     @Override

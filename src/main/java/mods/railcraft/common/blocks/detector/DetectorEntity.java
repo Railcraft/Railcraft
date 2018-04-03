@@ -16,9 +16,13 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +37,12 @@ public abstract class DetectorEntity<T> extends Detector {
 
     protected DetectorEntity(Class<? extends T> classObject, Class<? extends T> defaultEntity) {
         this.defaultEntity = defaultEntity;
-        Set<Class<? extends Entity>> entities = EntityList.CLASS_TO_NAME.keySet();
+        Collection<EntityEntry> entries = ForgeRegistries.ENTITIES.getValuesCollection();
+        Set<Class<? extends Entity>> entities = new HashSet<>();
+        for (EntityEntry entry : entries) {
+            entities.add(entry.getEntityClass());
+            //TODO optimize this mess
+        }
         this.entities = entities.stream()
                 .filter(classObject::isAssignableFrom)
                 .<Class<? extends T>>map(e -> e.asSubclass(classObject))

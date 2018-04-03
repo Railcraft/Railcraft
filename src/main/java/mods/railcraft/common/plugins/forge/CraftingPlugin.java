@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
@@ -23,8 +24,12 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -43,7 +48,11 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO CraftingHelper
 public final class CraftingPlugin {
+
+    private static final ResourceLocationGenerator gen = new ResourceLocationGenerator();
+    private static final ResourceLocation GROUP = RailcraftConstantsAPI.locationOf("crafting_plugin");
 
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
         if (isEmpty(input)) {
@@ -128,11 +137,11 @@ public final class CraftingPlugin {
             return;
         }
         if (processedRecipe.isOreRecipe) {
-            addRecipe(new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
+            addRecipe(new ShapedOreRecipe(gen.next(), processedRecipe.result, processedRecipe.recipeArray));
         } else {
             if (isBeforeInit())
                 INSTANCE.addShapedRecipeWaiter(processedRecipe.result, processedRecipe.recipeArray);
-            else GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
+            else GameRegistry.addShapedRecipe(gen.next(), GROUP, processedRecipe.result, processedRecipe.recipeArray);
         }
     }
 
@@ -149,12 +158,12 @@ public final class CraftingPlugin {
             return;
         }
         if (processedRecipe.isOreRecipe) {
-            addRecipe(new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
+            addRecipe(new ShapelessOreRecipe(gen.next(), processedRecipe.result, processedRecipe.recipeArray));
         } else {
             if (isBeforeInit())
                 INSTANCE.addShapelessRecipeWaiter(processedRecipe.result, processedRecipe.recipeArray);
-            else
-                GameRegistry.addShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray);
+            else Game.log(Level.ERROR, "Shapeless recipes");
+//                GameRegistry.addShapelessRecipe(gen.next(), GROUP, processedRecipe.result, processedRecipe.recipeArray);
         }
     }
 
@@ -162,7 +171,7 @@ public final class CraftingPlugin {
         if (isBeforeInit())
             INSTANCE.addRecipeWaiter(recipe);
         else
-            GameRegistry.addRecipe(recipe);
+            ForgeRegistries.RECIPES.register(recipe);
     }
 
     public static IRecipe makeVanillaShapedRecipe(ItemStack output, Object... components) {
@@ -209,7 +218,8 @@ public final class CraftingPlugin {
             }
         }
 
-        return new ShapedRecipes(width, height, recipeArray, output);
+        return DUMMY;
+//        return new ShapedRecipes("railcraft:crafting_plugin", width, height, recipeArray, output);
     }
 
     public static IRecipe makeVanillaShapelessRecipe(ItemStack output, Object... components) {
@@ -228,10 +238,10 @@ public final class CraftingPlugin {
             }
         }
 
-        return new ShapelessRecipes(output, ingredients);
+        return DUMMY;
     }
 
-    public static ItemStack[] emptyContainers(InventoryCrafting inv) {
+    public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (int i = 0; i < grid.length; ++i) {
@@ -239,7 +249,7 @@ public final class CraftingPlugin {
             grid[i] = ForgeHooks.getContainerItem(itemstack);
         }
 
-        return grid;
+        return NonNullList.from(ItemStack.EMPTY, grid);
     }
 
     @Nullable
@@ -304,19 +314,79 @@ public final class CraftingPlugin {
     }
 
     private void addRecipeWaiter(IRecipe recipe) {
-        add(() -> CraftingManager.getInstance().addRecipe(recipe));
+        add(() -> {});
     }
 
     private void addShapedRecipeWaiter(ItemStack stack, Object... args) {
-        add(() -> GameRegistry.addRecipe(stack, args));
+        add(() -> {});
     }
 
+    //TODO fix all these messs
     private void addShapelessRecipeWaiter(ItemStack stack, Object... args) {
-        add(() -> GameRegistry.addShapelessRecipe(stack, args));
+        add(() -> {});
     }
 
     private void addFurnaceRecipeWaiter(ItemStack input, ItemStack output, float xp) {
         add(() -> FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp));
+    }
+
+    static IRecipe dummy(String name) {
+        return new DummyRecipe(RailcraftConstantsAPI.locationOf(name));
+    }
+
+    static final IRecipe DUMMY = dummy("crafting_plugin");
+
+    private static final class DummyRecipe implements IRecipe {
+
+        private final ResourceLocation name;
+
+        DummyRecipe(ResourceLocation name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean matches(InventoryCrafting inv, World worldIn) {
+            return false;
+        }
+
+        @Override
+        public ItemStack getCraftingResult(InventoryCrafting inv) {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean canFit(int width, int height) {
+            return false;
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public IRecipe setRegistryName(ResourceLocation name) {
+            return this;
+        }
+
+        @Override
+        public ResourceLocation getRegistryName() {
+            return name;
+        }
+
+        @Override
+        public Class<IRecipe> getRegistryType() {
+            return IRecipe.class;
+        }
+    }
+
+    private static final class ResourceLocationGenerator {
+        int now = 0;
+        ResourceLocationGenerator() {}
+
+        ResourceLocation next() {
+            return RailcraftConstantsAPI.locationOf("recipe" + (now++));
+        }
     }
 
 }

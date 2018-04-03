@@ -177,14 +177,14 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
                 vec3d1 = vec3d;
             if (vec3d2 == null)
                 vec3d2 = vec3d;
-            x += vec3d.xCoord - mx;
-            y += (vec3d1.yCoord + vec3d2.yCoord) / 2D - my;
-            z += vec3d.zCoord - mz;
-            Vec3d vec3d3 = vec3d2.addVector(-vec3d1.xCoord, -vec3d1.yCoord, -vec3d1.zCoord);
+            x += vec3d.x - mx;
+            y += (vec3d1.y + vec3d2.y) / 2D - my;
+            z += vec3d.z - mz;
+            Vec3d vec3d3 = vec3d2.addVector(-vec3d1.x, -vec3d1.y, -vec3d1.z);
             if (vec3d3.lengthVector() != 0.0D) {
                 vec3d3 = vec3d3.normalize();
-                yaw = (float) (Math.atan2(vec3d3.zCoord, vec3d3.xCoord) / Math.PI) * 180F;
-                pitch = (float) (Math.atan(vec3d3.yCoord) * 73D);
+                yaw = (float) (Math.atan2(vec3d3.z, vec3d3.x) / Math.PI) * 180F;
+                pitch = (float) (Math.atan(vec3d3.y) * 73D);
             }
         }
 
@@ -251,7 +251,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             GlStateManager.color(color, color, color, 0.8F);
         }
 
-        float light = cart.getBrightness(partialTicks);
+        float light = cart.getBrightness();
 //        light = light + ((1.0f - light) * 0.4f);
 
         doRender(cart, light, partialTicks);

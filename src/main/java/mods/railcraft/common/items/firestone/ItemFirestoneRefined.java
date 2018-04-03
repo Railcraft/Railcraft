@@ -23,6 +23,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,14 +31,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -57,12 +54,10 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     protected int heat = HEAT;
 
-    @Nullable
     public static ItemStack getItemCharged() {
         return RailcraftItems.FIRESTONE_REFINED.getStack();
     }
 
-    @Nullable
     public static ItemStack getItemEmpty() {
         return RailcraftItems.FIRESTONE_REFINED.getStack(1, CHARGES - 1);
     }
@@ -106,7 +101,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         list.add(new ItemStack(this, 1, getMaxDamage()));
         list.add(new ItemStack(this, 1, 0));
     }
@@ -139,7 +134,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         String tipTag = getUnlocalizedName() + ".tips.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
             tipTag = getUnlocalizedName() + ".tips.empty";
@@ -149,14 +144,16 @@ public class ItemFirestoneRefined extends ItemFirestone {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         if (player.canPlayerEdit(pos, side, stack)) {
             Block block = WorldPlugin.getBlock(world, pos);
             if (block != Blocks.STONE) {
-                List<ItemStack> drops = block.getDrops(world, pos, WorldPlugin.getBlockState(world, pos), 0);
-                if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
+                NonNullList<ItemStack> drops = NonNullList.create();
+                block.getDrops(drops, world, pos, WorldPlugin.getBlockState(world, pos), 0);
+                if (drops.size() == 1 && !InvTools.isEmpty(drops.get(0)) && drops.get(0).getItem() instanceof ItemBlock) {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
-                    if (cooked != null && cooked.getItem() instanceof ItemBlock) {
+                    if (cooked.getItem() instanceof ItemBlock) {
                         IBlockState newState = InvTools.getBlockStateFromStack(cooked, world, pos);
                         if (newState != null) {
                             WorldPlugin.setBlockState(world, pos, newState);

@@ -37,7 +37,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     public final RailcraftContainer container;
     public final ResourceLocation texture;
 
-    protected GuiContainerRailcraft(RailcraftContainer container, String texture) {
+    GuiContainerRailcraft(RailcraftContainer container, String texture) {
         super(container);
         this.container = container;
         this.texture = new ResourceLocation(texture);
@@ -61,7 +61,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
         InventoryPlayer playerInv = mc.player.inventory;
 
-        if (playerInv.getItemStack() == null) {
+        if (playerInv.getItemStack().isEmpty()) {
             int mX = mouseX - left;
             int mY = mouseY - top;
             for (Widget element : container.getWidgets()) {
@@ -80,7 +80,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
             for (Object button : buttonList) {
                 if (!(button instanceof GuiBetterButton))
                     continue;
-                GuiBetterButton betterButton = (GuiBetterButton) button;
+                GuiBetterButton<?> betterButton = (GuiBetterButton<?>) button;
                 if (!betterButton.visible)
                     continue;
                 ToolTip tips = betterButton.getToolTip();
@@ -209,7 +209,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
             int y;
 
             for (ToolTipLine tip : toolTips) {
-                y = fontRendererObj.getStringWidth(tip.text);
+                y = fontRenderer.getStringWidth(tip.text);
 
                 if (y > length)
                     length = y;
@@ -247,7 +247,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 else
                     line = tip.format + line;
 
-                fontRendererObj.drawStringWithShadow(line, x, y, -1);
+                fontRenderer.drawStringWithShadow(line, x, y, -1);
 
                 y += 10 + tip.getSpacing();
             }

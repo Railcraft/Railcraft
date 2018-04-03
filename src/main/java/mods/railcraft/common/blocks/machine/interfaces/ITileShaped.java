@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 /**
  * Created by CovertJaguar on 2/19/2017 for Railcraft.
@@ -27,11 +26,11 @@ public interface ITileShaped {
         return Block.FULL_BLOCK_AABB;
     }
 
-    default AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+    default AxisAlignedBB getCollisionBoundingBox(IBlockAccess world, BlockPos pos) {
         return getBoundingBox(world, pos);
     }
 
-    default AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+    default AxisAlignedBB getSelectedBoundingBox(IBlockAccess world, BlockPos pos) {
         return getBoundingBox(world, pos).offset(pos);
     }
 }

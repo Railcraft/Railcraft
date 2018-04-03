@@ -49,7 +49,7 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             player.displayGUIChest(this);
         return true;

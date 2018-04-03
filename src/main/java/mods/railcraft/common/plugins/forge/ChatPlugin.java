@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -64,7 +65,7 @@ public class ChatPlugin {
     public static void sendLocalizedHotBarMessageFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
         if (player instanceof EntityPlayerMP && Game.isHost(player.world)) {
             modifyArgs(args);
-            ((EntityPlayerMP) player).connection.sendPacket(new SPacketChat(translateMessage(msg, args), (byte) 2));
+            ((EntityPlayerMP) player).connection.sendPacket(new SPacketChat(translateMessage(msg, args), ChatType.GAME_INFO));
         }
     }
  

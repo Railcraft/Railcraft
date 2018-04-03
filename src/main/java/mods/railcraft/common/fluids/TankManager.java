@@ -12,7 +12,6 @@ package mods.railcraft.common.fluids;
 import com.google.common.collect.ForwardingList;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -71,7 +70,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     public void readTanksFromNBT(NBTTagCompound data) {
-        NBTList<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "tanks", NBTPlugin.EnumNBTType.COMPOUND);
+        List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "tanks", NBTPlugin.EnumNBTType.COMPOUND);
         for (NBTTagCompound tag : tagList) {
             int slot = tag.getByte("tank");
             if (slot >= 0 && slot < tanks.size())

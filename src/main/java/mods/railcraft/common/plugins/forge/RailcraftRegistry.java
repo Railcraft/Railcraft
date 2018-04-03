@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 
@@ -131,7 +132,7 @@ public final class RailcraftRegistry {
     public static void register(Item item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Items must be initialized in Construction or PreInit:" + item.getRegistryName());
-        GameRegistry.register(item);
+        ForgeRegistries.ITEMS.register(item);
         RailcraftItemStackRegistry.register(item, new ItemStack(item));
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName().toString());
@@ -145,30 +146,12 @@ public final class RailcraftRegistry {
      *
      * @param block The block
      */
-    @Deprecated
-    public static void register(Block block, Class<? extends ItemBlock> itemBlock) {
-        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
-            throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
-        GameRegistry.registerBlock(block, itemBlock);
-        RailcraftItemStackRegistry.register(block, new ItemStack(block));
-        if (Game.DEVELOPMENT_ENVIRONMENT)
-            Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
-    }
-
-    /**
-     * Registers a new block with the GameRegistry.
-     * <p/>
-     * This should generally only be called by Railcraft or a Railcraft Module while the mod is
-     * initializing during the pre-initializeDefinition and initializeDefinition stages.
-     *
-     * @param block The block
-     */
     public static void register(Block block, @Nullable ItemBlock item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
-        GameRegistry.register(block);
+        ForgeRegistries.BLOCKS.register(block);
         if (item != null)
-            GameRegistry.register(item);
+            ForgeRegistries.ITEMS.register(item);
         RailcraftItemStackRegistry.register(block, new ItemStack(block));
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
@@ -179,6 +162,6 @@ public final class RailcraftRegistry {
     }
 
     public static void register(Class<? extends TileEntity> tileEntity, String tag, String... oldTags) {
-        GameRegistry.registerTileEntityWithAlternatives(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag, oldTags);
+        GameRegistry.registerTileEntity(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag /*, oldTags*/);
     }
 }

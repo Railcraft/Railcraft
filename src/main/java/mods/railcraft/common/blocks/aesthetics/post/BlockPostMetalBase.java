@@ -28,6 +28,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -140,7 +141,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (EnumColor color : EnumColor.VALUES) {
             CreativePlugin.addToList(list, getStack(1, color));
         }
@@ -174,12 +175,13 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
         return false;
     }
 
+
+
     /**
      * Get the MapColor for this Block and the given BlockState
      */
     @Override
-    @Nonnull
-    public MapColor getMapColor(IBlockState state) {
+    public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getColor(state).getMapColor();
     }
 

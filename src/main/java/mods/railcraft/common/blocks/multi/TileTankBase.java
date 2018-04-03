@@ -381,7 +381,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public float getResistance(Entity exploder) {
+    public float getResistance(@Nullable Entity exploder) {
         return getTankType().getResistance(exploder);
     }
 

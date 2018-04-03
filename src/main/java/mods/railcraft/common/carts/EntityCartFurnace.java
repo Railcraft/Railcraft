@@ -68,7 +68,6 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         return CartTools.isInRangeToRenderDist(this, distance);
     }
 
-    @Nullable
     @Override
     public ItemStack getCartItem() {
         return createCartItem(this);
@@ -84,9 +83,10 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
 //    }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)))
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)))
             return true;
+        ItemStack stack = player.getHeldItem(hand);
         Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
         if (!InvTools.isEmpty(stack)) {
             int burnTime = FuelPlugin.getBurnTime(stack);

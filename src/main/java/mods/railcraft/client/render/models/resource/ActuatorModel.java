@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.models.resource;
 
-import com.google.common.base.Function;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import net.minecraft.block.state.IBlockState;
@@ -32,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by CovertJaguar on 8/18/2016 for Railcraft.
@@ -90,7 +90,6 @@ public class ActuatorModel implements IModel {
         return Collections.emptyList();
     }
 
-    @SuppressWarnings("Guava")
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         getDependencies();
@@ -113,12 +112,6 @@ public class ActuatorModel implements IModel {
             models.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
         return models;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public IModelState getDefaultState() {
-        return null;
     }
 
     public enum Loader implements ICustomModelLoader {
