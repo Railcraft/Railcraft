@@ -79,7 +79,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)
             player.swingArm(event.getHand());
 
-        if (Game.isClient(player.worldObj))
+        if (Game.isClient(player.world))
             return;
 
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)

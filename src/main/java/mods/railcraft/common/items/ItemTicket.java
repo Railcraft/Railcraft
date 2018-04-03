@@ -121,7 +121,7 @@ public class ItemTicket extends ItemRailcraft {
             GameProfile owner = getOwner(stack);
             if (owner.getId() != null) {
                 list.add(TextFormatting.WHITE + LocalizationPlugin.translate("gui.railcraft.routing.ticket.tips.issuer"));
-                list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(player.worldObj, owner));
+                list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(player.world, owner));
             }
 
             String dest = getDestination(stack);

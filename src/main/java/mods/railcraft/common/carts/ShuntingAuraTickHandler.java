@@ -34,7 +34,7 @@ public class ShuntingAuraTickHandler {
     @SubscribeEvent
     public void tick(PlayerEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (Game.isClient(entity.worldObj))
+        if (Game.isClient(entity.world))
             return;
         clock++;
         if (clock % 16 != 0)
@@ -45,7 +45,7 @@ public class ShuntingAuraTickHandler {
                 ItemStack goggles = ItemGoggles.getGoggles(player);
                 ItemGoggles.GoggleAura aura = ItemGoggles.getCurrentAura(goggles);
                 if (aura == ItemGoggles.GoggleAura.SHUNTING) {
-                    List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(player, 32F).at(player.worldObj);
+                    List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(player, 32F).at(player.world);
                     PacketShuntingAura pkt = new PacketShuntingAura(carts);
                     PacketDispatcher.sendToPlayer(pkt.getPacket(), player);
                 }

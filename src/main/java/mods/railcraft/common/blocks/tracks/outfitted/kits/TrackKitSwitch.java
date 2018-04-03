@@ -159,7 +159,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
                 TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.EAST_WEST);
 //        } else if (TrackTools.isRailBlockAt(world, getPos().north()) && TrackTools.isRailBlockAt(world, getPos().south())) {
 //            if (dir != EnumRailDirection.NORTH_SOUTH)
-//                world.setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
+//                TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.NORTH_SOUTH);
         } else if (dir != EnumRailDirection.NORTH_SOUTH)
             TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.NORTH_SOUTH);
     }

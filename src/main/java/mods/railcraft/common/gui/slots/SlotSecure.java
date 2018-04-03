@@ -21,11 +21,7 @@ public class SlotSecure extends SlotStackFilter {
 
     public SlotSecure(Predicate<ItemStack> filter, IInventory contents, int id, int x, int y) {
         super(filter, contents, id, x, y);
-    }
-
-    @Override
-    public int getSlotStackLimit() {
-        return 1;
+        setStackLimit(1);
     }
 
     @Override

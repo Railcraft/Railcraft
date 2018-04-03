@@ -82,7 +82,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public void onUpdate() {
-//        if (Game.isHost(worldObj)) {
+//        if (Game.isHost(world)) {
 //            if (RailcraftConfig.printSignalDebug()) {
 //                if (outOfWater && !tankWater.isEmpty())
 //                    outOfWater = false;
@@ -94,7 +94,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 //        }
         super.onUpdate();
 
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
             if (InvTools.hasEmptySlot(invStock)) {
@@ -112,7 +112,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, worldObj, this);
+        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, world, this);
     }
 
     @Override

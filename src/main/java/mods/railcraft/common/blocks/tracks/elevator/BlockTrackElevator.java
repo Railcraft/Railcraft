@@ -195,7 +195,7 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing.Axis axis = facing.getAxis();
         if (axis.isVertical()) {
             IBlockState state = WorldPlugin.getBlockState(worldIn, pos.offset(facing.getOpposite()));
@@ -301,7 +301,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      *             adjusted
      */
     protected void keepMinecartConnected(BlockPos pos, IBlockState state, EntityMinecart cart) {
-        if (TrackTools.isRailBlockAt(cart.worldObj, pos.down()) || TrackTools.isRailBlockAt(cart.worldObj, pos.down(2)))
+        if (TrackTools.isRailBlockAt(cart.world, pos.down()) || TrackTools.isRailBlockAt(cart.world, pos.down(2)))
             cart.setCanUseRail(false);
         else
             cart.setCanUseRail(true);
@@ -329,7 +329,7 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     private boolean isPathEmpty(IBlockState state, EntityMinecart cart, BlockPos pos, boolean up) {
-        if (WorldPlugin.getBlockMaterial(cart.worldObj, pos).isSolid())
+        if (WorldPlugin.getBlockMaterial(cart.world, pos).isSolid())
             return false;
         EnumFacing.Axis axis = getAxis(state);
         AABBFactory factory = AABBFactory.start().createBoxForTileAt(pos).expandAxis(axis, 1.0);
@@ -340,7 +340,7 @@ public class BlockTrackElevator extends BlockRailcraft {
             factory.raiseCeiling(-0.2);
             factory.raiseFloor(-0.5);
         }
-        return EntitySearcher.findMinecarts().inArea(factory.build()).except(cart).at(cart.worldObj).isEmpty();
+        return EntitySearcher.findMinecarts().inArea(factory.build()).except(cart).at(cart.world).isEmpty();
     }
 
     /**

@@ -102,7 +102,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public void setDead() {
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 setInventorySlotContents(slot, null);
             }
@@ -215,7 +215,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
-        return FactoryContainer.build(getGuiType(), playerInventory, this, worldObj, (int) posX, (int) posY, (int) posZ);
+        return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
     @Nonnull

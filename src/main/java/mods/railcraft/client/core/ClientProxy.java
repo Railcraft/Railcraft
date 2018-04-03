@@ -23,9 +23,8 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.beta.TileTankBase;
+import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
@@ -69,7 +68,7 @@ import java.util.function.Supplier;
 public class ClientProxy extends CommonProxy {
     @Override
     public World getClientWorld() {
-        return FMLClientHandler.instance().getClient().theWorld;
+        return FMLClientHandler.instance().getClient().world;
     }
 
     @Override
@@ -200,17 +199,17 @@ public class ClientProxy extends CommonProxy {
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
-        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
+//        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
-        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
+//        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, TESRPneumaticEngine::new);
 
-        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
-        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
+//        bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
 
 //        bindTESR(EnumMachineDelta.CAGE, TESRCagedEntity::new);
 

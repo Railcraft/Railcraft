@@ -34,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,7 +59,8 @@ public class TrackTools {
         return isRailBlock(block) && TrackShapeHelper.isStraight(getTrackDirection(world, pos));
     }
 
-    public static boolean isRailBlock(Block block) {
+    @Contract("null -> false")
+    public static boolean isRailBlock(@Nullable Block block) {
         return block instanceof BlockRailBase;
     }
 

@@ -9,24 +9,35 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
+import com.google.common.collect.ForwardingMap;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemMap<V> extends HashMap<ItemKey, V> {
-    private static ItemMap EMPTY = new ItemMap();
+public class ItemMap<V> extends ForwardingMap<ItemKey, V> {
+    @SuppressWarnings("rawtypes")
+    private static ItemMap EMPTY = new ItemMap() {
+        @Override
+        protected Map delegate() {
+            return Collections.emptyMap();
+        }
+    };
 
+    @SuppressWarnings("unchecked")
     public static <V> ItemMap<V> emptyMap() {
-        //noinspection unchecked
         return (ItemMap<V>) EMPTY;
     }
+
+    private Map<ItemKey, V> delegate = new HashMap<>();
 
     public V put(Item item, int meta, V value) {
         return put(new ItemKey(item, meta), value);
@@ -45,6 +56,11 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
         if (value != null)
             return value;
         return get(new ItemKey(item));
+    }
+
+    @Override
+    protected Map<ItemKey, V> delegate() {
+        return delegate;
     }
 
     public V get(ItemStack stack) {

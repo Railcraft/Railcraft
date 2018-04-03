@@ -61,14 +61,14 @@ public class EntityCartCargo extends CartBaseFiltered {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             setSlotsFilled(InvTools.countStacks(this));
     }
 
     @Override
     public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
-        if (Game.isHost(worldObj)) {
-            GuiHandler.openGui(EnumGui.CART_CARGO, player, worldObj, this);
+        if (Game.isHost(world)) {
+            GuiHandler.openGui(EnumGui.CART_CARGO, player, world, this);
         }
         return true;
     }

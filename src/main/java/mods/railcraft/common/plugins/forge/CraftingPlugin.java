@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
 import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
@@ -21,10 +22,8 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -44,7 +43,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CraftingPlugin {
+public final class CraftingPlugin {
 
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
         if (isEmpty(input)) {
@@ -59,7 +58,11 @@ public class CraftingPlugin {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getUnlocalizedName());
             return;
         }
-        FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
+
+        if (isBeforeInit()) {
+            INSTANCE.addFurnaceRecipeWaiter(input, output, xp);
+        } else
+            FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
     public static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
@@ -126,8 +129,11 @@ public class CraftingPlugin {
         }
         if (processedRecipe.isOreRecipe) {
             addRecipe(new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
-        } else
-            GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
+        } else {
+            if (isBeforeInit())
+                INSTANCE.addShapedRecipeWaiter(processedRecipe.result, processedRecipe.recipeArray);
+            else GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
+        }
     }
 
     public static void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
@@ -144,12 +150,19 @@ public class CraftingPlugin {
         }
         if (processedRecipe.isOreRecipe) {
             addRecipe(new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
-        } else
-            GameRegistry.addShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray);
+        } else {
+            if (isBeforeInit())
+                INSTANCE.addShapelessRecipeWaiter(processedRecipe.result, processedRecipe.recipeArray);
+            else
+                GameRegistry.addShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray);
+        }
     }
 
     public static void addRecipe(IRecipe recipe) {
-        GameRegistry.addRecipe(recipe);
+        if (isBeforeInit())
+            INSTANCE.addRecipeWaiter(recipe);
+        else
+            GameRegistry.addRecipe(recipe);
     }
 
     public static IRecipe makeVanillaShapedRecipe(ItemStack output, Object... components) {
@@ -223,7 +236,7 @@ public class CraftingPlugin {
 
         for (int i = 0; i < grid.length; ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
-            grid[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+            grid[i] = ForgeHooks.getContainerItem(itemstack);
         }
 
         return grid;
@@ -268,6 +281,42 @@ public class CraftingPlugin {
             this.recipeArray = recipeArray;
             this.hasFluid = fluid;
         }
+    }
+
+    public static boolean isBeforeInit() {
+        return RailcraftModuleManager.getStage().compareTo(RailcraftModuleManager.Stage.INIT) < 0;
+    }
+
+    public static void onInit() {
+        INSTANCE.waitingRecipes.forEach(Runnable::run);
+    }
+
+    public static final CraftingPlugin INSTANCE = new CraftingPlugin();
+    private List<Runnable> waitingRecipes;
+
+    CraftingPlugin() {
+        waitingRecipes = new ArrayList<>();
+    }
+
+    public void add(Runnable e) {
+        Game.logTrace(Level.WARN, 7, "Recipes registered before INIT! At:");
+        waitingRecipes.add(e);
+    }
+
+    private void addRecipeWaiter(IRecipe recipe) {
+        add(() -> CraftingManager.getInstance().addRecipe(recipe));
+    }
+
+    private void addShapedRecipeWaiter(ItemStack stack, Object... args) {
+        add(() -> GameRegistry.addRecipe(stack, args));
+    }
+
+    private void addShapelessRecipeWaiter(ItemStack stack, Object... args) {
+        add(() -> GameRegistry.addShapelessRecipe(stack, args));
+    }
+
+    private void addFurnaceRecipeWaiter(ItemStack input, ItemStack output, float xp) {
+        add(() -> FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp));
     }
 
 }

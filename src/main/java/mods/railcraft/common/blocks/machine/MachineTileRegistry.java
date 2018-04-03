@@ -9,18 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederAdmin;
 import mods.railcraft.common.blocks.machine.charge.TileChargeFeederIC2;
-import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
-import mods.railcraft.common.blocks.machine.epsilon.TileEngravingBench;
-import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
-import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
-import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
-import mods.railcraft.common.blocks.machine.equipment.TileRollingMachineManual;
-import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.blocks.machine.equipment.TileSmoker;
+import mods.railcraft.common.blocks.machine.equipment.*;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorLever;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
@@ -31,8 +22,9 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
+import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -41,39 +33,39 @@ public class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha
-        GameRegistry.registerTileEntity(TileTradeStation.class, "RCTradeStationTile");
-        GameRegistry.registerTileEntity(TileSteamTurbine.class, "RCSteamTurbineTile");
-        GameRegistry.registerTileEntity(TileBlastFurnace.class, "RCBlastFurnaceTile");
-        GameRegistry.registerTileEntity(TileCokeOven.class, "RCCokeOvenTile");
-        GameRegistry.registerTileEntity(TileRockCrusher.class, "RCRockCrusherTile");
-        GameRegistry.registerTileEntity(TileTankWater.class, "RCWaterTankTile");
-        GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
-        GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
-        GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
+        RailcraftRegistry.register(TileTradeStation.class, "trade_station");
+        RailcraftRegistry.register(TileSteamTurbine.class, "steam_turbine");
+        RailcraftRegistry.register(TileBlastFurnace.class, "blast_furnace");
+        RailcraftRegistry.register(TileCokeOven.class, "coke_oven");
+        RailcraftRegistry.register(TileRockCrusher.class, "rock_crusher");
+        RailcraftRegistry.register(TileTankWater.class, "water_tank");
+        RailcraftRegistry.register(TileSteamOven.class, "steam_oven");
+        RailcraftRegistry.register(TileSteamTrapManual.class, "steam_trap_manual");
+        RailcraftRegistry.register(TileSteamTrapAuto.class, "steam_trap_auto");
 
         // Beta
-        GameRegistry.registerTileEntity(TileEngineSteamHobby.class, "RCEngineSteamHobby");
-        GameRegistry.registerTileEntity(TileEngineSteamLow.class, "RCEngineSteamLow");
-        GameRegistry.registerTileEntity(TileEngineSteamHigh.class, "RCEngineSteamHigh");
-        GameRegistry.registerTileEntity(TileBoilerFireboxSolid.class, "RCBoilerFireboxSoildTile");
-        GameRegistry.registerTileEntity(TileBoilerFireboxFluid.class, "RCBoilerFireboxLiquidTile");
-        GameRegistry.registerTileEntity(TileBoilerTankLow.class, "RCBoilerTankLowTile");
-        GameRegistry.registerTileEntity(TileBoilerTankHigh.class, "RCBoilerTankHighTile");
-        GameRegistry.registerTileEntity(TileTankIronWall.class, "RCIronTankWallTile");
-        GameRegistry.registerTileEntity(TileTankIronGauge.class, "RCIronTankGaugeTile");
-        GameRegistry.registerTileEntity(TileTankIronValve.class, "RCIronTankValveTile");
-        GameRegistry.registerTileEntity(TileTankSteelWall.class, "RCSteelTankWallTile");
-        GameRegistry.registerTileEntity(TileTankSteelGauge.class, "RCSteelTankGaugeTile");
-        GameRegistry.registerTileEntity(TileTankSteelValve.class, "RCSteelTankValveTile");
-        GameRegistry.registerTileEntity(TileChestVoid.class, "RCVoidChestTile");
-        GameRegistry.registerTileEntity(TileChestMetals.class, "RCMetalsChestTile");
-        GameRegistry.registerTileEntity(TileSawmill.class, "RCSawmillTile");
+        RailcraftRegistry.register(TileEngineSteamHobby.class, "engine_steam_hobby");
+        RailcraftRegistry.register(TileEngineSteamLow.class, "engine_steam_commercial");
+        RailcraftRegistry.register(TileEngineSteamHigh.class, "engine_steam_industrial");
+        RailcraftRegistry.register(TileBoilerFireboxSolid.class, "boiler_firebox_solid");
+        RailcraftRegistry.register(TileBoilerFireboxFluid.class, "boiler_firebox_fluid");
+        RailcraftRegistry.register(TileBoilerTankLow.class, "boiler_tank_lp");
+        RailcraftRegistry.register(TileBoilerTankHigh.class, "boiler_tank_hp");
+        RailcraftRegistry.register(TileTankIronWall.class, "tank_iron_wall");
+        RailcraftRegistry.register(TileTankIronGauge.class, "tank_iron_gauge");
+        RailcraftRegistry.register(TileTankIronValve.class, "tank_iron_valve");
+        RailcraftRegistry.register(TileTankSteelWall.class, "tank_steel_wall");
+        RailcraftRegistry.register(TileTankSteelGauge.class, "tank_steel_gauge");
+        RailcraftRegistry.register(TileTankSteelValve.class, "tank_steel_valve");
+        RailcraftRegistry.register(TileChestVoid.class, "chest_void");
+        RailcraftRegistry.register(TileChestMetals.class, "chest_metals");
+//        RailcraftRegistry.register(TileSawmill.class, "RCSawmillTile");
 
         // Epsilon
-        GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
-        GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
-        GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
-        GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
+        RailcraftRegistry.register(TileAdminSteamProducer.class, "admin_steam_producer");
+        RailcraftRegistry.register(TileFluxTransformer.class, "flux_transformer");
+        RailcraftRegistry.register(TileForceTrackEmitter.class, "force_track_emitter");
+        RailcraftRegistry.register(TileEngravingBench.class, "engraving_bench");
 
         // Actuator
         RailcraftRegistry.register(TileActuatorLever.class, "actuator_lever");
@@ -94,18 +86,18 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileSmoker.class, "equipment_smoker");
 
         // Manipulator
-        GameRegistry.registerTileEntity(TileDispenserCart.class, "RCMinecartDispenserTile");
-        GameRegistry.registerTileEntity(TileIC2Loader.class, "RCLoaderTileEnergy");
-        GameRegistry.registerTileEntity(TileIC2Unloader.class, "RCUnloaderTileEnergy");
-        GameRegistry.registerTileEntity(TileDispenserTrain.class, "RCTrainDispenserTile");
-        GameRegistry.registerTileEntity(TileItemLoader.class, "RCLoaderTile");
-        GameRegistry.registerTileEntity(TileItemLoaderAdvanced.class, "RCLoaderAdvancedTile");
-        GameRegistry.registerTileEntity(TileItemUnloader.class, "RCUnloaderTile");
-        GameRegistry.registerTileEntity(TileItemUnloaderAdvanced.class, "RCUnloaderAdvancedTile");
-        GameRegistry.registerTileEntity(TileFluidLoader.class, "RCLoaderTileLiquid");
-        GameRegistry.registerTileEntity(TileFluidUnloader.class, "RCUnloaderTileLiquid");
-        GameRegistry.registerTileEntity(TileRFLoader.class, "RCLoaderTileRF");
-        GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
+        RailcraftRegistry.register(TileDispenserCart.class, "manipulator_dispenser_cart", "RCMinecartDispenserTile");
+        RailcraftRegistry.register(TileDispenserTrain.class, "manipulator_dispenser_train", "RCTrainDispenserTile");
+        RailcraftRegistry.register(TileIC2Loader.class, "manipulator_ic2_loader", "RCLoaderTileEnergy");
+        RailcraftRegistry.register(TileIC2Unloader.class, "manipulator_ic2_unloader", "RCUnloaderTileEnergy");
+        RailcraftRegistry.register(TileItemLoader.class, "manipulator_item_loader", "RCLoaderTile");
+        RailcraftRegistry.register(TileItemLoaderAdvanced.class, "manipulator_item_loader_adv", "RCLoaderAdvancedTile");
+        RailcraftRegistry.register(TileItemUnloader.class, "manipulator_item_unloader", "RCUnloaderTile");
+        RailcraftRegistry.register(TileItemUnloaderAdvanced.class, "manipulator_item_unloader_adv", "RCUnloaderAdvancedTile");
+        RailcraftRegistry.register(TileFluidLoader.class, "manipulator_fluid_loader", "RCLoaderTileLiquid");
+        RailcraftRegistry.register(TileFluidUnloader.class, "manipulator_fluid_unloader", "RCUnloaderTileLiquid");
+        RailcraftRegistry.register(TileRFLoader.class, "manipulator_rf_loader", "RCLoaderTileRF");
+        RailcraftRegistry.register(TileRFUnloader.class, "manipulator_rf_unloader", "RCUnloaderTileRF");
 
         // Signals
         RailcraftRegistry.register(TileSignalDistant.class, "signal_block");

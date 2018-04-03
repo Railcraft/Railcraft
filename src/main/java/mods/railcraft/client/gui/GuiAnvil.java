@@ -43,7 +43,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
     private final InventoryPlayer playerInv;
 
     public GuiAnvil(InventoryPlayer playerInv, World world, BlockPos pos) {
-        super(new ContainerAnvil(playerInv, world, pos, Minecraft.getMinecraft().thePlayer));
+        super(new ContainerAnvil(playerInv, world, pos, Minecraft.getMinecraft().player));
         this.playerInv = playerInv;
         this.repairContainer = (ContainerRepair) inventorySlots;
     }
@@ -91,7 +91,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
             boolean flag = true;
             String msg = I18n.format("container.repair.cost", repairContainer.maximumCost);
 
-            if (repairContainer.maximumCost >= ContainerAnvil.MAX_COST && !mc.thePlayer.capabilities.isCreativeMode) {
+            if (repairContainer.maximumCost >= ContainerAnvil.MAX_COST && !mc.player.capabilities.isCreativeMode) {
                 msg = I18n.format("container.repair.expensive");
                 msgColor = 16736352;
             } else if (!repairContainer.getSlot(2).getHasStack())
@@ -140,7 +140,7 @@ public class GuiAnvil extends GuiContainer implements IContainerListener {
             s = "";
 
         repairContainer.updateItemName(s);
-        mc.thePlayer.connection.sendPacket(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
+        mc.player.connection.sendPacket(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
     }
 
     /**

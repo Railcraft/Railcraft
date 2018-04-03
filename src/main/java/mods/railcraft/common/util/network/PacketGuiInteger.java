@@ -45,7 +45,7 @@ public class PacketGuiInteger extends RailcraftPacket {
         dataId = data.readByte();
         value = data.readInt();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer != null && player.openContainer.windowId == windowId)
             player.openContainer.updateProgressBar(dataId, value);

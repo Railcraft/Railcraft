@@ -128,7 +128,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     public World theWorld() {
-        return worldObj;
+        return world;
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         List<String> debug = new ArrayList<>();
         debug.add("Railcraft Entity Data Dump");
         debug.add("Object: " + this);
-        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimension(), getPositionVector()));
+        debug.add(String.format("Coordinates: d=%d, %s", world.provider.getDimension(), getPositionVector()));
         debug.add("Owner: " + CartTools.getCartOwnerEntity(this));
         debug.add("LinkA: " + CartTools.getCartOwnerEntity(this));
         return debug;

@@ -44,7 +44,7 @@ class PacketMovingSound extends RailcraftPacket {
     @Override
     @SideOnly(Side.CLIENT)
     public void readData(RailcraftInputStream data) throws IOException {
-        Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(data.readInt());
+        Entity entity = Minecraft.getMinecraft().world.getEntityByID(data.readInt());
         SoundCategory category = data.readEnum(SoundCategory.values());
         SoundEvent event = new SoundEvent(new ResourceLocation(data.readUTF()));
         SoundHelper.MovingSoundType type = data.readEnum(SoundHelper.MovingSoundType.values());

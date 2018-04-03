@@ -31,7 +31,7 @@ public class MinecartRiderAIDisabler {
         EntityLivingBase entity = event.getEntityLiving();
         if (entity instanceof EntityLiving) {
             EntityLiving living = (EntityLiving) entity;
-            if (!entity.worldObj.isRemote) {
+            if (!entity.world.isRemote) {
                 if (entity.ticksExisted % 8 == 0) {
                     boolean ridingMinecart = entity.getRidingEntity() instanceof EntityMinecart;
                     for (int i = 0; i < 6; i++)

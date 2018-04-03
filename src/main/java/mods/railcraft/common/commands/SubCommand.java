@@ -41,14 +41,14 @@ public abstract class SubCommand implements IModCommand {
     private final List<String> aliases = new ArrayList<String>();
     private PermLevel permLevel = PermLevel.EVERYONE;
     private IModCommand parent;
-    private final SortedSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
+    private final NavigableSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
 
     protected SubCommand(String name) {
         this.name = name;
     }
 
     @Override
-    public final String getCommandName() {
+    public final String getName() {
         return name;
     }
 
@@ -63,7 +63,7 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public SortedSet<SubCommand> getChildren() {
+    public NavigableSet<SubCommand> getChildren() {
         return children;
     }
 
@@ -72,12 +72,12 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return Collections.emptyList();
     }
 
@@ -112,8 +112,8 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/" + getFullCommandString() + " help";
+    public String getUsage(ICommandSender sender) {
+        return "/" + getFullString() + " help";
     }
 
     @Override
@@ -122,13 +122,13 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public String getFullCommandString() {
-        return parent.getFullCommandString() + " " + getCommandName();
+    public String getFullString() {
+        return parent.getFullString() + " " + getName();
     }
 
     @Override
     public int compareTo(ICommand command) {
-        return getCommandName().compareTo(command.getCommandName());
+        return getName().compareTo(command.getName());
     }
 
 }

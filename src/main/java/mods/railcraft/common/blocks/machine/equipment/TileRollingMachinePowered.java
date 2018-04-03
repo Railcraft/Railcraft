@@ -68,7 +68,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     public void update() {
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             if (clock % 16 == 0)
                 processActions();
         }
@@ -77,7 +77,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     protected void progress() {
-        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(worldObj).getNode(pos);
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
         if (node.useCharge(CHARGE_PER_TICK)) {
             super.progress();
         }
@@ -104,7 +104,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     public boolean openGui(EntityPlayer player) {
         if (player.getDistanceSq(getPos().add(0.5, 0.5, 0.5)) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ROLLING_MACHINE_POWERED, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ROLLING_MACHINE_POWERED, player, world, getPos());
         return true;
     }
 
@@ -194,7 +194,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 

@@ -37,7 +37,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_ENERGY, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.LOADER_ENERGY, player, world, getPos());
         return true;
     }
 

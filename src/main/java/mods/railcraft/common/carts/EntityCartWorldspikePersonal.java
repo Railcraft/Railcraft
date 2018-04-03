@@ -59,7 +59,7 @@ public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
 
     @Override
     protected ForgeChunkManager.Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartToolsAPI.getCartOwner(this).getName(), worldObj, ForgeChunkManager.Type.ENTITY);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartToolsAPI.getCartOwner(this).getName(), world, ForgeChunkManager.Type.ENTITY);
     }
 
     @Override

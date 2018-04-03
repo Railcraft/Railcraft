@@ -15,22 +15,19 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+
 public class SlotWaterLimited extends SlotWater {
 
     public SlotWaterLimited(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
+        setStackLimit(4);
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean isItemValid(@Nullable ItemStack stack) {
         FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
-        if (fluidStack != null && fluidStack.amount > FluidTools.BUCKET_VOLUME)
-            return false;
-        return super.isItemValid(stack);
-    }
-
-    @Override
-    public int getSlotStackLimit() {
-        return 4;
+        return !(fluidStack != null && fluidStack.amount > FluidTools.BUCKET_VOLUME)
+                && super.isItemValid(stack);
     }
 }

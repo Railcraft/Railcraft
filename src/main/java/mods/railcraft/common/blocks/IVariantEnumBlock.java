@@ -124,7 +124,7 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
     }
 
     default boolean isState(IBlockState state) {
-        return state.getBlock() instanceof ISubtypedBlock && ((ISubtypedBlock) state.getBlock()).getVariant(state) == this;
+        return state.getBlock() instanceof ISubtypedBlock && ((ISubtypedBlock<?>) state.getBlock()).getVariant(state) == this;
     }
 
     default Tuple<Integer, Integer> getTextureDimensions() {

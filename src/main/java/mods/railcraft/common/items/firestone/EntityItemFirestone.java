@@ -52,30 +52,30 @@ public class EntityItemFirestone extends EntityItemFireproof {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isHost(worldObj)) {
+        if (Game.isHost(world)) {
             clock++;
             if (clock % 4 != 0)
                 return;
             ItemStack stack = getEntityItem();
-            FirestoneTools.trySpawnFire(worldObj, getPosition(), stack);
+            FirestoneTools.trySpawnFire(world, getPosition(), stack);
         }
     }
 
     @Override
     protected void setOnFireFromLava() {
-        if (!refined || isDead || worldObj.isRemote)
+        if (!refined || isDead || world.isRemote)
             return;
         IBlockState firestoneBlock = RailcraftBlocks.RITUAL.getDefaultState();
         if (firestoneBlock == null)
             return;
         BlockPos surface = new BlockPos(posX, posY, posZ);
-        if (WorldPlugin.getBlockMaterial(worldObj, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(worldObj, surface.up()) == Material.LAVA)
+        if (WorldPlugin.getBlockMaterial(world, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(world, surface.up()) == Material.LAVA)
             for (int i = 0; i < 10; i++) {
                 surface = surface.up();
-                if (WorldPlugin.isBlockAir(worldObj, surface) && WorldPlugin.getBlockMaterial(worldObj, surface.down()) == Material.LAVA) {
+                if (WorldPlugin.isBlockAir(world, surface) && WorldPlugin.getBlockMaterial(world, surface.down()) == Material.LAVA) {
                     boolean cracked = getEntityItem().getItem() instanceof ItemFirestoneCracked;
-                    WorldPlugin.setBlockState(worldObj, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
-                    TileEntity tile = WorldPlugin.getBlockTile(worldObj, surface);
+                    WorldPlugin.setBlockState(world, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
+                    TileEntity tile = WorldPlugin.getBlockTile(world, surface);
                     if (tile instanceof TileRitual) {
                         TileRitual fireTile = (TileRitual) tile;
                         ItemStack firestone = getEntityItem();

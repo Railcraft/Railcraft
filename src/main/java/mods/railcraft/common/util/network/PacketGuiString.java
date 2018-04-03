@@ -47,7 +47,7 @@ public class PacketGuiString extends RailcraftPacket {
         dataId = data.readByte();
         str = data.readUTF();
 
-        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().player;
 
         if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId)
             ((RailcraftContainer) player.openContainer).updateString(dataId, str);

@@ -19,11 +19,6 @@ public class SlotPassThrough extends SlotRailcraft {
     }
 
     @Override
-    public int getSlotStackLimit() {
-        return inventory.getInventoryStackLimit();
-    }
-
-    @Override
     public boolean isItemValid(ItemStack stack) {
         return inventory.isItemValidForSlot(getSlotIndex(), stack);
     }

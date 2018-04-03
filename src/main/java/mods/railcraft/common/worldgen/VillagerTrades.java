@@ -171,7 +171,7 @@ public class VillagerTrades {
         }
 
         private int stackSize(Random rand, Offer offer) {
-            return MathHelper.getRandomIntegerInRange(rand, offer.min, offer.max);
+            return MathHelper.getInt(rand, offer.min, offer.max);
         }
     }
 
@@ -193,7 +193,7 @@ public class VillagerTrades {
             if (stack == null)
                 return;
             recipeList.add(new MerchantRecipe(stack, null,
-                    new ItemStack(Items.EMERALD, MathHelper.getRandomIntegerInRange(random, 1, 3))));
+                    new ItemStack(Items.EMERALD, MathHelper.getInt(random, 1, 3))));
         }
     }
 }

@@ -93,7 +93,7 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return callback == null || callback.isUseableByPlayer(entityplayer);
+        return callback == null || callback.isUsableByPlayer(entityplayer);
     }
 
     //TODO: test new parameters

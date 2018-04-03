@@ -46,11 +46,11 @@ public class TileLogbook extends RailcraftTickingTileEntity {
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         if (clock % 32 == 0) {
-            List<EntityPlayer> players = EntitySearcher.find(EntityPlayer.class).around(getPos(), SEARCH_RADIUS).at(worldObj);
+            List<EntityPlayer> players = EntitySearcher.find(EntityPlayer.class).around(getPos(), SEARCH_RADIUS).at(world);
             if (!players.isEmpty()) {
                 LocalDate date = LocalDate.now();
                 log.putAll(date, players.stream().map(EntityPlayer::getGameProfile).collect(Collectors.toList()));

@@ -54,13 +54,13 @@ public class CommandHelpers {
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-        sender.addChatMessage(new TextComponentTranslation(locTag, args));
+        sender.sendMessage(new TextComponentTranslation(locTag, args));
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, Style chatStyle, String locTag, Object... args) {
         TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
         chat.setStyle(chatStyle);
-        sender.addChatMessage(chat);
+        sender.sendMessage(chat);
     }
 
     /**
@@ -71,15 +71,15 @@ public class CommandHelpers {
      * Messages will not be localized properly if you use StringUtil.localize().
      */
     public static void sendChatMessage(ICommandSender sender, String message) {
-        sender.addChatMessage(new TextComponentString(message));
+        sender.sendMessage(new TextComponentString(message));
     }
 
     public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
-        throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getCommandUsage(sender))));
+        throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getUsage(sender))));
     }
 
     public static boolean checkPermission(MinecraftServer server, ICommandSender sender, IModCommand command) {
-        return command.getPermissionLevel() <= 0 || sender.canCommandSenderUseCommand(command.getPermissionLevel(), command.getFullCommandString());
+        return command.getPermissionLevel() <= 0 || sender.canUseCommand(command.getPermissionLevel(), command.getFullString());
     }
 
     public static void executeChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
@@ -93,16 +93,16 @@ public class CommandHelpers {
     public static void printHelp(ICommandSender sender, IModCommand command) {
         Style header = new Style();
         header.setColor(TextFormatting.BLUE);
-        sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
+        sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullString().replace(" ", ".") + ".format", command.getFullString());
         Style body = new Style();
         body.setColor(TextFormatting.GRAY);
-        sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
+        sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getAliases().toString().replace("[", "").replace("]", ""));
         sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getPermissionLevel());
-        sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".help");
+        sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullString().replace(" ", ".") + ".help");
         if (!command.getChildren().isEmpty()) {
             sendLocalizedChatMessage(sender, "command.railcraft.list");
             for (SubCommand child : command.getChildren()) {
-                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullCommandString().replace(" ", ".") + ".desc", child.getCommandName());
+                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullString().replace(" ", ".") + ".desc", child.getName());
             }
         }
     }
@@ -125,10 +125,10 @@ public class CommandHelpers {
     }
 
     public static boolean matches(String commandName, IModCommand command) {
-        if (Objects.equals(commandName, command.getCommandName()))
+        if (Objects.equals(commandName, command.getName()))
             return true;
-        else if (command.getCommandAliases() != null)
-            return command.getCommandAliases().stream().anyMatch(alias -> Objects.equals(commandName, alias));
+        else if (command.getAliases() != null)
+            return command.getAliases().stream().anyMatch(alias -> Objects.equals(commandName, alias));
         return false;
     }
 

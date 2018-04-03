@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -58,9 +59,13 @@ public abstract class BlockContainerRailcraft extends BlockContainer implements 
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+    @Deprecated
+    public final TileEntity createNewTileEntity(World worldIn, int meta) {
+        return createTileEntity(worldIn, getStateFromMeta(meta));
     }
+
+    @Override
+    public abstract TileEntity createTileEntity(World world, IBlockState state);
 
     public void markBlockForUpdate(IBlockState state, World world, BlockPos pos) {
         if (world != null) {

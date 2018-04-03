@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;

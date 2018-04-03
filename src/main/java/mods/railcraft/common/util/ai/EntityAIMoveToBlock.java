@@ -56,17 +56,17 @@ public class EntityAIMoveToBlock extends EntityAIBase {
         if (entity.getRNG().nextFloat() >= weight)
             return false;
 
-        if (!entity.worldObj.isDaytime())
+        if (!entity.world.isDaytime())
             return false;
 
         if (watchedBlock == null || !isBlockValid())
-            watchedBlock = WorldPlugin.findBlock(entity.worldObj, entity.getPosition(), maxDist, t -> Objects.equals(t, searchedState));
+            watchedBlock = WorldPlugin.findBlock(entity.world, entity.getPosition(), maxDist, t -> Objects.equals(t, searchedState));
 
         return watchedBlock != null;
     }
 
     private boolean isBlockValid() {
-        return searchedState == WorldPlugin.getBlockState(entity.worldObj, watchedBlock) && entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
+        return searchedState == WorldPlugin.getBlockState(entity.world, watchedBlock) && entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
     }
 
     /**

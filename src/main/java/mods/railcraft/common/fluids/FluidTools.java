@@ -100,7 +100,7 @@ public final class FluidTools {
     }
 
     public static boolean interactWithFluidHandler(@Nullable ItemStack heldItem, @Nullable IFluidHandler fluidHandler, EntityPlayer player) {
-        if (Game.isHost(player.worldObj))
+        if (Game.isHost(player.world))
             return FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
         return FluidItemHelper.isContainer(heldItem);
     }

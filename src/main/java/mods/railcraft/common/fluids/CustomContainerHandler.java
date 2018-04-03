@@ -87,7 +87,7 @@ public final class CustomContainerHandler {
     private static RayTraceResult trace(EntityLivingBase entity, double length) {
         Vec3d startPos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d endPos = startPos.add(new Vec3d(entity.getLookVec().xCoord * length, entity.getLookVec().yCoord * length, entity.getLookVec().zCoord * length));
-        return entity.worldObj.rayTraceBlocks(startPos, endPos, true);
+        return entity.world.rayTraceBlocks(startPos, endPos, true);
     }
 
     @SubscribeEvent

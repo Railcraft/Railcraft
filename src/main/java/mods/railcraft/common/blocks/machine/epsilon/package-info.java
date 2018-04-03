@@ -8,6 +8,8 @@
  * license page at http://railcraft.info/wiki/info:license.
  *
  * Created by CovertJaguar on 5/27/2016.
+ *
+ * Created by CovertJaguar on 5/27/2016.
  */
 
 /**
@@ -15,6 +17,7 @@
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
+@Deprecated
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mcp.MethodsReturnNonnullByDefault;

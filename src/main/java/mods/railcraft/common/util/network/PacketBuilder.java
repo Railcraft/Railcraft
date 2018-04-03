@@ -153,14 +153,14 @@ public class PacketBuilder implements ISignalPacketBuilder {
         if (!RailcraftConfig.playSounds())
             return;
         PacketMovingSound pkt = new PacketMovingSound(sound, category, cart, type, extraData);
-        PacketDispatcher.sendToDimension(pkt, cart.worldObj.provider.getDimension());
+        PacketDispatcher.sendToDimension(pkt, cart.world.provider.getDimension());
     }
 
     public void stopRecord(EntityCartJukebox cart) {
         if (!RailcraftConfig.playSounds())
             return;
         PacketStopRecord pkt = new PacketStopRecord(cart);
-        PacketDispatcher.sendToDimension(pkt, cart.worldObj.provider.getDimension());
+        PacketDispatcher.sendToDimension(pkt, cart.world.provider.getDimension());
     }
 
 }

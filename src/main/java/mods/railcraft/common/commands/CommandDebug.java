@@ -59,7 +59,7 @@ public class CommandDebug extends SubCommand {
             msgObj = msgFactory.newMessage(msg, args);
         }
         Game.log(DEBUG_LEVEL, msgObj);
-        sender.addChatMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
+        sender.sendMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
     }
 
     private static void printTarget(ICommandSender sender, World world, BlockPos pos) {

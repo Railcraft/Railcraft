@@ -29,7 +29,7 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_RF, player, worldObj, getX(), getY(), getZ());
+        GuiHandler.openGui(EnumGui.MANIPULATOR_RF, player, world, getX(), getY(), getZ());
         return true;
     }
 

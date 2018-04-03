@@ -284,7 +284,7 @@ public class LinkageManager implements ILinkageManager {
 
     @Nullable
     public EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
-        return CartTools.getCartFromUUID(cart.worldObj, getLink(cart, type));
+        return CartTools.getCartFromUUID(cart.world, getLink(cart, type));
     }
 
     /**
@@ -420,7 +420,7 @@ public class LinkageManager implements ILinkageManager {
         Train.deleteTrain(cart);
         UUID link = getLink(cart, linkType);
         removeLinkTags(cart, linkType);
-        EntityMinecart other = CartTools.getCartFromUUID(cart.worldObj, link);
+        EntityMinecart other = CartTools.getCartFromUUID(cart.world, link);
         if (other != null) {
             breakLink(other, cart);
         }

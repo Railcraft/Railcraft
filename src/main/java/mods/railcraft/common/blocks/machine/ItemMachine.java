@@ -21,11 +21,11 @@ import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftSubtyped {
 
-    private final BlockMachine<? extends IEnumMachine<?>> machineBlock;
+    private final BlockMachine<? extends IEnumMachine> machineBlock;
 
     public ItemMachine(Block block) {
         super(block);
-        this.machineBlock = (BlockMachine<? extends IEnumMachine<?>>) block;
+        this.machineBlock = (BlockMachine<? extends IEnumMachine>) block;
     }
 
     public IEnumMachine<?> getMachine(ItemStack stack) {

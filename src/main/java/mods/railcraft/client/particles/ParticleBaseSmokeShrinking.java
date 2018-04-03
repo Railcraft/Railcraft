@@ -31,7 +31,7 @@ public abstract class ParticleBaseSmokeShrinking extends ParticleBaseSmoke {
     public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float par2, float par3, float par4, float par5, float par6, float par7) {
         float age = ((float) particleAge + par2) / (float) particleMaxAge * 32.0F;
 
-        age = MathHelper.clamp_float(age, 0.0F, 1.0F);
+        age = MathHelper.clamp(age, 0.0F, 1.0F);
 
         this.particleScale = originalScale * age;
         super.renderParticle(worldRendererIn, entityIn, par2, par3, par4, par5, par6, par7);

@@ -32,7 +32,7 @@ public class BlastFurnacePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack furnace = EnumMachineAlpha.BLAST_FURNACE.getStack();
+        ItemStack furnace = null; //TODO EnumMachineAlpha.BLAST_FURNACE.getStack();
         if(furnace != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, furnace, "/gui/CraftGuideRecipe.png", 1, 181, 82, 181);
 

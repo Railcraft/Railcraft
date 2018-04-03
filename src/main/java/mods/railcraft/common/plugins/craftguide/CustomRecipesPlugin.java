@@ -42,8 +42,8 @@ public class CustomRecipesPlugin implements RecipeProvider {
     public void generateRecipes(RecipeGenerator generator) {
         RecipeTemplate template = generator.createRecipeTemplate(slots, null, "/gui/CraftGuideRecipe.png", 1, 1, 82, 1);
 
-        // Rotor Repair
-        if (EnumMachineAlpha.TURBINE.isAvailable()) {
+        // Rotor Repair TODO
+        if (false) {
             ItemStack[] rotorRepair = new ItemStack[10];
             rotorRepair[0] = RailcraftItems.TURBINE_ROTOR.getStack();
             rotorRepair[0].setItemDamage(1);

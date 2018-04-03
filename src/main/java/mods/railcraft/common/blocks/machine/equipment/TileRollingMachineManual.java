@@ -45,7 +45,7 @@ public class TileRollingMachineManual extends TileRollingMachine {
     public boolean openGui(EntityPlayer player) {
         if (player.getDistanceSq(getPos().add(0.5, 0.5, 0.5)) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ROLLING_MACHINE_MANUAL, player, worldObj, getPos());
+        GuiHandler.openGui(EnumGui.ROLLING_MACHINE_MANUAL, player, world, getPos());
         return true;
     }
 }

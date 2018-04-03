@@ -46,7 +46,7 @@ public class TileSignalToken extends TileSignalBase implements IControllerTile, 
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             controller.tickClient();
             return;
         }
@@ -61,7 +61,7 @@ public class TileSignalToken extends TileSignalBase implements IControllerTile, 
         if (trackLocator.getTrackStatus() == TrackLocator.Status.VALID) {
             BlockPos trackPos = trackLocator.getTrackLocation();
             if (trackPos != null) {
-                List<EntityMinecart> carts = EntitySearcher.findMinecarts().inFloorBox(trackPos, 0F).at(worldObj);
+                List<EntityMinecart> carts = EntitySearcher.findMinecarts().inFloorBox(trackPos, 0F).at(world);
                 carts.stream().filter(c -> !cartTimers.contains(c.getUniqueID())).forEach(tokenRing::markCart);
                 carts.forEach(c -> cartTimers.add(c.getUniqueID()));
             }
@@ -143,7 +143,7 @@ public class TileSignalToken extends TileSignalBase implements IControllerTile, 
 
     @Override
     public TokenRing getTokenRing() {
-        return TokenManager.getManager(worldObj).getTokenRing(tokenRingUUID, getPos());
+        return TokenManager.getManager(world).getTokenRing(tokenRingUUID, getPos());
     }
 
     @Override

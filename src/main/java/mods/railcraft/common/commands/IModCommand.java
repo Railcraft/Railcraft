@@ -13,6 +13,7 @@ package mods.railcraft.common.commands;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
+import java.util.NavigableSet;
 import java.util.SortedSet;
 
 /**
@@ -22,11 +23,11 @@ import java.util.SortedSet;
  */
 public interface IModCommand extends ICommand {
 
-    String getFullCommandString();
+    String getFullString();
 
     int getPermissionLevel();
 
-    SortedSet<SubCommand> getChildren();
+    NavigableSet<SubCommand> getChildren();
 
     void printHelp(ICommandSender sender);
 }

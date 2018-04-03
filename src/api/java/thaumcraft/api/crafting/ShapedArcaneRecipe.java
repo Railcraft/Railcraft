@@ -11,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import thaumcraft.api.ThaumcraftApiHelper;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.research.ResearchHelper;
+import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 public class ShapedArcaneRecipe implements IArcaneRecipe
 {
@@ -22,21 +21,22 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
 
     public ItemStack output = null;
     public  Object[] input = null;
-    public AspectList aspects = null;
-    public String[] research; 
+    public  ItemStack[] inputCrystals = null;
+    public int vis = 0;
+    public String research; 
     public int width = 0;
     public int height = 0;
     private boolean mirrored = true;
-
+    private String name;
     
-    public ShapedArcaneRecipe(String research, ItemStack result, AspectList aspects, Object... recipe){ this(new String[]{research}, result, aspects, recipe); }
-    
-    public ShapedArcaneRecipe(String[] research, ItemStack result, AspectList aspects, Object... recipe)
+    public ShapedArcaneRecipe(String research, ItemStack result, int vis, ItemStack[] crystals, Object... recipe)
     {
+    	inputCrystals = crystals;
         output = result.copy();
         this.research = research;
-        this.aspects = aspects;
+        this.vis = vis;
         String shape = "";
+        this.name = "";
         
         int idx = 0;
 
@@ -108,7 +108,7 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
             }
             else if (in instanceof String)
             {
-                itemMap.put(chr, OreDictionary.getOres((String)in));
+                itemMap.put(chr, OreDictionary.getOres((String)in,false));
             }
             else
             {
@@ -149,9 +149,21 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
     @Override
     public boolean matches(InventoryCrafting inv, World world, EntityPlayer player)
     {
-    	if (player!=null && ( research!=null && research[0].length()>0 && !ResearchHelper.isResearchComplete(player.getName(), research))) {
+    	if (player!=null && !ThaumcraftCapabilities.knowsResearch(player, research)) {
     		return false;
     	}
+    	
+    	if (inputCrystals!=null && inputCrystals.length>0) {
+	        f1:
+	        for (ItemStack crystal:this.inputCrystals) {
+	        	for (int q = 0; q<6;q++) {
+	        		ItemStack is = inv.getStackInSlot(q+9);
+	        		if (this.checkItemEquals(crystal, is) && is.stackSize>=crystal.stackSize) continue f1;
+	        	}
+	        	return false;
+	        }
+        }
+    	
         for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++)
         {
             for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y)
@@ -167,7 +179,7 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
                 }
             }
         }
-
+        
         return false;
     }
 
@@ -254,17 +266,17 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
     }
     
     @Override		
-	public AspectList getAspects() {
-		return aspects;
+	public int getVis() {
+		return vis;
 	}
     
     @Override		
-	public AspectList getAspects(InventoryCrafting inv) {
-		return aspects;
+	public int getVis(InventoryCrafting inv) {
+		return vis;
 	}
 	
 	@Override
-	public String[] getResearch() {
+	public String getResearch() {
 		return research;
 	}
 	
@@ -281,4 +293,19 @@ public class ShapedArcaneRecipe implements IArcaneRecipe
 
         return aitemstack;
     }
+
+	@Override
+	public ItemStack[] getCrystals() {
+		return this.inputCrystals;
+	}
+
+	@Override
+	public String getRecipeName() {
+		return name;
+	}
+	
+	@Override
+	public void setRecipeName(String name) {
+		this.name=name;
+	}
 }

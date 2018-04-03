@@ -25,11 +25,7 @@ public class SlotStackFilter extends SlotRailcraft {
     public SlotStackFilter(Predicate<ItemStack> filter, IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
         this.filter = filter;
-    }
-
-    @Override
-    public int getSlotStackLimit() {
-        return 64;
+        setStackLimit(64);
     }
 
     @Override

@@ -272,9 +272,8 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return world.setBlockToAir(pos);
     }
 
-    @Nonnull
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World var1, int meta) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileDetector();
     }
 

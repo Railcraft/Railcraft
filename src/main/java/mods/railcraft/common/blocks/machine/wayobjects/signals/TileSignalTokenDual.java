@@ -35,7 +35,7 @@ public class TileSignalTokenDual extends TileSignalToken implements IReceiverTil
     @Override
     public void update() {
         super.update();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             receiver.tickClient();
             return;
         }

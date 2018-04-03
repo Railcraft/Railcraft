@@ -49,7 +49,7 @@ public class GoggleAuraWorldRenderer {
             return;
         }
 
-        final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        final EntityPlayer player = Minecraft.getMinecraft().player;
 
         if (ItemGoggles.isPlayerWearing(player)) {
             ItemStack goggles = ItemGoggles.getGoggles(player);
@@ -75,7 +75,7 @@ public class GoggleAuraWorldRenderer {
 
                 OpenGL.glBegin(GL11.GL_LINES);
 
-                World world = Minecraft.getMinecraft().theWorld;
+                World world = Minecraft.getMinecraft().world;
                 for (CartInfo cartInfo : cartInfos) {
                     EntityMinecart cart = CartTools.getCartFromUUID(world, cartInfo.id);
                     if (cart == null) {

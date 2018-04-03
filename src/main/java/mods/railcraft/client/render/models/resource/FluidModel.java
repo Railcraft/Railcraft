@@ -267,7 +267,7 @@ public final class FluidModel implements IModel {
                 if (flow == null) flow = -1000f;
             }
             int flowRound = (int) Math.round(Math.toDegrees(flow));
-            flowRound = MathHelper.clamp_int(flowRound, -1000, 1000);
+            flowRound = MathHelper.clamp(flowRound, -1000, 1000);
             return flowRound;
         }
 

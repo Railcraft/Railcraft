@@ -13,6 +13,8 @@ public class OreDictionaryEntries {
 	public static void initializeOreDictionary() {
 		OreDictionary.registerOre("oreAmber", new ItemStack(BlocksTC.oreAmber));
 		OreDictionary.registerOre("oreCinnabar", new ItemStack(BlocksTC.oreCinnabar));
+		OreDictionary.registerOre("oreQuartz", new ItemStack(BlocksTC.oreQuartz));
+		
 		OreDictionary.registerOre("oreCrystalAir", new ItemStack(BlocksTC.crystalAir,1,OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("oreCrystalEarth", new ItemStack(BlocksTC.crystalEarth,1,OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("oreCrystalWater", new ItemStack(BlocksTC.crystalWater,1,OreDictionary.WILDCARD_VALUE));
@@ -30,19 +32,13 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,0));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlocksTC.sapling,1,1));
 		
-		OreDictionary.registerOre("shardAir", new ItemStack(ItemsTC.shard,1,0));
-		OreDictionary.registerOre("shardFire", new ItemStack(ItemsTC.shard,1,1));
-		OreDictionary.registerOre("shardWater", new ItemStack(ItemsTC.shard,1,2));
-		OreDictionary.registerOre("shardEarth", new ItemStack(ItemsTC.shard,1,3));
-		OreDictionary.registerOre("shardOrder", new ItemStack(ItemsTC.shard,1,4));
-		OreDictionary.registerOre("shardEntropy", new ItemStack(ItemsTC.shard,1,5));
-		OreDictionary.registerOre("shardTainted", new ItemStack(ItemsTC.shard,1,6));
-		OreDictionary.registerOre("shardBalanced", new ItemStack(ItemsTC.shard,1,7));		
+		// not defined here: 
+		// shardAir,shardFire,shardWater,shardEarth,shardOrder,shardEntropy,shardTainted		
+		
 		OreDictionary.registerOre("nitor", new ItemStack(BlocksTC.nitor,1,OreDictionary.WILDCARD_VALUE));
 		
 		OreDictionary.registerOre("gemAmber", new ItemStack(ItemsTC.amber));
 		OreDictionary.registerOre("quicksilver", new ItemStack(ItemsTC.quicksilver));
-		OreDictionary.registerOre("nuggetGold", new ItemStack(ItemsTC.coin));
 		
 		OreDictionary.registerOre("nuggetIron", new ItemStack(ItemsTC.nuggets,1,0));
 		OreDictionary.registerOre("nuggetCopper", new ItemStack(ItemsTC.nuggets,1,1));
@@ -52,7 +48,8 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("nuggetQuicksilver", new ItemStack(ItemsTC.nuggets,1,5));
 		OreDictionary.registerOre("nuggetThaumium", new ItemStack(ItemsTC.nuggets,1,6));
 		OreDictionary.registerOre("nuggetVoid", new ItemStack(ItemsTC.nuggets,1,7));
-		OreDictionary.registerOre("nuggetBrass", new ItemStack(ItemsTC.nuggets,1,8));		
+		OreDictionary.registerOre("nuggetBrass", new ItemStack(ItemsTC.nuggets,1,8));
+		OreDictionary.registerOre("nuggetQuartz", new ItemStack(ItemsTC.nuggets,1,9));		
 		
 		OreDictionary.registerOre("ingotThaumium", new ItemStack(ItemsTC.ingots,1,0));
 		OreDictionary.registerOre("ingotVoid", new ItemStack(ItemsTC.ingots,1,1));
@@ -77,6 +74,7 @@ public class OreDictionaryEntries {
 		OreDictionary.registerOre("clusterSilver", new ItemStack(ItemsTC.clusters,1,4));
 		OreDictionary.registerOre("clusterLead", new ItemStack(ItemsTC.clusters,1,5));
 		OreDictionary.registerOre("clusterCinnabar", new ItemStack(ItemsTC.clusters,1,6));
+		OreDictionary.registerOre("clusterQuartz", new ItemStack(ItemsTC.clusters,1,7));
 	
 	}
 

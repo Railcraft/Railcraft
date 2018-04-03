@@ -62,7 +62,7 @@ public class CrowbarHandler {
         } else
             return;
 
-        if (Game.isClient(thePlayer.worldObj))
+        if (Game.isClient(thePlayer.world))
             return;
 
         IToolCrowbar crowbar = (IToolCrowbar) stack.getItem();

@@ -41,7 +41,7 @@ public class SchematicEntity extends Schematic {
 
     public void writeToWorld(IBuilderContext context) {
         Entity e = EntityList.createEntityFromNBT(entityNBT, context.world());
-        context.world().spawnEntityInWorld(e);
+        context.world().spawnEntity(e);
     }
 
     public void readFromWorld(IBuilderContext context, Entity entity) {

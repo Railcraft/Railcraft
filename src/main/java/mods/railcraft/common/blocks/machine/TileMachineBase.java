@@ -84,7 +84,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
      */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, getPos());
+            InvTools.dropInventory(new InventoryMapper((IInventory) this), world, getPos());
     }
 
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -102,7 +102,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
     public boolean openGui(EntityPlayer player) {
         EnumGui gui = getGui();
         if (gui != null) {
-            GuiHandler.openGui(gui, player, worldObj, getX(), getY(), getZ());
+            GuiHandler.openGui(gui, player, world, getX(), getY(), getZ());
             return true;
         }
         return false;
@@ -121,7 +121,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
     public void update() {
         super.update();
 
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         // Check and fix invalid block ids
@@ -129,26 +129,26 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             checkedBlock = true;
 
             if (!getMachineType().isAvailable()) {
-                worldObj.setBlockToAir(getPos());
+                world.setBlockToAir(getPos());
                 return;
             }
 
             if (getBlockType() != getMachineType().block()) {
                 Game.log(Level.INFO, "Updating Machine Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
-                worldObj.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
+                world.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
-                worldObj.setTileEntity(getPos(), this);
+                world.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
             }
 
-            IBlockState oldState = worldObj.getBlockState(getPos());
+            IBlockState oldState = world.getBlockState(getPos());
             IEnumMachine variant = (IEnumMachine) ((BlockMachine) oldState.getBlock()).getVariant(oldState);
             if (getMachineType() != variant) {
                 IBlockState newState = getMachineType().getDefaultState();
                 if (newState != null) {
-                    worldObj.setBlockState(getPos(), newState, 3);
+                    world.setBlockState(getPos(), newState, 3);
                     validate();
-                    worldObj.setTileEntity(getPos(), this);
+                    world.setTileEntity(getPos(), this);
                     Game.log(Level.INFO, "Updating Machine State: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), oldState, newState, getPos());
                     updateContainingBlockInfo();
                 }

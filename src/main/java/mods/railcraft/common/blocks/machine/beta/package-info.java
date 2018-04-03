@@ -10,6 +10,7 @@
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
+@Deprecated
 package mods.railcraft.common.blocks.machine.beta;
 
 import mcp.MethodsReturnNonnullByDefault;

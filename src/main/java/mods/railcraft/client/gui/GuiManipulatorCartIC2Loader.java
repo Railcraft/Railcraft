@@ -108,7 +108,7 @@ public class GuiManipulatorCartIC2Loader extends TileGui {
         if (t instanceof TileIC2Loader)
             tile = (TileIC2Loader) t;
         else
-            mc.thePlayer.closeScreen();
+            mc.player.closeScreen();
     }
 
 }

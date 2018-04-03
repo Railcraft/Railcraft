@@ -1,0 +1,38 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column",
+    "textures": {
+      "end": "railcraft:blocks/blast_furnace_0"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "model": "railcraft:detector",
+        "textures": {
+          "front": "railcraft:blocks/blast_furnace_1",
+          "side": "railcraft:blocks/blast_furnace_0"
+        }
+      }
+    ],
+    "icon": {
+      "0": {
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_0"
+        }
+      },
+      "1": {
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_1"
+        }
+      },
+      "2": {
+        "textures": {
+          "side": "railcraft:blocks/blast_furnace_2"
+        }
+      }
+    }
+  }
+}

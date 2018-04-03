@@ -54,7 +54,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
         super.moveAlongTrack(pos, state);
-        if (Game.isClient(worldObj))
+        if (Game.isClient(world))
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
@@ -84,25 +84,25 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
         }
 
         if (isValidNewTrackPosition(pos)) {
-            IBlockState targetState = WorldPlugin.getBlockState(worldObj, pos);
+            IBlockState targetState = WorldPlugin.getBlockState(world, pos);
             if (placeNewTrack(pos, SLOT_STOCK, trackShape)) {
-                targetState.getBlock().dropBlockAsItem(worldObj, pos, targetState, 0);
+                targetState.getBlock().dropBlockAsItem(world, pos, targetState, 0);
             }
         }
     }
 
     private boolean isValidNewTrackPosition(BlockPos pos) {
-        return isValidReplacementBlock(pos) && worldObj.isSideSolid(pos.down(), EnumFacing.UP);
+        return isValidReplacementBlock(pos) && world.isSideSolid(pos.down(), EnumFacing.UP);
     }
 
     private boolean isValidReplacementBlock(BlockPos pos) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
         Block block = state.getBlock();
-        return (WorldPlugin.isBlockAir(worldObj, pos, state) ||
+        return (WorldPlugin.isBlockAir(world, pos, state) ||
                 block instanceof IPlantable ||
                 block instanceof IShearable ||
                 EntityTunnelBore.replaceableBlocks.contains(block)) ||
-                block.isReplaceable(worldObj, pos);
+                block.isReplaceable(world, pos);
     }
 
     @Override
@@ -112,8 +112,8 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
 
     @Override
     public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.CART_TRACK_LAYER, player, worldObj, this);
+        if (Game.isHost(world))
+            GuiHandler.openGui(EnumGui.CART_TRACK_LAYER, player, world, this);
         return true;
     }
 

@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ public class CokeOvenPlugin implements RecipeProvider {
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack oven = EnumMachineAlpha.COKE_OVEN.getStack();
+        ItemStack oven = RailcraftBlocks.COKE_OVEN.getStack();
         if (oven != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, oven, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_craft_guide.png", 1, 1, 82, 1);
 

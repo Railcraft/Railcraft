@@ -1,5 +1,8 @@
 package thaumcraft.api.golems;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -10,13 +13,10 @@ import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 import thaumcraft.api.golems.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class GolemHelper {
 
 	/**
-	 * Make sure to register your seals during the preInit phase.
+	 * Make sure to register your seals during the preInit phase before TC is loaded
 	 * @param seal
 	 */
 	public static void registerSeal(ISeal seal) {

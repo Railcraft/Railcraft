@@ -56,7 +56,7 @@ public class ModelManager {
     public static void registerBlockItemModel(ItemStack stack, IBlockState state) {
         Item item = stack.getItem();
         if (item instanceof IRailcraftItemBlock) {
-            ModelResourceLocation modelResourceLocation = ((IRailcraftItemBlock) item).getModelLocation(state);
+            ModelResourceLocation modelResourceLocation = ((IRailcraftItemBlock) item).getModelLocation(stack, state);
             int meta = stack.getItemDamage();
             if (Game.DEVELOPMENT_ENVIRONMENT)
                 Game.log(Level.INFO, "Registering block item model: {0} meta: {1} state: {2} location: {3}", item.getRegistryName(), meta, state, modelResourceLocation);

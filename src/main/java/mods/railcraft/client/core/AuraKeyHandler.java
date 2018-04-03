@@ -51,7 +51,7 @@ public class AuraKeyHandler {
     public void tick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen instanceof GuiChat)
             return;
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         for (Map.Entry<GoggleAura, KeyBinding> keyBinding : keyBindings.entrySet()) {
             if (keyBinding.getValue().isPressed()) {
                 GoggleAura aura = keyBinding.getKey();

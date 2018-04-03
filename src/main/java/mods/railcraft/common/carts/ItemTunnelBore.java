@@ -78,7 +78,7 @@ public class ItemTunnelBore extends ItemCart {
 
                     EntityMinecart bore = new EntityTunnelBore(world, (float) pos.getX() + 0.5F, (float) pos.getY(), (float) pos.getZ() + 0.5F, playerFacing);
                     CartToolsAPI.setCartOwner(bore, player);
-                    world.spawnEntityInWorld(bore);
+                    world.spawnEntity(bore);
                 }
             }
             dec(stack);

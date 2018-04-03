@@ -60,18 +60,18 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
 
     private Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
-        int i = MathHelper.floor_double(x);
-        int j = MathHelper.floor_double(y);
-        int k = MathHelper.floor_double(z);
+        int i = MathHelper.floor(x);
+        int j = MathHelper.floor(y);
+        int k = MathHelper.floor(z);
 
-        if (BlockRailBase.isRailBlock(cart.worldObj, new BlockPos(i, j - 1, k))) {
+        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
             --j;
         }
 
-        IBlockState iblockstate = cart.worldObj.getBlockState(new BlockPos(i, j, k));
+        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
 
         if (BlockRailBase.isRailBlock(iblockstate)) {
-            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.worldObj, new BlockPos(i, j, k), iblockstate, cart);
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
             y = (double) j;
 
             if (blockrailbase$enumraildirection.isAscending()) {
@@ -87,9 +87,9 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             x = x + d0 * offset;
             z = z + d1 * offset;
 
-            if (aint[0][1] != 0 && MathHelper.floor_double(x) - i == aint[0][0] && MathHelper.floor_double(z) - k == aint[0][2]) {
+            if (aint[0][1] != 0 && MathHelper.floor(x) - i == aint[0][0] && MathHelper.floor(z) - k == aint[0][2]) {
                 y += (double) aint[0][1];
-            } else if (aint[1][1] != 0 && MathHelper.floor_double(x) - i == aint[1][0] && MathHelper.floor_double(z) - k == aint[1][2]) {
+            } else if (aint[1][1] != 0 && MathHelper.floor(x) - i == aint[1][0] && MathHelper.floor(z) - k == aint[1][2]) {
                 y += (double) aint[1][1];
             }
 
@@ -100,18 +100,18 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     }
 
     public Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
-        int i = MathHelper.floor_double(p_70489_1_);
-        int j = MathHelper.floor_double(p_70489_3_);
-        int k = MathHelper.floor_double(p_70489_5_);
+        int i = MathHelper.floor(p_70489_1_);
+        int j = MathHelper.floor(p_70489_3_);
+        int k = MathHelper.floor(p_70489_5_);
 
-        if (BlockRailBase.isRailBlock(cart.worldObj, new BlockPos(i, j - 1, k))) {
+        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
             --j;
         }
 
-        IBlockState iblockstate = cart.worldObj.getBlockState(new BlockPos(i, j, k));
+        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
 
         if (BlockRailBase.isRailBlock(iblockstate)) {
-            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.worldObj, new BlockPos(i, j, k), iblockstate, cart);
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
             int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
             double d0 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
             double d1 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;

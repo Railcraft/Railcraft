@@ -33,7 +33,8 @@ public class ModuleRF extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftCarts.REDSTONE_FLUX,
-                        RailcraftBlocks.MANIPULATOR
+                        RailcraftBlocks.MANIPULATOR,
+                        RailcraftBlocks.FLUX_TRANSFORMER
                 );
             }
 

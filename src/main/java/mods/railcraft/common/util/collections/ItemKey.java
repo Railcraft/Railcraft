@@ -16,7 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemKey {
+public final class ItemKey {
 
     public final Item item;
     public final int metadata;

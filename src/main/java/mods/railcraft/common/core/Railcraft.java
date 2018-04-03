@@ -21,6 +21,7 @@ import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
@@ -57,7 +58,7 @@ import java.io.File;
                 + "after:BuildCraftAPI|statements@[1.0,);"
                 + "after:BuildCraftAPI|transport@[1.0,);"
                 + "after:forestry@[5.2.15,);"
-                + "after:Thaumcraft;"
+                + "after:thaumcraft;"
                 + "after:IC2@[2.6.192-ex110,2.7.0-ex111);")
 public final class Railcraft {
     public static final String NAME = "Railcraft";
@@ -188,6 +189,8 @@ public final class Railcraft {
 //        Game.log(Level.FINE, "Init Phase");
 
         RailcraftModuleManager.init();
+
+        CraftingPlugin.onInit();
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }

@@ -4,57 +4,75 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.aspects.Aspect;
 
 public class AuraHelper {
 	
 	
 	/**
-	 * Consume vis from the aura at the given location
+	 * Consume vis from the aura at the given location 
 	 * @param world
 	 * @param pos
-	 * @param aspect
 	 * @param amount
-	 * @return has anything been consumed
-	 */
-	public static boolean drainAura(World world, BlockPos pos, Aspect aspect, int amount) {
-		return ThaumcraftApi.internalMethods.drainAura(world,pos, aspect, amount);
-	}
-	
-	/**
-	 * Consume vis from the aura at the given location
-	 * @param world
-	 * @param pos
-	 * @param aspect
-	 * @param amount
+	 * @param simulate
 	 * @return how much was actually drained
 	 */
-	public static int drainAuraAvailable(World world, BlockPos pos, Aspect aspect, int amount) {
-		return ThaumcraftApi.internalMethods.drainAuraAvailable(world,pos, aspect, amount);
+	public static float drainVis(World world, BlockPos pos, float amount, boolean simulate) {
+		return ThaumcraftApi.internalMethods.drainVis(world,pos, amount, simulate);
 	}
 	
 	/**
-	 * Adds vis to the aura at the given location. This does not actually increase the aura instantly - 
-	 * it merely adds a recharge ticked to the chunk that will add to the aura there the next time it is processed.	 
+	 * Consume flux from the aura at the given location
+	 * Added for completeness, but should really not be used. Add instability instead.
+	 * @param world
+	 * @param pos
+	 * @param amount
+	 * @param simulate
+	 * @return how much was actually drained
+	 */
+	public static float drainFlux(World world, BlockPos pos, float amount, boolean simulate) {
+		return ThaumcraftApi.internalMethods.drainFlux(world,pos, amount,simulate);
+	}
+		
+	/**
+	 * Adds vis to the aura at the given location. 
 	 *  
 	 * @param world
 	 * @param pos
-	 * @param aspect
 	 * @param amount
 	 */
-	public static void addAura(World world, BlockPos pos, Aspect aspect, int amount) {
-		ThaumcraftApi.internalMethods.addAura(world,pos, aspect, amount);
+	public static void addVis(World world, BlockPos pos, float amount) {
+		ThaumcraftApi.internalMethods.addVis(world,pos, amount);
 	}
 	
 	/**
-	 * Get how much of a given aspect is in the aura at the given location.
+	 * Get how much vis is in the aura at the given location.
 	 * @param world
 	 * @param pos
-	 * @param aspect
 	 * @return
 	 */
-	public static int getAura(World world, BlockPos pos, Aspect aspect) {
-		return ThaumcraftApi.internalMethods.getAura(world,pos, aspect);
+	public static float getVis(World world, BlockPos pos) {
+		return ThaumcraftApi.internalMethods.getVis(world,pos);
+	}
+	
+	/**
+	 * Adds flux to the aura at the specified block position.
+	 * @param world
+	 * @param pos
+	 * @param amount how much stability to remove
+	 * @param showEffect if set to true, a flux smoke effect and sound will also be displayed. Use in moderation.
+	 */
+	public static void polluteAura(World world, BlockPos pos, float amount, boolean showEffect) {
+		ThaumcraftApi.internalMethods.addFlux(world,pos,amount,showEffect);
+	}
+	
+	/**
+	 * Get how much flux is in the aura at the given location.
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
+	public static float getFlux(World world, BlockPos pos) {
+		return ThaumcraftApi.internalMethods.getFlux(world,pos);
 	}
 	
 	/**
@@ -73,23 +91,9 @@ public class AuraHelper {
 	 * @param world
 	 * @param player
 	 * @param pos
-	 * @param aspect
 	 * @return
 	 */
-	public static boolean shouldPreserveAura(World world, EntityPlayer player, BlockPos pos, Aspect aspect) {
-		return ThaumcraftApi.internalMethods.shouldPreserveAura(world,player,pos,aspect);
+	public static boolean shouldPreserveAura(World world, EntityPlayer player, BlockPos pos) {
+		return ThaumcraftApi.internalMethods.shouldPreserveAura(world,player,pos);
 	}
-	
-	/**
-	 * Adds flux to the aura at the specified block position.
-	 * @param world
-	 * @param pos
-	 * @param amount how much flux to add
-	 * @param showEffect if set to true, a flux goo splash effect and sound will also be displayed. Use in moderation.
-	 */
-	public static void pollute(World world, BlockPos pos, int amount, boolean showEffect) {
-		ThaumcraftApi.internalMethods.pollute(world,pos,amount,showEffect);
-	}
-
-	
 }

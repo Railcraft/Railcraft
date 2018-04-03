@@ -1,7 +1,7 @@
 package thaumcraft.api.golems.seals;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class SealPos  {
 		public BlockPos pos;

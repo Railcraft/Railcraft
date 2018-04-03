@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
@@ -14,36 +14,30 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.research.ResearchItem;
+import thaumcraft.api.research.ResearchEntry;
+//import thaumcraft.api.research.ResearchItem;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ResearchItemRC extends ResearchItem {
+public class ResearchItemRC extends ResearchEntry {
 
     public ResearchItemRC(String key, String catagory) {
-        super(key, catagory);
+//        super(key, catagory);
     }
 
     public ResearchItemRC(String key, String category, AspectList aspects, int displayColumn, int displayRow, int complexity, ResourceLocation icon) {
-        super(key, category, aspects, displayColumn, displayRow, complexity, icon);
+//        super(key, category, aspects, displayColumn, displayRow, complexity, icon);
     }
 
     public ResearchItemRC(String key, String category, AspectList aspects, int displayColumn, int displayRow, int complexity, ItemStack icon) {
-        super(key, category, aspects, displayColumn, displayRow, complexity, icon);
+//        super(key, category, aspects, displayColumn, displayRow, complexity, icon);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public String getName() {
-        return LocalizationPlugin.translate(String.format("thaumcraft.research.%s.name", key));
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public String getText() {
-        return LocalizationPlugin.translate(String.format("thaumcraft.research.%s.text", key));
+        return LocalizationPlugin.translate(String.format("thaumcraft.research.%s.name", getKey()));
     }
 
 }

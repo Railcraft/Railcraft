@@ -63,7 +63,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
                     horse.setGrowingAge(0);
                     horse.tasks.addTask(1, new EntityAIHalloweenKnights(horse));
                 },
-                (cart, horse) -> cart.worldObj.addWeatherEffect(new EntityLightningBolt(horse.worldObj, horse.posX, horse.posY, horse.posZ, true))
+                (cart, horse) -> cart.world.addWeatherEffect(new EntityLightningBolt(horse.world, horse.posX, horse.posY, horse.posZ, true))
         ));
 
         MOBS.add(SurpriseEntity.create(EntityHorse.class, 20, 1,

@@ -1,0 +1,91 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+      "particle": "railcraft:blocks/tank_steel_valve_0"
+    }
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "north": {
+      "true": {
+        "textures": {
+          "north": "railcraft:blocks/tank_steel_valve_3"
+        }
+      },
+      "false": {
+        "textures": {
+          "north": "railcraft:blocks/tank_steel_valve_1"
+        }
+      }
+    },
+    "south": {
+      "true": {
+        "textures": {
+          "south": "railcraft:blocks/tank_steel_valve_3"
+        }
+      },
+      "false": {
+        "textures": {
+          "south": "railcraft:blocks/tank_steel_valve_1"
+        }
+      }
+    },
+    "west": {
+      "true": {
+        "textures": {
+          "west": "railcraft:blocks/tank_steel_valve_3"
+        }
+      },
+      "false": {
+        "textures": {
+          "west": "railcraft:blocks/tank_steel_valve_1"
+        }
+      }
+    },
+    "east": {
+      "true": {
+        "textures": {
+          "east": "railcraft:blocks/tank_steel_valve_3"
+        }
+      },
+      "false": {
+        "textures": {
+          "east": "railcraft:blocks/tank_steel_valve_1"
+        }
+      }
+    },
+    "up": {
+      "true": {
+        "textures": {
+          "up": "railcraft:blocks/tank_steel_valve_2"
+        }
+      },
+      "false": {
+        "textures": {
+          "up": "railcraft:blocks/tank_steel_valve_0"
+        }
+      }
+    },
+    "down": {
+      "true": {
+        "textures": {
+          "down": "railcraft:blocks/tank_steel_valve_2"
+        }
+      },
+      "false": {
+        "textures": {
+          "down": "railcraft:blocks/tank_steel_valve_0"
+        }
+      }
+    }
+  }
+}

@@ -54,18 +54,18 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
     public void update() {
         super.update();
         if (!powered) {
-            if (Game.isHost(worldObj)) {
+            if (Game.isHost(world)) {
                 if (clock % SNOW_MELT_INTERVAL == 0) {
-                    Block blockAbove = WorldPlugin.getBlock(worldObj, getPos().up());
+                    Block blockAbove = WorldPlugin.getBlock(world, getPos().up());
                     if (blockAbove == Blocks.SNOW_LAYER)
-                        WorldPlugin.setBlockToAir(worldObj, getPos().up());
+                        WorldPlugin.setBlockToAir(world, getPos().up());
                 }
             } else {
-                if (!WorldPlugin.isBlockAir(worldObj, getPos().up())) return;
+                if (!WorldPlugin.isBlockAir(world, getPos().up())) return;
                 double px = getX() + rand.nextFloat();
                 double py = getY() + rand.nextFloat() * 0.5F + 1;
                 double pz = getZ() + rand.nextFloat();
-                EffectManager.instance.chimneyEffect(worldObj, px, py, pz, color);
+                EffectManager.instance.chimneyEffect(world, px, py, pz, color);
             }
         }
     }
@@ -73,7 +73,7 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
     @Override
     public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
+        powered = PowerPlugin.isBlockBeingPowered(world, getPos());
         sendUpdateToClient();
     }
 
@@ -115,7 +115,7 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY,
-        float hitZ) {
+                                  float hitZ) {
         if (super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ))
             return true;
         if (player.isSneaking())

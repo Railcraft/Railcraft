@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
 
 public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockContainerRailcraftSubtyped<V> implements IPostConnection, ColorPlugin.IColoredBlock {
 
-    public BlockMachine(Boolean opaque) {
+    public BlockMachine(boolean opaque) {
         super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
@@ -289,12 +289,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return getVariant(state).getTileEntity();
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public TileEntity createNewTileEntity(World var1, int meta) {
-        return null;
     }
 
     @Override

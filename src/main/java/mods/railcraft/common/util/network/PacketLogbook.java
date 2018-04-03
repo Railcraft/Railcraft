@@ -40,7 +40,7 @@ class PacketLogbook extends RailcraftPacket {
     @Override
     @SideOnly(Side.CLIENT)
     public void readData(RailcraftInputStream data) throws IOException {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         NBTTagCompound nbt = data.readNBT();
         if (nbt != null) {
             Multimap<LocalDate, GameProfile> log = TileLogbook.convertLogFromNBT(nbt);

@@ -279,7 +279,7 @@ public abstract class InvTools {
             return;
         EntityItem entityItem = new EntityItem(world, x, y + 1.5, z, stack);
         entityItem.setDefaultPickupDelay();
-        world.spawnEntityInWorld(entityItem);
+        world.spawnEntity(entityItem);
     }
 
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
@@ -318,7 +318,7 @@ public abstract class InvTools {
                 entityItem.motionX = (float) MiscTools.RANDOM.nextGaussian() * variance;
                 entityItem.motionY = (float) MiscTools.RANDOM.nextGaussian() * variance + 0.2F;
                 entityItem.motionZ = (float) MiscTools.RANDOM.nextGaussian() * variance;
-                world.spawnEntityInWorld(entityItem);
+                world.spawnEntity(entityItem);
             }
         }
     }
@@ -1029,6 +1029,6 @@ public abstract class InvTools {
         }
 
         average = average / (float) inv.slotCount();
-        return MathHelper.floor_float(average * 14.0F) + (numStacks > 0 ? 1 : 0);
+        return MathHelper.floor(average * 14.0F) + (numStacks > 0 ? 1 : 0);
     }
 }

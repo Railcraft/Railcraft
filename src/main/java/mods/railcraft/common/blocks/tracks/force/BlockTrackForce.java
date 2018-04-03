@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.tracks.force;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -20,6 +21,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityMinecart;
@@ -41,10 +43,17 @@ import java.util.Random;
  */
 public class BlockTrackForce extends BlockTrackTile {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, EnumRailDirection.NORTH_SOUTH, EnumRailDirection.EAST_WEST);
+    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
 
     public BlockTrackForce() {
         setHardness(-1);
         setSoundType(SoundType.METAL);
+        setDefaultState(getDefaultState().withProperty(COLOR, EnumColor.CYAN));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, SHAPE, COLOR);
     }
 
     @Override
@@ -82,4 +91,8 @@ public class BlockTrackForce extends BlockTrackTile {
         return 0.6F;
     }
 
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new TileTrackForce();
+    }
 }

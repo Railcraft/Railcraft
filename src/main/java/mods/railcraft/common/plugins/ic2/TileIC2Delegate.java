@@ -22,7 +22,7 @@ public class TileIC2Delegate extends TileEntity implements IEnergyTile {
     public TileIC2Delegate(TileEntity delegate) {
         this.delegate = delegate;
         setPos(delegate.getPos());
-        this.worldObj = delegate.getWorld();
+        this.world = delegate.getWorld();
     }
 
     @Override

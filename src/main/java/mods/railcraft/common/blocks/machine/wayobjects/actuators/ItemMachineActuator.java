@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,12 +33,12 @@ public class ItemMachineActuator extends ItemMachine {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelResourceLocation getModelLocation(IBlockState state) {
+    public ModelResourceLocation getModelLocation(ItemStack stack, IBlockState state) {
         BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.ACTUATOR.block();
         if (block != null) {
             ActuatorVariant variant = block.getVariant(state);
             return new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, variant.getName()), "inventory");
         }
-        return super.getModelLocation(state);
+        return super.getModelLocation(stack, state);
     }
 }

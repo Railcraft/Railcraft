@@ -108,7 +108,7 @@ public class ParticleFireSpark extends ParticleBase {
 
         if (this.rand.nextFloat() > f)
         {
-            this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ, 0);
+            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ, 0);
         }
 
         double dist = getPos().squareDistanceTo(end);
@@ -119,7 +119,7 @@ public class ParticleFireSpark extends ParticleBase {
 
         calculateVector(getHorizontalDistSq(end));
 
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
     }
 
 }
