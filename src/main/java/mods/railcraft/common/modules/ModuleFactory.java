@@ -13,11 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
-import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
@@ -352,7 +348,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 //TODO this is not right
                 if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
-                if (/*!EnumMachineAlpha.BLAST_FURNACE.isAvailable() || */RailcraftConfig.forceEnableSteelRecipe())
+                if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
                 List<ItemStack> logs = new ArrayList<ItemStack>(25);
