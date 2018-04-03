@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +25,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -47,6 +49,10 @@ public class WorldPlugin {
     @Nullable
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
         // see flowerpot source code
+        if (pos.getY() < 0) {
+            // dunno if this will be triggered by tiles at y=0
+            Game.log(Level.INFO, "Attempted to access tile entity in an invalid position");
+        }
         return world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
     }
 

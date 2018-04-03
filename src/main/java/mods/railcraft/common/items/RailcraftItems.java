@@ -11,7 +11,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackKit;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.IRailcraftObject;
@@ -168,13 +167,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }},
     TRACK_PARTS(ItemTrackParts::new, "track_parts", () -> "ingotIron"),
     TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", () -> "ingotSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
     }},
     TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", () -> "blockSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
     }},
     TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor") {{
-//        conditions().add(EnumMachineAlpha.TURBINE);
+//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
     }},
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();

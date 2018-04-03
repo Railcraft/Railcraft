@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -26,7 +25,6 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -164,7 +162,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                     return true;
                 break;
             case 'A':
-                if (world.isAirBlock(pos) || state.getMaterial() == Material.LAVA)
+                if (state.getBlock().isAir(state, world, pos) || state.getMaterial() == Material.LAVA)
                     return true;
                 break;
         }
@@ -182,7 +180,6 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         return 1;
     }
 
-    @Override
     public int getBurnProgressScaled(int i) {
         if (burnTime <= 0 || currentItemBurnTime <= 0)
             return 0;

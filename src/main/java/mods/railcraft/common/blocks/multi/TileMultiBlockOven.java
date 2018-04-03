@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -23,8 +24,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
@@ -35,6 +38,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     private boolean cooking;
     protected boolean paused;
     private boolean wasBurning;
+    private final Set<Object> actions = new HashSet<>();
 
     protected TileMultiBlockOven(int invNum, List<? extends MultiBlockPattern> patterns) {
         super(invNum, patterns);
@@ -159,8 +163,6 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         return scale;
     }
 
-    public abstract int getBurnProgressScaled(int i);
-
     @Override
     public int getLightValue() {
         if (getPatternMarker() == 'W' && isStructureValid() && isBurning()) {
@@ -169,9 +171,17 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         return 0;
     }
 
-    private void processActions() {
-//        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
-//        actions.clear();
+    protected void processActions() {
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
+        actions.clear();
+    }
+
+    @Override
+    public void actionActivated(IActionExternal action) {
+        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
+        if (mBlock != null) {
+            mBlock.actions.add(action);
+        }
     }
 
     @Override
@@ -179,11 +189,4 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         return isCooking();
     }
 
-    @Override
-    public void actionActivated(IActionExternal action) {
-//        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
-//        if (mBlock != null) {
-//            mBlock.actions.add(action);
-//        }
-    }
 }

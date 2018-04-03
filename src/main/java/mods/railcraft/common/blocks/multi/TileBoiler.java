@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -205,11 +205,10 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) getTankManager();
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 
@@ -269,7 +268,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
                     return false;
                 break;
             case 'A': // Air
-                if (!world.isAirBlock(pos))
+                if (!block.isAir(state, world, pos))
                     return false;
                 break;
         }
