@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BatterySaveData extends WorldSavedData {
+public final class BatterySaveData extends WorldSavedData {
     private static final String NAME = "railcraft.batteries";
     private Long2DoubleMap chargeLevels = new Long2DoubleLinkedOpenHashMap();
 
@@ -46,11 +46,13 @@ public class BatterySaveData extends WorldSavedData {
 
     BatterySaveData() {
         super(NAME);
+        chargeLevels.defaultReturnValue(Double.NaN);
     }
 
     @Deprecated // called by reflection
     public BatterySaveData(String name) {
         super(name);
+        chargeLevels.defaultReturnValue(Double.NaN);
     }
 
     @Override
@@ -81,7 +83,10 @@ public class BatterySaveData extends WorldSavedData {
     }
 
     public void initBattery(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        chargeBattery.initCharge(chargeLevels.getOrDefault(pos.toLong(), 0.0));
+        double charge = chargeLevels.get(pos.toLong());
+        if (Double.isNaN(charge))
+            charge = 0.0;
+        chargeBattery.initCharge(charge);
     }
 
     public void updateBatteryRecord(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
@@ -90,7 +95,7 @@ public class BatterySaveData extends WorldSavedData {
     }
 
     public void removeBattery(BlockPos pos) {
-        if (chargeLevels.remove(pos) != null)
+        if (!Double.isNaN(chargeLevels.remove(pos.toLong())))
             markDirty();
     }
 }
