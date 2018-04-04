@@ -179,6 +179,11 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
     }
 
+    @Override
+    public boolean canDisableShield(ItemStack stack, ItemStack shield, EntityLivingBase entity, EntityLivingBase attacker) {
+        return true;
+    }
+
     static {
         if (TrackKits.TURNOUT.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.TURNOUT::getTrackKit));
