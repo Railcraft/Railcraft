@@ -2,11 +2,8 @@ language: java
 sudo: required
 dist: trusty
 
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 jdk:
+  - openjdk8
   - oraclejdk8
   
 before_cache:
@@ -19,8 +16,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-install: ./gradlew setupCiWorkspace -S
-script: ./gradlew build
+install: ./gradlew setupCiWorkspace -S -i
+script: ./gradlew build -i
 
 env:
   global:
