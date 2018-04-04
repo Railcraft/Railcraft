@@ -20,10 +20,11 @@ import java.util.Arrays;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum Mod {
-    THAUMCRAFT("Thaumcraft"),
+    THAUMCRAFT("thaumcraft"),
     FORESTRY("forestry"),
-    IC2("IC2"),
+    IC2("ic2"),
     IC2_CLASSIC("IC2-Classic-Spmod");
+    //TODO fix modid
 
     public final String modId;
 

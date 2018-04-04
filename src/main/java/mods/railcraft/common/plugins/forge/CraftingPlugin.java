@@ -23,7 +23,8 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -168,6 +169,8 @@ public final class CraftingPlugin {
     }
 
     public static void addRecipe(IRecipe recipe) {
+        if (recipe.getRegistryName() == null)
+            recipe.setRegistryName(gen.next());
         if (isBeforeInit())
             INSTANCE.addRecipeWaiter(recipe);
         else
@@ -314,16 +317,19 @@ public final class CraftingPlugin {
     }
 
     private void addRecipeWaiter(IRecipe recipe) {
-        add(() -> {});
+        add(() -> {
+        });
     }
 
     private void addShapedRecipeWaiter(ItemStack stack, Object... args) {
-        add(() -> {});
+        add(() -> {
+        });
     }
 
     //TODO fix all these messs
     private void addShapelessRecipeWaiter(ItemStack stack, Object... args) {
-        add(() -> {});
+        add(() -> {
+        });
     }
 
     private void addFurnaceRecipeWaiter(ItemStack input, ItemStack output, float xp) {
@@ -382,7 +388,9 @@ public final class CraftingPlugin {
 
     private static final class ResourceLocationGenerator {
         int now = 0;
-        ResourceLocationGenerator() {}
+
+        ResourceLocationGenerator() {
+        }
 
         ResourceLocation next() {
             return RailcraftConstantsAPI.locationOf("recipe" + (now++));

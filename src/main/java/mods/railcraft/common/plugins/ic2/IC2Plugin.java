@@ -45,7 +45,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
+    public static final ItemStackCache ITEMS = new ItemStackCache("ic2", () -> Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC), s -> {
         String[] tokens = s.split("#");
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
@@ -111,7 +111,7 @@ public class IC2Plugin {
             if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
                 return ElectricItem.manager.discharge(stack, energyNeeded, tier, false, true, false);
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, ElectricItem.class);
+            Game.logErrorAPI("ic2", error, ElectricItem.class);
         }
         return 0;
     }
@@ -123,7 +123,7 @@ public class IC2Plugin {
                 return tier >= battery.getTier(stack);
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
+            Game.logErrorAPI("ic2", error, IElectricItem.class);
         }
         return false;
     }
@@ -135,7 +135,7 @@ public class IC2Plugin {
                 return battery.canProvideEnergy(stack) && tier >= battery.getTier(stack);
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
+            Game.logErrorAPI("ic2", error, IElectricItem.class);
         }
         return false;
     }
@@ -176,7 +176,7 @@ public class IC2Plugin {
                     it.remove();
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
+            Game.logErrorAPI("ic2", error, Recipes.class);
         }
     }
 
@@ -186,7 +186,7 @@ public class IC2Plugin {
         try {
             Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(container), Recipes.inputFactory.forStack(input), output, true);
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
+            Game.logErrorAPI("ic2", error, Recipes.class);
         }
     }
 
@@ -215,7 +215,7 @@ public class IC2Plugin {
                     it.remove();
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
+            Game.logErrorAPI("ic2", error, Recipes.class);
         }
     }
 

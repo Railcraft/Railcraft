@@ -54,12 +54,10 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         String domain = textureResource.getResourceDomain();
         String name = textureResource.getResourcePath();
 
-        Map<String, TextureAtlasSprite> mapRegisteredSprites = ObfuscationReflectionHelper.getPrivateValue(TextureMap.class, textureMap, 5);  //TODO 1.11
-
         for (int i = 0; i < numIcons; i++) {
             String texName = domain + ":" + textureFolder + name;
             TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
-            mapRegisteredSprites.put(texture.getIconName(), texture);
+            textureMap.setTextureEntry(texture);
             locations[i] = new ResourceLocation(texture.getIconName());
         }
         return locations;

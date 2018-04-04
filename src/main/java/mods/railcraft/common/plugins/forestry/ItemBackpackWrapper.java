@@ -37,9 +37,10 @@ public class ItemBackpackWrapper extends ItemWrapper {
         try {
             Field itemColorList = ForestryAPI.modelManager.getClass().getDeclaredField("itemColorList");
             itemColorList.setAccessible(true);
+            //TODO this is not a list
             List list = (List) itemColorList.get(ForestryAPI.modelManager);
             list.add(getObject());
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
+        } catch (NoSuchFieldException | IllegalAccessException | ClassCastException ignored) {
         }
     }
 }

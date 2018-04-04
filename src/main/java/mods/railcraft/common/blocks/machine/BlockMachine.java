@@ -335,14 +335,12 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.addAll(
-                // leave this as lambda's instead of method references, it breaks otherwise.
-                getCreativeList().stream()
-                        .filter(IEnumMachine::isAvailable)
-                        .map(IEnumMachine::getStack)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList())
-        );
+        // leave this as lambda's instead of method references, it breaks otherwise.
+        getCreativeList().stream()
+                .filter(m -> m.isAvailable())
+                .map(m -> m.getStack())
+                .filter(s -> !s.isEmpty())
+                .forEach(list::add);
     }
 
     @Override

@@ -49,20 +49,20 @@ import java.io.File;
         acceptedMinecraftVersions = Railcraft.MC_VERSION,
         guiFactory = "mods.railcraft.client.core.RailcraftGuiConfigFactory",
         updateJSON = "http://www.railcraft.info/railcraft_versions",
-        dependencies = "required-after:Forge@[12.18.2.2107,);"
-                + "after:BuildCraft|Core@[6.1.7,);"
-                + "after:BuildCraft|Energy;"
-                + "after:BuildCraft|Builders;"
-                + "after:BuildCraft|Factory;"
-                + "after:BuildCraftAPI|statements@[1.0,);"
-                + "after:BuildCraftAPI|transport@[1.0,);"
-                + "after:forestry@[5.2.15,);"
+        dependencies = "required-after:forge@[14.23.2.2611,);"
+                + "after:buildcraft|core@[7.99,);"
+                + "after:buildcraft|energy;"
+                + "after:buildcraft|builders;"
+                + "after:buildcraft|factory;"
+                + "after:buildcraftAPI|statements@[1.0,);"
+                + "after:buildcraftAPI|transport@[1.0,);"
+                + "after:forestry@[5.8.0.256,);"
                 + "after:thaumcraft;"
-                + "after:IC2@[2.6.192-ex110,2.7.0-ex111);")
+                + "after:ic2@[2.8.67-ex112,);")
 public final class Railcraft {
     public static final String NAME = "Railcraft";
     public static final String MOD_ID = "railcraft";
-    public static final String MC_VERSION = "[1.10.2,1.11)";
+    public static final String MC_VERSION = "[1.12.2,1.13)";
     public static final RootCommand rootCommand = new RootCommand();
     static final String VERSION = "@VERSION@";
     @Instance(Railcraft.MOD_ID)
