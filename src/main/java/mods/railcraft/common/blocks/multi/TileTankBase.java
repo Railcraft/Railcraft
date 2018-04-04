@@ -413,6 +413,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         List<ItemStack> items = super.getDrops(fortune);
         if (items.isEmpty())
             return Collections.emptyList();
+        items.clear();
         ItemStack drop = new ItemStack(getBlockType());
         if (!InvTools.isEmpty(drop)) {
             NBTTagCompound nbt = InvTools.getItemData(drop);

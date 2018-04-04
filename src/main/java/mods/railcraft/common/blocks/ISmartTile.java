@@ -1,5 +1,6 @@
 package mods.railcraft.common.blocks;
 
+import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -44,7 +45,7 @@ public interface ISmartTile {
     }
 
     default List<ItemStack> getDrops(int fortune) {
-        return Collections.singletonList(new ItemStack(tile().getBlockType())); // fast and furious
+        return Lists.newArrayList(new ItemStack(tile().getBlockType())); // must be modifiable!
 //        World world = tile().getWorld();
 //        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
 //        List<ItemStack> ret = new ArrayList<>();
