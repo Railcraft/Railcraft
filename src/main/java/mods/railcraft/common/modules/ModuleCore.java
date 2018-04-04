@@ -66,6 +66,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 import org.apache.logging.log4j.Level;
 
@@ -191,7 +192,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.FURNACE_MINECART);
 
-                IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+                IForgeRegistry<IRecipe> registry = ForgeRegistries.RECIPES;
                 Collection<ResourceLocation> toRemove = new ArrayList<>();
                 for (IRecipe each : registry) {
                     ItemStack output = InvTools.emptyStack();
@@ -205,7 +206,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 for (ResourceLocation each : toRemove) {
-                    registry.remove(each);
+                    registry.register(CraftingPlugin.disabledRecipe(each));
                 }
 
 //                register(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecart.Type.COMMAND_BLOCK.getName());

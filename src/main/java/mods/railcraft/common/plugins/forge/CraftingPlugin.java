@@ -340,6 +340,10 @@ public final class CraftingPlugin {
         return new DummyRecipe(RailcraftConstantsAPI.locationOf(name));
     }
 
+    public static IRecipe disabledRecipe(ResourceLocation namespace) {
+        return new DummyRecipe(namespace);
+    }
+
     static final IRecipe DUMMY = dummy("crafting_plugin");
 
     private static final class DummyRecipe implements IRecipe {
