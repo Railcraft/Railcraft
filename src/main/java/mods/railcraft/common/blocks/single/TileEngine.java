@@ -212,7 +212,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     @Override
-    public boolean canConnectRedstone(EnumFacing dir) {
+    public boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return true;
     }
 

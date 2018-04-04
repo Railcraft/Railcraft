@@ -121,7 +121,7 @@ public interface ISmartTile {
         return 2.0f;
     }
 
-    default boolean canConnectRedstone(EnumFacing dir) {
+    default boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return false;
     }
 

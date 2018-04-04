@@ -149,7 +149,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canConnectRedstone(side)).orElse(false);
     }
 
@@ -201,21 +201,21 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElseGet(() -> super.getBoundingBox(state, world, pos));
     }
 
     @Override
     @Nullable
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(null);
+        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElseGet(() -> super.getCollisionBoundingBox(state, world, pos));
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(super.getSelectedBoundingBox(state, world, pos));
+        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElseGet(() -> super.getSelectedBoundingBox(state, world, pos));
     }
 
     @Override
@@ -242,7 +242,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canCreatureSpawn(type)).orElse(super.canCreatureSpawn(state, world, pos, type));
+        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canCreatureSpawn(type)).orElseGet(() -> super.canCreatureSpawn(state, world, pos, type));
     }
 
     @Override
@@ -264,7 +264,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(worldIn, pos, ITileCompare.class, ITileCompare::getComparatorInputOverride).orElse(super.getComparatorInputOverride(state, worldIn, pos));
+        return WorldPlugin.retrieveFromTile(worldIn, pos, ITileCompare.class, ITileCompare::getComparatorInputOverride).orElseGet(() -> super.getComparatorInputOverride(state, worldIn, pos));
     }
 
     public IPostConnection.ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing face) {
@@ -274,6 +274,6 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.getActualState(state)).orElse(super.getActualState(state, worldIn, pos));
+        return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.getActualState(state)).orElseGet(() -> super.getActualState(state, worldIn, pos));
     }
 }
