@@ -19,7 +19,6 @@ import ic2.api.item.IElectricItem;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -50,7 +49,6 @@ public class IC2Plugin {
         return IC2Items.getItem(tokens[0], tokens.length == 2 ? tokens[1] : null);
     });
 
-    @Nullable
     public static ItemStack getItem(String tag) {
         return ITEMS.get(tag);
     }
@@ -149,21 +147,10 @@ public class IC2Plugin {
             return;
         output = output.copy();
         setSize(output, numoutput);
-        if (CraftingPlugin.isBeforeInit()) {
-            final ItemStack out = output; // No potential pointer changes yeah
-            CraftingPlugin.INSTANCE.add(() -> {
-                try {
-                    Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, out);
-                } catch (Throwable error) {
-                    Game.logErrorAPI("IC2", error, Recipes.class);
-                }
-            });
-        } else {
-            try {
-                Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, output);
-            } catch (Throwable error) {
-                Game.logErrorAPI("IC2", error, Recipes.class);
-            }
+        try {
+            Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, output);
+        } catch (Throwable error) {
+            Game.logErrorAPI("IC2", error, Recipes.class);
         }
     }
 

@@ -25,6 +25,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -75,6 +77,7 @@ public final class CraftingPlugin {
             FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
+    @Deprecated
     public static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
@@ -96,6 +99,7 @@ public final class CraftingPlugin {
         return recipeList.toArray();
     }
 
+    @Deprecated
     private static void getExtraInfo(RecipeType recipeType, ItemStack result, boolean[] extraInfo, Object... recipeArray) throws InvalidRecipeException {
         Arrays.fill(extraInfo, false);
         for (Object obj : recipeArray) {
@@ -114,6 +118,7 @@ public final class CraftingPlugin {
         }
     }
 
+    @Deprecated
     @Contract("_, null, _ -> fail")
     public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         if (isEmpty(result)) {
@@ -125,6 +130,7 @@ public final class CraftingPlugin {
         return new ProcessedRecipe(info[0], info[1], result, recipeArray);
     }
 
+    @Deprecated
     public static void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
@@ -146,6 +152,7 @@ public final class CraftingPlugin {
         }
     }
 
+    @Deprecated
     public static void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
@@ -168,6 +175,7 @@ public final class CraftingPlugin {
         }
     }
 
+    @Deprecated
     public static void addRecipe(IRecipe recipe) {
         if (recipe.getRegistryName() == null)
             recipe.setRegistryName(gen.next());
@@ -177,6 +185,7 @@ public final class CraftingPlugin {
             ForgeRegistries.RECIPES.register(recipe);
     }
 
+    @Deprecated
     public static IRecipe makeVanillaShapedRecipe(ItemStack output, Object... components) {
         String s = "";
         int index = 0;
@@ -225,23 +234,26 @@ public final class CraftingPlugin {
 //        return new ShapedRecipes("railcraft:crafting_plugin", width, height, recipeArray, output);
     }
 
+    @Deprecated
     public static IRecipe makeVanillaShapelessRecipe(ItemStack output, Object... components) {
-        List<ItemStack> ingredients = new ArrayList<>();
+        NonNullList<Ingredient> ingredients = NonNullList.create();
         for (Object obj : components) {
             if (obj instanceof ItemStack) {
-                ingredients.add(((ItemStack) obj).copy());
+                ingredients.add(Ingredient.fromStacks(((ItemStack) obj).copy()));
                 continue;
             }
             if (obj instanceof Item) {
-                ingredients.add(new ItemStack((Item) obj));
+                ingredients.add(Ingredient.fromItem((Item) obj));
                 continue;
             }
             if (obj instanceof Block) {
-                ingredients.add(new ItemStack((Block) obj));
+                ingredients.add(Ingredient.fromItem(Item.getItemFromBlock((Block) obj)));
             }
         }
 
-        return DUMMY;
+        IRecipe result = new ShapelessRecipes(GROUP.toString(), output, ingredients);
+        result.setRegistryName(gen.next());
+        return result;
     }
 
     public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
@@ -255,7 +267,7 @@ public final class CraftingPlugin {
         return NonNullList.from(ItemStack.EMPTY, grid);
     }
 
-    @Nullable
+    @Deprecated
     public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
         Object object = ingredient.getRecipeObject();
         if (object instanceof ItemStack) {
@@ -272,6 +284,7 @@ public final class CraftingPlugin {
         throw new RuntimeException("Unknown ingredient object");
     }
 
+    @Deprecated
     public enum RecipeType {
         SHAPED, SHAPELESS
     }
@@ -282,6 +295,7 @@ public final class CraftingPlugin {
         }
     }
 
+    @Deprecated
     public static class ProcessedRecipe {
         public final ItemStack result;
         public final Object[] recipeArray;
@@ -300,27 +314,32 @@ public final class CraftingPlugin {
         return RailcraftModuleManager.getStage().compareTo(RailcraftModuleManager.Stage.INIT) < 0;
     }
 
+    @Deprecated
     public static void onInit() {
         INSTANCE.waitingRecipes.forEach(Runnable::run);
     }
 
     public static final CraftingPlugin INSTANCE = new CraftingPlugin();
+    @Deprecated
     private List<Runnable> waitingRecipes;
 
     CraftingPlugin() {
         waitingRecipes = new ArrayList<>();
     }
 
-    public void add(Runnable e) {
+    @Deprecated
+    private void add(Runnable e) {
         Game.logTrace(Level.WARN, 7, "Recipes registered before INIT! At:");
         waitingRecipes.add(e);
     }
 
+    @Deprecated
     private void addRecipeWaiter(IRecipe recipe) {
         add(() -> {
         });
     }
 
+    @Deprecated
     private void addShapedRecipeWaiter(ItemStack stack, Object... args) {
         add(() -> {
         });
@@ -336,15 +355,11 @@ public final class CraftingPlugin {
         add(() -> FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp));
     }
 
-    static IRecipe dummy(String name) {
-        return new DummyRecipe(RailcraftConstantsAPI.locationOf(name));
-    }
-
     public static IRecipe disabledRecipe(ResourceLocation namespace) {
         return new DummyRecipe(namespace);
     }
 
-    static final IRecipe DUMMY = dummy("crafting_plugin");
+    static final IRecipe DUMMY = new DummyRecipe(RailcraftConstantsAPI.locationOf("crafting_plugin"));
 
     private static final class DummyRecipe implements IRecipe {
 

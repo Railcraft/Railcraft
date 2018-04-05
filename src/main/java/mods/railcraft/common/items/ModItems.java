@@ -20,8 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
-
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
@@ -74,12 +72,10 @@ public enum ModItems implements IRailcraftRecipeIngredient {
         this.meta = meta;
     }
 
-    @Nullable
     public ItemStack get() {
         return get(1);
     }
 
-    @Nullable
     public ItemStack get(int qty) {
         init();
         if (!InvTools.isEmpty(stack)) {
@@ -87,10 +83,9 @@ public enum ModItems implements IRailcraftRecipeIngredient {
             setSize(stack, Math.min(qty, stack.getMaxStackSize()));
             return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
-    @Nullable
     @Override
     public Object getRecipeObject() {
         return get();

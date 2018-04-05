@@ -91,7 +91,7 @@ public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
     }
 
     @Override
-    public void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, FluidStack fluidOutput, int cookTime) {
+    public void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
         checkNotNull(input);
         recipes.add(new CokeOvenRecipe(input, matchDamage, matchNBT, output, fluidOutput, cookTime));
 
