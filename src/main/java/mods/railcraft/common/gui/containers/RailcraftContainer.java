@@ -34,7 +34,7 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
 public abstract class RailcraftContainer extends Container {
     @Nullable
     private final IInventory callback;
-    private final List<Widget> widgets = new ArrayList<Widget>();
+    private final List<Widget> widgets = new ArrayList<>();
 
     protected RailcraftContainer(IInventory inv) {
         this.callback = inv;
@@ -97,7 +97,6 @@ public abstract class RailcraftContainer extends Container {
     }
 
     //TODO: test new parameters
-    @Nullable
     @Override
     public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
         Slot slot = slotId < 0 ? null : inventorySlots.get(slotId);
@@ -106,13 +105,12 @@ public abstract class RailcraftContainer extends Container {
         return super.slotClick(slotId, mouseButton, clickType, player);
     }
 
-    @Nullable
     protected ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
         ItemStack stack = InvTools.emptyStack();
 
         if (mouseButton == 2) {
             if (slot.canAdjustPhantom())
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
         } else if (mouseButton == 0 || mouseButton == 1) {
             InventoryPlayer playerInv = player.inventory;
             slot.onSlotChanged();
@@ -229,7 +227,7 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        ItemStack originalStack = null;
+        ItemStack originalStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotIndex);
         int numSlots = inventorySlots.size();
         if (slot != null && slot.getHasStack()) {

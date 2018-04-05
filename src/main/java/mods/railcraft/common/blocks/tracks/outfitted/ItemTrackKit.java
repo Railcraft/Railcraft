@@ -44,7 +44,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 
@@ -116,7 +115,7 @@ public class ItemTrackKit extends ItemRailcraft {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (!isInCreativeTab(tab))
             return;
-        list.addAll(TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).map(this::getStack).filter(stack -> !stack.isEmpty()).collect(Collectors.toList()));
+        TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).map(this::getStack).filter(stack -> !stack.isEmpty()).forEach(list::add);
     }
 
     @Override

@@ -201,11 +201,11 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
     }
 
     public boolean canFill() {
-        return getPatternPosition().getY() - getPattern().getMasterOffset().getY() > 0;
+        return isStructureValid() && getPatternPosition().getY() - getPattern().getMasterOffset().getY() > 0;
     }
 
     public boolean canDrain() {
-        return getPatternPosition().getY() - getPattern().getMasterOffset().getY() <= 1;
+        return isStructureValid() && getPatternPosition().getY() - getPattern().getMasterOffset().getY() <= 1;
     }
 
     @Override
