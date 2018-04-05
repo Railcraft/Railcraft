@@ -102,6 +102,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if (!isInCreativeTab(tab))
+            return;
         list.add(new ItemStack(this, 1, getMaxDamage()));
         list.add(new ItemStack(this, 1, 0));
     }

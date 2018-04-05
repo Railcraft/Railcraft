@@ -51,6 +51,8 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if (!isInCreativeTab(tab))
+            return;
         IVariantEnum[] variants = getVariants();
         if (variants != null) {
             for (IVariantEnum variant : variants) {

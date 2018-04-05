@@ -73,9 +73,10 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         CraftingPlugin.addRecipe(new LocomotivePaintingRecipe(new ItemStack(this)));
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if (!isInCreativeTab(tab))
+            return;
         for (String skin : renderType.getRendererTags()) {
             CreativePlugin.addToList(list, renderType.getItemWithRenderer(skin, new ItemStack(this)));
         }

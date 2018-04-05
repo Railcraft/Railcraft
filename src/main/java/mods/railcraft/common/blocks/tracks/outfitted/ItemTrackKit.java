@@ -114,6 +114,8 @@ public class ItemTrackKit extends ItemRailcraft {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if (!isInCreativeTab(tab))
+            return;
         list.addAll(TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).map(this::getStack).filter(stack -> !stack.isEmpty()).collect(Collectors.toList()));
     }
 
