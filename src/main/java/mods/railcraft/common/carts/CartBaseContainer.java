@@ -35,7 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -50,7 +49,9 @@ import java.util.Iterator;
  */
 public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject, IInventoryComposite {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
+    @Nullable
     protected EnumFacing travelDirection;
+    @Nullable
     protected EnumFacing verticalTravelDirection;
 
     protected CartBaseContainer(World world) {
@@ -104,7 +105,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     public void setDead() {
         if (Game.isClient(world))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             }
         super.setDead();
     }
@@ -117,11 +118,9 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     /**
      * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
      */
-    @Nullable
     @Override
     public EntityMinecart.Type getType() {
-        FMLLog.bigWarning("This method should NEVER be called");
-        return null;
+        throw new RuntimeException("This method should NEVER be called");
     }
 
     @Override
@@ -136,18 +135,17 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     protected void updateTravelDirection(BlockPos pos, IBlockState state) {
         BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirection(getEntityWorld(), pos, state);
-        if (shape != null) {
-            EnumFacing EnumFacing = determineTravelDirection(shape);
-            EnumFacing previousEnumFacing = travelDirectionHistory[1];
-            if (previousEnumFacing != null && travelDirectionHistory[0] == previousEnumFacing) {
-                travelDirection = EnumFacing;
-                verticalTravelDirection = determineVerticalTravelDirection(shape);
-            }
-            travelDirectionHistory[0] = previousEnumFacing;
-            travelDirectionHistory[1] = EnumFacing;
+        @Nullable EnumFacing facing = determineTravelDirection(shape);
+        @Nullable EnumFacing previousEnumFacing = travelDirectionHistory[1];
+        if (previousEnumFacing != null && travelDirectionHistory[0] == previousEnumFacing) {
+            travelDirection = facing;
+            verticalTravelDirection = determineVerticalTravelDirection(shape);
         }
+        travelDirectionHistory[0] = previousEnumFacing;
+        travelDirectionHistory[1] = facing;
     }
 
+    @Nullable
     private EnumFacing determineTravelDirection(BlockRailBase.EnumRailDirection shape) {
         if (TrackShapeHelper.isStraight(shape)) {
             if (posX - prevPosX > 0)
@@ -185,6 +183,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return null;
     }
 
+    @Nullable
     private EnumFacing determineVerticalTravelDirection(BlockRailBase.EnumRailDirection shape) {
         if (shape.isAscending())
             return prevPosY < posY ? EnumFacing.UP : EnumFacing.DOWN;

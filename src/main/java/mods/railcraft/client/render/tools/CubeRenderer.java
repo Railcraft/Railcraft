@@ -26,6 +26,7 @@ import java.util.Arrays;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CubeRenderer {
+    @Deprecated //this broke
     public static class RenderInfo {
 
         public static final float LIGHT_SOURCE_FULL = 1.0F;

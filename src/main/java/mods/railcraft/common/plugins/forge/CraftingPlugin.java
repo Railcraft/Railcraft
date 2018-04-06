@@ -220,7 +220,7 @@ public final class CraftingPlugin {
             hashMap.put(character, itemStack);
         }
 
-        ItemStack recipeArray[] = new ItemStack[width * height];
+        ItemStack[] recipeArray = new ItemStack[width * height];
         for (int i1 = 0; i1 < width * height; i1++) {
             char c = s.charAt(i1);
             if (hashMap.containsKey(c)) {

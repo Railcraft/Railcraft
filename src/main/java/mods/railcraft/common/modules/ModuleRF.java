@@ -39,7 +39,7 @@ public class ModuleRF extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
                 ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getStack();

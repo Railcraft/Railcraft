@@ -45,7 +45,7 @@ public class ModuleTransport extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
 //                EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
 //                if (alpha.isAvailable())
 //                    CraftingPlugin.addRecipe(alpha.getStack(6),

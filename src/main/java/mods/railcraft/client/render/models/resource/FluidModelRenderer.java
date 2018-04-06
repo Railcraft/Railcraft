@@ -42,7 +42,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
-public class FluidModelRenderer {
+public final class FluidModelRenderer {
     public static final FluidModelRenderer INSTANCE = new FluidModelRenderer();
 
     private FluidModelRenderer() {

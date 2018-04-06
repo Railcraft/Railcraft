@@ -200,7 +200,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return slot == SLOT_INPUT && FluidItemHelper.isContainer(stack);
     }
 

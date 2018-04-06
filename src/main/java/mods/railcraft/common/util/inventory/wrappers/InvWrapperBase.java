@@ -63,7 +63,7 @@ public abstract class InvWrapperBase implements IInventory, IInventoryObject, II
     }
 
     @Override
-    public void setInventorySlotContents(int slot, @Nullable ItemStack itemstack) {
+    public void setInventorySlotContents(int slot, ItemStack itemstack) {
         inv.setInventorySlotContents(slot, itemstack);
     }
 

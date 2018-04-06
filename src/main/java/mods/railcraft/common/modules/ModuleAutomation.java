@@ -56,7 +56,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
                 if (RailcraftItems.FILTER_ORE_DICT.isEnabled()
                         || RailcraftItems.FILTER_TYPE.isEnabled())
                     CraftingPlugin.addRecipe(new PrototypeRecipe());

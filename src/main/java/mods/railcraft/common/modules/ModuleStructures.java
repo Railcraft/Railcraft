@@ -58,7 +58,7 @@ public class ModuleStructures extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit() {
+            public void init() {
 
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CONCRETE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
@@ -112,10 +112,6 @@ public class ModuleStructures extends RailcraftModulePayload {
 //            }
 //        }
 
-            }
-
-            @Override
-            public void init() {
                 Block blockPost = RailcraftBlocks.POST.block();
                 if (blockPost != null) {
                     CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getStack(4), RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.WOOD));

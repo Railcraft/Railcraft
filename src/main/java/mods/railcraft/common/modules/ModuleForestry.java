@@ -57,7 +57,7 @@ public class ModuleForestry extends RailcraftModulePayload {
 
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void preInit() {
+            public void init() {
                 if (RailcraftItems.FILTER_BEE_GENOME.isEnabled()) {
                     ForestryPlugin.instance().registerBeeFilterRecipe();
                 }
@@ -90,6 +90,7 @@ public class ModuleForestry extends RailcraftModulePayload {
 
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing")) {
                     ItemStack casing = ModItems.STURDY_CASING.get();
+                    // todo broke!
                     CraftingPlugin.addRecipe(casing,
                             "III",
                             "I I",

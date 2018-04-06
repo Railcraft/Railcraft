@@ -54,14 +54,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -388,8 +386,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean setDestination(@Nullable ItemStack ticket) {
-        if (ticket != null && ticket.getItem() instanceof ItemTicket) {
+    public boolean setDestination(ItemStack ticket) {
+        if (ticket.getItem() instanceof ItemTicket) {
             if (isSecure() && !ItemTicket.matchesOwnerOrOp(ticket, CartToolsAPI.getCartOwner(this)))
                 return false;
             String dest = ItemTicket.getDestination(ticket);
@@ -407,12 +405,11 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private void processTicket() {
         IInventory invTicket = getTicketInventory();
         ItemStack stack = invTicket.getStackInSlot(0);
-        if (stack != null)
-            if (stack.getItem() instanceof ItemTicket) {
-                if (setDestination(stack))
-                    invTicket.setInventorySlotContents(0, InvTools.depleteItem(stack));
-            } else
-                invTicket.setInventorySlotContents(0, null);
+        if (stack.getItem() instanceof ItemTicket) {
+            if (setDestination(stack))
+                invTicket.setInventorySlotContents(0, InvTools.depleteItem(stack));
+        } else
+            invTicket.setInventorySlotContents(0, InvTools.emptyStack());
     }
 
     @Override
@@ -504,7 +501,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public int getDamageToRoadKill(EntityLivingBase entity) {
         if (entity instanceof EntityPlayer) {
             ItemStack pants = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-            if (pants != null && RailcraftItems.OVERALLS.isInstance(pants)) {
+            if (RailcraftItems.OVERALLS.isInstance(pants)) {
                 entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 5));
                 return 4;
             }
@@ -553,13 +550,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void killAndDrop(EntityMinecart cart) {
-        getTicketInventory().setInventorySlotContents(1, null);
+        getTicketInventory().setInventorySlotContents(1, InvTools.emptyStack());
         super.killAndDrop(cart);
     }
 
     @Override
     public void setDead() {
-        getTicketInventory().setInventorySlotContents(1, null);
+        getTicketInventory().setInventorySlotContents(1, InvTools.emptyStack());
         super.setDead();
     }
 
@@ -632,7 +629,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(clientMode.ordinal());
         data.writeByte(clientSpeed.ordinal());
         data.writeByte(lockController.getCurrentState());
@@ -640,7 +637,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         setMode(LocoMode.VALUES[data.readByte()]);
         setSpeed(LocoSpeed.VALUES[data.readByte()]);
         byte lock = data.readByte();

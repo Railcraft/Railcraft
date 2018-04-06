@@ -70,38 +70,38 @@ public class OutfittedTrackItemModel implements IModel {
     }
 
     public enum Loader implements ICustomModelLoader {
-        INSTANCE {
-            @Override
-            public void onResourceManagerReload(IResourceManager resourceManager) {
-            }
+        INSTANCE;
 
-            @Override
-            public boolean accepts(ResourceLocation modelLocation) {
-                return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                        && modelLocation.getResourcePath().startsWith(MODEL_PREFIX);
-            }
+        @Override
+        public void onResourceManagerReload(IResourceManager resourceManager) {
+        }
 
-            @Override
-            public IModel loadModel(ResourceLocation modelLocation) throws IOException {
-                String[] tokens = modelLocation.getResourcePath().split("\\.");
-                TrackType trackType = TrackRegistry.TRACK_TYPE.get(tokens[1]);
-                TrackKit trackKit = TrackRegistry.TRACK_KIT.get(tokens[2]);
-                ImmutableList.Builder<ResourceLocation> texBuilder = ImmutableList.builder();
-                switch (trackKit.getRenderer()) {
-                    case COMPOSITE:
-                        texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
-                                "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
-                        texBuilder.add(new ResourceLocation(trackKit.getRegistryName().getResourceDomain(),
-                                "blocks/tracks/outfitted/kit/" + trackKit.getRegistryName().getResourcePath() + "_0"));
-                        break;
-                    case UNIFIED:
-                        // TODO: fix this
-                        texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
-                                "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
-                        break;
-                }
-                return new OutfittedTrackItemModel(texBuilder.build());
+        @Override
+        public boolean accepts(ResourceLocation modelLocation) {
+            return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
+                    && modelLocation.getResourcePath().startsWith(MODEL_PREFIX);
+        }
+
+        @Override
+        public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+            String[] tokens = modelLocation.getResourcePath().split("\\.");
+            TrackType trackType = TrackRegistry.TRACK_TYPE.get(tokens[1]);
+            TrackKit trackKit = TrackRegistry.TRACK_KIT.get(tokens[2]);
+            ImmutableList.Builder<ResourceLocation> texBuilder = ImmutableList.builder();
+            switch (trackKit.getRenderer()) {
+                case COMPOSITE:
+                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
+                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
+                    texBuilder.add(new ResourceLocation(trackKit.getRegistryName().getResourceDomain(),
+                            "blocks/tracks/outfitted/kit/" + trackKit.getRegistryName().getResourcePath() + "_0"));
+                    break;
+                case UNIFIED:
+                    // TODO: fix this
+                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
+                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
+                    break;
             }
+            return new OutfittedTrackItemModel(texBuilder.build());
         }
     }
 }

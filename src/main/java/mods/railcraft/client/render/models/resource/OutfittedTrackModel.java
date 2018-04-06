@@ -28,6 +28,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -39,6 +41,7 @@ import java.util.function.Function;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class OutfittedTrackModel implements IModel {
     public static final OutfittedTrackModel INSTANCE = new OutfittedTrackModel();
     private static final String TRACK_TYPE_MODEL_FOLDER = "tracks/outfitted/type/";
@@ -55,17 +58,14 @@ public class OutfittedTrackModel implements IModel {
                 modelPrefix + registryName.getResourcePath());
     }
 
-    @Nullable
     private ModelResourceLocation getTrackTypeModelLocation(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
         return new ModelResourceLocation(getModelLocation(TRACK_TYPE_MODEL_FOLDER, trackType.getRegistryName()), "shape=" + shape.getName());
     }
 
-    @Nullable
     private ModelResourceLocation getTrackKitModelLocation(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
         return new ModelResourceLocation(getModelLocation(TRACK_KIT_MODEL_FOLDER, trackKit.getRegistryName()), "shape=" + shape.getName() + ",state=" + state);
     }
 
-    @Nullable
     private ModelResourceLocation getUnifiedModelLocation(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
         ResourceLocation trackTypeName = trackType.getRegistryName();
         ResourceLocation trackKitName = trackKit.getRegistryName();
@@ -151,28 +151,22 @@ public class OutfittedTrackModel implements IModel {
         return models;
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public IModelState getDefaultState() {
-        return null;
-    }
-
     public enum Loader implements ICustomModelLoader {
-        INSTANCE {
-            @Override
-            public void onResourceManagerReload(IResourceManager resourceManager) {
-            }
+        INSTANCE;
 
-            @Override
-            public boolean accepts(ResourceLocation modelLocation) {
-                return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                        && modelLocation.getResourcePath().contains("outfitted_rail");
-            }
+        @Override
+        public void onResourceManagerReload(IResourceManager resourceManager) {
+        }
 
-            @Override
-            public IModel loadModel(ResourceLocation modelLocation) throws IOException {
-                return OutfittedTrackModel.INSTANCE;
-            }
+        @Override
+        public boolean accepts(ResourceLocation modelLocation) {
+            return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
+                    && modelLocation.getResourcePath().contains("outfitted_rail");
+        }
+
+        @Override
+        public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+            return OutfittedTrackModel.INSTANCE;
         }
     }
 

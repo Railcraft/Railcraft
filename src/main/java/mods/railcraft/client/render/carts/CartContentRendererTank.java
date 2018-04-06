@@ -11,6 +11,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.models.resource.FluidModelRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRendererTank extends CartContentRenderer<EntityCartTank> {
+public final class CartContentRendererTank extends CartContentRenderer<EntityCartTank> {
 
     private void renderTank(RenderCart renderer, EntityCartTank cart, float light, float partialTicks, int x, int y, int z) {
         StandardTank tank = cart.getTankManager().get(0);
@@ -42,7 +43,7 @@ public class CartContentRendererTank extends CartContentRenderer<EntityCartTank>
 
                 OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-                OpenGL.glTranslatef(-0.5F, -0.501F + 0.0625f, -0.5F);
+                OpenGL.glTranslatef(-0.5F, -0.501F + RenderTools.PIXEL, -0.5F);
 
                 float level = Math.min(fluidStack.amount / cap, cap);
 

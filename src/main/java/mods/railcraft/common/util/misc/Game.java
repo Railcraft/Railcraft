@@ -103,6 +103,7 @@ public class Game {
 
     public static void logTrace(Level level, int lines, String msg, Object... args) {
         log(level, getMessage(msg, args));
+        logTrace(level, lines, 2, Thread.currentThread().getStackTrace());
     }
 
     public static void logTrace(Level level, int lines, Message message) {

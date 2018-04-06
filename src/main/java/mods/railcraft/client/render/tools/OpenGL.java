@@ -12,6 +12,8 @@ package mods.railcraft.client.render.tools;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -23,6 +25,7 @@ import java.nio.IntBuffer;
  *
  * @author CovertJaguar <http://www.railcraft.info>, inspired by some code posted by MamiyaOtaru (http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2231761-opengl-calls-glstatemanager)
  */
+@SideOnly(Side.CLIENT)
 public class OpenGL {
 
     public static void glEnable(int attrib) {
@@ -195,7 +198,8 @@ public class OpenGL {
     }
 
     public static void glPopAttrib() {
-        GlStateManager.popAttrib();
+        GL11.glPopAttrib();  // Forge #1637
+//        GlStateManager.popAttrib();
     }
 
     public static void glPopMatrix() {
@@ -203,7 +207,8 @@ public class OpenGL {
     }
 
     public static void glPushAttrib() {
-        GlStateManager.pushAttrib();
+        GL11.glPushAttrib(8256); // Forge #1637
+//        GlStateManager.pushAttrib();
     }
 
     public static void glPushMatrix() {

@@ -47,13 +47,14 @@ public class HarvestPlugin {
     private static final MethodHandle GET_SILK_TOUCH_DROP_METHOD;
 
     static {
-        String methodName = Game.DEVELOPMENT_ENVIRONMENT ? "createStackedBlock" : "func_180643_i";
+        String methodName = Game.DEVELOPMENT_ENVIRONMENT ? "getSilkTouchDrop" : "func_180643_i";
         MethodHandle handle = null;
         try {
             Method method = Block.class.getDeclaredMethod(methodName, IBlockState.class);
+            boolean oldAccessible = method.isAccessible();
             method.setAccessible(true);
             handle = MethodHandles.lookup().unreflect(method);
-            method.setAccessible(false);
+            method.setAccessible(oldAccessible);
         } catch (Throwable throwable) {
             Game.logThrowable("Cannot initialize silk touch drops", throwable);
         }

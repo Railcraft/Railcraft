@@ -118,25 +118,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                     if (oreConfig.hasChanged())
                         oreConfig.save();
                 }
-
-                if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
-                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
-                }
-
-                if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
-                    ItemStack fertilizer = ForestryPlugin.getItem("fertilizerCompound");
-
-                    if (!InvTools.isEmpty(fertilizer)) {
-                        fertilizer = fertilizer.copy();
-                        setSize(fertilizer, 2);
-                        CraftingPlugin.addShapelessRecipe(fertilizer,
-                                "dustSaltpeter",
-                                "sand",
-                                "sand",
-                                new ItemStack(Blocks.DIRT),
-                                new ItemStack(Blocks.DIRT));
-                    }
-                }
             }
 
             private void generateDefaultMine(int defaultWeight, int defaultDepth, int defaultRange, int defaultBlockCount, int defaultSeed, Metal metal, String fileName) {
@@ -158,6 +139,24 @@ public class ModuleWorld extends RailcraftModulePayload {
 
             @Override
             public void init() {
+                if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
+                }
+
+                if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
+                    ItemStack fertilizer = ForestryPlugin.getItem("fertilizerCompound");
+
+                    if (!InvTools.isEmpty(fertilizer)) {
+                        fertilizer = fertilizer.copy();
+                        setSize(fertilizer, 2);
+                        CraftingPlugin.addShapelessRecipe(fertilizer,
+                                "dustSaltpeter",
+                                "sand",
+                                "sand",
+                                new ItemStack(Blocks.DIRT),
+                                new ItemStack(Blocks.DIRT));
+                    }
+                }
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {
                     WorkshopCreationHandler workshop = new WorkshopCreationHandler();
                     VillagerRegistry villagerRegistry = VillagerRegistry.instance();

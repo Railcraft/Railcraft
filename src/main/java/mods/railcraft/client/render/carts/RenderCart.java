@@ -28,16 +28,17 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RenderCart extends Render<EntityMinecart> implements ICartRenderer {
 
     public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
-    private static final Map<Class, CartModelRenderer> renderersCore = new HashMap<Class, CartModelRenderer>();
-    private static final Map<Class, CartContentRenderer<?>> renderersContent = new HashMap<>();
+    private static final Map<Class<?>, CartModelRenderer> renderersCore = new HashMap<>();
+    private static final Map<Class<?>, CartContentRenderer<?>> renderersContent = new HashMap<>();
     private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
-    private static final CartContentRenderer<EntityMinecart> defaultContentRenderer = new CartContentRenderer<EntityMinecart>();
+    private static final CartContentRenderer<EntityMinecart> defaultContentRenderer = new CartContentRenderer<>();
 
     static {
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
@@ -59,6 +60,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     // **********************************
     private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
 
+    @Nullable
     private Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
         int i = MathHelper.floor(x);
         int j = MathHelper.floor(y);
@@ -99,6 +101,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         }
     }
 
+    @Nullable
     public Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
         int i = MathHelper.floor(p_70489_1_);
         int j = MathHelper.floor(p_70489_3_);
@@ -299,7 +302,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     }
 
     @SuppressWarnings("ConstantConditions")
-    public CartModelRenderer getCoreRenderer(Class eClass) {
+    public CartModelRenderer getCoreRenderer(Class<?> eClass) {
         CartModelRenderer render = renderersCore.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getCoreRenderer(eClass.getSuperclass());

@@ -17,6 +17,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -26,10 +28,11 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public class FluidRenderer {
 
-    private static final Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
-    private static final Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
+    private static final Map<Fluid, int[]> flowingRenderCache = new HashMap<>();
+    private static final Map<Fluid, int[]> stillRenderCache = new HashMap<>();
     public static final int DISPLAY_STAGES = 100;
 
     public enum FlowState {
@@ -51,7 +54,6 @@ public class FluidRenderer {
         return location != null;
     }
 
-    @Nullable
     public static TextureAtlasSprite getFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
         if (fluidStack == null)
             return RenderTools.getMissingTexture();
@@ -81,10 +83,12 @@ public class FluidRenderer {
         RenderTools.setColor(fluidStack.getFluid().getColor(fluidStack));
     }
 
+    @Deprecated
     public static int[] getLiquidDisplayLists(FluidStack fluidStack) {
         return getLiquidDisplayLists(fluidStack, FlowState.STILL);
     }
 
+    @Deprecated // broken
     public static int[] getLiquidDisplayLists(FluidStack fluidStack, FlowState flowState) {
         Map<Fluid, int[]> cache = flowState == FlowState.FLOWING ? flowingRenderCache : stillRenderCache;
         int[] displayLists = cache.get(fluidStack.getFluid());
