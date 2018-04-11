@@ -31,6 +31,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -131,7 +132,7 @@ public final class CraftingPlugin {
     }
 
     @Deprecated
-    public static void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
+    public static void addRecipe(ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
             processedRecipe = processRecipe(RecipeType.SHAPED, result, recipeArray);
@@ -153,7 +154,7 @@ public final class CraftingPlugin {
     }
 
     @Deprecated
-    public static void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
+    public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
         ProcessedRecipe processedRecipe;
         try {
             processedRecipe = processRecipe(RecipeType.SHAPELESS, result, recipeArray);
@@ -170,7 +171,13 @@ public final class CraftingPlugin {
         } else {
             if (isBeforeInit())
                 INSTANCE.addShapelessRecipeWaiter(processedRecipe.result, processedRecipe.recipeArray);
-            else Game.log(Level.ERROR, "Shapeless recipes");
+            else {
+                Ingredient[] ingredients = new Ingredient[processedRecipe.recipeArray.length];
+                for (int i = 0; i < processedRecipe.recipeArray.length; i++) {
+                    ingredients[i] = CraftingHelper.getIngredient(processedRecipe.recipeArray[i]);
+                }
+                GameRegistry.addShapelessRecipe(gen.next(), GROUP, processedRecipe.result, ingredients);
+            }
 //                GameRegistry.addShapelessRecipe(gen.next(), GROUP, processedRecipe.result, processedRecipe.recipeArray);
         }
     }
@@ -220,17 +227,17 @@ public final class CraftingPlugin {
             hashMap.put(character, itemStack);
         }
 
-        ItemStack[] recipeArray = new ItemStack[width * height];
+        Ingredient[] recipeArray = new Ingredient[width * height];
         for (int i1 = 0; i1 < width * height; i1++) {
             char c = s.charAt(i1);
             if (hashMap.containsKey(c)) {
-                recipeArray[i1] = hashMap.get(c).copy();
+                recipeArray[i1] = Ingredient.fromStacks(hashMap.get(c).copy());
             } else {
-                recipeArray[i1] = InvTools.emptyStack();
+                recipeArray[i1] = Ingredient.EMPTY;
             }
         }
 
-        return DUMMY;
+        return new ShapelessRecipes(GROUP.toString(), output, NonNullList.from(Ingredient.EMPTY, recipeArray));
 //        return new ShapedRecipes("railcraft:crafting_plugin", width, height, recipeArray, output);
     }
 
