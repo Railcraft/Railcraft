@@ -24,9 +24,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import static mods.railcraft.common.util.inventory.InvTools.dec;
-import static mods.railcraft.common.util.inventory.InvTools.inc;
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+import javax.annotation.Nonnull;
+
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 public abstract class TileRollingMachine extends TileMachineBase {
 
@@ -40,7 +40,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     protected final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     public boolean useLast;
     protected boolean isWorking, paused;
-    private ItemStack currentRecipe;
+    private ItemStack currentRecipe = ItemStack.EMPTY;
     private int progress;
 
     protected TileRollingMachine() {
@@ -120,16 +120,16 @@ public abstract class TileRollingMachine extends TileMachineBase {
 
         if (clock % 8 == 0) {
             currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
-            if (currentRecipe != null)
+            if (!InvTools.isEmpty(currentRecipe))
                 findMoreStuff();
         }
 
-        if (currentRecipe != null && canMakeMore()) {
+        if (!isEmpty(currentRecipe) && canMakeMore()) {
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
                 if (InvTools.isRoomForStack(currentRecipe, invResult)) {
                     currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
-                    if (currentRecipe != null) {
+                    if (!InvTools.isEmpty(currentRecipe)) {
                         // TODO: Replace with IRecipe.getRemainder()
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                             craftMatrix.decrStackSize(i, 1);
@@ -185,7 +185,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world) == null)
+        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world).isEmpty())
             return false;
         if (useLast)
             return true;

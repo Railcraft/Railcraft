@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,7 +96,7 @@ public final class InventoryConcatenator implements IInventory {
 
     @Override
     public ITextComponent getDisplayName() {
-        return null;
+        return new TextComponentString("");
     }
 
     @Override

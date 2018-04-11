@@ -79,8 +79,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        for (Object crafter : listeners) {
-            IContainerListener listener = (IContainerListener) crafter;
+        for (IContainerListener listener : listeners) {
             if (lastProgress != tile.getProgress())
                 listener.sendWindowProperty(this, 0, tile.getProgress());
         }

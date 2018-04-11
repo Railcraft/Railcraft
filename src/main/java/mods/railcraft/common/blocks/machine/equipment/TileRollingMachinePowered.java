@@ -33,7 +33,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -113,18 +112,18 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
         if (InvTools.isEmpty(stack))
