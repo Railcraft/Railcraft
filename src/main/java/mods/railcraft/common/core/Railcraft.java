@@ -190,7 +190,7 @@ public final class Railcraft {
 
         RailcraftModuleManager.init();
 
-        CraftingPlugin.onInit();
+        CraftingPlugin.init();
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }

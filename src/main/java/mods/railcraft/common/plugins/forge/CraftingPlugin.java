@@ -321,8 +321,7 @@ public final class CraftingPlugin {
         return RailcraftModuleManager.getStage().compareTo(RailcraftModuleManager.Stage.INIT) < 0;
     }
 
-    @Deprecated
-    public static void onInit() {
+    public static void init() {
         INSTANCE.waitingRecipes.forEach(Runnable::run);
     }
 

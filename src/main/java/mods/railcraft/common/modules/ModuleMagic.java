@@ -50,16 +50,6 @@ public class ModuleMagic extends RailcraftModulePayload {
 
                 MinecraftForge.EVENT_BUS.register(new FirestoneTickHandler());
             }
-
-            @Override
-            public void init() {
-                super.init();
-            }
-
-            @Override
-            public void postInit() {
-                super.postInit();
-            }
         });
     }
 
