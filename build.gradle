@@ -93,9 +93,9 @@ dependencies {
     runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
-    provided "org.jetbrains:annotations:15.0"
+    compileOnly "org.jetbrains:annotations:15.0"
     api project(':api:buildcraft')
-    compile project(':api:railcraft')
+    api project(':api:railcraft')
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
@@ -130,20 +130,20 @@ runClient {
 
 jar {
     from(sourceSets.api.output) {
-        include '**/mods/railcraft/api/**'
         include '**/cofh/api/**'
         exclude '**/uristqwerty/**'
-        exclude '**/buildcraft/**'
         exclude '**/thaumcraft/**'
     }
 
     from {
         configurations.api.collect {
             it.isDirectory() ? it : zipTree(it).matching {
+                include '**/mods/railcraft/api/**'
                 include '**/ic2/api/energy/**'
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
                 include '**/ic2/api/recipe/**'
+                exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
             }
