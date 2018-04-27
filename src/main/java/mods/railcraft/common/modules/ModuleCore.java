@@ -99,7 +99,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 RailcraftFluids.preInitFluids();
                 MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
-                MinecraftForge.EVENT_BUS.register(LootPlugin.INSTANCE);
+                LootPlugin.INSTANCE.init();
 
                 Helpers.structures = new MultiBlockHelper();
 

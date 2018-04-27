@@ -10,6 +10,7 @@
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
+import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStairs;
@@ -27,28 +28,37 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 //TODO templates
 public class ComponentWorkshop extends StructureVillagePieces.Village {
 
+    @GameRegistry.ObjectHolder("minecraft:smith")
+    private static VillagerRegistry.VillagerProfession smith;
     private int averageGroundLevel = -1;
     private boolean hasMadeChest;
+    private final Random random;
 
     public ComponentWorkshop() {
+        random = new Random();
     }
 
     public ComponentWorkshop(Start villagePiece, int type, Random rand, StructureBoundingBox sbb, EnumFacing facing) {
         super(villagePiece, type);
         this.boundingBox = sbb;
+        this.random = rand;
         setCoordBaseMode(facing);
     }
 
     @Nullable
-    public static ComponentWorkshop buildComponent(Start villagePiece, List pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+    public static ComponentWorkshop buildComponent(Start villagePiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
         StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 11, 6, 11, facing);
         return canVillageGoDeeper(box) && StructureComponent.findIntersecting(pieces, box) == null ? new ComponentWorkshop(villagePiece, type, random, box, facing) : null;
     }
@@ -222,8 +232,16 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 //
 //        generateChest(world, sbb, random, 1, 1, 10, LootTableList.CHESTS_STRONGHOLD_CORRIDOR);
 
-        spawnVillagers(world, sbb, 0, 0, 0, 2);
+        spawnVillagers(world, sbb, 3, 1, 3, 2);
         return true;
+    }
+
+    @Override
+    protected VillagerRegistry.VillagerProfession chooseForgeProfession(int count, VillagerRegistry.VillagerProfession prof) {
+        // leave null pointer exceptions on different lines
+        return count == 0 || random.nextBoolean()
+                ? checkNotNull(ModuleWorld.villagerTrackman)
+                : checkNotNull(smith);
     }
 
 //    private BlockPos getPosWithOffset(int x, int y, int z) {

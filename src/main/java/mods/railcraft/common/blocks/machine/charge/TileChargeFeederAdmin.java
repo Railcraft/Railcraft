@@ -46,7 +46,7 @@ public class TileChargeFeederAdmin extends TileCharge {
 
         @Override
         public double getCharge() {
-            return enabled ? getCapacity() : 0.0;
+            return getCapacity();
         }
 
         @Override
