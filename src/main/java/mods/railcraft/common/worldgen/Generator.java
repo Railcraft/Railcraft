@@ -15,7 +15,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 
@@ -28,12 +30,12 @@ public abstract class Generator implements IWorldGenerator {
     protected Generator() {
     }
 
-//    @SubscribeEvent
-//    public final void generate(OreGenEvent.Post event) {
-//        World world = event.getWorld();
-//        Random rand = event.getRand();
-//        _generate(rand, event.getPos(), world);
-//    }
+    @SubscribeEvent
+    public final void generate(OreGenEvent.Post event) {
+        World world = event.getWorld();
+        Random rand = event.getRand();
+        _generate(rand, event.getPos(), world);
+    }
 
     @Override
     public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
