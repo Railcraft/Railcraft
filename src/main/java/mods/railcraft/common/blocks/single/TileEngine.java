@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyConnection;
+import cofh.redstoneflux.impl.EnergyStorage;
+import cofh.redstoneflux.api.IEnergyConnection;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;

@@ -4,6 +4,7 @@ rootProject.ext.version_forge = version_forge
 rootProject.ext.version_mcp = version_mcp
 rootProject.ext.version_forestry = version_forestry
 rootProject.ext.version_industrialcraft = version_industrialcraft
+rootProject.ext.version_rf = version_rf
 
 task echoVersion {
     doLast {
