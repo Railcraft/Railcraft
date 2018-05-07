@@ -80,6 +80,10 @@ repositories {
         name = "jei"
         url = "http://dvs1.progwml6.com/files/maven/"
     }
+	maven {
+			name = "CoFH Maven"
+			url = "http://maven.covers1624.net"
+		}
 }
 
 configurations {
@@ -97,6 +101,7 @@ dependencies {
     api project(':api:buildcraft')
     api project(':api:railcraft')
     compile fileTree(dir: 'libs', include: '*.jar')
+	api "cofh:RedstoneFlux:${project.version_rf}:deobf"
 }
 
 processResources {

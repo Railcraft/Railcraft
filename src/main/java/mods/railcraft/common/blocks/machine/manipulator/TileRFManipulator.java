@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
+import cofh.redstoneflux.impl.EnergyStorage;
+import cofh.redstoneflux.api.IEnergyHandler;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.RailcraftInputStream;

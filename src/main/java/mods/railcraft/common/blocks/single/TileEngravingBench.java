@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
+import cofh.redstoneflux.impl.EnergyStorage;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
