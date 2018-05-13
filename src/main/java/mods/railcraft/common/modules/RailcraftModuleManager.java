@@ -94,7 +94,7 @@ public class RailcraftModuleManager {
                 + "Disabling the Locomotive Module will remove the extra drag added to Trains.\n"
                 + "Disabling the World Module will disable all world gen.\n"
                 + "Railcraft will attempt to compensate for disabled Modules on a best effort basis.\n"
-                + "It will define alternate recipes and crafting paths, but the system is far from flawless.\n"
+                + "It will define alternate getRecipes and crafting paths, but the system is far from flawless.\n"
                 + "Unexpected behavior, bugs, or crashes may occur. Please report any issues so they can be fixed.\n");
 
         // Add enabled modules to list

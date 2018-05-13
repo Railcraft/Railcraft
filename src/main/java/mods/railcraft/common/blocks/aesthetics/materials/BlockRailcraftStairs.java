@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -90,7 +90,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
             }
 
             CraftingPlugin.addRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getStack(mat), true, false);
+            ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getStack(mat), true, false);
             //noinspection ConstantConditions
             recipe.addOutput(mat.getSourceItem(), 1.0f);
         }

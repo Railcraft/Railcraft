@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -39,8 +40,7 @@ public class ItemCoke extends ItemRailcraft {
                     'S', "stickWood");
         }
         FluidStack creosoteStack = Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE);
-        if (creosoteStack != null)
-            RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Items.COAL, 1, 0), true, false, new ItemStack(this), creosoteStack, COKE_COOK_TIME);
+        RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 0)), new ItemStack(this), creosoteStack, COKE_COOK_TIME);
     }
 
     @Override

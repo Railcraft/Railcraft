@@ -10,15 +10,13 @@
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -46,10 +44,11 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_ABYSSAL.getStack());
-                ItemStack abyssalStone = EnumGeneric.STONE_ABYSSAL.getStack();
-                if (!InvTools.isEmpty(abyssalStone)) {
-                    ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(abyssalStone, true, false);
-                    recipe.addOutput(getStack(1, COBBLE), 1.0F);
+                if (COBBLE.isEnabled()) {
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(EnumGeneric.STONE_ABYSSAL.getIngredient())
+                            .addOutput(getStack(COBBLE))
+                            .buildAndRegister();
                 }
             }
         }
@@ -103,11 +102,10 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_QUARRIED.getStack());
-                ItemStack quarriedStone = EnumGeneric.STONE_QUARRIED.getStack();
-                if (!InvTools.isEmpty(quarriedStone)) {
-                    ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(quarriedStone, true, false);
-                    recipe.addOutput(getStack(1, COBBLE), 1.0F);
-                }
+                RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                        .input(EnumGeneric.STONE_QUARRIED.getIngredient())
+                        .addOutput(getStack(COBBLE))
+                        .buildAndRegister();
             }
         }
     },
@@ -357,7 +355,6 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     }
 
     @Override
-    @Nullable
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         BlockBrick blockBrick = getBlock();
         if (blockBrick != null) {
@@ -369,7 +366,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                 meta = 0;
             return new ItemStack(blockBrick, qty, meta);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
 //    @Nullable

@@ -10,28 +10,26 @@
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
@@ -72,8 +70,10 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
                 'I', getStack(BLOCK));
         CraftingPlugin.addShapelessRecipe(getStack(ETCHED), getStack(BLOCK), new ItemStack(Items.GUNPOWDER));
 
-        ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(this), false, false);
-        recipe.addOutput(getStack(COBBLE), 1.0F);
+        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                .input(Ingredient.fromStacks(new ItemStack(this)))
+                .addOutput(getStack(COBBLE))
+                .buildAndRegister();
 
         CraftingPlugin.addFurnaceRecipe(getStack(COBBLE), getStack(BLOCK), 0.0F);
         theme.initRecipes(this);

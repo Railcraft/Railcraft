@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
+import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -23,8 +24,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nonnull;
+import net.minecraft.util.math.MathHelper;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
@@ -40,8 +41,10 @@ public abstract class TileRollingMachine extends TileMachineBase {
     protected final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     public boolean useLast;
     protected boolean isWorking, paused;
-    private ItemStack currentRecipe = ItemStack.EMPTY;
+    private @Nullable IRollingMachineRecipe currentRecipe = null;
+    private ItemStack currentRecipeOutput = ItemStack.EMPTY;
     private int progress;
+    private int processTime = PROCESS_TIME;
 
     protected TileRollingMachine() {
     }
@@ -87,7 +90,15 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public int getProgressScaled(int i) {
-        return (progress * i) / PROCESS_TIME;
+        return (progress * i) / processTime;
+    }
+
+    public void setProcessTime(int processTime) {
+        this.processTime = Math.max(processTime, 1);
+    }
+
+    public int getProcessTime() {
+        return processTime;
     }
 
     public InventoryCrafting getCraftMatrix(Container listener) {
@@ -119,25 +130,25 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return;
 
         if (clock % 8 == 0) {
-            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
-            if (!InvTools.isEmpty(currentRecipe))
+            currentRecipe = RollingMachineCraftingManager.getInstance().findMatching(craftMatrix);
+            if (currentRecipe != null) {
+                currentRecipeOutput = currentRecipe.getOutput(craftMatrix);
                 findMoreStuff();
+            } else {
+                currentRecipeOutput = ItemStack.EMPTY;
+            }
         }
 
-        if (!isEmpty(currentRecipe) && canMakeMore()) {
-            if (progress >= PROCESS_TIME) {
+        if (currentRecipe != null && canMakeMore()) {
+            if (progress >= currentRecipe.getTime()) {
                 isWorking = false;
-                if (InvTools.isRoomForStack(currentRecipe, invResult)) {
-                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world);
-                    if (!InvTools.isEmpty(currentRecipe)) {
-                        // TODO: Replace with IRecipe.getRemainder()
-                        for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-                            craftMatrix.decrStackSize(i, 1);
-                        }
-                        InvTools.moveItemStack(currentRecipe, invResult);
-                    }
+                if (InvTools.isRoomForStack(currentRecipeOutput, invResult)) {
+                    currentRecipe.consume(craftMatrix);
+                    InvTools.moveItemStack(currentRecipeOutput, invResult);
                     useLast = false;
                     progress = 0;
+                    currentRecipe = null;
+                    currentRecipeOutput = ItemStack.EMPTY;
                 }
             } else {
                 isWorking = true;
@@ -185,7 +196,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, world).isEmpty())
+        if (RollingMachineCraftingManager.getInstance().findMatching(craftMatrix) == null)
             return false;
         if (useLast)
             return true;
@@ -204,7 +215,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
 
     private static class RollingContainer extends Container {
 
-        public Container listener;
+        Container listener;
 
         @Override
         public boolean canInteractWith(EntityPlayer entityplayer) {

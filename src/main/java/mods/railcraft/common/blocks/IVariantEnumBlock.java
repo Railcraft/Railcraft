@@ -20,6 +20,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Tuple;
 
 import javax.annotation.Nullable;
@@ -94,6 +95,10 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
         } catch (NoSuchFieldException ignored) {
         }
         return IVariantEnum.super.isDeprecated();
+    }
+
+    default Ingredient getIngredient() {
+        return Ingredient.fromStacks(getStack());
     }
 
     default ItemStack getStack() {

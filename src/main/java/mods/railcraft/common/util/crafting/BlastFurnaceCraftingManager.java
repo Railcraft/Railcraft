@@ -10,127 +10,123 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
+import mods.railcraft.api.crafting.IBlastFurnaceFuel;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager {
 
-public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager {
+    private static final BlastFurnaceCraftingManager INSTANCE = new BlastFurnaceCraftingManager();
+    private final List<IBlastFurnaceRecipe> recipes = new ArrayList<>();
+    private final List<IBlastFurnaceFuel> fuels = new ArrayList<>();
 
-    private final List<BlastFurnaceRecipe> recipes = new ArrayList<>();
-    private List<ItemStack> fuels;
+    public static BlastFurnaceCraftingManager getInstance() {
+        return INSTANCE;
+    }
 
-    public static IBlastFurnaceCraftingManager getInstance() {
-        return RailcraftCraftingManager.blastFurnace;
+    private BlastFurnaceCraftingManager() {
+        List<ItemStack> fuel = new ArrayList<ItemStack>() {
+            @Override
+            public boolean add(ItemStack e) {
+                return !InvTools.isEmpty(e) && super.add(e);
+            }
+
+        };
+        fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
+        fuel.add(RailcraftItems.COKE.getStack());
+        fuel.add(EnumGeneric.BLOCK_COKE.getStack());
+        fuel.add(new ItemStack(Items.COAL, 1, 1));
+        fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());
+        fuel.add(RailcraftItems.FIRESTONE_CRACKED.getWildcard());
+        for (ItemStack each : fuel) {
+            fuels.add(createFuel(Ingredient.fromStacks(each), FuelPlugin.getBurnTime(each)));
+        }
     }
 
     @Override
-    public List<ItemStack> getFuels() {
-        if (fuels == null) {
-            List<ItemStack> fuel = new ArrayList<ItemStack>() {
-                @Override
-                public boolean add(ItemStack e) {
-                    return !InvTools.isEmpty(e) && super.add(e);
-                }
+    public IBlastFurnaceFuel createFuel(Ingredient matcher, int cookTime) {
+        return new IBlastFurnaceFuel() {
+            @Override
+            public Ingredient getInput() {
+                return matcher;
+            }
 
-            };
-            fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-            fuel.add(RailcraftItems.COKE.getStack());
-            fuel.add(EnumGeneric.BLOCK_COKE.getStack());
-            fuel.add(new ItemStack(Items.COAL, 1, 1));
-            fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());
-            fuel.add(RailcraftItems.FIRESTONE_CRACKED.getWildcard());
-            fuels = Collections.unmodifiableList(fuel);
-        }
+            @Override
+            public int getCookTime() {
+                return cookTime;
+            }
+        };
+    }
+
+    @Override
+    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output) {
+        return new IBlastFurnaceRecipe() {
+            @Override
+            public Ingredient getInput() {
+                return matcher;
+            }
+
+            @Override
+            public int getCookTime() {
+                return cookTime;
+            }
+
+            @Override
+            public ItemStack getOutput() {
+                return output.copy();
+            }
+        };
+    }
+
+    @Override
+    public void addRecipe(IBlastFurnaceRecipe recipe) {
+        recipes.add(recipe);
+    }
+
+    @Override
+    public void addFuel(IBlastFurnaceFuel fuel) {
+        fuels.add(fuel);
+    }
+
+    @Override
+    public List<IBlastFurnaceRecipe> getRecipes() {
+        return recipes;
+    }
+
+    @Override
+    public List<@NonNull IBlastFurnaceFuel> getFuels() {
         return fuels;
     }
 
     @Override
-    public List<? extends IBlastFurnaceRecipe> getRecipes() {
-        return recipes;
+    public int getCookTime(ItemStack stack) {
+        for (IBlastFurnaceFuel fuel : fuels) {
+            if (fuel.getInput().test(stack)) {
+                return fuel.getCookTime();
+            }
+        }
+        return 0;
     }
 
-    public static class BlastFurnaceRecipe implements IBlastFurnaceRecipe {
-
-        private final ItemStack input;
-        private final boolean matchDamage;
-        private final boolean matchNBT;
-        private final int cookTime;
-        private final ItemStack output;
-
-        public BlastFurnaceRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, ItemStack output) {
-            this.input = input.copy();
-            this.matchDamage = matchDamage;
-            this.matchNBT = matchNBT;
-            this.cookTime = cookTime;
-            this.output = output.copy();
-        }
-
-        @Override
-        public boolean isRoomForOutput(ItemStack outputSlot) {
-            return (InvTools.isEmpty(outputSlot) || InvTools.isEmpty(output) || (InvTools.isItemEqual(outputSlot, output) && sizeOf(outputSlot) + sizeOf(output) <= output.getMaxStackSize()));
-        }
-
-        @Override
-        public ItemStack getInput() {
-            return input.copy();
-        }
-
-        public boolean matchDamage() {
-            return matchDamage;
-        }
-
-        public boolean matchNBT() {
-            return matchNBT;
-        }
-
-        @Override
-        public ItemStack getOutput() {
-            return output.copy();
-        }
-
-        @Override
-        public int getOutputStackSize() {
-            return sizeOf(output);
-        }
-
-        @Override
-        public int getCookTime() {
-            return cookTime;
-        }
-
-    }
-
+    @Nullable
     @Override
-    public void addRecipe(@Nullable ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, @Nullable ItemStack output) {
-        if (!InvTools.isEmpty(input) && !InvTools.isEmpty(output))
-            recipes.add(new BlastFurnaceRecipe(input, matchDamage, matchNBT, cookTime, output));
-    }
-
-    @Override
-    public IBlastFurnaceRecipe getRecipe(ItemStack input) {
-        if (InvTools.isEmpty(input)) return null;
-        for (BlastFurnaceRecipe r : recipes) {
-            if (!r.matchDamage || InvTools.isWildcard(r.input)) continue;
-            if (InvTools.isItemEqual(input, r.input, true, r.matchNBT))
-                return r;
-        }
-        for (BlastFurnaceRecipe r : recipes) {
-            if (InvTools.isItemEqual(input, r.input, r.matchDamage, r.matchNBT))
-                return r;
+    public IBlastFurnaceRecipe getRecipe(ItemStack stack) {
+        for (IBlastFurnaceRecipe recipe : recipes) {
+            if (recipe.getInput().test(stack))
+                return recipe;
         }
         return null;
     }
-
 }

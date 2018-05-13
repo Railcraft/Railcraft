@@ -16,7 +16,7 @@ public class ItemTrackParts extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        IRollingMachineCraftingManager cm = RailcraftCraftingManager.rollingMachine;
+        IRollingMachineCraftingManager cm = RailcraftCraftingManager.getRollingMachineCraftings();
         cm.addShapelessRecipe(getStack(), "nuggetBronze", "nuggetBronze", "nuggetBronze");
         cm.addShapelessRecipe(getStack(), "nuggetIron", "nuggetIron");
         cm.addShapelessRecipe(getStack(), "nuggetSteel");

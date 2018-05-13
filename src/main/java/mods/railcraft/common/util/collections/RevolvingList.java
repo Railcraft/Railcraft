@@ -21,7 +21,7 @@ import java.util.LinkedList;
  */
 public class RevolvingList<T> extends ForwardingCollection<T> {
 
-    private final Deque<T> list = new LinkedList<T>();
+    private final Deque<T> list = new LinkedList<>();
 
     public RevolvingList() {
     }

@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.aesthetics.materials;
 
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
@@ -60,7 +60,7 @@ public class MatTools {
                 continue;
             ItemStack stack = source.getStack(mat);
             if (stack != null) {
-                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(stack, true, false);
+                ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(stack, true, false);
                 recipe.addOutput(output, 1.0F);
             }
         }

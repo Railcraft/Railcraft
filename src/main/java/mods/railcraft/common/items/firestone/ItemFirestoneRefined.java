@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.fluids.FluidTools;
@@ -34,6 +34,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,9 +71,12 @@ public class ItemFirestoneRefined extends ItemFirestone {
     @Override
     public void defineRecipes() {
         ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
-        if (ore != null) {
-            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
-            recipe.addOutput(RailcraftItems.FIRESTONE_RAW.getStack(), 1F);
+        if (!ore.isEmpty()) {
+            ICrusherRecipe recipe = RailcraftCraftingManager.getRockCrusherCraftings().createRecipeBuilder()
+                    .input(Ingredient.fromStacks(ore))
+                    .addOutput(RailcraftItems.FIRESTONE_RAW.getStack())
+                    .build();
+            RailcraftCraftingManager.getRockCrusherCraftings().addRecipe(recipe);
         }
 
         CraftingPlugin.addRecipe(RailcraftItems.FIRESTONE_CUT.getStack(),

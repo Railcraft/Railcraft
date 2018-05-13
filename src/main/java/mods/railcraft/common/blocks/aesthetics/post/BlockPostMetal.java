@@ -49,7 +49,7 @@ public class BlockPostMetal extends BlockPostMetalBase {
 
     @Override
     public void defineRecipes() {
-        // TODO: Temp recipes, remove
+        // TODO: Temp getRecipes, remove
         RailcraftCraftingManager.rollingMachine.addRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK),
                 "III",
                 " I ",

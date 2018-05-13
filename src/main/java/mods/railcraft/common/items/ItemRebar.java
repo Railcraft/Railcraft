@@ -27,25 +27,25 @@ public class ItemRebar extends ItemRailcraft {
                 "I  ",
                 'I', new ItemStack(Items.IRON_INGOT));
 
-        RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 4),
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotBronze");
 
-        RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 6),
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 6),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotRefinedIron");
 
-        RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 6),
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 6),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotInvar");
 
-        RollingMachineCraftingManager.instance().addRecipe(new ItemStack(this, 8),
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 8),
                 "  I",
                 " I ",
                 "I  ",

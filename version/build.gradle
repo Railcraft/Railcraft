@@ -1,10 +1,19 @@
+def api = parent.project(":api:railcraft")
+
+evaluationDependsOn(api.path)
+
+ext {
+    version_minecraft = api.ext.version_minecraft
+    version_forge = api.ext.version_forge
+    version_mcp = api.ext.version_mcp
+}
 constructVersion()
-rootProject.ext.version_minecraft = version_minecraft
-rootProject.ext.version_forge = version_forge
-rootProject.ext.version_mcp = version_mcp
-rootProject.ext.version_forestry = version_forestry
-rootProject.ext.version_industrialcraft = version_industrialcraft
-rootProject.ext.version_rf = version_rf
+parent.ext.version_minecraft = version_minecraft
+parent.ext.version_forge = version_forge
+parent.ext.version_mcp = version_mcp
+parent.ext.version_forestry = version_forestry
+parent.ext.version_industrialcraft = version_industrialcraft
+parent.ext.version_rf = version_rf
 
 task echoVersion {
     doLast {
@@ -13,12 +22,12 @@ task echoVersion {
 }
 
 def constructVersion() {
-    rootProject.version = version_project_major + '.' + version_project_series + '.' + version_project_revision
+    parent.version = version_project_major + '.' + version_project_series + '.' + version_project_revision
     if (version_project_qualifier != 'none') {
-        rootProject.version = rootProject.version + '-' + version_project_qualifier + '-' + version_project_build
+        parent.version = parent.version + '-' + version_project_qualifier + '-' + version_project_build
     }
-    if (!rootProject.hasProperty('official')) {
-        rootProject.version = rootProject.version + "-unofficial"
+    if (!parent.hasProperty('official')) {
+        parent.version = parent.version + "-unofficial"
     }
 }
 
@@ -36,7 +45,7 @@ def saveVersion() {
 
 def printNextVersion() {
     println '*************************************************************'
-    println 'The next build will be version: ' + rootProject.version
+    println 'The next build will be version: ' + parent.version
     println '*************************************************************'
 }
 

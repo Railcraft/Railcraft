@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
@@ -265,7 +265,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                     return;
 
                 ItemStack input = InvTools.emptyStack();
-                ICrusherCraftingManager.ICrusherRecipe recipe = null;
+                ICrusherRecipe recipe = null;
                 for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
                     input = slot.getStack();
                     if (!InvTools.isEmpty(input)) {
@@ -281,7 +281,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
                         boolean hasRoom = true;
-                        List<ItemStack> outputs = recipe.getProcessedOutputs();
+                        List<ItemStack> outputs = recipe.pollOutputs();
                         for (ItemStack output : outputs) {
                             output = InvTools.moveItemStack(output, tempInv);
                             if (!InvTools.isEmpty(output)) {

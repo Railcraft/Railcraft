@@ -224,11 +224,11 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     @Override
-    public boolean isEqual(@Nullable ItemStack stack) {
+    public boolean isEqual(ItemStack stack) {
         return !InvTools.isEmpty(stack) && item == stack.getItem();
     }
 
-    public boolean isInstance(@Nullable ItemStack stack) {
+    public boolean isInstance(ItemStack stack) {
         return !InvTools.isEmpty(stack) && (item == stack.getItem() || item.getClass().isInstance(stack.getItem()));
     }
 

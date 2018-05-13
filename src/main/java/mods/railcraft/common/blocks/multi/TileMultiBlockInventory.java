@@ -18,7 +18,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.decrStackSize(i, j);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -50,18 +49,18 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.getStackInSlot(i);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) {
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             mBlock.inv.setInventorySlotContents(i, itemstack);
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_,@Nullable ItemStack p_94041_2_) {
+    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
         return isStructureValid();
     }
 

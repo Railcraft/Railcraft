@@ -89,7 +89,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         getObject().ifPresent(IRailcraftObject::finalizeDefinition);
     }
 
-    default boolean isEqual(@Nullable ItemStack stack) {
+    default boolean isEqual(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
         // java generics broke so we must use function that takes object

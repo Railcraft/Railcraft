@@ -1,5 +1,6 @@
 package mods.railcraft.common.util.crafting;
 
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -10,6 +11,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
@@ -23,8 +25,7 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * A version of {@link net.minecraftforge.oredict.ShapedOreRecipe shaped ore recipe}
  * that supports fluid.
  */
-//TODO
-@Deprecated
+//TODO future is dark
 public class ShapedFluidRecipe extends BaseRecipe {
     //Added in for future ease of change, but hard coded for now.
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
@@ -38,7 +39,7 @@ public class ShapedFluidRecipe extends BaseRecipe {
     protected boolean mirrored = true;
 
     public ShapedFluidRecipe(ItemStack result, Object... recipe) {
-        super("aaaaaaa");
+        super(CraftingPlugin.getGenerator().next().getResourcePath());
         output = result.copy();
 
         StringBuilder sb = new StringBuilder();
@@ -193,8 +194,8 @@ public class ShapedFluidRecipe extends BaseRecipe {
                     if (isEmpty(slot))
                         return false;
                     ItemStack toCheck = setSize(slot.copy(), 1);
-                    if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                        IFluidHandler handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                    if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                        IFluidHandlerItem handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                         FluidStack fluidStack = handler.drain((FluidStack) target, false);
                         if (fluidStack == null || fluidStack.amount < ((FluidStack) target).amount) {
                             return false;
@@ -222,7 +223,7 @@ public class ShapedFluidRecipe extends BaseRecipe {
      * Returns the input for this recipe, any mod accessing this value should never
      * manipulate the values in this array as it will effect the recipe itself.
      *
-     * @return The recipes input vales.
+     * @return The getRecipes input vales.
      */
     public Object[] getInput() {
         return this.input;

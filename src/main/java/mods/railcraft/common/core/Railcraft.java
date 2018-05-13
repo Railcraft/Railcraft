@@ -12,8 +12,6 @@ package mods.railcraft.common.core;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.Ints;
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.LinkageManager;
@@ -29,7 +27,6 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -127,15 +124,7 @@ public final class Railcraft {
                 FuelManager.addBoilerFuel(fluid, fuel);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("rock-crusher")) {
-                NBTTagCompound nbt = mess.getNBTValue();
-                ItemStack input = new ItemStack(nbt.getCompoundTag("input"));
-                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
-                for (int i = 0; i < 9; i++) {
-                    if (nbt.hasKey("output" + i)) {
-                        NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
-                        recipe.addOutput(new ItemStack(outputNBT), outputNBT.getFloat("chance"));
-                    }
-                }
+                throw new UnsupportedOperationException("rock crusher");
             } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
                 NBTTagCompound nbt = mess.getNBTValue();
                 if (nbt.hasKey("entities")) {

@@ -11,15 +11,16 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,6 @@ public class OreDictPlugin {
         return Arrays.stream(ids).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
     }
 
-    @Nullable
     public static ItemStack getOre(String name, int qty) {
         List<ItemStack> ores = OreDictionary.getOres(name);
         for (ItemStack ore : ores) {
@@ -74,13 +74,14 @@ public class OreDictPlugin {
                 return ore;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static boolean oreExists(String name) {
         return OreDictionary.doesOreNameExist(name);
     }
 
+    @Deprecated
     public static Set<Block> getOreBlocks() {
         String[] names = OreDictionary.getOreNames();
         return Arrays.stream(names)
@@ -90,5 +91,17 @@ public class OreDictPlugin {
                 .map(InvTools::getBlockFromStack)
                 .collect(Collectors.toSet());
     }
+
+    public static Set<IBlockState> getOreBlockStates() {
+        String[] names = OreDictionary.getOreNames();
+        return Arrays.stream(names)
+                .filter(n -> n.startsWith("ore"))
+                .flatMap(n -> OreDictionary.getOres(n).stream())
+                .filter(stack -> stack.getItem() instanceof ItemBlock)
+                .map(InvTools::getBlockStateFromStack)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
 
 }

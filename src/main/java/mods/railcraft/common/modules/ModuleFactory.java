@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -26,11 +27,15 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -84,37 +89,38 @@ public class ModuleFactory extends RailcraftModulePayload {
                 {
                     int burnTime = 1280;
                     Metal steel = Metal.STEEL;
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_INGOT), false, false, burnTime, RailcraftItems.INGOT.getStack(1, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_INGOT), burnTime, RailcraftItems.INGOT.getStack(1, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_HELMET), true, false, burnTime * 5, RailcraftItems.INGOT.getStack(5, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_CHESTPLATE), true, false, burnTime * 8, RailcraftItems.INGOT.getStack(8, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_LEGGINGS), true, false, burnTime * 7, RailcraftItems.INGOT.getStack(7, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_BOOTS), true, false, burnTime * 4, RailcraftItems.INGOT.getStack(4, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_HELMET), burnTime * 5, RailcraftItems.INGOT.getStack(5, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_CHESTPLATE), burnTime * 8, RailcraftItems.INGOT.getStack(8, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_LEGGINGS), burnTime * 7, RailcraftItems.INGOT.getStack(7, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_BOOTS), burnTime * 4, RailcraftItems.INGOT.getStack(4, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_HORSE_ARMOR), true, false, burnTime * 4, RailcraftItems.INGOT.getStack(4, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_HORSE_ARMOR), burnTime * 4, RailcraftItems.INGOT.getStack(4, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_SWORD), true, false, burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_SHOVEL), true, false, burnTime, RailcraftItems.INGOT.getStack(1, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_PICKAXE), true, false, burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_AXE), true, false, burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_HOE), true, false, burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.SHEARS), true, false, burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_SWORD), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_SHOVEL), burnTime, RailcraftItems.INGOT.getStack(1, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_PICKAXE), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_AXE), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_HOE), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.SHEARS), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.CROWBAR_IRON.getStack(), true, false, burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
+                    //TODO move to respective classes
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.CROWBAR_IRON.getIngredient(), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_DOOR), false, false, burnTime * 6, RailcraftItems.INGOT.getStack(6, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Items.IRON_DOOR), burnTime * 6, RailcraftItems.INGOT.getStack(6, steel));
 
                     int recycleTime = burnTime / 2;
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.ARMOR_HELMET_STEEL.getStack(), false, false, recycleTime * 4, RailcraftItems.INGOT.getStack(4, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.ARMOR_CHESTPLATE_STEEL.getStack(), false, false, recycleTime * 6, RailcraftItems.INGOT.getStack(6, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.ARMOR_LEGGINGS_STEEL.getStack(), false, false, recycleTime * 5, RailcraftItems.INGOT.getStack(5, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.ARMOR_BOOTS_STEEL.getStack(), false, false, recycleTime * 3, RailcraftItems.INGOT.getStack(3, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.ARMOR_HELMET_STEEL.getIngredient(), recycleTime * 4, RailcraftItems.INGOT.getStack(4, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.ARMOR_CHESTPLATE_STEEL.getIngredient(), recycleTime * 6, RailcraftItems.INGOT.getStack(6, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.ARMOR_LEGGINGS_STEEL.getIngredient(), recycleTime * 5, RailcraftItems.INGOT.getStack(5, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.ARMOR_BOOTS_STEEL.getIngredient(), recycleTime * 3, RailcraftItems.INGOT.getStack(3, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.SWORD_STEEL.getStack(), false, false, recycleTime, RailcraftItems.INGOT.getStack(1, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.PICKAXE_STEEL.getStack(), false, false, recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.HOE_STEEL.getStack(), false, false, recycleTime, RailcraftItems.INGOT.getStack(1, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.AXE_STEEL.getStack(), false, false, recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.SHEARS_STEEL.getStack(), false, false, recycleTime, RailcraftItems.INGOT.getStack(1, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.SWORD_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.PICKAXE_STEEL.getIngredient(), recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.HOE_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.AXE_STEEL.getIngredient(), recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel));
+                    BlastFurnaceCraftingManager.getInstance().addRecipe(RailcraftItems.SHEARS_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel));
                 }
 
 //                alpha = EnumMachineAlpha.ROCK_CRUSHER;
@@ -128,159 +134,218 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                            'P', new ItemStack(Blocks.PISTON),
 //                            'S', "blockSteel");
                 {
-                    ICrusherCraftingManager.ICrusherRecipe recipe;
-
                     if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled() || RailcraftItems.DUST.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.OBSIDIAN), false, false);
+                        ICrusherCraftingManager.ICrusherRecipeBuilder builder = RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.OBSIDIAN)));
                         if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled())
-                            addOutput(recipe, EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 1.0f);
+                            builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
                         if (RailcraftItems.DUST.isEnabled()) {
-                            addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
+                            builder.addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
                             if (!EnumGeneric.CRUSHED_OBSIDIAN.isEnabled())
-                                addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 1.0f);
+                                builder.addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }
+                        builder.buildAndRegister();
                     }
 
 
                     if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled() && RailcraftItems.DUST.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), true, false);
-                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 1.0f);
-                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(EnumGeneric.CRUSHED_OBSIDIAN.getIngredient())
+                                .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN))
+                                .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f)
+                                .buildAndRegister();
                     }
 
-                    if (RailcraftBlocks.COKE_OVEN.isLoaded()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(RailcraftBlocks.COKE_OVEN.getStack(), true, false);
-                        addOutput(recipe, new ItemStack(Items.BRICK, 3), 1.0f);
-                        addOutput(recipe, new ItemStack(Items.BRICK), 0.5f);
-                        addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
-                        addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
-                        addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
-                        addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
-                        addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
-                    }
-
-                    if (RailcraftBlocks.BLAST_FURNACE.isLoaded()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(RailcraftBlocks.BLAST_FURNACE.getStack(), true, false);
-                        addOutput(recipe, new ItemStack(Blocks.NETHER_BRICK), 0.75f);
-                        addOutput(recipe, new ItemStack(Blocks.SOUL_SAND), 0.75f);
-                        addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.05f);
-                    }
-
+                    //TODO move to individual classes once we do split up
                     if (WorldspikeVariant.STANDARD.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.STANDARD.getStack(), true, false);
-                        addOutput(recipe, new ItemStack(Items.DIAMOND), 0.5f);
-                        addWorldspikeOutputs(recipe);
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(, true, false);
+                        getWorldSpikeBuilder()
+                                .input(WorldspikeVariant.STANDARD.getIngredient())
+                                .addOutput(new ItemStack(Items.DIAMOND), 0.5f)
+                                .buildAndRegister();
+
                     }
 
                     if (WorldspikeVariant.PERSONAL.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.PERSONAL.getStack(), true, false);
-                        addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
-                        addWorldspikeOutputs(recipe);
+                        getWorldSpikeBuilder()
+                                .input(WorldspikeVariant.PERSONAL.getIngredient())
+                                .addOutput(new ItemStack(Items.EMERALD), 0.5f)
+                                .buildAndRegister();
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(WorldspikeVariant.PERSONAL.getStack(), true, false);
+//                        addOutput(new ItemStack(Items.EMERALD), 0.5f);
+//                        addWorldspikeOutputs(recipe);
                     }
 
                     if (WorldspikeVariant.PASSIVE.isAvailable()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(WorldspikeVariant.PASSIVE.getStack(), true, false);
-//                addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
-                        addWorldspikeOutputs(recipe);
+                        getWorldSpikeBuilder()
+                                .input(WorldspikeVariant.PASSIVE.getIngredient())
+                                .addOutput(new ItemStack(Blocks.PRISMARINE), 0.5f)
+                                .buildAndRegister();
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(WorldspikeVariant.PASSIVE.getStack(), true, false);
+//                addOutput(new ItemStack(Items.EMERALD), 0.5f);
+//                        addWorldspikeOutputs(recipe);
                     }
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.COBBLESTONE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.GRAVEL), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.FLINT), 0.10f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.COBBLESTONE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.COBBLESTONE), false, false);
+                            .addOutput(new ItemStack(Blocks.GRAVEL))
+                            .addOutput(new ItemStack(Items.FLINT), 0.10f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.MOSSY_COBBLESTONE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.GRAVEL), 1.0f);
-                    addOutput(recipe, new ItemStack(Blocks.VINE), 0.10f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.MOSSY_COBBLESTONE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.MOSSY_COBBLESTONE), false, false);
+                            .addOutput(new ItemStack(Blocks.GRAVEL))
+                            .addOutput(new ItemStack(Blocks.VINE), 0.80f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.GRAVEL), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.SAND), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.GOLD_NUGGET), 0.001f);
-                    addOutput(recipe, new ItemStack(Items.DIAMOND), 0.00005f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.GRAVEL)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.GRAVEL), false, false);
+                            .addOutput(new ItemStack(Blocks.SAND))
+                            .addOutput(new ItemStack(Items.GOLD_NUGGET), 0.001f)
+                            .addOutput(new ItemStack(Items.DIAMOND), 0.00005f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.COBBLESTONE), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE), false, false);
+                            .addOutput(new ItemStack(Blocks.COBBLESTONE))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.SANDSTONE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.SAND, 4), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.SANDSTONE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.SANDSTONE), false, false);
+                            .addOutput(new ItemStack(Blocks.SAND, 4))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.BRICK_BLOCK), false, false);
-                    addOutput(recipe, new ItemStack(Items.BRICK, 3), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.BRICK), 0.5f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BRICK_BLOCK)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.BRICK_BLOCK), false, false);
+                            .addOutput(new ItemStack(Items.BRICK, 3))
+                            .addOutput(new ItemStack(Items.BRICK), 0.5f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.CLAY), false, false);
-                    addOutput(recipe, new ItemStack(Items.CLAY_BALL, 4), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.CLAY)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.CLAY), false, false);
+                            .addOutput(new ItemStack(Items.CLAY_BALL, 4))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONEBRICK), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.COBBLESTONE), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONEBRICK)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONEBRICK), false, false);
+                    .addOutput(new ItemStack(Blocks.COBBLESTONE))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_STAIRS), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.GRAVEL), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONE_STAIRS)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_STAIRS), false, false);
+                    .addOutput(new ItemStack(Blocks.GRAVEL));
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_BRICK_STAIRS), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.COBBLESTONE), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_BRICK_STAIRS), false, false);
+                    addOutput(new ItemStack(Blocks.COBBLESTONE));
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.NETHER_BRICK_STAIRS), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.NETHER_BRICK), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.NETHER_BRICK_STAIRS), false, false);
+                    addOutput(new ItemStack(Blocks.NETHER_BRICK));
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.BRICK_STAIRS), false, false);
-                    addOutput(recipe, new ItemStack(Items.BRICK, 4), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.BRICK), 0.5f);
-                    addOutput(recipe, new ItemStack(Items.BRICK), 0.5f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.BRICK_STAIRS), false, false);
+                    addOutput(new ItemStack(Items.BRICK, 4));
+                    addOutput(new ItemStack(Items.BRICK), 0.5f);
+                    addOutput(new ItemStack(Items.BRICK), 0.5f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 0), true, false);
-                    addOutput(recipe, new ItemStack(Blocks.COBBLESTONE), 0.45f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 0), true, false);
+                    addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 1), true, false);
-                    addOutput(recipe, new ItemStack(Blocks.SAND), 0.45f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 1), true, false);
+                    addOutput(new ItemStack(Blocks.SAND), 0.45f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 3), true, false);
-                    addOutput(recipe, new ItemStack(Blocks.GRAVEL), 0.45f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 3), true, false);
+                    addOutput(new ItemStack(Blocks.GRAVEL), 0.45f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 4), true, false);
-                    addOutput(recipe, new ItemStack(Items.BRICK), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.BRICK), 0.75f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 4), true, false);
+                    addOutput(new ItemStack(Items.BRICK));
+                    addOutput(new ItemStack(Items.BRICK), 0.75f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 5), true, false);
-                    addOutput(recipe, new ItemStack(Blocks.COBBLESTONE), 0.45f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 5), true, false);
+                    addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.ICE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.SNOW), 0.85f);
-                    addOutput(recipe, new ItemStack(Items.SNOWBALL), 0.25f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+//                            .createAndAddRecipe(new ItemStack(Blocks.ICE), false, false);
+                    addOutput(new ItemStack(Blocks.SNOW), 0.85f);
+                    addOutput(new ItemStack(Items.SNOWBALL), 0.25f);
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.NETHER_BRICK_FENCE), false, false);
-                    addOutput(recipe, new ItemStack(Blocks.NETHER_BRICK), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.NETHER_BRICK_FENCE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.NETHER_BRICK_FENCE), false, false);
+                            .addOutput(new ItemStack(Blocks.NETHER_BRICK))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.GLOWSTONE), false, false);
-                    addOutput(recipe, new ItemStack(Items.GLOWSTONE_DUST, 3), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.GLOWSTONE_DUST), 0.75f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.GLOWSTONE)))
+//                            .createAndAddRecipe(new ItemStack(Blocks.GLOWSTONE), false, false);
+                            .addOutput(new ItemStack(Items.GLOWSTONE_DUST, 3))
+                            .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.75f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Blocks.REDSTONE_LAMP), false, false);
-                    addOutput(recipe, new ItemStack(Items.GLOWSTONE_DUST, 3), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.GLOWSTONE_DUST), 0.75f);
-                    addOutput(recipe, new ItemStack(Items.REDSTONE, 3), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.REDSTONE), 0.75f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.REDSTONE_LAMP)))
+//                            createAndAddRecipe(new ItemStack(Blocks.REDSTONE_LAMP), false, false);
+                            .addOutput(new ItemStack(Items.GLOWSTONE_DUST, 3))
+                            .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.75f)
+                            .addOutput(new ItemStack(Items.REDSTONE, 3))
+                            .addOutput(new ItemStack(Items.REDSTONE), 0.75f)
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.BONE), false, false);
-                    addOutput(recipe, new ItemStack(Items.DYE, 4, 15), 1.0f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Items.BONE))
+                            .addOutput(new ItemStack(Items.DYE, 4, 15))
+                            .buildAndRegister();
 
-                    recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.BLAZE_ROD), false, false);
-                    addOutput(recipe, new ItemStack(Items.BLAZE_POWDER, 2), 1.0f);
-                    addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.25f);
-                    addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.25f);
-                    addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.25f);
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Items.BLAZE_ROD))
+                            .addOutput(new ItemStack(Items.BLAZE_POWDER, 2))
+                            .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
+                            .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
+                            .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
+                            .buildAndRegister();
+//                    RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.BLAZE_ROD), false, false);
+
 
                     if (RailcraftItems.DUST.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.COAL, 1, 0), true, false);
-                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL), 1.0f);
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 0)))
+                                .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL))
+                                .buildAndRegister();
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.COAL, 1, 0), true, false);
+//                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL));
 
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.COAL, 1, 1), true, false);
-                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL), 1.0f);
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)))
+                                .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL))
+                                .buildAndRegister();
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.COAL, 1, 1), true, false);
+//                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL));
 
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(Items.ENDER_PEARL), false, false);
-                        addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER), 1.0f);
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromItem(Items.ENDER_PEARL))
+                                .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER))
+                                .buildAndRegister();
+//                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.ENDER_PEARL), false, false);
+//                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER));
                     }
                 }
 
+                //TODO class declaration
 //                EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
 //                if (metalsChest.isAvailable())
 //                    CraftingPlugin.addRecipe(metalsChest.getStack(),
@@ -290,24 +355,6 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                            'A', new ItemStack(Blocks.ANVIL),
 //                            'P', new ItemStack(Blocks.PISTON),
 //                            'G', "gearSteel");
-            }
-
-            private void addWorldspikeOutputs(ICrusherCraftingManager.ICrusherRecipe recipe) {
-                if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
-                    addOutput(recipe, EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 1.0f);
-                    addOutput(recipe, EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);
-                } else {
-                    addOutput(recipe, new ItemStack(Blocks.OBSIDIAN), 1.0f);
-                    addOutput(recipe, new ItemStack(Blocks.OBSIDIAN), 0.5f);
-                }
-                addOutput(recipe, new ItemStack(Blocks.OBSIDIAN), 0.25f);
-                if (RailcraftItems.DUST.isEnabled())
-                    addOutput(recipe, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
-                addOutput(recipe, new ItemStack(Items.GOLD_NUGGET, 16), 1.0f);
-                addOutput(recipe, new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
-                addOutput(recipe, new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
-                addOutput(recipe, new ItemStack(Items.GOLD_NUGGET, 4), 0.5f);
-
                 if (RailcraftModuleManager.isModuleEnabled(ModuleStructures.class)) {
 //                    if (EnumMachineAlpha.BLAST_FURNACE.isAvailable() && BrickTheme.INFERNAL.getBlock() != null) {
 
@@ -331,7 +378,27 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
 
                 if (EnumGeneric.BLOCK_COKE.isEnabled())
-                    RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Blocks.COAL_BLOCK), false, false, EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
+                    RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(Blocks.COAL_BLOCK)), EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
+            }
+
+            private ICrusherCraftingManager.ICrusherRecipeBuilder getWorldSpikeBuilder() {
+                ICrusherCraftingManager.ICrusherRecipeBuilder builder = RockCrusherCraftingManager.getInstance().createRecipeBuilder();
+                if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
+                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
+                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);
+                } else {
+                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN));
+                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.5f);
+                }
+                builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.25f);
+                if (RailcraftItems.DUST.isEnabled()) {
+                    builder.addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
+                }
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 16));
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 4), 0.5f);
+                return builder;
             }
 
             private void registerCrushedOreRecipe(ItemStack ore, ItemStack dust) {
@@ -340,8 +407,11 @@ public class ModuleFactory extends RailcraftModulePayload {
                 dust = dust.copy();
                 setSize(dust, 2);
 
-                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(ore, true, false);
-                addOutput(recipe, dust, 1.0f);
+                RockCrusherCraftingManager.getInstance().
+                        createRecipeBuilder()
+                        .input(Ingredient.fromStacks(ore))
+                        .addOutput(dust)
+                        .buildAndRegister();
             }
 
             @Override
@@ -352,12 +422,10 @@ public class ModuleFactory extends RailcraftModulePayload {
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
-                List<ItemStack> logs = new ArrayList<ItemStack>(25);
+                List<ItemStack> logs = new ArrayList<>(25);
                 logs.addAll(OreDictionary.getOres("logWood"));
                 logs.addAll(OreDictionary.getOres("woodRubber"));
-                for (ItemStack log : logs) {
-                    RailcraftCraftingManager.cokeOven.addRecipe(log, true, false, new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
-                }
+                RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromStacks(logs.toArray(new ItemStack[0])), new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
 
                 if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
                     boolean classic = Mod.IC2_CLASSIC.isLoaded();
@@ -440,10 +508,10 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
             }
 
-            private void addOutput(ICrusherCraftingManager.ICrusherRecipe recipe, ItemStack output, float chance) {
+            private void addOutput(ICrusherRecipe recipe, ItemStack output, float chance) {
                 if (InvTools.isEmpty(output))
                     return;
-                recipe.addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule(chance));
+                recipe.addOutput(output, RockCrusherCraftingManager.getInstance().createGenRule(chance));
             }
         });
         setDisabledEventHandler(new ModuleEventHandler() {

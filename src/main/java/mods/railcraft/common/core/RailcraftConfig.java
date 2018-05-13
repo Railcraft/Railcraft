@@ -50,7 +50,7 @@ public class RailcraftConfig {
     private static final String CAT_LOOT = "loot";
     private static final String CAT_WORLD_GEN = "worldgen";
     private static final String CAT_FLUIDS = "fluids";
-    private static final String CAT_RECIPES = "recipes";
+    private static final String CAT_RECIPES = "getRecipes";
     private static final String CAT_ENTITIES = "entities";
     private static final String CAT_ITEMS = "items";
     private static final String CAT_BLOCKS = "blocks";
@@ -325,14 +325,14 @@ public class RailcraftConfig {
     }
 
     private static void loadRecipeOption() {
-        configMain.addCustomCategoryComment(CAT_RECIPES, "You can add or remove various recipes here");
+        configMain.addCustomCategoryComment(CAT_RECIPES, "You can add or remove various getRecipes here");
 
-        loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
-        loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
+        loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting getRecipes for Creosote Oil to the vanilla furnace");
+        loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track getRecipes more similar to vanilla minecraft");
         loadRecipeProperty("railcraft.alloy", "enableAltBronze", false, "change to '{t}=true' to forcibly enable a recipe to craft Bronze Ingots from Tin and Copper Ingots, regardless of whether the Factory Module is enabled");
-        loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze recipes to supply 3 Bronze instead of 4");
+        loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze getRecipes to supply 3 Bronze instead of 4");
         loadRecipeProperty("railcraft.alloy", "enableAltBrass", false, "change to '{t}=true' to forcibly enable a recipe to craft Brass Ingots from Zinc and Copper Ingots, regardless of whether the Factory Module is enabled");
-        loadRecipeProperty("railcraft.alloy", "enableHarderBrass", false, "change to '{t}=true' if you want Brass recipes to supply 3 Brass instead of 4");
+        loadRecipeProperty("railcraft.alloy", "enableHarderBrass", false, "change to '{t}=true' if you want Brass getRecipes to supply 3 Brass instead of 4");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.alloy", "enableAltInvar", false, "change to '{t}=true' to forcibly enable a recipe to craft Invar Ingots from Iron and Nickel Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
@@ -342,12 +342,12 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "vanilla.furnace", true, "change to '{t}=false' to disable the Furnace Minecart recipe");
-        loadRecipeProperty("ic2.macerator", "obsidian", false, "change to '{t}=false' to disable the IC2 Macerator recipes for Crushed Obsidian and Obsidian Dust");
+        loadRecipeProperty("ic2.macerator", "obsidian", false, "change to '{t}=false' to disable the IC2 Macerator getRecipes for Crushed Obsidian and Obsidian Dust");
         loadRecipeProperty("ic2.macerator", "charcoal", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Charcoal Dust");
-        loadRecipeProperty("ic2.macerator", "ores", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Ore Dusts");
+        loadRecipeProperty("ic2.macerator", "ores", true, "change to '{t}=false' to disable the IC2 Macerator getRecipes for Ore Dusts");
         loadRecipeProperty("ic2.macerator", "bones", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Bonemeal");
         loadRecipeProperty("ic2.macerator", "blaze", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Blaze Powder");
-        loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Cobblestone");
+        loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator getRecipes for Cobblestone");
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
         loadRecipeProperty("ic2.macerator", "slag", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Slag Dust");
         loadRecipeProperty("ic2.macerator", "ender", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Ender Powder");
@@ -559,7 +559,7 @@ public class RailcraftConfig {
     private static void loadItems() {
         configItems.addCustomCategoryComment(CAT_ITEMS, "Many items can be disabled by setting them to 'false'.\n"
                 + "This is not true for all items, so some experimentation may be needed.\n"
-                + "Some disabled items will cause a substitute to be used in crafting recipes.");
+                + "Some disabled items will cause a substitute to be used in crafting getRecipes.");
 
         for (RailcraftItems item : RailcraftItems.VALUES) {
             loadItemProperty(item.getBaseTag());

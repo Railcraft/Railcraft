@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
@@ -45,7 +46,6 @@ public class ContainerRollingMachine extends RailcraftContainer {
                 if (!stack.isEmpty() && Game.isClient(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("gui.railcraft.rolling.machine.tips.craft"));
             }
-
         };
 
         addSlot(new SlotRollingMachine(craftResult, 0, cx, cy));
@@ -74,14 +74,17 @@ public class ContainerRollingMachine extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
         listener.sendWindowProperty(this, 0, tile.getProgress());
+        listener.sendWindowProperty(this, 1, tile.getProcessTime());
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         for (IContainerListener listener : listeners) {
-            if (lastProgress != tile.getProgress())
+            if (lastProgress != tile.getProgress()) {
                 listener.sendWindowProperty(this, 0, tile.getProgress());
+                listener.sendWindowProperty(this, 1, tile.getProcessTime());
+            }
         }
 
         ItemStack output = tile.getInvResult().getStackInSlot(0);
@@ -99,13 +102,18 @@ public class ContainerRollingMachine extends RailcraftContainer {
             case 0:
                 tile.setProgress(data);
                 break;
+            case 1:
+                tile.setProcessTime(data);
+                break;
+            default:
+                //Noop
         }
     }
 
     @Override
     public final void onCraftMatrixChanged(IInventory inv) {
-        ItemStack output = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, tile.getWorld());
-        craftResult.setInventorySlotContents(0, output);
+        IRollingMachineRecipe output = RollingMachineCraftingManager.getInstance().findMatching(craftMatrix);
+        craftResult.setInventorySlotContents(0, output == null ? ItemStack.EMPTY : output.getOutput(craftMatrix));
     }
 
     @Override
@@ -131,6 +139,5 @@ public class ContainerRollingMachine extends RailcraftContainer {
             tile.useLast = true;
             return stack;
         }
-
     }
 }

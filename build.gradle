@@ -80,15 +80,14 @@ repositories {
         name = "jei"
         url = "http://dvs1.progwml6.com/files/maven/"
     }
-	maven {
-			name = "CoFH Maven"
-			url = "http://maven.covers1624.net"
-		}
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
 }
 
 configurations {
     api
-    api.transitive = false
     compile.extendsFrom api
 }
 
@@ -98,10 +97,11 @@ dependencies {
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     compileOnly "org.jetbrains:annotations:15.0"
+    api 'org.checkerframework:checker-qual:2.4.0'
     api project(':api:buildcraft')
     api project(':api:railcraft')
     compile fileTree(dir: 'libs', include: '*.jar')
-	api "cofh:RedstoneFlux:${project.version_rf}:deobf"
+    api "cofh:RedstoneFlux:${project.version_rf}:deobf"
 }
 
 processResources {
@@ -249,7 +249,7 @@ task apiZip(type: Zip) {
 task releaseInit {
     doLast {
         println '*************************************************************'
-        println 'This build will be version: ' + rootProject.version
+        println 'This build will be version: ' + project.version
         println '*************************************************************'
     }
 }

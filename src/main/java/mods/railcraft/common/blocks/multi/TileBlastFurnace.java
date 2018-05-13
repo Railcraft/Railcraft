@@ -9,12 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.crafting.IBlastFurnaceFuel;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryFactory;
@@ -51,8 +51,8 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
-    public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(stack) != null;
+    public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.getBlastFurnaceCraftings().getFuels(), IBlastFurnaceFuel::getInput);
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
@@ -135,7 +135,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        Map<Character, IBlockState> blockMapping = new HashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getState(null));
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getState(null));
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
@@ -174,7 +174,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         ItemStack input = getStackInSlot(SLOT_INPUT);
         if (InvTools.isEmpty(input))
             return 1;
-        IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
+        IBlastFurnaceRecipe recipe = RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(input);
         if (recipe != null)
             return recipe.getCookTime();
         return 1;
@@ -190,13 +190,13 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     private void setLavaIdle() {
-        BlockPos offsetPos = getPos().add(1, 1, 1);
+        BlockPos offsetPos = getPos().add(0, 1, 0);
         if (world.isAirBlock(offsetPos))
             world.setBlockState(offsetPos, Blocks.LAVA.getStateFromMeta(7), 3);
     }
 
     private void setLavaBurn() {
-        BlockPos offsetPos = getPos().add(1, 1, 1);
+        BlockPos offsetPos = getPos().add(0, 1, 0);
         if (world.isAirBlock(offsetPos))
             world.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
         offsetPos = offsetPos.up();
@@ -246,36 +246,40 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             ItemStack input = getStackInSlot(SLOT_INPUT);
             if (!InvTools.isEmpty(input)) {
 
-                ItemStack output = getStackInSlot(SLOT_OUTPUT);
-                IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
+                ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
+                IBlastFurnaceRecipe recipe = RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(input);
 
-                if (recipe != null && recipe.isRoomForOutput(output)) {
+                if (recipe != null) {
                     if (paused) return;
 
-                    if (burnTime <= FUEL_PER_TICK * 2) {
-                        ItemStack fuel = getStackInSlot(SLOT_FUEL);
-                        if (fuel != null && FUEL_FILTER.test(fuel)) {
-                            int itemBurnTime = FuelPlugin.getBurnTime(fuel);
-                            if (itemBurnTime > 0) {
-                                currentItemBurnTime = itemBurnTime + burnTime;
-                                burnTime = currentItemBurnTime;
-                                setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
+                    ItemStack nextOutput = recipe.getOutput();
+
+                    if (InvTools.isItemEqual(outputSlot, nextOutput) && nextOutput.getCount() + outputSlot.getCount() <= Math.min(inv.getInventoryStackLimit(), outputSlot.getMaxStackSize())) {
+                        if (burnTime <= FUEL_PER_TICK * 2) {
+                            ItemStack fuel = getStackInSlot(SLOT_FUEL);
+                            if (!fuel.isEmpty() && FUEL_FILTER.test(fuel)) {
+                                int itemBurnTime = RailcraftCraftingManager.getBlastFurnaceCraftings().getCookTime(fuel);
+                                if (itemBurnTime > 0) {
+                                    currentItemBurnTime = itemBurnTime + burnTime;
+                                    burnTime = currentItemBurnTime;
+                                    setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
+                                }
                             }
                         }
-                    }
 
-                    if (isBurning()) {
-                        cookTime++;
-                        setCooking(true);
+                        if (isBurning()) {
+                            cookTime++;
+                            setCooking(true);
 
-                        if (cookTime >= recipe.getCookTime()) {
-                            cookTime = 0;
-                            finishedAt = clock;
-                            if (InvTools.isEmpty(output))
-                                setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
-                            else
-                                incSize(output, recipe.getOutputStackSize());
-                            decrStackSize(SLOT_INPUT, 1);
+                            if (cookTime >= recipe.getCookTime()) {
+                                cookTime = 0;
+                                finishedAt = clock;
+                                if (InvTools.isEmpty(outputSlot))
+                                    setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
+                                else
+                                    incSize(outputSlot, nextOutput.getCount());
+                                decrStackSize(SLOT_INPUT, 1);
+                            }
                         }
                     }
                 } else {

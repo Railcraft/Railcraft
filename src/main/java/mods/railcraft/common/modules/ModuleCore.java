@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.CraftingApiAccess;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
@@ -67,7 +67,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryModifiable;
 import org.apache.logging.log4j.Level;
 
 import java.util.*;
@@ -89,10 +88,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 Railcraft.rootCommand.addChildCommand(new CommandTrack());
                 Railcraft.rootCommand.addChildCommand(new CommandTile());
 
-                RailcraftCraftingManager.cokeOven = new CokeOvenCraftingManager();
-                RailcraftCraftingManager.blastFurnace = new BlastFurnaceCraftingManager();
-                RailcraftCraftingManager.rockCrusher = new RockCrusherCraftingManager();
-                RailcraftCraftingManager.rollingMachine = new RollingMachineCraftingManager();
+                CraftingApiAccess.initialize();
 
                 SignalTools.packetBuilder = PacketBuilder.instance();
 

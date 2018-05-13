@@ -187,13 +187,13 @@ public class ModuleTransport extends RailcraftModulePayload {
                 return false;
             }
 
-            private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
-                if (defineTank(type, recipe)) {
-                    RailcraftCraftingManager.blastFurnace.addRecipe(type.getStack(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
-                    return true;
-                }
-                return false;
-            }
+//            private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
+//                if (defineTank(type, recipe)) {
+//                    RailcraftCraftingManager.getBlastFurnaceCraftings().addRecipe(type.getStack(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
+//                    return true;
+//                }
+//                return false;
+//            }
 
 //            private void initIronTank() {
 //                defineIronTank(EnumMachineBeta.TANK_IRON_WALL,

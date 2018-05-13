@@ -19,17 +19,18 @@
 
 package mods.railcraft.common.util.crafting;
 
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -42,14 +43,14 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * A version of {@link net.minecraftforge.oredict.ShapelessOreRecipe shaped ore recipe}
  * that supports fluid.
  */
-@Deprecated
+//TODO need something smarter
 public class ShapelessFluidRecipe extends BaseRecipe {
     protected ItemStack output;
     protected List<Object> input = new ArrayList<>();
     protected int[] drains;
 
     public ShapelessFluidRecipe(ItemStack result, Object... recipe) {
-        super("aaaaaa.");
+        super(CraftingPlugin.getGenerator().next().getResourcePath());
         output = result.copy();
         for (Object in : recipe) {
             if (in instanceof ItemStack) {
@@ -119,8 +120,8 @@ public class ShapelessFluidRecipe extends BaseRecipe {
                         }
                     } else if (next instanceof FluidStack) {
                         ItemStack toCheck = setSize(slot.copy(), 1);
-                        if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                            IFluidHandler handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                        if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                            IFluidHandlerItem handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                             FluidStack fluidStack = handler.drain((FluidStack) next, false);
                             if (fluidStack == null || fluidStack.amount < ((FluidStack) next).amount) {
                                 continue;
@@ -152,7 +153,7 @@ public class ShapelessFluidRecipe extends BaseRecipe {
      * Returns the input for this recipe, any mod accessing this value should never
      * manipulate the values in this array as it will effect the recipe itself.
      *
-     * @return The recipes input vales.
+     * @return The getRecipes input vales.
      */
     public List<Object> getInput() {
         return this.input;

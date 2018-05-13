@@ -9,193 +9,129 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import com.google.common.collect.ForwardingCollection;
-import com.google.common.collect.ForwardingIterator;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.ICrusherRecipe;
+import mods.railcraft.api.crafting.IGenRule;
+import mods.railcraft.api.crafting.IOutputEntry;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import static mods.railcraft.common.util.inventory.InvTools.*;
+import static com.google.common.base.Preconditions.checkArgument;
 
-public class RockCrusherCraftingManager implements ICrusherCraftingManager {
+public final class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
-    private static final RecipeList recipes = new RecipeList();
-    public static final ICrusherRecipe NULL_RECIPE = new CrusherRecipe(new IInputMatcher() {
-        @Override
-        public ItemStack getDisplayStack() {
-            return new ItemStack(Blocks.SAND);
-        }
+    private final List<ICrusherRecipe> recipes = new ArrayList<>();
+    public static final ICrusherRecipe NULL_RECIPE = new CrusherRecipe(Ingredient.EMPTY);
+    private static final RockCrusherCraftingManager INSTANCE = new RockCrusherCraftingManager();
 
-        @Override
-        public Priority getPriority() {
-            return Priority.LOW;
-        }
+    public static RockCrusherCraftingManager getInstance() {
+        return INSTANCE;
+    }
 
-        @Override
-        public boolean apply(@Nullable ItemStack input) {
-            return true;
-        }
-    });
+    private RockCrusherCraftingManager() {}
 
-    @Nonnull
     @Override
-    public Collection<? extends ICrusherRecipe> recipes() {
+    public List<ICrusherRecipe> getRecipes() {
         return recipes;
     }
 
     @Override
-    public IInputMatcher createInputMatcher(ItemStack input, boolean matchDamage, boolean matchNBT) {
-        return new InputMatcher(input, matchDamage, matchNBT);
+    public IGenRule createGenRule(float randomChance) {
+        return new RandomChanceGenRule(randomChance);
     }
 
     @Override
-    public GenRule createGenRule() {
-        return createGenRule(1.0F, -1);
-    }
-
-    @Override
-    public GenRule createGenRule(float randomChance, String... groupNames) {
-        return new GenRule(randomChance, -1, groupNames);
-    }
-
-    @Override
-    public GenRule createGenRule(final float randomChance, final int maxItems, final String... groupNames) {
-        return new GenRule(randomChance, maxItems, groupNames);
-    }
-
-    @Override
-    public ICrusherRecipe createRecipe(@Nonnull IInputMatcher inputMatcher) {
+    public ICrusherRecipe createRecipe(@Nonnull Ingredient inputMatcher) {
         return new CrusherRecipe(inputMatcher);
     }
 
-    @Override
-    public ICrusherRecipe createRecipe(ItemStack input, boolean matchDamage, boolean matchNBT) {
-        return createRecipe(createInputMatcher(input, matchDamage, matchNBT));
-    }
-
-    @Override
-    public ICrusherRecipe createAndAddRecipe(@Nonnull IInputMatcher inputMatcher) {
-        ICrusherRecipe recipe = createRecipe(inputMatcher);
-        recipes.add(recipe);
-        return recipe;
-    }
-
-    @Override
-    public ICrusherRecipe createAndAddRecipe(ItemStack input, boolean matchDamage, boolean matchNBT) {
-        ICrusherRecipe recipe = createRecipe(input, matchDamage, matchNBT);
-        recipes.add(recipe);
-        return recipe;
-    }
-
+    @Nullable
     @Override
     public ICrusherRecipe getRecipe(ItemStack input) {
-        if (InvTools.isEmpty(input)) return null;
-        for (ICrusherRecipe r : recipes.high()) {
-            if (r.getInputMatcher().apply(input))
-                return r;
+        if (InvTools.isEmpty(input)) {
+            return null;
         }
-        for (ICrusherRecipe r : recipes.medium()) {
-            if (r.getInputMatcher().apply(input))
-                return r;
-        }
-        for (ICrusherRecipe r : recipes.low()) {
-            if (r.getInputMatcher().apply(input))
+        for (ICrusherRecipe r : recipes) {
+            if (r.getInput().apply(input))
                 return r;
         }
         return null;
     }
 
-    private static class InputMatcher implements IInputMatcher {
-        private final ItemStack input;
-        private final Priority priority;
-        private final boolean matchDamage, matchNBT;
+    @Override
+    public void addRecipe(ICrusherRecipe recipe) {
+        recipes.add(recipe);
+    }
 
-        InputMatcher(ItemStack input, boolean matchDamage, boolean matchNBT) {
-            this(input, genPriority(matchDamage, matchNBT), matchDamage, matchNBT);
-        }
+    @Override
+    public ICrusherRecipeBuilder createRecipeBuilder() {
+        return new CrusherRecipeBuilderImpl();
+    }
 
-        InputMatcher(ItemStack input, Priority priority, boolean matchDamage, boolean matchNBT) {
-            this.input = input.copy();
-            this.priority = priority;
-            this.matchDamage = matchDamage;
-            this.matchNBT = matchNBT;
-        }
+    private static class CrusherRecipeBuilderImpl implements ICrusherRecipeBuilder {
+        private Ingredient input;
+        private List<IOutputEntry> outputs = new ArrayList<>();
 
-        private static Priority genPriority(boolean matchDamage, boolean matchNBT) {
-            if (matchNBT)
-                return Priority.HIGH;
-            if (matchDamage)
-                return Priority.MEDIUM;
-            return Priority.LOW;
+        @Override
+        public ICrusherRecipeBuilder input(Ingredient input) {
+            this.input = input;
+            return this;
         }
 
         @Override
-        public ItemStack getDisplayStack() {
-            return input;
+        public ICrusherRecipeBuilder addOutput(IOutputEntry entry) {
+            this.outputs.add(entry);
+            return this;
         }
 
         @Override
-        public Priority getPriority() {
-            return priority;
+        public ICrusherRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
+            return addOutput(new OutputEntry(output, rule));
         }
 
         @Override
-        public boolean apply(@Nullable ItemStack stack) {
-            return InvTools.isItemEqual(stack, input, matchDamage, matchNBT);
+        public ICrusherRecipeBuilder addOutput(ItemStack output, float chance) {
+            return addOutput(output, new RandomChanceGenRule(chance));
+        }
+
+        @Override
+        public ICrusherRecipe build() throws IllegalArgumentException {
+            checkArgument(input != null, "input");
+            return new CrusherRecipe(input, outputs);
+        }
+
+        @Override
+        public void buildAndRegister() throws IllegalArgumentException {
+            RockCrusherCraftingManager.getInstance().addRecipe(build());
         }
     }
 
-    private static class GenRule implements IGenRule {
+    private static class RandomChanceGenRule implements IGenRule {
         private final float randomChance;
-        private final int maxItems;
-        private final String[] groupNames;
         private List<ITextComponent> toolTip;
 
-        GenRule(final float randomChance, final int maxItems, final String... groupNames) {
+        RandomChanceGenRule(float randomChance) {
             this.randomChance = randomChance;
-            this.maxItems = maxItems;
-            this.groupNames = groupNames;
         }
 
         @Override
-        public boolean apply(@Nullable List<IOutputEntry> previousEntries) {
-            if (previousEntries != null) {
-                if (maxItems > 0 && previousEntries.size() >= maxItems)
-                    return false;
-
-                for (IOutputEntry entry : previousEntries) {
-                    if (entry instanceof GenRule) {
-                        GenRule genRule = (GenRule) entry;
-                        for (String group : groupNames) {
-                            if (ArrayUtils.contains(genRule.groupNames, group))
-                                return false;
-                        }
-                    }
-                }
-            }
-
-            return MiscTools.RANDOM.nextFloat() <= randomChance;
+        public boolean test(Random random) {
+            return random.nextFloat() < randomChance;
         }
 
         //TODO: test this!
         @Override
         public List<ITextComponent> getToolTip() {
             if (toolTip == null) {
-                toolTip = new ArrayList<ITextComponent>();
-                toolTip.add(new TextComponentString(new DecimalFormat("(###.###% chance)").format(randomChance)));
-                toolTip.add(new TextComponentString("Max Items: " + maxItems));
-                toolTip.add(new TextComponentString("Groups: " + Arrays.toString(groupNames)));
+                toolTip = Collections.singletonList(new TextComponentString(new DecimalFormat("(###.###% chance)").format(randomChance)));
             }
             return toolTip;
         }
@@ -205,7 +141,7 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
         private final ItemStack output;
         private final IGenRule genRule;
 
-        private OutputEntry(ItemStack output, IGenRule genRule) {
+        OutputEntry(ItemStack output, IGenRule genRule) {
             this.output = output.copy();
             this.genRule = genRule;
         }
@@ -223,176 +159,32 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
     private static class CrusherRecipe implements ICrusherRecipe {
 
-        private final IInputMatcher inputMatcher;
-        private final List<IOutputEntry> outputs = new ArrayList<IOutputEntry>();
+        private final Ingredient inputMatcher;
+        private final List<IOutputEntry> outputs;
 
-        CrusherRecipe(IInputMatcher inputMatcher) {
+        CrusherRecipe(Ingredient inputMatcher) {
+            this(inputMatcher, new ArrayList<>());
+        }
+
+        CrusherRecipe(Ingredient inputMatcher, List<IOutputEntry> entries) {
             this.inputMatcher = inputMatcher;
+            this.outputs = entries;
         }
 
         @Override
-        public IInputMatcher getInputMatcher() {
+        public Ingredient getInput() {
             return inputMatcher;
         }
 
         @Override
-        public void addOutput(@Nullable ItemStack output, IGenRule genRule) {
+        public void addOutput(ItemStack output, IGenRule genRule) {
             if (InvTools.isEmpty(output)) return;
             outputs.add(new OutputEntry(output, genRule));
         }
 
         @Override
-        public void addOutput(@Nullable ItemStack output, float chance, int maxItems, String... groupNames) {
-            addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule(chance, maxItems, groupNames));
-        }
-
-        @Override
-        public void addOutput(@Nullable ItemStack output, float chance) {
-            addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule(chance));
-        }
-
-        @Override
-        public void addOutput(@Nullable ItemStack output) {
-            addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule());
-        }
-
-        @Override
         public List<IOutputEntry> getOutputs() {
             return outputs;
-        }
-
-        @Override
-        public List<ItemStack> getPossibleOutputs() {
-            List<ItemStack> list = new ArrayList<ItemStack>();
-            for (IOutputEntry entry : outputs) {
-                ItemStack output = entry.getOutput();
-                for (ItemStack saved : list) {
-                    if (InvTools.isItemEqual(saved, output)) {
-                        if (sizeOf(saved) + sizeOf(output) <= saved.getMaxStackSize()) {
-                            incSize(saved, sizeOf(output));
-                            output = InvTools.emptyStack();
-                        } else {
-                            int diff = saved.getMaxStackSize() - sizeOf(saved);
-                            setSize(saved, saved.getMaxStackSize());
-                            decSize(output, diff);
-                        }
-                        break;
-                    }
-                }
-                if (!InvTools.isEmpty(output)) {
-                    list.add(output);
-                }
-            }
-            return list;
-        }
-
-        @Override
-        public List<ItemStack> getProcessedOutputs() {
-            List<ItemStack> list = new ArrayList<ItemStack>();
-            for (IOutputEntry entry : outputs) {
-                if (entry.getGenRule().apply(outputs)) {
-                    list.add(entry.getOutput());
-                }
-            }
-            return list;
-        }
-
-    }
-
-    private static class RecipeList extends ForwardingCollection<ICrusherRecipe> {
-        private final List<ICrusherRecipe> recipes = new ArrayList<ICrusherRecipe>();
-        private final List<ICrusherRecipe> recipesHigh = new ArrayList<ICrusherRecipe>();
-        private final List<ICrusherRecipe> recipesMedium = new ArrayList<ICrusherRecipe>();
-        private final List<ICrusherRecipe> recipesLow = new ArrayList<ICrusherRecipe>();
-
-        @Override
-        protected Collection<ICrusherRecipe> delegate() {
-            return recipes;
-        }
-
-        @Nonnull
-        @Override
-        public Iterator<ICrusherRecipe> iterator() {
-            return new ForwardingIterator<ICrusherRecipe>() {
-                ICrusherRecipe current;
-
-                @Override
-                protected Iterator<ICrusherRecipe> delegate() {
-                    return recipes.iterator();
-                }
-
-                @Override
-                public ICrusherRecipe next() {
-                    current = super.next();
-                    return current;
-                }
-
-                @Override
-                public void remove() {
-                    super.remove();
-                    recipesHigh.remove(current);
-                    recipesMedium.remove(current);
-                    recipesLow.remove(current);
-                }
-            };
-        }
-
-        Collection<ICrusherRecipe> high() {
-            return Collections.unmodifiableCollection(recipesHigh);
-        }
-
-        Collection<ICrusherRecipe> medium() {
-            return Collections.unmodifiableCollection(recipesMedium);
-        }
-
-        Collection<ICrusherRecipe> low() {
-            return Collections.unmodifiableCollection(recipesLow);
-        }
-
-        @Override
-        public boolean add(@Nonnull ICrusherRecipe recipe) {
-            boolean added = recipes.add(recipe);
-            if (added)
-                switch (recipe.getInputMatcher().getPriority()) {
-                    case HIGH:
-                        recipesHigh.add(recipe);
-                    case MEDIUM:
-                        recipesMedium.add(recipe);
-                    case LOW:
-                        recipesLow.add(recipe);
-                }
-            return added;
-        }
-
-        @Override
-        public boolean remove(@Nonnull Object recipe) {
-            recipesHigh.remove(recipe);
-            recipesMedium.remove(recipe);
-            recipesLow.remove(recipe);
-            return recipes.remove(recipe);
-        }
-
-        @Override
-        public boolean addAll(@Nonnull Collection<? extends ICrusherRecipe> c) {
-            return standardAddAll(c);
-        }
-
-        @Override
-        public boolean removeAll(@Nonnull Collection<?> c) {
-            return standardRemoveAll(c);
-        }
-
-        @Override
-        public boolean retainAll(@Nonnull Collection<?> c) {
-            return standardRetainAll(c);
-        }
-
-        @Override
-        public void clear() {
-            recipes.clear();
-            recipesHigh.clear();
-            recipesMedium.clear();
-            recipesLow.clear();
         }
     }
 }

@@ -9,106 +9,79 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import mods.railcraft.api.crafting.CraftingApiAccess;
 import mods.railcraft.api.crafting.ICokeOvenCraftingManager;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+public final class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
 
-public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
+    private final List<ICokeOvenRecipe> recipes = new ArrayList<>();
 
-    private final List<CokeOvenRecipe> recipes = new ArrayList<>();
+    private static final CokeOvenCraftingManager INSTANCE = new CokeOvenCraftingManager();
+
+    static {
+        CraftingApiAccess.setCokeOvenCrafting(INSTANCE);
+    }
 
     public static ICokeOvenCraftingManager getInstance() {
-        return RailcraftCraftingManager.cokeOven;
+        return INSTANCE;
+    }
+
+    private CokeOvenCraftingManager() {
     }
 
     @Override
-    public List<? extends ICokeOvenRecipe> getRecipes() {
+    public Collection<ICokeOvenRecipe> getRecipes() {
         return recipes;
     }
 
-    public static class CokeOvenRecipe implements ICokeOvenRecipe {
-
-        private final ItemStack input;
-        private final boolean matchDamage;
-        private final boolean matchNBT;
-        private final FluidStack fluidOutput;
-        private final int cookTime;
-        private final ItemStack output;
-
-        public CokeOvenRecipe(ItemStack input, boolean matchDamage, boolean matchNBT,
-                              @Nullable ItemStack output,
-                              @Nullable FluidStack fluidOutput, int cookTime) {
-            this.input = input;
-            this.matchDamage = matchDamage;
-            this.matchNBT = matchNBT;
-            this.output = output;
-            this.fluidOutput = fluidOutput;
-            this.cookTime = cookTime;
-        }
-
-        @Override
-        public ItemStack getInput() {
-            return input.copy();
-        }
-
-        @Override
-        @Nullable
-        public ItemStack getOutput() {
-            if (InvTools.isEmpty(output)) {
-                return InvTools.emptyStack();
+    @Override
+    public ICokeOvenRecipe create(Ingredient input, ItemStack output, @Nullable FluidStack liquidOutput, int cookTime) {
+        return new ICokeOvenRecipe() {
+            @Override
+            public Ingredient getInput() {
+                return input;
             }
-            return output.copy();
-        }
 
-        @Override
-        @Nullable
-        public FluidStack getFluidOutput() {
-            if (fluidOutput != null) {
-                return fluidOutput.copy();
+            @Override
+            public int getCookTime() {
+                return cookTime;
             }
-            return null;
-        }
 
-        @Override
-        public int getCookTime() {
-            return cookTime;
-        }
+            @Nullable
+            @Override
+            public FluidStack getFluidOutput() {
+                return FluidTools.copy(liquidOutput);
+            }
 
-        @Override
-        public String toString() {
-            return String.format("Coke Oven Recipe: %s -> %s & %s", InvTools.toString(input), InvTools.toString(output), FluidTools.toString(fluidOutput));
-        }
+            @Override
+            public ItemStack getOutput() {
+                return output.copy();
+            }
+        };
     }
 
     @Override
-    public void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
-        checkNotNull(input);
-        recipes.add(new CokeOvenRecipe(input, matchDamage, matchNBT, output, fluidOutput, cookTime));
-
-//        Game.log(Level.DEBUG, "Adding Coke Oven recipe: {0}, {1}, {2}", input.getItem().getClass().getName(), input, input.getItemDamage());
+    public void addRecipe(ICokeOvenRecipe recipe) {
+        recipes.add(recipe);
     }
 
     @Override
-    public ICokeOvenRecipe getRecipe(@Nullable ItemStack input) {
-        if (InvTools.isEmpty(input)) return null;
-        for (CokeOvenRecipe r : recipes) {
-            if (!r.matchDamage || InvTools.isWildcard(r.input)) continue;
-            if (InvTools.isItemEqual(input, r.input, true, r.matchNBT))
+    @Nullable
+    public ICokeOvenRecipe getRecipe(ItemStack input) {
+        for (ICokeOvenRecipe r : recipes) {
+            if (r.getInput().test(input)) {
                 return r;
-        }
-        for (CokeOvenRecipe r : recipes) {
-            if (InvTools.isItemEqual(input, r.input, r.matchDamage, r.matchNBT))
-                return r;
+            }
         }
         return null;
     }

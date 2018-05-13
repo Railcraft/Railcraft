@@ -45,6 +45,8 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
+import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -63,6 +65,12 @@ public final class FluidTools {
     public static final int PROCESS_VOLUME = BUCKET_VOLUME * 4;
 
     private FluidTools() {
+    }
+
+    @Contract("null -> null; !null -> !null")
+    @Nullable
+    public static @PolyNull FluidStack copy(@Nullable @PolyNull FluidStack fluidStack) {
+        return fluidStack == null ? null : fluidStack.copy();
     }
 
     public static String toString(@Nullable FluidStack fluidStack) {

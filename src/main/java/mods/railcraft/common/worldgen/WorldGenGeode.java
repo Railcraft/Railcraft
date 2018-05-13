@@ -34,6 +34,7 @@ public class WorldGenGeode extends WorldGenerator {
     private static final int DISTANCE_ORE_SQ = 5 * 5;
     private static final int DISTANCE_INNER_SQ = 4 * 4;
     private final IBlockState geodeStone;
+    //TODO block state
     public final Set<Block> ores = new HashSet<Block>();
     public final Set<Block> banned = new HashSet<Block>();
     private final Block blockOre;
