@@ -236,53 +236,72 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                             .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONEBRICK)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONEBRICK), false, false);
-                    .addOutput(new ItemStack(Blocks.COBBLESTONE))
+                            .addOutput(new ItemStack(Blocks.COBBLESTONE))
                             .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                             .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONE_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_STAIRS), false, false);
-                    .addOutput(new ItemStack(Blocks.GRAVEL));
+                            .addOutput(new ItemStack(Blocks.GRAVEL))
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.STONE_BRICK_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_BRICK_STAIRS), false, false);
-                    addOutput(new ItemStack(Blocks.COBBLESTONE));
+                            .addOutput(new ItemStack(Blocks.COBBLESTONE))
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.NETHER_BRICK_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.NETHER_BRICK_STAIRS), false, false);
-                    addOutput(new ItemStack(Blocks.NETHER_BRICK));
+                            .addOutput(new ItemStack(Blocks.NETHER_BRICK))
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BIRCH_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.BRICK_STAIRS), false, false);
-                    addOutput(new ItemStack(Items.BRICK, 4));
-                    addOutput(new ItemStack(Items.BRICK), 0.5f);
-                    addOutput(new ItemStack(Items.BRICK), 0.5f);
+                            .addOutput(new ItemStack(Items.BRICK, 4))
+                            .addOutput(new ItemStack(Items.BRICK), 0.5f)
+                            .addOutput(new ItemStack(Items.BRICK), 0.5f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(new ItemStack(Blocks.STONE_SLAB, 1, 0)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 0), true, false);
-                    addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f);
+                            .addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(new ItemStack(Blocks.STONE_SLAB, 1, 1)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 1), true, false);
-                    addOutput(new ItemStack(Blocks.SAND), 0.45f);
+                            .addOutput(new ItemStack(Blocks.SAND), 0.45f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(new ItemStack(Blocks.STONE_SLAB, 1, 3)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 3), true, false);
-                    addOutput(new ItemStack(Blocks.GRAVEL), 0.45f);
+                            .addOutput(new ItemStack(Blocks.GRAVEL), 0.45f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(new ItemStack(Blocks.STONE_SLAB, 1, 4)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 4), true, false);
-                    addOutput(new ItemStack(Items.BRICK));
-                    addOutput(new ItemStack(Items.BRICK), 0.75f);
+                            .addOutput(new ItemStack(Items.BRICK))
+                            .addOutput(new ItemStack(Items.BRICK), 0.75f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(new ItemStack(Blocks.STONE_SLAB, 1, 5)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 5), true, false);
-                    addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f);
+                            .addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.ICE)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.ICE), false, false);
-                    addOutput(new ItemStack(Blocks.SNOW), 0.85f);
-                    addOutput(new ItemStack(Items.SNOWBALL), 0.25f);
+                            .addOutput(new ItemStack(Blocks.SNOW), 0.85f)
+                            .addOutput(new ItemStack(Items.SNOWBALL), 0.25f)
+                            .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                             .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.NETHER_BRICK_FENCE)))

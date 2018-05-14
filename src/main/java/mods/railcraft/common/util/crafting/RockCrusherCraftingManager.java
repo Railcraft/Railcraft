@@ -94,6 +94,8 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
 
         @Override
         public ICrusherRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
+            if (output.isEmpty())
+                return this;
             return addOutput(new OutputEntry(output, rule));
         }
 

@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.api.crafting.CraftingApiAccess;
 import mods.railcraft.api.crafting.ICokeOvenCraftingManager;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.common.fluids.FluidTools;
@@ -28,11 +27,7 @@ public final class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
 
     private static final CokeOvenCraftingManager INSTANCE = new CokeOvenCraftingManager();
 
-    static {
-        CraftingApiAccess.setCokeOvenCrafting(INSTANCE);
-    }
-
-    public static ICokeOvenCraftingManager getInstance() {
+    public static CokeOvenCraftingManager getInstance() {
         return INSTANCE;
     }
 

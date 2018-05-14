@@ -136,6 +136,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<Object> actions = new HashSet<Object>();
     private int processTime;
+    private final Random random = new Random();
 //    @Nullable
 //    private final EnergyStorage energyStorage;
 //    @Nullable
@@ -281,7 +282,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
                         boolean hasRoom = true;
-                        List<ItemStack> outputs = recipe.pollOutputs();
+                        List<ItemStack> outputs = recipe.pollOutputs(random);
                         for (ItemStack output : outputs) {
                             output = InvTools.moveItemStack(output, tempInv);
                             if (!InvTools.isEmpty(output)) {

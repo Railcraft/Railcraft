@@ -112,7 +112,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     }
 
     default ItemStack getWildcard() {
-        return getObject().map(o -> o.getWildcard()).orElse(null);
+        return getObject().map(o -> o.getWildcard()).orElse(ItemStack.EMPTY);
     }
 
     default ItemStack getStack() {

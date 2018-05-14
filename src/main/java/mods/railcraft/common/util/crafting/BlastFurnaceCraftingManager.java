@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -37,15 +36,9 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     private BlastFurnaceCraftingManager() {
-        List<ItemStack> fuel = new ArrayList<ItemStack>() {
-            @Override
-            public boolean add(ItemStack e) {
-                return !InvTools.isEmpty(e) && super.add(e);
-            }
-
-        };
+        List<ItemStack> fuel = new ArrayList<>();
+        //TODO fix this tc thing
         fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-        fuel.add(RailcraftItems.COKE.getStack());
         fuel.add(EnumGeneric.BLOCK_COKE.getStack());
         fuel.add(new ItemStack(Items.COAL, 1, 1));
         fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());

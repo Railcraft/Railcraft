@@ -13,6 +13,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,6 +33,7 @@ public class ItemCoke extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
+        BlastFurnaceCraftingManager.getInstance().addFuel(getIngredient(), COKE_HEAT);
         if (RailcraftConfig.coalCokeTorchOutput() > 0) {
             CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",

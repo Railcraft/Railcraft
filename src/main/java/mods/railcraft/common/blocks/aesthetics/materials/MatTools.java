@@ -10,10 +10,9 @@
 
 package mods.railcraft.common.blocks.aesthetics.materials;
 
-import mods.railcraft.api.crafting.ICrusherRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -58,11 +57,15 @@ public class MatTools {
         for (Materials mat : types) {
             if (!mat.isSourceValid())
                 continue;
-            ItemStack stack = source.getStack(mat);
-            if (stack != null) {
-                ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(stack, true, false);
-                recipe.addOutput(output, 1.0F);
-            }
+            RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                    .input(source.getIngredient(mat))
+                    .addOutput(output)
+                    .buildAndRegister();
+//            ItemStack stack = source.getStack(mat);
+//            if (stack != null) {
+//                ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(stack, true, false);
+//                recipe.addOutput(output, 1.0F);
+//            }
         }
     }
 

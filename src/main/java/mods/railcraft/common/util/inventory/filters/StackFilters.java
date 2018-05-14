@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -99,10 +98,6 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
         return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
-    }
-
-    public static <T> Predicate<ItemStack> anyOf(@Nonnull final List<T> checks, Function<T, Predicate<ItemStack>> function) {
-        return stack -> checks.stream().map(function).anyMatch(t -> t.test(stack));
     }
 
     public static Predicate<ItemStack> none() {

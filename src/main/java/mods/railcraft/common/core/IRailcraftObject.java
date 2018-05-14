@@ -10,11 +10,13 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IRailcraftRegistryEntry;
 import mods.railcraft.api.core.IVariantEnum;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,12 +30,22 @@ import javax.annotation.Nullable;
  *
  * Created by CovertJaguar on 3/14/2016.
  */
-public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRailcraftRegistryEntry<T> {
+public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRailcraftRegistryEntry<T>, IIngredientSource {
     T getObject();
 
     @Nullable
+    @Deprecated
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
+    }
+
+    default Ingredient getIngredient(@Nullable IVariantEnum variant) {
+        return Ingredient.fromStacks(getStack(1, variant));
+    }
+
+    @Override
+    default Ingredient getIngredient() {
+        return Ingredient.fromStacks(getStack(1));
     }
 
     default ItemStack getStack() {

@@ -15,6 +15,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryFactory;
@@ -51,8 +52,8 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(stack) != null;
-    public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.getBlastFurnaceCraftings().getFuels(), IBlastFurnaceFuel::getInput);
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && BlastFurnaceCraftingManager.getInstance().getRecipe(stack) != null;
+    public static final Predicate<ItemStack> FUEL_FILTER = stack -> BlastFurnaceCraftingManager.getInstance().getCookTime(stack) > 0;
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
@@ -247,7 +248,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             if (!InvTools.isEmpty(input)) {
 
                 ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
-                IBlastFurnaceRecipe recipe = RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(input);
+                IBlastFurnaceRecipe recipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
 
                 if (recipe != null) {
                     if (paused) return;
@@ -258,7 +259,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                         if (burnTime <= FUEL_PER_TICK * 2) {
                             ItemStack fuel = getStackInSlot(SLOT_FUEL);
                             if (!fuel.isEmpty() && FUEL_FILTER.test(fuel)) {
-                                int itemBurnTime = RailcraftCraftingManager.getBlastFurnaceCraftings().getCookTime(fuel);
+                                int itemBurnTime = BlastFurnaceCraftingManager.getInstance().getCookTime(fuel);
                                 if (itemBurnTime > 0) {
                                     currentItemBurnTime = itemBurnTime + burnTime;
                                     burnTime = currentItemBurnTime;

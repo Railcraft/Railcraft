@@ -25,11 +25,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreIngredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -369,17 +371,15 @@ public enum Materials implements IVariantEnum {
         return SoundType.STONE;
     }
 
-    @Nullable
     public ItemStack getSourceItem() {
         IBlockState state = getState();
-        if (state == null) return null;
+        if (state == null) return ItemStack.EMPTY;
         return new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
     }
 
-    @Nullable
-    public Object getCraftingEquivalent() {
-        if (oreTag != null) return oreTag;
-        return getSourceItem();
+    public Ingredient getCraftingEquivalent() {
+        if (oreTag != null) return new OreIngredient(oreTag);
+        return Ingredient.fromStacks(getSourceItem());
     }
 
     public boolean isTransparent() {

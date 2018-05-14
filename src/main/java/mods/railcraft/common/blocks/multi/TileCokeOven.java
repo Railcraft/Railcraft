@@ -19,6 +19,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
@@ -126,17 +127,17 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
         TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return null;
+        return tankManager;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
@@ -144,7 +145,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -179,7 +180,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
                 if (!InvTools.isEmpty(input) && !InvTools.isSynthetic(input)) {
                     if (!paused && clock % COOK_STEP_LENGTH == 0) {
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
-                        ICokeOvenRecipe recipe = RailcraftCraftingManager.cokeOven.getRecipe(input);
+                        ICokeOvenRecipe recipe = CokeOvenCraftingManager.getInstance().getRecipe(input);
 
                         if (recipe != null) {
                             FluidStack fluidOutput = recipe.getFluidOutput();
@@ -257,12 +258,12 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
             case SLOT_INPUT:
-                return RailcraftCraftingManager.cokeOven.getRecipe(stack) != null;
+                return CokeOvenCraftingManager.getInstance().getRecipe(stack) != null;
             case SLOT_LIQUID_INPUT:
                 return FluidItemHelper.isRoomInContainer(stack);
             default:
