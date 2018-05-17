@@ -41,7 +41,7 @@ minecraft {
     version = project.version_minecraft + "-" + project.version_forge
     runDir = "run"
 
-    mappings = project.version_mcp.replace("-", "_");
+    mappings = project.version_mcp.replace("-", "_")
 
     replace '@VERSION@', project.version
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
@@ -101,7 +101,7 @@ dependencies {
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
     runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     // BuildCraft
-    api "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
+    compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     runtime "com.mod-buildcraft:buildcraft:${project.version_buildcraft}"
     // RF
     api "cofh:RedstoneFlux:${project.version_rf}:deobf"
@@ -143,7 +143,6 @@ runClient {
 
 jar {
     from(sourceSets.api.output) {
-        include '**/cofh/api/**'
         exclude '**/uristqwerty/**'
         exclude '**/thaumcraft/**'
     }
@@ -156,9 +155,11 @@ jar {
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
                 include '**/ic2/api/recipe/**'
+                include '**/cofh/api/**'
                 exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
+                // TODO exclude forestry?
             }
         }
     }
