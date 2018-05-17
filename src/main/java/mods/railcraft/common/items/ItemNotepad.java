@@ -138,6 +138,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         return contents;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         String contentString;

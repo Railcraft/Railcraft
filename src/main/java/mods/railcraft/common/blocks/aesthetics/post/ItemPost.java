@@ -21,6 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -59,6 +61,7 @@ public class ItemPost extends ItemBlockRailcraft {
         return EnumPost.fromId(stack.getItemDamage()).getTag();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         if (stack.getItemDamage() == EnumPost.EMBLEM.ordinal() && stack.hasTagCompound()) {

@@ -16,6 +16,8 @@ import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class ItemFilterOreDictionary extends ItemFilterSimple {
         return !OreDictPlugin.getOreTags(stack).isEmpty();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     protected void addAdditionalInfo(ItemStack stack, ItemStack prototype, List<String> info, ITooltipFlag adv) {
         info.add(LocalizationPlugin.translate("item.railcraft.filter.ore.dict.tips.tags"));

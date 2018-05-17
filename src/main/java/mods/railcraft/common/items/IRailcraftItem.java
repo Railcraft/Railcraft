@@ -19,6 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -39,6 +41,7 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
     }
 
     @Nullable
+    @SideOnly(Side.CLIENT)
     default ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag flag) {
         String tipTag = getTooltipTag(stack);
         if (LocalizationPlugin.hasTag(tipTag))
@@ -46,6 +49,7 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
         return null;
     }
 
+    @SideOnly(Side.CLIENT)
     default void addToolTips(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag flag) {
         ToolTip toolTip = getToolTip(stack, world, flag);
         if (toolTip != null)
