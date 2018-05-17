@@ -34,6 +34,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -121,6 +123,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, player, info, adv);

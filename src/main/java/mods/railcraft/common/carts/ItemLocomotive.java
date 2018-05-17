@@ -130,6 +130,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 //        return renderer.getItemIcons()[pass];
 //    }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);

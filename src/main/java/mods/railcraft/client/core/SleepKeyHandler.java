@@ -34,7 +34,7 @@ public final class SleepKeyHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().theWorld == null)
+        if (Minecraft.getMinecraft().world == null)
             return;
         if (sleepKey.isPressed()) {
             PacketBuilder.instance().sendKeyPressPacket(PacketKeyPress.EnumKeyBinding.BED_CART_SLEEP);

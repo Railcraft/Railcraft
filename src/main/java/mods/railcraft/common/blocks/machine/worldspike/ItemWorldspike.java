@@ -19,6 +19,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +34,7 @@ public class ItemWorldspike extends ItemMachine {
         super(block);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag adv) {
         ToolTip tips = super.getToolTip(stack, world, adv);

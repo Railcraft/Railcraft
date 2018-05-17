@@ -99,6 +99,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         return CartTools.placeCart(type, owner, cartStack, world, pos);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);

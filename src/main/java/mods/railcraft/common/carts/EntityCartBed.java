@@ -47,7 +47,7 @@ public class EntityCartBed extends EntityCartBasic {
     }
 
     {
-        if (Game.isHost(worldObj))
+        if (Game.isHost(world))
             MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -70,7 +70,7 @@ public class EntityCartBed extends EntityCartBasic {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isClient(worldObj)) {
+        if (Game.isClient(world)) {
             return;
         }
 
@@ -82,7 +82,7 @@ public class EntityCartBed extends EntityCartBasic {
             if (rideAfterSleep)
                 sendPlayerRiding((EntityPlayerMP) sleeper);
             if (!wokeUp) {
-                sleeper.playerLocation = getPosition();
+                sleeper.setPosition(getPosition().getX(), getPosition().getY(), getPosition().getZ());
                 return;
             }
             wokeUp = false;
@@ -94,7 +94,7 @@ public class EntityCartBed extends EntityCartBasic {
             return;
         EntityPlayer player = (EntityPlayer) rider;
 
-        if (shouldSleep && worldObj.provider.isSurfaceWorld() && !player.isPlayerSleeping()) {
+        if (shouldSleep && world.provider.isSurfaceWorld() && !player.isPlayerSleeping()) {
             shouldSleep = false;
             EntityPlayer.SleepResult sleepResult = player.trySleep(getPosition());
             if (sleepResult == EntityPlayer.SleepResult.NOT_SAFE) {
@@ -108,7 +108,7 @@ public class EntityCartBed extends EntityCartBasic {
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        if (Game.isHost(worldObj) && passenger instanceof EntityPlayerMP) {
+        if (Game.isHost(world) && passenger instanceof EntityPlayerMP) {
             ChatPlugin.sendLocalizedChatFromServer((EntityPlayerMP) passenger, "gui.railcraft.cart.bed.key");
         }
     }
@@ -150,17 +150,17 @@ public class EntityCartBed extends EntityCartBasic {
             return EntityPlayer.SleepResult.OTHER_PROBLEM;
         }
 
-        if (!player.worldObj.provider.isSurfaceWorld()) {
+        if (!player.world.provider.isSurfaceWorld()) {
             return EntityPlayer.SleepResult.NOT_POSSIBLE_HERE;
         }
 
-        if (player.worldObj.isDaytime()) {
+        if (player.world.isDaytime()) {
             return EntityPlayer.SleepResult.NOT_POSSIBLE_NOW;
         }
 
         double d0 = 8.0D;
         double d1 = 5.0D;
-        List<EntityMob> list = player.worldObj.getEntitiesWithinAABB(EntityMob.class,
+        List<EntityMob> list = player.world.getEntitiesWithinAABB(EntityMob.class,
                 AABBFactory.start()
                         .fromAABB(player.getEntityBoundingBox())
                         .expandXAxis(d0)
@@ -175,10 +175,10 @@ public class EntityCartBed extends EntityCartBasic {
         player.setPosition(posX, posY, posZ);
 
         startSleeping(player);
-        player.playerLocation = getPosition();
+        player.setPosition(getPosition().getX(), getPosition().getY(), getPosition().getZ());
 
-        if (!player.worldObj.isRemote) {
-            player.worldObj.updateAllPlayersSleepingFlag();
+        if (!player.world.isRemote) {
+            player.world.updateAllPlayersSleepingFlag();
         }
 
         return EntityPlayer.SleepResult.OK;
