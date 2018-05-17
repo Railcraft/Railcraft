@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -25,7 +24,7 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * A version of {@link net.minecraftforge.oredict.ShapedOreRecipe shaped ore recipe}
  * that supports fluid.
  */
-//TODO future is dark
+//TODO make something like cofh's fluid recipe
 public class ShapedFluidRecipe extends BaseRecipe {
     //Added in for future ease of change, but hard coded for now.
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
@@ -196,6 +195,9 @@ public class ShapedFluidRecipe extends BaseRecipe {
                     ItemStack toCheck = setSize(slot.copy(), 1);
                     if (toCheck.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                         IFluidHandlerItem handler = toCheck.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (handler == null) {
+                            return false;
+                        }
                         FluidStack fluidStack = handler.drain((FluidStack) target, false);
                         if (fluidStack == null || fluidStack.amount < ((FluidStack) target).amount) {
                             return false;
@@ -238,8 +240,12 @@ public class ShapedFluidRecipe extends BaseRecipe {
                 if (isEmpty(ret[i]))
                     continue;
                 ret[i] = setSize(ret[i].copy(), 1);
-                ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).drain(drains[i], true);
-                ret[i] = makeSafe(ret[i]);
+                IFluidHandlerItem handler = ret[i].getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                if (handler == null) {
+                    continue;
+                }
+                handler.drain(drains[i], true);
+                ret[i] = makeSafe(handler.getContainer());
             } else {
                 ret[i] = ForgeHooks.getContainerItem(inv.getStackInSlot(i));
             }

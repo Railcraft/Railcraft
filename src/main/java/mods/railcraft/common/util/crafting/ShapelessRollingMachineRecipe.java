@@ -13,7 +13,7 @@ import java.util.List;
 /**
  *
  */
-final class ShapelessRollingMachineRecipe implements IRollingMachineRecipe {
+public final class ShapelessRollingMachineRecipe implements IRollingMachineRecipe {
     private final List<@NonNull Ingredient> ingredients;
     private final ItemStack output;
     private static final Field NON_NULL_LIST_FIELD = InventoryCrafting.class.getDeclaredFields()[0];

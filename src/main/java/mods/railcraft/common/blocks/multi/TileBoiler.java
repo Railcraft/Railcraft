@@ -29,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
@@ -52,9 +53,9 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     public static final int STEAM_HIGH = 32;
     public static final float HEAT_LOW = SteamConstants.MAX_HEAT_LOW;
     public static final float HEAT_HIGH = SteamConstants.MAX_HEAT_HIGH;
-    protected static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private static final Set<Integer> boilerBlocks = new HashSet<Integer>();
-    private static final Set<Integer> fireboxBlocks = new HashSet<Integer>();
+    protected static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final Set<Integer> boilerBlocks = new HashSet<>();
+    private static final Set<Integer> fireboxBlocks = new HashSet<>();
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tankWater;
     protected final FilteredTank tankSteam;
@@ -142,7 +143,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

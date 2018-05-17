@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -39,10 +40,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -95,8 +98,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<>();
-//        blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.getDefaultState()); TODO
-//        blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
+        blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
@@ -426,7 +429,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
         List<ItemStack> items = new ArrayList<>();
-        List<ItemStack> old = getBlockType().getDrops(world, getPos(), getBlockState(), fortune);
+        NonNullList<ItemStack> old = NonNullList.create();
+        getBlockType().getDrops(old, world, getPos(), getBlockState(), fortune);
         if (old.isEmpty())
             return Collections.emptyList();
         ItemStack drop = new ItemStack(getBlockType());
@@ -460,10 +464,10 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(world)) {
             TankManager tankManager = getTankManager();
-            if (isStructureValid() && tankManager != null && FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player)) {
+            if (isStructureValid() && tankManager != null && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();
@@ -473,7 +477,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             return true;
 
         // Prevents players from getting inside tanks using boats
-        return heldItem != null && heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

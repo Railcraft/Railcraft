@@ -32,6 +32,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -164,18 +166,19 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
     }
 
     @Override
+    @Nonnull
     public TankManager getTankManager() {
         return tankManager;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);

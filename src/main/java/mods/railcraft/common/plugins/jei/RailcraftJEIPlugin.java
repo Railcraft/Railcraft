@@ -11,10 +11,17 @@
 package mods.railcraft.common.plugins.jei;
 
 import mezz.jei.api.*;
+import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
+import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeWrapper;
+import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeWrapper;
+import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
+import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +36,17 @@ import javax.annotation.Nullable;
 @JEIPlugin
 public class RailcraftJEIPlugin implements IModPlugin {
     public static final String ROLLING = "railcraft.rolling";
+
+    @Override
+    public void registerIngredients(IModIngredientRegistration registry) {
+    }
+
+    @Override
+    public void register(IModRegistry registry) {
+        FluidRecipeInterpreter.init(registry.getJeiHelpers().getStackHelper(), registry.getIngredientRegistry());
+        registry.handleRecipes(ShapedFluidRecipe.class, ShapedFluidRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(ShapelessFluidRecipe.class, ShapelessFluidRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
+    }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -74,7 +92,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
 //        RailcraftObjects.processItemVariants((item, variant) -> addDescription(registry, item.getStack(variant)));
 //    }
 
-    private void addDescription(IModRegistry registry, @Nullable ItemStack stack) {
+    private void addDescription(IModRegistry registry, ItemStack stack) {
         if (!InvTools.isEmpty(stack)) {
             String locTag = stack.getUnlocalizedName() + ".desc";
             if (LocalizationPlugin.hasTag(locTag))

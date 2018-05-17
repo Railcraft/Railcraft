@@ -11,7 +11,7 @@ import java.util.List;
 /**
  *
  */
-final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
+public final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
     private final int width;
     private final int height;
     private final List<@NonNull Ingredient> ingredients;

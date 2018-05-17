@@ -47,12 +47,12 @@ import java.io.File;
         guiFactory = "mods.railcraft.client.core.RailcraftGuiConfigFactory",
         updateJSON = "http://www.railcraft.info/railcraft_versions",
         dependencies = "required-after:forge@[14.23.2.2611,);"
-                + "after:buildcraft|core@[7.99,);"
-                + "after:buildcraft|energy;"
-                + "after:buildcraft|builders;"
-                + "after:buildcraft|factory;"
-                + "after:buildcraftAPI|statements@[1.0,);"
-                + "after:buildcraftAPI|transport@[1.0,);"
+                + "after:buildcraftcore@[7.99.17,);"
+                + "after:buildcraftenergy;"
+                + "after:buildcraftbuilders;"
+                + "after:buildcraftfactory;"
+                + "after:BuildCraftAPI|statements@[1.0,);"
+                + "after:BuildCraftAPI|transport@[1.0,);"
                 + "after:forestry@[5.8.0.256,);"
                 + "after:thaumcraft;"
                 + "after:ic2@[2.8.67-ex112,);")

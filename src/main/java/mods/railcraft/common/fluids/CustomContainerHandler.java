@@ -8,7 +8,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -58,7 +57,7 @@ public final class CustomContainerHandler {
         if (Game.isClient(world))
             return;
         EntityPlayer player = event.getEntityPlayer();
-        RayTraceResult trace = trace(player, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance());
+        RayTraceResult trace = trace(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue());
         if (trace == null || trace.typeOfHit != RayTraceResult.Type.BLOCK)
             return;
         BlockPos pos = trace.getBlockPos();
@@ -98,7 +97,7 @@ public final class CustomContainerHandler {
         }
     }
 
-    class EmptyContainerCapabilityDispatcher extends FluidBucketWrapper {
+    final class EmptyContainerCapabilityDispatcher extends FluidBucketWrapper {
 
         private final IRegistryDelegate<Item> item;
 
@@ -140,16 +139,16 @@ public final class CustomContainerHandler {
                 return 0;
 
             if (doFill) {
-                setFluid(resource.getFluid());
+                setFluid(resource);
             }
 
             return (resource.getFluid() == FluidRegistry.WATER ? FluidTools.WaterBottleEventHandler.INSTANCE.amount : Fluid.BUCKET_VOLUME);
         }
 
         @Override
-        protected void setFluid(@Nullable Fluid fluid) {
+        protected void setFluid(@Nullable FluidStack fluid) {
             if (fluid != null) {
-                container.deserializeNBT(new ItemStack(containerTable.get(item, fluid.getName()).get()).serializeNBT());
+                container = new ItemStack(containerTable.get(item, fluid.getFluid().getName()).get());
             }
         }
     }

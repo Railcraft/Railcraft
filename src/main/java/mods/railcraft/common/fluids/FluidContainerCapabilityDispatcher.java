@@ -9,22 +9,19 @@ import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 import javax.annotation.Nullable;
 
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
-
 /**
  * A simple capability dispatcher for Railcraft fluid containers. Drain only,
  * no fills.
  */
-public class FluidContainerCapabilityDispatcher extends FluidBucketWrapper {
+final class FluidContainerCapabilityDispatcher extends FluidBucketWrapper {
 
     private final ItemFluidContainer item;
 
-    public FluidContainerCapabilityDispatcher(ItemFluidContainer item, ItemStack container) {
+    FluidContainerCapabilityDispatcher(ItemFluidContainer item, ItemStack container) {
         super(container);
         this.item = item;
     }
 
-    @Nullable
     @Override
     public FluidStack getFluid() {
         return item.fluid.get(Fluid.BUCKET_VOLUME);
@@ -36,12 +33,12 @@ public class FluidContainerCapabilityDispatcher extends FluidBucketWrapper {
     }
 
     @Override
-    protected void setFluid(@Nullable Fluid fluid) {
+    protected void setFluid(@Nullable FluidStack fluid) {
         if (fluid == null) {
             if (item.empty == Items.GLASS_BOTTLE && ModuleResources.getInstance().isBottleFree()) {
-                setSize(container, 0);
+                container = ItemStack.EMPTY;
             } else {
-                container.deserializeNBT(new ItemStack(item.empty).serializeNBT());
+                container = new ItemStack(item.empty);
             }
         }
     }

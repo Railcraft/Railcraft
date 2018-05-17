@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class OptionalFluidStack {
+public final class OptionalFluidStack {
     private final FluidStack fluidStack;
 
     private static final OptionalFluidStack EMPTY = new OptionalFluidStack(null);

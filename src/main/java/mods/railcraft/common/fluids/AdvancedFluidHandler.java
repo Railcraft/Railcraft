@@ -82,7 +82,7 @@ public class AdvancedFluidHandler implements IFluidHandler {
             amount += liquid == null ? 0 : liquid.amount;
             capacity += tank.getCapacity();
         }
-        return capacity == 0 ? 0 : amount / capacity;
+        return capacity == 0 ? 0 : ((float) amount) / capacity;
     }
 
     public float getFluidLevel(Fluid fluid) {

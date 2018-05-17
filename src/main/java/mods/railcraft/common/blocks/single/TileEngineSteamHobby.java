@@ -23,8 +23,8 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
-import mods.railcraft.common.util.steam.SteamConstants;
 import mods.railcraft.common.util.steam.SteamBoiler;
+import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -102,7 +102,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return FluidTools.interactWithFluidHandler(heldItem, getTankManager(), player) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager()) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -258,7 +258,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void clear() {
         for (int i = 0; i < this.getSizeInventory(); i++) {
-            setInventorySlotContents(i, null);
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
     }
 

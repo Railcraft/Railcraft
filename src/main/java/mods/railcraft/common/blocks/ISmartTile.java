@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -84,7 +83,7 @@ public interface ISmartTile {
             InvTools.dropInventory(new InventoryMapper((IInventory) this), tile().getWorld(), tile().getPos());
     }
 
-    default boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    default boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
         if (!InvTools.isEmpty(heldItem)) {
