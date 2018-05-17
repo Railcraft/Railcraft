@@ -37,7 +37,6 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
 
     private BlastFurnaceCraftingManager() {
         List<ItemStack> fuel = new ArrayList<>();
-        //TODO fix this tc thing
         fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
         fuel.add(EnumGeneric.BLOCK_COKE.getStack());
         fuel.add(new ItemStack(Items.COAL, 1, 1));

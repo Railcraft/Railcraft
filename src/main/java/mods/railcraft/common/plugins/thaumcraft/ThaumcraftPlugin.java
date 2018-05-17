@@ -10,38 +10,44 @@
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.blocks.BlocksTC;
+import thaumcraft.api.items.ItemsTC;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ThaumcraftPlugin {
     public static final ItemStackCache ITEMS = new ItemStackCache("Thaumcraft", Mod.THAUMCRAFT::isLoaded, tag -> {
-//        try {
-//            return nullnew ItemStack((Item) ItemsTC.class.getField(tag).get(null));
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            if (Game.DEVELOPMENT_ENVIRONMENT)
-//                throw new RuntimeException(e);
-//            return null;
-//        }
-        return null;
+        try {
+            return new ItemStack((Item) ItemsTC.class.getField(tag).get(null));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            if (Game.DEVELOPMENT_ENVIRONMENT)
+                throw new RuntimeException(e);
+            return ItemStack.EMPTY;
+        }
     });
     public static final ItemStackCache BLOCKS = new ItemStackCache("Thaumcraft", Mod.THAUMCRAFT::isLoaded, tag -> {
-        return null;
-//        try {
-//            return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            if (Game.DEVELOPMENT_ENVIRONMENT)
-//                throw new RuntimeException(e);
-//            return null;
-//        }
+        try {
+            return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            if (Game.DEVELOPMENT_ENVIRONMENT)
+                throw new RuntimeException(e);
+            return ItemStack.EMPTY;
+        }
     });
     public static final String RESEARCH_CATEGORY = "RAILCRAFT";
 //    private static Map<String, ResearchPage> researchPages = new HashMap<String, ResearchPage>();
 
-//    public static void setupResearch() {
+    public static void setupResearch() {
 //        ResearchCategories.registerCategory(RESEARCH_CATEGORY, null, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
-
+//
 //        // Apothecaries Backpack
 //        Item item = RailcraftItems.BACKPACK_APOTHECARY_T1.item();
 //        if (item != null) {
@@ -55,14 +61,14 @@ public class ThaumcraftPlugin {
 //                            'V', Items.GLASS_BOTTLE,
 //                            'X', Items.STRING,
 //                            'Y', "chestWood"));
-
+//
 //            AspectList aspects = new AspectList();
 //            aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);
-
+//
 //            ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, RailcraftItems.BACKPACK_APOTHECARY_T1.getStack());
 //            backpack.setPages(ThaumcraftPlugin.getResearchPage("RC_ApothecariesBackpack"), new ResearchPage(recipe)).setParentsHidden("ENCHFABRIC").registerResearchItem();
 //        }
-
+//
 //        // Thaumium Crowbar
 //        item = RailcraftItems.CROWBAR_THAUMIUM.item();
 //        if (item != null) {
@@ -75,37 +81,41 @@ public class ThaumcraftPlugin {
 //                    "IR ",
 //                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 0),
 //                    'R', "dyeRed"));
-
+//
 //            AspectList aspects = new AspectList();
 //            aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.METAL, 1);
-
+//
 //            ResearchItem thaumiumCrowbar = new ResearchItemRC(researchTag, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
 //            thaumiumCrowbar.setPages(ThaumcraftPlugin.getResearchPage(researchTag), new ResearchPage(recipe))
 //                    .setParentsHidden("THAUMIUM")
 //                    .registerResearchItem();
 //        }
-
+//
 //        // Void Crowbar
 //        item = RailcraftItems.CROWBAR_VOID.item();
 //        if (item != null) {
 //            String researchTag = "RC_Crowbar_Void";
-//            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(researchTag, new ItemStack(item),
-//                    new AspectList().add(Aspect.ENTROPY, 50),
-//                    " RI",
-//                    "RIR",
-//                    "IR ",
-//                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 1),
-//                    'R', "dyeRed");
+//            ResourceLocation key = RailcraftConstantsAPI.locationOf(researchTag);
+//            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(
+//                    key,
+//                    new ShapedArcaneRecipe(key, researchTag, 0,
+//                            new AspectList().add(Aspect.ENTROPY, 50),
+//                            new ItemStack(item),
+//                            " RI",
+//                            "RIR",
+//                            "IR ",
+//                            'I', ThaumcraftPlugin.ITEMS.get("ingots", 1),
+//                            'R', "dyeRed")
+//            );
 
-//            AspectList aspects = new AspectList();
-//            aspects.add(Aspect.TOOL, 2).add(Aspect.MECHANISM, 4).add(Aspect.METAL, 2);
+        AspectList aspects = new AspectList();
+        aspects.add(Aspect.TOOL, 2).add(Aspect.MECHANISM, 4).add(Aspect.METAL, 2);
 
 //            ResearchItemRC voidCrowbar = new ResearchItemRC(researchTag, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 1, 3, new ItemStack(item));
 //            voidCrowbar.setPages(ThaumcraftPlugin.getResearchPage(researchTag), new ResearchPage(recipe))
 //                    .setParents(researchTag).setParentsHidden("VOIDMETAL")
 //                    .registerResearchItem();
-//        }
-//    }
+    }
 
 //    private static ResearchPage createResearchPage(String key, int pageNum) {
 //        return new ResearchPage(LocalizationPlugin.translate(String.format("thaumcraft.research.%s.page.%d", key, pageNum)).replace("\n", "<BR>").replace("---", "<LINE>").replace("{img}", "<IMG>").replace("{/img}", "</IMG>"));
