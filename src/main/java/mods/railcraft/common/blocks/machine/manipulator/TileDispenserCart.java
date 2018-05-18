@@ -80,17 +80,17 @@ public class TileDispenserCart extends TileManipulator {
                             }
                         } else {
                             InvTools.spewItem(cartStack, world, pos.getX(), pos.getY(), pos.getZ());
-                            setInventorySlotContents(ii, null);
+                            setInventorySlotContents(ii, ItemStack.EMPTY);
                         }
                     }
                 }
-        } else if (!cart.isDead && cart.getCartItem() != null) {
+        } else if (!cart.isDead && !cart.getCartItem().isEmpty()) {
             InventoryCopy testInv = new InventoryCopy(this);
             ItemStack cartStack = cart.getCartItem();
             if (cart.hasCustomName())
                 cartStack.setStackDisplayName(cart.getName());
             ItemStack remainder = InvTools.moveItemStack(cartStack.copy(), testInv);
-            if (remainder == null) {
+            if (remainder.isEmpty()) {
                 InvTools.moveItemStack(cartStack, getInventory());
                 if (cart.isBeingRidden())
                     CartTools.removePassengers(cart);

@@ -34,13 +34,23 @@ import java.io.IOException;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO total crap
 public class TileTrackForce extends RailcraftTileEntity {
 
     @Nullable
     private TileForceTrackEmitter emitter;
 
-    private boolean zAxis = true;
+    private boolean zAxis;
+    //TODO fix this color field
     private EnumColor color = EnumColor.CYAN;
+
+    public TileTrackForce() {
+        this(true);
+    }
+
+    public TileTrackForce(boolean zAxis) {
+        this.zAxis = zAxis;
+    }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
@@ -72,7 +82,6 @@ public class TileTrackForce extends RailcraftTileEntity {
     }
 
     public void checkForEmitter() {
-        assert emitter != null;
         BlockRailBase.EnumRailDirection meta = TrackTools.getTrackDirectionRaw(world, getPos());
         BlockPos checkPos = getPos().down();
         if (meta == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
@@ -125,13 +134,16 @@ public class TileTrackForce extends RailcraftTileEntity {
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {
-            setEmitter(emitter);
+            setEmitter((TileForceTrackEmitter) tile);
             return true;
         }
         return false;
     }
 
-    private boolean isValidEmitterTile(TileForceTrackEmitter tile, EnumFacing... facing) {
+    private boolean isValidEmitterTile(@Nullable TileForceTrackEmitter tile, EnumFacing... facing) {
+        if (tile == null) {
+            return false;
+        }
         if (tile.isInvalid())
             return false;
         BlockPos expected = getPos().down();

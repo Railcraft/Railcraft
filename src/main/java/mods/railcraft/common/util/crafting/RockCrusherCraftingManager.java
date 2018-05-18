@@ -14,15 +14,19 @@ import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.IGenRule;
 import mods.railcraft.api.crafting.IOutputEntry;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -36,7 +40,8 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
         return INSTANCE;
     }
 
-    private RockCrusherCraftingManager() {}
+    private RockCrusherCraftingManager() {
+    }
 
     @Override
     public List<ICrusherRecipe> getRecipes() {
@@ -49,7 +54,7 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
     }
 
     @Override
-    public ICrusherRecipe createRecipe(@Nonnull Ingredient inputMatcher) {
+    public ICrusherRecipe createRecipe(Ingredient inputMatcher) {
         return new CrusherRecipe(inputMatcher);
     }
 
@@ -68,7 +73,11 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
 
     @Override
     public void addRecipe(ICrusherRecipe recipe) {
-        recipes.add(recipe);
+        if (!recipe.getInput().apply(ItemStack.EMPTY)) {
+            recipes.add(recipe);
+        } else {
+            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid rock crusher recipe");
+        }
     }
 
     @Override

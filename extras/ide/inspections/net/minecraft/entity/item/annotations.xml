@@ -2,9 +2,6 @@
     <item name='net.minecraft.entity.item.EntityMinecart net.minecraft.entity.item.EntityMinecart.Type getType()'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
-    <item name='net.minecraft.entity.item.EntityMinecart net.minecraft.item.ItemStack getCartItem()'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
     <item name='net.minecraft.entity.item.EntityMinecart net.minecraft.util.math.Vec3d getPosOffset(double, double, double, double)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>

@@ -69,7 +69,6 @@ public class EntityCartCommand extends EntityMinecartCommandBlock implements IRa
         return CartTools.isInRangeToRenderDist(this, distance);
     }
 
-    @Nullable
     @Override
     public ItemStack getCartItem() {
         return createCartItem(this);

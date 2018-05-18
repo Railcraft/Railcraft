@@ -27,7 +27,7 @@ public class ItemCokeOven extends ItemMultiBlock {
 
     @Override
     public void defineRecipes() {
-        ItemStack stack = new ItemStack(this, 1);
+        ItemStack stack = new ItemStack(this);
         CraftingPlugin.addRecipe(stack,
                 "MBM",
                 "BMB",

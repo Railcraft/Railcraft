@@ -54,7 +54,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
     @Override
     public void finalizeDefinition() {
-        CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEYCOMB);
+        CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEY_COMB);
     }
 
     public static ItemStack setBeeFilter(ItemStack filter, String type, @Nullable ItemStack active, @Nullable ItemStack inactive) {

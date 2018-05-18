@@ -12,8 +12,10 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -53,15 +55,31 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 "W",
                 'W', getStack(SPOOL_LARGE));
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(
-                getStack(SPOOL_SMALL),
-                "C",
-                'C', "ingotCopper");
+        Ingredient ingotCopper = new OreIngredient("ingotCopper");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(
-                getStack(SPOOL_LARGE),
-                "C",
-                'C', "blockCopper");
+        //TODO configure time
+        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+                .output(getStack(SPOOL_SMALL))
+                .add(ingotCopper)
+                .buildAndRegister();
+
+//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//                getStack(SPOOL_SMALL),
+//                "C",
+//                'C', "ingotCopper");
+
+        Ingredient blockCopper = new OreIngredient("blockCopper");
+
+        //TODO configure time
+        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+                .output(getStack(SPOOL_LARGE))
+                .add(blockCopper)
+                .buildAndRegister();
+
+//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//                getStack(SPOOL_LARGE),
+//                "C",
+//                'C', "blockCopper");
 
         CraftingPlugin.addRecipe(getStack(MOTOR),
                 " S ",
@@ -72,26 +90,66 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'T', RailcraftItems.CHARGE, TERMINAL,
                 'P', "plateTin");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(
-                getStack(ELECTRODE_NICKEL),
-                "P",
-                "P",
-                "P",
-                'P', "plateNickel");
+        Ingredient plateNickel = new OreIngredient("plateNickel");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(
-                getStack(ELECTRODE_IRON),
-                "P",
-                "P",
-                "P",
-                'P', "plateIron");
+        //TODO configure time
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(ELECTRODE_NICKEL))
+                .ingredients(
+                        plateNickel,
+                        plateNickel,
+                        plateNickel
+                )
+                .width(1)
+                .height(3)
+                .buildAndRegister();
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(
-                getStack(ELECTRODE_ZINC),
-                "P",
-                "P",
-                "P",
-                'P', "plateZinc");
+//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//                getStack(ELECTRODE_NICKEL),
+//                "P",
+//                "P",
+//                "P",
+//                'P', "plateNickel");
+
+        Ingredient plateIron = new OreIngredient("plateIron");
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(ELECTRODE_IRON))
+                .ingredients(
+                        plateIron,
+                        plateIron,
+                        plateIron
+                )
+                .height(3)
+                .width(1)
+                .buildAndRegister();
+
+//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//                getStack(ELECTRODE_IRON),
+//                "P",
+//                "P",
+//                "P",
+//                'P', "plateIron");
+
+        Ingredient plateZinc = new OreIngredient("plateZinc");
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(ELECTRODE_ZINC))
+                .ingredients(
+                        plateZinc,
+                        plateZinc,
+                        plateZinc
+                )
+                .height(3)
+                .width(1)
+                .buildAndRegister();
+
+//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//                getStack(ELECTRODE_ZINC),
+//                "P",
+//                "P",
+//                "P",
+//                'P', "plateZinc");
     }
 
     public enum EnumCharge implements IVariantEnum {

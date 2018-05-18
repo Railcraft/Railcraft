@@ -24,6 +24,7 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
 import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.single.*;
+import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 /**
@@ -121,5 +122,7 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileWorldspikePersonal.class, "worldspike_personal");
         RailcraftRegistry.register(TileWorldspikeAdmin.class, "worldspike_admin");
         RailcraftRegistry.register(TileWorldspikePassive.class, "worldspike_passive");
+
+        RailcraftRegistry.register(TileTrackForce.class, "track_force");
     }
 }

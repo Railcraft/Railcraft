@@ -16,9 +16,11 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import org.apache.logging.log4j.Level;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nullable;
@@ -84,12 +86,20 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
 
     @Override
     public void addRecipe(IBlastFurnaceRecipe recipe) {
-        recipes.add(recipe);
+        if (!recipe.getInput().apply(ItemStack.EMPTY)) {
+            recipes.add(recipe);
+        } else {
+            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid blast furnace recipe");
+        }
     }
 
     @Override
     public void addFuel(IBlastFurnaceFuel fuel) {
-        fuels.add(fuel);
+        if (!fuel.getInput().apply(ItemStack.EMPTY)) {
+            fuels.add(fuel);
+        } else {
+            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid blast furnace fuel");
+        }
     }
 
     @Override

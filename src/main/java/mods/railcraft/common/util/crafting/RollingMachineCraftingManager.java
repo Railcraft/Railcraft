@@ -15,11 +15,13 @@ import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.ArrayTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
@@ -37,8 +39,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class RollingMachineCraftingManager implements IRollingMachineCraftingManager {
 
     private final List<IRollingMachineRecipe> recipes = new ArrayList<>();
-    private static final ResourceLocation INVALID = new ResourceLocation("invalid", "invalid");
     private static final RollingMachineCraftingManager INSTANCE = new RollingMachineCraftingManager();
+    private static final InventoryCrafting EMPTY_CRAFTING_INVENTORY = new InventoryCrafting(new Container() {
+        @Override
+        public boolean canInteractWith(EntityPlayer playerIn) {
+            return false;
+        }
+    }, 3, 3);
 
     static {
 
@@ -77,13 +84,36 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
     }
 
     public static void copyRecipesToWorkbench() {
-        //TODO
-        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().toArray(new IRecipe[0]));
+        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().stream().map(recipe -> new BaseRecipe(CraftingPlugin.getGenerator().next().getResourcePath()) {
+            @Override
+            public boolean matches(InventoryCrafting inv, World worldIn) {
+                return recipe.test(inv);
+            }
+
+            @Override
+            public ItemStack getCraftingResult(InventoryCrafting inv) {
+                return recipe.getOutput(inv);
+            }
+
+            @Override
+            public boolean canFit(int width, int height) {
+                return true;
+            }
+
+            @Override
+            public ItemStack getRecipeOutput() {
+                return recipe.getSampleOutput();
+            }
+        }).toArray(IRecipe[]::new));
     }
 
     @Override
     public void addRecipe(IRollingMachineRecipe recipe) {
-        recipes.add(recipe);
+        if (!recipe.test(EMPTY_CRAFTING_INVENTORY)) {
+            recipes.add(recipe);
+        } else {
+            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid rolling machine recipe");
+        }
     }
 
     @Override

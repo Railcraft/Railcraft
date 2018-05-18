@@ -34,8 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -94,6 +92,6 @@ public class BlockTrackForce extends BlockTrackTile {
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileTrackForce();
+        return new TileTrackForce(state.getValue(SHAPE) == EnumRailDirection.EAST_WEST);
     }
 }

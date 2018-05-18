@@ -38,6 +38,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.EQUIPMENT,
                         RailcraftBlocks.TRADE_STATION,
                         RailcraftBlocks.FORCE_TRACK_EMITTER,
+                        RailcraftBlocks.TRACK_FORCE,
 
                         RailcraftItems.FILTER_BLANK,
                         RailcraftItems.FILTER_TYPE,

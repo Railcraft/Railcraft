@@ -29,7 +29,6 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
         return RailcraftItems.FIRESTONE_CRACKED.getStack();
     }
 
-    @Nullable
     public static ItemStack getItemEmpty() {
         return RailcraftItems.FIRESTONE_CRACKED.getStack(CHARGES - 1);
     }

@@ -1,7 +1,9 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class ItemForceTrackEmitter extends ItemBlockRailcraft {
     public ItemForceTrackEmitter(Block block) {
@@ -10,6 +12,12 @@ public class ItemForceTrackEmitter extends ItemBlockRailcraft {
 
     @Override
     public void defineRecipes() {
-        //TODO
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "PIP",
+                "IBI",
+                "PIP",
+                'P', "plateTin",
+                'I', "ingotCopper",
+                'B', "blockDiamond");
     }
 }

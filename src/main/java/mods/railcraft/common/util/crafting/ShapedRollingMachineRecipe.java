@@ -48,15 +48,15 @@ public final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
     private boolean checkMatch(InventoryCrafting grid, int xStart, int yStart, boolean backwards) {
         for (int i = 0; i < grid.getWidth(); ++i) {
             for (int j = 0; j < grid.getHeight(); ++j) {
-                int x = i + xStart;
-                int y = j + yStart;
+                int k = i - xStart;
+                int l = j - yStart;
                 Ingredient ingredient = Ingredient.EMPTY;
 
-                if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
+                if (k >= 0 && l >= 0 && k < this.width && l < this.height) {
                     if (backwards) {
-                        ingredient = this.ingredients.get(this.width - x - 1 + y * this.width);
+                        ingredient = this.ingredients.get(this.width - k - 1 + l * this.width);
                     } else {
-                        ingredient = this.ingredients.get(x + y * this.width);
+                        ingredient = this.ingredients.get(k + l * this.width);
                     }
                 }
 

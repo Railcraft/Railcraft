@@ -66,12 +66,23 @@ public class ItemFluidContainer extends ItemRailcraft {
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
 
             if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode) {
-                ItemStack empty = getContainerItem(stack);
-                if (InvTools.isEmpty(empty)) {
-                    empty = stack.copy();
-                    setSize(empty, 0);
+                if (stack.getCount() == 1) {
+                    ItemStack emptied = getContainerItem(stack);
+                    if (InvTools.isEmpty(emptied)) {
+                        emptied = stack.copy();
+                        setSize(emptied, 0);
+                    }
+                    return new ActionResult<>(EnumActionResult.SUCCESS, emptied);
+                } else {
+                    ItemStack emptied = getContainerItem(stack);
+                    if (!InvTools.isEmpty(emptied)) {
+                        if (!player.addItemStackToInventory(emptied)) {
+                            player.dropItem(emptied, true);
+                        }
+                    }
+                    InvTools.dec(stack);
+                    return new ActionResult<>(EnumActionResult.SUCCESS, stack);
                 }
-                return new ActionResult<>(EnumActionResult.SUCCESS, empty);
             }
         }
 

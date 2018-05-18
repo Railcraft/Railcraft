@@ -36,7 +36,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.Level;
 
@@ -60,7 +59,6 @@ public class ForestryPlugin {
         return instance;
     }
 
-    @Nullable
     public static ItemStack getItem(String tag) {
         if (!Mod.FORESTRY.isLoaded())
             return InvTools.emptyStack();
@@ -108,8 +106,8 @@ public class ForestryPlugin {
     public void addCarpenterRecipe(String recipeTag,
                                    int packagingTime,
                                    @Nullable FluidStack liquid,
-                                   @Nullable ItemStack box,
-                                   @Nullable ItemStack product,
+                                   ItemStack box,
+                                   ItemStack product,
                                    Object... materials) {
     }
 
@@ -159,7 +157,7 @@ public class ForestryPlugin {
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     if (!InvTools.isEmpty(silk)) {
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), ItemStack.EMPTY, backpack,
                                 "WXW",
                                 "WTW",
                                 "WWW",
@@ -192,7 +190,7 @@ public class ForestryPlugin {
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     if (!InvTools.isEmpty(silk)) {
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), ItemStack.EMPTY, backpack,
                                 "WXW",
                                 "WTW",
                                 "WWW",
@@ -225,7 +223,7 @@ public class ForestryPlugin {
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     if (!InvTools.isEmpty(silk)) {
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), ItemStack.EMPTY, backpack,
                                 "WXW",
                                 "WTW",
                                 "WWW",
@@ -262,7 +260,7 @@ public class ForestryPlugin {
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
                     if (!InvTools.isEmpty(silk)) {
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, backpack,
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), ItemStack.EMPTY, backpack,
                                 "WXW",
                                 "WTW",
                                 "WWW",
@@ -324,7 +322,7 @@ public class ForestryPlugin {
 
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-        public void addCarpenterRecipe(String recipeTag, int packagingTime, @Nullable FluidStack liquid, @Nullable ItemStack box, @Nullable ItemStack product, Object... materials) {
+        public void addCarpenterRecipe(String recipeTag, int packagingTime, @Nullable FluidStack liquid, ItemStack box, @Nullable ItemStack product, Object... materials) {
             if (product == null) {
                 Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", the result was null or zero. Skipping", recipeTag);
                 return;

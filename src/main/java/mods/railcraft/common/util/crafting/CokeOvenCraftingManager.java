@@ -12,9 +12,11 @@ package mods.railcraft.common.util.crafting;
 import mods.railcraft.api.crafting.ICokeOvenCraftingManager;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -67,6 +69,10 @@ public final class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
 
     @Override
     public void addRecipe(ICokeOvenRecipe recipe) {
+        if (recipe.getInput().test(ItemStack.EMPTY)) {
+            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid coke oven recipe");
+            return;
+        }
         recipes.add(recipe);
     }
 

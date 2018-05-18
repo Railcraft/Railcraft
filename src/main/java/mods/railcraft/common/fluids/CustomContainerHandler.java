@@ -4,7 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +34,7 @@ public final class CustomContainerHandler {
 
     public static final CustomContainerHandler INSTANCE = new CustomContainerHandler();
 
+    /* Empty item, fluid name -> filled item */
     private final Table<IRegistryDelegate<Item>, String, IRegistryDelegate<Item>> containerTable = HashBasedTable.create();
 
     private CustomContainerHandler() {
@@ -54,8 +55,6 @@ public final class CustomContainerHandler {
     @SubscribeEvent
     public void onItemUse(PlayerInteractEvent.RightClickItem event) {
         World world = event.getWorld();
-        if (Game.isClient(world))
-            return;
         EntityPlayer player = event.getEntityPlayer();
         RayTraceResult trace = trace(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue());
         if (trace == null || trace.typeOfHit != RayTraceResult.Type.BLOCK)
@@ -63,8 +62,8 @@ public final class CustomContainerHandler {
         BlockPos pos = trace.getBlockPos();
         EnumHand hand = event.getHand();
         Block block = WorldPlugin.getBlock(world, pos);
-        ItemStack stack = player.getHeldItem(hand);
-        if (isEmpty(stack) || !(block instanceof IFluidBlock))
+        ItemStack held = player.getHeldItem(hand);
+        if (isEmpty(held) || !(block instanceof IFluidBlock))
             return;
         IFluidBlock fluidBlock = (IFluidBlock) block;
         if (!fluidBlock.canDrain(world, pos)) {
@@ -73,11 +72,20 @@ public final class CustomContainerHandler {
         FluidStack fluidStack = fluidBlock.drain(world, pos, false);
         if (fluidStack == null || fluidStack.amount != Fluid.BUCKET_VOLUME)
             return;
-        IRegistryDelegate<Item> contained = containerTable.get(stack.getItem().delegate, fluidStack.getFluid().getName());
+        IRegistryDelegate<Item> contained = containerTable.get(held.getItem().delegate, fluidStack.getFluid().getName());
         if (contained != null) {
             fluidBlock.drain(world, pos, true);
-            if (!player.capabilities.isCreativeMode)
-                player.setHeldItem(hand, new ItemStack(contained.get()));
+            if (!player.capabilities.isCreativeMode) {
+                if (held.getCount() == 1) {
+                    player.setHeldItem(hand, new ItemStack(contained.get()));
+                } else {
+                    InvTools.dec(held);
+                    ItemStack toAdd = new ItemStack(contained.get());
+                    if (!player.addItemStackToInventory(toAdd)) {
+                        player.dropItem(toAdd, true);
+                    }
+                }
+            }
             event.setCanceled(true);
         }
     }
