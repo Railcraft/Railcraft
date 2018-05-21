@@ -1,5 +1,2 @@
 <root>
-    <item name='net.minecraft.inventory.IInventory boolean isItemValidForSlot(int, net.minecraft.item.ItemStack) 1'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
 </root>

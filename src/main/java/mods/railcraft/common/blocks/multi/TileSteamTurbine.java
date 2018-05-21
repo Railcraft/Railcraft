@@ -45,7 +45,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: migrate to new charge API
-public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     enum Texture {
 
@@ -263,7 +263,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TURBINE, player, world, mBlock.getPos());
             return true;
@@ -276,7 +276,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     public void removeEnergy(double amount) {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock != null) {
             mBlock.energy -= amount;
             if (mBlock.energy < 0) mBlock.energy = 0;
@@ -284,21 +284,21 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     public double getEnergy() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.energy;
     }
 
     public float getOutput() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.output;
     }
 
     public float getMainGauge() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.gaugeState * 0.01F;
@@ -362,35 +362,33 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<TileEntity> getSubTiles() {
-        return (List<TileEntity>) (List) getComponents();
+    public List<? extends TileEntity> getSubTiles() {
+        return getComponents();
     }
 
     public StandaloneInventory getInventory() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inv;
         return inv;
     }
 
     @Override
-    @Nullable
     public TankManager getTankManager() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return null;
+        return TankManager.NIL;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
@@ -414,7 +412,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     @Override
     public boolean needsMaintenance() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        TileSteamTurbine mBlock = getMasterBlock();
         if (mBlock != null) {
             ItemStack rotor = mBlock.inv.getStackInSlot(0);
             if (InvTools.isEmpty(rotor))
@@ -427,7 +425,6 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return false;
     }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;

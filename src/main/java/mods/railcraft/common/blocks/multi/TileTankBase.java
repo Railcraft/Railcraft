@@ -57,7 +57,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
+public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiBlock<S> implements ITankTile {
 
     @SuppressWarnings("WeakerAccess")
     public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidTools.BUCKET_VOLUME;
@@ -86,11 +86,11 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, IBlockState> blockMapping = new HashMap<>();
-//        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getDefaultState());
-//        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.TANK_IRON_WALL.getDefaultState());
+        blockMapping.put('W', RailcraftBlocks.TANK_IRON_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
-            TileTankBase master = (TileTankBase) tile;
+            TileTankBase<?> master = (TileTankBase<?>) tile;
             master.tank.setFluid(fluid);
         }
     }
@@ -102,7 +102,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
-            TileTankBase master = (TileTankBase) tile;
+            TileTankBase<?> master = (TileTankBase<?>) tile;
             master.tank.setFluid(fluid);
         }
     }
@@ -459,16 +459,15 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    protected boolean isStructureTile(TileEntity tile) {
+    protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileTankBase;
     }
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(world)) {
-            TankManager tankManager = getTankManager();
-            if (isStructureValid() && tankManager != null && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) {
-                TileTankBase master = (TileTankBase) getMasterBlock();
+            if (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) {
+                TileTankBase<S> master = getMasterBlock();
                 if (master != null)
                     master.syncClient();
                 return true;
@@ -482,7 +481,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        S mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
             return true;
@@ -491,18 +490,17 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    @Nullable
     public TankManager getTankManager() {
-        TileTankBase mBlock = (TileTankBase) getMasterBlock();
+        S mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return null;
+        return TankManager.NIL;
     }
 
     @Override
     @Nullable
     public StandardTank getTank() {
-        TileTankBase mBlock = (TileTankBase) getMasterBlock();
+        S mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager.get(0);
         return null;
@@ -523,7 +521,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     protected void onMasterChanged() {
         TankManager tMan = getTankManager();
-        if (tMan != null)
+        if (!tMan.isEmpty())
             //noinspection ConstantConditions
             tMan.get(0).setFluid(null);
     }
@@ -547,7 +545,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                     world.removeTileEntity(pos);
                     return true;
                 }
-                return !((TileMultiBlock) tile).isStructureValid();
+                return !((TileMultiBlock<?>) tile).isStructureValid();
             case 'A': // Air
                 return state.getBlock().isAir(state, world, pos);
         }

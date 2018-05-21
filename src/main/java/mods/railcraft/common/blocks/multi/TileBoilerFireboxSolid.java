@@ -38,7 +38,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerFireboxSolid extends TileBoilerFirebox {
+public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFireboxSolid> {
 
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;
@@ -69,7 +69,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
     public static void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
-                Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+                Map<Character, IBlockState> blockMapping = new HashMap<>();
                 //TODO
 //                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
 //                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
@@ -94,7 +94,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileBoilerFireboxSolid mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.BOILER_SOLID, player, world, mBlock.getPos());
             return true;
@@ -121,7 +121,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
             needsFuel = !InvTools.numItemsMoreThan(invFuel, 64);
 
         if (needsFuel()) {
-            TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
+            TileBoilerFireboxSolid mBlock = getMasterBlock();
 
             if (mBlock != null)
                 InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StandardStackFilters.FUEL);
@@ -156,7 +156,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
+        TileBoilerFireboxSolid mBlock = getMasterBlock();
         return mBlock != null && mBlock.needsFuel;
     }
 
@@ -165,7 +165,6 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox {
         return false;
     }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_SOLID;

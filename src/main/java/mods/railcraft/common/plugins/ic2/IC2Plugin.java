@@ -36,6 +36,7 @@ import net.minecraftforge.common.MinecraftForge;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
@@ -154,12 +155,26 @@ public class IC2Plugin {
         }
     }
 
-    public static void removeMaceratorRecipes(ItemStack... items) {
+    /**
+     * Removes by result and tests the input is a block.
+     */
+    public static void removeMaceratorDustRecipes(ItemStack... items) {
+        removeMaceratorRecipes(recipe -> (isInputBlock(recipe.getInput()) && doesRecipeProduce(recipe.getOutput(), items)));
+    }
+
+    /**
+     * Removes either by input or result.
+     */
+    public static void removeMaceratorRecipes(ItemStack item) {
+        removeMaceratorRecipes(recipe -> doesRecipeRequire(recipe.getInput(), item) || doesRecipeProduce(recipe.getOutput(), item));
+    }
+
+    public static void removeMaceratorRecipes(Predicate<? super MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> predicate) {
         try {
             Iterator<? extends MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
                 MachineRecipe<? extends IRecipeInput, Collection<ItemStack>> recipe = it.next();
-                if (doesRecipeRequire(recipe.getInput(), items) || doesRecipeProduce(recipe.getOutput(), items))
+                if (predicate.test(recipe))
                     it.remove();
             }
         } catch (Throwable error) {
@@ -191,19 +206,6 @@ public class IC2Plugin {
                 return true;
         }
         return false;
-    }
-
-    public static void removeMaceratorDustRecipes(ItemStack... items) {
-        try {
-            Iterator<? extends MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> it = Recipes.macerator.getRecipes().iterator();
-            while (it.hasNext()) {
-                MachineRecipe<? extends IRecipeInput, Collection<ItemStack>> recipe = it.next();
-                if (isInputBlock(recipe.getInput()) && doesRecipeProduce(recipe.getOutput(), items))
-                    it.remove();
-            }
-        } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, Recipes.class);
-        }
     }
 
     private static boolean isInputBlock(IRecipeInput input) {

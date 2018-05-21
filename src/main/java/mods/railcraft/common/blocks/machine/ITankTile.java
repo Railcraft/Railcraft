@@ -22,7 +22,6 @@ public interface ITankTile {
     @Nullable
     StandardTank getTank();
 
-    @Nullable
     TankManager getTankManager();
 
     IInventory getInventory();

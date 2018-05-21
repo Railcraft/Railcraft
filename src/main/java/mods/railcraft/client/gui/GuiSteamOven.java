@@ -35,7 +35,7 @@ public class GuiSteamOven extends TileGui {
         super.drawGuiContainerBackgroundLayer(f, i, j);
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        if (tile.getCookTime() > 0) {
+        if (tile.getMasterCookTime() > 0) {
             int scale = tile.getCookProgressScaled(49);
             drawTexturedModalRect(w + 65, h + 18 + 49 - scale, 176, 47 + 49 - scale, 23, scale + 1);
         }

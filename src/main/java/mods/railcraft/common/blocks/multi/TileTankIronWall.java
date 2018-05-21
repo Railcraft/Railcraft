@@ -13,7 +13,7 @@ import mods.railcraft.common.gui.EnumGui;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronWall extends TileTankBase {
+public class TileTankIronWall extends TileTankBase<TileTankIronWall> {
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

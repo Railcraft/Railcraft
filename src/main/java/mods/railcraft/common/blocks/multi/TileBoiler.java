@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler extends TileMultiBlock implements IBoilerContainer {
+public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock<S> implements IBoilerContainer {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -62,6 +62,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     private boolean explode;
 
     static {
+        //TODO
 //        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
 //        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
 
@@ -143,7 +144,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getMasterTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -193,23 +194,22 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         return null;
     }
 
-    @Nullable
-    public TankManager getTankManager() {
-        TileBoiler mBlock = (TileBoiler) getMasterBlock();
+    public TankManager getMasterTankManager() {
+        S mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return null;
+        return TankManager.NIL;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getMasterTankManager());
         return super.getCapability(capability, facing);
     }
 
@@ -236,7 +236,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        S mBlock = getMasterBlock();
         return mBlock != null && mBlock.openGui(player);
     }
 
@@ -256,6 +256,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
                 if (block == getBlockType() && boilerBlocks.contains(meta))
                     return false;
                 break;
+                //TODO
 //            case 'L': // Tank
 //                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal())
 //                    return false;
@@ -277,7 +278,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 
     @Override
-    protected boolean isStructureTile(TileEntity tile) {
+    protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileBoiler;
     }
 

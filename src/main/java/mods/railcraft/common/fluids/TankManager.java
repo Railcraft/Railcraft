@@ -27,10 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -39,6 +36,12 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TankManager extends ForwardingList<StandardTank> implements IFluidHandler {
+    public static final TankManager NIL = new TankManager() {
+        @Override
+        protected List<StandardTank> delegate() {
+            return Collections.emptyList();
+        }
+    };
     public static final BiFunction<TileEntity, EnumFacing, Boolean> TANK_FILTER = (t, f) -> t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, f);
     private final List<StandardTank> tanks = new ArrayList<>();
 

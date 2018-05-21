@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve extends TileTankBase implements IFluidHandler, ITileCompare {
+public class TileTankIronValve extends TileTankBase<TileTankIronValve> implements IFluidHandler, ITileCompare {
 
     private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
     private static final int FLOW_RATE = FluidTools.BUCKET_VOLUME;

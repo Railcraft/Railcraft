@@ -36,7 +36,7 @@ public class GuiCokeOven extends TileGui {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (tile.getCookTime() > 0) {
+        if (tile.getMasterCookTime() > 0) {
             int burnProgress = tile.getBurnProgressScaled(12);
             drawTexturedModalRect(x + 16, (y + 38) - burnProgress, 176, 59 - burnProgress, 14, burnProgress + 2);
             int cookProgress = tile.getCookProgressScaled(20);

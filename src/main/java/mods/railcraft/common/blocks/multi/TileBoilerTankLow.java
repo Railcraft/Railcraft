@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerTankLow extends TileBoilerTank {
+public final class TileBoilerTankLow extends TileBoilerTank<TileBoilerTankLow> {
 
     public TileBoilerTankLow() {
         super();
@@ -26,7 +26,6 @@ public class TileBoilerTankLow extends TileBoilerTank {
 //        return EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
 //    }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

@@ -39,7 +39,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITileLit {
+public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends TileBoiler<F> implements ISidedInventory, ITileLit {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
@@ -65,7 +65,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     public boolean isBurning() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         return mBlock != null && mBlock.boiler.isBurning();
     }
 
@@ -137,8 +137,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected abstract void process();
 
     protected void processBuckets() {
-        //FIXME
-//        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        FluidTools.drainContainers(this.tankManager, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -193,15 +192,15 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.decrStackSize(i, j);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getStackInSlot(i);
         else
@@ -210,7 +209,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);
     }
@@ -245,7 +244,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.removeStackFromSlot(i);
         else
@@ -254,7 +253,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public int getField(int id) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getField(id);
         else
@@ -263,7 +262,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public void setField(int id, int value) {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setField(id, value);
         else
@@ -272,7 +271,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public int getFieldCount() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getFieldCount();
         else
@@ -281,7 +280,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public void clear() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.clear();
         else

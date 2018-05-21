@@ -18,6 +18,6 @@ import java.util.List;
  */
 public interface IMultiEmitterDelegate extends IEmitterDelegate {
 
-    List<TileEntity> getSubTiles();
+    List<? extends TileEntity> getSubTiles();
 
 }

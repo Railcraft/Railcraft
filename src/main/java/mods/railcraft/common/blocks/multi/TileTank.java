@@ -7,10 +7,9 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.multi.MultiBlockPattern;
-import mods.railcraft.common.blocks.multi.TileMultiBlockInventory;
+import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
@@ -37,7 +36,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank extends TileMultiBlockInventory implements ITankTile, ISidedInventory {
+public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S> implements ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
@@ -51,18 +50,17 @@ public abstract class TileTank extends TileMultiBlockInventory implements ITankT
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
-    @Nullable
     public TankManager getTankManager() {
-        TileTank mBlock = (TileTank) getMasterBlock();
+        S mBlock = getMasterBlock();
         if (mBlock != null) {
             return mBlock.tankManager;
         }
-        return null;
+        return TankManager.NIL;
     }
 
     @Override
@@ -81,7 +79,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements ITankT
     @Override
     @Nullable
     public StandardTank getTank() {
-        TileTank mBlock = (TileTank) getMasterBlock();
+        S mBlock = getMasterBlock();
         if (mBlock != null) {
             return mBlock.tankManager.get(0);
         }

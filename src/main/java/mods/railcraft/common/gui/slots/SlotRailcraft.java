@@ -36,6 +36,7 @@ public class SlotRailcraft extends Slot {
     /**
      * @return the toolTips
      */
+    @Nullable
     public ToolTip getToolTip() {
         return toolTips;
     }

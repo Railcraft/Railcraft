@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -44,7 +43,7 @@ import java.util.Map;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
-public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory {
+public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> implements ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -157,7 +156,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     }
 
     public int getBurnProgressScaled(int i) {
-        return ((getTotalCookTime() - getCookTime()) * i) / getTotalCookTime();
+        return ((getTotalCookTime() - getMasterCookTime()) * i) / getTotalCookTime();
     }
 
     @Override
@@ -294,7 +293,7 @@ public class TileCokeOven extends TileMultiBlockOven implements ISidedInventory 
     @Override
     public IBlockState getActualState(IBlockState base) {
         return getPatternMarker() == 'W'
-                ? isBurning()
+                ? isMasterBurning()
                 ? base.withProperty(BlockCokeOven.ICON, 2)
                 : base.withProperty(BlockCokeOven.ICON, 1)
                 : base.withProperty(BlockCokeOven.ICON, 0);

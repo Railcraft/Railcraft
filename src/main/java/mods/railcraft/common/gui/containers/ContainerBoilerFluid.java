@@ -31,9 +31,9 @@ public class ContainerBoilerFluid extends RailcraftContainer {
         super(tile);
         this.tile = tile;
 
-        addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 116, 23, 176, 0, 16, 47));
-        addWidget(new FluidGaugeWidget(tile.getTankManager().get(1), 17, 23, 176, 0, 16, 47));
-        addWidget(new FluidGaugeWidget(tile.getTankManager().get(2), 89, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(tile.getMasterTankManager().get(0), 116, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(tile.getMasterTankManager().get(1), 17, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(tile.getMasterTankManager().get(2), 89, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 

@@ -88,6 +88,7 @@ public class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
+    @Nullable
     public TileEntity placeStructure(World world, BlockPos pos, Map<Character, IBlockState> blockMapping) {
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();

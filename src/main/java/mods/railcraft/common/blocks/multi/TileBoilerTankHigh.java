@@ -15,13 +15,12 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerTankHigh extends TileBoilerTank {
+public final class TileBoilerTankHigh extends TileBoilerTank<TileBoilerTankHigh> {
 
     public TileBoilerTankHigh() {
         super();
     }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

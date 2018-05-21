@@ -16,9 +16,7 @@ import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,7 +28,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronGauge extends TileTankBase implements ITileLit {
+public class TileTankIronGauge extends TileTankBase<TileTankIronGauge> implements ITileLit {
 
     private int lightValue = 0;
     private final Timer timer = new Timer();

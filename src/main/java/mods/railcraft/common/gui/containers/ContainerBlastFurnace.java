@@ -48,8 +48,8 @@ public class ContainerBlastFurnace extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        player.sendWindowProperty(this, 0, furnace.getCookTime());
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.burnTime);
+        player.sendWindowProperty(this, 0, furnace.getMasterCookTime());
+        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.fuelTimeLeft);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 2, furnace.currentItemBurnTime);
     }
 
@@ -61,18 +61,18 @@ public class ContainerBlastFurnace extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener listener : listeners) {
-            if (lastCookTime != furnace.getCookTime())
-                listener.sendWindowProperty(this, 0, furnace.getCookTime());
+            if (lastCookTime != furnace.getMasterCookTime())
+                listener.sendWindowProperty(this, 0, furnace.getMasterCookTime());
 
-            if (lastBurnTime != furnace.burnTime)
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 1, furnace.burnTime);
+            if (lastBurnTime != furnace.fuelTimeLeft)
+                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 1, furnace.fuelTimeLeft);
 
             if (lastItemBurnTime != furnace.currentItemBurnTime)
                 PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 2, furnace.currentItemBurnTime);
         }
 
-        lastCookTime = furnace.getCookTime();
-        lastBurnTime = furnace.burnTime;
+        lastCookTime = furnace.getMasterCookTime();
+        lastBurnTime = furnace.fuelTimeLeft;
         lastItemBurnTime = furnace.currentItemBurnTime;
     }
 
@@ -83,7 +83,7 @@ public class ContainerBlastFurnace extends RailcraftContainer {
             furnace.setCookTime(data);
 
         if (id == 1)
-            furnace.burnTime = data;
+            furnace.fuelTimeLeft = data;
 
         if (id == 2)
             furnace.currentItemBurnTime = data;

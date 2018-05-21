@@ -32,13 +32,13 @@ import java.util.Set;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork, ITileLit {
+public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T> implements INeedsFuel, IHasWork, ITileLit {
 
     protected int cookTime;
     private boolean cooking;
     protected boolean paused;
     private boolean wasBurning;
-    private final Set<Object> actions = new HashSet<>();
+    protected final Set<Object> actions = new HashSet<>();
 
     protected TileMultiBlockOven(int invNum, List<? extends MultiBlockPattern> patterns) {
         super(invNum, patterns);
@@ -64,7 +64,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     private void updateLighting() {
-        boolean b = isBurning();
+        boolean b = isMasterBurning();
         if (wasBurning != b) {
             wasBurning = b;
             world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
@@ -76,7 +76,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(Random random) {
         updateLighting();
-        if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isBurning()) {
+        if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isMasterBurning()) {
             float x = getPos().getX() + 0.5F;
             float y = getPos().getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
             float z = getPos().getZ() + 0.5F;
@@ -122,8 +122,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         cooking = data.readBoolean();
     }
 
-    public int getCookTime() {
-        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
+    public int getMasterCookTime() {
+        T masterOven = getMasterBlock();
         if (masterOven != null) {
             return masterOven.cookTime;
         }
@@ -134,10 +134,13 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         cookTime = i;
     }
 
-    @SuppressWarnings("WeakerAccess")
+    public boolean isMasterCooking() {
+        T masterOven = getMasterBlock();
+        return masterOven != null && masterOven.isCooking();
+    }
+
     public boolean isCooking() {
-        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
-        return masterOven != null && masterOven.cooking;
+        return cooking;
     }
 
     protected void setCooking(boolean c) {
@@ -147,8 +150,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
-    public boolean isBurning() {
-        return isCooking();
+    public boolean isMasterBurning() {
+        return isMasterCooking();
     }
 
     public abstract int getTotalCookTime();
@@ -165,7 +168,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Override
     public int getLightValue() {
-        if (getPatternMarker() == 'W' && isStructureValid() && isBurning()) {
+        if (getPatternMarker() == 'W' && isStructureValid() && isMasterBurning()) {
             return 13;
         }
         return 0;
@@ -178,7 +181,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
+        T mBlock = getMasterBlock();
         if (mBlock != null) {
             mBlock.actions.add(action);
         }
@@ -186,7 +189,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Override
     public boolean hasWork() {
-        return isCooking();
+        return isMasterCooking();
     }
 
 }

@@ -59,7 +59,7 @@ import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory, ISteamUser, ITileRotate {
+public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> implements ISidedInventory, ISteamUser, ITileRotate {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -108,7 +108,8 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
     public int cookTime;
     private boolean finishedCycle;
     private EnumFacing facing = NORTH;
-    private boolean paused;
+    //TODO ???
+    private boolean paused = false;
 
     public TileSteamOven() {
         super(18, patterns);
@@ -135,7 +136,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @Nullable
     public TankManager getTankManager() {
-        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
+        TileSteamOven mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return null;
@@ -143,7 +144,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @Override
     public EnumFacing getFacing() {
-        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
+        TileSteamOven masterOven = getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
         return facing;
@@ -151,7 +152,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @Override
     public void setFacing(EnumFacing facing) {
-        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
+        TileSteamOven masterOven = getMasterBlock();
         if (masterOven != null)
             masterOven.facing = facing;
         this.facing = facing;
@@ -162,7 +163,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
         super.update();
 
         if (Game.isClient(getWorld())) {
-            if (isCooking())
+            if (isMasterCooking())
                 EffectManager.instance.steamEffect(world, this, +0.25);
             return;
         }
@@ -254,7 +255,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
     public boolean rotateBlock(EnumFacing face) {
         if (face.getAxis() == Axis.Y)
             return false;
-        TileSteamOven master = (TileSteamOven) getMasterBlock();
+        TileSteamOven master = getMasterBlock();
         if (master != null) {
             if (master.facing == face)
                 master.facing = face.getOpposite();
@@ -273,7 +274,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileSteamOven masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.STEAN_OVEN, player, world, masterBlock.getPos());
             return true;
@@ -331,7 +332,7 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (InvTools.isEmpty(stack))
@@ -343,11 +344,10 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
 
     @Override
     public boolean hasWork() {
-        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
+        TileSteamOven mBlock = getMasterBlock();
         return mBlock != null && mBlock.cookTime > 0;
     }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.STEAN_OVEN;
@@ -426,14 +426,14 @@ public class TileSteamOven extends TileMultiBlockOven implements ISidedInventory
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         //TODO: front/top no fluid?
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);

@@ -28,14 +28,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerFireboxFluid extends TileBoilerFirebox {
+public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFireboxFluid> {
 
     private static final int TANK_FUEL = 2;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
@@ -50,7 +49,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     public static void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
-                Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+                Map<Character, IBlockState> blockMapping = new HashMap<>();
 //              //TODO
 //                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.getDefaultState());
 //                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
@@ -72,7 +71,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileBoilerFireboxFluid mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, world, mBlock.getPos());
             return true;
@@ -128,11 +127,10 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFireboxFluid mBlock = (TileBoilerFireboxFluid) getMasterBlock();
+        TileBoilerFireboxFluid mBlock = getMasterBlock();
         return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
     }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_LIQUID;

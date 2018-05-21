@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.crafting.ICrusherRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
@@ -56,7 +55,7 @@ import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork, ISidedInventory {
+public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrusher> implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -134,10 +133,10 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     private final InventoryMapper invInput = new InventoryMapper(this, 0, 9, false);
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
-    private final Set<Object> actions = new HashSet<Object>();
+    private final Set<Object> actions = new HashSet<>();
     private int processTime;
     private final Random random = new Random();
-//    @Nullable
+    //    @Nullable
 //    private final EnergyStorage energyStorage;
 //    @Nullable
 //    public final RFEnergyIndicator rfIndicator;
@@ -156,7 +155,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
-        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        Map<Character, IBlockState> blockMapping = new HashMap<>();
         IBlockState state = RailcraftBlocks.ROCK_CRUSHER.getState(null);
         blockMapping.put('B', state);
         blockMapping.put('D', state);
@@ -219,14 +218,14 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 //    }
 
     private boolean useMasterEnergy(double amount) {
-        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher master = getMasterBlock();
         if (master == null)
             return false;
         return master.node().useCharge(amount);
     }
 
     private boolean canUseMasterEnergy(double amount) {
-        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher master = getMasterBlock();
         if (master == null)
             return false;
         return master.node().canUseCharge(amount);
@@ -270,7 +269,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
                 for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
                     input = slot.getStack();
                     if (!InvTools.isEmpty(input)) {
-                        recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);
+                        recipe = RockCrusherCraftingManager.getInstance().getRecipe(input);
                         if (recipe == null)
                             recipe = RockCrusherCraftingManager.NULL_RECIPE;
                         break;
@@ -329,7 +328,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileRockCrusher mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos());
             return true;
@@ -357,14 +356,14 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
     }
 
     public int getProcessTime() {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.processTime;
         return -1;
     }
 
     public void setProcessTime(int processTime) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.processTime = processTime;
     }
@@ -375,7 +374,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     @Override
     public boolean hasWork() {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher mBlock = getMasterBlock();
         return mBlock != null && mBlock.isWorking;
     }
 
@@ -392,7 +391,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        TileRockCrusher mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.actions.add(action);
     }
@@ -425,7 +424,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot < 9)
-            return RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
+            return RockCrusherCraftingManager.getInstance().getRecipe(stack) != null;
         return false;
     }
 
@@ -470,7 +469,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IHasWork
 //        return true;
 //    }
 
-    @Nullable
     @Override
     public EnumGui getGui() {
         return EnumGui.ROCK_CRUSHER;

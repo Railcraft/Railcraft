@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileMultiBlockInventory extends TileMultiBlock implements IInventory {
+public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<T>> extends TileMultiBlock<T> implements IInventory {
 
     protected final StandaloneInventory inv;
 
@@ -38,7 +38,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        T mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.decrStackSize(i, j);
         return ItemStack.EMPTY;
@@ -46,7 +46,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        T mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.getStackInSlot(i);
         return ItemStack.EMPTY;
@@ -54,7 +54,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        T mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inv.setInventorySlotContents(i, itemstack);
     }

@@ -97,7 +97,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 if (!(obj instanceof SlotRailcraft))
                     continue;
                 SlotRailcraft slot = (SlotRailcraft) obj;
-                if (slot.getStack() != null)
+                if (!slot.getStack().isEmpty())
                     continue;
                 ToolTip tips = slot.getToolTip();
                 if (tips == null)
@@ -114,6 +114,8 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         OpenGL.glPopMatrix();
         OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+
+        renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
@@ -190,7 +192,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
         if (button instanceof GuiBetterButton)
-            ((GuiBetterButton) button).consumeClick();
+            ((GuiBetterButton<?>) button).consumeClick();
         buttonList.stream().flatMap(Streams.toType(GuiBetterButton.class)).forEach(GuiBetterButton::updateStatus);
     }
 

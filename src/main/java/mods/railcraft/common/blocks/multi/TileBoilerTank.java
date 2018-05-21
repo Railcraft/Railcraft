@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerTank extends TileBoiler {
+public abstract class TileBoilerTank<S extends TileBoilerTank<S>> extends TileBoiler<S> {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);
 
