@@ -66,7 +66,7 @@ public final class Railcraft {
     public static Railcraft instance;
     //    public int totalMultiBlockUpdates = 0;
 //    public int ticksSinceLastMultiBlockPrint = 0;
-    @SidedProxy(clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
+    @SidedProxy(modId = Railcraft.MOD_ID, clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
     public static CommonProxy proxy;
     private File configFolder;
 

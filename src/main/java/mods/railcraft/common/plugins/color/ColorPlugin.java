@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.plugins.color;
 
+import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ColorPlugin {
-    @SidedProxy(clientSide = "mods.railcraft.common.plugins.color.ColorProxyClient", serverSide = "mods.railcraft.common.plugins.color.ColorProxy")
+    @SidedProxy(modId = Railcraft.MOD_ID, clientSide = "mods.railcraft.common.plugins.color.ColorProxyClient", serverSide = "mods.railcraft.common.plugins.color.ColorProxy")
     public static ColorProxy instance;
 
     public interface IColoredItem {
