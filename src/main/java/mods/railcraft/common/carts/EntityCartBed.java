@@ -185,8 +185,8 @@ public class EntityCartBed extends EntityCartBasic {
     }
 
     private static void startSleeping(EntityPlayer player) {
-        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, true, 23);
-        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, 0, 25);
+        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, true, 26);
+        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, 0, 28);
     }
 
     private void sendPlayerRiding(EntityPlayerMP player) {
