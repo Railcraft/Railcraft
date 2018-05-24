@@ -93,16 +93,16 @@ public class CommandHelpers {
     public static void printHelp(ICommandSender sender, IModCommand command) {
         Style header = new Style();
         header.setColor(TextFormatting.BLUE);
-        sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullString().replace(" ", ".") + ".format", command.getFullString());
+        sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullString().replace(" ", ".").replace('_', '.') + ".format", command.getFullString());
         Style body = new Style();
         body.setColor(TextFormatting.GRAY);
         sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getAliases().toString().replace("[", "").replace("]", ""));
         sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getPermissionLevel());
-        sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullString().replace(" ", ".") + ".help");
+        sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullString().replace(" ", ".").replace('_', '.') + ".help");
         if (!command.getChildren().isEmpty()) {
             sendLocalizedChatMessage(sender, "command.railcraft.list");
             for (SubCommand child : command.getChildren()) {
-                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullString().replace(" ", ".") + ".desc", child.getName());
+                sendLocalizedChatMessage(sender, "command.railcraft." + child.getFullString().replace(" ", ".").replace('_', '.') + ".desc", child.getName());
             }
         }
     }

@@ -123,20 +123,6 @@ public class ModuleResources extends RailcraftModulePayload {
                         CraftingPlugin.addShapelessRecipe(Metal.BRASS.getStack(Metal.Form.INGOT, RailcraftConfig.enableHarderBrass() ? 3 : 4), "ingotZinc", "ingotCopper", "ingotCopper", "ingotCopper");
                     }
 
-                    type = EnumGeneric.CRUSHED_OBSIDIAN;
-                    if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
-                        ItemStack stack = type.getStack();
-
-                        BallastRegistry.registerBallast(BlockGeneric.getBlock(), type.ordinal());
-
-                        if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian") && RailcraftItems.DUST.isEnabled()) {
-                            ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN);
-                            IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian));
-                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
-                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
-                        }
-                    }
-
                     type = EnumGeneric.BLOCK_COKE;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         Block cube = BlockGeneric.getBlock();
@@ -161,6 +147,18 @@ public class ModuleResources extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
+                if (BlockGeneric.getBlock() != null && RailcraftConfig.isSubBlockEnabled(EnumGeneric.CRUSHED_OBSIDIAN.getTag())) {
+                    ItemStack stack = EnumGeneric.CRUSHED_OBSIDIAN.getStack();
+
+                    BallastRegistry.registerBallast(BlockGeneric.getBlock(), EnumGeneric.CRUSHED_OBSIDIAN.ordinal());
+
+                    if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian") && RailcraftItems.DUST.isEnabled()) {
+                        ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN);
+                        IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian));
+                        IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
+                        IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
+                    }
+                }
                 checkSteelBlock();
             }
         });

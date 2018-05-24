@@ -3,16 +3,15 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.network.play.server.SPacketSetPassengers;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
@@ -63,8 +62,7 @@ public class EntityCartBed extends EntityCartBasic {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return Blocks.BED.getDefaultState().withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD)
-                .withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH);
+        return Blocks.CARPET.getDefaultState().withProperty(BlockCarpet.COLOR, EnumDyeColor.GRAY);
     }
 
     @Override

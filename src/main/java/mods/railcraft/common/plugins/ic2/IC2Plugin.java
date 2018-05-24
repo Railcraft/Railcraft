@@ -174,8 +174,9 @@ public class IC2Plugin {
             Iterator<? extends MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
                 MachineRecipe<? extends IRecipeInput, Collection<ItemStack>> recipe = it.next();
-                if (predicate.test(recipe))
+                if (predicate.test(recipe)) {
                     it.remove();
+                }
             }
         } catch (Throwable error) {
             Game.logErrorAPI("ic2", error, Recipes.class);
