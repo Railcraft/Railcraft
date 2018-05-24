@@ -35,7 +35,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -107,8 +109,6 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-
-
     private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
@@ -129,6 +129,9 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     public int currentItemBurnTime;
     public boolean clientBurning;
     private int finishedAt;
+    private ItemStack lastInput = ItemStack.EMPTY;
+    @Nullable
+    private IBlastFurnaceRecipe currentRecipe;
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
@@ -223,7 +226,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         if (Game.isClient(getWorld()))
             return;
 
-        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
+        TileBlastFurnace mBlock = getMasterBlock();
 
         if (mBlock != null)
             InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, FUEL_FILTER);
@@ -234,71 +237,126 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     }
 
     void updateMaster() {
-        boolean wasBurning = isMasterBurning();
-        if (clock > finishedAt + 10)
-            if (cookTime <= 0)
-                setCooking(false);
+        boolean wasBurning = isBurning();
+
+        // cooking check
+        if (clock > finishedAt + 10 && cookTime <= 0)
+            setCooking(false);
 
         if (fuelTimeLeft >= FUEL_PER_TICK)
             fuelTimeLeft -= FUEL_PER_TICK;
         else
             fuelTimeLeft = 0;
 
-        if (isMasterBurning())
+        if (isBurning())
             setLavaBurn();
         else
             setLavaIdle();
 
+        processRecipe();
+        loadFuel();
+
+        if (wasBurning != isBurning())
+            sendUpdateToClient();
+    }
+
+    void processRecipe() {
         ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (!InvTools.isEmpty(input)) {
-
-            ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
-            IBlastFurnaceRecipe recipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
-
-            if (recipe != null) {
-                if (paused) return;
-
-                ItemStack nextOutput = recipe.getOutput();
-
-                if (InvTools.isItemEqual(outputSlot, nextOutput) && nextOutput.getCount() + outputSlot.getCount() <= Math.min(inv.getInventoryStackLimit(), outputSlot.getMaxStackSize())) {
-                    if (fuelTimeLeft <= FUEL_PER_TICK * 2) {
-                        ItemStack fuel = getStackInSlot(SLOT_FUEL);
-                        if (!fuel.isEmpty() && FUEL_FILTER.test(fuel)) {
-                            int itemBurnTime = BlastFurnaceCraftingManager.getInstance().getCookTime(fuel);
-                            if (itemBurnTime > 0) {
-                                currentItemBurnTime = itemBurnTime + fuelTimeLeft;
-                                fuelTimeLeft = currentItemBurnTime;
-                                setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
-                            }
-                        }
-                    }
-
-                    if (isMasterBurning()) {
-                        cookTime++;
-                        setCooking(true);
-
-                        if (cookTime >= recipe.getCookTime()) {
-                            cookTime = 0;
-                            finishedAt = clock;
-                            if (InvTools.isEmpty(outputSlot))
-                                setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
-                            else
-                                incSize(outputSlot, nextOutput.getCount());
-                            decrStackSize(SLOT_INPUT, 1);
-                        }
-                    }
-                }
-            } else {
-                cookTime = 0;
-                setCooking(false);
-            }
-        } else {
-            cookTime = 0;
-            setCooking(false);
+        if (input != lastInput) {
+            resetCooking();
+            lastInput = input;
+            currentRecipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
         }
 
-        if (wasBurning != isMasterBurning())
-            sendUpdateToClient();
+        if (currentRecipe == null) {
+            return;
+        }
+
+        ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
+        ItemStack nextOutput = currentRecipe.getOutput();
+
+        if (!InvTools.canMerge(outputSlot, nextOutput, getInventoryStackLimit())) {
+            return;
+        }
+
+        if (!isBurning()) {
+            return;
+        }
+
+        setCooking(true);
+        cookTime++;
+        if (cookTime < currentRecipe.getCookTime()) {
+            return;
+        }
+
+        cookTime = 0;
+        finishedAt = clock;
+
+        if (InvTools.isEmpty(outputSlot))
+            setInventorySlotContents(SLOT_OUTPUT, nextOutput);
+        else
+            incSize(outputSlot, nextOutput.getCount());
+        decrStackSize(SLOT_INPUT, 1);
+
+        // TODO fix mess
+//        if (!InvTools.isEmpty(input)) {
+//            ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
+//            IBlastFurnaceRecipe recipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
+//
+//            if (recipe != null) {
+//                if (paused) return;
+//
+//                ItemStack nextOutput = recipe.getOutput();
+//
+//                if (InvTools.isItemEqual(outputSlot, nextOutput) && nextOutput.getCount() + outputSlot.getCount() <= Math.min(inv.getInventoryStackLimit(), outputSlot.getMaxStackSize())) {
+//
+//                    if (isBurning()) {
+//                        cookTime++;
+//                        setCooking(true);
+//
+//                        if (cookTime >= recipe.getCookTime()) {
+//                            cookTime = 0;
+//                            finishedAt = clock;
+//                            if (InvTools.isEmpty(outputSlot))
+//                                setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
+//                            else
+//                                incSize(outputSlot, nextOutput.getCount());
+//                            decrStackSize(SLOT_INPUT, 1);
+//                        }
+//                    }
+//                }
+//            } else {
+//                resetCooking();
+//            }
+//        } else {
+//            resetCooking();
+//        }
+    }
+
+    void loadFuel() {
+        if (getStackInSlot(SLOT_INPUT).isEmpty()) {
+            return;
+        }
+
+        if (fuelTimeLeft > FUEL_PER_TICK * 2) {
+            return;
+        }
+        ItemStack fuel = getStackInSlot(SLOT_FUEL);
+        if (fuel.isEmpty()) {
+            return;
+        }
+        int itemBurnTime = BlastFurnaceCraftingManager.getInstance().getCookTime(fuel);
+        if (itemBurnTime <= 0) {
+            return;
+        }
+        currentItemBurnTime = itemBurnTime + fuelTimeLeft;
+        fuelTimeLeft = currentItemBurnTime;
+        setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
+    }
+
+    void resetCooking() {
+        cookTime = 0;
+        setCooking(false);
     }
 
     @Override
@@ -346,14 +404,19 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         return sizeOf(fuel) < 8;
     }
 
+    // Must be called on server side and on master block
+    public boolean isBurning() {
+        return fuelTimeLeft > 0;
+    }
+
     @Override
     public boolean isMasterBurning() {
-        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
+        TileBlastFurnace mBlock = getMasterBlock();
         if (mBlock != null)
             if (world.isRemote)
                 return mBlock.clientBurning;
             else
-                return mBlock.fuelTimeLeft > 0;
+                return mBlock.isBurning();
         return false;
     }
 
@@ -392,6 +455,8 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         return inv.isEmpty();
     }
 
+    @NotNull
+    @Nonnull
     @Override
     public EnumGui getGui() {
         return EnumGui.BLAST_FURNACE;

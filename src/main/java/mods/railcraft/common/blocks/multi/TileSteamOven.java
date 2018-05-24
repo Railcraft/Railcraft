@@ -46,6 +46,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Optional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -348,6 +349,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
         return mBlock != null && mBlock.cookTime > 0;
     }
 
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.STEAN_OVEN;

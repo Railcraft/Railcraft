@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -29,8 +28,6 @@ import javax.annotation.Nullable;
 public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    @Nullable
-    private IChargeBlock.ChargeBattery chargeBattery;
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -38,11 +35,8 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     }
 
     @Override
-    public IChargeBlock.ChargeBattery getChargeBattery() {
-        if (chargeBattery == null) {
-            chargeBattery = ChargeManager.getNetwork(world).getTileBattery(pos, () -> new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65));
-        }
-        return chargeBattery;
+    protected IChargeBlock.ChargeBattery createBattery() {
+        return new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65);
     }
 
     @Override

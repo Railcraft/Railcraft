@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public class BlockSteamOven extends BlockMultiBlockInventory {
+public  class BlockSteamOven extends BlockMultiBlockInventory {
 
     public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final IProperty<TileSteamOven.Icon> ICON = PropertyEnum.create("icon", TileSteamOven.Icon.class);
@@ -27,7 +27,7 @@ public class BlockSteamOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state) {
         return new TileSteamOven();
     }
 

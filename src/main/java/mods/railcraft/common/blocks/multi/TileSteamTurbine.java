@@ -36,6 +36,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -425,6 +426,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine> imp
         return false;
     }
 
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;

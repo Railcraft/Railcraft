@@ -83,7 +83,6 @@ public class RailcraftInputStream extends DataInputStream {
         return nbt;
     }
 
-    @Nullable
     public ItemStack readItemStack() throws IOException {
         ItemStack stack = InvTools.emptyStack();
         short id = readShort();
@@ -92,7 +91,6 @@ public class RailcraftInputStream extends DataInputStream {
             byte stackSize = readByte();
             short damage = readShort();
             stack = new ItemStack(Item.getItemById(id), stackSize, damage);
-            //noinspection ConstantConditions
             stack.setTagCompound(readNBT());
         }
 

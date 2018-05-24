@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
         setWorld(worldIn);
     }
 
-    @Nullable
+    @NotNull
     @Override
     public EnumGui getGui() {
         return null;

@@ -125,7 +125,7 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
 
     @Override
     public void clearTicket() {
-        inv.setInventorySlotContents(0, null);
+        inv.setInventorySlotContents(0, ItemStack.EMPTY);
     }
 
     @Override

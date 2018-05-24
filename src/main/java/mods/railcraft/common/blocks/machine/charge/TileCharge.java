@@ -24,7 +24,11 @@ import java.util.List;
  */
 public abstract class TileCharge extends TileMachineBase {
 
-    public abstract IChargeBlock.ChargeBattery getChargeBattery();
+    protected abstract IChargeBlock.ChargeBattery createBattery();
+
+    public IChargeBlock.ChargeBattery getChargeBattery() {
+        return ChargeManager.getNetwork(world).getTileBattery(pos, this::createBattery);
+    }
 
     private int prevComparatorOutput;
 

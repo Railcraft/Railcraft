@@ -32,10 +32,6 @@ import java.util.List;
  */
 public interface IRailcraftItem extends IRailcraftObject<Item> {
 
-    default int getHeatValue(ItemStack stack) {
-        return 0;
-    }
-
     default String getTooltipTag(ItemStack stack) {
         return stack.getUnlocalizedName() + ".tips";
     }

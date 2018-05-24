@@ -22,10 +22,7 @@ import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.multi.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
-import mods.railcraft.common.commands.CommandAdmin;
-import mods.railcraft.common.commands.CommandDebug;
-import mods.railcraft.common.commands.CommandTile;
-import mods.railcraft.common.commands.CommandTrack;
+import mods.railcraft.common.commands.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.CustomContainerHandler;
@@ -36,7 +33,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.*;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.crafting.*;
@@ -63,7 +59,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -83,10 +78,11 @@ public class ModuleCore extends RailcraftModulePayload {
                 LinkageManager.reset();
                 CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
 
-                Railcraft.rootCommand.addChildCommand(new CommandDebug());
-                Railcraft.rootCommand.addChildCommand(new CommandAdmin());
-                Railcraft.rootCommand.addChildCommand(new CommandTrack());
-                Railcraft.rootCommand.addChildCommand(new CommandTile());
+                Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
+                Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());
+                Railcraft.ROOT_COMMAND.addChildCommand(new CommandTrack());
+                Railcraft.ROOT_COMMAND.addChildCommand(new CommandTile());
+                Railcraft.ROOT_COMMAND.addChildCommand(new CommandCrafting());
 
                 CraftingApiAccess.initialize();
 
@@ -334,8 +330,6 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 RailcraftFluids.finalizeDefinitions();
-
-                GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 
                 addLiquidFuels();
 

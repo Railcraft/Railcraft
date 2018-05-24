@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public class BlockCokeOven extends BlockMultiBlockInventory {
+public final class BlockCokeOven extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -27,7 +27,7 @@ public class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state) {
         return new TileCokeOven();
     }
 

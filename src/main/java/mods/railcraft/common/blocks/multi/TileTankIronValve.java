@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -34,7 +35,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve extends TileTankBase<TileTankIronValve> implements IFluidHandler, ITileCompare {
+public class TileTankIronValve extends TileTankBase implements IFluidHandler, ITileCompare {
 
     private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
     private static final int FLOW_RATE = FluidTools.BUCKET_VOLUME;
@@ -120,14 +121,13 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
 
             if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() == 0) {
                 TankManager tMan = getTankManager();
-                if (tMan != null)
+                if (!tMan.isEmpty())
                     tMan.push(tileCache, Predicates.notInstanceOf(TileTankBase.class), FLUID_OUTPUTS, 0, FLOW_RATE);
             }
 
-            TileMultiBlock masterBlock = getMasterBlock();
-            if (masterBlock instanceof TileTankBase) {
-                TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
-                int compValue = masterTileTankBase.getComparatorValue();
+            TileTankBase masterBlock = getMasterBlock();
+            if (masterBlock != null) {
+                int compValue = masterBlock.getComparatorValue();
                 if (previousComparatorValue != compValue) {
                     previousComparatorValue = compValue;
                     getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
@@ -157,7 +157,7 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
         if (!canFill())
             return 0;
         TankManager tMan = getTankManager();
-        if (tMan != null) {
+        if (!tMan.isEmpty()) {
             int amount = tMan.fill(resource, doFill);
             if (amount > 0 && doFill)
                 setFilling(resource.copy());
@@ -171,7 +171,7 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
         if (!canDrain())
             return null;
         TankManager tMan = getTankManager();
-        if (tMan != null) {
+        if (!tMan.isEmpty()) {
             return tMan.drain(maxDrain, doDrain);
         }
         return null;
@@ -185,7 +185,7 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
-        if (tMan != null) {
+        if (!tMan.isEmpty()) {
             return tMan.drain(resource, doDrain);
         }
         return null;
@@ -194,7 +194,7 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
     @Override
     public IFluidTankProperties[] getTankProperties() {
         TankManager tMan = getTankManager();
-        if (tMan != null) {
+        if (!tMan.isEmpty()) {
             return tMan.getTankProperties();
         }
         return FakeTank.PROPERTIES;
@@ -210,13 +210,13 @@ public class TileTankIronValve extends TileTankBase<TileTankIronValve> implement
 
     @Override
     public int getComparatorInputOverride() {
-        TileMultiBlock masterBlock = getMasterBlock();
-        if (masterBlock instanceof TileTankBase)
-            return ((TileTankBase) masterBlock).getComparatorValue();
+        TileTankBase masterBlock = getMasterBlock();
+        if (masterBlock != null)
+            return masterBlock.getComparatorValue();
         return 0;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

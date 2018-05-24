@@ -18,6 +18,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -129,8 +130,8 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.UP;
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return face == EnumFacing.UP ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override

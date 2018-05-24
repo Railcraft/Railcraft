@@ -29,8 +29,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -38,6 +40,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,6 +55,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     @Nonnull
     private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
+    @Nullable
     private UUID uuid;
     @Nonnull
     private String customName = "";
@@ -66,10 +70,15 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return uuid;
     }
 
-    @Nullable
+//    @Nullable
     public IBlockState getBlockState() {
-        if (isInvalid())
-            return null;
+        if (isInvalid()) {
+            if (Game.DEVELOPMENT_ENVIRONMENT) {
+                Game.log(Level.ERROR, "Tried to access invalid blockstate on " + getClass() + " at " + getPos() + " hashcode " + System.identityHashCode(this));
+                throw new RuntimeException();
+            }
+            return Blocks.AIR.getDefaultState();
+        }
         return WorldPlugin.getBlockState(getWorld(), getPos());
     }
 
@@ -113,7 +122,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
-    public final void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt) {
+    public final void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         handleUpdateTag(pkt.getNbtCompound());
     }
 

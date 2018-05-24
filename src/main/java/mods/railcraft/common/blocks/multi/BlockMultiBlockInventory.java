@@ -18,5 +18,5 @@ public abstract class BlockMultiBlockInventory extends BlockMultiBlock {
     }
 
     @Override
-    public abstract TileMultiBlockInventory createTileEntity(World world, IBlockState state);
+    public abstract TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state);
 }

@@ -41,7 +41,7 @@ public class BlockTankSteelGauge extends BlockMultiBlock {
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
         return new TileTankSteelGauge();
     }
 

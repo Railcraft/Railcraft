@@ -46,7 +46,7 @@ public class ItemCoke extends ItemRailcraft {
     }
 
     @Override
-    public int getHeatValue(ItemStack stack) {
+    public int getItemBurnTime(ItemStack itemStack) {
         return COKE_HEAT;
     }
 }

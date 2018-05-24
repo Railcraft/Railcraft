@@ -12,7 +12,6 @@ package mods.railcraft.common.util.inventory;
 import com.google.common.collect.Iterators;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -27,7 +26,6 @@ import net.minecraft.util.text.TextComponentString;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
@@ -77,10 +75,6 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
 
     public StandaloneInventory(int size) {
         this(size, null, (RailcraftTileEntity) null);
-    }
-
-    public Predicate<ItemStack> presenceTest() {
-        return StackFilters.containedIn(this);
     }
 
     @Override
@@ -141,7 +135,7 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack stack) {
+    public void setInventorySlotContents(int i, ItemStack stack) {
         contents[i] = stack;
         if (sizeOf(stack) > getInventoryStackLimit()) {
             setSize(stack, getInventoryStackLimit());

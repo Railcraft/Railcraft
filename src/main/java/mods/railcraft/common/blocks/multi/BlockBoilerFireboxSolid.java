@@ -8,9 +8,9 @@ import net.minecraft.world.World;
 /**
  *
  */
-public class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
+public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
         return new TileBoilerFireboxSolid();
     }
 

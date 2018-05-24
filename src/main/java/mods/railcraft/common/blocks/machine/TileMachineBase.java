@@ -13,12 +13,14 @@ import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -114,10 +116,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         return null;
     }
 
-    public boolean isSideSolid(EnumFacing side) {
-        return true;
-    }
-
     @Override
     public void update() {
         super.update();
@@ -143,7 +141,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
             }
 
             IBlockState oldState = world.getBlockState(getPos());
-            IEnumMachine variant = (IEnumMachine) ((BlockMachine) oldState.getBlock()).getVariant(oldState);
+            IEnumMachine<?> variant = ((BlockMachine<?>) oldState.getBlock()).getVariant(oldState);
             if (getMachineType() != variant) {
                 IBlockState newState = getMachineType().getDefaultState();
                 if (newState != null) {
@@ -186,7 +184,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
     }
 
     public ConnectStyle connectsToPost(EnumFacing side) {
-        if (isSideSolid(side.getOpposite()))
+        if (this instanceof ITileNonSolid && ((ITileNonSolid) this).getShape(side.getOpposite()) != BlockFaceShape.UNDEFINED)
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
     }

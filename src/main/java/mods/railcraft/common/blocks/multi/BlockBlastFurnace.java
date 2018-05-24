@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public class BlockBlastFurnace extends BlockMultiBlockInventory {
+public final class BlockBlastFurnace extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -27,7 +27,7 @@ public class BlockBlastFurnace extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state) {
         return new TileBlastFurnace();
     }
 

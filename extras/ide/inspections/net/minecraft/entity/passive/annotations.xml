@@ -1,0 +1,8 @@
+<root>
+    <item name='net.minecraft.entity.passive.EntityVillager net.minecraft.village.MerchantRecipeList getRecipes(net.minecraft.entity.player.EntityPlayer)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val name="value" val="&quot;_ -&gt; !null&quot;"/>
+            <val name="pure" val="true"/>
+        </annotation>
+    </item>
+</root>

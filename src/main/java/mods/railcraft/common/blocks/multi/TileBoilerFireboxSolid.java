@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -165,6 +166,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         return false;
     }
 
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_SOLID;

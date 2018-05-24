@@ -12,6 +12,8 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -25,6 +27,7 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -45,7 +48,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 64;
     @SuppressWarnings("unchecked")
-    protected final Class<T> selfClass = (Class<T>) getClass();
+    protected Class<T> genericClass = (Class<T>) getClass();
     private final Timer netTimer = new Timer();
     protected final List<? extends MultiBlockPattern> patterns;
     protected final List<T> components = new ArrayList<>();
@@ -58,7 +61,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     private MultiBlockState state;
     private T masterBlock;
     private MultiBlockPattern currentPattern;
-    //TODO ???
+    //TODO ??? remove?
     private UUID uuidMaster;
 
     protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
@@ -173,13 +176,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
                         BlockPos pos = new BlockPos(px, py, pz).add(offset);
 
                         TileEntity tile = world.getTileEntity(pos);
-                        if (selfClass.isInstance(tile)) {
-                            T multiBlock = selfClass.cast(tile);
+                        if (genericClass.isInstance(tile)) {
+                            T multiBlock = genericClass.cast(tile);
                             if (multiBlock != this)
                                 multiBlock.components.clear();
                             components.add(multiBlock);
                             multiBlock.tested = true;
-                            multiBlock.setMaster(selfClass.cast(this));
+                            multiBlock.setMaster(genericClass.cast(this));
                             multiBlock.setPattern(currentPattern);
                             multiBlock.setPatternPosition(px, py, pz);
                             multiBlock.sendUpdateToClient();
@@ -346,7 +349,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
 
     @Contract("null -> false")
     protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return tile != null && tile.getClass() == selfClass;
+        return tile != null && tile.getClass() == genericClass;
     }
 
     @Override
@@ -440,7 +443,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
             if (tile != null)
                 if (masterBlock != tile && isStructureTile(tile)) {
                     needsRenderUpdate = true;
-                    masterBlock = selfClass.cast(tile);
+                    masterBlock = genericClass.cast(tile);
                 }
             if (getMasterBlock() == null)
                 requestPacket = true;
@@ -485,6 +488,20 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
         }
         return masterBlock;
     }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        T masterBlock = getMasterBlock();
+        if (masterBlock != null && isStructureValid()) {
+            GuiHandler.openGui(getGui(), player, world, masterBlock.getPos());
+            return true;
+        }
+        return false;
+    }
+
+    @Nonnull
+    @Override
+    public abstract EnumGui getGui();
 
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {

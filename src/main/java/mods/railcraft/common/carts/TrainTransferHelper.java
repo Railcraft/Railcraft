@@ -94,7 +94,6 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return _pullStack(requester, carts, filter);
     }
 
-    @Nullable
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, Predicate<ItemStack> filter) {
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);

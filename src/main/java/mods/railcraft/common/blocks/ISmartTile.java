@@ -43,25 +43,12 @@ public interface ISmartTile {
         return true;
     }
 
-    default List<ItemStack> getDrops(int fortune) {
-        return Lists.newArrayList(new ItemStack(tile().getBlockType())); // must be modifiable!
-//        World world = tile().getWorld();
-//        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
-//        List<ItemStack> ret = new ArrayList<>();
-//        Random rand = world.rand;
-//
-//        int count = state.getBlock().quantityDropped(state, fortune, rand);
-//        int damage = state.getBlock().damageDropped(state);
-//        Item item = state.getBlock().getItemDropped(state, rand, fortune);
-//        if (item != null)
-//            for (int i = 0; i < count; i++) {
-//                ret.add(new ItemStack(item, 1, damage));
-//            }
-//        return ret;
+    default void addDrops(List<ItemStack> drops, int fortune) {
+        drops.add(new ItemStack(tile().getBlockType()));
     }
 
     default List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        return getDrops(fortune);
+        return Lists.newArrayList(new ItemStack(tile().getBlockType()));
     }
 
     default boolean canSilkHarvest(EntityPlayer player) {

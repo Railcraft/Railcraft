@@ -27,7 +27,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,7 +133,9 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
         return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
     }
 
+    @NotNull
     @Override
+    @Nonnull
     public EnumGui getGui() {
         return EnumGui.BOILER_LIQUID;
     }

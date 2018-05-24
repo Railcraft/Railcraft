@@ -135,7 +135,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     }
 
     @Override
-    public final int getHeatValue(ItemStack stack) {
+    public final int getItemBurnTime(ItemStack stack) {
         if (stack.getItemDamage() < getMaxDamage())
             return heat;
         return 0;

@@ -34,8 +34,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +44,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankWater extends TileTank<TileTankWater> {
+public final class TileTankWater extends TileTank<TileTankWater> {
 
     private static final int OUTPUT_RATE = 40;
     private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 400;
@@ -179,7 +179,7 @@ public class TileTankWater extends TileTank<TileTankWater> {
             }
 
             TankManager tMan = getTankManager();
-            if (tMan != null)
+            if (!tMan.isEmpty())
                 tMan.push(tileCache, Predicates.notInstanceOf(getClass()), LIQUID_OUTPUTS, 0, OUTPUT_RATE);
         }
     }
@@ -220,7 +220,7 @@ public class TileTankWater extends TileTank<TileTankWater> {
         return false;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

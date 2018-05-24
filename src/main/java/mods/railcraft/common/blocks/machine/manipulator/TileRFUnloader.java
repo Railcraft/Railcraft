@@ -23,7 +23,7 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public IEnumMachine<?> getMachineType() {
         return ManipulatorVariant.RF_UNLOADER;
     }
 

@@ -57,7 +57,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiBlock<S> implements ITankTile {
+public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implements ITankTile {
 
     @SuppressWarnings("WeakerAccess")
     public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidTools.BUCKET_VOLUME;
@@ -79,6 +79,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
 
     TileTankBase() {
         super(patterns);
+        genericClass = TileTankBase.class;
         inv = new StandaloneInventory(2, "gui.tank.iron", this);
         tankManager.add(tank);
     }
@@ -90,7 +91,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
         blockMapping.put('W', RailcraftBlocks.TANK_IRON_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
-            TileTankBase<?> master = (TileTankBase<?>) tile;
+            TileTankBase master = (TileTankBase) tile;
             master.tank.setFluid(fluid);
         }
     }
@@ -102,7 +103,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
         blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
-            TileTankBase<?> master = (TileTankBase<?>) tile;
+            TileTankBase master = (TileTankBase) tile;
             master.tank.setFluid(fluid);
         }
     }
@@ -412,18 +413,13 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
     }
 
     @Override
-    public List<ItemStack> getDrops(int fortune) {
-        List<ItemStack> items = super.getDrops(fortune);
-        if (items.isEmpty())
-            return Collections.emptyList();
-        items.clear();
+    public void addDrops(List<ItemStack> drops, int fortune) {
         ItemStack drop = new ItemStack(getBlockType());
         if (!InvTools.isEmpty(drop)) {
             NBTTagCompound nbt = InvTools.getItemData(drop);
             nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
-            items.add(drop);
+            drops.add(drop);
         }
-        return items;
     }
 
     @Override
@@ -467,7 +463,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
     public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(world)) {
             if (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) {
-                TileTankBase<S> master = getMasterBlock();
+                TileTankBase master = getMasterBlock();
                 if (master != null)
                     master.syncClient();
                 return true;
@@ -481,7 +477,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        S mBlock = getMasterBlock();
+        TileTankBase mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
             return true;
@@ -491,7 +487,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
 
     @Override
     public TankManager getTankManager() {
-        S mBlock = getMasterBlock();
+        TileTankBase mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;
@@ -500,7 +496,7 @@ public abstract class TileTankBase<S extends TileTankBase<S>> extends TileMultiB
     @Override
     @Nullable
     public StandardTank getTank() {
-        S mBlock = getMasterBlock();
+        TileTankBase mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager.get(0);
         return null;

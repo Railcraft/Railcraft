@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import net.minecraft.block.Block;
@@ -28,9 +27,6 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileChargeFeederAdmin extends TileCharge {
-    @Nullable
-    public InfiniteBattery chargeBattery;
-
     private static class InfiniteBattery extends IChargeBlock.ChargeBattery {
         private boolean enabled;
 
@@ -64,11 +60,8 @@ public class TileChargeFeederAdmin extends TileCharge {
     }
 
     @Override
-    public InfiniteBattery getChargeBattery() {
-        if (chargeBattery == null) {
-            chargeBattery = (InfiniteBattery) ChargeManager.getNetwork(world).getTileBattery(pos, InfiniteBattery::new);
-        }
-        return chargeBattery;
+    protected IChargeBlock.ChargeBattery createBattery() {
+        return new InfiniteBattery();
     }
 
     @Override
@@ -79,24 +72,24 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        getChargeBattery().enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        ((InfiniteBattery) getChargeBattery()).enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        getChargeBattery().enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        ((InfiniteBattery) getChargeBattery()).enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        nbt.setBoolean("enabled", getChargeBattery().enabled);
+        nbt.setBoolean("enabled", ((InfiniteBattery) getChargeBattery()).enabled);
         return nbt;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        getChargeBattery().enabled = nbt.getBoolean("enabled");
+        ((InfiniteBattery) getChargeBattery()).enabled = nbt.getBoolean("enabled");
     }
 }

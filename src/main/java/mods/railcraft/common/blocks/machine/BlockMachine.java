@@ -23,6 +23,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
@@ -154,9 +155,15 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockCont
     }
 
     @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileNonSolid.class, t -> t.getShape(face)).orElse(super.getBlockFaceShape(worldIn, state, pos, face));
+    }
+
+    @Override
+    @Deprecated
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileNonSolid.class, t -> t.isSideSolid(side)).orElse(true);
+        return getBlockFaceShape(world, state, pos, side) == BlockFaceShape.SOLID;
     }
 
     //TODO: Do we need to do this anymore?

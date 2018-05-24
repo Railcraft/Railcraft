@@ -20,15 +20,15 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronGauge extends TileTankBase<TileTankIronGauge> implements ITileLit {
+public class TileTankIronGauge extends TileTankBase implements ITileLit {
 
     private int lightValue = 0;
     private final Timer timer = new Timer();
@@ -55,7 +55,7 @@ public class TileTankIronGauge extends TileTankBase<TileTankIronGauge> implement
         lightValue = fluid != null ? fluid.getLuminosity() : 0;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

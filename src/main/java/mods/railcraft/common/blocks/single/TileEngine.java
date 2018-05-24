@@ -22,6 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -239,8 +240,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     @Override
-    public boolean isSideSolid(EnumFacing side) {
-        return direction.getOpposite() == side;
+    public BlockFaceShape getShape(EnumFacing side) {
+        return direction.getOpposite() == side ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     public double getEnergyLevel() {

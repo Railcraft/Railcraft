@@ -138,6 +138,14 @@ public abstract class InvTools {
         return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
     }
 
+    public static boolean canMerge(ItemStack target, ItemStack source) {
+        return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
+    }
+
+    public static boolean canMerge(ItemStack target, ItemStack source, int slotLimit) {
+        return canMerge(target, source) && target.getCount() + source.getCount() <= slotLimit;
+    }
+
     public static InventoryComposite getAdjacentInventories(World world, BlockPos pos) {
         return getAdjacentInventories(world, pos, null);
     }
@@ -307,7 +315,7 @@ public abstract class InvTools {
     public static void validateInventory(IInventory inv, int slot, World world, BlockPos pos, Predicate<ItemStack> canStay) {
         ItemStack stack = inv.getStackInSlot(slot);
         if (!isEmpty(stack) && !canStay.test(stack)) {
-            inv.setInventorySlotContents(slot, null);
+            inv.setInventorySlotContents(slot, emptyStack());
             dropItem(stack, world, pos);
         }
     }

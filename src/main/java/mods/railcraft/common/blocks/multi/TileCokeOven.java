@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -121,12 +122,11 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
         }
     }
 
-    @Nullable
     public TankManager getTankManager() {
-        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
+        TileCokeOven mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return tankManager;
+        return TankManager.NIL;
     }
 
     @Override
@@ -143,13 +143,13 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
     public int getTotalCookTime() {
-        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
+        TileCokeOven mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.cookTimeTotal;
         return 3600;
@@ -189,7 +189,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
                                 cookTime += COOK_STEP_LENGTH;
                                 setCooking(true);
 
-                                if (cookTime >= recipe.getCookTime()) {
+                                if (cookTime >= cookTimeTotal) {
                                     cookTime = 0;
                                     finishedAt = clock;
                                     decrStackSize(SLOT_INPUT, 1);
@@ -235,7 +235,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileCokeOven masterBlock = getMasterBlock();
         if (masterBlock != null && isStructureValid()) {
             GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, masterBlock.getPos());
             return true;
@@ -299,7 +299,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
                 : base.withProperty(BlockCokeOven.ICON, 0);
     }
 
-    @Nullable
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.COKE_OVEN;

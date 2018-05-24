@@ -29,7 +29,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -208,7 +207,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) {
         F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);

@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -92,7 +91,7 @@ public abstract class TileSmartItem extends RailcraftTileEntity implements ISmar
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) {
         inv.setInventorySlotContents(i, itemstack);
     }
 
@@ -102,7 +101,7 @@ public abstract class TileSmartItem extends RailcraftTileEntity implements ISmar
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, @Nullable ItemStack itemstack) {
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return true;
     }
 

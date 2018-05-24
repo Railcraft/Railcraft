@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  *
  */
-public class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
+public final class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
 
     public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
             (world, pos) -> WorldPlugin.getTileEntity(world, pos, TileFluxTransformer.class).map(TileFluxTransformer::getMasterBattery).orElse(null)
@@ -40,7 +40,7 @@ public class BlockFluxTransformer extends BlockMultiBlock implements IChargeBloc
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
         return new TileFluxTransformer();
     }
 

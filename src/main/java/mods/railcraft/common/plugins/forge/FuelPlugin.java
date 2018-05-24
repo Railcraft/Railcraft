@@ -11,7 +11,6 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -20,38 +19,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.IFuelHandler;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FuelPlugin {
 
-    private static IFuelHandler fuelHandler;
     private static ItemStack lastFuel;
     private static int lastFuelValue;
-
-    public static IFuelHandler getFuelHandler() {
-        if (fuelHandler == null)
-            fuelHandler = new FuelHandler();
-        return fuelHandler;
-    }
-
-    private static class FuelHandler implements IFuelHandler {
-
-        private FuelHandler() {
-        }
-
-        @Override
-        public int getBurnTime(ItemStack fuel) {
-            if (InvTools.isEmpty(fuel))
-                return 0;
-            if (fuel.getItem() instanceof IRailcraftItem)
-                return ((IRailcraftItem) fuel.getItem()).getHeatValue(fuel);
-            return 0;
-        }
-
-    }
 
     /**
      * Internal function that provides custom fuel values before requesting them

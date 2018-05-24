@@ -45,6 +45,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -469,6 +470,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 //        return true;
 //    }
 
+    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.ROCK_CRUSHER;

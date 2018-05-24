@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public IEnumMachine<?> getMachineType() {
         return ManipulatorVariant.RF_LOADER;
     }
 

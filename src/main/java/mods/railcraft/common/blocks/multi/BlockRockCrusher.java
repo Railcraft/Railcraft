@@ -13,13 +13,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
  *
  */
-public class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
+public final class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
     private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
@@ -30,7 +29,6 @@ public class BlockRockCrusher extends BlockMultiBlockInventory implements ICharg
         setHarvestLevel("pickaxe", 1);
     }
 
-    @Nullable
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return DEFINITION;
@@ -42,7 +40,7 @@ public class BlockRockCrusher extends BlockMultiBlockInventory implements ICharg
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state) {
         return new TileRockCrusher();
     }
 

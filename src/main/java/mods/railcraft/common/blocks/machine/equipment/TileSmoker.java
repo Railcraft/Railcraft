@@ -22,6 +22,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -79,8 +80,8 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
     }
 
     @Override
-    public boolean isSideSolid(EnumFacing side) {
-        return side != EnumFacing.UP;
+    public BlockFaceShape getShape(EnumFacing side) {
+        return side == EnumFacing.UP ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
 
     @Override

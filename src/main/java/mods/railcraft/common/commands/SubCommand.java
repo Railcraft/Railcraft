@@ -82,7 +82,7 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public final void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (!CommandHelpers.executeStandardCommands(server, sender, this, args))
             executeSubCommand(server, sender, args);
     }

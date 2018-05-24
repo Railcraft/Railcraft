@@ -30,7 +30,7 @@ public abstract class BlockMultiBlock extends BlockEntityDelegate {
     }
 
     @Override
-    public abstract TileMultiBlock createTileEntity(World world, IBlockState state);
+    public abstract TileMultiBlock<?> createTileEntity(World world, IBlockState state);
 
     @Override
     public int getMetaFromState(IBlockState state) {

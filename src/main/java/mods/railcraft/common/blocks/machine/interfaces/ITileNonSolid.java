@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.interfaces;
 
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -19,7 +20,7 @@ import net.minecraft.util.EnumFacing;
  */
 public interface ITileNonSolid {
 
-    default boolean isSideSolid(EnumFacing side) {
-        return true;
+    default BlockFaceShape getShape(EnumFacing side) {
+        return BlockFaceShape.SOLID;
     }
 }

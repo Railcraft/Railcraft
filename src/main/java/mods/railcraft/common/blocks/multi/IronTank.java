@@ -14,7 +14,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;

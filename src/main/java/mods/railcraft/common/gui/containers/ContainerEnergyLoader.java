@@ -51,7 +51,7 @@ public class ContainerEnergyLoader extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        PacketBuilder.instance().sendGuiIntegerPacket( player, windowId, 0, (int) device.getEnergy());
+        PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) device.getEnergy());
         player.sendWindowProperty(this, 1, device.storageUpgrades);
         player.sendWindowProperty(this, 2, device.lapotronUpgrades);
         player.sendWindowProperty(this, 3, device.transferRate);
@@ -66,7 +66,7 @@ public class ContainerEnergyLoader extends RailcraftContainer {
 
         for (IContainerListener listener : listeners) {
             if (lastEnergy != device.getEnergy())
-                PacketBuilder.instance().sendGuiIntegerPacket( listener, windowId, 0, (int) device.getEnergy());
+                PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 0, (int) device.getEnergy());
 
             if (lastStorage != device.storageUpgrades)
                 listener.sendWindowProperty(this, 1, device.storageUpgrades);

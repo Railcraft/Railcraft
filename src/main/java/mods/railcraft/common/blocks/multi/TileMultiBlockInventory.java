@@ -89,7 +89,7 @@ public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<
 
     @Override
     public int getInventoryStackLimit() {
-        return 64;
+        return inv.getInventoryStackLimit();
     }
 
     @Override

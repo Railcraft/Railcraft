@@ -33,7 +33,7 @@ public class ItemBlockGeneric extends ItemBlockRailcraft {
     }
 
     @Override
-    public int getHeatValue(ItemStack stack) {
+    public int getItemBurnTime(ItemStack stack) {
         int meta = stack.getMetadata();
         if (meta == EnumGeneric.BLOCK_COKE.ordinal())
             return ItemCoke.COKE_HEAT * 10;
