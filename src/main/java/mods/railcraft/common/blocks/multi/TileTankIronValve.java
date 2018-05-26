@@ -159,8 +159,10 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty()) {
             int amount = tMan.fill(resource, doFill);
-            if (amount > 0 && doFill)
+            if (amount > 0 && doFill) {
                 setFilling(resource.copy());
+            }
+            return amount;
         }
         return 0;
     }
