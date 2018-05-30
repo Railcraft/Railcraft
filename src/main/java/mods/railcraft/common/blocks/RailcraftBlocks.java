@@ -147,6 +147,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemTradeStation::new),
     FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
     ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
+    CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemChestMetals::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),

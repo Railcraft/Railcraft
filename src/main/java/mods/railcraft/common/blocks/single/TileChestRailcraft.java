@@ -44,7 +44,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
 
     private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int TICK_PER_SYNC = 64;
-    private EnumFacing facing = EnumFacing.EAST;
+    private EnumFacing facing = EnumFacing.NORTH;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;

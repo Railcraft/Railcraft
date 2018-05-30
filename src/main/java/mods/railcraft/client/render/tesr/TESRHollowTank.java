@@ -10,53 +10,36 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.models.resource.FluidModelRenderer;
-import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
-import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.blocks.multi.TileTankIronValve;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
-    private static final RenderInfo fillBlock = new RenderInfo();
 
     public TESRHollowTank() {
-        fillBlock.boundingBox = AABBFactory.start().box().expandHorizontally(-5 * RenderTools.PIXEL).build();
     }
 
-    private void prepFillTexture(@Nullable FluidStack fluidStack) {
-        if (fluidStack == null)
-            return;
-        ResourceLocation texSheet = FluidRenderer.setupFluidTexture(fluidStack, FluidRenderer.FlowState.FLOWING, fillBlock);
-        if (texSheet != null)
-            bindTexture(texSheet);
-    }
-
-    private float getVerticalScaleSide(TileMultiBlock tile) {
+    private float getVerticalScaleSide(TileTankBase tile) {
         int y = tile.getPatternPosition().getY();
         if (!RailcraftConfig.allowTankStacking())
             y--;
         return y - RenderTools.PIXEL * 5;
     }
 
-    private int getTankHeight(TileMultiBlock tile) {
+    private int getTankHeight(TileTankBase tile) {
         int height = tile.getPattern().getPatternHeight();
         if (!RailcraftConfig.allowTankStacking())
             height -= 2;
@@ -173,7 +156,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase
         float hScale = tile.getPattern().getPatternWidthX() - 2;
 
         TankManager tankManager = tile.getTankManager();
-        if (tankManager == null)
+        if (tankManager.isEmpty())
             return;
         StandardTank tank = tankManager.get(0);
         if (tank == null)

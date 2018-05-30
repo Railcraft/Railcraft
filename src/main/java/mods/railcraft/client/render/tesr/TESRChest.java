@@ -9,16 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
-import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -32,10 +29,8 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
 
     private final ResourceLocation texture;
 
-    public TESRChest(IEnumMachine<?> machineType) {
-        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
-        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
-        //TODO switch to tile entity item stack renderer
+    public TESRChest(RailcraftBlocks type) {
+        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + type.getBaseTag() + ".png");
     }
 
     /**
@@ -43,58 +38,123 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
      */
     @Override
     public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        int facing = tile.getFacing().ordinal();
+//        if (tile.hasWorld()) {
+//            RenderHelper.enableStandardItemLighting();
+//            int i = Minecraft.getMinecraft().world.getCombinedLight(tile.getPos(), 0);
+//            int j = i % 65536;
+//            int k = i / 65536;
+//            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+//            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+//        }
+//
+//        if (destroyStage >= 0) {
+//            bindTexture(DESTROY_STAGES[destroyStage]);
+//            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
+//            OpenGL.glPushMatrix();
+//            OpenGL.glScalef(4.0F, 4.0F, 1.0F);
+//            OpenGL.glTranslatef(0.0625F, 0.0625F, 0.0625F);
+//            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
+//        } else {
+//            bindTexture(texture);
+//        }
+//
+//        OpenGL.glPushMatrix();
+//        OpenGL.glPushAttrib();
+//        OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
+//        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+//        OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
+//        OpenGL.glScalef(1.0F, -1.0F, -1.0F);
+//        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
+//        short rotation = 0;
+//
+//        switch (tile.getFacing()) {
+//            case SOUTH:
+//                rotation = 180;
+//                break;
+//            case NORTH:
+//                rotation = 0;
+//                break;
+//            case EAST:
+//                rotation = 90;
+//                break;
+//            case WEST:
+//                rotation = -90;
+//                break;
+//        }
+//
+//        OpenGL.glRotatef((float) rotation, 0.0F, 1.0F, 0.0F);
+//        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
+//        float lidAngle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
+//        lidAngle = 1.0F - lidAngle;
+//        lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
+//        chestModel.chestLid.rotateAngleX = -(lidAngle * (float) Math.PI / 2.0F);
+//        chestModel.renderAll();
+//        OpenGL.glPopAttrib();
+//        OpenGL.glPopMatrix();
+//        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+//
+//        if (destroyStage >= 0) {
+//            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
+//            OpenGL.glPopMatrix();
+//            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
+//        }
+
+        int i = 0;
+
+        if (tile.hasWorld()) {
+            i = tile.getBlockMetadata();
+        }
 
         if (destroyStage >= 0) {
-            bindTexture(DESTROY_STAGES[destroyStage]);
-            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
-            OpenGL.glPushMatrix();
-            OpenGL.glScalef(4.0F, 4.0F, 1.0F);
-            OpenGL.glTranslatef(0.0625F, 0.0625F, 0.0625F);
-            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
+            this.bindTexture(DESTROY_STAGES[destroyStage]);
+            GlStateManager.matrixMode(5890);
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(4.0F, 4.0F, 1.0F);
+            GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+            GlStateManager.matrixMode(5888);
         } else {
-            bindTexture(texture);
+            this.bindTexture(texture);
         }
 
-        OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib();
-        OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
-        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
-        OpenGL.glScalef(1.0F, -1.0F, -1.0F);
-        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
-        short rotation = 0;
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+        GlStateManager.translate((float) x, (float) y + 1.0F, (float) z + 1.0F);
+        GlStateManager.scale(1.0F, -1.0F, -1.0F);
+        GlStateManager.translate(0.5F, 0.5F, 0.5F);
+        int j = 0;
 
-        switch (facing) {
-            case 2:
-                rotation = 180;
-                break;
-            case 3:
-                rotation = 0;
-                break;
-            case 4:
-                rotation = 90;
-                break;
-            case 5:
-                rotation = -90;
-                break;
+        if (i == 2) {
+            j = 180;
         }
 
-        OpenGL.glRotatef((float) rotation, 0.0F, 1.0F, 0.0F);
-        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
-        float lidAngle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
-        lidAngle = 1.0F - lidAngle;
-        lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
-        chestModel.chestLid.rotateAngleX = -(lidAngle * (float) Math.PI / 2.0F);
-        chestModel.renderAll();
-        OpenGL.glPopAttrib();
-        OpenGL.glPopMatrix();
-        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        if (i == 3) {
+            j = 0;
+        }
+
+        if (i == 4) {
+            j = 90;
+        }
+
+        if (i == 5) {
+            j = -90;
+        }
+
+        GlStateManager.rotate((float) j, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+        float f = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
+        f = 1.0F - f;
+        f = 1.0F - f * f * f;
+        this.chestModel.chestLid.rotateAngleX = -(f * ((float) Math.PI / 2F));
+        this.chestModel.renderAll();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (destroyStage >= 0) {
-            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
-            OpenGL.glPopMatrix();
-            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
+            GlStateManager.matrixMode(5890);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(5888);
         }
     }
 

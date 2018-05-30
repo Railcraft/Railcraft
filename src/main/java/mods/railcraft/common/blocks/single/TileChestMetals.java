@@ -30,9 +30,9 @@ import java.util.function.Predicate;
 public class TileChestMetals extends TileChestRailcraft {
 
     private static final int TICK_PER_CONDENSE = 16;
-    private static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
-    private static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
-    private static final Map<Metal, Predicate<ItemStack>> blockFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> blockFilters = new EnumMap<>(Metal.class);
 
     static {
         for (Metal m : Metal.VALUES) {

@@ -112,7 +112,7 @@ public class BlockRitual extends BlockContainerRailcraft {
 
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

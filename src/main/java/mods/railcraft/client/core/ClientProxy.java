@@ -23,11 +23,11 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
+import mods.railcraft.common.blocks.multi.TileTankBase;
+import mods.railcraft.common.blocks.single.TileChestMetals;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -42,6 +42,7 @@ import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -49,6 +50,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ICustomModelLoader;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -62,6 +65,8 @@ import org.apache.logging.log4j.Level;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
@@ -154,7 +159,7 @@ public class ClientProxy extends CommonProxy {
                 },
                 (block, variant) -> {
                     ItemStack stack = block.getStack(variant);
-                    if (stack != null)
+                    if (!stack.isEmpty())
                         block.registerItemModel(stack, variant);
                 });
 
@@ -201,6 +206,7 @@ public class ClientProxy extends CommonProxy {
 
 //        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
+        //TODO move to block classes
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
@@ -263,11 +269,13 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(tileClass, factory.get());
     }
 
+    @Deprecated
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
         if (machineType.isAvailable())
             ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.get());
     }
 
+    @Deprecated
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Function<IEnumMachine<?>, TileEntitySpecialRenderer<? super T>> factory) {
         if (machineType.isAvailable())
             ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));

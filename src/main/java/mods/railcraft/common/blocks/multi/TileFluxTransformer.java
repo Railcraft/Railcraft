@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -98,7 +99,12 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
     @NotNull
     @Override
     public EnumGui getGui() {
-        return null;
+        throw new Error();
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        return false;
     }
 
     @Override
