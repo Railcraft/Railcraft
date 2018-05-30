@@ -252,6 +252,7 @@ public final class CraftingPlugin {
 
     public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+        Arrays.fill(grid, ItemStack.EMPTY);
 
         for (int i = 0; i < grid.length; ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);

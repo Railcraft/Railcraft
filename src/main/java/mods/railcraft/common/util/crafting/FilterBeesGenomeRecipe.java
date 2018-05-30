@@ -27,6 +27,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
@@ -110,6 +111,7 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+        Arrays.fill(grid, ItemStack.EMPTY);
 
         for (int i = 0; i < grid.length; ++i) {
             ItemStack stack = inv.getStackInSlot(i);

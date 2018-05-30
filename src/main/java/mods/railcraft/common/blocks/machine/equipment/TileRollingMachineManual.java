@@ -35,7 +35,7 @@ public class TileRollingMachineManual extends TileRollingMachine {
         for (IExtInvSlot slot : InventoryIterator.getVanilla(getInventory())) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack)) {
-                slot.setStack(null);
+                slot.setStack(ItemStack.EMPTY);
                 player.dropItem(stack, false);
             }
         }

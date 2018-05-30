@@ -143,7 +143,6 @@ public final class Railcraft {
         if (Game.isObfuscated()) {
             Game.logErrorFingerprint(MOD_ID);
 //            FMLCommonHandler.instance().exitJava(1, false);
-            throw new RuntimeException("Invalid Fingerprint");
         }
     }
 

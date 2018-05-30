@@ -21,6 +21,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
+
 /**
  * Created by CovertJaguar on 3/10/2016 for Railcraft.
  *
@@ -69,6 +71,7 @@ public class CartDisassemblyRecipe extends BaseRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+        Arrays.fill(grid, ItemStack.EMPTY);
 
         for (IInvSlot slot : InventoryIterator.getVanilla(inv)) {
             if (slot.containsItem(fullCart))

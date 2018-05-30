@@ -80,7 +80,7 @@ public class EntityCartBed extends EntityCartBasic {
             if (rideAfterSleep)
                 sendPlayerRiding((EntityPlayerMP) sleeper);
             if (!wokeUp) {
-                sleeper.setPosition(getPosition().getX(), getPosition().getY(), getPosition().getZ());
+                sleeper.bedLocation = getPosition();
                 return;
             }
             wokeUp = false;

@@ -11,7 +11,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
@@ -22,7 +21,6 @@ import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.ModuleSteam;
-import mods.railcraft.common.modules.ModuleThaumcraft;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -74,9 +72,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     PUMPKIN(3, "cart_pumpkin", EntityCartPumpkin.class, ItemCartPumpkin::new),
     REDSTONE_FLUX(0, "cart_redstone_flux", EntityCartRF.class, ItemCartRF::new),
     TANK(0, "cart_tank", EntityCartTank.class, ItemCartTank::new, () -> {
-//        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
-//        return !InvTools.isEmpty(stack) ? stack : TODO
-               return new ItemStack(Blocks.GLASS, 8);
+        ItemStack stack = RailcraftBlocks.TANK_IRON_GAUGE.getStack();
+        return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
     TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCartTNTWood::new),
     WORK(0, "cart_work", EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
@@ -88,7 +85,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             conditions().add(ModuleSteam.class);
         }
     },
-//    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
+    //    LOCO_STEAM_MAGIC(1, "locomotive_steam_magic", EntityLocomotiveSteamMagic.class, (c) -> new ItemLocomotive(c, LocomotiveRenderType.STEAM_MAGIC, EnumColor.PURPLE, EnumColor.SILVER)) {
 //        {
 //            conditions().add(ModuleLocomotives.class);
 //            conditions().add(ModuleThaumcraft.class);
