@@ -60,4 +60,17 @@ public class BlockChestMetals extends BlockEntityDelegate {
     public void initializeClient() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new TESRChest(RailcraftBlocks.CHEST_METALS));
     }
+
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean hasCustomBreakingProgress(IBlockState state) {
+        return true;
+    }
 }
