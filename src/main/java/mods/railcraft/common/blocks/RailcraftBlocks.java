@@ -40,7 +40,6 @@ import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
-import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
@@ -52,6 +51,7 @@ import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
 import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.ore.*;
+import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
@@ -148,6 +148,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
     ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
     CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemChestMetals::new),
+    CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemChestVoid::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
@@ -288,7 +289,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public String toString() {
         return "Block{" + getBaseTag() + "}";
     }
-
 
 
 }
