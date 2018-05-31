@@ -6,12 +6,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemChestMetals extends ItemBlockRailcraft {
-    public ItemChestMetals(Block block) {
+public class ItemChestVoid extends ItemBlockRailcraft {
+    public ItemChestVoid(Block block) {
         super(block);
     }
 
@@ -19,7 +20,7 @@ public class ItemChestMetals extends ItemBlockRailcraft {
     @Override
     public void initializeClient() {
         setTileEntityItemStackRenderer(new TileEntityItemStackRenderer() {
-            private final TileChestMetals template = new TileChestMetals();
+            private final TileChestVoid template = new TileChestVoid();
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -32,11 +33,10 @@ public class ItemChestMetals extends ItemBlockRailcraft {
     @Override
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this),
-                "GPG",
-                "PAP",
-                "GPG",
-                'A', new ItemStack(Blocks.ANVIL),
-                'P', new ItemStack(Blocks.PISTON),
-                'G', "gearSteel");
+                "OOO",
+                "OPO",
+                "OOO",
+                'O', new ItemStack(Blocks.OBSIDIAN),
+                'P', new ItemStack(Items.ENDER_PEARL));
     }
 }

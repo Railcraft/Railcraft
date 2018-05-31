@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:chest_void"
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": {},
+      "east": {},
+      "west": {}
+    }
+  }
+}

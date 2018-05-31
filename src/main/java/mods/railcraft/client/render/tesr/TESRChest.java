@@ -10,6 +10,7 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.single.BlockChestMetals;
 import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.BlockHorizontal;
@@ -73,7 +74,7 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         int i = 0;
 
         if (tile.hasWorld()) {
-            i = tile.getBlockMetadata();
+            i = tile.getBlockState().getValue(BlockChestMetals.FACING).ordinal();
         }
 
         if (destroyStage >= 0) {

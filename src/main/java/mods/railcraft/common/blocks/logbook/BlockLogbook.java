@@ -41,14 +41,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nullable;
-
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockLogbook extends BlockContainerRailcraft {
+public final class BlockLogbook extends BlockContainerRailcraft {
     public static final PropertyEnum<EnumFacing.Axis> ROTATION = PropertyEnum.create("rotation", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 
     public BlockLogbook() {

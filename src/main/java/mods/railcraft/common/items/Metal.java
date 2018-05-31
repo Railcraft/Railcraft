@@ -221,7 +221,7 @@ public enum Metal implements IVariantEnum {
         private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;
-        protected final IRailcraftObjectContainer container;
+        protected final IRailcraftObjectContainer<?> container;
         private final BiMap<Metal, IVariantEnum> variantMap;
 
         static {
@@ -230,11 +230,11 @@ public enum Metal implements IVariantEnum {
             }
         }
 
-        Form(String orePrefix, IRailcraftObjectContainer container) {
+        Form(String orePrefix, IRailcraftObjectContainer<?> container) {
             this(orePrefix, container, null);
         }
 
-        Form(String orePrefix, IRailcraftObjectContainer container, @Nullable BiMap<Metal, IVariantEnum> variantMap) {
+        Form(String orePrefix, IRailcraftObjectContainer<?> container, @Nullable BiMap<Metal, IVariantEnum> variantMap) {
             this.orePrefix = orePrefix;
             this.container = container;
             this.variantMap = variantMap;
