@@ -10,15 +10,13 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.single.BlockChestMetals;
 import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,38 +42,21 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
      */
     @Override
     public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        final BlockPos pos = tile.getPos();
-        final World world = tile.getWorld();
-        final IBlockState blockState = world.getBlockState(pos);
-        final int blockX = pos.getX();
-        final int blockY = pos.getY();
-        final int blockZ = pos.getZ();
-        float brightness = 0f;
-
-        switch (blockState.getValue(BlockHorizontal.FACING)) {
-            case SOUTH:
-                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX, blockY, blockZ + 1));
-                break;
-            case WEST:
-                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX - 1, blockY, blockZ));
-                break;
-            case NORTH:
-                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX, blockY, blockZ - 1));
-                break;
-            case EAST:
-                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX + 1, blockY, blockZ));
-                break;
+        final int brightness;
+        final EnumFacing face;
+        if (tile.hasWorld()) {
+            final BlockPos pos = tile.getPos();
+            final World world = tile.getWorld();
+            face = tile.getFacing();
+            brightness = tile.getBlockState().getPackedLightmapCoords(world, pos.offset(face));
+        } else {
+            brightness = 15 << 20 | 15 << 4;
+            face = EnumFacing.SOUTH;
         }
 
         GlStateManager.enableDepth();
         GlStateManager.depthFunc(515);
         GlStateManager.depthMask(true);
-
-        int i = 0;
-
-        if (tile.hasWorld()) {
-            i = tile.getBlockState().getValue(BlockChestMetals.FACING).ordinal();
-        }
 
         if (destroyStage >= 0) {
             this.bindTexture(DESTROY_STAGES[destroyStage]);
@@ -98,31 +79,16 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         GlStateManager.translate((float) x, (float) y + 1.0F, (float) z + 1.0F);
         GlStateManager.scale(1.0F, -1.0F, -1.0F);
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
-        int j = 0;
 
-        if (i == 2) {
-            j = 180;
-        }
-
-        if (i == 3) {
-            j = 0;
-        }
-
-        if (i == 4) {
-            j = 90;
-        }
-
-        if (i == 5) {
-            j = -90;
-        }
+        float j = face.getHorizontalAngle();
 
         // Set lightmap coordinates to the skylight value of the block in front of the cache item model
-        float jl = brightness % 65536;
-        float kl = brightness / 65536;
+        float jl = brightness % 65536F;
+        float kl = brightness / 65536F;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, jl / 1.0F, kl / 1.0F);
         GlStateManager.color(1f, 1f, 1f, 1f);
 
-        GlStateManager.rotate((float) j, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(j, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         float f = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
         f = 1.0F - f;

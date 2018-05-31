@@ -61,16 +61,13 @@ public class BlockChestVoid extends BlockEntityDelegate {
         ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new TESRChest(RailcraftBlocks.CHEST_VOID));
     }
 
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
     public boolean isFullCube(IBlockState state) {
         return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean hasCustomBreakingProgress(IBlockState state) {
-        return true;
     }
 }
