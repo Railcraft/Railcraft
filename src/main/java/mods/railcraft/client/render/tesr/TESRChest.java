@@ -13,10 +13,15 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.single.BlockChestMetals;
 import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -39,66 +44,32 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
      */
     @Override
     public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-//        if (tile.hasWorld()) {
-//            RenderHelper.enableStandardItemLighting();
-//            int i = Minecraft.getMinecraft().world.getCombinedLight(tile.getPos(), 0);
-//            int j = i % 65536;
-//            int k = i / 65536;
-//            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-//            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//        }
-//
-//        if (destroyStage >= 0) {
-//            bindTexture(DESTROY_STAGES[destroyStage]);
-//            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
-//            OpenGL.glPushMatrix();
-//            OpenGL.glScalef(4.0F, 4.0F, 1.0F);
-//            OpenGL.glTranslatef(0.0625F, 0.0625F, 0.0625F);
-//            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
-//        } else {
-//            bindTexture(texture);
-//        }
-//
-//        OpenGL.glPushMatrix();
-//        OpenGL.glPushAttrib();
-//        OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
-//        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//        OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
-//        OpenGL.glScalef(1.0F, -1.0F, -1.0F);
-//        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
-//        short rotation = 0;
-//
-//        switch (tile.getFacing()) {
-//            case SOUTH:
-//                rotation = 180;
-//                break;
-//            case NORTH:
-//                rotation = 0;
-//                break;
-//            case EAST:
-//                rotation = 90;
-//                break;
-//            case WEST:
-//                rotation = -90;
-//                break;
-//        }
-//
-//        OpenGL.glRotatef((float) rotation, 0.0F, 1.0F, 0.0F);
-//        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
-//        float lidAngle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
-//        lidAngle = 1.0F - lidAngle;
-//        lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
-//        chestModel.chestLid.rotateAngleX = -(lidAngle * (float) Math.PI / 2.0F);
-//        chestModel.renderAll();
-//        OpenGL.glPopAttrib();
-//        OpenGL.glPopMatrix();
-//        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//
-//        if (destroyStage >= 0) {
-//            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
-//            OpenGL.glPopMatrix();
-//            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
-//        }
+        final BlockPos pos = tile.getPos();
+        final World world = tile.getWorld();
+        final IBlockState blockState = world.getBlockState(pos);
+        final int blockX = pos.getX();
+        final int blockY = pos.getY();
+        final int blockZ = pos.getZ();
+        float brightness = 0f;
+
+        switch (blockState.getValue(BlockHorizontal.FACING)) {
+            case SOUTH:
+                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX, blockY, blockZ + 1));
+                break;
+            case WEST:
+                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX - 1, blockY, blockZ));
+                break;
+            case NORTH:
+                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX, blockY, blockZ - 1));
+                break;
+            case EAST:
+                brightness = blockState.getPackedLightmapCoords(world, new BlockPos(blockX + 1, blockY, blockZ));
+                break;
+        }
+
+        GlStateManager.enableDepth();
+        GlStateManager.depthFunc(515);
+        GlStateManager.depthMask(true);
 
         int i = 0;
 
@@ -119,7 +90,11 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+
+        if (destroyStage < 0) {
+            GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+        }
+
         GlStateManager.translate((float) x, (float) y + 1.0F, (float) z + 1.0F);
         GlStateManager.scale(1.0F, -1.0F, -1.0F);
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
@@ -141,6 +116,12 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
             j = -90;
         }
 
+        // Set lightmap coordinates to the skylight value of the block in front of the cache item model
+        float jl = brightness % 65536;
+        float kl = brightness / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, jl / 1.0F, kl / 1.0F);
+        GlStateManager.color(1f, 1f, 1f, 1f);
+
         GlStateManager.rotate((float) j, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         float f = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
@@ -149,6 +130,10 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         this.chestModel.chestLid.rotateAngleX = -(f * ((float) Math.PI / 2F));
         this.chestModel.renderAll();
         GlStateManager.disableRescaleNormal();
+
+        // Revert lightmap texture coordinates to world values pre-render tick
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX, OpenGlHelper.lastBrightnessY);
+
         GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -158,5 +143,4 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
             GlStateManager.matrixMode(5888);
         }
     }
-
 }
