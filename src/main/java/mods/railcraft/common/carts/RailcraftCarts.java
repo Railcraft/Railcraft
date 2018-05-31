@@ -198,7 +198,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     public Item getItem() {
-        return getObject().map(IRailcraftObject::getObject).orElse(null);
+        return getObject().map(IRailcraftObject::getObject).orElse(Items.AIR);
     }
 
     @Override
@@ -258,8 +258,14 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private void registerEntity() {
         if (id < 0)
             return;
+        //TODO entityentrybuilder
+//        EntityEntryBuilder.create()
+//                .id(def.registryName, id)
+//                .entity(type)
+//                .name(getBaseTag())
+//                .tracker(256, 2, true)
+//                .build();
         EntityRegistry.registerModEntity(def.registryName, type, getBaseTag(), id, Railcraft.getMod(), 256, 2, true);
-
         // Legacy stuff
 //        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);
 //        if (this == LOCO_STEAM_SOLID)

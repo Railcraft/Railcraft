@@ -88,6 +88,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         super.readEntityFromNBT(data);
 
         invFilter.readFromNBT("invFilter", data);
+        dataManager.set(FILTER, getFilterInv().getStackInSlot(0));
     }
 
     @Override

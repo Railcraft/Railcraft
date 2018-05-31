@@ -39,7 +39,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
         OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
 
-        EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
+        EntityItem item = new EntityItem(cart.getEntityWorld(), 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
         setSize(item.getItem(), 1);
         item.hoverStart = 0.0F;
         IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item.getItem(), cart.world, null);

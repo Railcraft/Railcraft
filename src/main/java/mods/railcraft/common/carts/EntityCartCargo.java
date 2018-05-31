@@ -25,8 +25,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.invoke.MethodHandles;
 
 public class EntityCartCargo extends CartBaseFiltered {
     private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(DataSerializers.VARINT);
@@ -89,7 +87,7 @@ public class EntityCartCargo extends CartBaseFiltered {
         if (!InvTools.isItemEqual(stack, filter))
             return false;
         if (!RailcraftConfig.chestAllowLiquids())
-            return getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
+            return getStackInSlot(slot).isEmpty() || !FluidItemHelper.isContainer(stack);
         return true;
     }
 
