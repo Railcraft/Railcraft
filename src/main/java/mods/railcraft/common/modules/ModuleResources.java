@@ -152,11 +152,13 @@ public class ModuleResources extends RailcraftModulePayload {
 
                     BallastRegistry.registerBallast(BlockGeneric.getBlock(), EnumGeneric.CRUSHED_OBSIDIAN.ordinal());
 
-                    if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian") && RailcraftItems.DUST.isEnabled()) {
+                    if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftItems.DUST.isEnabled()) {
                         ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN);
                         IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian));
-                        IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
-                        IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
+                        if (RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian")) {
+                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
+                            IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
+                        }
                     }
                 }
                 checkSteelBlock();
