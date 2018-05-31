@@ -1,5 +1,6 @@
 package mods.railcraft.common.blocks.single;
 
+import mods.railcraft.common.blocks.ItemBlockEntityDelegate;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemChestVoid extends ItemBlockRailcraft {
+public class ItemChestVoid extends ItemBlockEntityDelegate {
     public ItemChestVoid(Block block) {
         super(block);
     }

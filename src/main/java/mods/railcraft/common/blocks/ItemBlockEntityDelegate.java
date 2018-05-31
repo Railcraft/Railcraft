@@ -7,10 +7,8 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,21 +16,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMachine extends ItemBlockRailcraftSubtyped {
+public class ItemBlockEntityDelegate extends ItemBlockRailcraftSubtyped {
 
-    private final BlockMachine<? extends IEnumMachine> machineBlock;
+    protected final BlockEntityDelegate entityDelegate;
 
-    public ItemMachine(Block block) {
+    public ItemBlockEntityDelegate(Block block) {
         super(block);
-        this.machineBlock = (BlockMachine<? extends IEnumMachine>) block;
-    }
-
-    public IEnumMachine<?> getMachine(ItemStack stack) {
-        int meta = stack.getMetadata();
-        if (!ArrayTools.indexInBounds(machineBlock.getVariants().length, meta))
-            meta = 0;
-        return machineBlock.getVariants()[meta];
+        this.entityDelegate = (BlockEntityDelegate) block;
     }
 
     @Override
@@ -40,19 +33,20 @@ public class ItemMachine extends ItemBlockRailcraftSubtyped {
         if (!world.setBlockState(pos, newState, 3))
             return false;
 
-        if (world.getBlockState(pos).getBlock() == machineBlock) {
-            machineBlock.onBlockPlacedBy(world, pos, newState, player, stack);
-            machineBlock.initFromItem(world, pos, stack);
+        if (world.getBlockState(pos).getBlock() == entityDelegate) {
+            entityDelegate.onBlockPlacedBy(world, pos, newState, player, stack);
+            entityDelegate.initFromItem(world, pos, stack);
         }
 
         return true;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
         if (!super.canPlaceBlockOnSide(worldIn, pos, side, player, stack))
             return false;
-        if (!machineBlock.needsSupport())
+        if (!entityDelegate.needsSupport())
             return true;
         Block block = worldIn.getBlockState(pos).getBlock();
         if (!block.isReplaceable(worldIn, pos)) {

@@ -15,9 +15,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockChestVoid extends BlockEntityDelegate {
-
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+public class BlockChestVoid extends BlockChestRailcraft {
 
     public BlockChestVoid() {
         super(Material.IRON);
@@ -30,17 +28,6 @@ public class BlockChestVoid extends BlockEntityDelegate {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
-
-    @Override
     public Class<? extends TileEntity> getTileClass(IBlockState state) {
         return TileChestVoid.class;
     }
@@ -50,24 +37,11 @@ public class BlockChestVoid extends BlockEntityDelegate {
         return new TileChestVoid();
     }
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new TESRChest(RailcraftBlocks.CHEST_VOID));
     }
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
 
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
 }

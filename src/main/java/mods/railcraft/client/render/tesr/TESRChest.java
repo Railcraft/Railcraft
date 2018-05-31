@@ -14,12 +14,9 @@ import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -42,21 +39,7 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
      */
     @Override
     public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        final int brightness;
-        final EnumFacing face;
-        if (tile.hasWorld()) {
-            final BlockPos pos = tile.getPos();
-            final World world = tile.getWorld();
-            face = tile.getFacing();
-            brightness = tile.getBlockState().getPackedLightmapCoords(world, pos.offset(face));
-        } else {
-            brightness = 15 << 20 | 15 << 4;
-            face = EnumFacing.SOUTH;
-        }
-
-        GlStateManager.enableDepth();
-        GlStateManager.depthFunc(515);
-        GlStateManager.depthMask(true);
+        final EnumFacing facing = tile.getFacing();
 
         if (destroyStage >= 0) {
             this.bindTexture(DESTROY_STAGES[destroyStage]);
@@ -71,24 +54,31 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
-
-        if (destroyStage < 0) {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
-        }
-
+        GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
         GlStateManager.translate((float) x, (float) y + 1.0F, (float) z + 1.0F);
         GlStateManager.scale(1.0F, -1.0F, -1.0F);
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
 
-        float j = face.getHorizontalAngle();
+        int j;
+        switch (facing) {
+            case NORTH:
+                j = 180;
+                break;
+            case SOUTH:
+                j = 0;
+                break;
+            case WEST:
+                j = 90;
+                break;
+            case EAST:
+                j = -90;
+                break;
+            default:
+                j = 0;
+                break;
+        }
 
-        // Set lightmap coordinates to the skylight value of the block in front of the cache item model
-        float jl = brightness % 65536F;
-        float kl = brightness / 65536F;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, jl / 1.0F, kl / 1.0F);
-        GlStateManager.color(1f, 1f, 1f, 1f);
-
-        GlStateManager.rotate(j, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float) j, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         float f = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
         f = 1.0F - f;
@@ -96,10 +86,6 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         this.chestModel.chestLid.rotateAngleX = -(f * ((float) Math.PI / 2F));
         this.chestModel.renderAll();
         GlStateManager.disableRescaleNormal();
-
-        // Revert lightmap texture coordinates to world values pre-render tick
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX, OpenGlHelper.lastBrightnessY);
-
         GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 

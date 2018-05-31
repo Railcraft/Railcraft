@@ -1,6 +1,6 @@
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.blocks.ItemBlockEntityDelegate;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemChestMetals extends ItemBlockRailcraft {
+public class ItemChestMetals extends ItemBlockEntityDelegate {
     public ItemChestMetals(Block block) {
         super(block);
     }

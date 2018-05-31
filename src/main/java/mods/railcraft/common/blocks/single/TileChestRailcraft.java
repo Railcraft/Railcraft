@@ -61,7 +61,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         if (entityLiving != null)
-            facing = entityLiving.getHorizontalFacing();
+            facing = entityLiving.getHorizontalFacing().getOpposite();
     }
 
     @Override
