@@ -47,12 +47,6 @@ public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEng
     public TESRPneumaticEngine(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
         final Item type = null; //TODO
-        RailcraftCustomItemRenderer.INSTANCE.registerItemStackHandler((stack) -> {
-            if (stack.getItem() != type)
-                return false;
-            render(null, 0, 0, 0, 0, -1, 255);
-            return true;
-        });
 //        ForgeHooksClient.registerTESRItemStack(machineType.getStack().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
