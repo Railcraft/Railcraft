@@ -136,6 +136,8 @@ public enum Metal implements IVariantEnum {
                 switch (metal) {
                     case GOLD:
                         return new ItemStack(Items.GOLD_NUGGET, qty);
+                    case IRON:
+                        return new ItemStack(Items.IRON_NUGGET, qty);
                 }
                 return super.getStack(metal, qty);
             }

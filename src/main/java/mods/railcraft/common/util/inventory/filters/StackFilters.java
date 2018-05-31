@@ -110,7 +110,7 @@ public final class StackFilters {
      * Returns false if the ItemStack being matched is null and true if the stacks to match against is empty/nulled.
      */
     public static Predicate<ItemStack> noneOf(@Nonnull final ItemStack... stacks) {
-        return anyOf(Arrays.asList(stacks));
+        return noneOf(Arrays.asList(stacks));
     }
 
     /**
