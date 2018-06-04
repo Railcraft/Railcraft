@@ -285,7 +285,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     itemCart.setRegistryName(getRegistryName());
                     itemCart.setUnlocalizedName("railcraft.entity." + getBaseTag().replace("_", "."));
                     itemCart.setRarity(rarity);
-                    RailcraftRegistry.register((IRailcraftItemSimple) itemCart);
+                    RailcraftRegistry.register((Item) itemCart);
 
                     itemCart.initializeDefinition();
                 } else if (item != null) {

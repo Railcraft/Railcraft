@@ -9,11 +9,11 @@ import javax.annotation.Nonnull;
 /**
  *
  */
-abstract class BaseRecipe implements IRecipe {
+public abstract class BaseRecipe implements IRecipe {
 
-    final ResourceLocation registryName;
+    private final ResourceLocation registryName;
 
-    BaseRecipe(String name) {
+    protected BaseRecipe(String name) {
         this.registryName = RailcraftConstantsAPI.locationOf(name);
     }
 

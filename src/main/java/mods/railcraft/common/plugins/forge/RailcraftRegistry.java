@@ -117,18 +117,6 @@ public final class RailcraftRegistry {
      *
      * @param item The item
      */
-    public static void register(IRailcraftObject<Item> item) {
-        register(item.getObject());
-    }
-
-    /**
-     * Registers a new item with the GameRegistry.
-     * <p/>
-     * This should generally only be called by Railcraft or a Railcraft Module while the mod is
-     * initializing during the pre-initializeDefinition and initializeDefinition stages.
-     *
-     * @param item The item
-     */
     public static void register(Item item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Items must be initialized in Construction or PreInit:" + item.getRegistryName());

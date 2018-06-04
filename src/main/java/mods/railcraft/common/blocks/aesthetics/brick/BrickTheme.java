@@ -320,6 +320,10 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         return def;
     }
 
+    @Override
+    public void register() {
+    }
+
     public final MapColor getMapColor() {
         return mapColor;
     }
@@ -343,6 +347,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         }
         return null;
     }
+
+
 
     protected void initBlock(BlockBrick block) {
     }

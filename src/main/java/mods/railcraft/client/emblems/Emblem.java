@@ -8,6 +8,8 @@
  */
 package mods.railcraft.client.emblems;
 
+import net.minecraft.item.EnumRarity;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -17,10 +19,10 @@ public class Emblem {
     public final String textureFile;
     public final String identifier;
     public final String displayName;
-    public final int rarity;
+    public final EnumRarity rarity;
     public final boolean hasEffect;
 
-    public Emblem(String ident, String text, String display, int rarity, boolean hasEffect) {
+    public Emblem(String ident, String text, String display, EnumRarity rarity, boolean hasEffect) {
         this.identifier = ident;
         this.textureFile = text;
         this.displayName = display;

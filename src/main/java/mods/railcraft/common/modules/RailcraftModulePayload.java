@@ -20,10 +20,10 @@ import java.util.LinkedHashSet;
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {};
-    private final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
+    final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
-    private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
-    private ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
+    ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
+    ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
 
     public final void setEnabledEventHandler(@Nonnull ModuleEventHandler enabledEventHandler) {
         this.enabledEventHandler = enabledEventHandler;
@@ -63,7 +63,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
     private final class BaseModuleEventHandler implements ModuleEventHandler {
         private final IRailcraftModule owner;
 
-        private BaseModuleEventHandler(IRailcraftModule owner) {
+        BaseModuleEventHandler(IRailcraftModule owner) {
             this.owner = owner;
         }
 

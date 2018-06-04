@@ -37,7 +37,7 @@ import java.util.function.Supplier;
 public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IRailcraftRecipeIngredient {
     class Definition {
         public final Set<Class<? extends IRailcraftModule>> modules = new HashSet<>();
-        private final InitializationConditional conditions = new InitializationConditional();
+        final InitializationConditional conditions = new InitializationConditional();
         private final String tag;
         @Nullable
         private final Supplier<?> altRecipeObject;
@@ -64,8 +64,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     /**
      * Register the item. Call {@link IRailcraftObject#initializeDefinition()} in this part!
      */
-    default void register() {
-    }
+    void register();
 
     /**
      * To be called in batch by the client proxy.

@@ -209,13 +209,11 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return names[0];
     }
 
-    @Nullable
     public ItemStack setItemColor(ItemStack stack) {
         return setItemColor(stack, DEFAULT_COLOR_TAG);
     }
 
-    @Nullable
-    public ItemStack setItemColor(@Nullable ItemStack stack, String tag) {
+    public ItemStack setItemColor(ItemStack stack, String tag) {
         if (InvTools.isEmpty(stack))
             return InvTools.emptyStack();
         NBTTagCompound nbt = InvTools.getItemData(stack);

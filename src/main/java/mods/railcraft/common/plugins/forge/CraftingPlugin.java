@@ -251,15 +251,7 @@ public final class CraftingPlugin {
     }
 
     public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
-        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
-        Arrays.fill(grid, ItemStack.EMPTY);
-
-        for (int i = 0; i < grid.length; ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
-            grid[i] = ForgeHooks.getContainerItem(itemstack);
-        }
-
-        return NonNullList.from(ItemStack.EMPTY, grid);
+        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
     public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
