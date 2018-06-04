@@ -157,6 +157,7 @@ jar {
                 include '**/ic2/api/recipe/**'
                 include '**/cofh/redstoneflux/**'
                 exclude '**/cofh/redstoneflux/RedstoneFlux.java'
+                exclude '**/cofh/redstoneflux/RedstoneFlux.class'
                 exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
