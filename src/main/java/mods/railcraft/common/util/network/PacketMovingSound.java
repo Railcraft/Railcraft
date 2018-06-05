@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +24,7 @@ class PacketMovingSound extends RailcraftPacket {
     }
 
     PacketMovingSound(SoundEvent sound, SoundCategory category, EntityMinecart cart, SoundHelper.MovingSoundType type, NBTTagCompound extraData) {
-        this.soundName = ReflectionHelper.getPrivateValue(SoundEvent.class, sound, 1).toString();
+        this.soundName = sound.soundName.toString();
         this.category = category;
         this.id = cart.getEntityId();
         this.type = type;
@@ -49,7 +48,7 @@ class PacketMovingSound extends RailcraftPacket {
         SoundEvent event = new SoundEvent(new ResourceLocation(data.readUTF()));
         SoundHelper.MovingSoundType type = data.readEnum(SoundHelper.MovingSoundType.values());
         NBTTagCompound nbt = data.readNBT();
-        if (entity == null || !(entity instanceof EntityMinecart))
+        if (!(entity instanceof EntityMinecart))
             return;
         type.handle(event, category, (EntityMinecart) entity, nbt);
     }

@@ -27,7 +27,6 @@ import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -46,7 +45,6 @@ public class ContainerAnvil extends ContainerRepair {
     private final EntityPlayer thePlayer;
     private final BlockPos pos;
     private String repairedItemName;
-    private final IInventory inputSlots;
 
     public ContainerAnvil(InventoryPlayer playerInv, World world, BlockPos pos, EntityPlayer player) {
         super(playerInv, world, pos, player);
@@ -57,8 +55,6 @@ public class ContainerAnvil extends ContainerRepair {
         SlotAnvil slot = new SlotAnvil(this, outputSlot, 2, 134, 47, world, pos);
         slot.slotNumber = 2;
         inventorySlots.set(2, slot);
-
-        inputSlots = ObfuscationReflectionHelper.getPrivateValue(ContainerRepair.class, this, 2);
     }
 
     @Override
@@ -137,7 +133,7 @@ public class ContainerAnvil extends ContainerRepair {
 
                     for (@Nullable Enchantment input2Enchantment : input2Enchantments.keySet()) {
                         if (input2Enchantment != null) {
-                            int input1EnchantLevel = input1Enchantments.containsKey(input2Enchantment) ? input1Enchantments.get(input2Enchantment) : 0;
+                            int input1EnchantLevel = input1Enchantments.getOrDefault(input2Enchantment, 0);
                             int input2EnchantLevel = input2Enchantments.get(input2Enchantment);
                             input2EnchantLevel = input1EnchantLevel == input2EnchantLevel ? input2EnchantLevel + 1 : Math.max(input2EnchantLevel, input1EnchantLevel);
                             boolean canApplyEnchants = input2Enchantment.canApply(input1original);

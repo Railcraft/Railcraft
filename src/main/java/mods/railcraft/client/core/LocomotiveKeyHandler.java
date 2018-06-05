@@ -27,7 +27,7 @@ import org.lwjgl.input.Keyboard;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class LocomotiveKeyHandler {
+public final class LocomotiveKeyHandler {
 
     public static final LocomotiveKeyHandler INSTANCE = new LocomotiveKeyHandler();
     private final KeyBinding reverseKey = new KeyBinding("keybind.railcraft.loco.reverse", KeyConflictContext.UNIVERSAL, KeyModifier.ALT, Keyboard.KEY_SLASH, Railcraft.NAME);

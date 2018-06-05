@@ -20,11 +20,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart {
 
@@ -87,7 +84,6 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)))
             return true;
         ItemStack stack = player.getHeldItem(hand);
-        Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 1);
         if (!InvTools.isEmpty(stack)) {
             int burnTime = FuelPlugin.getBurnTime(stack);
 
@@ -95,7 +91,6 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
                 if (!player.capabilities.isCreativeMode)
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
                 fuel += burnTime;
-                ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 1);
 
                 pushX = posX - player.posX;
                 pushZ = posZ - player.posZ;

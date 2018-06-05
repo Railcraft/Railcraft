@@ -19,7 +19,6 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -183,8 +182,8 @@ public class EntityCartBed extends EntityCartBasic {
     }
 
     private static void startSleeping(EntityPlayer player) {
-        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, true, 26);
-        ReflectionHelper.setPrivateValue(EntityPlayer.class, player, 0, 28);
+        player.sleeping = true;
+        player.sleepTimer = 0;
     }
 
     private void sendPlayerRiding(EntityPlayerMP player) {

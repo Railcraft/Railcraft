@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RCSoundHandler {
+public final class RCSoundHandler {
 
     public static final RCSoundHandler INSTANCE = new RCSoundHandler();
 
@@ -58,7 +58,7 @@ public class RCSoundHandler {
                 }
                 if (blockSound != null) {
                     SoundEvent newSound = SoundHelper.matchSoundEvent(soundResource, blockSound);
-                    ObfuscationReflectionHelper.setPrivateValue(PositionedSound.class, (PositionedSound) soundEvent, newSound.getSoundName(), 3);
+//                    ObfuscationReflectionHelper.setPrivateValue(PositionedSound.class, (PositionedSound) soundEvent, newSound.getSoundName(), 3);
                 } else {
                     event.setResultSound(null);
                 }

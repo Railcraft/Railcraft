@@ -12,7 +12,7 @@ package mods.railcraft.common.core;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RailcraftConstants {
+public final class RailcraftConstants {
 
     public static final String RESOURCE_DOMAIN = Railcraft.MOD_ID;
     public static final String SEPERATOR = "_";
@@ -35,4 +35,7 @@ public class RailcraftConstants {
     public static final int BOOK_LINE_LENGTH = 37;
     public static final int BOOK_LINES_PER_PAGE = 13;
     public static final int BOOK_MAX_PAGES = 50;
+
+    private RailcraftConstants() {
+    }
 }

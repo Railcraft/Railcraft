@@ -22,14 +22,14 @@ import java.util.Set;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class APIErrorHandler {
+public final class APIErrorHandler {
 
-    private static final Set<Class> printedWarnings = new HashSet<Class>();
+    private static final Set<Class<?>> printedWarnings = new HashSet<>();
 
     private APIErrorHandler() {
     }
 
-    public static void versionMismatch(Class type) {
+    public static void versionMismatch(Class<?> type) {
         if (!printedWarnings.contains(type)) {
             Game.log(Level.ERROR, "The Railcraft API (" + type.getSimpleName() + ") in one of the mods you are using needs updating, expect odd behaivor.");
             printedWarnings.add(type);

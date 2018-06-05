@@ -29,7 +29,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +41,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SoundHelper {
+public final class SoundHelper {
 
     private static final Map<SoundEvent, Integer> soundLimiterClient = new HashMap<>();
     private static final Map<SoundEvent, Integer> soundLimiterServer = new HashMap<>();
@@ -122,7 +121,7 @@ public class SoundHelper {
     //TODO: test
     public static void playBlockSound(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch, IBlockState state) {
         if (world != null && sound != null) {
-            ResourceLocation soundPath = ReflectionHelper.getPrivateValue(SoundEvent.class, sound, 1);
+            ResourceLocation soundPath = sound.soundName; //ReflectionHelper.getPrivateValue(SoundEvent.class, sound, 1);
             if (matchesSoundResource(soundPath, "override")) {
                 SoundType blockSound = SoundRegistry.getBlockSound(state, world, pos);
                 if (blockSound != null) {

@@ -17,7 +17,6 @@ import mods.railcraft.api.carts.*;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -56,7 +55,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
 
@@ -98,7 +96,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
-    private boolean preReverse;
+//    private boolean preReverse;
 
     private EnumSet<LocoMode> allowedModes = EnumSet.allOf(LocoMode.class);
     private LocoSpeed maxReverseSpeed = LocoSpeed.NORMAL;
@@ -182,7 +180,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         return item;
     }
 
-    @Nullable
     protected abstract ItemStack getCartItemBase();
 
     @Override
@@ -235,7 +232,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             dataManager.set(EMBLEM, emblem);
     }
 
-    @Nullable
     public ItemStack getDestItem() {
         return getTicketInventory().getStackInSlot(1);
     }
@@ -575,7 +571,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
+        //Boolean isInReverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, this, RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         data.setBoolean("isInReverse", isInReverse);
 
@@ -604,7 +600,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
-        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
+        isInReverse = data.getBoolean("isInReverse");
+//        ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, this, data.getBoolean("isInReverse"), RailcraftConstants.IS_REVERSED_VARIABLE_INDEX);
 
         model = data.getString("model");
 
@@ -801,8 +798,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         }
 
         public LocoSpeed shiftUp() {
-            LocoSpeed newSpeed = LocoSpeed.VALUES[ordinal() + shiftUp];
-            return newSpeed;
+            return LocoSpeed.VALUES[ordinal() + shiftUp];
         }
 
         public LocoSpeed shiftDown() {

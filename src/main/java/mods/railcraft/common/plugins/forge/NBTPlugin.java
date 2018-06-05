@@ -15,7 +15,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ import java.util.UUID;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class NBTPlugin {
+public final class NBTPlugin {
     @Nullable
     public static NBTTagCompound makeGameProfileTag(@Nullable GameProfile profile) {
         if (profile == null || (profile.getName() == null && profile.getId() == null))
@@ -167,8 +166,9 @@ public class NBTPlugin {
 
         private final List<T> backingList;
 
+        @SuppressWarnings("unchecked")
         NBTList(NBTTagList nbtList) {
-            backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
+            backingList = (List<T>) nbtList.tagList;
         }
 
         @Override

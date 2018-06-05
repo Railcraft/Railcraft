@@ -26,7 +26,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -80,8 +79,8 @@ public final class EntityCartJukebox extends CartBase {
                 dec(heldItem);
             player.addStat(StatList.RECORD_PLAYED);
             ItemRecord item = (ItemRecord) record.getItem();
-            SoundEvent sound = ReflectionHelper.getPrivateValue(ItemRecord.class, item, 1);
-            String display = ReflectionHelper.getPrivateValue(ItemRecord.class, item, 2);
+            SoundEvent sound = item.sound; // ReflectionHelper.getPrivateValue(ItemRecord.class, item, 1);
+            String display = item.displayName; // ReflectionHelper.getPrivateValue(ItemRecord.class, item, 2);
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString(RECORD_DISPLAY_NAME, display);
             PacketBuilder.instance().sendMovingSoundPacket(sound, SoundCategory.RECORDS, this, SoundHelper.MovingSoundType.RECORD, tag);

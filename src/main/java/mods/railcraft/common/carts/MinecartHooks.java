@@ -40,14 +40,12 @@ import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static mods.railcraft.common.core.RailcraftConstants.IS_REVERSED_VARIABLE_INDEX;
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
@@ -248,8 +246,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         float cutoff = 120F;
         if (distance < -cutoff || distance >= cutoff) {
             cart.rotationYaw += 180.0F;
-            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
-            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
+            cart.isInReverse = !cart.isInReverse;
+//            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
+//            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
             cart.rotationYaw = cart.rotationYaw % 360.0F;
         }
 

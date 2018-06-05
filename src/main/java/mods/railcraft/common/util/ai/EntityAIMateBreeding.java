@@ -82,8 +82,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
         if (sitPriority > 0) {
             EntityAISitBred aiSit = new EntityAISitBred((EntityTameable) animal);
             animal.tasks.addTask(sitPriority, aiSit);
-//            ObfuscationReflectionHelper.setPrivateValue(EntityTameable.class, (EntityTameable)animal, aiSit, "d", "aiSit");
-            ObfuscationReflectionHelper.setPrivateValue(EntityTameable.class, (EntityTameable) animal, aiSit, 0);
+            ((EntityTameable) animal).aiSit = aiSit;
         }
     }
 
