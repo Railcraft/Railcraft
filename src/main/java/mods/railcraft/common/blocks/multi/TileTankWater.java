@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileTank;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -115,8 +115,7 @@ public class TileTankWater extends TileTank {
     public static void placeWaterTank(World world, BlockPos pos, int water) {
         MultiBlockPattern pattern = TileTankWater.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        //TODO
-//        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getDefaultState());
+        blockMapping.put('B', RailcraftBlocks.TANK_WATER.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankWater) {
             TileTankWater master = (TileTankWater) tile;
