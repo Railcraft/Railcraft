@@ -13,12 +13,14 @@ package mods.railcraft.common.plugins.forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
 import mods.railcraft.common.items.ItemWrapper;
+import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Field;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by CovertJaguar on 4/26/2017 for Railcraft.
@@ -32,15 +34,17 @@ public class ItemBackpackWrapper extends ItemWrapper {
 
     @Override
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void initializeClient() {
         ((IItemModelRegister) getObject()).registerModel(getObject(), ForestryAPI.modelManager);
         try {
             Field itemColorList = ForestryAPI.modelManager.getClass().getDeclaredField("itemColorList");
             itemColorList.setAccessible(true);
             //TODO this is not a list
-            List list = (List) itemColorList.get(ForestryAPI.modelManager);
+            Set<Object> list = (Set<Object>) itemColorList.get(ForestryAPI.modelManager);
             list.add(getObject());
-        } catch (NoSuchFieldException | IllegalAccessException | ClassCastException ignored) {
+        } catch (NoSuchFieldException | IllegalAccessException | ClassCastException ex) {
+            Game.logErrorAPI(Mod.FORESTRY.modId, ex, ForestryAPI.modelManager.getClass());
         }
     }
 }

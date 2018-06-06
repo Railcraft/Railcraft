@@ -13,7 +13,7 @@
     "logoFile": "assets/railcraft/logo.png",
     "screenshots": [],
     "parent": "",
-    "requiredMods": [ "Forge" ],
+    "requiredMods": [ "forge" ],
     "dependencies": [],
     "dependants": [ "railcraftretrogen" ],
     "useDependencyInformation": false

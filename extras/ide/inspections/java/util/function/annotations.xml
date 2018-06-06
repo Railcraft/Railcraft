@@ -2,7 +2,4 @@
     <item name='java.util.function.Function R apply(T)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
-    <item name='java.util.function.Supplier T get()'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
 </root>

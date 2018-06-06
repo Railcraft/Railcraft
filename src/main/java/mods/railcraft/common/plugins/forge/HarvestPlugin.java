@@ -27,7 +27,7 @@ import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class HarvestPlugin {
+public final class HarvestPlugin {
 
     public enum ToolClass {
         PICKAXE("pickaxe"),

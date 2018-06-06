@@ -13,7 +13,6 @@ import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IFilterItem;
 import mods.railcraft.api.core.items.InvToolsAPI;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
@@ -120,7 +119,6 @@ public abstract class InvTools {
             return new ItemStack(item, qty, meta);
         return emptyStack();
     }
-
 
     public static ItemStack makeStack(@Nullable Block block, int qty, int meta) {
         if (block != null)
@@ -460,8 +458,8 @@ public abstract class InvTools {
     /**
      * Attempts to move a single item from one inventory to another.
      *
-     * @param source  the source inventory
-     * @param dest    the destination inventory
+     * @param source the source inventory
+     * @param dest   the destination inventory
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
@@ -985,7 +983,7 @@ public abstract class InvTools {
             int meta = item.getMetadata(stack.getMetadata());
             if (world instanceof WorldServer)
                 return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()), EnumHand.MAIN_HAND);
-            //TODO fix get state for placement for that hand
+                //TODO fix get state for placement for that hand
             else
                 return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
         }

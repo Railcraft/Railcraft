@@ -28,7 +28,7 @@ import java.util.function.ToIntFunction;
  * <url https://github.com/AtomicStryker/atomicstrykers-minecraft-mods/blob/1.10/DynamicLights/>
  * Dynamic Lights</url>
  */
-public class DynamicLightsPlugin {
+public final class DynamicLightsPlugin {
     public static final String MOD_ID = "DynamicLights";
     private static final DynamicLightsPlugin INSTANCE = new DynamicLightsPlugin();
 
@@ -72,7 +72,7 @@ public class DynamicLightsPlugin {
         private Method addLightSource;
         private Map<Class<? extends Entity>, ToIntFunction<Entity>> lightCalculatorMap;
 
-        private PresentHandle(Method addLightSource) {
+        PresentHandle(Method addLightSource) {
             this.addLightSource = addLightSource;
             lightCalculatorMap = new ConcurrentHashMap<>();
             MinecraftForge.EVENT_BUS.register(this);

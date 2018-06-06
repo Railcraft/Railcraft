@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryComposite extends ForwardingList<IInventoryObject> implements IInventoryComposite {
+public final class InventoryComposite extends ForwardingList<IInventoryObject> implements IInventoryComposite {
     private final List<IInventoryObject> list = new ArrayList<>(10);
 
     private InventoryComposite(IInventoryObject... objects) {
