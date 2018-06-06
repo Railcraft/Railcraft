@@ -38,10 +38,11 @@ public class ItemTie extends ItemRailcraftSubtyped {
     @Override
     public void defineRecipes() {
         ItemStack tieStone = RailcraftItems.TIE.getStack(1, EnumTie.STONE);
+        FluidStack water = Fluids.WATER.getB(1);
         CraftingPlugin.addRecipe(tieStone,
                 " O ",
                 "#r#",
-                'O', Items.WATER_BUCKET,
+                'O', water,
                 'r', RailcraftItems.REBAR,
                 '#', RailcraftItems.CONCRETE);
     }

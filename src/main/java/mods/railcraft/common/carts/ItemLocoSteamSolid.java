@@ -43,7 +43,7 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
 //        else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
 //            tank = EnumMachineBeta.TANK_IRON_WALL.getStack();
         if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
-            tank = Metal.STEEL.getStack(Metal.Form.PLATE);
+            tank = Metal.STEEL.getOreTag(Metal.Form.PLATE);
         else if (OreDictPlugin.oreExists("ingotSteel"))
             tank = "ingotSteel";
         else
