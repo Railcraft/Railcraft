@@ -15,11 +15,15 @@ import mods.railcraft.common.core.IRailcraftObjectContainer;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {};
+    final static Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
+
     final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
     ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
@@ -82,7 +86,13 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void init() {
-            objectContainers.forEach(IRailcraftObjectContainer::defineRecipes);
+            objectContainers.forEach(roc -> {
+                //Use a set to avoid redefine recipes
+                if (!definedContainers.contains(roc)) {
+                    roc.defineRecipes();
+                    definedContainers.add(roc);
+                }
+            });
             enabledEventHandler.init();
         }
 

@@ -48,6 +48,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
+        drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, par3);
         int left = guiLeft;
         int top = guiTop;
