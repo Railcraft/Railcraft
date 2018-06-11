@@ -21,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -163,7 +162,6 @@ public class TokenRing implements ITokenRing {
         return centroid;
     }
 
-    @Nullable
     private BlockPos calculateCentroid() {
         double x = 0;
         double y = 0;

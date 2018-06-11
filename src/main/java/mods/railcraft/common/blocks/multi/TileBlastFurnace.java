@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -41,9 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
@@ -135,7 +135,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);

@@ -48,9 +48,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.*;
 
-@Optional.InterfaceList({
-        @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API")
-})
+@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "ic2")
 public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailcraftItemSimple {
 
     public static final String ORE_TAG = "toolSpikeMaul";

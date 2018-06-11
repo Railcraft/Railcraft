@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
@@ -51,9 +53,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.FACING;
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
@@ -121,7 +121,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
 
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {

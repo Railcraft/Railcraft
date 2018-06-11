@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerTank;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
@@ -31,8 +32,9 @@ public class GuiTank extends TileGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+//        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate(tile.getTitle()));
 //        fontRenderer.drawString(RailcraftLanguage.translate("railcraft.gui.liquid.capacity") + ": " + tile.getTanks()[0].getCapacity(), 30, 100, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

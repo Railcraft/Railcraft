@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryManifest extends ForwardingMap<StackKey, InventoryManifest.ManifestEntry> {
+public final class InventoryManifest extends ForwardingMap<StackKey, InventoryManifest.ManifestEntry> {
 
     private Map<StackKey, ManifestEntry> entries = new HashMap<>();
 
@@ -94,7 +94,7 @@ public class InventoryManifest extends ForwardingMap<StackKey, InventoryManifest
 
     public static class ManifestEntry {
         private final StackKey key;
-        private final List<ItemStack> stacks = new ArrayList<>();
+        final List<ItemStack> stacks = new ArrayList<>();
 
         public ManifestEntry(StackKey key) {
             this.key = key;

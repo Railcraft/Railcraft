@@ -67,7 +67,7 @@ public interface ISmartTile {
      */
     default void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), tile().getWorld(), tile().getPos());
+            InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
     }
 
     default boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {

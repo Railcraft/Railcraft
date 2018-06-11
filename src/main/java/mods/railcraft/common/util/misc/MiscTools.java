@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
+import com.google.common.base.Predicate;
 import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.entity.Entity;
@@ -26,7 +27,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -40,22 +40,22 @@ public final class MiscTools {
     }
 
     @Nonnull
-    private static final Predicate<Entity> livingEntitySelector = entity -> entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
+    private static final Predicate<Entity> livingEntitySelector = entity -> entity != null && entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
         AxisAlignedBB box = AABBFactory.start().setBounds(x, minY, z, x + 1, maxY, z + 1).expandHorizontally(radius).build();
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
     @Nullable
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
+        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
             return entities.get(0);
         return null;

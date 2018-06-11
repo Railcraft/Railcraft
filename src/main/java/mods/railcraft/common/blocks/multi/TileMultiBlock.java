@@ -17,7 +17,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -43,6 +42,10 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ *
+ * @param <T> The component tile class
+ */
 public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends RailcraftTickingTileEntity implements ISmartTile {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
@@ -95,7 +98,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
 
     protected void onPatternChanged() {
         if (!isMaster && this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), world, getPos());
+            InvTools.dropInventory((IInventory) this, world, getPos());
     }
 
     public final char getPatternMarker() {
@@ -108,7 +111,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
         return posInPattern;
     }
 
-    protected void setPatternPosition(byte x, byte y, byte z) {
+    protected void setPatternPosition(int x, int y, int z) {
         posInPattern = new BlockPos(x, y, z);
     }
 
@@ -140,7 +143,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
         super.update();
         if (Game.isHost(world)) {
             if (!tested && (state != MultiBlockState.UNKNOWN || clock % UNKNOWN_STATE_RECHECK == 0))
-                testIfMasterBlock(); //                ClientProxy.getMod().totalMultiBlockUpdates++;
+                testIfMasterBlock();
         } else if (requestPacket && netTimer.hasTriggered(world, NETWORK_RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(this));
             requestPacket = false;
@@ -165,9 +168,9 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
 
             BlockPos offset = getPos().subtract(currentPattern.getMasterOffset());
 
-            for (byte px = 0; px < xWidth; px++) {
-                for (byte py = 0; py < height; py++) {
-                    for (byte pz = 0; pz < zWidth; pz++) {
+            for (int px = 0; px < xWidth; px++) {
+                for (int py = 0; py < height; py++) {
+                    for (int pz = 0; pz < zWidth; pz++) {
 
                         char marker = currentPattern.getPatternMarker(px, py, pz);
                         if (isMapPositionOtherBlock(marker))

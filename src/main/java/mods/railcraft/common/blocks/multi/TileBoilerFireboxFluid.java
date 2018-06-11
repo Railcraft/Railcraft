@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -30,8 +32,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -51,7 +51,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
     public static void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
-                Map<Character, IBlockState> blockMapping = new HashMap<>();
+                Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
 //              //TODO
 //                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.getDefaultState());
 //                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());

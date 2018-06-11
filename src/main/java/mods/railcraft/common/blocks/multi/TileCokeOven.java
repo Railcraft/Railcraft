@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -38,9 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
@@ -110,7 +110,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);

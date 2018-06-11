@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
@@ -37,9 +39,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -113,7 +113,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
 
     public static void placeWaterTank(World world, BlockPos pos, int water) {
         MultiBlockPattern pattern = TileTankWater.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_WATER.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankWater) {

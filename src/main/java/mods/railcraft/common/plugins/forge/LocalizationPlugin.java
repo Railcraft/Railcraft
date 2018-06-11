@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class LocalizationPlugin {
+public final class LocalizationPlugin {
     public static final String ENGLISH = "en_US";
 
     public static String convertTag(String tag) {

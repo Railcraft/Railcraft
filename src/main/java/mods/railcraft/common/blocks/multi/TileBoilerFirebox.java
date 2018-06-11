@@ -59,8 +59,8 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
         int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
         tankManager.setCapacity(TANK_WATER, capacity * 4);
-        boiler.setMaxHeat(((BoilerPattern) pattern).maxHeat);
-        boiler.setTicksPerCycle(((BoilerPattern) pattern).ticksPerCycle);
+        boiler.setMaxHeat(pattern.getAttachedData(BoilerData.EMPTY).maxHeat);
+        boiler.setTicksPerCycle(pattern.getAttachedData(BoilerData.EMPTY).ticksPerCycle);
     }
 
     public boolean isBurning() {

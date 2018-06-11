@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL12;
 import java.util.Collection;
 import java.util.List;
 
-public class GuiTools {
+public final class GuiTools {
 
     public static void drawCenteredString(FontRenderer fr, IWorldNameable nameable) {
         ITextComponent name = nameable.getDisplayName();
@@ -37,6 +37,10 @@ public class GuiTools {
         ITextComponent name = nameable.getDisplayName();
         if (name != null)
             drawCenteredString(fr, name.getFormattedText(), y);
+    }
+
+    public static void drawCenteredString(FontRenderer fr, String s) {
+        drawCenteredString(fr, s, 6);
     }
 
     public static void drawCenteredString(FontRenderer fr, String s, int y) {

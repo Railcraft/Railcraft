@@ -18,6 +18,7 @@ import mods.railcraft.api.signals.TrackLocator;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -33,10 +34,10 @@ import net.minecraftforge.fml.common.Optional;
 
 import java.util.Objects;
 
-@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
+@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "ic2")
 public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable {
     public ItemSignalBlockSurveyor() {
-        super("gui.railcraft.surveyor");
+        super("gui.railcraft.surveyor.");
     }
 
     @Override

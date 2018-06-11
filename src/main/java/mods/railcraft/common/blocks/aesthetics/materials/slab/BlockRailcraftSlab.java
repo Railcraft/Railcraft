@@ -138,7 +138,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @SuppressWarnings("unused")
     public static Materials getTopSlab(IBlockAccess world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getTopSlab();
         return Materials.NO_MAT;
@@ -146,7 +146,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @SuppressWarnings("unused")
     public static Materials getBottomSlab(IBlockAccess world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getBottomSlab();
         return Materials.NO_MAT;
@@ -154,7 +154,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Nullable
     static TileSlab getSlabTile(IBlockAccess world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile);
         return null;
@@ -170,7 +170,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab) {
             Materials slab = ((TileSlab) tile).getUpmostSlab();
             return getStack(1, slab);
@@ -185,7 +185,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileSlab) {
             Materials top = ((TileSlab) tile).getTopSlab();
@@ -220,7 +220,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
-        TileEntity tile = worldIn.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
         if (tile instanceof TileSlab) {
             Materials top = ((TileSlab) tile).getTopSlab();
             Materials bottom = ((TileSlab) tile).getBottomSlab();
@@ -238,7 +238,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab) {
             TileSlab slab = (TileSlab) tile;
             Materials top = slab.getTopSlab();
@@ -269,7 +269,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab) {
             Materials slab = ((TileSlab) tile).getUpmostSlab();
             return slab.getSound();
@@ -319,7 +319,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         BlockPos offsetPos = pos.offset(side);
 
-        TileEntity tile = worldIn.getTileEntity(pos);
+        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
         if (tile instanceof TileSlab) {
             TileSlab slab = (TileSlab) tile;
             Materials top = slab.getTopSlab();

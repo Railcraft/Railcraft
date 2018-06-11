@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
@@ -71,7 +73,7 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
 
     public static void placeFluxTransformer(World world, BlockPos pos) {
         MultiBlockPattern pattern = TileFluxTransformer.patterns.get(0);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.FLUX_TRANSFORMER.getDefaultState());
         pattern.placeStructure(world, pos, blockMapping);
     }
@@ -99,7 +101,7 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
     @NotNull
     @Override
     public EnumGui getGui() {
-        throw new Error();
+        throw new UnsupportedOperationException("No GUI");
     }
 
     @Override

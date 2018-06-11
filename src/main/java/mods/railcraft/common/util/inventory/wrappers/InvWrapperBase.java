@@ -27,7 +27,7 @@ import java.util.Iterator;
 public abstract class InvWrapperBase implements IInventory, IInventoryObject, IInventoryComposite {
 
     private final IInventory inv;
-    private boolean checkItems = true;
+    private boolean checkItems;
 
     protected InvWrapperBase(IInventory inv) {
         this(inv, true);

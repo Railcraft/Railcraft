@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class MultiBlockHelper implements StructureHelper {
+public final class MultiBlockHelper implements StructureHelper {
 
     @Override
     public void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {

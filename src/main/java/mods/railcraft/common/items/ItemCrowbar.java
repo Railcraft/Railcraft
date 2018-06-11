@@ -47,10 +47,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Optional.InterfaceList({
-        @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
-        @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
-})
+@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "ic2")
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
 public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItemSimple {
 
     private static final int BOOST_DAMAGE = 1;

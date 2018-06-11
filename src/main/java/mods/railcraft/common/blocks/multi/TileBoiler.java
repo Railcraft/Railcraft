@@ -17,8 +17,8 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
-import mods.railcraft.common.util.steam.SteamConstants;
 import mods.railcraft.common.util.steam.SteamBoiler;
+import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,8 +54,8 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
     public static final float HEAT_LOW = SteamConstants.MAX_HEAT_LOW;
     public static final float HEAT_HIGH = SteamConstants.MAX_HEAT_HIGH;
     protected static final List<MultiBlockPattern> patterns = new ArrayList<>();
-    private static final Set<Integer> boilerBlocks = new HashSet<>();
-    private static final Set<Integer> fireboxBlocks = new HashSet<>();
+    private static final Set<IBlockState> boilerBlocks = new HashSet<>();
+    private static final Set<IBlockState> fireboxBlocks = new HashSet<>();
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tankWater;
     protected final FilteredTank tankSteam;
@@ -109,37 +109,46 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
     }
 
     private static MultiBlockPattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
-        char[][][] map = new char[tankHeight + 3][width + 2][width + 2];
-
+        MultiBlockPattern.Builder builder = MultiBlockPattern.builder();
+        char[][] level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                map[0][x][z] = 'O';
+                level[x][z] = MultiBlockPattern.EMPTY_PATTERN;
             }
         }
+        builder.level(level);
 
+        level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? 'O' : 'F';
-                map[1][x][z] = m;
+                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_PATTERN : 'F';
+                level[x][z] = m;
             }
         }
+        builder.level(level);
 
         for (int y = 2; y < tankHeight + 2; y++) {
+            level = new char[width + 2][width + 2];
             for (int x = 0; x < width + 2; x++) {
                 for (int z = 0; z < width + 2; z++) {
-                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? 'O' : tank;
-                    map[y][x][z] = m;
+                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_PATTERN : tank;
+                    level[x][z] = m;
                 }
             }
+            builder.level(level);
         }
 
+        level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                map[tankHeight + 2][x][z] = 'O';
+                level[x][z] = MultiBlockPattern.EMPTY_PATTERN;
             }
         }
-
-        return new BoilerPattern(map, width * width * tankHeight, ticks, heat, capacity, offset, offset);
+        return builder
+                .level(level)
+                .attachedData(new BoilerData(width * width * tankHeight, ticks, heat, capacity))
+                .master(offset, 1, offset)
+                .build();
     }
 
     @Override
@@ -154,33 +163,33 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
 
     public int getNumTanks() {
         MultiBlockPattern pattern = getPattern();
-        return ((BoilerPattern) pattern).numTanks;
+        return pattern.getAttachedData(BoilerData.EMPTY).numTanks;
     }
 
     public float getMaxHeat() {
         MultiBlockPattern pattern = getPattern();
-        return ((BoilerPattern) pattern).maxHeat;
+        return pattern.getAttachedData(BoilerData.EMPTY).maxHeat;
     }
 
     public int getTicksPerConversion() {
         MultiBlockPattern pattern = getPattern();
-        return ((BoilerPattern) pattern).ticksPerCycle;
+        return pattern.getAttachedData(BoilerData.EMPTY).ticksPerCycle;
     }
 
     public int getSteamCapacityPerTank() {
         MultiBlockPattern pattern = getPattern();
-        return ((BoilerPattern) pattern).steamCapacity;
+        return pattern.getAttachedData(BoilerData.EMPTY).steamCapacity;
     }
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        TileBoilerFirebox<?> mBlock = (TileBoilerFirebox) getMasterBlock();
         return mBlock != null && mBlock.needsFuel();
     }
 
     @Override
     public float getTemperature() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        TileBoilerFirebox<?> mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return (float) mBlock.boiler.getHeat();
         return SteamConstants.COLD_TEMP;
@@ -188,7 +197,7 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
 
     @Override
     public SteamBoiler getBoiler() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        TileBoilerFirebox<?> mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.boiler;
         return null;
@@ -222,7 +231,7 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
                 explode = false;
                 return;
             }
-            TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+            TileBoilerFirebox<?> mBlock = (TileBoilerFirebox) getMasterBlock();
             if (mBlock != null) {
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
@@ -256,7 +265,7 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
                 if (block == getBlockType() && boilerBlocks.contains(meta))
                     return false;
                 break;
-                //TODO
+            //TODO
 //            case 'L': // Tank
 //                if (block != getBlockType() || meta != EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal())
 //                    return false;
@@ -281,19 +290,21 @@ public abstract class TileBoiler<S extends TileBoiler<S>> extends TileMultiBlock
     protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileBoiler;
     }
+}
 
-    public static class BoilerPattern extends MultiBlockPattern {
-        public final int numTanks;
-        public final int ticksPerCycle;
-        public final float maxHeat;
-        public final int steamCapacity;
+final class BoilerData {
 
-        public BoilerPattern(char[][][] pattern, int tanks, int ticks, float heat, int capacity, int xOffset, int yOffset) {
-            super(pattern, xOffset, 1, yOffset);
-            numTanks = tanks;
-            ticksPerCycle = ticks;
-            this.maxHeat = heat;
-            this.steamCapacity = capacity;
-        }
+    static final BoilerData EMPTY = new BoilerData(0, 0, 0f, 0);
+
+    final int numTanks;
+    final int ticksPerCycle;
+    final float maxHeat;
+    final int steamCapacity;
+
+    BoilerData(int tanks, int ticks, float heat, int capacity) {
+        this.numTanks = tanks;
+        this.ticksPerCycle = ticks;
+        this.maxHeat = heat;
+        this.steamCapacity = capacity;
     }
 }

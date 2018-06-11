@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -52,7 +54,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -77,7 +81,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
     private EnumColor color = EnumColor.WHITE;
     private FluidStack previousFluidStack;
 
-    TileTankBase() {
+    protected TileTankBase() {
         super(patterns);
         genericClass = TileTankBase.class;
         inv = new StandaloneInventory(2, "gui.tank.iron", this);
@@ -86,7 +90,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
 
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_IRON_WALL.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.TANK_IRON_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
@@ -98,7 +102,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
 
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);

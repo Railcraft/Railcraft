@@ -217,7 +217,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine> imp
         }
 
         TankManager tMan = getTankManager();
-        if (tMan != null)
+        if (!tMan.isEmpty())
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
     }
 

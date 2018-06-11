@@ -86,7 +86,7 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
      */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), world, getPos());
+            InvTools.dropInventory((IInventory) this, world, getPos());
     }
 
     public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {

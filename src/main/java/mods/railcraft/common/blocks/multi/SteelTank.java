@@ -33,7 +33,7 @@ public class SteelTank implements MetalTank {
 
     @Override
     public String getTitle() {
-        return LocalizationPlugin.translate("gui.railcraft.tank.steel");
+        return "gui.railcraft.tank.steel";
     }
 
     @Override

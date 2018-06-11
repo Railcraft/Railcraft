@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.Optional;
 
 import java.util.Objects;
 
-@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
+@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "ic2")
 public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
     private static final String LOC_PREFIX = "gui.railcraft.tuner.";
 

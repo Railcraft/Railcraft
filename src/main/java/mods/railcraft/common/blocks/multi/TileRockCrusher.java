@@ -10,6 +10,8 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
@@ -156,7 +158,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
-        Map<Character, IBlockState> blockMapping = new HashMap<>();
+        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         IBlockState state = RailcraftBlocks.ROCK_CRUSHER.getState(null);
         blockMapping.put('B', state);
         blockMapping.put('D', state);

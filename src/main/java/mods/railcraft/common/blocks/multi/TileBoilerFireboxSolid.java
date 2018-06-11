@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -70,7 +72,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
     public static void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
-                Map<Character, IBlockState> blockMapping = new HashMap<>();
+                Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
                 //TODO
 //                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
 //                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
