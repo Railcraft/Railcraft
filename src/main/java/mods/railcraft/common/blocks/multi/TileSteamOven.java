@@ -263,6 +263,8 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
             else
                 master.facing = face;
             master.scheduleMasterRetest();
+            if (Game.isClient(world))
+                markBlockForUpdate();
             return true;
         }
         return false;
@@ -301,14 +303,14 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte(facing.ordinal());
+        data.writeEnum(facing);
         data.writeBoolean(finishedCycle);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        EnumFacing f = EnumFacing.getFront(data.readByte());
+        EnumFacing f = data.readEnum(EnumFacing.VALUES);
         finishedCycle = data.readBoolean();
         if (facing != f) {
             facing = f;
