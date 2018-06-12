@@ -284,4 +284,9 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     public EnumFacing getFacing() {
         return direction;
     }
+
+    @Override
+    public String getLocalizationTag() {
+        return super.getLocalizationTag() + ".name";
+    }
 }
