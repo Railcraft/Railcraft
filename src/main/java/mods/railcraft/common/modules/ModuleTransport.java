@@ -10,20 +10,14 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -160,41 +154,6 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                'W', new ItemStack(Item.wheat),
 //                'P', ItemPlate.getPlate(ItemPlate.EnumPlate.STEEL));
             }
-
-            private void addColorRecipes(EnumMachineBeta type) {
-                for (EnumColor color : EnumColor.VALUES) {
-                    ItemStack output = getColorTank(type, color, 8);
-                    CraftingPlugin.addRecipe(output,
-                            "OOO",
-                            "ODO",
-                            "OOO",
-                            'O', type.getStack(),
-                            'D', color.getDyeOreDictTag());
-                }
-            }
-
-            private ItemStack getColorTank(EnumMachineBeta type, EnumColor color, int qty) {
-                ItemStack stack = type.getStack(qty);
-                color.setItemColor(stack);
-                return stack;
-            }
-
-            private boolean defineTank(EnumMachineBeta type, Object... recipe) {
-                if (type.isAvailable()) {
-                    addColorRecipes(type);
-                    CraftingPlugin.addRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
-                    return true;
-                }
-                return false;
-            }
-
-//            private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
-//                if (defineTank(type, recipe)) {
-//                    RailcraftCraftingManager.getBlastFurnaceCraftings().addRecipe(type.getStack(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
-//                    return true;
-//                }
-//                return false;
-//            }
 
 //            private void initIronTank() {
 //                defineIronTank(EnumMachineBeta.TANK_IRON_WALL,

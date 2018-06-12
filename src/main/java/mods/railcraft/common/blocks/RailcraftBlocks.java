@@ -31,13 +31,9 @@ import mods.railcraft.common.blocks.charge.*;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.logbook.BlockLogbook;
-import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
@@ -109,12 +105,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
-    @Deprecated
-    MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
-    @Deprecated
-    MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
-    @Deprecated
-    MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
+    //    @Deprecated
+//    MACHINE_ALPHA("machine_alpha", BlockMachine.class, () -> new BlockMachine<EnumMachineAlpha>(true), ItemMachine::new),
+//    @Deprecated
+//    MACHINE_BETA("machine_beta", BlockMachine.class, () -> new BlockMachine<EnumMachineBeta>(false), ItemMachine::new),
+//    @Deprecated
+//    MACHINE_EPSILON("machine_epsilon", BlockMachine.class, () -> new BlockMachine<EnumMachineEpsilon>(true), ItemMachine::new),
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
     ORE("ore", BlockOre.class, BlockOre::new, ItemBlockRailcraftSubtyped::new),
     ORE_MAGIC("ore_magic", BlockOreMagic.class, BlockOreMagic::new, ItemOreMagic::new),
@@ -154,12 +150,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
-    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemTankIronGauge::new),
-    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemTankIronValve::new),
-    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemTankIronWall::new),
-    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemTankSteelGauge::new),
-    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemTankSteelValve::new),
-    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemTankSteelWall::new),
+    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockRailcraftSubtyped::new),
+    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockRailcraftSubtyped::new),
+    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockRailcraftSubtyped::new),
+    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockRailcraftSubtyped::new),
+    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockRailcraftSubtyped::new),
+    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockRailcraftSubtyped::new),
     TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemTankWater::new),
     FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemFluxTransformer::new),
     // others

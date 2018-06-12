@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -26,7 +36,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,8 +45,6 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -159,10 +166,6 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canConnectRedstone(side)).orElse(false);
-    }
-
-    public void initFromItem(World world, BlockPos pos, ItemStack stack) {
-        WorldPlugin.getTileEntity(world, pos, ISmartTile.class).ifPresent(t -> t.initFromItem(stack));
     }
 
     @Override

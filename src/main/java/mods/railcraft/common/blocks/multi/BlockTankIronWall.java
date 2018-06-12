@@ -1,5 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -9,15 +21,23 @@ import net.minecraft.world.World;
 /**
  *
  */
-public class BlockTankIronWall extends BlockMultiBlock {
+public class BlockTankIronWall extends BlockTankIron {
 
     public BlockTankIronWall() {
-        super(Material.ROCK);
+        super(Material.IRON);
         setHarvestLevel("pickaxe", 1);
     }
 
     @Override
-    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
+    public void defineRecipes() {
+        super.defineRecipes();
+        addRecipe("PP",
+                "PP",
+                'P', RailcraftItems.PLATE, Metal.IRON);
+    }
+
+    @Override
+    public TileMultiBlock createTileEntity(World world, IBlockState state) {
         return new TileTankIronWall();
     }
 

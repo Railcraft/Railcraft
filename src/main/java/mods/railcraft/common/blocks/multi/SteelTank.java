@@ -23,12 +23,12 @@ import java.util.Set;
  */
 public class SteelTank implements MetalTank {
 
-    private final Set<IBlockState> tankBlocks = new HashSet<>();
+    private final Set<RailcraftBlocks> tankBlocks = new HashSet<>();
 
     public SteelTank() {
-        tankBlocks.add(RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
-        tankBlocks.add(RailcraftBlocks.TANK_STEEL_VALVE.getDefaultState());
-        tankBlocks.add(RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_GAUGE);
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_VALVE);
+        tankBlocks.add(RailcraftBlocks.TANK_STEEL_WALL);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class SteelTank implements MetalTank {
     }
 
     @Override
-    public boolean isTankBlock(IBlockState meta) {
-        return tankBlocks.contains(meta);
+    public boolean isTankBlock(IBlockState state) {
+        return tankBlocks.stream().anyMatch(b -> b.isEqual(state));
     }
 
     @Override
-    public boolean isWallBlock(IBlockState meta) {
-        return RailcraftBlocks.TANK_STEEL_WALL.isEqual(meta.getBlock());
+    public boolean isWallBlock(IBlockState state) {
+        return RailcraftBlocks.TANK_STEEL_WALL.isEqual(state);
     }
 
     @Override

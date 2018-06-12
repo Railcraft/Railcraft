@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.ItemBlockEntityDelegate;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -28,18 +27,6 @@ public class ItemMultiBlock extends ItemBlockEntityDelegate {
     public ItemMultiBlock(Block block) {
         super(block);
         this.multiBlock = (BlockMultiBlock) block;
-    }
-
-    @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        if (!super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState))
-            return false;
-
-        if (world.getBlockState(pos).getBlock() == getBlock()) {
-            multiBlock.initFromItem(world, pos, stack);
-        }
-
-        return true;
     }
 
     @Override

@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks;
 
 import com.google.common.collect.Lists;
@@ -41,22 +51,6 @@ public interface ISmartTile {
 
     default boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
-    }
-
-    default void addDrops(List<ItemStack> drops, int fortune) {
-        drops.add(new ItemStack(tile().getBlockType()));
-    }
-
-    default List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        return Lists.newArrayList(new ItemStack(tile().getBlockType()));
-    }
-
-    default boolean canSilkHarvest(EntityPlayer player) {
-        return true;
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    default void initFromItem(ItemStack stack) {
     }
 
     default void onBlockAdded() {
