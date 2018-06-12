@@ -454,7 +454,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    protected boolean isStructureTile(TileEntity tile) {
+    protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileTankBase;
     }
 
