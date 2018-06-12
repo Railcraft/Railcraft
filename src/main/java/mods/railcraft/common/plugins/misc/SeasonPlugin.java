@@ -24,7 +24,7 @@ import java.util.Calendar;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SeasonPlugin {
+public final class SeasonPlugin {
     public static final boolean HARVEST;
     public static final boolean HALLOWEEN;
     public static final boolean CHRISTMAS;

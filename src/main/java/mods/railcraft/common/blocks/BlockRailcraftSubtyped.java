@@ -57,13 +57,12 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
             //noinspection unchecked
             this.variantClass = (Class<V>) annotation.variant();
             this.variantValues = variantClass.getEnumConstants();
-            this.variantProperty = PropertyEnum.create("variant", variantClass);
+            this.variantProperty = PropertyEnum.create("variant", variantClass, variantValues);
         }
     }
 
     @Override
     public final IProperty<V> getVariantProperty() {
-        setup();
         return variantProperty;
     }
 

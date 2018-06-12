@@ -47,10 +47,6 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
         }
     }, 3, 3);
 
-    static {
-
-    }
-
     public static IRollingMachineCraftingManager getInstance() {
         return INSTANCE;
     }

@@ -527,12 +527,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
             }
-
-            private void addOutput(ICrusherRecipe recipe, ItemStack output, float chance) {
-                if (InvTools.isEmpty(output))
-                    return;
-                recipe.addOutput(output, RockCrusherCraftingManager.getInstance().createGenRule(chance));
-            }
         });
         setDisabledEventHandler(new ModuleEventHandler() {
             @Override

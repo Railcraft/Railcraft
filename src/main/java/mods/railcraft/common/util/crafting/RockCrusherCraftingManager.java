@@ -53,11 +53,6 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
         return new RandomChanceGenRule(randomChance);
     }
 
-    @Override
-    public ICrusherRecipe createRecipe(Ingredient inputMatcher) {
-        return new CrusherRecipe(inputMatcher);
-    }
-
     @Nullable
     @Override
     public ICrusherRecipe getRecipe(ItemStack input) {
@@ -185,12 +180,6 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
         @Override
         public Ingredient getInput() {
             return inputMatcher;
-        }
-
-        @Override
-        public void addOutput(ItemStack output, IGenRule genRule) {
-            if (InvTools.isEmpty(output)) return;
-            outputs.add(new OutputEntry(output, genRule));
         }
 
         @Override

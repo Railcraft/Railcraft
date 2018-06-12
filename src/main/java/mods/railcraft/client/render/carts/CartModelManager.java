@@ -26,16 +26,17 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartModelManager {
+public final class CartModelManager {
 
     public static final ModelBase modelMinecart = new ModelMinecartRailcraft();
     public static final ModelBase modelSnow = new ModelMinecartRailcraft(0.125f);
     public static final ModelTextured emptyModel = new ModelTextured("empty");
-    public static final Map<Class, ModelBase> modelsCore = new HashMap<>();
-    public static final Map<Class, ModelBase> modelsSnow = new HashMap<>();
-    public static final Map<Class, ModelTextured> modelsContents = new HashMap<Class, ModelTextured>();
+    public static final Map<Class<?>, ModelBase> modelsCore = new HashMap<>();
+    public static final Map<Class<?>, ModelBase> modelsSnow = new HashMap<>();
+    public static final Map<Class<?>, ModelTextured> modelsContents = new HashMap<>();
 
     static {
+        //TODO move to cart containers? EntityEntry subclasses? That way we do not forget these code here
         ModelLowSidesMinecart lowSides = new ModelLowSidesMinecart();
         ModelLowSidesMinecart lowSidesSnow = new ModelLowSidesMinecart(0.125f);
 
@@ -44,6 +45,9 @@ public class CartModelManager {
 
         modelsCore.put(EntityCartCargo.class, lowSides);
         modelsSnow.put(EntityCartCargo.class, lowSidesSnow);
+
+        modelsCore.put(EntityCartBed.class, lowSides);
+        modelsSnow.put(EntityCartBed.class, lowSidesSnow);
 
         ModelTextured tank = new ModelSimpleCube();
         tank.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_tank.png");
@@ -69,7 +73,7 @@ public class CartModelManager {
         modelsContents.put(EntityCartTrackRemover.class, maint);
     }
 
-    public static ModelBase getCoreModel(Class eClass) {
+    public static ModelBase getCoreModel(Class<?> eClass) {
         ModelBase render = modelsCore.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getCoreModel(eClass.getSuperclass());
@@ -78,7 +82,7 @@ public class CartModelManager {
         return render != null ? render : modelMinecart;
     }
 
-    public static ModelBase getSnowModel(Class eClass) {
+    public static ModelBase getSnowModel(Class<?> eClass) {
         ModelBase render = modelsSnow.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getSnowModel(eClass.getSuperclass());
@@ -87,7 +91,7 @@ public class CartModelManager {
         return render != null ? render : modelSnow;
     }
 
-    public static ModelTextured getContentModel(Class eClass) {
+    public static ModelTextured getContentModel(Class<?> eClass) {
         ModelTextured render = modelsContents.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getContentModel(eClass.getSuperclass());

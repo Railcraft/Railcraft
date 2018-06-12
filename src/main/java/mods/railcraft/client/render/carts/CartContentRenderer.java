@@ -26,8 +26,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class CartContentRenderer<T extends EntityMinecart> {
 
-    private final RenderInfo info = new RenderInfo();
-
     public void render(RenderCart renderer, T cart, float light, float partialTicks) {
         int blockOffset = cart.getDisplayTileOffset();
 

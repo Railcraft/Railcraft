@@ -25,6 +25,7 @@ public final class ArrayTools {
     }
 
     @SuppressWarnings("unchecked")
+    @SafeVarargs
     public static <T> T[] flatten(T[]... arrays) {
         int len = 0;
         for (T[] array : arrays) {

@@ -59,7 +59,7 @@ public class CartContentRendererCargo extends CartContentRenderer<EntityCartCarg
             if (slotsFilled <= 0) {
                 numIterations = 0;
             } else {
-                numIterations = (int) Math.ceil(slotsFilled / 2);
+                numIterations = (int) Math.ceil(slotsFilled / 2f);
                 numIterations = MathHelper.clamp(numIterations, 1, 6);
             }
             yOffset = -1.1F;
