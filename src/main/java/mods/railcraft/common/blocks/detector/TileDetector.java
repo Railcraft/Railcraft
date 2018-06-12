@@ -74,7 +74,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
 
     @Override
     public String getLocalizationTag() {
-        return getDetector().getType().getTag() + ".name";
+        return getDetector().getType().getTag().replace('_','.') + ".name";
     }
 
     public List<EntityMinecart> getCarts() {
