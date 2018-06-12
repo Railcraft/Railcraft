@@ -11,7 +11,7 @@ package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.item.ItemStack;
 import uristqwerty.CraftGuide.api.*;
 
@@ -32,7 +32,7 @@ public class BlastFurnacePlugin implements RecipeProvider
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack furnace = null; //TODO EnumMachineAlpha.BLAST_FURNACE.getStack();
+        ItemStack furnace = RailcraftBlocks.BLAST_FURNACE.getStack();
         if(furnace != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, furnace, "/gui/CraftGuideRecipe.png", 1, 181, 82, 181);
 

@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -25,9 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -41,35 +48,6 @@ public interface ISmartTile {
 
     default boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
-    }
-
-    default List<ItemStack> getDrops(int fortune) {
-        return Collections.singletonList(new ItemStack(tile().getBlockType())); // fast and furious
-//        World world = tile().getWorld();
-//        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
-//        List<ItemStack> ret = new ArrayList<>();
-//        Random rand = world.rand;
-//
-//        int count = state.getBlock().quantityDropped(state, fortune, rand);
-//        int damage = state.getBlock().damageDropped(state);
-//        Item item = state.getBlock().getItemDropped(state, rand, fortune);
-//        if (item != null)
-//            for (int i = 0; i < count; i++) {
-//                ret.add(new ItemStack(item, 1, damage));
-//            }
-//        return ret;
-    }
-
-    default List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        return getDrops(fortune);
-    }
-
-    default boolean canSilkHarvest(EntityPlayer player) {
-        return true;
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    default void initFromItem(ItemStack stack) {
     }
 
     default void onBlockAdded() {
