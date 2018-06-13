@@ -48,7 +48,7 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
 
     protected BlockRailcraftSubtyped(Material material, MapColor mapColor) {
         super(material, mapColor);
-        setup();
+        //setup();//This 'setup' is called after 'createBlockState' which is called in super's <init>, so it is useless
     }
 
     private void setup() {
@@ -63,6 +63,7 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
 
     @Override
     public final IProperty<V> getVariantProperty() {
+        setup();//'setup' before 'createBlockState'
         return variantProperty;
     }
 
