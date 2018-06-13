@@ -23,11 +23,11 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<T>> extends TileMultiBlock<T> implements IInventory {
+public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<T, M>, M extends T> extends TileMultiBlock<T, M> implements IInventory {
 
     protected final StandaloneInventory inv;
 
-    protected TileMultiBlockInventory(int invSize, List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlockInventory(int invSize, List<MultiBlockPattern> patterns) {
         super(patterns);
         inv = new StandaloneInventory(invSize, (IInventory) this);
     }

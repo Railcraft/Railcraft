@@ -10,7 +10,7 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.core.Railcraft;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -24,10 +24,12 @@ import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class Game {
+public final class Game {
     public static final boolean OBFUSCATED;
     public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
@@ -68,11 +70,9 @@ public class Game {
     }
 
     @SideOnly(Side.CLIENT)
-    public static World getWorld() {
-        Minecraft mc = FMLClientHandler.instance().getClient();
-        if (mc != null)
-            return mc.world;
-        return null;
+    @Nullable
+    public static WorldClient getWorld() {
+        return FMLClientHandler.instance().getWorldClient();
     }
 
     @SuppressWarnings("SameReturnValue")
@@ -153,5 +153,8 @@ public class Game {
 
     public static void logErrorFingerprint(String mod) {
         log(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.", mod);
+    }
+
+    private Game() {
     }
 }

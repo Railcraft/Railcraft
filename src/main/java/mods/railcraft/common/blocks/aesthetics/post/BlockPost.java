@@ -94,7 +94,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
         for (EnumPost post : EnumPost.VALUES) {
             ItemStack stack = post.getStack();
-            if (stack != null)
+            if (!stack.isEmpty())
                 RailcraftRegistry.register(this, post, stack);
         }
 

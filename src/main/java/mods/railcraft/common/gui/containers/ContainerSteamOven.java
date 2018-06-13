@@ -27,7 +27,7 @@ public class ContainerSteamOven extends RailcraftContainer {
         this.tile = tile;
 
         TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
+        if (!tMan.isEmpty()) {
             addWidget(new FluidGaugeWidget(tMan.get(0), 94, 20, 176, 0, 16, 47));
         }
 

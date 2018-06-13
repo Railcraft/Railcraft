@@ -64,7 +64,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     }
 
     public boolean isBurning() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         return mBlock != null && mBlock.boiler.isBurning();
     }
 
@@ -191,7 +191,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.decrStackSize(i, j);
         return ItemStack.EMPTY;
@@ -199,7 +199,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getStackInSlot(i);
         else
@@ -208,7 +208,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);
     }
@@ -243,7 +243,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.removeStackFromSlot(i);
         else
@@ -252,7 +252,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getField(int id) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getField(id);
         else
@@ -261,7 +261,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setField(int id, int value) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setField(id, value);
         else
@@ -270,7 +270,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getFieldCount() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getFieldCount();
         else
@@ -279,7 +279,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void clear() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.clear();
         else

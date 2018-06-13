@@ -40,7 +40,7 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     }
 
     @Override
-    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
         return new TileFluxTransformer();
     }
 

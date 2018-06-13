@@ -17,6 +17,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * Created by CovertJaguar on 6/11/2018 for Railcraft.
  *
@@ -27,6 +29,7 @@ public abstract class BlockTankIron extends BlockTankMetal {
         super(material);
     }
 
+    @OverridingMethodsMustInvokeSuper
     @Override
     public void defineRecipes() {
         super.defineRecipes();

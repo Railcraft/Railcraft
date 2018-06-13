@@ -122,6 +122,11 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
         }
     }
 
+    @Override
+    protected Class<TileCokeOven> defineCommonClass() {
+        return TileCokeOven.class;
+    }
+
     public TankManager getTankManager() {
         TileCokeOven mBlock = getMasterBlock();
         if (mBlock != null)

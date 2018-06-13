@@ -20,13 +20,21 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerTank<S extends TileBoilerTank<S>> extends TileBoiler<S> {
+@SuppressWarnings("rawtypes")
+// java is too bad that TileBoiler<TileBoilerFirebox<?>> just does not work.
+public abstract class TileBoilerTank extends TileBoiler {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);
 
     private boolean isConnected;
 
     protected TileBoilerTank() {
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Class<TileBoilerFirebox> defineMasterClass() {
+        return TileBoilerFirebox.class;
     }
 
     @Override

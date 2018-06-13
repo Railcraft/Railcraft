@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:chest_metals"
+    "model": "railcraft:chest_metals",
+    "textures": {
+      "particle": "railcraft:blocks/chest_metals"
+    }
   },
   "variants": {
     "facing": {

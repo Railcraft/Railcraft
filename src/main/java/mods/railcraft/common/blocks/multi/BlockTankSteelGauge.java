@@ -13,8 +13,6 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -26,8 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
+import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.AXIS;
+import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.POSITION;
 
 /**
  *
@@ -36,14 +34,15 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     public BlockTankSteelGauge() {
         super(Material.GLASS);
-        IBlockState state = getDefaultState();
-        for (PropertyEnum<BlockTankIronGauge.RenderState> touch : BlockTankIronGauge.TOUCHES.values()) {
-            state = state.withProperty(touch, BlockTankIronGauge.RenderState.DEFAULT);
-        }
-        setDefaultState(state);
+        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
     }
 
     @Override
@@ -57,22 +56,12 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        List<IProperty> props = new ArrayList<>();
-        props.add(COLOR);
-        for (EnumFacing face : EnumFacing.VALUES) {
-            props.add(BlockTankIronGauge.TOUCHES.get(face));
-        }
-        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
-    }
-
-    @Override
     public Class<? extends TileEntity> getTileClass(IBlockState state) {
         return TileTankSteelGauge.class;
     }
 
     @Override
-    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
         return new TileTankSteelGauge();
     }
 

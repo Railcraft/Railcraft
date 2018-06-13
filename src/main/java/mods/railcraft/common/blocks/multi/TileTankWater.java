@@ -123,6 +123,11 @@ public final class TileTankWater extends TileTank<TileTankWater> {
     }
 
     @Override
+    protected Class<TileTankWater> defineCommonClass() {
+        return TileTankWater.class;
+    }
+
+    @Override
     public String getTitle() {
         return LocalizationPlugin.translate("gui.railcraft.tank.water");
     }

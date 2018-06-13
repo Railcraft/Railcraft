@@ -39,7 +39,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -49,14 +48,16 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implements ITankTile {
+public abstract class TileTankBase extends TileMultiBlock<TileTankBase, TileTankBase> implements ITankTile {
 
     @SuppressWarnings("WeakerAccess")
     public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidTools.BUCKET_VOLUME;
@@ -77,7 +78,6 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
 
     protected TileTankBase() {
         super(patterns);
-        genericClass = TileTankBase.class;
         inv = new StandaloneInventory(2, "gui.tank.iron", this);
         tankManager.add(tank);
     }
@@ -368,6 +368,22 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
         return map;
     }
 
+    @Override
+    protected Class<TileTankBase> defineCommonClass() {
+        return TileTankBase.class;
+    }
+
+    @Override
+    protected Class<TileTankBase> defineMasterClass() {
+        return TileTankBase.class;
+    }
+
+    @Nonnull
+    @Override
+    public final EnumGui getGui() {
+        return EnumGui.TANK;
+    }
+
     public MetalTank getTankType() {
         return IRON_TANK;
     }
@@ -480,11 +496,11 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase> implemen
                 if (!getTankType().isTankBlock(state))
                     return false;
                 TileEntity tile = world.getTileEntity(pos);
-                if (!(tile instanceof TileMultiBlock)) {
+                if (!(tile instanceof IMultiBlockTile)) {
                     world.removeTileEntity(pos);
                     return true;
                 }
-                return !((TileMultiBlock<?>) tile).isStructureValid();
+                return !((IMultiBlockTile<?, ?>) tile).isStructureValid();
             case 'A': // Air
                 return state.getBlock().isAir(state, world, pos);
         }

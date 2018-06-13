@@ -10,11 +10,9 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import com.google.common.collect.ImmutableMap;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -28,32 +26,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  *
  */
 public class BlockTankIronGauge extends BlockTankIron {
 
-    public static final Map<EnumFacing, PropertyEnum<RenderState>> TOUCHES;
-
-    static {
-        ImmutableMap.Builder<EnumFacing, PropertyEnum<RenderState>> builder = ImmutableMap.builder();
-        for (EnumFacing face : EnumFacing.VALUES) {
-            builder.put(face, PropertyEnum.create(face.getName(), RenderState.class));
-        }
-        TOUCHES = builder.build();
-    }
+    public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
+    public static final PropertyEnum<ColumnPosition> POSITION = PropertyEnum.create("position", ColumnPosition.class);
 
     public BlockTankIronGauge() {
         super(Material.GLASS);
-        IBlockState state = getDefaultState();
-        for (PropertyEnum<RenderState> touch : TOUCHES.values()) {
-            state = state.withProperty(touch, RenderState.DEFAULT);
-        }
-        setDefaultState(state);
+        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -71,12 +54,7 @@ public class BlockTankIronGauge extends BlockTankIron {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        List<IProperty> props = new ArrayList<>();
-        props.add(COLOR);
-        for (EnumFacing face : EnumFacing.VALUES) {
-            props.add(TOUCHES.get(face));
-        }
-        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
+        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
     }
 
     @Override
@@ -85,7 +63,7 @@ public class BlockTankIronGauge extends BlockTankIron {
     }
 
     @Override
-    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
         return new TileTankIronGauge();
     }
 
@@ -112,12 +90,11 @@ public class BlockTankIronGauge extends BlockTankIron {
         return false;
     }
 
-    public enum RenderState implements IStringSerializable {
-        DEFAULT,
-        TOPMOST,
+    public enum ColumnPosition implements IStringSerializable {
+        SINGLE,
+        TOP,
         MIDDLE,
-        BOTTOMMOST,
-        TRANSPARENT;
+        BOTTOM;
 
         private final String name = name().toLowerCase();
 

@@ -8,17 +8,8 @@
  */
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.gui.EnumGui;
-
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronWall extends TileTankBase {
-    @Override
-    @Nonnull
-    public EnumGui getGui() {
-        return EnumGui.TANK;
-    }
 }

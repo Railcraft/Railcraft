@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> extends BlockRailcraft implements ISubtypedBlock<V> {
-    private RailcraftBlockMetadata annotation;
     private Class<V> variantClass;
     private V[] variantValues;
     private PropertyEnum<V> variantProperty;
@@ -48,12 +47,11 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
 
     protected BlockRailcraftSubtyped(Material material, MapColor mapColor) {
         super(material, mapColor);
-        //setup();//This 'setup' is called after 'createBlockState' which is called in super's <init>, so it is useless
     }
 
     private void setup() {
-        if (annotation == null) {
-            annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
+        if (variantProperty == null) {
+            RailcraftBlockMetadata annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
             //noinspection unchecked
             this.variantClass = (Class<V>) annotation.variant();
             this.variantValues = variantClass.getEnumConstants();
@@ -63,7 +61,7 @@ public abstract class BlockRailcraftSubtyped<V extends Enum<V> & IVariantEnum> e
 
     @Override
     public final IProperty<V> getVariantProperty() {
-        setup();//'setup' before 'createBlockState'
+        setup();
         return variantProperty;
     }
 

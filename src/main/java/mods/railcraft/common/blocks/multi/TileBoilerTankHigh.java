@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerTankHigh extends TileBoilerTank<TileBoilerTankHigh> {
+public final class TileBoilerTankHigh extends TileBoilerTank {
 
     public TileBoilerTankHigh() {
         super();

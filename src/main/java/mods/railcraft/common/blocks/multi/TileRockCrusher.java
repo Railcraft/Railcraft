@@ -58,7 +58,7 @@ import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrusher> implements IHasWork, ISidedInventory {
+public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrusher, TileRockCrusher> implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -219,6 +219,16 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 //        return mBlock != null && (mBlock.energyStorage == null || mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount);
 //        return false;
 //    }
+
+    @Override
+    protected Class<TileRockCrusher> defineCommonClass() {
+        return TileRockCrusher.class;
+    }
+
+    @Override
+    protected Class<TileRockCrusher> defineMasterClass() {
+        return TileRockCrusher.class;
+    }
 
     private boolean useMasterEnergy(double amount) {
         TileRockCrusher master = getMasterBlock();

@@ -47,7 +47,7 @@ public class StandardTank extends FluidTank {
         this.tile = tile;
     }
 
-    public void setUpdateCallback(Consumer<StandardTank> callback) {
+    public void setUpdateCallback(@Nullable Consumer<StandardTank> callback) {
         this.updateCallback = callback;
     }
 

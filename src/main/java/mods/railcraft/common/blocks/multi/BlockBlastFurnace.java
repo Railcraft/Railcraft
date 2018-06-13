@@ -27,7 +27,7 @@ public final class BlockBlastFurnace extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory<?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?, ?> createTileEntity(World world, IBlockState state) {
         return new TileBlastFurnace();
     }
 

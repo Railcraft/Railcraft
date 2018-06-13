@@ -135,12 +135,16 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
         }
     }
 
-    @Nullable
+    @Override
+    protected Class<TileSteamOven> defineCommonClass() {
+        return TileSteamOven.class;
+    }
+
     public TankManager getTankManager() {
         TileSteamOven mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
-        return null;
+        return TankManager.NIL;
     }
 
     @Override

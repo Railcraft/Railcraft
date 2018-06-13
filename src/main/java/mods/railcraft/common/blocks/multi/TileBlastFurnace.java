@@ -152,6 +152,11 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     }
 
     @Override
+    protected Class<TileBlastFurnace> defineCommonClass() {
+        return TileBlastFurnace.class;
+    }
+
+    @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         IBlockState self = getBlockState();
         IBlockState state = world.getBlockState(pos);

@@ -28,11 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransformer> implements IEnergyStorage {
+public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransformer, TileFluxTransformer> implements IEnergyStorage {
 
     public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
@@ -76,6 +74,16 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.FLUX_TRANSFORMER.getDefaultState());
         pattern.placeStructure(world, pos, blockMapping);
+    }
+
+    @Override
+    protected Class<TileFluxTransformer> defineCommonClass() {
+        return TileFluxTransformer.class;
+    }
+
+    @Override
+    protected Class<TileFluxTransformer> defineMasterClass() {
+        return TileFluxTransformer.class;
     }
 
     @Nullable

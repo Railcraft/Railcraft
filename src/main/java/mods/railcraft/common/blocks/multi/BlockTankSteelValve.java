@@ -33,11 +33,6 @@ public class BlockTankSteelValve extends BlockTankMetal {
 
     public BlockTankSteelValve() {
         super(Material.IRON);
-        IBlockState state = getDefaultState();
-        for (PropertyBool touch : BlockTankIronValve.TOUCHES.values()) {
-            state = state.withProperty(touch, false);
-        }
-        setDefaultState(state);
         setHarvestLevel("pickaxe", 1);
     }
 
@@ -53,17 +48,7 @@ public class BlockTankSteelValve extends BlockTankMetal {
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        List<IProperty> props = new ArrayList<>();
-        props.add(COLOR);
-        for (EnumFacing face : EnumFacing.VALUES) {
-            props.add(BlockTankIronValve.TOUCHES.get(face));
-        }
-        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
-    }
-
-    @Override
-    public TileMultiBlock<?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
         return new TileTankSteelValve();
     }
 

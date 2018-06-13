@@ -59,7 +59,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
 
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack stack = getStack(1, color);
-            if (stack != null)
+            if (!stack.isEmpty())
                 RailcraftRegistry.register(this, color, stack);
         }
     }

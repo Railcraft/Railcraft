@@ -22,9 +22,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -32,6 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * Created by CovertJaguar on 6/11/2018 for Railcraft.
@@ -46,6 +50,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
+    @OverridingMethodsMustInvokeSuper
     @Override
     public void defineRecipes() {
         addColorRecipes();
@@ -58,7 +63,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
                     "OOO",
                     "ODO",
                     "OOO",
-                    'O', getStack(),
+                    'O', Item.getItemFromBlock(this),
                     'D', color.getDyeOreDictTag());
         }
     }
@@ -93,6 +98,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
     }
@@ -140,6 +146,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      * Get the MapColor for this Block and the given BlockState
      */
     @Override
+    @SuppressWarnings("deprecation")
     public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return getColor(state).getMapColor();
     }
@@ -147,5 +154,17 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
     @Override
     public int damageDropped(IBlockState state) {
         return getColor(state).ordinal();
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+        for (int meta = 0; meta < 16; meta++) {
+            items.add(new ItemStack(this, 1, meta));
+        }
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return super.getUnlocalizedName();
     }
 }

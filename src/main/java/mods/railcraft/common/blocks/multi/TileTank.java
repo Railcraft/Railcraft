@@ -36,12 +36,17 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S> implements ITankTile, ISidedInventory {
+public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S, S> implements ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
-    protected TileTank(int invNum, List<? extends MultiBlockPattern> patterns) {
+    protected TileTank(int invNum, List<MultiBlockPattern> patterns) {
         super(invNum, patterns);
+    }
+
+    @Override
+    protected Class<S> defineMasterClass() {
+        return defineCommonClass();
     }
 
     @Override

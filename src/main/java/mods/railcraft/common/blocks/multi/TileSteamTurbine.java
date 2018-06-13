@@ -46,7 +46,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: migrate to new charge API
-public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     enum Texture {
 
@@ -156,10 +156,19 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine> imp
         tankWater.setCanFill(false);
         tankManager.add(tankSteam); // Steam
         tankManager.add(tankWater); // Water
-
     }
 
-//    @Override
+    @Override
+    protected Class<TileSteamTurbine> defineCommonClass() {
+        return TileSteamTurbine.class;
+    }
+
+    @Override
+    protected Class<TileSteamTurbine> defineMasterClass() {
+        return TileSteamTurbine.class;
+    }
+
+    //    @Override
 //    public ChargeHandler getChargeHandler() {
 //        return chargeHandler;
 //    }

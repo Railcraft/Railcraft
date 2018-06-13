@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
+import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class TileMachineBase extends RailcraftTickingTileEntity {
+public abstract class TileMachineBase extends RailcraftTickingTileEntity implements ISmartTile {
 
     private boolean checkedBlock;
 
@@ -57,12 +58,13 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity {
         return (short) getMachineType().ordinal();
     }
 
+    @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
     }
 
     public List<ItemStack> getDrops(int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
         items.add(getMachineType().getStack());
         return items;
     }

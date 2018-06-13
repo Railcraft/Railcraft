@@ -17,11 +17,8 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -30,7 +27,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -78,7 +74,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
 
         if (Game.isClient(world))
             return;
-        
+
         if (isStructureValid()) {
             decrementFilling();
 
@@ -138,18 +134,6 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         if (previousStructureValidity != isStructureValid())
             getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
         previousStructureValidity = isStructureValid();
-    }
-
-    @Override
-    public IBlockState getActualState(IBlockState base) {
-        if (!isStructureValid())
-            return base.getBlock().getDefaultState();
-        BlockPos pos = getPatternPosition();
-        MultiBlockPattern pattern = getPattern();
-        for (Map.Entry<EnumFacing, PropertyBool> entry : BlockTankIronValve.TOUCHES.entrySet()) {
-            base = base.withProperty(entry.getValue(), !isMapPositionOtherBlock(pattern.getPatternMarkerChecked(pos.offset(entry.getKey()))));
-        }
-        return base;
     }
 
     @Override
@@ -216,12 +200,6 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         if (masterBlock != null)
             return masterBlock.getComparatorValue();
         return 0;
-    }
-
-    @NotNull
-    @Override
-    public EnumGui getGui() {
-        return EnumGui.TANK;
     }
 
     @Override

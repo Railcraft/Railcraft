@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube",
+    "model": "railcraft:tinted_cube",
     "textures": {
       "particle": "railcraft:blocks/tank_iron_gauge_0"
     }
@@ -15,165 +15,51 @@
         "transform": "forge:default-block"
       }
     ],
-    "north": {
-      "default": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_gauge_0"
-        }
-      },
-      "topmost": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_gauge_1"
-        }
-      },
-      "middle": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_gauge_4"
-        }
+    "axis": {
+      "x": {},
+      "z": {
+        "y": 90
       }
     },
-    "south": {
-      "default": {
+    "position": {
+      "single": {
         "textures": {
-          "south": "railcraft:blocks/tank_iron_gauge_0"
-        }
-      },
-      "topmost": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_gauge_1"
-        }
-      },
-      "middle": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_gauge_4"
-        }
-      }
-    },
-    "west": {
-      "default": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_gauge_0"
-        }
-      },
-      "topmost": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_gauge_1"
-        }
-      },
-      "middle": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_gauge_4"
-        }
-      }
-    },
-    "east": {
-      "default": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_gauge_0"
-        }
-      },
-      "topmost": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_gauge_1"
-        }
-      },
-      "middle": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_gauge_4"
-        }
-      }
-    },
-    "up": {
-      "default": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_gauge_0"
-        }
-      },
-      "topmost": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_gauge_1"
-        }
-      },
-      "middle": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_gauge_4"
-        }
-      }
-    },
-    "down": {
-      "default": {
-        "textures": {
+          "north": "railcraft:blocks/tank_iron_gauge_0",
+          "south": "railcraft:blocks/tank_iron_gauge_0",
+          "east": "railcraft:blocks/tank_iron_gauge_0",
+          "west": "railcraft:blocks/tank_iron_gauge_0",
+          "up": "railcraft:blocks/tank_iron_gauge_0",
           "down": "railcraft:blocks/tank_iron_gauge_0"
         }
       },
-      "topmost": {
+      "top": {
         "textures": {
-          "down": "railcraft:blocks/tank_iron_gauge_1"
+          "north": "railcraft:blocks/tank_iron_gauge_1",
+          "south": "railcraft:blocks/tank_iron_gauge_1",
+          "east": "railcraft:blocks/tank_iron_gauge_4",
+          "west": "railcraft:blocks/tank_iron_gauge_4",
+          "up": "railcraft:blocks/tank_iron_gauge_0",
+          "down": "railcraft:blocks/tank_iron_gauge_4"
         }
       },
       "middle": {
         "textures": {
-          "down": "railcraft:blocks/tank_iron_gauge_2"
-        }
-      },
-      "bottommost": {
-        "textures": {
-          "down": "railcraft:blocks/tank_iron_gauge_3"
-        }
-      },
-      "transparent": {
-        "textures": {
+          "north": "railcraft:blocks/tank_iron_gauge_2",
+          "south": "railcraft:blocks/tank_iron_gauge_2",
+          "east": "railcraft:blocks/tank_iron_gauge_4",
+          "west": "railcraft:blocks/tank_iron_gauge_4",
+          "up": "railcraft:blocks/tank_iron_gauge_4",
           "down": "railcraft:blocks/tank_iron_gauge_4"
+        }
+      },
+      "bottom": {
+        "textures": {
+          "north": "railcraft:blocks/tank_iron_gauge_3",
+          "south": "railcraft:blocks/tank_iron_gauge_3",
+          "east": "railcraft:blocks/tank_iron_gauge_4",
+          "west": "railcraft:blocks/tank_iron_gauge_4",
+          "up": "railcraft:blocks/tank_iron_gauge_4",
+          "down": "railcraft:blocks/tank_iron_gauge_0"
         }
       }
     }

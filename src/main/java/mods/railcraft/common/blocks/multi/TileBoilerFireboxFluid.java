@@ -66,7 +66,12 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
         }
     }
 
-//    @Override
+    @Override
+    protected Class<TileBoilerFireboxFluid> defineMasterClass() {
+        return TileBoilerFireboxFluid.class;
+    }
+
+    //    @Override
 //    public EnumMachineBeta getMachineType() {
 //        return EnumMachineBeta.BOILER_FIREBOX_FLUID;
 //    }

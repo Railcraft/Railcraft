@@ -44,17 +44,16 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *
- * @param <T> The component tile class
+ * @param <T> The least common component tile class, might not be the same as self class
  */
-public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends RailcraftTickingTileEntity implements ISmartTile {
+public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T> extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile<T, M> {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 64;
-    @SuppressWarnings("unchecked")
-    protected Class<T> genericClass = (Class<T>) getClass();
+    protected final Class<T> componentClass = defineCommonClass();
+    protected final Class<M> masterClass = defineMasterClass();
     private final Timer netTimer = new Timer();
-    protected final List<? extends MultiBlockPattern> patterns;
+    protected final List<MultiBlockPattern> patterns;
     protected final List<T> components = new ArrayList<>();
     protected final List<T> componentsView = Collections.unmodifiableList(components);
     public final ListMultimap<MultiBlockStateReturn, Integer> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockStateReturn.class), ArrayList::new);
@@ -63,20 +62,19 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     protected boolean tested;
     private boolean requestPacket;
     private MultiBlockState state;
-    private T masterBlock;
+    private M masterBlock;
     private MultiBlockPattern currentPattern;
-    //TODO ??? remove?
     private UUID uuidMaster;
 
-    protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlock(List<MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
         tested = FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER;
     }
 
-    public UUID getMasterUUID() {
-        return uuidMaster;
-    }
+    protected abstract Class<T> defineCommonClass();
+
+    protected abstract Class<M> defineMasterClass();
 
     public List<T> getComponents() {
         return componentsView;
@@ -85,7 +83,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     protected void onMasterChanged() {
     }
 
-    protected void setMaster(T master) {
+    protected void setMaster(M master) {
         this.masterBlock = master;
 
         if (uuidMaster != null && !uuidMaster.equals(master.getUUID()))
@@ -180,13 +178,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
                         BlockPos pos = new BlockPos(px, py, pz).add(offset);
 
                         TileEntity tile = world.getTileEntity(pos);
-                        if (genericClass.isInstance(tile)) {
-                            T multiBlock = genericClass.cast(tile);
+                        if (componentClass.isInstance(tile)) {
+                            T multiBlock = componentClass.cast(tile);
                             if (multiBlock != this)
                                 multiBlock.components.clear();
                             components.add(multiBlock);
                             multiBlock.tested = true;
-                            multiBlock.setMaster(genericClass.cast(this));
+                            multiBlock.setMaster(masterClass.cast(this));
                             multiBlock.setPattern(currentPattern);
                             multiBlock.setPatternPosition(px, py, pz);
                             multiBlock.sendUpdateToClient();
@@ -326,7 +324,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
         for (EnumFacing side : EnumFacing.VALUES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (isStructureTile(tile))
-                ((TileMultiBlock<?>) tile).onBlockChange(getMaxRecursionDepth());
+                ((TileMultiBlock<?, ?>) tile).onBlockChange(getMaxRecursionDepth());
         }
     }
 
@@ -337,7 +335,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
         if (tested) {
             tested = false;
 
-            TileMultiBlock<?> mBlock = getMasterBlock();
+            TileMultiBlock<T, M> mBlock = getMasterBlock();
             if (mBlock != null) {
                 mBlock.onBlockChange(getMaxRecursionDepth());
                 return;
@@ -346,14 +344,14 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
             for (EnumFacing side : EnumFacing.VALUES) {
                 TileEntity tile = tileCache.getTileOnSide(side);
                 if (isStructureTile(tile))
-                    ((TileMultiBlock<?>) tile).onBlockChange(depth);
+                    ((TileMultiBlock<?, ?>) tile).onBlockChange(depth);
             }
         }
     }
 
     @Contract("null -> false")
     protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return tile != null && tile.getClass() == genericClass;
+        return componentClass.isInstance(tile);
     }
 
     @Override
@@ -449,7 +447,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
             if (tile != null)
                 if (masterBlock != tile && isStructureTile(tile)) {
                     needsRenderUpdate = true;
-                    masterBlock = genericClass.cast(tile);
+                    masterBlock = masterClass.cast(tile);
                 }
             if (getMasterBlock() == null)
                 requestPacket = true;
@@ -487,7 +485,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     }
 
     @Nullable
-    public final T getMasterBlock() {
+    public final M getMasterBlock() {
         if (masterBlock != null && !isStructureValid()) {
             masterBlock = null;
             sendUpdateToClient();
@@ -512,6 +510,31 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T>> extends Railcr
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return (!(isStructureValid() && getPatternPosition().getY() < 2));
+    }
+
+    @Override
+    public TileEntity tile() {
+        return this;
+    }
+
+    @Override
+    public Class<M> getMasterType() {
+        return masterClass;
+    }
+
+    @Override
+    public Class<T> getCommonType() {
+        return componentClass;
+    }
+
+    @Override
+    public MultiBlockPattern getCurrentPattern() {
+        return currentPattern;
+    }
+
+    @Override
+    public Collection<MultiBlockPattern> getPatterns() {
+        return patterns;
     }
 
     public enum MultiBlockState {

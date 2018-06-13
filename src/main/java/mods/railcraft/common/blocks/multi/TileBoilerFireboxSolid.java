@@ -32,10 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -90,10 +87,10 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         }
     }
 
-//    @Override
-//    public EnumMachineBeta getMachineType() {
-//        return EnumMachineBeta.BOILER_FIREBOX_SOLID;
-//    }
+    @Override
+    protected Class<TileBoilerFireboxSolid> defineMasterClass() {
+        return TileBoilerFireboxSolid.class;
+    }
 
     @Override
     public boolean openGui(EntityPlayer player) {

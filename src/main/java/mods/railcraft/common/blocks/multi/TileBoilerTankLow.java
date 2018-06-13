@@ -16,16 +16,11 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerTankLow extends TileBoilerTank<TileBoilerTankLow> {
+public final class TileBoilerTankLow extends TileBoilerTank {
 
     public TileBoilerTankLow() {
         super();
     }
-
-//    @Override
-//    public EnumMachineBeta getMachineType() {
-//        return EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
-//    }
 
     @NotNull
     @Override

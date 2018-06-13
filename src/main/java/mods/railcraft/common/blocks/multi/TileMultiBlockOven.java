@@ -32,7 +32,7 @@ import java.util.Set;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T> implements INeedsFuel, IHasWork, ITileLit {
+public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T, T> implements INeedsFuel, IHasWork, ITileLit {
 
     protected int cookTime;
     private boolean cooking;
@@ -40,8 +40,13 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
     private boolean wasBurning;
     protected final Set<Object> actions = new HashSet<>();
 
-    protected TileMultiBlockOven(int invNum, List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlockOven(int invNum, List<MultiBlockPattern> patterns) {
         super(invNum, patterns);
+    }
+
+    @Override
+    protected final Class<T> defineMasterClass() {
+        return defineCommonClass();
     }
 
     @Override
