@@ -33,7 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -85,6 +84,10 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
         };
     }
 
+    public void initFromItem(IBlockAccess world, BlockPos pos, ItemStack stack) {
+        WorldPlugin.getTileEntity(world, pos, ISmartTile.class).ifPresent(t -> t.initFromItem(stack));
+    }
+
     @Override
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.recolourBlock(color)).orElse(false);
@@ -125,30 +128,6 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return getBlockFaceShape(world, state, pos, side) == BlockFaceShape.SOLID;
-    }
-
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        WorldPlugin.getTileEntity(world, pos, ISmartTile.class).ifPresent(t -> t.addDrops(drops, fortune));
-    }
-
-    public List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getBlockDroppedSilkTouch(fortune)).orElseGet(() -> Collections.singletonList(getSilkTouchDrop(state)));
-    }
-
-    @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canSilkHarvest(player)).orElse(super.canSilkHarvest(world, pos, state, player));
-    }
-
-    @Override
-    @Nullable
-    @SuppressWarnings("deprecation")
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
-        if (drops.isEmpty())
-            return getItem(world, pos, state);
-        return drops.get(0);
     }
 
     @Override

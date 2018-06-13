@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks;
 
-import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -18,7 +17,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -37,7 +35,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -54,6 +51,10 @@ public interface ISmartTile {
     }
 
     default void onBlockAdded() {
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    default void initFromItem(ItemStack stack) {
     }
 
     /**

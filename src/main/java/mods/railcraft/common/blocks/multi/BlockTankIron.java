@@ -10,10 +10,12 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.Ingredient;
 
 /**
  * Created by CovertJaguar on 6/11/2018 for Railcraft.
@@ -30,7 +32,7 @@ public abstract class BlockTankIron extends BlockTankMetal {
         super.defineRecipes();
 
         // Smelting Recipe to turn Iron Tanks into Steel Nuggets
-        RailcraftCraftingManager.blastFurnace.addRecipe(getStack(), true, false, 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
+        BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(this)), 640, RailcraftItems.NUGGET.getStack(4, Metal.STEEL));
     }
 
 }
