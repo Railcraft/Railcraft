@@ -171,4 +171,37 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
         }
         return super.getCapability(capability, facing);
     }
+
+    @Override
+    protected void onMasterChanged() {
+        super.onMasterChanged();
+        if (isStructureValid()) {
+            ((IChargeBlock) getBlockType()).registerNode(getBlockState(), world, pos);
+        } else {
+            clean();
+        }
+    }
+
+    @Override
+    protected void onMasterReset() {
+        super.onMasterReset();
+        clean();
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        clean();
+    }
+
+    @Override
+    public void onChunkUnload() {
+        super.onChunkUnload();
+        clean();
+    }
+
+    private void clean() {
+        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        battery = null;
+    }
 }

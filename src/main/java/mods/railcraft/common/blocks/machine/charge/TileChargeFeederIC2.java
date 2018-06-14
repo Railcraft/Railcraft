@@ -20,8 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nullable;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -72,7 +70,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public double getDemandedEnergy() {
         IBlockState state = getBlockState();
-        if (state != null && state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && getChargeBattery().isInitialized()) {
+        if (state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && getChargeBattery().isInitialized()) {
             double chargeDifference = getChargeBattery().getCapacity() - getChargeBattery().getCharge();
             return chargeDifference > 0.0 ? chargeDifference : 0.0;
         }

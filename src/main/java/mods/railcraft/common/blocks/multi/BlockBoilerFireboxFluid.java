@@ -14,10 +14,10 @@ import net.minecraft.world.World;
 /**
  *
  */
-public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
+public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox {
     @Override
     public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileBoilerFireboxSolid();
+        return new TileBoilerFireboxFluid();
     }
 
     @Override
@@ -27,20 +27,19 @@ public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
 
     @Override
     public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileBoilerFireboxSolid.class;
+        return TileBoilerFireboxFluid.class;
     }
 
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
         CraftingPlugin.addRecipe(stack,
-                "PUP",
+                "BBB",
                 "BCB",
-                "PFP",
-                'P', RailcraftItems.PLATE, Metal.STEEL,
-                'U', Items.BUCKET,
-                'B', Blocks.IRON_BARS,
+                "BFB",
+                'B', Items.BRICK,
                 'C', Items.FIRE_CHARGE,
-                'F', Blocks.FURNACE);
+                'F', Blocks.FURNACE
+        );
     }
 }

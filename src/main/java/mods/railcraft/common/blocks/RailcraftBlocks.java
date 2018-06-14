@@ -134,24 +134,24 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLDSPIKE("worldspike", BlockWorldspike.class, BlockWorldspike::new, ItemWorldspike::new),
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
     // singles
-    TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemTradeStation::new),
-    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
-    ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
-    CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemChestMetals::new),
-    CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemChestVoid::new),
+    TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemBlockEntityDelegate::new),
+    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemBlockEntityDelegate::new),
+    ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemBlockEntityDelegate::new),
+    CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemBlockEntityDelegate::new),
+    CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemBlockEntityDelegate::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
-    ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
-    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
+    ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemMultiBlock::new),
+    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemMultiBlock::new),
     TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockTank::new),
     TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockTank::new),
     TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockTank::new),
     TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockTank::new),
     TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockTank::new),
     TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockTank::new),
-    TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemTankWater::new),
-    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemFluxTransformer::new),
+    TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemMultiBlock::new),
+    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemMultiBlock::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();

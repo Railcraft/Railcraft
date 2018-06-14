@@ -1,10 +1,13 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
@@ -48,5 +51,17 @@ public class BlockTradeStation extends BlockEntityDelegate {
     @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "PGP",
+                "EDE",
+                "PGP",
+                'P', "plateSteel",
+                'G', Blocks.GLASS_PANE,
+                'E', "gemEmerald",
+                'D', Blocks.DISPENSER);
     }
 }

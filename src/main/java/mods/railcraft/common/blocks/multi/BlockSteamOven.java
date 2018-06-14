@@ -1,11 +1,16 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
@@ -50,5 +55,16 @@ public  class BlockSteamOven extends BlockMultiBlockInventory {
     @SideOnly(Side.CLIENT)
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(4, 2);
+    }
+
+    @Override
+    public void defineRecipes() {
+        ItemStack stack = new ItemStack(this, 4);
+        CraftingPlugin.addRecipe(stack,
+                "SSS",
+                "SFS",
+                "SSS",
+                'F', new ItemStack(Blocks.FURNACE),
+                'S', RailcraftItems.PLATE, Metal.STEEL);
     }
 }

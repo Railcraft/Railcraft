@@ -60,7 +60,7 @@ public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> ex
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        deregisterNode(worldIn, pos);
     }
 
     @Override

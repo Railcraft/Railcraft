@@ -2,10 +2,14 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -60,12 +64,6 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         deregisterNode(worldIn, pos);
@@ -79,5 +77,17 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
         return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+    }
+
+    @Override
+    public void defineRecipes() {
+        ItemStack stack = new ItemStack(this, 2);
+        CraftingPlugin.addRecipe(stack,
+                "CGC",
+                "GRG",
+                "CGC",
+                'C', RailcraftItems.PLATE, Metal.COPPER,
+                'G', "ingotGold",
+                'R', "blockRedstone");
     }
 }

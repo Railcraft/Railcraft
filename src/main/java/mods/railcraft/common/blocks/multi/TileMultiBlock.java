@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
 
@@ -80,6 +81,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         return componentsView;
     }
 
+    @OverridingMethodsMustInvokeSuper
     protected void onMasterChanged() {
     }
 
@@ -199,6 +201,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         }
     }
 
+    @OverridingMethodsMustInvokeSuper
     protected void onMasterReset() {
         components.clear();
     }
@@ -312,6 +315,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void invalidate() {
         if (world == null || Game.isHost(world)) {
             tested = false;

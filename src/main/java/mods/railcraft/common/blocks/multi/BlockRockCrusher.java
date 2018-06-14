@@ -1,11 +1,14 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.property.PropertyCharacter;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -76,5 +79,17 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     @SideOnly(Side.CLIENT)
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(4, 3);
+    }
+
+    @Override
+    public void defineRecipes() {
+        ItemStack stack = new ItemStack(this, 4);
+        CraftingPlugin.addRecipe(stack,
+                "PDP",
+                "DSD",
+                "PDP",
+                'D', "gemDiamond",
+                'P', new ItemStack(Blocks.PISTON),
+                'S', "blockSteel");
     }
 }

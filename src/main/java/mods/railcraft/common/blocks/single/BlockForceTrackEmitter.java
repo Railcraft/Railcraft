@@ -2,11 +2,13 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -49,5 +51,16 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "PIP",
+                "IBI",
+                "PIP",
+                'P', "plateTin",
+                'I', "ingotCopper",
+                'B', "blockDiamond");
     }
 }
