@@ -89,7 +89,7 @@ public class GuiTrackRouting extends TileGui {
     }
 
     private void sendUpdatePacket() {
-        PacketBuilder.instance().sendGuiReturnPacket((IGuiReturnHandler) track.getTile());
+        PacketBuilder.instance().sendGuiReturnPacket(track.getTile());
     }
 
     @Override

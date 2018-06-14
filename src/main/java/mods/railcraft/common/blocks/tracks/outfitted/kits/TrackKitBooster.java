@@ -17,8 +17,6 @@ import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
 public class TrackKitBooster extends TrackKitPowered {
 
@@ -39,7 +37,7 @@ public class TrackKitBooster extends TrackKitPowered {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        TrackType trackType = ((TileTrackOutfitted) getTile()).getTrackType();
+        TrackType trackType = getTile().getTrackType();
         if (TrackTypes.REINFORCED.getTrackType() == trackType)
             onMinecartPassStandard(cart, BOOST_FACTOR_REINFORCED);
         else if (trackType.isHighSpeed())

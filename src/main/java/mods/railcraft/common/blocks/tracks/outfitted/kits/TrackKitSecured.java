@@ -67,7 +67,7 @@ public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiR
     }
 
     @Override
-    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         byte lock = data.readByte();
         if (sender == null || canAccess(sender.getGameProfile()))
             lockController.setCurrentState(lock);
@@ -104,7 +104,7 @@ public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiR
 
     @Override
     public ITextComponent getDisplayName() {
-        return ((TileTrackOutfitted) getTile()).getDisplayName();
+        return getTile().getDisplayName();
     }
 
     @Override

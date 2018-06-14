@@ -658,7 +658,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         try {
             DataInputStream byteSteam = new DataInputStream(new ByteBufInputStream(data));
             String name = byteSteam.readUTF();
-            if (!name.equals(""))
+            if (!name.isEmpty())
                 setCustomNameTag(name);
             model = byteSteam.readUTF();
         } catch (IOException ignored) {

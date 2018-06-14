@@ -16,13 +16,16 @@ import mods.railcraft.api.tracks.TrackType;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackTileFactory {
+public final class TrackTileFactory {
 
     public static void initTrackTile(TileTrackOutfitted tile, TrackType trackType, TrackKit trackKit) {
         ITrackKitInstance trackInstance = trackKit.createInstance();
         tile.setTrackType(trackType);
         tile.setTrackKitInstance(trackInstance);
         trackInstance.setTile(tile);
+    }
+
+    private TrackTileFactory() {
     }
 
 }
