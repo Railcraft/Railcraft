@@ -1,4 +1,7 @@
 <root>
+    <item name='forestry.api.apiculture.BeeManager beeRoot'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
     <item name='forestry.api.apiculture.IBeeRoot forestry.api.apiculture.IBee getMember(net.minecraft.item.ItemStack)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>

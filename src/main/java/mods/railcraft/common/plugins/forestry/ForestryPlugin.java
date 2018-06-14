@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forestry;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackInterface;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -36,7 +37,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
@@ -127,7 +127,8 @@ public class ForestryPlugin {
     public void registerBeeFilterRecipe() {
     }
 
-    private static class ForestryPluginInstalled extends ForestryPlugin {
+    @SuppressWarnings("deprecation")
+    private static final class ForestryPluginInstalled extends ForestryPlugin {
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         public void defineBackpackRecipes() {
@@ -344,20 +345,28 @@ public class ForestryPlugin {
 
         @Override
         public boolean isBee(ItemStack stack) {
-            IBee bee = BeeManager.beeRoot.getMember(stack);
-            return bee != null && bee.isAnalyzed();
+            IBeeRoot root = BeeManager.beeRoot;
+            if (root == null) {
+                return false;
+            }
+            IBee bee = root.getMember(stack);
+            return bee != null;
         }
 
         @Override
         public boolean isAnalyzedBee(ItemStack stack) {
-            IBee bee = BeeManager.beeRoot.getMember(stack);
+            IBeeRoot root = BeeManager.beeRoot;
+            if (root == null) {
+                return false;
+            }
+            IBee bee = root.getMember(stack);
             return bee != null && bee.isAnalyzed();
         }
 
         @Override
         public void registerBeeFilterRecipe() {
             CraftingPlugin.addRecipe(new FilterBeesGenomeRecipe());
-            RecipeSorter.register("railcraft:filter_bees_species", FilterBeesGenomeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+//            RecipeSorter.register("railcraft:filter_bees_species", FilterBeesGenomeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         }
     }
 }
