@@ -18,6 +18,11 @@ import javax.annotation.Nullable;
  */
 public interface MetalTank {
 
+    /**
+     * Returns a localization entry for the title.
+     *
+     * @return A localization entry
+     */
     String getTitle();
 
     boolean isTankBlock(IBlockState meta);

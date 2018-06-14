@@ -30,7 +30,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineTileRegistry {
+public final class MachineTileRegistry {
 
     public static void registerTileEntities() {
         // Alpha
@@ -124,5 +124,8 @@ public class MachineTileRegistry {
         RailcraftRegistry.register(TileWorldspikePassive.class, "worldspike_passive");
 
         RailcraftRegistry.register(TileTrackForce.class, "track_force");
+    }
+
+    private MachineTileRegistry() {
     }
 }
