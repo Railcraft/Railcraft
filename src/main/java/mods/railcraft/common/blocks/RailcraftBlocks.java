@@ -145,6 +145,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemAdminSteamProducer::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
+    RED_COKE_OVEN ("red_coke_oven", BlockRedCokeOven.class, BlockRedCokeOven::new, ItemRedCokeOven::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemRockCrusher::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemSteamOven::new),
