@@ -56,6 +56,7 @@ public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftItemSimpl
                 " S ",
                 'I', "ingotSteel",
                 'S', "stickWood");
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
     }
 
     @Override

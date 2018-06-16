@@ -54,6 +54,7 @@ public class ItemSteelHoe extends ItemHoe implements IRailcraftItemSimple {
                 " S ",
                 'I', "ingotSteel",
                 'S', "stickWood");
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
     }
 
     @Override

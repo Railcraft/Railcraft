@@ -38,6 +38,7 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
                         "III",
                         "I I",
                         'I', "ingotSteel");
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case CHEST:
                 CraftingPlugin.addRecipe(new ItemStack(this), true,
@@ -45,6 +46,7 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
                         "III",
                         "III",
                         'I', "ingotSteel");
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case LEGS:
                 CraftingPlugin.addRecipe(new ItemStack(this), true,
@@ -52,12 +54,14 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
                         "I I",
                         "I I",
                         'I', "ingotSteel");
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case FEET:
                 CraftingPlugin.addRecipe(new ItemStack(this), true,
                         "I I",
                         "I I",
                         'I', "ingotSteel");
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
         }
     }
