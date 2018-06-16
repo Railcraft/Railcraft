@@ -25,27 +25,7 @@ public enum EnumOre implements IVariantEnumBlock<EnumOre> {
     SALTPETER("saltpeter", "oreSaltpeter"),
     DARK_DIAMOND("dark_diamond", "oreDiamond"),
     DARK_EMERALD("dark_emerald", "oreEmerald"),
-    DARK_LAPIS("dark_lapis", "oreLapis"),
-    @Deprecated
-    POOR_IRON("poor_iron", "orePoorIron"),
-    @Deprecated
-    POOR_GOLD("poor_gold", "orePoorGold"),
-    @Deprecated
-    POOR_COPPER("poor_copper", "orePoorCopper"),
-    @Deprecated
-    POOR_TIN("poor_tin", "orePoorTin"),
-    @Deprecated
-    POOR_LEAD("poor_lead", "orePoorLead"),
-    @Deprecated
-    POOR_SILVER("poor_silver", "orePoorSilver"),
-    @Deprecated
-    COPPER("copper", "oreCopper"),
-    @Deprecated
-    TIN("tin", "oreTin"),
-    @Deprecated
-    LEAD("lead", "oreLead"),
-    @Deprecated
-    SILVER("silver", "oreSilver"),;
+    DARK_LAPIS("dark_lapis", "oreLapis"),;
     public static final EnumOre[] VALUES = values();
     private final Definition def;
     private final String oreTag;
