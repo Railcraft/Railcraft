@@ -54,14 +54,6 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
         setTickRandomly(true);
     }
 
-    private static void registerPoorOreRecipe(EnumOre ore, Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(ore.getStack(), metal.getStack(Metal.Form.NUGGET, 2), 0.1F);
-    }
-
-    private static void registerOreRecipe(EnumOre ore, Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(ore.getStack(), metal.getStack(Metal.Form.INGOT), 0.7F);
-    }
-
     @Override
     public void initializeDefinition() {
         EntityTunnelBore.addMineableBlock(this);
@@ -153,5 +145,5 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
     }
-    
+
 }
