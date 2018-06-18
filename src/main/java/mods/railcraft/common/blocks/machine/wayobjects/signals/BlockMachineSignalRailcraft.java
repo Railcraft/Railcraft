@@ -55,6 +55,15 @@ public class BlockMachineSignalRailcraft extends BlockMachineSignal<SignalVarian
                 'I', "ingotIron",
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
+        SignalVariant.TOKEN.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+                "LCI",
+                "MBI",
+                "   ",
+                'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL,
+                'I', "ingotIron",
+                'L', RailcraftItems.SIGNAL_LAMP,
+                'B', "dyeBlack",
+                'M', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER));
     }
 
     @Override
