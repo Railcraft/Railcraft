@@ -276,7 +276,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 
     @Override
-    protected boolean isStructureTile(TileEntity tile) {
+    protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileBoiler;
     }
 

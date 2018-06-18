@@ -11,7 +11,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.core.items.IPrototypedItem;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;

@@ -12,9 +12,10 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -36,7 +37,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockMachineManipulator() {
-        super(true);
+        super(Material.ROCK);
         setDefaultState(getDefaultState().withProperty(FRONT, EnumFacing.DOWN).withProperty(ACTIVE, false));
     }
 

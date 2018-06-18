@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,11 +18,25 @@ import net.minecraftforge.common.property.IUnlistedProperty;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class UnlistedProperty<T extends IStringSerializable> implements IUnlistedProperty<T> {
+public class UnlistedProperty<T> implements IUnlistedProperty<T> {
     private final String name;
     private final Class<T> classType;
 
-    public static <T extends IStringSerializable> UnlistedProperty<T> create(String name, Class<T> classType) {
+    private static class UnlistedPropertySerializable<T extends IStringSerializable> extends UnlistedProperty<T> {
+        private UnlistedPropertySerializable(String name, Class<T> classType) {
+            super(name, classType);
+        }
+
+        @Override
+        public String valueToString(T value) {
+            return value.getName();
+        }
+    }
+
+    public static <T> UnlistedProperty<T> create(String name, Class<T> classType) {
+        if (IStringSerializable.class.isAssignableFrom(classType))
+            //noinspection unchecked
+            return new UnlistedPropertySerializable(name, classType);
         return new UnlistedProperty<T>(name, classType);
     }
 
@@ -48,6 +62,6 @@ public class UnlistedProperty<T extends IStringSerializable> implements IUnliste
 
     @Override
     public String valueToString(T value) {
-        return value.getName();
+        return value.toString();
     }
 }

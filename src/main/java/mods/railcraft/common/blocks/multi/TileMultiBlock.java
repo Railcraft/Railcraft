@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -45,7 +46,7 @@ import java.util.UUID;
 public abstract class TileMultiBlock extends RailcraftTickingTileEntity implements ISmartTile {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
-    private static final int NETWORK_RECHECK = 64;
+    private static final int NETWORK_RECHECK = 16;
     private final Timer netTimer = new Timer();
     private final List<? extends MultiBlockPattern> patterns;
     private final List<TileMultiBlock> components = new ArrayList<>();
@@ -420,6 +421,8 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
             byte pX = data.readByte();
             byte pY = data.readByte();
             byte pZ = data.readByte();
+
+//            System.out.println("HasMaster :" + pX + ", " + pY + ", " + pZ);
 
             if (posInPattern == null || posInPattern.getX() != pX || posInPattern.getY() != pY || posInPattern.getZ() != pZ) {
                 posInPattern = new BlockPos(pX, pY, pZ);

@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -54,7 +55,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     public static ResourceLocation[] lampTextures = new ResourceLocation[4];
 
     protected BlockMachineSignalBox() {
-        super(false);
+        super(Material.CIRCUITS);
         setDefaultState(getDefaultState()
                 .withProperty(CAP, false)
                 .withProperty(CONNECTION_NORTH, false)
@@ -101,6 +102,11 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         state = state.withProperty(CONNECTION_SOUTH, tile.map(t -> t.isConnected(EnumFacing.SOUTH)).orElse(false));
         state = state.withProperty(CONNECTION_WEST, tile.map(t -> t.isConnected(EnumFacing.WEST)).orElse(false));
         return state;
+    }
+
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override

@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +46,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     public static final PropertyBool ENABLED = PropertyBool.create("enabled");
 
     public BlockWorldspike() {
-        super(false);
+        super(Material.ROCK);
         setDefaultState(getDefaultState()
                 .withProperty(ENABLED, true)
         );
@@ -58,6 +59,11 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     @Override
     public StateMapperBase getStateMapper() {
         return new StateMap.Builder().withName(getVariantProperty()).build();
+    }
+
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override

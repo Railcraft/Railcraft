@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,10 +8,18 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.machine.interfaces;
+package mods.railcraft.common.blocks.interfaces;
 
-import mcp.MethodsReturnNonnullByDefault;
+import mods.railcraft.common.fluids.TankManager;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.Nullable;
+
+/**
+ * Created by CovertJaguar on 9/10/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface ITileTanks {
+    @Nullable
+    TankManager getTankManager();
+}

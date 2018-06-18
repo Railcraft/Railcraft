@@ -12,12 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RotorRepairRecipe;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -44,9 +39,6 @@ public class ModuleCharge extends RailcraftModulePayload {
                         RailcraftBlocks.CHARGE_BATTERY,
                         RailcraftBlocks.FRAME,
                         RailcraftBlocks.WIRE
-//                        RailcraftBlocks.machine_alpha,
-//                        RailcraftBlocks.machine_delta,
-//                        RailcraftBlocks.machine_epsilon
                 );
             }
 

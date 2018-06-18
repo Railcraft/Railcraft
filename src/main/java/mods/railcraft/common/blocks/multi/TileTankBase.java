@@ -19,9 +19,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
@@ -33,7 +31,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -49,7 +46,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -71,7 +71,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     protected final TankManager tankManager = new TankManager();
     private final StandaloneInventory inv;
     private final Timer networkTimer = new Timer();
-    private EnumColor color = EnumColor.WHITE;
     private FluidStack previousFluidStack;
 
     TileTankBase() {
@@ -396,65 +395,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public void initFromItem(ItemStack stack) {
-        super.initFromItem(stack);
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt != null && nbt.hasKey("color"))
-            recolourBlock(EnumDyeColor.byMetadata(15 - nbt.getByte("color")));
-    }
-
-    @Override
-    public boolean canSilkHarvest(EntityPlayer player) {
-        return true;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(int fortune) {
-        List<ItemStack> items = super.getDrops(fortune);
-        if (items.isEmpty())
-            return Collections.emptyList();
-        ItemStack drop = new ItemStack(getBlockType());
-        if (!InvTools.isEmpty(drop)) {
-            NBTTagCompound nbt = InvTools.getItemData(drop);
-            nbt.setByte("color", (byte) EnumColor.WHITE.ordinal());
-            items.add(drop);
-        }
-        return items;
-    }
-
-    @Override
-    public List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        List<ItemStack> items = new ArrayList<>();
-        List<ItemStack> old = getBlockType().getDrops(world, getPos(), getBlockState(), fortune);
-        if (old.isEmpty())
-            return Collections.emptyList();
-        ItemStack drop = new ItemStack(getBlockType());
-        if (!InvTools.isEmpty(drop)) {
-            NBTTagCompound nbt = InvTools.getItemData(drop);
-            nbt.setByte("color", (byte) color.ordinal());
-            items.add(drop);
-        }
-        return items;
-    }
-
-    @Override
-    public boolean recolourBlock(EnumDyeColor cID) {
-        EnumColor c = EnumColor.fromDye(cID);
-        if (color != c) {
-            color = c;
-            markBlockForUpdate();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int colorMultiplier() {
-        return color.getHexColor();
-    }
-
-    @Override
-    protected boolean isStructureTile(TileEntity tile) {
+    protected boolean isStructureTile(@Nullable TileEntity tile) {
         return tile instanceof TileTankBase;
     }
 
@@ -578,7 +519,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inv.writeToNBT("inv", data);
-        color.writeToNBT(data, "color");
         return data;
     }
 
@@ -587,25 +527,18 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inv.readFromNBT("inv", data);
-        color = EnumColor.readFromNBT(data, "color");
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte(color.ordinal());
         tankManager.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        EnumColor c = EnumColor.fromOrdinal(data.readByte());
         tankManager.readPacketData(data);
-        if (color != c) {
-            color = c;
-            markBlockForUpdate();
-        }
     }
 
     @Override

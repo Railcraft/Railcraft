@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -15,7 +25,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -25,9 +34,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -41,35 +47,6 @@ public interface ISmartTile {
 
     default boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
-    }
-
-    default List<ItemStack> getDrops(int fortune) {
-        return Collections.singletonList(new ItemStack(tile().getBlockType())); // fast and furious
-//        World world = tile().getWorld();
-//        IBlockState state = WorldPlugin.getBlockState(world, tile().getPos());
-//        List<ItemStack> ret = new ArrayList<>();
-//        Random rand = world.rand;
-//
-//        int count = state.getBlock().quantityDropped(state, fortune, rand);
-//        int damage = state.getBlock().damageDropped(state);
-//        Item item = state.getBlock().getItemDropped(state, rand, fortune);
-//        if (item != null)
-//            for (int i = 0; i < count; i++) {
-//                ret.add(new ItemStack(item, 1, damage));
-//            }
-//        return ret;
-    }
-
-    default List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
-        return getDrops(fortune);
-    }
-
-    default boolean canSilkHarvest(EntityPlayer player) {
-        return true;
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    default void initFromItem(ItemStack stack) {
     }
 
     default void onBlockAdded() {
@@ -107,7 +84,9 @@ public interface ISmartTile {
     }
 
     @Nullable
-    EnumGui getGui();
+    default EnumGui getGui() {
+        return null;
+    }
 
     default boolean isSideSolid(EnumFacing side) {
         return true;
@@ -129,14 +108,6 @@ public interface ISmartTile {
     default void randomDisplayTick(Random rand) {
     }
 
-    default int colorMultiplier() {
-        return 16777215;
-    }
-
-    default boolean recolourBlock(EnumDyeColor color) {
-        return false;
-    }
-
     default IPostConnection.ConnectStyle connectsToPost(EnumFacing side) {
         if (isSideSolid(side.getOpposite()))
             return IPostConnection.ConnectStyle.TWO_THIN;
@@ -151,8 +122,12 @@ public interface ISmartTile {
         WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());
     }
 
-    default IBlockState getActualState(IBlockState base) {
-        return base;
+    default IBlockState getActualState(IBlockState state) {
+        return state;
+    }
+
+    default IBlockState getExtendedState(IBlockState state) {
+        return state;
     }
 
 }

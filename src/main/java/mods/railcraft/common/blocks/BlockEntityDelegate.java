@@ -1,9 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.blocks.machine.interfaces.*;
-import mods.railcraft.common.plugins.color.ColorPlugin;
-import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.blocks.interfaces.*;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -12,19 +20,16 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -34,14 +39,12 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 /**
  *
  */
-public abstract class BlockEntityDelegate extends BlockContainerRailcraft implements ColorPlugin.IColoredBlock {
+public abstract class BlockEntityDelegate extends BlockContainerRailcraft implements IPostConnection {
 
     protected BlockEntityDelegate(Material materialIn) {
         super(materialIn);
@@ -62,24 +65,24 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     @Override
     public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
+//        ColorPlugin.instance.register(this, this);
     }
 
-    @Override
-    public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> {
-            //TODO: this probably not entirely correct, may need to handle this differently if world/pos null
-            if (worldIn != null && pos != null) {
-                WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).ifPresent(ISmartTile::colorMultiplier);
-            }
-            return EnumColor.WHITE.getHexColor();
-        };
-    }
-
-    @Override
-    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.recolourBlock(color)).orElse(false);
-    }
+//    @Override
+//    public IBlockColor colorHandler() {
+//        return (state, worldIn, pos, tintIndex) -> {
+//            //TODO: this probably not entirely correct, may need to handle this differently if world/pos null
+//            if (worldIn != null && pos != null) {
+//                WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).ifPresent(ISmartTile::colorMultiplier);
+//            }
+//            return EnumColor.WHITE.getHexColor();
+//        };
+//    }
+//
+//    @Override
+//    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+//        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.recolourBlock(color)).orElse(false);
+//    }
 
     @Override
     public int damageDropped(IBlockState state) {
@@ -95,12 +98,14 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-        return WorldPlugin.getTileEntity(world, pos, ITileRotate.class).map(t -> t.rotateBlock(axis)).orElse(false);
+        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
+                .retrieve(ITileRotate.class, t -> t.rotateBlock(axis)).orElse(false);
     }
 
     @Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos) {
-        return WorldPlugin.getTileEntity(world, pos, ITileRotate.class).map(ITileRotate::getValidRotations).orElseGet(() -> new EnumFacing[]{});
+        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
+                .retrieve(ITileRotate.class, ITileRotate::getValidRotations).orElse(null);
     }
 
     @Override
@@ -111,31 +116,8 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileNonSolid.class, t -> t.isSideSolid(side)).orElse(true);
-    }
-
-    @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return WorldPlugin.retrieveFromTile(world, pos, ISmartTile.class, t -> t.getDrops(fortune)).orElse(super.getDrops(world, pos, state, fortune));
-    }
-
-    public List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getBlockDroppedSilkTouch(fortune)).orElse(Collections.singletonList(getSilkTouchDrop(state)));
-    }
-
-    @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canSilkHarvest(player)).orElse(super.canSilkHarvest(world, pos, state, player));
-    }
-
-    @Override
-    @Nullable
-    @SuppressWarnings("deprecation")
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
-        if (drops.isEmpty())
-            return getItem(world, pos, state);
-        return drops.get(0);
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileNonSolid.class, t -> t.isSideSolid(side)).orElse(true);
     }
 
     @Override
@@ -147,16 +129,13 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return WorldPlugin.getTileEntity(worldIn, pos, ITileRedstoneEmitter.class).map(t -> t.getPowerOutput(side)).orElse(PowerPlugin.NO_POWER);
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileRedstoneEmitter.class, t -> t.getPowerOutput(side)).orElse(PowerPlugin.NO_POWER);
     }
 
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.canConnectRedstone(side)).orElse(false);
-    }
-
-    public void initFromItem(World world, BlockPos pos, ItemStack stack) {
-        WorldPlugin.getTileEntity(world, pos, ISmartTile.class).ifPresent(t -> t.initFromItem(stack));
     }
 
     @Override
@@ -203,27 +182,31 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(world, pos, ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(super.getSelectedBoundingBox(state, world, pos));
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
     }
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (pos.getY() < 0)
             return 0;
-        return WorldPlugin.retrieveFromTile(world, pos, ITileLit.class, ITileLit::getLightValue).orElse(0);
+        return TileManager.forTile(this::getTileClass, state, world, pos)
+                .retrieve(ITileLit.class, ITileLit::getLightValue).orElse(0);
     }
 
     @Override
@@ -265,16 +248,24 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return WorldPlugin.retrieveFromTile(worldIn, pos, ITileCompare.class, ITileCompare::getComparatorInputOverride).orElse(super.getComparatorInputOverride(state, worldIn, pos));
+        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+                .retrieve(ITileCompare.class, ITileCompare::getComparatorInputOverride).orElse(0);
     }
 
-    public IPostConnection.ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.connectsToPost(face)).orElse(IPostConnection.ConnectStyle.NONE);
+    @Override
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.connectsToPost(side)).orElse(IPostConnection.ConnectStyle.NONE);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.getActualState(state)).orElse(super.getActualState(state, worldIn, pos));
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getActualState(state)).orElse(super.getActualState(state, world, pos));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getExtendedState(state)).orElse(super.getExtendedState(state, world, pos));
     }
 }
