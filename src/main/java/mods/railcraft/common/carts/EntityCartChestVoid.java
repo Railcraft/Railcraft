@@ -82,7 +82,7 @@ public class EntityCartChestVoid extends CartBaseContainer {
 
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
-        return true;
+        return false;
     }
 
     @Override
