@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,9 +7,8 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.aesthetics.glass;
+package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -17,9 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStrengthGlass extends ItemBlockRailcraftSubtyped {
+public class ItemBlockRailcraftColored extends ItemBlockRailcraftSubtyped {
 
-    public ItemStrengthGlass(Block block) {
+    public ItemBlockRailcraftColored(Block block) {
         super(block);
     }
 

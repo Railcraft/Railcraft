@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -37,9 +37,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-import static mods.railcraft.common.util.inventory.InvTools.inc;
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * Created by CovertJaguar on 3/29/2017 for Railcraft.

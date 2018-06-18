@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.fuel.INeedsFuel;
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;

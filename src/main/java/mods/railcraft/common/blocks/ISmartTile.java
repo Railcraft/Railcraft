@@ -25,7 +25,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -85,7 +84,9 @@ public interface ISmartTile {
     }
 
     @Nullable
-    EnumGui getGui();
+    default EnumGui getGui() {
+        return null;
+    }
 
     default boolean isSideSolid(EnumFacing side) {
         return true;
@@ -107,14 +108,6 @@ public interface ISmartTile {
     default void randomDisplayTick(Random rand) {
     }
 
-    default int colorMultiplier() {
-        return 16777215;
-    }
-
-    default boolean recolourBlock(EnumDyeColor color) {
-        return false;
-    }
-
     default IPostConnection.ConnectStyle connectsToPost(EnumFacing side) {
         if (isSideSolid(side.getOpposite()))
             return IPostConnection.ConnectStyle.TWO_THIN;
@@ -129,8 +122,12 @@ public interface ISmartTile {
         WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());
     }
 
-    default IBlockState getActualState(IBlockState base) {
-        return base;
+    default IBlockState getActualState(IBlockState state) {
+        return state;
+    }
+
+    default IBlockState getExtendedState(IBlockState state) {
+        return state;
     }
 
 }

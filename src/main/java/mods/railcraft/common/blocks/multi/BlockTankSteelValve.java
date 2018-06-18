@@ -14,7 +14,6 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -33,11 +32,6 @@ public class BlockTankSteelValve extends BlockTankMetal {
 
     public BlockTankSteelValve() {
         super(Material.IRON);
-        IBlockState state = getDefaultState();
-        for (PropertyBool touch : BlockTankIronValve.TOUCHES.values()) {
-            state = state.withProperty(touch, false);
-        }
-        setDefaultState(state);
         setHarvestLevel("pickaxe", 1);
     }
 
@@ -55,7 +49,7 @@ public class BlockTankSteelValve extends BlockTankMetal {
     @Override
     protected BlockStateContainer createBlockState() {
         List<IProperty> props = new ArrayList<>();
-        props.add(COLOR);
+        props.add(getVariantProperty());
         for (EnumFacing face : EnumFacing.VALUES) {
             props.add(BlockTankIronValve.TOUCHES.get(face));
         }

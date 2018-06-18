@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,7 +31,7 @@ import java.util.Random;
 public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> extends BlockMachine<V> implements IChargeBlock {
 
     protected BlockMachineCharge() {
-        super(true);
+        super(Material.IRON);
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
     }

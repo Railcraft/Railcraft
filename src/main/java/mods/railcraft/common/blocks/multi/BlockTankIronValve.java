@@ -42,11 +42,6 @@ public class BlockTankIronValve extends BlockTankIron {
 
     public BlockTankIronValve() {
         super(Material.IRON);
-        IBlockState state = getDefaultState();
-        for (PropertyBool touch : TOUCHES.values()) {
-            state = state.withProperty(touch, false);
-        }
-        setDefaultState(state);
         setHarvestLevel("pickaxe", 1);
     }
 
@@ -64,7 +59,7 @@ public class BlockTankIronValve extends BlockTankIron {
     @Override
     protected BlockStateContainer createBlockState() {
         List<IProperty> props = new ArrayList<>();
-        props.add(COLOR);
+        props.add(getVariantProperty());
         for (EnumFacing face : EnumFacing.VALUES) {
             props.add(TOUCHES.get(face));
         }

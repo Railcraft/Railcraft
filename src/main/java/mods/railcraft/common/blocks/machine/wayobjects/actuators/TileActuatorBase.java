@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitSwitch;
 import mods.railcraft.common.plugins.forge.NBTPlugin;

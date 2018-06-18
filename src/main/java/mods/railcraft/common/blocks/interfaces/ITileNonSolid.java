@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.interfaces;
+package mods.railcraft.common.blocks.interfaces;
 
 import net.minecraft.util.EnumFacing;
 

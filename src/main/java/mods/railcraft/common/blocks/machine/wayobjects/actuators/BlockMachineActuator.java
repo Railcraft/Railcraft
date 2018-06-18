@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -46,7 +47,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     public static final PropertyBool THROWN = PropertyBool.create("thrown");
 
     public BlockMachineActuator() {
-        super(false);
+        super(Material.CIRCUITS);
         setDefaultState(getDefaultState()
                 .withProperty(FACING, EnumFacing.NORTH)
                 .withProperty(RED_FLAG, ISwitchActuator.ArrowDirection.NORTH_SOUTH)
@@ -65,6 +66,11 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
 
     @Override
     public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 

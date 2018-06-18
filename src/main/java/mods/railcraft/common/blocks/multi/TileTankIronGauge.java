@@ -9,22 +9,19 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Timer;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Map;
+import java.util.EnumSet;
 import java.util.Random;
 
 /**
@@ -64,38 +61,21 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState base) {
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
         if (!isStructureValid()) {
-            return base.getBlock().getDefaultState();
+            return state;
         }
-        for (Map.Entry<EnumFacing, PropertyEnum<BlockTankIronGauge.RenderState>> entry : BlockTankIronGauge.TOUCHES.entrySet()) {
-            EnumFacing face = entry.getKey();
-            PropertyEnum<BlockTankIronGauge.RenderState> property = entry.getValue();
-            if (WorldPlugin.getBlock(world, getPos().offset(face)) == getBlockType()) {
-                base = base.withProperty(property, BlockTankIronGauge.RenderState.TRANSPARENT);
-                continue;
-            }
 
-            if (face.getAxis() == EnumFacing.Axis.Y) {
-                base = base.withProperty(property, BlockTankIronGauge.RenderState.DEFAULT);
-            } else {
-                boolean upConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.UP)) == getBlockType();
-                boolean downConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.DOWN)) == getBlockType();
-                if (upConnected) {
-                    if (downConnected) {
-                        base = base.withProperty(property, BlockTankIronGauge.RenderState.MIDDLE);
-                    } else {
-                        base = base.withProperty(property, BlockTankIronGauge.RenderState.BOTTOMMOST);
-                    }
-                } else {
-                    if (downConnected) {
-                        base = base.withProperty(property, BlockTankIronGauge.RenderState.TOPMOST);
-                    } else {
-                        base = base.withProperty(property, BlockTankIronGauge.RenderState.DEFAULT);
-                    }
-                }
-            }
-        }
-        return base;
+        EnumSet<BlockStrengthGlass.Position> neighbors = EnumSet.noneOf(BlockStrengthGlass.Position.class);
+
+        if (WorldPlugin.getBlockState(world, pos.up()) == state)
+            neighbors.add(BlockStrengthGlass.Position.TOP);
+
+        if (WorldPlugin.getBlockState(world, pos.down()) == state)
+            neighbors.add(BlockStrengthGlass.Position.BOTTOM);
+
+        state = state.withProperty(BlockTankIronGauge.POSITION, BlockStrengthGlass.Position.patterns.get(neighbors));
+        return state;
     }
 }

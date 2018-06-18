@@ -10,13 +10,14 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.ISubtypedBlock;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -37,12 +38,20 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankMetal extends BlockMultiBlock {
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
+@RailcraftBlockMetadata(variant = EnumColor.class, propertyName = "color")
+public abstract class BlockTankMetal extends BlockMultiBlock implements ColorPlugin.IColoredBlock, ISubtypedBlock<EnumColor> {
+    private VariantData<EnumColor> variantData;
 
     protected BlockTankMetal(Material material) {
         super(material);
-        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE));
+    }
+
+    @Override
+    public VariantData<EnumColor> getVariantData() {
+        if (variantData == null)
+            variantData = ISubtypedBlock.super.getVariantData();
+        return variantData;
     }
 
     @Override
@@ -66,26 +75,14 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
         CraftingPlugin.addRecipe(getStack(8), recipe);
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumColor.class;
-    }
-
-    @Nullable
-    @Override
-    public IVariantEnum[] getVariants() {
-        return EnumColor.VALUES;
+    public void finalizeDefinition() {
+        ColorPlugin.instance.register(this, this);
     }
 
     @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        IBlockState state = getDefaultState();
-        if (variant != null) {
-            checkVariant(variant);
-            state = state.withProperty(COLOR, (EnumColor) variant);
-        }
-        return state;
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, getVariantProperty());
     }
 
     /**
@@ -93,7 +90,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
+        return convertMetaToState(meta);
     }
 
     /**
@@ -101,35 +98,26 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return getColor(state).ordinal();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR);
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @SideOnly(Side.CLIENT)
     @Nullable
     @Override
     public StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(COLOR).build();
-    }
-
-    public EnumColor getColor(IBlockState state) {
-        return state.getValue(COLOR);
+        return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
 
     @Override
     public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
+        return (state, worldIn, pos, tintIndex) -> getVariant(state).getHexColor();
     }
 
     @Override
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        if (getColor(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
+        if (getVariant(state).getDye() != color) {
+            world.setBlockState(pos, getDefaultState().withProperty(getVariantProperty(), EnumColor.fromDye(color)));
             return true;
         }
         return false;
@@ -140,11 +128,11 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      */
     @Override
     public MapColor getMapColor(IBlockState state) {
-        return getColor(state).getMapColor();
+        return getVariant(state).getMapColor();
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return getColor(state).ordinal();
+        return getVariant(state).ordinal();
     }
 }
