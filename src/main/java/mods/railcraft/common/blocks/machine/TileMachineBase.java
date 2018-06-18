@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.util.misc.Game;
@@ -111,6 +110,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity impleme
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
-                && ((BlockContainerRailcraftSubtyped) getBlockType()).getVariant(oldState) == ((BlockContainerRailcraftSubtyped) getBlockType()).getVariant(newSate));
+                && ((BlockMachine) getBlockType()).getVariant(oldState) == ((BlockMachine) getBlockType()).getVariant(newSate));
     }
 }
