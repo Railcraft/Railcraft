@@ -15,6 +15,7 @@ import net.minecraft.command.CommandException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by CovertJaguar on 6/4/2017 for Railcraft.
@@ -45,8 +46,9 @@ public class ArgDeque extends ArrayDeque<String> {
         if (entries > size())
             throw new CommandException("commands.generic.syntax");
         String[] args = new String[entries];
+        Iterator<String> it = iterator();
         for (int i = 0; i < args.length; i++) {
-            args[i] = peek();
+            args[i] = it.next();
         }
         return args;
     }
