@@ -538,9 +538,6 @@ public class ModuleFactory extends RailcraftModulePayload {
     }
 
     private void registerAltSteelFurnaceRecipe() {
-        List<ItemStack> iron = OreDictionary.getOres("nuggetIron");
-        for (ItemStack nugget : iron) {
-            CraftingPlugin.addFurnaceRecipe(nugget, RailcraftItems.NUGGET.getStack(Metal.STEEL), 0);
-        }
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.IRON_NUGGET, 1), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0);
     }
 }

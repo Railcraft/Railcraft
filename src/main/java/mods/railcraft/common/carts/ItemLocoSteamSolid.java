@@ -11,10 +11,13 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,27 +35,25 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        Object tank;
+        ItemStack tank;
         //TODO fix
 //        if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
 //            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
 //        else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
 //            tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getStack();
-//        else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
-//            tank = EnumMachineBeta.TANK_IRON_WALL.getStack();
-        if (Metal.STEEL.getStack(Metal.Form.PLATE) != null)
-            tank = Metal.STEEL.getOreTag(Metal.Form.PLATE);
-        else if (OreDictPlugin.oreExists("ingotSteel"))
-            tank = "ingotSteel";
-        else
+            tank = RailcraftBlocks.TANK_IRON_WALL.getStack(1);
+         if (InvTools.isEmpty(tank))
+            tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
+         if (InvTools.isEmpty(tank))
+            tank = RailcraftItems.INGOT.getStack(1, Metal.STEEL);
+         if (InvTools.isEmpty(tank))
             tank = new ItemStack(Items.IRON_INGOT);
 
         ItemStack firebox;
 //        if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
 //            firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getStack();
-//        else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
-//            firebox = EnumMachineAlpha.BLAST_FURNACE.getStack();
-//        else
+            firebox = RailcraftBlocks.BLAST_FURNACE.getStack(1);
+        if (InvTools.isEmpty(firebox))
             firebox = new ItemStack(Blocks.FURNACE);
 
         CraftingPlugin.addRecipe(getStack(),

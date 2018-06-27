@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 public class BlockTankWater extends BlockMultiBlock {
 
     public BlockTankWater() {
-        super(Material.ROCK);
-        setHarvestLevel("pickaxe", 1);
+        super(Material.WOOD);
+        setHarvestLevel("axe", 0);
     }
 
     @Override

@@ -55,6 +55,16 @@ public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDu
                 'I', "ingotIron",
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
+        SignalDualVariant.TOKEN.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+                "LCI",
+                "MBI",
+                "LRI",
+                'C', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.SIGNAL,
+                'M', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.CONTROLLER,
+                'R', RailcraftItems.CIRCUIT, ItemCircuit.EnumCircuit.RECEIVER,
+                'I', "ingotIron",
+                'L', RailcraftItems.SIGNAL_LAMP,
+                'B', "dyeBlack"));
     }
 
     @Override

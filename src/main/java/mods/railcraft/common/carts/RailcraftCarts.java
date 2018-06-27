@@ -58,6 +58,11 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     // Railcraft Carts
     BORE(1, "bore", EntityTunnelBore.class, ItemTunnelBore::new),
     CARGO(0, "cart_cargo", EntityCartCargo.class, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
+    CHEST_VOID(0, "cart_void", EntityCartChestVoid.class, ItemCartChestVoid::new, RailcraftBlocks.CHEST_VOID::getStack) {
+        {
+            conditions().add(RailcraftBlocks.CHEST_VOID);
+        }
+    },
     ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, ItemCart::new, ModItems.BAT_BOX::get),
     ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, ItemCart::new, ModItems.CESU::get),
     ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, ItemCart::new, ModItems.MFE::get),

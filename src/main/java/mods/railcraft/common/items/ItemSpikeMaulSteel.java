@@ -30,6 +30,7 @@ public class ItemSpikeMaulSteel extends ItemSpikeMaul {
                 'I', "ingotSteel",
                 'B', "blockSteel",
                 'S', "stickWood");
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
     }
 
 }

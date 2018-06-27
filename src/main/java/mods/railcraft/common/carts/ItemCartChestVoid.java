@@ -7,30 +7,31 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.items;
 
+package mods.railcraft.common.carts;
+
+import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 /**
+ * Created by CovertJaguar on 8/30/2016 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSpikeMaulIron extends ItemSpikeMaul {
-
-    public ItemSpikeMaulIron() {
-        super(ItemMaterials.Material.IRON, ToolMaterial.IRON);
+public class ItemCartChestVoid extends ItemCart implements IPrototypedItem {
+    public ItemCartChestVoid(IRailcraftCartContainer cart) {
+        super(cart);
     }
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
-                "IBI",
-                " S ",
-                " S ",
-                'I', "ingotIron",
-                'B', "blockIron",
-                'S', "stickWood");
-        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), new ItemStack(Items.IRON_NUGGET, 1), 0.1f);
+        CraftingPlugin.addRecipe(getStack(),
+                "B",
+                "M",
+                'B', RailcraftBlocks.CHEST_VOID,
+                'M', Items.MINECART);
     }
 }

@@ -28,6 +28,7 @@ public class ItemCrowbarSteel extends ItemCrowbar {
                 "IR ",
                 'I', "ingotSteel",
                 'R', "dyeRed");
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
     }
 
 }

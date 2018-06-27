@@ -35,7 +35,8 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                        RailcraftBlocks.machine_alpha,
 //                        RailcraftBlocks.machine_beta,
                         RailcraftBlocks.MANIPULATOR,
-                        RailcraftBlocks.CHEST_VOID
+                        RailcraftBlocks.CHEST_VOID,
+                        RailcraftCarts.CHEST_VOID
                 );
             }
 

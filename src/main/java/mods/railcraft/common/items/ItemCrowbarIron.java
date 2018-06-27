@@ -10,6 +10,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -29,5 +30,6 @@ public class ItemCrowbarIron extends ItemCrowbar {
                 "IR ",
                 'I', "ingotIron",
                 'R', "dyeRed");
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(this), new ItemStack(Items.IRON_NUGGET, 1), 0.1f);
     }
 }

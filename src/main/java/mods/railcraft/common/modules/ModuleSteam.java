@@ -155,10 +155,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                 ItemStack tank; //TODO
 //                if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
 //                    tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
-//                else if (EnumMachineBeta.TANK_STEEL_WALL.isAvailable())
-//                    tank = EnumMachineBeta.TANK_STEEL_WALL.getStack();
-//                else
-                tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
+                tank = RailcraftBlocks.TANK_STEEL_WALL.getStack(1);
+                if (InvTools.isEmpty(tank))
+                    tank = RailcraftItems.PLATE.getStack(1, Metal.STEEL);
                 if (InvTools.isEmpty(tank))
                     tank = RailcraftItems.INGOT.getStack(1, Metal.STEEL);
                 if (InvTools.isEmpty(tank))
