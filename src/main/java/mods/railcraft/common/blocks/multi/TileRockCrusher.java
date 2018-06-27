@@ -142,7 +142,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     //    @Nullable
 //    private final EnergyStorage energyStorage;
 //    @Nullable
-//    public final RFEnergyIndicator rfIndicator;
+//    public final FEEnergyIndicator rfIndicator;
     private boolean isWorking;
     private boolean paused;
     @Nullable
@@ -153,7 +153,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         super(18, patterns);
 
 //        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
-//        rfIndicator = new RFEnergyIndicator(energyStorage);
+//        rfIndicator = new FEEnergyIndicator(energyStorage);
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {

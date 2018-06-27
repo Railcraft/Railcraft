@@ -29,7 +29,6 @@ archivesBaseName = "Railcraft_" + project.version_minecraft
 ext {
     apiRailcraft = "./api/railcraft"
     // apiForestry = "./api/forestry"
-    // apiRedstoneFlux = "./api/redstoneflux"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
     dirLang = "./lang"
@@ -80,10 +79,6 @@ repositories {
         name = "jei"
         url = "http://dvs1.progwml6.com/files/maven/"
     }
-    maven {
-        name = "CoFH Maven"
-        url = "http://maven.covers1624.net"
-    }
 }
 
 configurations {
@@ -103,8 +98,6 @@ dependencies {
     // BuildCraft
     compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     runtime "com.mod-buildcraft:buildcraft:${project.version_buildcraft}"
-    // RF
-    api "cofh:RedstoneFlux:${project.version_rf}:deobf"
     // annotations
     compileOnly "org.jetbrains:annotations:15.0"
     api 'org.checkerframework:checker-qual:2.4.0'
@@ -155,9 +148,6 @@ jar {
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
                 include '**/ic2/api/recipe/**'
-                include '**/cofh/redstoneflux/**'
-                exclude '**/cofh/redstoneflux/RedstoneFlux.java'
-                exclude '**/cofh/redstoneflux/RedstoneFlux.class'
                 exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
@@ -177,9 +167,6 @@ jar {
 //    into('thaumcraft/api') {
 //        from "./src/api/java/thaumcraft/api/LICENSE.txt"
 //    }
-    into('cofh/api') {
-        from "./src/api/java/cofh/api/LICENSE - LGPLv3.txt"
-    }
 //    into('buildcraft/api') {
 //        from "./src/api/java/buildcraft/api/LICENSE.API"
 //    }
@@ -201,7 +188,6 @@ task devJar(type: Jar, dependsOn: 'classes') {
 
     from(sourceSets.api.output) {
         include '**/mods/railcraft/api/**'
-        include '**/cofh/api/**'
         exclude '**/uristqwerty/**'
         exclude '**/buildcraft/**'
         exclude '**/thaumcraft/**'

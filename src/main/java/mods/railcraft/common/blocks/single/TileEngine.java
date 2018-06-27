@@ -9,15 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import cofh.redstoneflux.impl.EnergyStorage;
-import cofh.redstoneflux.api.IEnergyConnection;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
+import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
+import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -30,17 +28,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends RailcraftTickingTileEntity implements IEnergyConnection, ITileRotate, ITileNonSolid, ISmartTile {
-
+public abstract class TileEngine extends RailcraftTickingTileEntity implements ITileRotate, ITileNonSolid, ISmartTile {
+//TODO: Convert to MJ
     public float currentOutput;
-    public int energy;
     private EnumFacing direction = EnumFacing.UP;
     private float pistonProgress = 0.25F;
     private int pistonStage;
@@ -49,22 +52,14 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     private boolean needsInit = true;
     //    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
-    public final RFEnergyIndicator rfIndicator = new RFEnergyIndicator(new EnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted()) {
-        @Override
-        public int getEnergyStored() {
-            return energy;
-        }
-    });
+    protected final EnergyStorage storage = new EnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted());
+    public final FEEnergyIndicator rfIndicator = new FEEnergyIndicator(storage);
 
     protected TileEngine() {
     }
 
     public float getCurrentOutput() {
         return currentOutput;
-    }
-
-    public int getEnergy() {
-        return energy;
     }
 
     protected void playSoundIn() {
@@ -99,8 +94,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
         }
 
         if (!powered)
-            if (energy > 1)
-                energy--;
+            if (storage.getEnergyStored() > 1)
+                storage.extractEnergy(1, false);
 
         if (getEnergyStage() == EnergyStage.OVERHEAT)
             overheat();
@@ -112,8 +107,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
-                if (RedstoneFluxPlugin.canTileReceivePower(tile, direction.getOpposite())) {
-                    RedstoneFluxPlugin.pushToTile(tile, direction.getOpposite(), extractEnergy());
+                if (EnergyPlugin.canTileReceivePower(tile, direction.getOpposite())) {
+                    EnergyPlugin.pushToTile(tile, direction.getOpposite(), extractEnergy());
                 }
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
@@ -126,8 +121,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
         } else if (powered) {
             TileEntity tile = tileCache.getTileOnSide(direction);
 
-            if (RedstoneFluxPlugin.canTileReceivePower(tile, direction.getOpposite()))
-                if (energy > 0) {
+            if (EnergyPlugin.canTileReceivePower(tile, direction.getOpposite()))
+                if (storage.getEnergyStored() > 0) {
                     pistonStage = 1;
                     setActive(true);
                 } else
@@ -223,7 +218,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
-            if (RedstoneFluxPlugin.canTileReceivePower(tile, dir.getOpposite())) {
+            if (EnergyPlugin.canTileReceivePower(tile, dir.getOpposite())) {
                 direction = dir;
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();
@@ -245,7 +240,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     public double getEnergyLevel() {
-        return (double) energy / (double) maxEnergy();
+        return (double) storage.getEnergyStored() / (double) maxEnergy();
     }
 
     protected EnergyStage computeEnergyStage() {
@@ -289,33 +284,15 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     public void addEnergy(int addition) {
-        energy += addition;
-//        genDebug += addition;
-
-        if (energy > maxEnergy())
-            energy = maxEnergy();
-        if (energy < 0)
-            energy = 0;
+        storage.receiveEnergy(addition, false);
     }
 
     public void subtractEnergy(int subtraction) {
-        energy -= subtraction;
-
-        if (energy > maxEnergy())
-            energy = maxEnergy();
-        if (energy < 0)
-            energy = 0;
+        storage.extractEnergy(subtraction, false);
     }
 
     public int extractEnergy() {
-        int amount = maxEnergyExtracted();
-        if (energy >= amount) {
-            energy -= amount;
-            return amount;
-        }
-        int returnValue = energy;
-        energy = 0;
-        return returnValue;
+        return storage.extractEnergy(maxEnergyExtracted(), false);
     }
 
     //    public int extractEnergy(int min, int max, boolean doExtract) {
@@ -360,7 +337,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
         data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
-        data.setInteger("energyRF", energy);
+        data.setTag("energy", CapabilityEnergy.ENERGY.writeNBT(storage, direction));
         data.setFloat("currentOutput", currentOutput);
         data.setByte("energyStage", (byte) energyStage.ordinal());
         return data;
@@ -372,7 +349,8 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
         direction = EnumFacing.getFront(data.getByte("direction"));
         powered = data.getBoolean("powered");
-        energy = data.getInteger("energyRF");
+        if (data.hasKey("energy"))
+            CapabilityEnergy.ENERGY.readNBT(storage, direction, data.getTag("energy"));
         currentOutput = data.getFloat("currentOutput");
         energyStage = EnergyStage.fromOrdinal(data.getByte("energyStage"));
     }
@@ -396,13 +374,24 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     }
 
     @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return from == direction;
+    public EnumFacing getFacing() {
+        return direction;
+    }
+
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        direction = facing;
     }
 
     @Override
-    public EnumFacing getFacing() {
-        return direction;
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == ENERGY || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        return capability == ENERGY && facing == direction ? ENERGY.cast(storage) : super.getCapability(capability, facing);
     }
 
     public enum EnergyStage {

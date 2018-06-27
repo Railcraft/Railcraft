@@ -9,17 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import cofh.redstoneflux.impl.EnergyStorage;
+import net.minecraftforge.energy.EnergyStorage;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class RFEnergyIndicator extends IndicatorController {
+public class FEEnergyIndicator extends IndicatorController {
 
     private final EnergyStorage energyStorage;
     private int rf;
 
-    public RFEnergyIndicator(EnergyStorage energyStorage) {
+    public FEEnergyIndicator(EnergyStorage energyStorage) {
         this.energyStorage = energyStorage;
     }
 
