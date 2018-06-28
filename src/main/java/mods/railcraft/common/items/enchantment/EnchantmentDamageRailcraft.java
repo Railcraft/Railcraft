@@ -10,31 +10,33 @@
 
 package mods.railcraft.common.items.enchantment;
 
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
+import java.util.function.Predicate;
 
 public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
 
     private final int baseEnchantability, levelEnchantability, thresholdEnchantability;
-    private final Class<? extends EntityLivingBase> targetType;
+    private final Predicate<? super Entity> check;
     private final float damageBonusPerLevel;
     private WeakReference<Entity> target;
 
-    public EnchantmentDamageRailcraft(String tag, Rarity rarity, int baseEnchantability, int levelEnchantability, int thresholdEnchantability, Class<? extends EntityLivingBase> targetType, float damageBonusPerLevel) {
+    public EnchantmentDamageRailcraft(String tag, Rarity rarity, int baseEnchantability, int levelEnchantability, int thresholdEnchantability, @Nullable Predicate<? super Entity> check, float damageBonusPerLevel) {
         super(tag, rarity, EntityEquipmentSlot.MAINHAND);
         this.baseEnchantability = baseEnchantability;
         this.levelEnchantability = levelEnchantability;
         this.thresholdEnchantability = thresholdEnchantability;
-        this.targetType = targetType;
+        this.check = check == null ? Predicates.alwaysTrue() : check;
         this.damageBonusPerLevel = damageBonusPerLevel;
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -57,7 +59,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
     @Override
     public float calcDamageByCreature(int lvl, EnumCreatureAttribute creatureType) {
         float modifier = 0.0f;
-        if (targetType == null || (target != null && targetType.isInstance(target.get())))
+        if ((target != null && check.test(target.get())))
             modifier = lvl * damageBonusPerLevel;
         target = null;
         return modifier;
@@ -65,7 +67,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentToolRailcraft {
 
     @SubscribeEvent
     public void attackEvent(AttackEntityEvent event) {
-        target = new WeakReference<Entity>(event.getTarget());
+        target = new WeakReference<>(event.getTarget());
     }
 
     @Override

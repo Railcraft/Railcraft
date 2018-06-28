@@ -15,13 +15,14 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -30,22 +31,19 @@ import net.minecraft.util.math.Vec3d;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileRitual extends RailcraftTickingTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
-    private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
-    private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();
+    private final Deque<BlockPos> queue = new ArrayDeque<>();
+    private final Set<BlockPos> visitedBlocks = new HashSet<>();
     public int charge;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
-    private Deque<BlockPos> lavaFound = new LinkedList<BlockPos>();
+    private Deque<BlockPos> lavaFound = new ArrayDeque<>();
     private int rebuildDelay;
     private String itemName;
 
@@ -76,8 +74,8 @@ public class TileRitual extends RailcraftTickingTileEntity {
             return;
         }
 
-        Item firestone = RailcraftItems.FIRESTONE_REFINED.item();
-        if (firestone == null)
+        ItemStack firestone = RailcraftItems.FIRESTONE_REFINED.getStack();
+        if (InvTools.isEmpty(firestone))
             return;
 
         if (charge >= firestone.getMaxDamage())
@@ -216,8 +214,4 @@ public class TileRitual extends RailcraftTickingTileEntity {
         return "tile.railcraft.firestone.recharge.name";
     }
 
-    @Override
-    public short getId() {
-        return 222;
-    }
 }

@@ -73,7 +73,7 @@ public enum RailcraftFluids {
     private final int density;
     private final int viscosity;
     private final boolean isGaseous;
-    private final ModelResourceLocation location;
+    final ModelResourceLocation location;
     private Fluid railcraftFluid;
     private Block railcraftBlock;
     private ItemBlock railcraftItem;

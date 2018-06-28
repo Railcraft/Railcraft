@@ -166,11 +166,6 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     }
 
     @Override
-    public short getId() {
-        return 76;
-    }
-
-    @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
         detector.writeGuiData(data);
     }

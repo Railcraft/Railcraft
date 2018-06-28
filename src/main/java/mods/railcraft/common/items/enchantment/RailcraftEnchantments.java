@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public enum RailcraftEnchantments {
     WRECKING(() -> new EnchantmentDamageRailcraft("wrecking", Enchantment.Rarity.RARE, 1, 11, 20, null, 0.75f)),
-    IMPLOSION(() -> new EnchantmentDamageRailcraft("implosion", Enchantment.Rarity.RARE, 5, 8, 20, EntityCreeper.class, 2.5f)),
+    IMPLOSION(() -> new EnchantmentDamageRailcraft("implosion", Enchantment.Rarity.RARE, 5, 8, 20, EntityCreeper.class::isInstance, 2.5f)),
     DESTRUCTION(() -> new EnchantmentDestruction(Enchantment.Rarity.VERY_RARE)),
     SMACK(() -> new EnchantmentSmack(Enchantment.Rarity.VERY_RARE));
     public static RailcraftEnchantments[] VALUES = values();

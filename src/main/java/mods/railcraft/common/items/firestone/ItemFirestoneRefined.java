@@ -110,8 +110,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (!isInCreativeTab(tab))
             return;
-        list.add(new ItemStack(this, 1, getMaxDamage()));
-        list.add(new ItemStack(this, 1, 0));
+        ItemStack noDamage = new ItemStack(this, 1, 0);
+        list.add(new ItemStack(this, 1, noDamage.getMaxDamage()));
+        list.add(noDamage);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public final int getItemBurnTime(ItemStack stack) {
-        if (stack.getItemDamage() < getMaxDamage())
+        if (stack.getItemDamage() < stack.getMaxDamage())
             return heat;
         return 0;
     }
@@ -212,8 +213,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
      * @return A new Entity object to spawn or null
      */
     @Override
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
-        EntityItemFirestone entity = (EntityItemFirestone) super.createEntity(world, location, stack);
+    public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemFirestone entity = super.createEntity(world, location, stack);
         entity.setRefined(true);
         return entity;
     }

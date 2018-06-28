@@ -136,8 +136,4 @@ public class TileSlab extends RailcraftTileEntity {
         markBlockForUpdate();
     }
 
-    @Override
-    public short getId() {
-        return 43;
-    }
 }

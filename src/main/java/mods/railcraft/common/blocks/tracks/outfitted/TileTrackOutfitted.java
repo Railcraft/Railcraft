@@ -116,11 +116,6 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     }
 
     @Override
-    public short getId() {
-        return -1;
-    }
-
-    @Override
     public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).writeGuiData(data);

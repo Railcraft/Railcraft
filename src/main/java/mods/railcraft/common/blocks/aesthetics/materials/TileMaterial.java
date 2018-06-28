@@ -64,9 +64,4 @@ public class TileMaterial extends RailcraftTileEntity {
         super.readPacketData(data);
         material = Materials.fromName(data.readUTF());
     }
-
-    @Override
-    public short getId() {
-        return 42;
-    }
 }

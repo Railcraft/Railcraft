@@ -53,11 +53,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity impleme
     }
 
     @Override
-    public final short getId() {
-        return (short) getMachineType().ordinal();
-    }
-
-    @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
     }

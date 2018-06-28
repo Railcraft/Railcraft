@@ -148,8 +148,4 @@ public class TilePostEmblem extends RailcraftTileEntity {
         return "tile.railcraft.post.emblem.name";
     }
 
-    @Override
-    public short getId() {
-        return (short) EnumPost.EMBLEM.ordinal();
-    }
 }

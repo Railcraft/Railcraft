@@ -138,9 +138,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public void markBlockForUpdate() {
 //        System.out.println("updating");
-        if (world != null) {
+        if (hasWorld()) {
             IBlockState state = getBlockState();
-            if (state != null)
+            if (state.getBlock().hasTileEntity(state))
                 world.notifyBlockUpdate(getPos(), state, state, 8);
         }
     }
@@ -252,11 +252,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Override
     public final World theWorld() {
         return world;
-    }
-
-    @Deprecated //useless
-    public short getId() {
-        return -1;
     }
 
     @Override

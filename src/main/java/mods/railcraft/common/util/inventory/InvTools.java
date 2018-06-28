@@ -136,6 +136,13 @@ public abstract class InvTools {
         return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
     }
 
+    public static ItemStack copyOne(ItemStack stack) {
+        ItemStack ret = copy(stack);
+        if (!isEmpty(stack))
+            stack.setCount(1);
+        return stack;
+    }
+
     public static boolean canMerge(ItemStack target, ItemStack source) {
         return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }

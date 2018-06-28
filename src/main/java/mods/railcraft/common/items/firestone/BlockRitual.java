@@ -30,18 +30,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -49,7 +47,7 @@ import java.util.Random;
  */
 public class BlockRitual extends BlockContainerRailcraft {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
-    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -8.0).shiftY(0.0625F * 8.0).build();
+    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -9.0).shiftY(0.0625F * 12.0).build();
 
     public BlockRitual() {
         super(Material.ROCK);
@@ -72,10 +70,9 @@ public class BlockRitual extends BlockContainerRailcraft {
         return new StateMap.Builder().ignore(CRACKED).build();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -9.0).shiftY(0.0625F * 12.0).build();
+        return BOUNDING_BOX;
     }
 
     /**
@@ -126,8 +123,7 @@ public class BlockRitual extends BlockContainerRailcraft {
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<>();
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileRitual) {
             TileRitual firestone = (TileRitual) tile;
@@ -138,9 +134,9 @@ public class BlockRitual extends BlockContainerRailcraft {
                     drop.setStackDisplayName(firestone.getItemName());
                 drops.add(drop);
             }
-        } else
+        } else {
             drops.add(ItemFirestoneRefined.getItemEmpty());
-        return drops;
+        }
     }
 
     @Override

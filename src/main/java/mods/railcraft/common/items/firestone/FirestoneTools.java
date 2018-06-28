@@ -34,10 +34,10 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FirestoneTools {
+public final class FirestoneTools {
 
     public static final Predicate<ItemStack> SPAWNS_FIRE = stack -> {
-        if (InvTools.isEmpty(stack) || stack.getItem() == null) return false;
+        if (InvTools.isEmpty(stack)) return false;
         if (RailcraftItems.FIRESTONE_RAW.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CUT.isEqual(stack)) return true;
         if (RailcraftItems.FIRESTONE_CRACKED.isEqual(stack)) return true;

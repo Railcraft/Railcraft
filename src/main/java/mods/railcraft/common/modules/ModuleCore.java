@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
+import com.google.common.base.Throwables;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
@@ -35,7 +36,7 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.crafting.*;
+import mods.railcraft.common.util.crafting.CraftingHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -53,19 +54,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Level;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -75,6 +78,8 @@ public class ModuleCore extends RailcraftModulePayload {
 
     public ModuleCore() {
         setEnabledEventHandler(new ModuleEventHandler() {
+            private final Field modField = ReflectionHelper.findField(EntityEntryBuilder.class, "mod");
+
             @Override
             public void construction() {
                 LinkageManager.reset();
@@ -98,17 +103,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 Helpers.structures = new MultiBlockHelper();
 
                 EntityItemFireproof.register();
-
-                //TODO move all these mess
-                RecipeSorter.register("railcraft:rotor.repair", RotorRepairRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:locomotive.painting", LocomotivePaintingRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:prototype", PrototypeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:fluid.shaped", ShapedFluidRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:fluid.shapeless", ShapelessFluidRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictPlugin.registerNewTags();
 
@@ -169,7 +163,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 });
 
                 if (RailcraftConfig.useCollisionHandler()) {
-                    //noinspection ConstantConditions
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
@@ -241,7 +234,6 @@ public class ModuleCore extends RailcraftModulePayload {
             private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.register();
 
-                //TODO fix this
                 ResourceLocation key = names.get(minecartType);
                 EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
                 Class<? extends Entity> minecartClass = old.getEntityClass();
@@ -249,7 +241,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 CartTools.classReplacements.put(minecartClass, cartType);
                 CartTools.vanillaCartItemMap.put(original, cartType);
 
-                EntityEntry substitute = EntityEntryBuilder.create()
+                EntityEntry substitute = createHackedEntityEntryBuilder()
                         .id(key, entityId)
                         .entity(minecartClass)
                         .name(old.getName())
@@ -261,6 +253,20 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
                 original.setCreativeTab(CreativeTabs.TRANSPORTATION);
+            }
+
+            private EntityEntryBuilder<Entity> createHackedEntityEntryBuilder() {
+                EntityEntryBuilder<Entity> ret = EntityEntryBuilder.create();
+
+                // So that entity registry does not add substitute entity entries with wrong ids to railcraft's network ids
+                try {
+                    EnumHelper.setFailsafeFieldValue(modField, ret, Loader.instance().getMinecraftModContainer());
+                } catch (Throwable ex) {
+                    Throwables.throwIfUnchecked(ex);
+                    throw new RuntimeException("cannot substitute vanilla carts", ex);
+                }
+
+                return ret;
             }
 
             @Override

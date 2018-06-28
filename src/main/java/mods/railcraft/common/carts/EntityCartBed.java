@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -80,6 +79,7 @@ public class EntityCartBed extends EntityCartBasic {
             }
             // Riding enforced! Otherwise player dismounts once sleeps
             if (rideAfterSleep) {
+                rideAfterSleep = false;
                 sendPlayerRiding((EntityPlayerMP) sleeper);
             }
             if (wokeUp) {
