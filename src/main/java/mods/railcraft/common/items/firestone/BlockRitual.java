@@ -12,6 +12,7 @@ package mods.railcraft.common.items.firestone;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -56,8 +57,12 @@ public class BlockRitual extends BlockContainerRailcraft {
         setSoundType(RailcraftSoundTypes.NULL);
         setLightLevel(1);
         setDefaultState(blockState.getBaseState().withProperty(CRACKED, false));
+    }
 
-        GameRegistry.registerTileEntity(TileRitual.class, "RCRitualTile");
+    @Override
+    public void initializeDefinition() {
+        super.initializeDefinition();
+        RailcraftRegistry.register(TileRitual.class, "ritual");
     }
 
     @SideOnly(Side.CLIENT)

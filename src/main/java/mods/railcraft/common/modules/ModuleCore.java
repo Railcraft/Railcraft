@@ -58,6 +58,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -243,16 +245,17 @@ public class ModuleCore extends RailcraftModulePayload {
                 ResourceLocation key = names.get(minecartType);
                 EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
                 Class<? extends Entity> minecartClass = old.getEntityClass();
-//                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
                 CartTools.classReplacements.put(minecartClass, cartType);
                 CartTools.vanillaCartItemMap.put(original, cartType);
 
-                EntityEntry substitute = new EntityEntry(cartType.getCartClass(), old.getName());
-                substitute.setRegistryName(key);
+                EntityEntry substitute = EntityEntryBuilder.create()
+                        .id(key, entityId)
+                        .entity(minecartClass)
+                        .name(old.getName())
+                        .factory(cartType.getFactory())
+                        .build();
                 ForgeRegistries.ENTITIES.register(substitute);
-//                EntityList.ID_TO_CLASS.remove(entityId);
-//                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 

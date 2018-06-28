@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartTools {
+public final class CartTools {
 
-    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<Item, IRailcraftCartContainer>();
-    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<Class<? extends Entity>, IRailcraftCartContainer>();
+    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<>();
+    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<>();
     public static String HIGH_SPEED_TAG = "HighSpeed";
 
     /**
@@ -277,6 +277,16 @@ public class CartTools {
     public static void smackCart(EntityMinecart respect, EntityMinecart cart, EntityPlayer smacker, float smackVelocity) {
         cart.motionX += Math.copySign(smackVelocity, respect.posX - smacker.posX);
         cart.motionZ += Math.copySign(smackVelocity, respect.posZ - smacker.posZ);
+    }
+
+    public static void initCartPos(EntityMinecart entity, double i, double j, double k) {
+        entity.setPosition(i, j, k);
+        entity.motionX = 0.0D;
+        entity.motionY = 0.0D;
+        entity.motionZ = 0.0D;
+        entity.prevPosX = i;
+        entity.prevPosY = j;
+        entity.prevPosZ = k;
     }
 
 }

@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketChat;
@@ -20,7 +21,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ChatPlugin {
+public final class ChatPlugin {
     public static ITextComponent makeMessage(String msg) {
         return new TextComponentString(msg);
     }
@@ -55,6 +55,10 @@ public class ChatPlugin {
             sendLocalizedChat(player, msg, args);
     }
 
+    public static void sendLocalizedHotBarMessageFromClient(String msg, Object... args) {
+        Minecraft.getMinecraft().ingameGUI.setOverlayMessage(makeMessage(String.format(LocalizationPlugin.translate(msg), args)), false);
+    }
+
     public static void sendLocalizedChatFromServer(@Nullable EntityPlayer player, String msg, Object... args) {
         if (player != null && Game.isHost(player.world)) {
             modifyArgs(args);
@@ -68,7 +72,7 @@ public class ChatPlugin {
             ((EntityPlayerMP) player).connection.sendPacket(new SPacketChat(translateMessage(msg, args), ChatType.GAME_INFO));
         }
     }
- 
+
     static void modifyArgs(Object... args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof String) {
@@ -81,12 +85,8 @@ public class ChatPlugin {
     }
 
     public static void sendLocalizedChatToAllFromServer(World world, String msg, Object... args) {
-        if (world instanceof WorldServer) {
-            WorldServer worldServer = (WorldServer) world;
-            for (Object obj : worldServer.playerEntities) {
-                if (obj instanceof EntityPlayer)
-                    sendLocalizedChat((EntityPlayer) obj, msg, args);
-            }
+        for (EntityPlayer obj : world.playerEntities) {
+            sendLocalizedChat(obj, msg, args);
         }
     }
 }

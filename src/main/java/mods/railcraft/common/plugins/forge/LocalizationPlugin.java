@@ -11,11 +11,14 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.ILocalizedObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.IllegalFormatException;
 import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -58,10 +61,15 @@ public final class LocalizationPlugin {
     }
 
     public static String getEntityLocalizationTag(Entity entity) {
-        String s = EntityList.getEntityString(entity);
-
-        if (s == null) {
-            s = "generic";
+        EntityEntry entry = EntityRegistry.getEntry(entity.getClass());
+        String s = "generic";
+        if (entry != null) {
+            String domain = requireNonNull(entry.getRegistryName()).getResourceDomain();
+            if (domain.equals("minecraft")) {
+                s = entry.getName();
+            } else {
+                s = domain + '.' + entry.getName();
+            }
         }
 
         return "entity." + s + ".name";

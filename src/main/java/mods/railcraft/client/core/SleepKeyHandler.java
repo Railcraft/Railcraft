@@ -40,4 +40,8 @@ public final class SleepKeyHandler {
             PacketBuilder.instance().sendKeyPressPacket(PacketKeyPress.EnumKeyBinding.BED_CART_SLEEP);
         }
     }
+
+    public String getKeyDisplayName() {
+        return this.sleepKey.getDisplayName();
+    }
 }
