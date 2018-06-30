@@ -41,7 +41,7 @@ import java.time.LocalDate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PacketBuilder implements ISignalPacketBuilder {
+public final class PacketBuilder implements ISignalPacketBuilder {
 
     private static PacketBuilder instance;
 

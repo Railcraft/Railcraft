@@ -2,12 +2,16 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -51,6 +55,32 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
+    }
+
+    @Override
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileForceTrackEmitter) {
+            TileForceTrackEmitter emitter = (TileForceTrackEmitter) tile;
+            int rcColor = EnumColor.fromDye(color).getHexColor();
+            if (rcColor != emitter.getColor()) {
+                emitter.setColor(rcColor);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public IBlockColor colorHandler() {
+        return (state, worldIn, pos, tintIndex) -> {
+            if (worldIn != null && pos != null) {
+                return WorldPlugin.getTileEntity(worldIn, pos, TileForceTrackEmitter.class).map(TileForceTrackEmitter::getColor)
+                        .orElseGet(EnumColor.WHITE::getHexColor);
+            }
+            return EnumColor.WHITE.getHexColor();
+        };
     }
 
     @Override

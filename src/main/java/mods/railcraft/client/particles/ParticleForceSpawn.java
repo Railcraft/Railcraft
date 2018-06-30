@@ -17,16 +17,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleForceSpawn extends ParticleBaseSmokeShrinking {
 
-    public ParticleForceSpawn(World world, Vec3d start, Vec3d vel) {
-        this(world, start, vel, 1.0F);
+    public ParticleForceSpawn(World world, Vec3d start, Vec3d vel, int color) {
+        this(world, start, vel, color, 1.0F);
     }
 
-    public ParticleForceSpawn(World world, Vec3d start, Vec3d vel, float scale) {
+    public ParticleForceSpawn(World world, Vec3d start, Vec3d vel, int color, float scale) {
         super(world, start, vel, scale);
         this.particleGravity = ParticleHelper.SMOKE_GRAVITY;
-        this.particleRed = 0.33F;
-        this.particleGreen = 0.74F;
-        this.particleBlue = 0.86F;
+        this.particleRed = ((color >> 16) & 0xFF) / 255F;
+        this.particleGreen = ((color >> 8) & 0xFF) / 255F;
+        this.particleBlue = ((color) & 0xFF) / 255F;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.particleMaxAge = (int) ((float) particleMaxAge * scale);
         this.canCollide = false;

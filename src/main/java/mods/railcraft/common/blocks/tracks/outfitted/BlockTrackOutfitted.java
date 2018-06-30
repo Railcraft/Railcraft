@@ -22,10 +22,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -44,7 +41,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -63,7 +59,6 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
@@ -87,10 +82,6 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         setHarvestLevel("crowbar", 0);
         setDefaultState(getDefaultState().withProperty(TICKING, false));
         setTickRandomly(true);
-
-        GameRegistry.registerTileEntity(TileTrackOutfitted.class, "railcraft:track.outfitted");
-        GameRegistry.registerTileEntity(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
-        TrackToolsAPI.blockTrackOutfitted = this;
     }
 
     @Override
@@ -173,6 +164,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void initializeDefinition() {
+        RailcraftRegistry.register(TileTrackOutfitted.class, "railcraft:track.outfitted");
+        RailcraftRegistry.register(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
+        TrackToolsAPI.blockTrackOutfitted = this;
         TrackKit.blockTrackOutfitted = this;
     }
 
@@ -422,7 +416,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return b;
     }
 
-//    @Override
+    //    @Override
     //TODO obsolete
     public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
         if (TrackTools.isRailBlockAt(worldIn, pos.up()) || TrackTools.isRailBlockAt(worldIn, pos.down()))

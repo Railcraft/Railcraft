@@ -52,13 +52,14 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-// TODO: Where you stupid when you decided to use a Proxy? Just no, no...
+// TODO: Where you stupid when you decided to use a Proxy? Just no, no... liach comment: say were instead of where
 @SideOnly(Side.CLIENT)
+@SuppressWarnings("unused")
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
 
-    @SuppressWarnings("unused")
+
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
     }
@@ -97,6 +98,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             return;
 
         BlockPos pos = data.readBlockPos();
+        int color = data.readInt();
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -104,10 +106,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
 //        double vy = RANDOM.nextDouble() * 0.01;
 //        double vz = RANDOM.nextGaussian() * 0.1;
         Vec3d vel = new Vec3d(0, 0, 0);
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.1), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.1), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.9), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.9), vel));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.1), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.1), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.9), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.9), vel, color));
     }
 
     @Override

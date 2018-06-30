@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:detector"
+    "model": "railcraft:force_track_emitter"
   },
   "variants": {
     "inventory": [{"transform": "forge:default-block"}],

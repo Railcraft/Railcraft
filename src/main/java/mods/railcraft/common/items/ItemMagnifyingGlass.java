@@ -78,12 +78,16 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (Game.isClient(thePlayer.world))
             return;
 
-        if (stack.getItem() instanceof ItemMagnifyingGlass)
+        if (stack.getItem() instanceof ItemMagnifyingGlass) {
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
                 event.setCanceled(true);
             }
+            if (entity instanceof IMagnifiable) {
+                ((IMagnifiable) entity).onMagnify(thePlayer);
+            }
+        }
     }
 
     @Override
@@ -120,6 +124,9 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         } else if (t instanceof TileSignalBase) {
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = EnumActionResult.SUCCESS;
+        }
+        if (t instanceof IMagnifiable) {
+            ((IMagnifiable) t).onMagnify(player);
         }
         return returnValue;
     }

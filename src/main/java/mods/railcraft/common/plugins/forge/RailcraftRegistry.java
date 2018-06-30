@@ -11,9 +11,8 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.IRailcraftRegistryEntry;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftItemStackRegistry;
-import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -146,10 +145,10 @@ public final class RailcraftRegistry {
     }
 
     public static void register(Class<? extends TileEntity> tileEntity, String tag) {
-        GameRegistry.registerTileEntity(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag);
+        GameRegistry.registerTileEntity(tileEntity, RailcraftConstantsAPI.locationOf(tag));
     }
 
     public static void register(Class<? extends TileEntity> tileEntity, String tag, String... oldTags) {
-        GameRegistry.registerTileEntity(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag /*, oldTags*/);
+        GameRegistry.registerTileEntity(tileEntity, RailcraftConstantsAPI.locationOf(tag) /*, oldTags*/);
     }
 }

@@ -408,12 +408,6 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         }
     }
 
-    @Nonnull
-    @Override
-    public String getLocalizationTag() {
-        return getBlockType().getUnlocalizedName() + ".name";
-    }
-
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);

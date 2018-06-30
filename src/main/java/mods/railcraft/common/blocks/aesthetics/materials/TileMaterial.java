@@ -35,7 +35,7 @@ public class TileMaterial extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(material);
+        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(material) + ".name";
     }
 
     @Override

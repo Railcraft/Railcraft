@@ -285,8 +285,4 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         return direction;
     }
 
-    @Override
-    public String getLocalizationTag() {
-        return super.getLocalizationTag() + ".name";
-    }
 }

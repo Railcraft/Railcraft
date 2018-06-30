@@ -1,0 +1,7 @@
+<root>
+    <item name='net.minecraftforge.registries.IForgeRegistryEntry.Impl net.minecraft.util.ResourceLocation getRegistryName()'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;-&gt; !null&quot;"/>
+        </annotation>
+    </item>
+</root>

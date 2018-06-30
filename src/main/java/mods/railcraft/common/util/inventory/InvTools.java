@@ -29,6 +29,7 @@ import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -48,6 +49,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -959,25 +961,21 @@ public abstract class InvTools {
     }
 
     @Nullable
-    @Deprecated
+    @Deprecated // Use getBlockStateFromStack
     public static Block getBlockFromStack(ItemStack stack) {
-        if (stack.getItem() instanceof ItemBlock)
-            return ((ItemBlock) stack.getItem()).getBlock();
-        return null;
+        return GameData.getBlockItemMap().inverse().get(stack.getItem());
+//        if (stack.getItem() instanceof ItemBlock)
+//            return ((ItemBlock) stack.getItem()).getBlock();
+//        return null;
     }
 
-    @Nullable
     @SuppressWarnings("deprecation")
-    @Contract("null->null")
-    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack) {
+    public static IBlockState getBlockStateFromStack(ItemStack stack) {
         if (isEmpty(stack))
-            return null;
+            return Blocks.AIR.getDefaultState();
         Item item = stack.getItem();
-        if (item instanceof ItemBlock) {
-            int meta = item.getMetadata(stack.getMetadata());
-            return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
-        }
-        return null;
+        Block block = GameData.getBlockItemMap().inverse().get(stack.getItem());
+        return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
     }
 
     @Nullable

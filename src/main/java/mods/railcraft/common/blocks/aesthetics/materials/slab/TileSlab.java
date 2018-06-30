@@ -85,7 +85,7 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(getUpmostSlab());
+        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(getUpmostSlab()) + ".name";
     }
 
     @Override

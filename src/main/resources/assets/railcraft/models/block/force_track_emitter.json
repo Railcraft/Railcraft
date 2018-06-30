@@ -1,5 +1,5 @@
 {
-  "parent": "railcraft:block/tinted_cube",
+  "parent": "block/cube",
   "textures": {
     "particle": "#side",
     "down": "#side",

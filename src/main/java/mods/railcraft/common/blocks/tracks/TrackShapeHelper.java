@@ -21,7 +21,7 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackShapeHelper {
+public final class TrackShapeHelper {
     public static boolean isLevelStraight(@Nullable BlockRailBase.EnumRailDirection dir) {
         return dir != null && dir.ordinal() < 2;
     }

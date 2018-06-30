@@ -35,8 +35,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import javax.annotation.Nullable;
-
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
@@ -101,8 +99,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager()) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager()) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override

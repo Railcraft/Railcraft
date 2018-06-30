@@ -419,7 +419,8 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase, TileTank
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
         if (Game.isHost(world)) {
             if (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) {
                 TileTankBase master = getMasterBlock();
@@ -431,7 +432,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase, TileTank
             return true;
 
         // Prevents players from getting inside tanks using boats
-        return heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+        return heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -475,6 +476,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase, TileTank
 
     @Override
     protected void onMasterChanged() {
+        super.onMasterChanged();
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty())
             //noinspection ConstantConditions

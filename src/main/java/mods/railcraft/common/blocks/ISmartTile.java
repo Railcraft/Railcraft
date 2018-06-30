@@ -65,9 +65,10 @@ public interface ISmartTile {
             InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
     }
 
-    default boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    default boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
+        ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem)) {
             if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;

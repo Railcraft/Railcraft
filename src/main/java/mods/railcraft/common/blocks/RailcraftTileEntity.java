@@ -86,7 +86,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return tileCache;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
@@ -189,7 +189,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     protected final void setOwner(GameProfile profile) {
         owner = profile;
-        sendUpdateToClient();
+//        sendUpdateToClient();  Sending this when a te is initialized will cause client net handler errors because the tile is not yet on client
     }
 
     @Override
@@ -203,7 +203,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @Nonnull
     public String getLocalizationTag() {
-        return getBlockType().getUnlocalizedName();
+        return getBlockType().getUnlocalizedName() + ".name";
     }
 
     public List<String> getDebugOutput() {
