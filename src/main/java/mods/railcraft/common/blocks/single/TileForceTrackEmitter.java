@@ -243,7 +243,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         }
         if (!player.capabilities.isCreativeMode)
             player.setHeldItem(hand, InvTools.depleteItem(heldItem));
-        this.color = color.getHexColor();
+        setColor(color.getHexColor());
         markDirty();
         return true;
     }
@@ -280,6 +280,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
     public void setColor(int color) {
         this.color = color;
+        clearTracks(0);
     }
 
     public static double getMaintenanceCost(int tracks) {
