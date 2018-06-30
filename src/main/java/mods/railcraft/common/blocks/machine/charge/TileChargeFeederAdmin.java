@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class TileChargeFeederAdmin extends TileCharge {
     private static class InfiniteBattery extends IChargeBlock.ChargeBattery {
-        private boolean enabled;
+        boolean enabled;
 
         @Override
         public double getMaxDraw() {
