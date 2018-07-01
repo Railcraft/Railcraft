@@ -145,6 +145,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
          */
         HALTED(false);
 
+        static final State[] VALUES = values();
         final boolean appearPowered;
 
         State(boolean appearPowered) {
@@ -400,6 +401,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         data.writeBoolean(powered);
         data.writeByte((byte) facing.ordinal());
         data.writeInt(color);
+        data.writeEnum(state);
     }
 
     @Override
@@ -422,6 +424,13 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         int color = data.readInt();
         if (color != this.color) {
             this.color = color;
+            update = true;
+        }
+
+        State state = data.readEnum(State.VALUES);
+        if (state != this.state) {
+            this.state = state;
+            update = true;
         }
 
         if (update)
