@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -31,7 +32,7 @@ public final class TileTrackForce extends RailcraftTileEntity {
     @Nullable
     private TileForceTrackEmitter emitter = null;
     private int index = 0;
-    private int color;
+    private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
     private boolean eastWest = false;
 
     int getColor() {

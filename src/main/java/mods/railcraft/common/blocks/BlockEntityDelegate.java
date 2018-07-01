@@ -126,6 +126,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return getBlockFaceShape(world, state, pos, side) == BlockFaceShape.SOLID;
     }

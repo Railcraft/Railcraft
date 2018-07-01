@@ -9,13 +9,19 @@
       "true": {
         "textures": {
           "front": "railcraft:blocks/force_track_emitter_facing",
-          "side": "railcraft:blocks/force_track_emitter_side"
+          "side": "railcraft:blocks/force_track_emitter_side",
+          "colored_front": "railcraft:blocks/force_track_emitter_facing_colored",
+          "colored_side": "railcraft:blocks/force_track_emitter_side_colored",
+          "particle": "railcraft:blocks/force_track_emitter_side"
         }
       },
       "false": {
         "textures": {
           "front": "railcraft:blocks/force_track_emitter_facing_unpowered",
-          "side": "railcraft:blocks/force_track_emitter_side_unpowered"
+          "side": "railcraft:blocks/force_track_emitter_side_unpowered",
+          "colored_front": "railcraft:blocks/force_track_emitter_facing_unpowered_colored",
+          "colored_side": "railcraft:blocks/force_track_emitter_side_unpowered_colored",
+          "particle": "railcraft:blocks/force_track_emitter_side_unpowered"
         }
       }
     },

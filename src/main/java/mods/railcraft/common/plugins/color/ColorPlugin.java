@@ -23,6 +23,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class ColorPlugin {
+
+    public static final int NONE_MULTIPLIER = -1;
+
     @SidedProxy(modId = Railcraft.MOD_ID, clientSide = "mods.railcraft.common.plugins.color.ColorProxyClient", serverSide = "mods.railcraft.common.plugins.color.ColorProxy")
     public static ColorProxy instance;
 

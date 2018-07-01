@@ -140,11 +140,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         return state.getValue(getVariantProperty()).ordinal();
     }
 
-    @Override
-    public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
-    }
-
 //    /**
 //     * Returns the default ambient occlusion value based on block opacity
 //     */

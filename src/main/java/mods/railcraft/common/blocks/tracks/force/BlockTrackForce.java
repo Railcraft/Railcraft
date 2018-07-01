@@ -11,10 +11,10 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.plugins.color.ColorPlugin;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -140,7 +140,7 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
                 if (tile instanceof TileTrackForce)
                     return ((TileTrackForce) tile).getColor();
             }
-            return EnumColor.WHITE.getHexColor();
+            return BlockForceTrackEmitter.DEFAULT_SHADE;
         };
     }
 

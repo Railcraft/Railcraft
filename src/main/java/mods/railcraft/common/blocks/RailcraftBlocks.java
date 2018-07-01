@@ -135,7 +135,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
     // singles
     TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemBlockEntityDelegate::new),
-    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemBlockEntityDelegate::new),
+    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
     ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemBlockEntityDelegate::new),
     CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemBlockEntityDelegate::new),
     CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemBlockEntityDelegate::new),

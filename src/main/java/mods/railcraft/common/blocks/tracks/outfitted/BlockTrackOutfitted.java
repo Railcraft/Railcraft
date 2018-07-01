@@ -164,8 +164,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void initializeDefinition() {
-        RailcraftRegistry.register(TileTrackOutfitted.class, "railcraft:track.outfitted");
-        RailcraftRegistry.register(TileTrackOutfittedTicking.class, "railcraft:track.outfitted.ticking");
+        RailcraftRegistry.register(TileTrackOutfitted.class, "track.outfitted");
+        RailcraftRegistry.register(TileTrackOutfittedTicking.class, "track.outfitted.ticking");
         TrackToolsAPI.blockTrackOutfitted = this;
         TrackKit.blockTrackOutfitted = this;
     }

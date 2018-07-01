@@ -62,15 +62,18 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     EnumFacing facing = EnumFacing.NORTH;
     int numTracks;
     private State state = State.RETRACTED;
-    private int color = EnumColor.WHITE.getHexColor();
-    boolean retracting;
+    private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
+    /**
+     * Field to prevent recursive removing of tracks when a track is broken by the emitter
+     */
+    boolean removingTrack;
 
     private enum State {
 
         /**
          * A state when the track is fully built and ready for carts.
          */
-        EXTENDED() {
+        EXTENDED(true) {
             @Override
             State afterUseCharge(TileForceTrackEmitter emitter) {
                 return emitter.clock % TICKS_PER_REFRESH == 0 ? EXTENDING : this;
@@ -91,7 +94,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         /**
          * A state in which no track presents.
          */
-        RETRACTED() {
+        RETRACTED(false) {
             @Override
             State whenNoCharge(TileForceTrackEmitter emitter) {
                 return this;
@@ -100,7 +103,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         /**
          * A state in which the track is in progress of building.
          */
-        EXTENDING() {
+        EXTENDING(true) {
             @Override
             State afterUseCharge(TileForceTrackEmitter emitter) {
                 if (!emitter.hasPowerToExtend())
@@ -124,14 +127,12 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         /**
          * A state in which the tracks are destroyed.
          */
-        RETRACTING() {
+        RETRACTING(false) {
             @Override
             State whenNoCharge(TileForceTrackEmitter emitter) {
                 if (emitter.numTracks > 0) {
                     if (emitter.clock % TICKS_PER_ACTION == 0) {
-                        emitter.retracting = true;
                         emitter.removeFirstTrack();
-                        emitter.retracting = false;
                     }
                     return this;
                 } else {
@@ -142,7 +143,13 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         /**
          * A state in which the state will wait for a transition.
          */
-        HALTED;
+        HALTED(false);
+
+        final boolean appearPowered;
+
+        State(boolean appearPowered) {
+            this.appearPowered = appearPowered;
+        }
 
         /**
          * Determines what state the emitter will be after using charge.
@@ -181,6 +188,12 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         checkRedstone();
     }
 
+    @Override
+    public void initFromItem(ItemStack stack) {
+        super.initFromItem(stack);
+        this.color = ItemForceTrackEmitter.getColor(stack);
+    }
+
     private void checkRedstone() {
         if (Game.isClient(getWorld()))
             return;
@@ -194,7 +207,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        clearTracks(0);
+        clearTracks();
     }
 
     @Override
@@ -248,16 +261,12 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         return true;
     }
 
-    // TODO: Test this
     boolean placeTrack(BlockPos toPlace, IBlockState prevState, EnumRailDirection direction) {
         BlockTrackForce trackForce = (BlockTrackForce) TRACK_FORCE.block();
         if (trackForce != null && WorldPlugin.isBlockAir(getWorld(), toPlace, prevState)) {
             spawnParticles(toPlace);
             IBlockState place = trackForce.getDefaultState().withProperty(BlockTrackForce.SHAPE, direction);
-            if (place.getValue(BlockTrackForce.SHAPE) != TrackTools.getAxisAlignedDirection(facing))
-                throw new RuntimeException("errrrr");
-            if (!WorldPlugin.setBlockState(world, toPlace, place))
-                throw new RuntimeException("bork!!!");
+            WorldPlugin.setBlockState(world, toPlace, place);
             TileEntity tile = WorldPlugin.getBlockTile(world, toPlace);
             if (tile instanceof TileTrackForce) {
                 TileTrackForce track = (TileTrackForce) tile;
@@ -280,7 +289,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
     public void setColor(int color) {
         this.color = color;
-        clearTracks(0);
+        clearTracks();
     }
 
     public static double getMaintenanceCost(int tracks) {
@@ -297,11 +306,13 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     private void removeTrack(BlockPos toRemove) {
+        removingTrack = true;
         if (WorldPlugin.isBlockLoaded(world, toRemove) && WorldPlugin.isBlockAt(world, toRemove, TRACK_FORCE.block())) {
             spawnParticles(toRemove);
             WorldPlugin.setBlockToAir(world, toRemove);
         }
         numTracks--;
+        removingTrack = false;
     }
 
     @Nullable
@@ -330,18 +341,22 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     @Override
     public void invalidate() {
         super.invalidate();
+        clearTracks();
+    }
+
+    void clearTracks() {
         clearTracks(0);
     }
 
-    public void clearTracks(int tracksLeft) {
-        if (retracting || tracksLeft == numTracks) {
+    public void clearTracks(int lastIndex) {
+        if (removingTrack || lastIndex == numTracks) {
             return;
         }
         BlockPos.PooledMutableBlockPos toRemove = BlockPos.PooledMutableBlockPos.retain();
         toRemove.setPos(this.pos);
         toRemove.move(EnumFacing.UP);
         toRemove.move(facing, numTracks);
-        while (numTracks > tracksLeft) {
+        while (numTracks > lastIndex) {
             removeTrack(toRemove);
             toRemove.move(facing.getOpposite());
         }
@@ -419,6 +434,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return base.withProperty(BlockForceTrackEmitter.FACING, facing).withProperty(BlockForceTrackEmitter.POWERED, powered);
+        return base.withProperty(BlockForceTrackEmitter.FACING, facing).withProperty(BlockForceTrackEmitter.POWERED, powered && state.appearPowered);
     }
+
 }
