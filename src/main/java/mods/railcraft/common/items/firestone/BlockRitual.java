@@ -147,7 +147,7 @@ public class BlockRitual extends BlockContainerRailcraft {
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world))
             dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
         return WorldPlugin.setBlockToAir(world, pos);

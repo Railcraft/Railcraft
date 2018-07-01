@@ -172,7 +172,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode) {
             dropBlockAsItem(world, pos, state, 0);
         }

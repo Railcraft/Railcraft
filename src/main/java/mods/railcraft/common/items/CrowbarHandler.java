@@ -111,7 +111,7 @@ public class CrowbarHandler {
     }
 
     private void boostCart(EntityPlayer player, EnumHand hand, ItemStack stack, EntityMinecart cart, IToolCrowbar crowbar) {
-        player.addExhaustion(1F);
+        player.addExhaustion(.25F);
 
         //noinspection StatementWithEmptyBody
         if (player.getRidingEntity() != null) {

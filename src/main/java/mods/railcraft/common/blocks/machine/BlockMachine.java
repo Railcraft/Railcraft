@@ -219,7 +219,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
             if (canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand()) > 0) {
                 List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, state, 0);
