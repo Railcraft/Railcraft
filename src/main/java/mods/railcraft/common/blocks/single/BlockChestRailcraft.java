@@ -6,6 +6,9 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class BlockChestRailcraft extends BlockEntityDelegate {
 
@@ -13,6 +16,11 @@ public abstract class BlockChestRailcraft extends BlockEntityDelegate {
 
     protected BlockChestRailcraft(Material materialIn) {
         super(materialIn);
+    }
+
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+            return new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
     }
 
     @Override
