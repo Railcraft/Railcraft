@@ -246,6 +246,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         .entity(minecartClass)
                         .name(old.getName())
                         .factory(cartType.getFactory())
+                        .tracker(80, 2, true)
                         .build();
                 ForgeRegistries.ENTITIES.register(substitute);
 
