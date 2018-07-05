@@ -16,7 +16,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -24,7 +27,14 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class EntityItemFireproof extends EntityItem {
 
     public static void register() {
-        EntityRegistry.registerModEntity(RailcraftConstantsAPI.locationOf("fireproof_item"), EntityItemFireproof.class, "ItemFireproof", EntityIDs.ENTITY_ITEM_FIREPROOF, Railcraft.getMod(), 64, 20, true);
+        EntityEntry entry = EntityEntryBuilder.create()
+                .id(RailcraftConstantsAPI.locationOf("fireproof_item"),  EntityIDs.ENTITY_ITEM_FIREPROOF)
+                .entity(EntityItemFireproof.class)
+                .name("ItemFireproof")
+                .tracker(64, 20, true)
+                .factory(EntityItemFireproof::new)
+                .build();
+        ForgeRegistries.ENTITIES.register(entry);
     }
 
     public EntityItemFireproof(World world) {

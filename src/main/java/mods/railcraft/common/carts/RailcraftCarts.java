@@ -244,21 +244,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return entity;
     }
 
-//    private ItemCart defineItem() {
-//        switch (this) {
-//            case LOCO_STEAM_SOLID:
-//                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_SOLID, EnumColor.SILVER, EnumColor.GRAY);
-//            case LOCO_STEAM_MAGIC:
-//                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_MAGIC, EnumColor.SILVER, EnumColor.GRAY);
-//            case LOCO_ELECTRIC:
-//                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.YELLOW, EnumColor.BLACK);
-//            case LOCO_CREATIVE:
-//                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA);
-//            default:
-//                return new ItemCart(this);
-//        }
-//    }
-
     @SuppressWarnings("unchecked")
     private void registerEntity() {
         if (id < 0)
@@ -272,10 +257,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 .build();
         classToContainer.put(type, this);
         ForgeRegistries.ENTITIES.register(entry);
-        // Legacy stuff
-//        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);
-//        if (this == LOCO_STEAM_SOLID)
-//            EntityList.NAME_TO_CLASS.put("Railcraft.railcraft.cart.loco.steam", type);
     }
 
     @Override
