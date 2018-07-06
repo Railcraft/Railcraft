@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IOwnable;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;

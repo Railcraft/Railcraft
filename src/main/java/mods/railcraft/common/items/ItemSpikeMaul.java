@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.ISpikeMaulTarget;
+import mods.railcraft.api.items.ISpikeMaulTarget;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.charge.ChargeManager;

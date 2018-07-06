@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;

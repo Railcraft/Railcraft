@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.steam;
 
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,7 +37,7 @@ public class FluidFuelProvider implements IFuelProvider {
         if (fuel == null)
             return 0;
 
-        double heatValue = FuelManager.getBoilerFuelValue(fuel.getFluid());
+        double heatValue = FluidFuelManager.getFuelValue(fuel.getFluid());
         if (heatValue > 0) {
             fuelTank.drain(FluidTools.BUCKET_VOLUME, true);
             if (fuel.amount < FluidTools.BUCKET_VOLUME)

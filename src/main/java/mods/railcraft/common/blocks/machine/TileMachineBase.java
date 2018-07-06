@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.ISubtypedBlock;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;

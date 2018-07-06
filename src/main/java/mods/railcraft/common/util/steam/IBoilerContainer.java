@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.steam;
 
-import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import net.minecraftforge.fluids.FluidStack;

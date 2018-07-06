@@ -13,7 +13,7 @@ import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IFilterItem;
+import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.plugins.color.ColorPlugin;

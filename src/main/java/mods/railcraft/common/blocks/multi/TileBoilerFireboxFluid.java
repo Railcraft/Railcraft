@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -126,7 +126,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
                 Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
                 if (fluid == null)
                     return false;
-                if (Fluids.WATER.is(fluid) || FuelManager.getBoilerFuelValue(fluid) > 0)
+                if (Fluids.WATER.is(fluid) || FluidFuelManager.getFuelValue(fluid) > 0)
                     return true;
         }
         return false;

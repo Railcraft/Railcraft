@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.items.IActivationBlockingItem;
-import mods.railcraft.api.core.items.InvToolsAPI;
+import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;

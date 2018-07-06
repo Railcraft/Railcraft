@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.items.IFilterItem;
+import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;

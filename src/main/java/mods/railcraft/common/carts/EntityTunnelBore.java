@@ -13,7 +13,6 @@ import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
-import mods.railcraft.api.carts.bore.IMineable;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -883,9 +882,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     @SuppressWarnings({"SimplifiableIfStatement", "BooleanMethodIsAlwaysInverted"})
     private boolean canMineBlock(BlockPos targetPos, IBlockState existingState) {
         ItemStack head = getStackInSlot(0);
-        if (existingState.getBlock() instanceof IMineable) {
-            return ((IMineable) existingState.getBlock()).canMineBlock(world, targetPos, this, head);
-        }
         if (existingState.getBlockHardness(world, targetPos) < 0)
             return false;
         return isMineableBlock(existingState) && canHeadHarvestBlock(head, existingState);
@@ -898,10 +894,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         ItemStack boreSlot = getStackInSlot(0);
         if (!InvTools.isEmpty(boreSlot) && boreSlot.getItem() instanceof IBoreHead) {
             IBoreHead head = (IBoreHead) boreSlot.getItem();
-            float dig = 2f - head.getDigModifier();
-            hardness *= dig;
+            double dig = head.getDigModifier();
+            hardness /= dig;
             int e = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, boreSlot);
-            hardness /= e * e * 0.2 + 1;
+            hardness /= (e * e * 0.2d + 1);
         }
 
         hardness /= RailcraftConfig.boreMiningSpeedMultiplier();

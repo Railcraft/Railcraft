@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted;
 
 import mods.railcraft.api.core.ILocalizedObject;
-import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;

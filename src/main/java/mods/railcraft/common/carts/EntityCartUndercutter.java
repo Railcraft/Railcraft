@@ -190,6 +190,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             int existMeta = OreDictionary.WILDCARD_VALUE;
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
+            //TODO wrong
             Block stackBlock = InvTools.getBlockFromStack(stack);
             return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.DIRT && stackBlock == Blocks.GRASS);
         }

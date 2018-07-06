@@ -35,8 +35,6 @@ import java.util.Set;
 
 public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailcraftItemSimple {
 
-    protected static final ImmutableSet<String> TOOL_CLASSES = ImmutableSet.of("pickaxe", "axe", "shovel");
-
     protected ItemBoreHead() {
         super(ItemMaterials.DUMMY, Collections.emptySet());
         maxStackSize = 1;
@@ -63,12 +61,12 @@ public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailc
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
-        return getToolClasses(stack).contains(toolClass) ? getHarvestLevel() : -1;
+        return IBoreHead.super.getHarvestLevel(stack, toolClass, player, blockState);
     }
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return TOOL_CLASSES;
+        return IBoreHead.super.getToolClasses(stack);
     }
 
     @Override
