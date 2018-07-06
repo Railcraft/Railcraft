@@ -11,6 +11,6 @@
 @ParametersAreNonnullByDefault
 package mods.railcraft.common.blocks.aesthetics.concrete;
 
-        import mcp.MethodsReturnNonnullByDefault;
+import mcp.MethodsReturnNonnullByDefault;
 
-        import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -2,8 +2,11 @@ package mods.railcraft.common.blocks.aesthetics.concrete;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -41,17 +44,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraftBlock, ColorPlugin.IColoredBlock {
-
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
+@RailcraftBlockMetadata(variant = EnumColor.class)
+public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements IRailcraftBlock, ColorPlugin.IColoredBlock {
 
     public BlockReinforcedConcrete() {
         super(Material.ROCK, MapColor.STONE);
-        setResistance(15);
-        setHardness(3);
+        setResistance(45);
+        setHardness(4);
         setSoundType(SoundType.STONE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.SILVER));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.SILVER));
     }
 
     @Override
@@ -72,19 +74,7 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
     @Nullable
     @Override
     public StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(COLOR).build();
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumColor.class;
-    }
-
-    @Nullable
-    @Override
-    public IVariantEnum[] getVariants() {
-        return EnumColor.VALUES;
+        return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
 
     @Override
@@ -92,7 +82,7 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(COLOR, (EnumColor) variant);
+            state = state.withProperty(getVariantProperty(), (EnumColor) variant);
         }
         return state;
     }
@@ -101,24 +91,14 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
         //TODO: Make it craft a powder ALA Vanilla? World interaction may not be such a bad idea, and we can get rid of the fluid crafting in exchange for crafting colors directly...
         ColorPlugin.instance.register(this, this);
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
-        if ((EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() || EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) && RailcraftItems.REBAR.isEnabled()) {
-            CraftingPlugin.addRecipe(getStack(8, EnumColor.SILVER),
-                    "SIS",
-                    "IWI",
-                    "SIS",
-                    'W', water,
-                    'I', RailcraftItems.REBAR,
-                    'S', RailcraftItems.CONCRETE);
-        } else {
-            CraftingPlugin.addRecipe(getStack(4, EnumColor.SILVER),
-                    " S ",
-                    "SIS",
-                    " S ",
-                    'I', "ingotIron",
-                    'S', RailcraftItems.CONCRETE);
-        }
+        CraftingPlugin.addRecipe(getStack(8, EnumColor.SILVER),
+                "SIS",
+                "IWI",
+                "SIS",
+                'W', water,
+                'I', RailcraftItems.REBAR,
+                'S', RailcraftItems.CONCRETE);
     }
-
 
     @Override
     public void defineRecipes() {
@@ -132,8 +112,8 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
         }
     }
 
-    public EnumColor getColor(IBlockState state) {
-        return state.getValue(COLOR);
+    private EnumColor getColor(IBlockState state) {
+        return state.getValue(getVariantProperty());
     }
 
     @Override
@@ -155,7 +135,7 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
+            world.setBlockState(pos, getDefaultState().withProperty(getVariantProperty(), EnumColor.fromDye(color)));
             return true;
         }
         return false;
@@ -173,7 +153,7 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
+        return getDefaultState().withProperty(getVariantProperty(), EnumColor.fromOrdinal(meta));
     }
 
     /**
@@ -186,6 +166,6 @@ public class BlockReinforcedConcrete extends BlockRailcraft implements IRailcraf
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR);
+        return new BlockStateContainer(this, getVariantProperty());
     }
 }
