@@ -13,7 +13,7 @@ import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;

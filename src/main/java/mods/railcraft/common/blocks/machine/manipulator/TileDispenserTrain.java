@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.ItemCartWorldspike;
 import mods.railcraft.common.carts.ItemLocomotive;

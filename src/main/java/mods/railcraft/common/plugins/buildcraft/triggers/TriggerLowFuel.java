@@ -11,7 +11,7 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.IStatementParameter;
-import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 

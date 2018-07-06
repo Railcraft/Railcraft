@@ -10,8 +10,8 @@
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.api.core.items.IFilterItem;
-import mods.railcraft.api.core.items.InvToolsAPI;
+import mods.railcraft.api.items.IFilterItem;
+import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;

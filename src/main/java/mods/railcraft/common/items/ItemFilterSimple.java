@@ -10,12 +10,11 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.items.IFilterItem;
-import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.api.items.IFilterItem;
+import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

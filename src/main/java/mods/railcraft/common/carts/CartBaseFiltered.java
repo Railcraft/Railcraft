@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;

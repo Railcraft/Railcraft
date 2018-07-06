@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;

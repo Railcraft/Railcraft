@@ -12,7 +12,7 @@ package mods.railcraft.common.core;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.Ints;
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
@@ -20,7 +20,6 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
@@ -121,7 +120,7 @@ public final class Railcraft {
                     Game.log(Level.WARN, String.format("Mod %s attempted to register a liquid Boiler fuel, but failed: %s", mess.getSender(), mess.getStringValue()));
                     continue;
                 }
-                FuelManager.addBoilerFuel(fluid, fuel);
+                FluidFuelManager.addFuel(fluid, fuel);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("rock-crusher")) {
                 throw new UnsupportedOperationException("rock crusher");
@@ -158,8 +157,6 @@ public final class Railcraft {
 
         PacketHandler.init();
         DataManagerPlugin.register();
-
-        StandardStackFilters.initialize();
 
         Metal.init();
 

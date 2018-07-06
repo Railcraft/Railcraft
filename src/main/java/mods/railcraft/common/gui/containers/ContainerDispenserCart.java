@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserCart;
 import mods.railcraft.common.gui.slots.SlotMinecart;
 import mods.railcraft.common.util.inventory.InvTools;

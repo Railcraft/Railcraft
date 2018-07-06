@@ -12,7 +12,7 @@ package mods.railcraft.common.util.routing;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;

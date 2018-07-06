@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.worldspike;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.carts.ItemCartWorldspike;
@@ -95,7 +95,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 if (Game.isHost(world)) {
-                    WorldCoordinate ourCoord = new WorldCoordinate(this);
+                    WorldCoordinate ourCoord = WorldCoordinate.from(this);
                     WorldCoordinate target = pointPairingMap.get(player);
                     if (target == null) {
                         setTarget(ourCoord, player, getLocalizationTag());

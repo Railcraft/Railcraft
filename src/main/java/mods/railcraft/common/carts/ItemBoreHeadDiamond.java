@@ -43,8 +43,8 @@ public class ItemBoreHeadDiamond extends ItemBoreHead {
     }
 
     @Override
-    public float getDigModifier() {
-        return 1.4f;
+    public double getDigModifier() {
+        return 1d / .6d;
     }
 
     @Override

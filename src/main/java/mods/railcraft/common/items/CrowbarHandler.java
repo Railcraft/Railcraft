@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.carts.ILinkableCart;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleSeasonal;

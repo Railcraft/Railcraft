@@ -83,12 +83,12 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
 
     }
 
-    protected static class SurpriseCategory {
+    protected static final class SurpriseCategory {
         private final List<Surprise> surprises = new ArrayList<>();
-        private final int chance;
+        final int chance;
         private int numberToSpawn = 1;
 
-        private SurpriseCategory(int chance) {
+        SurpriseCategory(int chance) {
             this.chance = chance;
         }
 
