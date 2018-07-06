@@ -227,4 +227,17 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         }
         return super.getSoundType(state, world, pos, entity);
     }
+
+    @Override
+    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
+        EnumGeneric generic = getVariant(state);
+        IBlockState newState = null;
+        switch (generic) {
+            case BLOCK_CONCRETE:
+                newState = RailcraftBlocks.REINFORCED_CONCRETE.getDefaultState();
+                break;
+        }
+        if (newState != null)
+            WorldPlugin.setBlockState(worldIn, pos, newState);
+    }
 }

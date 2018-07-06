@@ -46,6 +46,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                         RailcraftItems.STONE_CARVER,
                         RailcraftBlocks.GLASS,
                         RailcraftBlocks.GENERIC,
+                        RailcraftBlocks.REINFORCED_CONCRETE,
 //                        RailcraftBlocks.post,
                         RailcraftBlocks.POST_METAL,
                         RailcraftBlocks.POST_METAL_PLATFORM
@@ -60,33 +61,7 @@ public class ModuleStructures extends RailcraftModulePayload {
             @Override
             public void init() {
 
-                EnumGeneric cubeType = EnumGeneric.BLOCK_CONCRETE;
-                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    Block cube = BlockGeneric.getBlock();
-                    if (cube != null) {
-                        ItemStack stack = cubeType.getStack();
-                        if ((EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() || EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) && RailcraftItems.REBAR.isEnabled()) {
-                            setSize(stack, 8);
-                            CraftingPlugin.addRecipe(stack,
-                                    "SIS",
-                                    "IWI",
-                                    "SIS",
-                                    'W', Items.WATER_BUCKET,
-                                    'I', RailcraftItems.REBAR,
-                                    'S', RailcraftItems.CONCRETE);
-                        } else {
-                            setSize(stack, 4);
-                            CraftingPlugin.addRecipe(stack,
-                                    " S ",
-                                    "SIS",
-                                    " S ",
-                                    'I', "ingotIron",
-                                    'S', RailcraftItems.CONCRETE);
-                        }
-                    }
-                }
-
-                cubeType = EnumGeneric.BLOCK_CREOSOTE;
+                EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
                     Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
