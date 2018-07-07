@@ -20,13 +20,12 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
 import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeWrapper;
 import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeWrapper;
+import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
 import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 10/7/2016 for Railcraft.
@@ -53,7 +52,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
-//        registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
+        registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
     }
 
 //    @Override

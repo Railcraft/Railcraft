@@ -45,11 +45,9 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.Level;
-import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -71,7 +69,7 @@ public final class FluidTools {
 
     @Contract("null -> null; !null -> !null")
     @Nullable
-    public static @PolyNull FluidStack copy(@Nullable @PolyNull FluidStack fluidStack) {
+    public static FluidStack copy(@Nullable FluidStack fluidStack) {
         return fluidStack == null ? null : fluidStack.copy();
     }
 
@@ -92,7 +90,7 @@ public final class FluidTools {
     }
 
     @Nullable
-    public static net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
+    public static IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
@@ -443,7 +441,7 @@ public final class FluidTools {
 
         @Override
         public IFluidTankProperties[] getTankProperties() {
-            return new FluidTankProperties[]{new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
+            return new FluidTankProperties[] {new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
         }
     }
 }

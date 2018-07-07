@@ -1,0 +1,12 @@
+{
+  "conditions": {
+    "module": "mods.railcraft.common.util.crafting.ModuleCondition$Factory"
+  },
+  "ingredients": {
+    "fluid": "mods.railcraft.common.util.crafting.FluidIngredient$Factory"
+  },
+  "recipes": {
+    "shaped": "mods.railcraft.common.util.crafting.RemainingItemShapedRecipe$Factory",
+    "shapeless": "mods.railcraft.common.util.crafting.RemainingItemShapelessRecipe$Factory"
+  }
+}

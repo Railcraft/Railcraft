@@ -18,12 +18,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * All Railcraft Items and Blocks should implement this.
@@ -34,13 +34,8 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
     T getObject();
 
     @Nullable
-    @Deprecated
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
-    }
-
-    default Ingredient getIngredient(@Nullable IVariantEnum variant) {
-        return Ingredient.fromStacks(getStack(1, variant));
     }
 
     @Override

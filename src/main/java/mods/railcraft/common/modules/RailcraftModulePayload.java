@@ -12,6 +12,8 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -22,7 +24,7 @@ import java.util.Set;
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {};
-    final static Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
+
 
     final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
@@ -88,9 +90,10 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         public void init() {
             objectContainers.forEach(roc -> {
                 //Use a set to avoid redefine recipes
-                if (!definedContainers.contains(roc)) {
+                if (!RailcraftModuleManager.definedContainers.contains(roc)) {
                     roc.defineRecipes();
-                    definedContainers.add(roc);
+                    Game.log(Level.ERROR, "An object is defined by a module more than once. It is {}.", roc);
+                    RailcraftModuleManager.definedContainers.add(roc);
                 }
             });
             enabledEventHandler.init();

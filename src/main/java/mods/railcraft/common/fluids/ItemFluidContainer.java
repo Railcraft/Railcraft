@@ -29,8 +29,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.setSize;

@@ -1,6 +1,5 @@
 package mods.railcraft.common.plugins.jei.crafting;
 
-import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.recipes.BrokenCraftingRecipeException;

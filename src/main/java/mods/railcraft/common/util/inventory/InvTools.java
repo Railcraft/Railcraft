@@ -52,8 +52,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -140,9 +140,9 @@ public abstract class InvTools {
 
     public static ItemStack copyOne(ItemStack stack) {
         ItemStack ret = copy(stack);
-        if (!isEmpty(stack))
-            stack.setCount(1);
-        return stack;
+        if (!isEmpty(ret))
+            ret.setCount(1);
+        return ret;
     }
 
     public static boolean canMerge(ItemStack target, ItemStack source) {
@@ -222,7 +222,7 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
-    @Nonnull
+    @NotNull
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -537,12 +537,12 @@ public abstract class InvTools {
     }
 
     @Contract("null,_->false;")
-    public static boolean isItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean isItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
         return !isEmpty(stack) && stack.getItem().getClass() == itemClass;
     }
 
     @Contract("null,_->false;")
-    public static boolean extendsItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean extendsItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
         return isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
@@ -570,7 +570,7 @@ public abstract class InvTools {
      * @return True if equal
      */
     @SuppressWarnings("SimplifiableIfStatement")
-    @Contract("null,null->true;null,!null->false;!null,null->false;")
+    @Contract("null,null->true")
     public static boolean isItemEqualStrict(@Nullable ItemStack a, @Nullable ItemStack b) {
         if (isEmpty(a) && isEmpty(b))
             return true;
