@@ -157,8 +157,8 @@ public class ClientProxy extends CommonProxy {
                         block.registerItemModel(stack, variant);
                 });
 
-        RailcraftPotions.VALUES.forEach(RailcraftPotions::initializeClient);
-        RailcraftPotionTypes.VALUES.forEach(RailcraftPotionTypes::initializeClient);
+//        RailcraftPotions.VALUES.forEach(RailcraftPotions::initializeClient);
+//        RailcraftPotionTypes.VALUES.forEach(RailcraftPotionTypes::initializeClient);
 
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);

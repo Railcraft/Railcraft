@@ -34,8 +34,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -108,7 +108,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool_crowbar_steel"),
-//    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
+    //    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
 //        conditions().add(Mod.THAUMCRAFT);
 //    }},
 //    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{

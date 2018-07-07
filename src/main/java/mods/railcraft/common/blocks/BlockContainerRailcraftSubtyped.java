@@ -96,6 +96,7 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();

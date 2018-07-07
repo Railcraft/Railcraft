@@ -36,7 +36,6 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.crafting.CraftingHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -296,25 +295,25 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
                     ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
-                    Object woodRailbed = RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD);
+                    Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
                     CraftingPlugin.addRecipe(stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed);
                     CraftingPlugin.addRecipe(stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
                     CraftingPlugin.addRecipe(stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
@@ -322,7 +321,7 @@ public class ModuleCore extends RailcraftModulePayload {
                             "ItI",
                             "I#I",
                             "ItI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed,
                             't', new ItemStack(Blocks.REDSTONE_TORCH));
 

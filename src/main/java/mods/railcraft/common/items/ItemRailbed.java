@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import java.util.Locale;
 
@@ -36,11 +37,11 @@ public class ItemRailbed extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         RailcraftItems item = RailcraftItems.RAILBED;
 
-        Object tieWood = RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD);
+        Ingredient tieWood = RailcraftItems.TIE.getIngredient(EnumTie.WOOD);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.WOOD),
                 tieWood, tieWood, tieWood, tieWood);
 
-        Object tieStone = RailcraftItems.TIE.getRecipeObject(EnumTie.STONE);
+        Ingredient tieStone = RailcraftItems.TIE.getIngredient(EnumTie.STONE);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.STONE),
                 tieStone, tieStone, tieStone, tieStone);
     }
