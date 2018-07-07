@@ -13,6 +13,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -152,7 +153,7 @@ public enum Materials implements IVariantEnum {
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
-    CONCRETE("concrete", EnumGeneric.BLOCK_CONCRETE::getDefaultState),
+    CONCRETE("reinforced_concrete", RailcraftBlocks.REINFORCED_CONCRETE::getDefaultState),
     CREOSOTE("creosote", EnumGeneric.BLOCK_CREOSOTE::getDefaultState),
 
     NO_MAT("no_mat", () -> null);
@@ -388,8 +389,6 @@ public enum Materials implements IVariantEnum {
 
     public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
-            case CONCRETE:
-                return EnumGeneric.BLOCK_CONCRETE.getHardness();
             case CREOSOTE:
                 return EnumGeneric.BLOCK_CREOSOTE.getHardness();
             case OBSIDIAN_CRUSHED:
@@ -422,8 +421,6 @@ public enum Materials implements IVariantEnum {
 
     public float getExplosionResistance(Entity entity) {
         switch (this) {
-            case CONCRETE:
-                return EnumGeneric.BLOCK_CONCRETE.getResistance() * 3f / 5f;
             case CREOSOTE:
                 return EnumGeneric.BLOCK_CREOSOTE.getResistance() * 3f / 5f;
             case OBSIDIAN_CRUSHED:

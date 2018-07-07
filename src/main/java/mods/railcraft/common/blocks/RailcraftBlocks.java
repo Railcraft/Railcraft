@@ -14,6 +14,8 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
+import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
+import mods.railcraft.common.blocks.aesthetics.concrete.ItemReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
@@ -113,6 +115,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     POST("post", BlockPost.class, BlockPost::new, ItemPost::new),
     POST_METAL("post_metal", BlockPostMetal.class, BlockPostMetal::new, ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetalPlatform.class, BlockPostMetalPlatform::new, ItemPostMetal::new),
+    REINFORCED_CONCRETE("reinforced_concrete", BlockReinforcedConcrete.class, BlockReinforcedConcrete::new, ItemReinforcedConcrete::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
     SIGNAL("signal", BlockMachineSignalRailcraft.class, BlockMachineSignalRailcraft::new, ItemSignal::new),
     SIGNAL_DUAL("signal_dual", BlockMachineSignalDualRailcraft.class, BlockMachineSignalDualRailcraft::new, ItemSignal::new),

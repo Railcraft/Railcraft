@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:tinted_cube",
+    "textures": {"particle": "railcraft:blocks/concrete",
+      "north": "railcraft:blocks/concrete",
+      "south": "railcraft:blocks/concrete",
+      "east": "railcraft:blocks/concrete",
+      "west": "railcraft:blocks/concrete",
+      "up": "railcraft:blocks/concrete",
+      "down": "railcraft:blocks/concrete"}
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}]
+  }
+}

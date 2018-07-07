@@ -30,6 +30,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     BLOCK_TIN(ModuleResources.class, "tin", new SimpleCube(), 3f, 10f),
     BLOCK_LEAD(ModuleResources.class, "lead", new SimpleCube(), 2f, 20f),
     BLOCK_STEEL(ModuleResources.class, "steel", new SimpleCube(), 5f, 15f),
+    @Deprecated
     BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
     BLOCK_CREOSOTE(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
     BLOCK_COKE(ModuleResources.class, "coke", new FlammableCube(5, 10), 2f, 10f),
@@ -56,7 +57,6 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
         creativeList.add(BLOCK_INVAR);
         creativeList.add(BLOCK_ZINC);
         creativeList.add(BLOCK_BRASS);
-        creativeList.add(BLOCK_CONCRETE);
         creativeList.add(BLOCK_CREOSOTE);
         creativeList.add(BLOCK_COKE);
         creativeList.add(CRUSHED_OBSIDIAN);
