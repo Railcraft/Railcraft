@@ -6,6 +6,7 @@ import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -34,7 +35,8 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.025);
 
     public BlockForceTrackEmitter() {
-        super(Material.ROCK);
+        super(Material.IRON);
+        setSoundType(SoundType.METAL);
     }
 
     @Override

@@ -50,7 +50,7 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
 
     public BlockTrackForce() {
         setHardness(-1);
-        setSoundType(SoundType.METAL);
+        setSoundType(SoundType.GLASS);
     }
 
     @Override

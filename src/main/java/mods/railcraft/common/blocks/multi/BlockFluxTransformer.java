@@ -7,6 +7,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,8 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     );
 
     public BlockFluxTransformer() {
-        super(Material.ROCK);
+        super(Material.IRON);
+        setSoundType(SoundType.METAL);
         setTickRandomly(true);
         setHarvestLevel("pickaxe", 1);
     }

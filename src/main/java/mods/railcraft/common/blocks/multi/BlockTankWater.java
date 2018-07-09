@@ -1,6 +1,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ public class BlockTankWater extends BlockMultiBlock {
 
     public BlockTankWater() {
         super(Material.WOOD);
+        setSoundType(SoundType.WOOD);
         setHarvestLevel("axe", 0);
     }
 

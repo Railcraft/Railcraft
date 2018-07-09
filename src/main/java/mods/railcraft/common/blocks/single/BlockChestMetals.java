@@ -3,6 +3,7 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.client.render.tesr.TESRChest;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +24,7 @@ public class BlockChestMetals extends BlockChestRailcraft {
     public BlockChestMetals() {
         super(Material.IRON);
         setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        setSoundType(SoundType.METAL);
     }
 
     @Override
