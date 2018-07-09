@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
+	        "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
+      "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
+      "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
+      "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},
+      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}},
+	  "nickel": {"textures": {"all": "railcraft:blocks/metal_nickel"}},
+	  "invar": {"textures": {"all": "railcraft:blocks/metal_invar"}},
+	  "zinc": {"textures": {"all": "railcraft:blocks/metal_zinc"}},
+	  "brass": {"textures": {"all": "railcraft:blocks/metal_brass"}}
+    }
+  }
+}

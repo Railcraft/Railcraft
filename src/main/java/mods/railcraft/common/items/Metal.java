@@ -15,7 +15,7 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.aesthetics.metals.EnumMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -71,16 +71,16 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(NICKEL, EnumOreMetalPoor.NICKEL);
         poorOreMap.put(ZINC, EnumOreMetalPoor.ZINC);
 
-        blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
-        blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
-        blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
-        blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
-        blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
-        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
-        blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
-        blockMap.put(INVAR, EnumGeneric.BLOCK_INVAR);
-        blockMap.put(ZINC, EnumGeneric.BLOCK_ZINC);
-        blockMap.put(BRASS, EnumGeneric.BLOCK_BRASS);
+        blockMap.put(STEEL, EnumMetal.BLOCK_STEEL);
+        blockMap.put(COPPER, EnumMetal.BLOCK_COPPER);
+        blockMap.put(TIN, EnumMetal.BLOCK_TIN);
+        blockMap.put(LEAD, EnumMetal.BLOCK_LEAD);
+        blockMap.put(SILVER, EnumMetal.BLOCK_SILVER);
+        blockMap.put(BRONZE, EnumMetal.BLOCK_BRONZE);
+        blockMap.put(NICKEL, EnumMetal.BLOCK_NICKEL);
+        blockMap.put(INVAR, EnumMetal.BLOCK_INVAR);
+        blockMap.put(ZINC, EnumMetal.BLOCK_ZINC);
+        blockMap.put(BRASS, EnumMetal.BLOCK_BRASS);
     }
 
     public final Predicate<ItemStack> nuggetFilter;
@@ -161,7 +161,7 @@ public enum Metal implements IVariantEnum {
                 return null;
             }
         },
-        BLOCK("block", RailcraftBlocks.GENERIC, blockMap) {
+        BLOCK("block", RailcraftBlocks.METAL, blockMap) {
             @Nullable
             @Override
             public IBlockState getState(Metal metal) {

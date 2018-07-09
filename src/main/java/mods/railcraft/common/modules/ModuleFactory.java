@@ -397,8 +397,16 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                    }
                 }
 
-                if (EnumGeneric.BLOCK_COKE.isEnabled())
+                if (EnumGeneric.BLOCK_COKE.isEnabled()) {
                     RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(Blocks.COAL_BLOCK)), EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
+                    ItemStack stack = EnumGeneric.BLOCK_COKE.getStack();
+                    CraftingPlugin.addRecipe(stack,
+                            "CCC",
+                            "CCC",
+                            "CCC",
+                            'C', RailcraftItems.COKE);
+                    CraftingPlugin.addShapelessRecipe(RailcraftItems.COKE.getStack(9), stack);
+                }
             }
 
             private ICrusherCraftingManager.ICrusherRecipeBuilder getWorldSpikeBuilder() {
@@ -538,6 +546,6 @@ public class ModuleFactory extends RailcraftModulePayload {
     }
 
     private void registerAltSteelFurnaceRecipe() {
-            CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.IRON_NUGGET, 1), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0);
+        CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.IRON_NUGGET, 1), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0);
     }
 }

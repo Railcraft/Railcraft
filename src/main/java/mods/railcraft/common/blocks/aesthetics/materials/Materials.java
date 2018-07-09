@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.aesthetics.metals.EnumMetal;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -140,16 +141,16 @@ public enum Materials implements IVariantEnum {
     PACKED_ICE("packed_ice", Blocks.PACKED_ICE::getDefaultState),
 
     IRON("iron", Blocks.IRON_BLOCK::getDefaultState),
-    STEEL("steel", EnumGeneric.BLOCK_STEEL::getDefaultState),
-    COPPER("copper", EnumGeneric.BLOCK_COPPER::getDefaultState),
-    TIN("tin", EnumGeneric.BLOCK_TIN::getDefaultState),
-    LEAD("lead", EnumGeneric.BLOCK_LEAD::getDefaultState),
+    STEEL("steel", EnumMetal.BLOCK_STEEL::getDefaultState),
+    COPPER("copper", EnumMetal.BLOCK_COPPER::getDefaultState),
+    TIN("tin", EnumMetal.BLOCK_TIN::getDefaultState),
+    LEAD("lead", EnumMetal.BLOCK_LEAD::getDefaultState),
     GOLD("gold", Blocks.GOLD_BLOCK::getDefaultState),
-    BRONZE("bronze", EnumGeneric.BLOCK_BRONZE::getDefaultState),
-    NICKEL("nickel", EnumGeneric.BLOCK_NICKEL::getDefaultState),
-    INVAR("invar", EnumGeneric.BLOCK_INVAR::getDefaultState),
-    ZINC("zinc", EnumGeneric.BLOCK_ZINC::getDefaultState),
-    BRASS("brass", EnumGeneric.BLOCK_BRASS::getDefaultState),
+    BRONZE("bronze", EnumMetal.BLOCK_BRONZE::getDefaultState),
+    NICKEL("nickel", EnumMetal.BLOCK_NICKEL::getDefaultState),
+    INVAR("invar", EnumMetal.BLOCK_INVAR::getDefaultState),
+    ZINC("zinc", EnumMetal.BLOCK_ZINC::getDefaultState),
+    BRASS("brass", EnumMetal.BLOCK_BRASS::getDefaultState),
 
     DIAMOND("diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
@@ -394,23 +395,23 @@ public enum Materials implements IVariantEnum {
             case OBSIDIAN_CRUSHED:
                 return EnumGeneric.CRUSHED_OBSIDIAN.getHardness();
             case COPPER:
-                return EnumGeneric.BLOCK_COPPER.getHardness();
+                return EnumMetal.BLOCK_COPPER.getHardness();
             case TIN:
-                return EnumGeneric.BLOCK_TIN.getHardness();
+                return EnumMetal.BLOCK_TIN.getHardness();
             case LEAD:
-                return EnumGeneric.BLOCK_LEAD.getHardness();
+                return EnumMetal.BLOCK_LEAD.getHardness();
             case STEEL:
-                return EnumGeneric.BLOCK_STEEL.getHardness();
+                return EnumMetal.BLOCK_STEEL.getHardness();
             case BRONZE:
-                return EnumGeneric.BLOCK_BRONZE.getHardness();
+                return EnumMetal.BLOCK_BRONZE.getHardness();
             case NICKEL:
-                return EnumGeneric.BLOCK_NICKEL.getHardness();
+                return EnumMetal.BLOCK_NICKEL.getHardness();
             case INVAR:
-                return EnumGeneric.BLOCK_INVAR.getHardness();
+                return EnumMetal.BLOCK_INVAR.getHardness();
             case ZINC:
-                return EnumGeneric.BLOCK_ZINC.getHardness();
+                return EnumMetal.BLOCK_ZINC.getHardness();
             case BRASS:
-                return EnumGeneric.BLOCK_BRASS.getHardness();
+                return EnumMetal.BLOCK_BRASS.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -426,23 +427,23 @@ public enum Materials implements IVariantEnum {
             case OBSIDIAN_CRUSHED:
                 return EnumGeneric.CRUSHED_OBSIDIAN.getResistance() * 3f / 5f;
             case COPPER:
-                return EnumGeneric.BLOCK_COPPER.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_COPPER.getResistance() * 3f / 5f;
             case TIN:
-                return EnumGeneric.BLOCK_TIN.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_TIN.getResistance() * 3f / 5f;
             case LEAD:
-                return EnumGeneric.BLOCK_LEAD.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_LEAD.getResistance() * 3f / 5f;
             case STEEL:
-                return EnumGeneric.BLOCK_STEEL.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_STEEL.getResistance() * 3f / 5f;
             case BRONZE:
-                return EnumGeneric.BLOCK_BRONZE.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_BRONZE.getResistance() * 3f / 5f;
             case NICKEL:
-                return EnumGeneric.BLOCK_NICKEL.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_NICKEL.getResistance() * 3f / 5f;
             case INVAR:
-                return EnumGeneric.BLOCK_INVAR.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_INVAR.getResistance() * 3f / 5f;
             case ZINC:
-                return EnumGeneric.BLOCK_ZINC.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_ZINC.getResistance() * 3f / 5f;
             case BRASS:
-                return EnumGeneric.BLOCK_BRASS.getResistance() * 3f / 5f;
+                return EnumMetal.BLOCK_BRASS.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)
