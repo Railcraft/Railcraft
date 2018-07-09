@@ -92,8 +92,11 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
                 //Use a set to avoid redefine recipes
                 if (!RailcraftModuleManager.definedContainers.contains(roc)) {
                     roc.defineRecipes();
-                    Game.log(Level.ERROR, "An object is defined by a module more than once. It is {}.", roc);
                     RailcraftModuleManager.definedContainers.add(roc);
+                }
+                else
+                {
+                    Game.log(Level.ERROR, "An object is defined by a module more than once. It is {0}.", roc);
                 }
             });
             enabledEventHandler.init();
