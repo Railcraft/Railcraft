@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -34,6 +35,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     public BlockTankSteelGauge() {
         super(Material.GLASS);
+        setSoundType(SoundType.GLASS);
         setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
         fullBlock = false;
         lightOpacity = 0;

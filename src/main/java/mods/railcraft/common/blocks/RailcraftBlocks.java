@@ -26,6 +26,8 @@ import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
+import mods.railcraft.common.blocks.aesthetics.metals.BlockMetal;
+import mods.railcraft.common.blocks.aesthetics.metals.ItemBlockMetal;
 import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
@@ -104,6 +106,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     EQUIPMENT("equipment", BlockMachineEquipment.class, BlockMachineEquipment::new, ItemMachine::new),
     FRAME("frame", BlockFrame.class, BlockFrame::new, ItemBlockRailcraft::new),
     GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
+    METAL("metal", BlockMetal.class, BlockMetal::new, ItemBlockMetal::new),
     GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),

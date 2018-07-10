@@ -3,6 +3,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -27,7 +28,8 @@ public  class BlockSteamOven extends BlockMultiBlockInventory {
     public static final IProperty<TileSteamOven.Icon> ICON = PropertyEnum.create("icon", TileSteamOven.Icon.class);
 
     public BlockSteamOven() {
-        super(Material.ROCK);
+        super(Material.IRON);
+        setSoundType(SoundType.METAL);
         setHarvestLevel("pickaxe", 1);
     }
 

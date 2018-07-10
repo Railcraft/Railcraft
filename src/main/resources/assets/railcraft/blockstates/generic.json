@@ -9,20 +9,10 @@
     "variant": {
       "coke": {"textures": {"all": "railcraft:blocks/coke"}},
       "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
-      "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
       "crushed_obsidian": {"textures": {"all": "railcraft:blocks/crushed_obsidian"}},
       "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone_abyssal"}},
       "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
-      "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
-      "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
-      "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
-      "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
-      "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},
-      "bronze": {"textures": {"all": "railcraft:blocks/metal_bronze"}},
-	  "nickel": {"textures": {"all": "railcraft:blocks/metal_nickel"}},
-	  "invar": {"textures": {"all": "railcraft:blocks/metal_invar"}},
-	  "zinc": {"textures": {"all": "railcraft:blocks/metal_zinc"}},
-	  "brass": {"textures": {"all": "railcraft:blocks/metal_brass"}}
+      "creosote": {"textures": {"all": "railcraft:blocks/creosote"}}
     }
   }
 }

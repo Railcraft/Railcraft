@@ -44,6 +44,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                 }
                 add(
                         RailcraftItems.STONE_CARVER,
+                        RailcraftItems.CONCRETE,
                         RailcraftBlocks.GLASS,
                         RailcraftBlocks.GENERIC,
                         RailcraftBlocks.REINFORCED_CONCRETE,

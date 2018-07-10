@@ -14,6 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -47,6 +48,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
 
     protected BlockTankMetal(Material material) {
         super(material);
+        setSoundType(SoundType.METAL);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
