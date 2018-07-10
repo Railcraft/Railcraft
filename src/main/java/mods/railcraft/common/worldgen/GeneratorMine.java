@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;

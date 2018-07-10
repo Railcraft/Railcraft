@@ -20,9 +20,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 /**
@@ -31,15 +32,15 @@ import java.util.UUID;
 public final class PlayerPlugin {
     public static final String UNKNOWN_PLAYER_NAME = "[Unknown]";
 
-    public static void writeOwnerToNBT(@Nonnull NBTTagCompound nbt, @Nonnull GameProfile owner) {
+    public static void writeOwnerToNBT(@NotNull NBTTagCompound nbt, @NotNull GameProfile owner) {
         if (owner.getName() != null)
             nbt.setString("owner", owner.getName());
         if (owner.getId() != null)
             nbt.setString("ownerId", owner.getId().toString());
     }
 
-    @Nonnull
-    public static GameProfile readOwnerFromNBT(@Nonnull NBTTagCompound nbt) {
+    @NotNull
+    public static GameProfile readOwnerFromNBT(@NotNull NBTTagCompound nbt) {
         String ownerName = UNKNOWN_PLAYER_NAME;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
@@ -50,7 +51,7 @@ public final class PlayerPlugin {
     }
 
     @Nullable
-    public static EntityPlayer getPlayer(@Nonnull World world, @Nonnull GameProfile gameProfile) {
+    public static EntityPlayer getPlayer(@NotNull World world, @NotNull GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
@@ -60,7 +61,7 @@ public final class PlayerPlugin {
         return null;
     }
 
-    public static String getUsername(@Nonnull World world, @Nonnull GameProfile gameProfile) {
+    public static String getUsername(@NotNull World world, @NotNull GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);

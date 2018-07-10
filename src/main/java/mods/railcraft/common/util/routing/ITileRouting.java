@@ -11,7 +11,7 @@ package mods.railcraft.common.util.routing;
 
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

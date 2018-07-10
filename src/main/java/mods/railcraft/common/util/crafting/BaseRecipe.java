@@ -3,8 +3,7 @@ package mods.railcraft.common.util.crafting;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -22,7 +21,7 @@ public abstract class BaseRecipe implements IRecipe {
         throw new UnsupportedOperationException("Not supported");
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final ResourceLocation getRegistryName() {
         return this.registryName;

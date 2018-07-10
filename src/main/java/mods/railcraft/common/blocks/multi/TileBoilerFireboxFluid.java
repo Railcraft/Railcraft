@@ -31,8 +31,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -140,7 +138,6 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
 
     @NotNull
     @Override
-    @Nonnull
     public EnumGui getGui() {
         return EnumGui.BOILER_LIQUID;
     }

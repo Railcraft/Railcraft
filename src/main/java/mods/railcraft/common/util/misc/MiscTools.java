@@ -22,8 +22,8 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
@@ -39,7 +39,7 @@ public final class MiscTools {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
-    @Nonnull
+    @NotNull
     private static final Predicate<Entity> livingEntitySelector = entity -> entity != null && entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
@@ -164,7 +164,7 @@ public final class MiscTools {
      *
      * @return a side
      */
-    @Nonnull
+    @NotNull
     public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
         int dir = MathHelper.floor((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {

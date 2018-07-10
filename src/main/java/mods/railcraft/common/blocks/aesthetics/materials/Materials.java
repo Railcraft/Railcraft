@@ -34,8 +34,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreIngredient;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -310,7 +310,7 @@ public enum Materials implements IVariantEnum {
         throw new RuntimeException("this should never happen");
     }
 
-    @Nonnull
+    @NotNull
     public static ItemStack getStack(Block block, int qty, @Nullable IVariantEnum variant) {
         ((IRailcraftObject) block).checkVariant(variant);
         ItemStack stack = new ItemStack(block, qty);

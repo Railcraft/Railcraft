@@ -21,9 +21,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -78,9 +78,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
             return false;
         else if (!waitIfEmpty && !waitTillFull && energyCart.getEnergy() == 0)
             return false;
-        else if (energyCart.getEnergy() >= energyCart.getCapacity())
-            return false;
-        return true;
+        else return !(energyCart.getEnergy() >= energyCart.getCapacity());
     }
 
     @Override

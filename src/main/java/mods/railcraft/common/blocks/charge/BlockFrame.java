@@ -31,8 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -105,7 +104,7 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing face) {
+    public ConnectStyle connectsToPost(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EnumFacing face) {
         return ConnectStyle.TWO_THIN;
     }
 

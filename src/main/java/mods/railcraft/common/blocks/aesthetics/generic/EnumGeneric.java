@@ -17,7 +17,7 @@ import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

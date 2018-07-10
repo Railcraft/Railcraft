@@ -58,9 +58,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -1173,7 +1173,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         return attackEntityFrom(damageSource, damage);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_BORE;

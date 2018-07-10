@@ -17,8 +17,8 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -36,49 +36,49 @@ public final class StackFilters {
     /**
      * Matches against the provided ItemStack.
      */
-    public static Predicate<ItemStack> of(@Nonnull final ItemStack stack) {
+    public static Predicate<ItemStack> of(@NotNull final ItemStack stack) {
         return stack1 -> InvTools.isItemEqual(stack1, stack);
     }
 
     /**
      * Matches against the provided class/interface.
      */
-    public static Predicate<ItemStack> of(@Nonnull final Class<?> itemClass) {
+    public static Predicate<ItemStack> of(@NotNull final Class<?> itemClass) {
         return stack -> !InvTools.isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
     /**
      * Matches against the provided Item.
      */
-    public static Predicate<ItemStack> of(@Nonnull final Item item) {
+    public static Predicate<ItemStack> of(@NotNull final Item item) {
         return stack -> !InvTools.isEmpty(stack) && stack.getItem() == item;
     }
 
     /**
      * Matches against the provided Item.
      */
-    public static Predicate<ItemStack> of(@Nonnull final RailcraftItems item) {
+    public static Predicate<ItemStack> of(@NotNull final RailcraftItems item) {
         return stack -> !InvTools.isEmpty(stack) && item.isEqual(stack);
     }
 
     /**
      * Matches against the provided Item.
      */
-    public static Predicate<ItemStack> of(@Nonnull final Block block) {
+    public static Predicate<ItemStack> of(@NotNull final Block block) {
         return stack -> !InvTools.isEmpty(stack) && stack.getItem() == Item.getItemFromBlock(block);
     }
 
     /**
      * Matches against the provided ItemStack. If the Item class extends IFilterItem then it will pass the check to the item.
      */
-    public static Predicate<ItemStack> matches(@Nonnull final ItemStack filter) {
+    public static Predicate<ItemStack> matches(@NotNull final ItemStack filter) {
         return stack -> InvTools.matchesFilter(filter, stack);
     }
 
     /**
      * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
      */
-    public static Predicate<ItemStack> matchesAny(@Nonnull final IInventoryComposite inv) {
+    public static Predicate<ItemStack> matchesAny(@NotNull final IInventoryComposite inv) {
         return stack -> inv.stackStream().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
     }
 
@@ -87,7 +87,7 @@ public final class StackFilters {
      *
      * If no ItemStacks are provided to match against, it returns true.
      */
-    public static Predicate<ItemStack> anyOf(@Nonnull final ItemStack... stacks) {
+    public static Predicate<ItemStack> anyOf(@NotNull final ItemStack... stacks) {
         return anyOf(Arrays.asList(stacks));
     }
 
@@ -96,7 +96,7 @@ public final class StackFilters {
      *
      * If no ItemStacks are provided to match against, it returns true.
      */
-    public static Predicate<ItemStack> anyOf(@Nonnull final List<ItemStack> stacks) {
+    public static Predicate<ItemStack> anyOf(@NotNull final List<ItemStack> stacks) {
         return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
     }
 
@@ -109,7 +109,7 @@ public final class StackFilters {
      *
      * Returns false if the ItemStack being matched is null and true if the stacks to match against is empty/nulled.
      */
-    public static Predicate<ItemStack> noneOf(@Nonnull final ItemStack... stacks) {
+    public static Predicate<ItemStack> noneOf(@NotNull final ItemStack... stacks) {
         return noneOf(Arrays.asList(stacks));
     }
 
@@ -118,7 +118,7 @@ public final class StackFilters {
      *
      * Returns false if the ItemStack being matched is null and true if the stacks to match against is empty/nulled.
      */
-    public static Predicate<ItemStack> noneOf(@Nonnull final Collection<ItemStack> stacks) {
+    public static Predicate<ItemStack> noneOf(@NotNull final Collection<ItemStack> stacks) {
         return stack -> {
             if (InvTools.isEmpty(stack))
                 return false;
@@ -135,14 +135,14 @@ public final class StackFilters {
     /**
      * Matches if the given ItemStack is registered as a specific OreType in the Ore Dictionary.
      */
-    public static Predicate<ItemStack> ofOreType(@Nonnull final String oreTag) {
+    public static Predicate<ItemStack> ofOreType(@NotNull final String oreTag) {
         return stack -> OreDictPlugin.isOreType(oreTag, stack);
     }
 
     /**
      * Matches if the Inventory contains the given ItemStack.
      */
-    public static Predicate<ItemStack> containedIn(@Nonnull final IInventoryComposite inv) {
+    public static Predicate<ItemStack> containedIn(@NotNull final IInventoryComposite inv) {
         return stack -> InvTools.containsItem(inv, stack);
     }
 }

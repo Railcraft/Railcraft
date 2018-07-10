@@ -37,9 +37,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
@@ -501,7 +501,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public abstract EnumGui getGui();
 

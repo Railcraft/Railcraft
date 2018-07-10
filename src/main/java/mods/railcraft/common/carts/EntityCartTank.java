@@ -36,8 +36,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
@@ -236,7 +236,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         return canPassFluidRequests(fluid);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.TANK;

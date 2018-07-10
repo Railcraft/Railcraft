@@ -33,7 +33,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;

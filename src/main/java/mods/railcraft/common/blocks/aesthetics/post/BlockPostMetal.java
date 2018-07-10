@@ -17,8 +17,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -42,7 +41,7 @@ public class BlockPostMetal extends BlockPostMetalBase {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, COLOR, COLUMN, NORTH, SOUTH, EAST, WEST);
     }

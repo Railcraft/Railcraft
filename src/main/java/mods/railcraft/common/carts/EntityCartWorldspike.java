@@ -40,9 +40,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 
 public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart, INeedsFuel {
@@ -338,7 +338,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_WORLDSPIKE;

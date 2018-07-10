@@ -24,7 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 

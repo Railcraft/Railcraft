@@ -27,8 +27,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -326,12 +326,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     }
 
     @Override
-    public void bindTex(@Nonnull ResourceLocation texture) {
+    public void bindTex(@NotNull ResourceLocation texture) {
         super.bindTexture(texture);
     }
 
     @Override
-    public void bindTex(@Nonnull EntityMinecart cart) {
+    public void bindTex(@NotNull EntityMinecart cart) {
         super.bindEntityTexture(cart);
     }
 

@@ -16,8 +16,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,17 +27,17 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class InventoryManipulator<T extends IInvSlot> implements Iterable<T> {
-    @Nonnull
+    @NotNull
     public static InventoryManipulator<IExtInvSlot> get(IInventory inv) {
         return new StandardInventoryManipulator(inv);
     }
 
-    @Nonnull
+    @NotNull
     public static InventoryManipulator<IInvSlot> get(IItemHandler inv) {
         return new ItemHandlerInventoryManipulator(inv);
     }
 
-    @Nonnull
+    @NotNull
     public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
         if (inv.getBackingObject() instanceof IInventory)
             return new StandardInventoryManipulator((IInventory) inv.getBackingObject());
@@ -118,12 +118,12 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return found == maxAmount;
     }
 
-    @Nonnull
+    @NotNull
     public List<ItemStack> removeItems(Predicate<ItemStack> filter, int maxAmount) {
         return removeItem(filter, maxAmount, true);
     }
 
-    @Nonnull
+    @NotNull
     protected abstract List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove);
 
     @Nullable

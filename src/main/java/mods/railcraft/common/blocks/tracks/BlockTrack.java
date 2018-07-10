@@ -35,7 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 

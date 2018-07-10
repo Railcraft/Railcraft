@@ -23,8 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

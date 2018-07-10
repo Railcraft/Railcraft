@@ -27,8 +27,8 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -127,7 +127,7 @@ public class ActuatorModel implements IModel {
             }
 
             @Override
-            public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+            public IModel loadModel(ResourceLocation modelLocation) {
                 return ActuatorModel.INSTANCE;
             }
         }

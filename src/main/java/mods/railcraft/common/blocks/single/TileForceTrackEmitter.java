@@ -42,7 +42,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 import static mods.railcraft.common.blocks.RailcraftBlocks.TRACK_FORCE;

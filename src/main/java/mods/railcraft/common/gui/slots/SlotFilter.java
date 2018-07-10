@@ -12,13 +12,13 @@ package mods.railcraft.common.gui.slots;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.BooleanSupplier;
 
 public class SlotFilter extends SlotRailcraft {
 
-    @Nonnull
+    @NotNull
     public BooleanSupplier isEnabled = () -> true;
 
     public SlotFilter(IInventory iinventory, int slotIndex, int posX, int posY) {

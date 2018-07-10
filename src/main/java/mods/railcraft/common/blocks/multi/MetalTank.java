@@ -10,8 +10,7 @@ package mods.railcraft.common.blocks.multi;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

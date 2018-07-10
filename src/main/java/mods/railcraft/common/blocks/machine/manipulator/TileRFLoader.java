@@ -15,8 +15,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class TileRFLoader extends TileRFManipulator {
 

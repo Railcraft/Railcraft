@@ -13,8 +13,7 @@ import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.common.fluids.Fluids;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

@@ -23,8 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class contains a registry of all currently active Railcraft items. Which

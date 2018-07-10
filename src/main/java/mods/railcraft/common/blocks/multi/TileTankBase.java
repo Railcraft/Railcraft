@@ -48,8 +48,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -378,7 +378,7 @@ public abstract class TileTankBase extends TileMultiBlock<TileTankBase, TileTank
         return TileTankBase.class;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final EnumGui getGui() {
         return EnumGui.TANK;

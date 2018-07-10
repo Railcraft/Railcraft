@@ -24,8 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @SideOnly(Side.CLIENT)
 public class GuiBookRoutingTable extends GuiBook {

@@ -20,8 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCart {
 
@@ -51,7 +50,7 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
         loadFromNBT(compound);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public EntityMinecart.Type getType() {
         return Type.RIDEABLE;

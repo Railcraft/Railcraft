@@ -21,7 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
     private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(DataSerializers.ITEM_STACK);

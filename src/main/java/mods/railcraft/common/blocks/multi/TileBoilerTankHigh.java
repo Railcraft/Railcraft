@@ -11,8 +11,6 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.gui.EnumGui;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */

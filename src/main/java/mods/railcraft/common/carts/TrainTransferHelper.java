@@ -28,7 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -220,8 +220,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             return ((IFluidCart) cart).canPassFluidRequests(fluid);
         IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
         if (fluidHandler != null) {
-            if (hasMatchingTank(fluidHandler, fluid))
-                return true;
+            return hasMatchingTank(fluidHandler, fluid);
         }
         return false;
     }

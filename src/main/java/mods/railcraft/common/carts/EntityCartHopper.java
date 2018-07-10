@@ -19,7 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class EntityCartHopper extends CartBaseContainer implements IHopper {
@@ -43,7 +43,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         return RailcraftCarts.HOPPER;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new UnsupportedOperationException("not supported");

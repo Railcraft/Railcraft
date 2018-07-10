@@ -16,7 +16,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class SlotWater extends SlotRailcraft {
     public SlotWater(IInventory iinventory, int slotIndex, int posX, int posY) {

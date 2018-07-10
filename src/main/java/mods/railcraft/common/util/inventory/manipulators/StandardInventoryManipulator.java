@@ -14,8 +14,8 @@ import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -116,7 +116,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
         List<ItemStack> outputList = new ArrayList<ItemStack>();

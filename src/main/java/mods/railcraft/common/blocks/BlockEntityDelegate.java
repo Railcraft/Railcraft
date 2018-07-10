@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 

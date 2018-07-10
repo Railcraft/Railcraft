@@ -15,7 +15,7 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -40,9 +40,9 @@ public abstract class TileBoxActionManager extends TileBoxSecured {
         powerOnAspects[aspect.ordinal()] = trigger;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
         byte[] array = new byte[powerOnAspects.length];
         for (int i = 0; i < powerOnAspects.length; i++) {
@@ -53,7 +53,7 @@ public abstract class TileBoxActionManager extends TileBoxSecured {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("PowerOnAspect")) {
             byte[] array = data.getByteArray("PowerOnAspect");
@@ -69,25 +69,25 @@ public abstract class TileBoxActionManager extends TileBoxSecured {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         writeActionInfo(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         readActionInfo(data.readByte());
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writeGuiData(data);
         writeActionInfo(data);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         byte bits = data.readByte();
         if (sender == null || canAccess(sender.getGameProfile())) {

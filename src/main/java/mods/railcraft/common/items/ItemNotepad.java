@@ -40,8 +40,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
@@ -121,7 +121,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         }
     }
 
-    @Nonnull
+    @NotNull
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {

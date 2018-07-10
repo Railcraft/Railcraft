@@ -47,8 +47,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -103,19 +103,19 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public final IProperty<V> getVariantProperty() {
         setup();
         return variantProperty;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final Class<? extends V> getVariantEnum() {
         return variantClass;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final V[] getVariants() {
         return variantValues;

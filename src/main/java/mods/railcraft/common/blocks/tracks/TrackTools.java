@@ -37,8 +37,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -91,7 +91,7 @@ public final class TrackTools {
         return getTrackDirection(world, pos, state, cart);
     }
 
-    @Nonnull
+    @NotNull
     public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         if (state.getBlock() instanceof BlockRailBase)
             return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);

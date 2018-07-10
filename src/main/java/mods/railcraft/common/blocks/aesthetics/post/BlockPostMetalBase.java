@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -35,8 +34,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,13 +147,13 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     }
 
     @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, @Nonnull IBlockState state, EntityPlayer player) {
+    public boolean canSilkHarvest(World world, BlockPos pos, @NotNull IBlockState state, EntityPlayer player) {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         List<ItemStack> list = new ArrayList<ItemStack>();
         // TODO: Drop rusty
 //        if (isPlatform)
@@ -166,7 +165,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     }
 
     @Override
-    public boolean recolorBlock(World world, @Nonnull BlockPos pos, EnumFacing side, @Nonnull EnumDyeColor color) {
+    public boolean recolorBlock(World world, @NotNull BlockPos pos, EnumFacing side, @NotNull EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
             world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
@@ -189,7 +188,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    @Nonnull
+    @NotNull
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
     }

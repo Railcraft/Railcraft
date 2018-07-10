@@ -19,7 +19,7 @@ import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing.Axis;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 /**

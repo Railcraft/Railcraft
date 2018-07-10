@@ -13,8 +13,8 @@ package mods.railcraft.common.util.inventory.iterators;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 
 /**

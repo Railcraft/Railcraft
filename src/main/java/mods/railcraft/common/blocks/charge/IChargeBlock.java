@@ -19,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,7 +119,7 @@ public interface IChargeBlock {
 
         };
 
-        @Nonnull
+        @NotNull
         public abstract Map<BlockPos, EnumSet<ConnectType>> getPossibleConnectionLocations(BlockPos pos);
 
     }
@@ -138,7 +138,7 @@ public interface IChargeBlock {
         }
 
         @Override
-        @Nonnull
+        @NotNull
         public EnumSet<ConnectType> get(@Nullable Object key) {
             EnumSet<ConnectType> ret = super.get(key);
             return ret == null ? EnumSet.noneOf(ConnectType.class) : ret;
@@ -146,20 +146,20 @@ public interface IChargeBlock {
     }
 
     final class ChargeDef {
-        @Nonnull
+        @NotNull
         private final ConnectType connectType;
         private final double cost;
         private final BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
 
-        public ChargeDef(@Nonnull ConnectType connectType, double cost) {
+        public ChargeDef(@NotNull ConnectType connectType, double cost) {
             this(connectType, cost, null);
         }
 
-        public ChargeDef(@Nonnull ConnectType connectType, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(@NotNull ConnectType connectType, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this(connectType, 0.0, batterySupplier);
         }
 
-        public ChargeDef(@Nonnull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(@NotNull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this.connectType = connectType;
             this.cost = cost * RailcraftConfig.chargeMaintenanceCostMultiplier();
             this.batterySupplier = batterySupplier;

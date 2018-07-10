@@ -10,14 +10,12 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.single.TileEngine.EnergyStage;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 /**

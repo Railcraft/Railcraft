@@ -14,7 +14,6 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.tileentity.TileEntity;
@@ -24,9 +23,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

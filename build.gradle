@@ -98,7 +98,6 @@ dependencies {
     compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     // annotations
     compileOnly "org.jetbrains:annotations:15.0"
-    api 'org.checkerframework:checker-qual:2.4.0'
     // libs folder in case
     compile fileTree(dir: 'libs', include: '*.jar')
 }

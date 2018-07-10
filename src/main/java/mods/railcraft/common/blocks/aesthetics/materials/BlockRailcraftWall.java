@@ -29,7 +29,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -42,8 +41,8 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -124,15 +123,13 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
 
         if (block instanceof BlockRailcraftWall)
             return true;
-        else if (block instanceof BlockPostBase)
-            return true;
-        return false;
+        else return block instanceof BlockPostBase;
     }
 
     private boolean canConnectToOld(IBlockAccess worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
         Block block = iblockstate.getBlock();
-        return block == Blocks.BARRIER ? false : (block != this && !(block instanceof BlockFenceGate) ? (iblockstate.getMaterial().isOpaque() && iblockstate.isFullCube() ? iblockstate.getMaterial() != Material.GOURD : false) : true);
+        return block != Blocks.BARRIER && (block == this || block instanceof BlockFenceGate || ((iblockstate.getMaterial().isOpaque() && iblockstate.isFullCube()) && iblockstate.getMaterial() != Material.GOURD));
     }
 
     /**
@@ -153,9 +150,9 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         return MatTools.getDrops(world, pos, state, fortune);
     }
 
@@ -166,11 +163,11 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     }
 
     @Override
-    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.005F);
@@ -181,7 +178,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     }
 
     @Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state) {
+    public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
@@ -191,9 +188,9 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+    public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
         return new TileMaterial();
     }
 
@@ -203,7 +200,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @NotNull Entity exploder, Explosion explosion) {
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
 

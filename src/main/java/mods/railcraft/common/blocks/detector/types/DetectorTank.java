@@ -32,8 +32,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -167,12 +167,12 @@ public class DetectorTank extends DetectorFilter {
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeByte(buttonController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         buttonController.setCurrentState(data.readByte());
     }
 

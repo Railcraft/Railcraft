@@ -10,7 +10,7 @@ package mods.railcraft.common.gui.tooltips;
 
 import net.minecraft.util.text.TextFormatting;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  *

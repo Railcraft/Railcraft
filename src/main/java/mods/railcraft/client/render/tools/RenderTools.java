@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderTools {
 

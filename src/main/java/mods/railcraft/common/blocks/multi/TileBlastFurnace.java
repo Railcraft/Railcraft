@@ -38,9 +38,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -461,7 +460,6 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     }
 
     @NotNull
-    @Nonnull
     @Override
     public EnumGui getGui() {
         return EnumGui.BLAST_FURNACE;

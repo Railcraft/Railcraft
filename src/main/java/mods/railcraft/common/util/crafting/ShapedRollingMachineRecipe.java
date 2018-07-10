@@ -4,7 +4,7 @@ import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import java.util.List;
 public final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
     private final int width;
     private final int height;
-    private final List<@NonNull Ingredient> ingredients;
+    private final List<@NotNull Ingredient> ingredients;
     private final ItemStack output;
     private final boolean allowFlip;
     private final int time;
 
-    ShapedRollingMachineRecipe(int width, int height, List<@NonNull Ingredient> items, ItemStack output, int time, boolean allowFlip) {
+    ShapedRollingMachineRecipe(int width, int height, List<@NotNull Ingredient> items, ItemStack output, int time, boolean allowFlip) {
         this.height = height;
         this.width = width;
         this.ingredients = items;
@@ -29,7 +29,7 @@ public final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
     }
 
     @Override
-    public boolean test(@NonNull InventoryCrafting inv) {
+    public boolean test(@NotNull InventoryCrafting inv) {
         for (int i = 0; i <= inv.getWidth() - this.width; ++i) {
             for (int j = 0; j <= inv.getHeight() - this.height; ++j) {
                 if (allowFlip && this.checkMatch(inv, i, j, true)) {
