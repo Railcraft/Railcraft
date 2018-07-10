@@ -54,7 +54,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     public BlockRailcraftStairs() {
         super(Blocks.STONEBRICK.getDefaultState());
         setSoundType(RailcraftSoundTypes.OVERRIDE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         useNeighborBrightness = true;
         hasTileEntity = true;
     }

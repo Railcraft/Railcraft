@@ -52,7 +52,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         setResistance(45);
         setHardness(4);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.SILVER));
     }
 

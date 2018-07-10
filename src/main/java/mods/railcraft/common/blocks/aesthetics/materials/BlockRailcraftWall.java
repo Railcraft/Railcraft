@@ -54,7 +54,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
 
     public BlockRailcraftWall() {
         super(Blocks.STONEBRICK);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     @Override

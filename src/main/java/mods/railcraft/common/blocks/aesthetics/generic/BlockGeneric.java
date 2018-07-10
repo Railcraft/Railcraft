@@ -52,7 +52,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         setHardness(5);
         setSoundType(SoundType.STONE);
 
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     @Override

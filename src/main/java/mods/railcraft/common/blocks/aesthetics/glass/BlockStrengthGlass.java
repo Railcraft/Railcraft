@@ -64,7 +64,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         setResistance(5);
         setHardness(1);
         setSoundType(SoundType.GLASS);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE).withProperty(POSITION, Position.SINGLE));
     }
 

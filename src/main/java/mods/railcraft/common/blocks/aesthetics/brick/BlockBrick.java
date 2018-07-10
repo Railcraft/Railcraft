@@ -44,7 +44,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
         setResistance(15);
         setHardness(5);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setHarvestLevel("pickaxe", 0);
     }
 

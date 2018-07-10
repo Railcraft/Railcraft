@@ -64,7 +64,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
         setResistance(15);
         setHardness(3);
 
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     public Column getColumnStyle(IBlockAccess world, IBlockState state, BlockPos pos) {

@@ -61,7 +61,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     public BlockLantern() {
         super(Material.REDSTONE_LIGHT);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setHardness(5);
         setResistance(15);
 //        useNeighborBrightness[id] = false;
