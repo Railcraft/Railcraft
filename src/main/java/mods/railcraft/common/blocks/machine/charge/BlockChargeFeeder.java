@@ -88,20 +88,8 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
-        state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
         state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
         return state;
-    }
-
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        int meta = state.getValue(getVariantProperty()).ordinal();
-        if (state.getValue(REDSTONE))
-            meta |= 0x8;
-        return meta;
     }
 
     @Override

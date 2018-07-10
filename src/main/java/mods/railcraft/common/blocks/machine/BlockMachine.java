@@ -243,6 +243,16 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         return super.getDrops(world, pos, state, fortune);
     }
 
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileMachineBase) {
+            drops.addAll(((TileMachineBase) tile).getDrops(fortune));
+        } else {
+            super.getDrops(drops, world, pos, state, fortune);
+        }
+    }
+
     private List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, @SuppressWarnings("SameParameterValue") int fortune) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileMachineBase)
