@@ -28,12 +28,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiAnvil extends GuiContainer implements IContainerListener {

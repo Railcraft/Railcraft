@@ -12,7 +12,7 @@ package mods.railcraft.common.core;
 
 import net.minecraft.block.state.IBlockState;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Lets see if we can remove some boilerplate with this.

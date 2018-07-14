@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import net.minecraft.block.BlockRailBase;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 

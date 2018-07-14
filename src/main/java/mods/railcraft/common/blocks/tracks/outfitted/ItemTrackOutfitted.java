@@ -106,8 +106,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
-            if (track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack))
-                return true;
+            return track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack);
         }
         return false;
     }

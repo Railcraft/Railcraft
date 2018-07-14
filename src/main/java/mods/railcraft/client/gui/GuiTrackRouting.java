@@ -35,7 +35,7 @@ public class GuiTrackRouting extends TileGui {
     private String ownerName = "[Unknown]";
 
     public GuiTrackRouting(InventoryPlayer inv, TrackKitRouting track) {
-        super((RailcraftTileEntity) track.getTile(), new ContainerTrackRouting(inv, track), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_routing.png");
+        super(track.getTile(), new ContainerTrackRouting(inv, track), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_routing.png");
         ySize = 140;
         this.track = track;
         this.player = inv.player;

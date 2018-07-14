@@ -14,7 +14,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 /**
@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public class TileMaterial extends RailcraftTileEntity {
 
-    @Nonnull
+    @NotNull
     private Materials material = Materials.getPlaceholder();
 
     public Materials getMaterial() {

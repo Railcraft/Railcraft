@@ -16,7 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -33,7 +33,7 @@ public class BlockPostMetalPlatform extends BlockPostMetalBase {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, COLOR, NORTH, SOUTH, EAST, WEST);
     }

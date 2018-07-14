@@ -45,8 +45,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,9 +213,9 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return state;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
@@ -236,7 +236,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -245,9 +245,9 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return getMetaFromState(state);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileDetector)
@@ -257,11 +257,11 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
-    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.005F);
@@ -308,7 +308,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public boolean rotateBlock(World world, @Nonnull BlockPos pos, EnumFacing axis) {
+    public boolean rotateBlock(World world, @NotNull BlockPos pos, EnumFacing axis) {
         if (getFront(world, pos) == axis)
             setFront(world, pos, axis.getOpposite());
         else
@@ -324,9 +324,9 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         WorldPlugin.setBlockState(world, pos, getDefaultState().withProperty(FRONT, front));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public EnumFacing[] getValidRotations(World world, @Nonnull BlockPos pos) {
+    public EnumFacing[] getValidRotations(World world, @NotNull BlockPos pos) {
         return EnumFacing.VALUES;
     }
 
@@ -383,7 +383,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+    public void breakBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         if (Game.isClient(worldIn))
             return;

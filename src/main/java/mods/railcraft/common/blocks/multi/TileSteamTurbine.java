@@ -37,8 +37,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -429,8 +429,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                 return true;
             if (!InvTools.isItemEqual(rotor, getSampleRotor()))
                 return true;
-            if (rotor.getItemDamage() / (double) rotor.getMaxDamage() > 0.75f)
-                return true;
+            return rotor.getItemDamage() / (double) rotor.getMaxDamage() > 0.75f;
         }
         return false;
     }

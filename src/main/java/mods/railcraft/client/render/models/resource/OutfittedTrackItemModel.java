@@ -83,7 +83,7 @@ public class OutfittedTrackItemModel implements IModel {
         }
 
         @Override
-        public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+        public IModel loadModel(ResourceLocation modelLocation) {
             String[] tokens = modelLocation.getResourcePath().split("\\.");
             TrackType trackType = TrackRegistry.TRACK_TYPE.get(tokens[1]);
             TrackKit trackKit = TrackRegistry.TRACK_KIT.get(tokens[2]);

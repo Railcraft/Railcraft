@@ -29,8 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
@@ -215,7 +214,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         return this;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_ENERGY;

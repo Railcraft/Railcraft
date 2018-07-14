@@ -17,7 +17,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 import static mods.railcraft.common.items.Metal.Form;
@@ -74,7 +74,7 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariant(variant);
-        Integer meta = metalBiMap.inverse().get((Metal) variant);
+        Integer meta = metalBiMap.inverse().get(variant);
         if (meta == null)
             meta = 0;
         return new ItemStack(this, qty, meta);

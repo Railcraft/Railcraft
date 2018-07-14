@@ -28,7 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitReversible, ITrackKitCustomShape {
 

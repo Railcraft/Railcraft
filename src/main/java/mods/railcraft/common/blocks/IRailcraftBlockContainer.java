@@ -15,7 +15,7 @@ import mods.railcraft.common.core.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/26/2016 for Railcraft.

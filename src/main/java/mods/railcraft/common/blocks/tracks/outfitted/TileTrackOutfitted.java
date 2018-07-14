@@ -20,12 +20,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
-    @Nonnull
+    @NotNull
     private ITrackKitInstance trackKitInstance = new TrackKitMissing(false);
     private TrackType trackType = TrackTypes.IRON.getTrackType();
 
@@ -47,7 +47,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         return trackKitInstance;
     }
 
-    public void setTrackKitInstance(@Nonnull ITrackKitInstance trackKit) {
+    public void setTrackKitInstance(@NotNull ITrackKitInstance trackKit) {
         this.trackKitInstance = trackKit;
         trackKitInstance.setTile(this);
     }
@@ -57,9 +57,9 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         return "tile." + trackKitInstance.getTrackKit().getName().replace(':', '.') + ".name";
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setString(TrackType.NBT_TAG, getTrackType().getName());
@@ -70,7 +70,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey(TrackType.NBT_TAG)) {
@@ -116,19 +116,19 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).writeGuiData(data);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).readGuiData(data, sender);
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newSate) {
+    public boolean shouldRefresh(World world, BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
     }
 }

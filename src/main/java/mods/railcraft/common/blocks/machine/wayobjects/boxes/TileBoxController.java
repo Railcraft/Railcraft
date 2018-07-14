@@ -27,8 +27,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -40,7 +40,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public SignalAspect poweredAspect = SignalAspect.RED;
     private boolean powered;
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.CONTROLLER;
@@ -73,7 +73,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         if (Game.isClient(getWorld()))
             return;
@@ -122,9 +122,9 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         return newAspect;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Powered", powered);
 
@@ -136,7 +136,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("Powered");
 
@@ -147,7 +147,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(defaultAspect.ordinal());
@@ -157,7 +157,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         defaultAspect = SignalAspect.values()[data.readByte()];
@@ -167,13 +167,13 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeByte(defaultAspect.ordinal());
         data.writeByte(poweredAspect.ordinal());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         defaultAspect = SignalAspect.values()[data.readByte()];
         poweredAspect = SignalAspect.values()[data.readByte()];
     }

@@ -21,9 +21,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.apache.logging.log4j.Level;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +108,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public List<@NonNull IBlastFurnaceFuel> getFuels() {
+    public List<@NotNull IBlastFurnaceFuel> getFuels() {
         return fuels;
     }
 

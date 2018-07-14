@@ -23,9 +23,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 /**
@@ -35,7 +35,7 @@ import java.util.function.Predicate;
 public abstract class BaseBackpack implements IBackpackDefinition {
     private final String id;
     protected final IBackpackFilterConfigurable backpackFilter = BackpackManager.backpackInterface.createBackpackFilter();
-    @Nonnull
+    @NotNull
     protected Predicate<ItemStack> compoundFilter = backpackFilter;
 
     protected BaseBackpack(String id) {
@@ -46,7 +46,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         return id;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Predicate<ItemStack> getFilter() {
         return compoundFilter;

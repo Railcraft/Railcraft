@@ -18,8 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCartChestVoid extends CartBaseContainer {
     private static final int TICK_PER_VOID = 8;
@@ -108,7 +107,7 @@ public class EntityCartChestVoid extends CartBaseContainer {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new Error("Should not be called");

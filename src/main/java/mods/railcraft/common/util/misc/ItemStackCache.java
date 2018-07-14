@@ -13,7 +13,6 @@ package mods.railcraft.common.util.misc;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;

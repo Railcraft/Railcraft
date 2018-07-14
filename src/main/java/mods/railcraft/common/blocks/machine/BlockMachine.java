@@ -47,8 +47,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -103,19 +103,19 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public final IProperty<V> getVariantProperty() {
         setup();
         return variantProperty;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final Class<? extends V> getVariantEnum() {
         return variantClass;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final V[] getVariants() {
         return variantValues;
@@ -241,6 +241,16 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getDrops(fortune);
         return super.getDrops(world, pos, state, fortune);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileMachineBase) {
+            drops.addAll(((TileMachineBase) tile).getDrops(fortune));
+        } else {
+            super.getDrops(drops, world, pos, state, fortune);
+        }
     }
 
     private List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, @SuppressWarnings("SameParameterValue") int fortune) {

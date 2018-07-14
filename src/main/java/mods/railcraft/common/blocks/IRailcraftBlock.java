@@ -25,7 +25,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/16/2016 for Railcraft.
@@ -63,7 +63,7 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
 
     @SideOnly(Side.CLIENT)
     default ResourceLocation getBlockTexture() {
-        return ((Block) this).getRegistryName();
+        return this.getRegistryName();
     }
 
     @SideOnly(Side.CLIENT)

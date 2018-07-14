@@ -16,8 +16,8 @@ import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -64,7 +64,7 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
      * @param invs the inventories to generate the manifest for
      * @return A <code>Multiset</code> that lists how many of each item is in the inventories
      */
-    @Nonnull
+    @NotNull
     public static InventoryManifest create(IInventoryComposite invs) {
         InventoryManifest manifest = new InventoryManifest();
         invs.stackStream().forEach(stack -> {
@@ -82,7 +82,7 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
      * @param keys The items to list.
      * @return A <code>Multiset</code> that lists how many of each item is in the inventories
      */
-    @Nonnull
+    @NotNull
     public static InventoryManifest create(IInventoryComposite invs, Collection<StackKey> keys) {
         InventoryManifest manifest = new InventoryManifest();
         for (StackKey filterKey : keys) {

@@ -24,7 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCartCargo extends CartBaseFiltered {
     private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(DataSerializers.VARINT);
@@ -106,7 +106,7 @@ public class EntityCartCargo extends CartBaseFiltered {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_CARGO;

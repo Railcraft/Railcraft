@@ -29,7 +29,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static net.minecraft.util.EnumFacing.DOWN;
@@ -93,7 +93,7 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(@NotNull IBlockState state, @NotNull EntityLivingBase entityLiving, @NotNull ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }

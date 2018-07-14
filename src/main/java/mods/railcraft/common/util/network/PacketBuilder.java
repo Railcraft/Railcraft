@@ -32,9 +32,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -48,7 +48,7 @@ public final class PacketBuilder implements ISignalPacketBuilder {
     private PacketBuilder() {
     }
 
-    @Nonnull
+    @NotNull
     public static PacketBuilder instance() {
         if (instance == null)
             instance = new PacketBuilder();

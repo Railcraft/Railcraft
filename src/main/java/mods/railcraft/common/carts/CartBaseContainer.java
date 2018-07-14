@@ -38,8 +38,8 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 
 /**
@@ -80,7 +80,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         loadFromNBT(compound);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -95,7 +95,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final ItemStack getCartItem() {
         return createCartItem(this);
@@ -205,19 +205,19 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getGuiID() {
         return "railcraft:" + getCartType().getBaseTag();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
+    public Container createContainer(@NotNull InventoryPlayer playerInventory, @NotNull EntityPlayer playerIn) {
         return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
-    @Nonnull
+    @NotNull
     protected abstract EnumGui getGuiType();
 
     @Override

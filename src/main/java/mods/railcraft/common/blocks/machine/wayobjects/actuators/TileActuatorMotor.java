@@ -29,8 +29,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 public class TileActuatorMotor extends TileActuatorSecured implements ITileAspectResponder, IGuiReturnHandler, IReceiverTile {
@@ -44,7 +44,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
         switchOnAspects[SignalAspect.RED.ordinal()] = true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return ActuatorVariant.MOTOR;
@@ -75,7 +75,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
@@ -92,9 +92,9 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
         return switchOnAspects[receiver.getAspect().ordinal()];
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
 
         byte[] array = new byte[switchOnAspects.length];
@@ -112,7 +112,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey("PowerOnAspect")) {
@@ -131,7 +131,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         receiver.writePacketData(data);
 
@@ -139,7 +139,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
 
@@ -149,7 +149,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writeGuiData(data);
         byte bits = 0;
         for (int i = 0; i < switchOnAspects.length; i++) {
@@ -160,7 +160,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         byte bits = data.readByte();
         for (int bit = 0; bit < switchOnAspects.length; bit++) {

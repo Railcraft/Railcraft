@@ -20,9 +20,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Mouse;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://railcraft.info/wiki/info:license>

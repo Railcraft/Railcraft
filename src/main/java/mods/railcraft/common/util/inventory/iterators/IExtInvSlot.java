@@ -12,7 +12,7 @@ package mods.railcraft.common.util.inventory.iterators;
 
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface extends IInvSlot by allowing you to modify a slot directly.

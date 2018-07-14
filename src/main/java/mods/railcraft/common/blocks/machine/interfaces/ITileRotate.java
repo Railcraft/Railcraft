@@ -11,8 +11,7 @@
 package mods.railcraft.common.blocks.machine.interfaces;
 
 import net.minecraft.util.EnumFacing;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.

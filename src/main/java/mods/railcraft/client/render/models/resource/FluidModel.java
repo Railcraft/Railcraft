@@ -35,8 +35,8 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
 import java.util.*;
 import java.util.function.Function;
@@ -110,7 +110,7 @@ public final class FluidModel implements IModel {
         private final boolean gas, sideFlowing;
         private static final LoadingCache<Key, BakedFluid> modelCache = CacheBuilder.newBuilder().maximumSize(200).build(new CacheLoader<BakedFluid.Key, BakedFluid>() {
             @Override
-            public BakedFluid load(Key key) throws Exception {
+            public BakedFluid load(Key key) {
                 return new BakedFluid(Optional.empty(), DefaultVertexFormats.BLOCK, key.color, key.still, key.flowing, key.gas, key.sideFlowing, key.cornerRound, key.flowRound);
             }
         });

@@ -42,8 +42,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,11 +53,11 @@ import java.util.UUID;
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-    @Nonnull
+    @NotNull
     private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
     @Nullable
     private UUID uuid;
-    @Nonnull
+    @NotNull
     private String customName = "";
 
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
@@ -201,7 +201,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
-    @Nonnull
+    @NotNull
     public String getLocalizationTag() {
         return getBlockType().getUnlocalizedName() + ".name";
     }

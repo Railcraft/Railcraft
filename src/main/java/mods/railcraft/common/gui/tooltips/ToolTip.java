@@ -13,9 +13,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ForwardingList;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     public void refresh() {
     }
 
-    @Nonnull
+    @NotNull
     public List<String> convertToStrings() {
         List<String> tips = new ArrayList<String>(size());
         for (ToolTipLine line : this) {

@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.single.TileEngine;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
@@ -33,7 +33,7 @@ public class TriggerProvider implements ITriggerProvider {
     }
 
     @Override
-    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @NotNull EnumFacing side) {
     }
 
     @Override

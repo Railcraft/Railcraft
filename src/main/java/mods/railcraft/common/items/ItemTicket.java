@@ -14,7 +14,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
@@ -23,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -55,7 +54,7 @@ public class ItemTicket extends ItemRailcraft {
                 return ItemStack.EMPTY;
             NBTTagCompound nbt = source.getTagCompound();
             if (nbt != null)
-                ticket.setTagCompound((NBTTagCompound) nbt.copy());
+                ticket.setTagCompound(nbt.copy());
             return ticket;
         }
         return ItemStack.EMPTY;

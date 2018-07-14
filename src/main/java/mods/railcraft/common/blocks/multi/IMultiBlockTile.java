@@ -4,7 +4,7 @@ import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 /**

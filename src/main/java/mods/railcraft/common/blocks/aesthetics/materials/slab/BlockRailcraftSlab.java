@@ -34,7 +34,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -54,8 +53,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -86,7 +85,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{TOP_MATERIAL, BOTTOM_MATERIAL});
     }
@@ -125,7 +124,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
@@ -371,8 +370,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
                 return true;
             if (side == DOWN && tile.isBottomSlab())
                 return true;
-            if (side == UP && tile.isTopSlab())
-                return true;
+            return side == UP && tile.isTopSlab();
         }
         return false;
     }
@@ -383,8 +381,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         if (tile != null) {
             if (tile.isDoubleSlab())
                 return true;
-            if (tile.isTopSlab())
-                return true;
+            return tile.isTopSlab();
         }
         return false;
     }

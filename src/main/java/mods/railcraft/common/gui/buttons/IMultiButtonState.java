@@ -10,7 +10,7 @@ package mods.railcraft.common.gui.buttons;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
