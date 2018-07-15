@@ -125,7 +125,7 @@ public enum RailcraftFluids {
                 flowTexture = stillTexture;
             else
                 flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
-            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(isGaseous);
+            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setTemperature(temperature).setViscosity(viscosity).setGaseous(isGaseous);
             FluidRegistry.registerFluid(railcraftFluid);
             if (!isGaseous)
                 FluidRegistry.addBucketForFluid(railcraftFluid);
