@@ -58,11 +58,14 @@ public class FuelPlugin {
                     return 0;
             }
 
-//            if (itemID == Item.coal.itemID && stack.getItemDamage() == 0)
-//                return 1600;
-
             if (item == Items.BLAZE_ROD)
                 return 1000;
+
+            if (stack == new ItemStack(Items.COAL, 1, 1))
+                return 1600;
+
+            if (stack == OreDictPlugin.getOre("blockCharcoal", 1))
+                return 16000;
 
             FluidStack liquid = FluidItemHelper.getFluidStackInContainer(stack);
             if (liquid != null && Fluids.LAVA.get() == liquid.getFluid())
