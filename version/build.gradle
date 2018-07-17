@@ -14,6 +14,7 @@ parent.ext.version_mcp = version_mcp
 parent.ext.version_forestry = version_forestry
 parent.ext.version_industrialcraft = version_industrialcraft
 parent.ext.version_buildcraft = version_buildcraft
+parent.ext.version_jei = version_jei
 
 task echoVersion {
     doLast {
