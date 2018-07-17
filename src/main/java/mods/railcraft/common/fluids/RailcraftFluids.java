@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public enum RailcraftFluids {
 
-    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500, false) {
+    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 320, 1500, false) {
         @Override
         Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluid(fluid, Material.WATER) {
@@ -60,7 +60,7 @@ public enum RailcraftFluids {
             }.setFlammable(true).setFlammability(10).setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f);
         }
     },
-    STEAM("fluid.steam", Fluids.STEAM, -1000, 500, true) {
+    STEAM("fluid.steam", Fluids.STEAM, -1000, 400, 500, true) {
         @Override
         Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow().setParticleColor(0xf2 / 255f, 0xf2 / 255f, 0xf2 / 255f);
@@ -71,6 +71,7 @@ public enum RailcraftFluids {
     private final String name;
     private final Fluids standardFluid;
     private final int density;
+    private final int temperature;
     private final int viscosity;
     private final boolean isGaseous;
     final ModelResourceLocation location;
@@ -78,10 +79,11 @@ public enum RailcraftFluids {
     private Block railcraftBlock;
     private ItemBlock railcraftItem;
 
-    RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity, boolean isGaseous) {
+    RailcraftFluids(String tag, Fluids standardFluid, int density, int temperature, int viscosity, boolean isGaseous) {
         this.tag = tag;
         this.standardFluid = standardFluid;
         this.density = density;
+        this.temperature = temperature;
         this.viscosity = viscosity;
         this.isGaseous = isGaseous;
         this.name = name().toLowerCase();
@@ -123,7 +125,7 @@ public enum RailcraftFluids {
                 flowTexture = stillTexture;
             else
                 flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
-            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(isGaseous);
+            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setTemperature(temperature).setViscosity(viscosity).setGaseous(isGaseous);
             FluidRegistry.registerFluid(railcraftFluid);
             if (!isGaseous)
                 FluidRegistry.addBucketForFluid(railcraftFluid);
