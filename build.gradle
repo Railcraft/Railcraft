@@ -98,7 +98,6 @@ dependencies {
     compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     // JEI
     deobfProvided "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}"
-    runtime "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}"
     // annotations
     compileOnly "org.jetbrains:annotations:15.0"
     // libs folder in case

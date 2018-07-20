@@ -241,16 +241,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
 
-        // Fix flip
-        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
-        float cutoff = 120F;
-        if (distance < -cutoff || distance >= cutoff) {
-            cart.rotationYaw += 180.0F;
-            cart.isInReverse = !cart.isInReverse;
-//            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
-//            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
-            cart.rotationYaw = cart.rotationYaw % 360.0F;
-        }
+        // Fix flip TODO test this
+//        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
+//        float cutoff = 120F;
+//        if (distance < -cutoff || distance >= cutoff) {
+//            cart.rotationYaw += 180.0F;
+//            cart.isInReverse = !cart.isInReverse;
+//            cart.rotationYaw = cart.rotationYaw % 360.0F;
+//        }
 
 
 //        if (SeasonPlugin.isGhostTrain(cart)) {

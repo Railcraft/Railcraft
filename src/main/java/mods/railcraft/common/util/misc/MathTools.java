@@ -15,7 +15,7 @@ package mods.railcraft.common.util.misc;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MathTools {
+public final class MathTools {
 
     public static float getDistanceBetweenAngles(float angle1, float angle2) {
         angle1 = normalizeAngle(angle1);
