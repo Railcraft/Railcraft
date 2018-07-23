@@ -13,6 +13,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.multi.TileRockCrusher;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -31,19 +32,16 @@ public class ContainerRockCrusher extends RailcraftContainer {
     public ContainerRockCrusher(InventoryPlayer inventoryplayer, TileRockCrusher crusher) {
         super(crusher);
         this.tile = crusher;
-
-//        if (tile.rfIndicator != null) TODO: charge
-//            addWidget(new IndicatorWidget(tile.rfIndicator, 157, 23, 176, 53, 6, 48));
-        addWidget(new IndicatorWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 157, 23, 176, 53, 6, 48));
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 74, 59, 28, 14));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotRockCrusher(crusher, i * 3 + k, 8 + k * 18, 21 + i * 18));
+                addSlot(new SlotRockCrusher(crusher, i * 3 + k, 17 + k * 18, 21 + i * 18));
             }
         }
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotOutput(crusher, 9 + i * 3 + k, 98 + k * 18, 21 + i * 18));
+                addSlot(new SlotOutput(crusher, 9 + i * 3 + k, 107 + k * 18, 21 + i * 18));
             }
         }
         for (int i = 0; i < 3; i++) {
