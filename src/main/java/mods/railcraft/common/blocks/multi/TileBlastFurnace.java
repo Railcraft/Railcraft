@@ -56,8 +56,9 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
+    public static final int SLOT_SECOND_OUTPUT = 3;
     private static final int FUEL_PER_TICK = 5;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
@@ -132,7 +133,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     @Nullable
     private IBlastFurnaceRecipe currentRecipe;
 
-    public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
+    public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
@@ -142,12 +143,13 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             TileBlastFurnace master = (TileBlastFurnace) tile;
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SECOND_OUTPUT, secondOutput);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
     }
 
     public TileBlastFurnace() {
-        super(3, patterns);
+        super(4, patterns);
     }
 
     @Override
@@ -283,6 +285,13 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             return;
         }
 
+        ItemStack secondOutputSlot = getStackInSlot(SLOT_SECOND_OUTPUT);
+        ItemStack nextSecondOutput = currentRecipe.getSecondOutput();
+
+        if (!InvTools.canMerge(secondOutputSlot, nextSecondOutput, getInventoryStackLimit())) {
+            return;
+        }
+
         if (!isBurning()) {
             return;
         }
@@ -298,6 +307,10 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
 
         if (InvTools.isEmpty(outputSlot))
             setInventorySlotContents(SLOT_OUTPUT, nextOutput);
+        else
+            incSize(outputSlot, nextOutput.getCount());
+        if (InvTools.isEmpty(secondOutputSlot))
+            setInventorySlotContents(SLOT_SECOND_OUTPUT, nextSecondOutput);
         else
             incSize(outputSlot, nextOutput.getCount());
         decrStackSize(SLOT_INPUT, 1);
@@ -430,6 +443,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             return false;
         switch (slot) {
             case SLOT_OUTPUT:
+            case SLOT_SECOND_OUTPUT:
                 return false;
             case SLOT_FUEL:
                 return FUEL_FILTER.test(stack);
@@ -451,7 +465,14 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == SLOT_OUTPUT;
+        switch (direction) {
+            case NORTH:
+            case SOUTH:
+            case EAST:
+            case WEST:
+                return index == SLOT_OUTPUT;
+        }
+        return index == SLOT_SECOND_OUTPUT;
     }
 
     @Override

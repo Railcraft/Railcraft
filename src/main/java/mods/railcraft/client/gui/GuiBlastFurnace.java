@@ -10,6 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.multi.TileBlastFurnace;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
@@ -19,7 +20,7 @@ public class GuiBlastFurnace extends TileGui {
     private final TileBlastFurnace tile;
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
-        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), "textures/gui/container/furnace.png");
+        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png");
         this.tile = tile;
     }
 

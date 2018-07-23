@@ -65,7 +65,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output) {
+    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput) {
         return new IBlastFurnaceRecipe() {
             @Override
             public Ingredient getInput() {
@@ -80,6 +80,11 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
             @Override
             public ItemStack getOutput() {
                 return output.copy();
+            }
+
+            @Override
+            public ItemStack getSecondOutput() {
+                return secondoutput.copy();
             }
         };
     }

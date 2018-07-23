@@ -29,9 +29,10 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
         this.furnace = tile;
         addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, 0, 56, 17));
         addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, 1, 56, 53));
-        addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 35));
+        addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 21));
+        addSlot(new SlotFurnaceOutput(player.player, tile, 3, 116, 53));
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 9; ++j) {
                 addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
