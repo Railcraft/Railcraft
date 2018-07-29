@@ -4,10 +4,9 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.config.Constants;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
-import mods.railcraft.client.gui.GuiCokeOven;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -51,7 +50,7 @@ public final class CokeOvenWrapper implements IRecipeWrapper {
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         int cookTime = recipe.getCookTime();
         IDrawableAnimated animatedFire = helpers.getGuiHelper().createAnimatedDrawable(flame, cookTime, IDrawableAnimated.StartDirection.TOP, true);
-        IDrawableAnimated animatedArrow = helpers.getGuiHelper().createAnimatedDrawable(flame, cookTime, IDrawableAnimated.StartDirection.LEFT, false);
+        IDrawableAnimated animatedArrow = helpers.getGuiHelper().createAnimatedDrawable(arrow, cookTime, IDrawableAnimated.StartDirection.LEFT, false);
         animatedArrow.draw(minecraft);
         animatedFire.draw(minecraft);
         //TODO I18n
