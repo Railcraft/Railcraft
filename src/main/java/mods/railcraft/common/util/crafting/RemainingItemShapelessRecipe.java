@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
 @SuppressWarnings("unused")
-public final class RemainingItemShapelessRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
 
     private final ItemStack recipeOutput;
     /**
@@ -42,6 +42,7 @@ public final class RemainingItemShapelessRecipe extends IForgeRegistryEntry.Impl
     @Nullable private int[] lastResult;
 
     public RemainingItemShapelessRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
+        super(group, output, ingredients);
         this.group = group;
         this.recipeOutput = output;
         this.recipeItems = ingredients;

@@ -6,11 +6,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -35,7 +37,7 @@ import static java.util.Objects.requireNonNull;
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
 @SuppressWarnings("unused")
-public final class RemainingItemShapedRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IShapedRecipe {
+public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
     private final int recipeWidth;
     /**
@@ -55,6 +57,7 @@ public final class RemainingItemShapedRecipe extends IForgeRegistryEntry.Impl<IR
     @Nullable IRemainderIngredient[] bySlots;
 
     public RemainingItemShapedRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
+        super(group, width, height, ingredients, result);
         this.group = group;
         this.recipeWidth = width;
         this.recipeHeight = height;
