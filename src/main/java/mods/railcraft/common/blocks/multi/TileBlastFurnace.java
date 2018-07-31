@@ -312,7 +312,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         if (InvTools.isEmpty(secondOutputSlot))
             setInventorySlotContents(SLOT_SECOND_OUTPUT, nextSecondOutput);
         else
-            incSize(outputSlot, nextOutput.getCount());
+            incSize(secondOutputSlot, nextSecondOutput.getCount());
         decrStackSize(SLOT_INPUT, 1);
 
         // TODO fix mess
