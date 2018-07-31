@@ -23,7 +23,7 @@ public class ToolTipLine {
     public TextFormatting format;
     public int spacing;
 
-    public ToolTipLine(String text, TextFormatting format) {
+    public ToolTipLine(String text, @Nullable TextFormatting format) {
         this.text = text;
         this.format = format;
     }

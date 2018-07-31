@@ -14,7 +14,7 @@ public interface ITheorycraftAid {
 	 * This method should return an entity class, block or itemstack - itemstack is based on items block will drop when broken.
 	 * @return
 	 */
-	public Object getAidObject();
+    Object getAidObject();
 		
 	/**
 	 * The cards that are added to the draw rotation. Each time a card 
@@ -24,6 +24,6 @@ public interface ITheorycraftAid {
 	 * more than once by simply adding it to the array multiple times.
 	 * @return
 	 */
-	public Class<TheorycraftCard>[] getCards();
+    Class<TheorycraftCard>[] getCards();
 
 }

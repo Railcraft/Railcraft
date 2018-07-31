@@ -115,7 +115,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public TileSteamOven() {
         super(18, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.STEAM::get);
+        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 

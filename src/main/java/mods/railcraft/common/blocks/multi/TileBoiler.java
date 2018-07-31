@@ -27,6 +27,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -37,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -99,11 +101,11 @@ public abstract class TileBoiler<F extends TileBoilerFirebox<F>> extends TileMul
                 return super.fillInternal(resource, doFill);
             }
         };
-        tankWater.setFilter(Fluids.WATER::get);
+        tankWater.setFilter(Fluids.WATER);
         tankManager.add(tankWater);
 
         tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, this);
-        tankSteam.setFilter(Fluids.STEAM::get);
+        tankSteam.setFilter(Fluids.STEAM);
         tankManager.add(tankSteam);
     }
 

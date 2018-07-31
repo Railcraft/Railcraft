@@ -39,9 +39,9 @@ public class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
     private static final Map<World, Map<UUID, Train>> trains = new MapMaker().weakKeys().makeMap();
     private final UUID uuid;
-    private final LinkedList<UUID> carts = new LinkedList<UUID>();
-    private final List<UUID> safeCarts = Collections.unmodifiableList(carts);
-    private final Collection<UUID> lockingTracks = new HashSet<UUID>();
+    private final Deque<UUID> carts = new ArrayDeque<>();
+    private final Collection<UUID> safeCarts = Collections.unmodifiableCollection(carts);
+    private final Collection<UUID> lockingTracks = new HashSet<>();
     private final World world;
     private TrainState trainState = TrainState.NORMAL;
 
@@ -268,7 +268,7 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public Collection<UUID> getEnds() {
-        Set<UUID> ends = new HashSet<UUID>();
+        Set<UUID> ends = new HashSet<>();
         ends.add(carts.getFirst());
         ends.add(carts.getLast());
         return ends;
@@ -294,7 +294,7 @@ public class Train implements Iterable<EntityMinecart> {
         return list;
     }
 
-    public List<UUID> getUUIDs() {
+    public Collection<UUID> getUUIDs() {
         return safeCarts;
     }
 
@@ -308,12 +308,12 @@ public class Train implements Iterable<EntityMinecart> {
         }
         if (cartHandlers.isEmpty())
             return null;
-        return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[cartHandlers.size()]));
+        return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[0]));
     }
 
     @Nullable
     public IFluidHandler getFluidHandler() {
-        ArrayList<IFluidHandler> cartHandlers = new ArrayList<>();
+        List<IFluidHandler> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
             IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
             if (fluidHandler != null)
@@ -321,7 +321,7 @@ public class Train implements Iterable<EntityMinecart> {
         }
         if (cartHandlers.isEmpty())
             return null;
-        return new FluidHandlerConcatenate(cartHandlers.toArray(new IFluidHandler[cartHandlers.size()]));
+        return new FluidHandlerConcatenate(cartHandlers);
     }
 
     public int size() {
@@ -350,6 +350,7 @@ public class Train implements Iterable<EntityMinecart> {
         int numLocomotives = getNumRunningLocomotives();
         for (EntityMinecart c : this) {
             float baseSpeed = c.getMaxCartSpeedOnRail();
+            //TODO remove this nonsense, if we keep it leave it somewhere else
             if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
                 ICartBattery battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
                 if (battery.getType() != ICartBattery.Type.USER) {

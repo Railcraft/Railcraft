@@ -15,14 +15,14 @@ public interface IScanThing {
 	 * I generally use "!" as a prefix for these research key's.
 	 * You can then use this research key (fake or otherwise) as a parent for research or for whatever.
 	 */
-	public boolean checkThing(EntityPlayer player, Object obj);
+    boolean checkThing(EntityPlayer player, Object obj);
 	
 	/**
 	 * @param object 
 	 * @param player 
 	 * @return the research key linked to this 'thing'. 
 	 */
-	public String getResearchKey(EntityPlayer player, Object object);
+    String getResearchKey(EntityPlayer player, Object object);
 
 	
 	/**
@@ -30,7 +30,7 @@ public interface IScanThing {
 	 * @param player 
 	 * @return the research key linked to this 'thing'
 	 */
-	public default void onSuccess(EntityPlayer player, Object object) {
+	default void onSuccess(EntityPlayer player, Object object) {
 		
 	}
 }

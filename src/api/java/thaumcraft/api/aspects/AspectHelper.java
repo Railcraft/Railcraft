@@ -78,7 +78,7 @@ public class AspectHelper {
 	    if (entity instanceof EntityPlayer) {
 	    	tags = new AspectList();
 	    	tags.add(Aspect.MAN, 4);        	
-			Random rand = new Random(((EntityPlayer)entity).getName().hashCode());
+			Random rand = new Random(entity.getName().hashCode());
 	    	Aspect[] posa = Aspect.aspects.values().toArray(new Aspect[]{});
 			tags.add(posa[rand.nextInt(posa.length)], 15);
 	    	tags.add(posa[rand.nextInt(posa.length)], 15);

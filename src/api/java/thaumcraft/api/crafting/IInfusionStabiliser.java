@@ -15,6 +15,6 @@ public interface IInfusionStabiliser {
 	/**
 	 * returns true if the block can stabilise things
 	 */
-	public boolean canStabaliseInfusion(World world, BlockPos pos);
+    boolean canStabaliseInfusion(World world, BlockPos pos);
 
 }

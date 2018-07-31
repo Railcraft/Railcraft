@@ -60,7 +60,7 @@ public class PotionFluxTaint extends Potion
 	public boolean isReady(int par1, int par2)
     {
 		int k = 40 >> par2;
-        return k > 0 ? par1 % k == 0 : true;
+        return k <= 0 || par1 % k == 0;
     }
     
 }

@@ -96,7 +96,6 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         return true;
     }
 
-    @Nullable
     @Override
     public ItemStack getRoutingTable() {
         return inv.getStackInSlot(0);

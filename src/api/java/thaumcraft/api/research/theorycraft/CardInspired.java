@@ -59,8 +59,7 @@ public class CardInspired extends TheorycraftCard {
 	
 	@Override
 	public String getLocalizedText() {
-		return new TextComponentTranslation("card.inspired.text", new Object[] {
-				amt, TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET}).getUnformattedText();
+		return new TextComponentTranslation("card.inspired.text", amt, TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 	
 	@Override

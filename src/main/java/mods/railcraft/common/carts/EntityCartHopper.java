@@ -219,7 +219,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 

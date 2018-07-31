@@ -23,9 +23,9 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +112,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return false;
     }
 

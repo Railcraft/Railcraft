@@ -5,18 +5,18 @@ import net.minecraft.util.NonNullList;
 
 public interface ISealConfigFilter {
 	
-	public NonNullList<ItemStack> getInv();
+	NonNullList<ItemStack> getInv();
 	
-	public int getFilterSize();
+	int getFilterSize();
 	
-	public ItemStack getFilterSlot(int i);
+	ItemStack getFilterSlot(int i);
 	
-	public void setFilterSlot(int i, ItemStack stack);
+	void setFilterSlot(int i, ItemStack stack);
 	
-	public boolean isBlacklist();
+	boolean isBlacklist();
 	
-	public void setBlacklist(boolean black);
+	void setBlacklist(boolean black);
 	
-	public boolean hasStacksizeLimiters();
+	boolean hasStacksizeLimiters();
 	
 }

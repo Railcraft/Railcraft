@@ -715,7 +715,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 

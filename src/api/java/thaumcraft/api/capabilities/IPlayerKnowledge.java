@@ -48,7 +48,7 @@ public interface IPlayerKnowledge extends INBTSerializable<NBTTagCompound>
     boolean isResearchKnown(String res);
     
     enum EnumResearchStatus {
-    	UNKNOWN, COMPLETE, IN_PROGRESS;
+    	UNKNOWN, COMPLETE, IN_PROGRESS
     }
     
     /**
@@ -148,7 +148,7 @@ public interface IPlayerKnowledge extends INBTSerializable<NBTTagCompound>
      */
 	void sync(EntityPlayerMP player);
    
-	public enum EnumKnowledgeType {
+	enum EnumKnowledgeType {
 		THEORY(32,true,"T"),
 		OBSERVATION(16,true,"O");		
 		
@@ -156,7 +156,7 @@ public interface IPlayerKnowledge extends INBTSerializable<NBTTagCompound>
 		private boolean hasFields;
 		private String abbr;
 
-		private EnumKnowledgeType(int progression, boolean hasFields, String abbr) {
+		EnumKnowledgeType(int progression, boolean hasFields, String abbr) {
 			this.progression = (short) progression;
 			this.hasFields = hasFields;
 			this.abbr = abbr;
@@ -176,14 +176,14 @@ public interface IPlayerKnowledge extends INBTSerializable<NBTTagCompound>
 		
 	}	
 		
-	public enum EnumResearchFlag {
+	enum EnumResearchFlag {
 		/** This research has a new page associated with it. */ 
 		PAGE, 
 		/** This research is new and has not been examined yet. */ 
 		RESEARCH, 
 		/** This research should trigger a GUI popup when synced. Flag will be cleared once sync occurs */ 
-		POPUP;
-	}
+		POPUP
+    }
 
 	
 

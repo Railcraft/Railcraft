@@ -32,10 +32,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,7 +61,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     {
-        tank.setFilter(this::getFilterFluid);
+        tank.setFilter(fluidStack -> FluidTools.matches(this.getFilterFluid(), fluidStack));
         tank.setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
         tankManager.add(tank);
     }
@@ -188,11 +186,11 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Nullable
-    public Fluid getFilterFluid() {
+    public FluidStack getFilterFluid() {
         ItemStack filter = getFilterItem();
         if (InvTools.isEmpty(filter))
             return null;
-        return FluidItemHelper.getFluidInContainer(filter);
+        return FluidItemHelper.getFluidStackInContainer(filter);
     }
 
     public IInventory getInvLiquids() {
@@ -220,19 +218,19 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean canPassFluidRequests(Fluid fluid) {
+    public boolean canPassFluidRequests(FluidStack fluid) {
         if (hasFilter())
             return getFilterFluid() == fluid;
-        return !(!tank.isEmpty() && tank.getFluidType() != fluid);
+        return tank.isEmpty() && FluidTools.matches(tank.getFluid(), fluid);
     }
 
     @Override
-    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canAcceptPushedFluid(EntityMinecart requester, FluidStack fluid) {
         return canPassFluidRequests(fluid);
     }
 
     @Override
-    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canProvidePulledFluid(EntityMinecart requester, FluidStack fluid) {
         return canPassFluidRequests(fluid);
     }
 

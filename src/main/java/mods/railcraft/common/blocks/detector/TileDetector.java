@@ -58,7 +58,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     public ItemStack getRoutingTable() {
         if (detector instanceof ITileRouting)
             return ((ITileRouting) detector).getRoutingTable();
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

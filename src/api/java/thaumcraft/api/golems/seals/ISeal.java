@@ -22,39 +22,39 @@ public interface ISeal {
 	 * the key with "seal_" added to the front of the key.
 	 * For example: models/item/seal_fetch.json 
 	 */
-	public String getKey();	
+    String getKey();
 	
-	public boolean canPlaceAt(World world, BlockPos pos, EnumFacing side);
+	boolean canPlaceAt(World world, BlockPos pos, EnumFacing side);
 	
-	public void tickSeal(World world, ISealEntity seal);		
+	void tickSeal(World world, ISealEntity seal);
 	
-	public void onTaskStarted(World world, IGolemAPI golem, Task task);
+	void onTaskStarted(World world, IGolemAPI golem, Task task);
 	
-	public boolean onTaskCompletion(World world, IGolemAPI golem, Task task);	
+	boolean onTaskCompletion(World world, IGolemAPI golem, Task task);
 	
-	public void onTaskSuspension(World world, Task task);
+	void onTaskSuspension(World world, Task task);
 	
-	public boolean canGolemPerformTask(IGolemAPI golem, Task task);
+	boolean canGolemPerformTask(IGolemAPI golem, Task task);
 	
-	public void readCustomNBT(NBTTagCompound nbt);
+	void readCustomNBT(NBTTagCompound nbt);
 	
-	public void writeCustomNBT(NBTTagCompound nbt);
+	void writeCustomNBT(NBTTagCompound nbt);
 	
 	/**
 	 * @return icon used to render the seal in world. Usually the same as your seal placer item icon.
 	 * If it is not the same you will have to manually stitch it into the texture atlas.
 	 */
-	public ResourceLocation getSealIcon();
+    ResourceLocation getSealIcon();
 
-	public void onRemoval(World world, BlockPos pos, EnumFacing side);	
+	void onRemoval(World world, BlockPos pos, EnumFacing side);
 	
-	public Object returnContainer(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal);
+	Object returnContainer(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal);
 	
 	@SideOnly(Side.CLIENT)
-	public Object returnGui(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal);
+    Object returnGui(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal);
 	
-	public EnumGolemTrait[] getRequiredTags();
+	EnumGolemTrait[] getRequiredTags();
 	
-	public EnumGolemTrait[] getForbiddenTags();
+	EnumGolemTrait[] getForbiddenTags();
 	
 }

@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface ITileRouting {
 
-    @Nullable
     ItemStack getRoutingTable();
 
     void setRoutingTable(ItemStack stack);

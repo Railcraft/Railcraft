@@ -4,11 +4,11 @@ package thaumcraft.api.golems.seals;
 public interface ISealConfigToggles {
 
 	
-	public SealToggle[] getToggles();
-	public void setToggle(int indx, boolean value);
+	SealToggle[] getToggles();
+	void setToggle(int indx, boolean value);
 	
 	
-	public class SealToggle {
+	class SealToggle {
 		public boolean value;
 		public String key;		
 		public String name;

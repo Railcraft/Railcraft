@@ -51,16 +51,12 @@ public class CardStudy extends TheorycraftCard {
 	
 	@Override
 	public String getLocalizedName() {
-		return new TextComponentTranslation("card.study.name", new Object[] {
-				TextFormatting.DARK_BLUE+""+TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET
-				}).getUnformattedText();
+		return new TextComponentTranslation("card.study.name", TextFormatting.DARK_BLUE+""+TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 	
 	@Override
 	public String getLocalizedText() {
-		return new TextComponentTranslation("card.study.text", new Object[] {
-				TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET
-				}).getUnformattedText();
+		return new TextComponentTranslation("card.study.text", TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 	
 	@Override
