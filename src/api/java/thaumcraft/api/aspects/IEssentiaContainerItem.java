@@ -12,13 +12,13 @@ import net.minecraft.item.ItemStack;
  *
  */
 public interface IEssentiaContainerItem {
-	public AspectList getAspects(ItemStack itemstack);
-	public void setAspects(ItemStack itemstack, AspectList aspects);
+	AspectList getAspects(ItemStack itemstack);
+	void setAspects(ItemStack itemstack, AspectList aspects);
 	
 	/**
 	 * Return true if the contained aspect should not be used to calculate the actual item aspects. For example: jar labels. 
 	 */
-	public boolean ignoreContainedAspects();
+    boolean ignoreContainedAspects();
 }
 
 //Example implementation

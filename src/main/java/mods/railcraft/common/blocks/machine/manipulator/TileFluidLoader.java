@@ -32,11 +32,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 public class TileFluidLoader extends TileFluidManipulator {
@@ -174,7 +173,7 @@ public class TileFluidLoader extends TileFluidManipulator {
         if (cart instanceof IFluidCart)
             ((IFluidCart) cart).setFilling(isProcessing());
 
-        if (tankCart.isTankFull(tank.getFluidType()))
+        if (tankCart.isTankFull(tank.getFluid()))
             setResetTimer(RESET_WAIT);
     }
 
@@ -190,7 +189,7 @@ public class TileFluidLoader extends TileFluidManipulator {
         AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.UP);
         if (tankCart == null)
             return false;
-        Fluid fluid = getFluidHandled();
+        FluidStack fluid = getFluidHandled();
         switch (redstoneController().getButtonState()) {
             case COMPLETE:
                 return !tankCart.isTankFull(fluid);

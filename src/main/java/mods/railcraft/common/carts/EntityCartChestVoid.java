@@ -70,7 +70,7 @@ public class EntityCartChestVoid extends CartBaseContainer {
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 

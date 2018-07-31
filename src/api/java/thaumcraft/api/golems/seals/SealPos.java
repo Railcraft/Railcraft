@@ -37,7 +37,7 @@ public class SealPos  {
 	        else
 	        {
 	        	SealPos sp = (SealPos)p_equals_1_;
-	            return !this.pos.equals(sp.pos) ? false : this.face.equals(sp.face);
+	            return this.pos.equals(sp.pos) && this.face.equals(sp.face);
 	        }
 	    }
 	}

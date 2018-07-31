@@ -10,20 +10,20 @@ import net.minecraft.world.World;
  */
 public interface IGolemAPI {
 	
-	public EntityLivingBase getGolemEntity();
+	EntityLivingBase getGolemEntity();
 	
-	public IGolemProperties getProperties();
+	IGolemProperties getProperties();
 	
-	public void setProperties(IGolemProperties prop);
+	void setProperties(IGolemProperties prop);
 	
-	public World getGolemWorld();
+	World getGolemWorld();
 	
 	/**
 	 * Causes the golem to hold the itemstack supplied.
 	 * @param stack
 	 * @return anything left over that the golem could not hold. If the golem picked up the entire stack this will be a null.
 	 */
-	public ItemStack holdItem(ItemStack stack);
+    ItemStack holdItem(ItemStack stack);
 	
 	/**
 	 * Causes the golem to remove an itemstack it is holding. It does not actually drop the item in the 
@@ -31,7 +31,7 @@ public interface IGolemAPI {
 	 * @param stack the itemstack that the golem will drop. If null is supplied the golem will drop whatever it is holding
 	 * @return the stack it 'dropped'
 	 */
-	public ItemStack dropItem(ItemStack stack);
+    ItemStack dropItem(ItemStack stack);
 	
 	
 	/**
@@ -40,25 +40,25 @@ public interface IGolemAPI {
 	 * @param partial does the golem only need to have room for part of the stack?
 	 * @return 
 	 */
-	public boolean canCarry(ItemStack stack, boolean partial);
+    boolean canCarry(ItemStack stack, boolean partial);
 
-	public boolean isCarrying(ItemStack stack);
+	boolean isCarrying(ItemStack stack);
 	
-	public NonNullList<ItemStack> getCarrying();
+	NonNullList<ItemStack> getCarrying();
 	
 	/**
 	 * Gives the golem xp towards increasing its rank rating. Default is usually 1 for completing a task. 
 	 * @param xp
 	 */
-	public void addRankXp(int xp);
+    void addRankXp(int xp);
 
-	public byte getGolemColor();
+	byte getGolemColor();
 	
 	/**
 	 * Plays arm swinging animated for attacks and such
 	 */
-	public void swingArm();
+    void swingArm();
 	
-	public boolean isInCombat();
+	boolean isInCombat();
 	
 }

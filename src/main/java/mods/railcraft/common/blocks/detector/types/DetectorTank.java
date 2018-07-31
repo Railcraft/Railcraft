@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -28,12 +27,11 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -56,10 +54,10 @@ public class DetectorTank extends DetectorFilter {
     }
 
     @Nullable
-    public Fluid getFilterFluid() {
+    public FluidStack getFilterFluid() {
         ItemStack filter = getFilters().getStackInSlot(0);
         if (!InvTools.isEmpty(filter))
-            return FluidItemHelper.getFluidInContainer(filter);
+            return FluidItemHelper.getFluidStackInContainer(filter);
         return null;
     }
 
@@ -70,11 +68,11 @@ public class DetectorTank extends DetectorFilter {
             if (fluidHandler != null) {
                 AdvancedFluidHandler tank = new AdvancedFluidHandler(fluidHandler);
                 boolean liquidMatches = false;
-                Fluid filterFluid = getFilterFluid();
+                FluidStack filterFluid = getFilterFluid();
                 FluidStack tankLiquid = tank.drain(1, false);
                 if (filterFluid == null)
                     liquidMatches = true;
-                else if (Fluids.areEqual(filterFluid, tankLiquid))
+                else if (FluidTools.matches(filterFluid, tankLiquid))
                     liquidMatches = true;
                 else if (tank.canPutFluid(new FluidStack(filterFluid, 1)))
                     liquidMatches = true;

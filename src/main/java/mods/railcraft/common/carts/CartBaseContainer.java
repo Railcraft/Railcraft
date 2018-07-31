@@ -191,7 +191,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return false;
     }
 

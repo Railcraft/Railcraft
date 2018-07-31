@@ -78,7 +78,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                     drawToolTips(tips, mouseX, mouseY);
                 }
             }
-            for (Object button : buttonList) {
+            for (GuiButton button : buttonList) {
                 if (!(button instanceof GuiBetterButton))
                     continue;
                 GuiBetterButton<?> betterButton = (GuiBetterButton<?>) button;

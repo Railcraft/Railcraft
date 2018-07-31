@@ -40,8 +40,8 @@ public abstract class FocusNode implements IFocusElement {
 	}
 	
 	public enum EnumSupplyType {
-		TARGET, TRAJECTORY; 		
-	}
+		TARGET, TRAJECTORY
+    }
 	
 	
 	public RayTraceResult[] supplyTargets() { return null;}	

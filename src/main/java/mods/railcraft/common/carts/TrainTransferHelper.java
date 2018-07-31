@@ -23,12 +23,11 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -37,8 +36,8 @@ import java.util.function.Predicate;
  *
  * Created by CovertJaguar on 5/9/2015.
  */
-public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTransferHelper {
-    public static final ITrainTransferHelper INSTANCE = new TrainTransferHelper();
+public final class TrainTransferHelper implements ITrainTransferHelper {
+    public static final TrainTransferHelper INSTANCE = new TrainTransferHelper();
     private static final int NUM_SLOTS = 8;
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
 
@@ -72,13 +71,12 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return stack;
     }
 
-    @Nullable
     private ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty() && canAcceptPushedItem(requester, cart, stack))
                 stack = InvTools.moveItemStack(stack, inv);
-            if (InvTools.isEmpty(stack) || !canPassItemRequests(cart))
+            if (InvTools.isEmpty(stack) || !canPassItemRequests(cart, stack))
                 break;
         }
         return stack;
@@ -95,6 +93,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, Predicate<ItemStack> filter) {
+        ItemStack result = ItemStack.EMPTY;
+        EntityMinecart upTo = null;
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty()) {
@@ -103,15 +103,30 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
                     ItemStack stack = stackKey.get();
                     if (canProvidePulledItem(requester, cart, stack)) {
                         ItemStack removed = InvTools.removeOneItem(inv, stack);
-                        if (!InvTools.isEmpty(removed))
-                            return removed;
+                        if (!InvTools.isEmpty(removed)) {
+                            result = removed;
+                            upTo = cart;
+                            break;
+                        }
                     }
                 }
             }
-            if (!canPassItemRequests(cart))
-                break;
         }
-        return InvTools.emptyStack();
+
+        if (result.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        for (EntityMinecart cart : carts) {
+            if (cart == upTo) {
+                break;
+            }
+            if (!canPassItemRequests(cart, result)) {
+                return ItemStack.EMPTY;
+            }
+        }
+
+        return result;
     }
 
     private boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
@@ -122,9 +137,9 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return !(cart instanceof IItemCart) || ((IItemCart) cart).canProvidePulledItem(requester, stack);
     }
 
-    private boolean canPassItemRequests(EntityMinecart cart) {
+    private boolean canPassItemRequests(EntityMinecart cart, ItemStack stack) {
         if (cart instanceof IItemCart)
-            return ((IItemCart) cart).canPassItemRequests();
+            return ((IItemCart) cart).canPassItemRequests(stack);
         IInventoryObject inv = InventoryFactory.get(cart);
         return inv != null && inv.getNumSlots() >= NUM_SLOTS;
     }
@@ -155,12 +170,12 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     @Nullable
     private FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
-            if (canAcceptPushedFluid(requester, cart, fluidStack.getFluid())) {
+            if (canAcceptPushedFluid(requester, cart, fluidStack)) {
                 IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, cart);
                 if (fluidHandler != null)
                     fluidStack.amount -= fluidHandler.fill(fluidStack, true);
             }
-            if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack.getFluid()))
+            if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack))
                 break;
         }
         if (fluidStack.amount <= 0)
@@ -181,7 +196,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     @Nullable
     private FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
-            if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {
+            if (canProvidePulledFluid(requester, cart, fluidStack)) {
                 IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.DOWN, cart);
                 if (fluidHandler != null) {
                     FluidStack drained = fluidHandler.drain(fluidStack, true);
@@ -190,13 +205,13 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
                 }
             }
 
-            if (!canPassFluidRequests(cart, fluidStack.getFluid()))
+            if (!canPassFluidRequests(cart, fluidStack))
                 break;
         }
         return null;
     }
 
-    private boolean canAcceptPushedFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
+    private boolean canAcceptPushedFluid(EntityMinecart requester, EntityMinecart cart, FluidStack fluid) {
         IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, cart);
         if (fluidHandler == null)
             return false;
@@ -206,7 +221,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return advancedFluidHandler.canPutFluid(new FluidStack(fluid, 1));
     }
 
-    private boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
+    private boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, FluidStack fluid) {
         IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.DOWN, cart);
         if (fluidHandler == null)
             return false;
@@ -215,7 +230,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return !Fluids.isEmpty(fluidHandler.drain(new FluidStack(fluid, 1), false));
     }
 
-    private boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
+    private boolean canPassFluidRequests(EntityMinecart cart, FluidStack fluid) {
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canPassFluidRequests(fluid);
         IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
@@ -225,8 +240,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return false;
     }
 
-    private boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
-        return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || Fluids.areEqual(fluid, p.getContents())));
+    private boolean hasMatchingTank(IFluidHandler handler, FluidStack fluid) {
+        return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || FluidTools.matches(fluid, p.getContents())));
     }
 
     @Nullable

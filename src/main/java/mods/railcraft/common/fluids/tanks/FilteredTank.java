@@ -11,11 +11,13 @@ package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -23,32 +25,32 @@ import java.util.function.Supplier;
  */
 public class FilteredTank extends StandardTank {
 
-    private Supplier<Fluid> filter;
+    private Predicate<@Nullable FluidStack> filter = Predicates.alwaysTrue();
 
     public FilteredTank(int capacity) {
-        this(capacity, (TileEntity) null);
-    }
-
-    public FilteredTank(int capacity, Fluid filter) {
-        this(capacity, filter, null);
-    }
-
-    public FilteredTank(int capacity, Fluid filter, @Nullable TileEntity tile) {
-        this(capacity, tile);
-        setFilter(() -> filter);
+        this(capacity, null);
     }
 
     public FilteredTank(int capacity, @Nullable TileEntity tile) {
         super(capacity, tile);
     }
 
-    public void setFilter(Supplier<Fluid> filter) {
-        this.filter = filter;
+    public void setFilter(@Nullable Predicate<@Nullable FluidStack> filter) {
+        this.filter = filter == null ? Predicates.alwaysTrue() : filter;
+    }
+
+    public void setFilter(@Nullable Fluids filter) {
+        this.filter = filter == null ? Predicates.alwaysTrue() : filter::is;
+    }
+
+    @Deprecated
+    public void setFilter(@Nullable Supplier<@Nullable Fluid> typeFilter) {
+        this.filter = typeFilter == null ? Predicates.alwaysTrue() : fluidStack -> typeFilter.get() == null || Fluids.areEqual(typeFilter.get(), fluidStack);
     }
 
     @Override
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
-        return filter == null || filter.get() == null || Fluids.areEqual(filter.get(), fluidStack);
+        return filter.test(fluidStack);
     }
 
     @Override
@@ -56,14 +58,9 @@ public class FilteredTank extends StandardTank {
         toolTip.clear();
         int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
-        Fluid fluid;
-        if (Fluids.isEmpty(fluidStack))
-            fluid = filter.get();
-        else
-            fluid = fluidStack.getFluid();
 
-        if (fluid != null)
-            toolTip.add(getFluidNameToolTip(fluid));
+        if (fluidStack != null)
+            toolTip.add(getFluidNameToolTip(fluidStack));
 
         toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
     }

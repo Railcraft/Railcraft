@@ -142,16 +142,16 @@ public class StandardTank extends FluidTank {
         int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
         if (!Fluids.isEmpty(fluidStack)) {
-            toolTip.add(getFluidNameToolTip(fluidStack.getFluid()));
+            toolTip.add(getFluidNameToolTip(fluidStack));
         }
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
     }
 
-    protected ToolTipLine getFluidNameToolTip(Fluid fluid) {
-        EnumRarity rarity = fluid.getRarity();
+    protected ToolTipLine getFluidNameToolTip(FluidStack fluidStack) {
+        EnumRarity rarity = fluidStack.getFluid().getRarity(fluidStack);
         if (rarity == null)
             rarity = EnumRarity.COMMON;
-        ToolTipLine fluidName = new ToolTipLine(fluid.getLocalizedName(getFluid()), rarity.rarityColor);
+        ToolTipLine fluidName = new ToolTipLine(fluidStack.getLocalizedName(), rarity.rarityColor);
         fluidName.setSpacing(2);
         return fluidName;
     }

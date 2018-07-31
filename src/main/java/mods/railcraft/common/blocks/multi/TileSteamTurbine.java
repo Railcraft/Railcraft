@@ -150,8 +150,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
 
     public TileSteamTurbine() {
         super(patterns);
-        tankSteam.setFilter(Fluids.STEAM::get);
-        tankWater.setFilter(Fluids.WATER::get);
+        tankSteam.setFilter(Fluids.STEAM);
+        tankWater.setFilter(Fluids.WATER);
         tankSteam.setCanDrain(false);
         tankWater.setCanFill(false);
         tankManager.add(tankSteam); // Steam

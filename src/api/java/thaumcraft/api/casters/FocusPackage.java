@@ -138,7 +138,7 @@ public class FocusPackage implements IFocusElement {
 		NBTTagList nodelist = nbt.getTagList("nodes", (byte)10);
 		nodes.clear();
 		for (int x=0;x<nodelist.tagCount();x++) {
-			NBTTagCompound nodenbt = (NBTTagCompound) nodelist.getCompoundTagAt(x);
+			NBTTagCompound nodenbt = nodelist.getCompoundTagAt(x);
 			EnumUnitType ut = EnumUnitType.valueOf(nodenbt.getString("type"));
 			if (ut!=null) {
 				if (ut==EnumUnitType.PACKAGE) {

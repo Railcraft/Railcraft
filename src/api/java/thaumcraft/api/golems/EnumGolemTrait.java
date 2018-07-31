@@ -38,7 +38,7 @@ public enum EnumGolemTrait {
 	public ResourceLocation icon;
 	public EnumGolemTrait opposite;
 	
-	private EnumGolemTrait(ResourceLocation icon) {
+	EnumGolemTrait(ResourceLocation icon) {
 		this.icon = icon;
 	}
 	

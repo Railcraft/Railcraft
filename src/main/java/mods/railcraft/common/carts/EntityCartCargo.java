@@ -92,7 +92,7 @@ public class EntityCartCargo extends CartBaseFiltered {
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 

@@ -83,9 +83,8 @@ public class CasterTriggerRegistry {
 	public static boolean hasTrigger(IBlockState state, String modid) {
 		if (!triggers.containsKey(modid)) return false;
 		LinkedHashMap<IBlockState,List<Trigger>> temp = triggers.get(modid);
-		if (temp.containsKey(state)) return true;
-		return false;
-	}
+        return temp.containsKey(state);
+    }
 	
 	
 	/**

@@ -49,6 +49,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -71,6 +72,13 @@ public final class FluidTools {
     @Nullable
     public static FluidStack copy(@Nullable FluidStack fluidStack) {
         return fluidStack == null ? null : fluidStack.copy();
+    }
+
+    @Contract("null, null -> true; null, !null -> false; !null, null -> false")
+    public static boolean matches(@Nullable FluidStack left, @Nullable FluidStack right) {
+        // FluidStack#equals calls isFluidEqual
+        return Objects.equals(left, right);
+//        return left == null ? right == null : left.isFluidEqual(right);
     }
 
     public static String toString(@Nullable FluidStack fluidStack) {
@@ -380,7 +388,6 @@ public final class FluidTools {
         }
     }
 
-    //TODO fix crap
     private static final class WaterBottleCapabilityDispatcher extends FluidBucketWrapper {
         WaterBottleCapabilityDispatcher(ItemStack container) {
             super(container);

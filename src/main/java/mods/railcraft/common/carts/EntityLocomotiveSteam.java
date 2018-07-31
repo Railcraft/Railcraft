@@ -38,8 +38,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -67,12 +68,10 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     private int update = rand.nextInt();
     private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
-    @SuppressWarnings("WeakerAccess")
     protected EntityLocomotiveSteam(World world) {
         super(world);
     }
 
-    @SuppressWarnings("WeakerAccess")
     protected EntityLocomotiveSteam(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
@@ -87,10 +86,10 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                 return super.fillInternal(resource, doFill);
             }
         };
-        tankWater.setFilter(Fluids.WATER::get);
+        tankWater.setFilter(Fluids.WATER);
 
         tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16);
-        tankSteam.setFilter(Fluids.STEAM::get);
+        tankSteam.setFilter(Fluids.STEAM);
         tankSteam.setCanDrain(false);
         tankSteam.setCanFill(false);
 
@@ -244,17 +243,17 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     @Override
-    public boolean canPassFluidRequests(Fluid fluid) {
+    public boolean canPassFluidRequests(FluidStack fluid) {
         return Fluids.WATER.is(fluid);
     }
 
     @Override
-    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canAcceptPushedFluid(EntityMinecart requester, FluidStack fluid) {
         return Fluids.WATER.is(fluid);
     }
 
     @Override
-    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canProvidePulledFluid(EntityMinecart requester, FluidStack fluid) {
         return false;
     }
 

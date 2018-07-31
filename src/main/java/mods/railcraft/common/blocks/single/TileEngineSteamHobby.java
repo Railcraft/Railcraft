@@ -32,8 +32,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import java.util.function.Supplier;
 
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
@@ -66,7 +69,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
                 return super.fillInternal(resource, doFill);
             }
         };
-        tankWater.setFilter(Fluids.WATER::get);
+        tankWater.setFilter(Fluids.WATER);
         tankManager.add(tankWater);
         tankSteam.setCapacity(4 * FluidTools.BUCKET_VOLUME);
 

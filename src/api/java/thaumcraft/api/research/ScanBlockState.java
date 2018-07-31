@@ -29,12 +29,9 @@ public class ScanBlockState implements IScanThing {
 	}
 
 	@Override
-	public boolean checkThing(EntityPlayer player, Object obj) {		
-		if (obj!=null && obj instanceof BlockPos && player.world.getBlockState((BlockPos) obj)==blockState) {
-				return true;
-		}
-		return false;
-	}
+	public boolean checkThing(EntityPlayer player, Object obj) {
+        return obj != null && obj instanceof BlockPos && player.world.getBlockState((BlockPos) obj) == blockState;
+    }
 	
 	@Override
 	public String getResearchKey(EntityPlayer player, Object object) {

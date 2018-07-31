@@ -34,7 +34,7 @@ public class RechargeHelper {
 		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return 0;		
 		IRechargable chargeItem = (IRechargable)is.getItem();		
 		if (player!=null && AuraHelper.shouldPreserveAura(world,player,pos)) return 0;				
-		amt = (int) Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));		
+		amt = Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));
 		int drained = (int) AuraHelper.drainVis(world, pos, amt, false);		
 		if (drained>0) {
 			addCharge(is, player, drained);
@@ -54,7 +54,7 @@ public class RechargeHelper {
 	public static float rechargeItemBlindly(ItemStack is, EntityPlayer player, int amt) {	
 		if (is==null || is.isEmpty() || !(is.getItem() instanceof IRechargable)) return 0;		
 		IRechargable chargeItem = (IRechargable)is.getItem();		
-		amt = (int) Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));		
+		amt = Math.min(amt, chargeItem.getMaxCharge(is,player) - getCharge(is));
 		if (amt>0) addCharge(is, player, amt);		
 		return amt;
 	}

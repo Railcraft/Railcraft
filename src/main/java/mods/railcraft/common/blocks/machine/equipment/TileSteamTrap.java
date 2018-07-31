@@ -61,26 +61,24 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
 
     protected TileSteamTrap() {
         tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, this);
-        tank.setFilter(Fluids.STEAM::get);
+        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 
-    @Nullable
     @Override
     public TankManager getTankManager() {
         return tankManager;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) getTankManager();
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 
