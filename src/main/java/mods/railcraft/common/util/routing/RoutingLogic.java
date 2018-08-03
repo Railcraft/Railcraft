@@ -313,7 +313,7 @@ public final class RoutingLogic {
     private static final class ConstantCondition implements Condition {
 
         static final ConstantCondition TRUE = new ConstantCondition(true);
-        static final ConstantCondition FALSE = new ConstantCondition(true);
+        static final ConstantCondition FALSE = new ConstantCondition(false);
 
         private final boolean value;
 
