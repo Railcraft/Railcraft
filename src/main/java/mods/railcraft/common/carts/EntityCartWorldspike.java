@@ -113,8 +113,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
             return;
         }
 
-        if (disabled > 0)
-            disabled--;
+//        if (disabled > 0)
+//            disabled--;
 
         if (usesFuel()) {
             if (ticket != null && fuel > 0)
@@ -333,8 +333,11 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     @Override
     public void onActivatorRailPass(int x, int y, int z, boolean powered) {
         if (powered) {
-            disabled = 10;
+            disabled = 1;
             releaseTicket();
+        }
+        if (!powered) {
+            disabled = 0;
         }
     }
 
