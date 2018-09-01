@@ -91,7 +91,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.getRockCrusherCraftings().getRecipe(stack) != null;
         }
 
     }

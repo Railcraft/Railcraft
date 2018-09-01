@@ -25,6 +25,7 @@ import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -111,13 +112,13 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotIron");
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
@@ -130,37 +131,37 @@ public class ModuleStructures extends RailcraftModulePayload {
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotSteel");
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotSteel");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(12);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotBronze");
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotBronze");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(20);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotRefinedIron");
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",

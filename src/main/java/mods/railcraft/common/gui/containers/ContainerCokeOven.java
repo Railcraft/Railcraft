@@ -102,7 +102,7 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return !InvTools.isEmpty(stack) && !InvTools.isSynthetic(stack) && RailcraftCraftingManager.cokeOven.getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && !InvTools.isSynthetic(stack) && RailcraftCraftingManager.getCokeOvenCraftings().getRecipe(stack) != null;
         }
 
     }

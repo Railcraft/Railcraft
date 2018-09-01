@@ -15,6 +15,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -40,32 +41,32 @@ public class ItemRail extends ItemRailcraftSubtyped {
         RailcraftItems item = RailcraftItems.RAIL;
 
         // Standard
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.STANDARD),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
                 'I', Items.IRON_INGOT);
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(6, EnumRail.STANDARD),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(6, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotBronze");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(12, EnumRail.STANDARD),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(12, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotInvar");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(16, EnumRail.STANDARD),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(16, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotSteel");
 
         // Advanced
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.ADVANCED),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.ADVANCED),
                 "R G",
                 "R G",
                 "R G",
@@ -76,7 +77,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
         CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD));
 
         // Speed
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.SPEED),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.SPEED),
                 "IBG",
                 "IBG",
                 "IBG",
@@ -85,14 +86,14 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'G', Items.GOLD_INGOT);
 
         // Reinforced
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.REINFORCED),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.REINFORCED),
                 "IDI",
                 "IDI",
                 "IDI",
                 'I', "ingotSteel",
                 'D', "dustObsidian");
 
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(4, EnumRail.REINFORCED),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(4, EnumRail.REINFORCED),
                 "IDI",
                 "IDI",
                 "IDI",
@@ -100,12 +101,12 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'D', "dustObsidian");
 
         // Electric
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(6, EnumRail.ELECTRIC),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(6, EnumRail.ELECTRIC),
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotCopper");
-        RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(12, EnumRail.ELECTRIC),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(12, EnumRail.ELECTRIC),
                 "ICI",
                 "ICI",
                 "ICI",
