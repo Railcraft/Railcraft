@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.jei;
 
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -55,7 +56,6 @@ public class RailcraftJEIPlugin implements IModPlugin {
         registry.handleRecipes(ShapelessFluidRecipe.class, ShapelessFluidRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
 
         registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
-        registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
 
         registry.addRecipeCatalyst(RailcraftBlocks.STEAM_OVEN.getStack(), VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN.getStack(), COKE);
@@ -64,8 +64,10 @@ public class RailcraftJEIPlugin implements IModPlugin {
         registry.addRecipeCatalyst(RailcraftBlocks.BLAST_FURNACE.getStack(), BLAST_FURNACE);
         registry.addRecipeCatalyst(RailcraftBlocks.ROCK_CRUSHER.getStack(), ROCK_CRUSHER);
 
-        jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.CROWBAR_SEASONS);
-        jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.BLEACHED_CLAY);
+        if (RailcraftItems.CROWBAR_SEASONS.isLoaded())
+            jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.CROWBAR_SEASONS.getStack());
+        if (RailcraftItems.BLEACHED_CLAY.isLoaded())
+            jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.BLEACHED_CLAY.getStack());
     }
 
     @Override
@@ -117,7 +119,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
         if (!InvTools.isEmpty(stack)) {
             String locTag = stack.getUnlocalizedName() + ".desc";
             if (LocalizationPlugin.hasTag(locTag))
-                registry.addIngredientInfo(stack, ItemStack.class, locTag);
+                registry.addIngredientInfo(stack, VanillaTypes.ITEM, locTag);
         }
     }
 

@@ -20,10 +20,13 @@ import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -31,8 +34,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -42,12 +49,33 @@ import java.util.List;
  */
 public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlockingItem {
 
+    private static final String CART_NUMBERING_KEY = "cartNumber";
+
     public ItemMagnifyingGlass() {
         setMaxDamage(0);
         setMaxStackSize(1);
         setFull3D();
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    public void setCartNumber(ItemStack stack, int number) {
+        stack.setTagInfo(CART_NUMBERING_KEY, new NBTTagInt(number));
+    }
+
+    public void clearCartNumber(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null) {
+            tag.removeTag(CART_NUMBERING_KEY);
+        }
+    }
+
+    public int getCartNumber(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey(CART_NUMBERING_KEY, NBT.TAG_INT)) {
+            return tag.getInteger(CART_NUMBERING_KEY);
+        }
+        return 0;
     }
 
     @Override
@@ -91,6 +119,17 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     }
 
     @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        int t = getCartNumber(stack);
+        if (t > 0 && entity instanceof EntityMinecart) {
+            entity.setCustomNameTag("Cart " + t);
+            setCartNumber(stack, t + 1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
             return EnumActionResult.PASS;
@@ -129,5 +168,15 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             ((IMagnifiable) t).onMagnify(player);
         }
         return returnValue;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
+        int t = getCartNumber(stack);
+        if (t > 0) {
+            info.add(LocalizationPlugin.translate("gui.railcraft.mag.glass.cart.number", t));
+        }
     }
 }

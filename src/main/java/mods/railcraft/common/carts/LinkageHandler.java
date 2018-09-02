@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class LinkageHandler {
+public final class LinkageHandler {
     public static final String LINK_A_TIMER = "linkA_timer";
     public static final String LINK_B_TIMER = "linkB_timer";
     public static final double LINK_DRAG = 0.95;
@@ -224,7 +224,8 @@ public class LinkageHandler {
         if (link != null) {
             // sanity check to ensure links are consistent
             if (!lm.areLinked(cart, link)) {
-                lm.repairLink(cart, link);
+                boolean success = lm.repairLink(cart, link);
+                //TODO something should happen here
             }
             if (!isLaunched(link) && !isOnElevator(link)) {
                 linked = true;

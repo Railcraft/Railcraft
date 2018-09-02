@@ -35,17 +35,18 @@ import java.util.stream.StreamSupport;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings("unused")
-public class Train implements Iterable<EntityMinecart> {
+public final class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
     private static final Map<World, Map<UUID, Train>> trains = new MapMaker().weakKeys().makeMap();
     private final UUID uuid;
     private final Deque<UUID> carts = new ArrayDeque<>();
     private final Collection<UUID> safeCarts = Collections.unmodifiableCollection(carts);
+    @Deprecated // Should not have its logic here
     private final Collection<UUID> lockingTracks = new HashSet<>();
     private final World world;
     private TrainState trainState = TrainState.NORMAL;
 
-    public Train(EntityMinecart cart) {
+    Train(EntityMinecart cart) {
         uuid = UUID.randomUUID();
         world = cart.world;
 
@@ -91,7 +92,7 @@ public class Train implements Iterable<EntityMinecart> {
         UUID train1 = getTrainUUID(cart1);
         UUID train2 = getTrainUUID(cart2);
 
-        return Objects.equals(train1, train2);
+        return train1 != null && train1 == train2;
     }
 
     public static Train getLongestTrain(EntityMinecart cart1, EntityMinecart cart2) {
@@ -126,8 +127,8 @@ public class Train implements Iterable<EntityMinecart> {
         cart.getEntityData().removeTag(TRAIN_NBT);
     }
 
-    public static void addTrainTag(EntityMinecart cart, Train train) {
-        UUID trainId = train.getUUID();
+    public void addTrainTag(EntityMinecart cart) {
+        UUID trainId = getUUID();
         NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
@@ -163,7 +164,7 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
-        _addLink(prev, next);
+        addLinkInternal(prev, next);
 
         LinkageManager lm = LinkageManager.instance();
         EntityMinecart linkA = lm.getLinkedCartA(next);
@@ -198,9 +199,9 @@ public class Train implements Iterable<EntityMinecart> {
 
     public static void deleteTrain(EntityMinecart cart) {
         Train train = getTrainMap(cart.world).remove(getTrainUUID(cart));
+        removeTrainTag(cart);
         if (train != null)
             train.deleteTrain();
-        removeTrainTag(cart);
     }
 
     protected void resetTrain() {
@@ -223,7 +224,7 @@ public class Train implements Iterable<EntityMinecart> {
         buildTrain(cart);
     }
 
-    private void _addLink(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
+    private void addLinkInternal(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
         if (cartBase == null || carts.getFirst() == cartBase.getPersistentID())
             carts.addFirst(cartNew.getPersistentID());
         else if (carts.getLast() == cartBase.getPersistentID())
@@ -231,21 +232,21 @@ public class Train implements Iterable<EntityMinecart> {
         else
             return;
         Train train = getTrainUnsafe(cartNew);
-        if (train != null && train != this)
-            train._removeCart(cartNew);
-        addTrainTag(cartNew, this);
+        if (train != this && train != null)
+            train.removeCartInternal(cartNew);
+        addTrainTag(cartNew);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private boolean _removeCart(EntityMinecart cart) {
-        boolean removed = _removeCart(cart.getPersistentID());
+    private boolean removeCartInternal(EntityMinecart cart) {
+        boolean removed = removeCartId(cart.getPersistentID());
         if (removed && uuid.equals(getTrainUUID(cart))) {
             removeTrainTag(cart);
         }
         return removed;
     }
 
-    private boolean _removeCart(UUID cart) {
+    private boolean removeCartId(UUID cart) {
         boolean removed = carts.remove(cart);
         if (removed) {
             if (carts.isEmpty()) {
@@ -300,7 +301,7 @@ public class Train implements Iterable<EntityMinecart> {
 
     @Nullable
     public IItemHandler getItemHandler() {
-        ArrayList<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
+        List<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
             IItemHandler itemHandler = InvTools.getItemHandler(cart);
             if (itemHandler instanceof IItemHandlerModifiable)
@@ -368,14 +369,17 @@ public class Train implements Iterable<EntityMinecart> {
         }
     }
 
+    @Deprecated
     public boolean isTrainLockedDown() {
         return !lockingTracks.isEmpty();
     }
 
+    @Deprecated
     public void addLockingTrack(UUID track) {
         lockingTracks.add(track);
     }
 
+    @Deprecated
     public void removeLockingTrack(UUID track) {
         lockingTracks.remove(track);
     }

@@ -133,6 +133,10 @@ runClient {
     outputs.upToDateWhen { false }
 }
 
+compileJava {
+    options.compilerArgs += '-proc:none'
+}
+
 jar {
     from(sourceSets.api.output) {
         exclude '**/uristqwerty/**'

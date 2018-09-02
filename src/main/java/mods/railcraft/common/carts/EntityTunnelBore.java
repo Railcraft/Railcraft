@@ -1123,7 +1123,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Override
-    public boolean canLinkWithCart(EntityMinecart cart) {
+    public boolean canLink(EntityMinecart cart) {
         Vec3d pos = getPositionAhead(-LENGTH / 2.0);
         float dist = LinkageManager.LINKAGE_DISTANCE * 2;
         dist = dist * dist;

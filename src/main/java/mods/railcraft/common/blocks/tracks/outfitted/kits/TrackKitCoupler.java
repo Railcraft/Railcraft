@@ -71,6 +71,8 @@ public class TrackKitCoupler extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             mode.onMinecartPass(this, cart);
+        } else {
+            mode.onMinecartPassUnpowered(this, cart);
         }
     }
 
@@ -148,6 +150,11 @@ public class TrackKitCoupler extends TrackKitPowered {
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
                 LinkageManager.instance().setAutoLink(cart, true);
             }
+
+            @Override
+            public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {
+                LinkageManager.instance().setAutoLink(cart, false);
+            }
         };
         public static Mode[] VALUES = values();
         private final int powerPropagation;
@@ -176,6 +183,8 @@ public class TrackKitCoupler extends TrackKitPowered {
         }
 
         public abstract void onMinecartPass(TrackKitCoupler track, EntityMinecart cart);
+
+        public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {}
     }
 
 }

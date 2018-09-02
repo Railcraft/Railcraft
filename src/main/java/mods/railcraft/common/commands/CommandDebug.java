@@ -13,6 +13,7 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.carts.CartTools;
+import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -21,11 +22,14 @@ import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -49,9 +53,10 @@ public class CommandDebug extends SubCommand {
     public CommandDebug() {
         super("debug");
         addChildCommand(new CommandDebugTile());
+        addChildCommand(new CommandCartNumber());
     }
 
-    private static void printLine(ICommandSender sender, String msg, Object... args) {
+    static void printLine(ICommandSender sender, String msg, Object... args) {
         Message msgObj;
         if (args.length == 0) {
             msgObj = msgFactory.newMessage(msg);
@@ -62,7 +67,7 @@ public class CommandDebug extends SubCommand {
         sender.sendMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
     }
 
-    private static void printTarget(ICommandSender sender, World world, BlockPos pos) {
+    static void printTarget(ICommandSender sender, World world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
         printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(sender, pos), block.getClass(), block.getUnlocalizedName());
         TileEntity t = world.getTileEntity(pos);
@@ -72,7 +77,7 @@ public class CommandDebug extends SubCommand {
             printLine(sender, "Target tile [{0}] = null", shortCoords(sender, pos));
     }
 
-    private static String shortCoords(ICommandSender sender, BlockPos coord) {
+    static String shortCoords(ICommandSender sender, BlockPos coord) {
         String formatString;
         if (sender.getEntityWorld().getGameRules().getBoolean("reducedDebugInfo")) {
             coord = coord.subtract(sender.getPosition());
@@ -114,6 +119,57 @@ public class CommandDebug extends SubCommand {
         }
         for (String s : debug) {
             printLine(sender, s);
+        }
+    }
+
+    static final class CommandCartNumber extends SubCommand {
+        CommandCartNumber() {
+            super("cartnum");
+            setPermLevel(PermLevel.ADMIN);
+            addChildCommand(new Set());
+            addChildCommand(new Clear());
+        }
+
+        static final class Set extends SubCommand {
+            Set() {
+                super("set");
+            }
+
+            @Override
+            public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+                if (!(sender instanceof EntityLivingBase) || args.length != 1) {
+                    CommandHelpers.throwWrongUsage(sender, this);
+                }
+                int t;
+                try {
+                    t = Integer.parseInt(args[0]);
+                } catch (NumberFormatException ex) {
+                    throw CommandHelpers.throwWrongUsage(sender, this); // Doesn't actually throw
+                }
+
+                ItemStack stack = ((EntityLivingBase) sender).getHeldItem(EnumHand.MAIN_HAND);
+                if (stack.getItem() instanceof ItemMagnifyingGlass) {
+                    ((ItemMagnifyingGlass) stack.getItem()).setCartNumber(stack, t);
+                }
+            }
+        }
+
+        static final class Clear extends SubCommand {
+            Clear() {
+                super("clear");
+            }
+
+            @Override
+            public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+                if (!(sender instanceof EntityLivingBase) || args.length != 0) {
+                    CommandHelpers.throwWrongUsage(sender, this);
+                }
+
+                ItemStack stack = ((EntityLivingBase) sender).getHeldItem(EnumHand.MAIN_HAND);
+                if (stack.getItem() instanceof ItemMagnifyingGlass) {
+                    ((ItemMagnifyingGlass) stack.getItem()).clearCartNumber(stack);
+                }
+            }
         }
     }
 

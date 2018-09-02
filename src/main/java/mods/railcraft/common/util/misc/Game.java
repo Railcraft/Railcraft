@@ -32,6 +32,10 @@ public final class Game {
     public static final boolean OBFUSCATED;
     public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
+    /**
+     * A logging level dedicated to debug reports. It is more prioritized than errors but less serious than fatal.
+     */
+    public static final Level DEBUG_REPORT = Level.forName("DEBUG_REPORT", 150);
 
     static {
         boolean worldFound = false;

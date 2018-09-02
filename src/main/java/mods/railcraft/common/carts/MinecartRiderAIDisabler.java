@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO Patch EntityMinecart class moveAlongTrack method in forge
 public class MinecartRiderAIDisabler {
 
     @SubscribeEvent
@@ -34,8 +35,8 @@ public class MinecartRiderAIDisabler {
             if (!entity.world.isRemote) {
                 if (entity.ticksExisted % 8 == 0) {
                     boolean ridingMinecart = entity.getRidingEntity() instanceof EntityMinecart;
-                    for (int i = 0; i < 6; i++)
-                        living.tasks.setControlFlag(i, !ridingMinecart);
+                    // 4 is the boat field
+                    living.tasks.setControlFlag(4, !ridingMinecart);
                 }
             }
         }
