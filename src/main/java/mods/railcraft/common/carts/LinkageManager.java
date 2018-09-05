@@ -19,6 +19,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -466,6 +467,9 @@ public final class LinkageManager implements ILinkageManager {
     }
 
     public Iterable<EntityMinecart> linkIterator(final EntityMinecart start, final LinkType type) {
+        if (MathTools.isNil(getLink(start, type))) {
+            return Collections.emptyList();
+        }
         return () -> new Iterator<EntityMinecart>() {
             private final LinkageManager lm = LinkageManager.instance();
             @Nullable

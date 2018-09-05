@@ -361,6 +361,29 @@ public abstract class InvTools {
         return false;
     }
 
+    /**
+     * Usually used during train transfers.
+     *
+     * @param inv The inventory to be filled
+     * @return A predicate, to be combined with original one to request items
+     */
+    public static Predicate<ItemStack> getFillingChecker(IInventoryComposite inv) {
+        Collection<ItemStack> stacksPossible = new ArrayList<>();
+        for (IInventoryObject inventoryObject : inv) {
+            for (IInvSlot slot : InventoryIterator.getRailcraft(inventoryObject)) {
+                if (!slot.hasStack()) {
+                    return Predicates.alwaysTrue();
+                } else {
+                    ItemStack stack = slot.getStack();
+                    if (stack.getCount() < stack.getMaxStackSize()) {
+                        stacksPossible.add(stack);
+                    }
+                }
+            }
+        }
+        return stacksPossible.isEmpty() ? Predicates.alwaysFalse() : StackFilters.anyOf(stacksPossible);
+    }
+
     public static int countMaxItemStackSize(IInventoryComposite inv) {
         int count = 0;
         for (IInventoryObject inventoryObject : inv) {

@@ -21,6 +21,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,8 +31,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -96,8 +98,10 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, StandardStackFilters.FUEL.negate()); //TODO fix filter
-            if (InvTools.hasEmptySlot(invStock)) {
-                ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
+            Predicate<ItemStack> filler = InvTools.getFillingChecker(invStock);
+            if (filler != Predicates.<ItemStack>alwaysFalse()) {
+                // This comparison looks funky, but the identity is real
+                ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL.and(filler));
                 if (!InvTools.isEmpty(stack))
                     InvTools.moveItemStack(stack, invStock);
             }

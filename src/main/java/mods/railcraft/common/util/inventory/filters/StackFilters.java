@@ -96,7 +96,7 @@ public final class StackFilters {
      *
      * If no ItemStacks are provided to match against, it returns true.
      */
-    public static Predicate<ItemStack> anyOf(@NotNull final List<ItemStack> stacks) {
+    public static Predicate<ItemStack> anyOf(@NotNull final Collection<ItemStack> stacks) {
         return stack -> stacks.isEmpty() || stacks.stream().allMatch(InvTools::isEmpty) || InvTools.isItemEqual(stack, stacks);
     }
 

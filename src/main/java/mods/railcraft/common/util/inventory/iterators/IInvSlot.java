@@ -39,7 +39,6 @@ public interface IInvSlot {
     /**
      * It is not legal to edit the stack returned from this function.
      */
-    @Nullable
     ItemStack getStack();
 
 //    void setStack(ItemStack stack);
