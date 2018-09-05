@@ -12,6 +12,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.multi.TileCokeOven;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -20,7 +21,8 @@ public class GuiCokeOven extends TileGui {
     private TileCokeOven tile;
 
     public GuiCokeOven(InventoryPlayer inventoryplayer, TileCokeOven tile) {
-        super(tile, new ContainerCokeOven(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png");
+        super(tile, new ContainerCokeOven(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png",
+                LocalizationPlugin.translateFast("gui.railcraft.coke.oven"));
         this.tile = tile;
     }
 

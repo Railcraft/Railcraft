@@ -127,7 +127,7 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
-                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.switch.motor.action"));
+                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.actuator.motor.action"));
                 case BOX_RECEIVER:
                     return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_RELAY:
