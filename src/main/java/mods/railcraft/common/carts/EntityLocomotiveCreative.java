@@ -132,4 +132,9 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_CREATIVE;
     }
+
+    @Override
+    public ItemStack[] getItemsDropped(EntityMinecart cart) {
+        return new ItemStack[0]; // Prevent survival players from getting admin tools
+    }
 }
