@@ -134,14 +134,14 @@ public class TrackKitCoupler extends TrackKitPowered {
         COUPLER("coupler", 8) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).createLink(track.taggedCart, cart);
+                CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
         DECOUPLER("decoupler", 0) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).breakLinks(cart);
+                CartToolsAPI.getLinkageManager().breakLinks(cart);
                 LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
             }
         },

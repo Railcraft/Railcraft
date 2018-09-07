@@ -1,0 +1,46 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.root.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.root.desc"
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "touch_minecart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:minecart"
+          },
+          {
+            "item": "minecraft:chest_minecart"
+          },
+          {
+            "item": "railcraft:locomotive_steam_solid"
+          }
+        ]
+      }
+    },
+    "step_on_track": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minecraft:rail"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "touch_minecart",
+      "step_on_track"
+    ]
+  ]
+}

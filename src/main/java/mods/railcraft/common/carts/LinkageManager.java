@@ -9,13 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
+import mods.railcraft.api.events.CartLinkEvent;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MathTools;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +54,10 @@ public final class LinkageManager implements ILinkageManager {
     public static final String LINK_B_HIGH = "rcLinkBHigh";
     public static final String LINK_B_LOW = "rcLinkBLow";
 
+    private static final LinkageManager INSTANCE = new LinkageManager();
+
     private LinkageManager() {
+        CartsApiAccess.setLinkageManager(this);
     }
 
     /**
@@ -61,16 +66,12 @@ public final class LinkageManager implements ILinkageManager {
      * @return LinkageManager
      */
     public static LinkageManager instance() {
-        return (LinkageManager) CartToolsAPI.linkageManager;
+        return INSTANCE;
     }
 
     public static void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printLinkingDebug())
             Game.log(Level.DEBUG, msg, args);
-    }
-
-    public static void reset() {
-        CartToolsAPI.linkageManager = new LinkageManager();
     }
 
     /**
@@ -190,18 +191,15 @@ public final class LinkageManager implements ILinkageManager {
     @Override
     public boolean createLink(EntityMinecart cart1, EntityMinecart cart2) {
         if (canLinkCarts(cart1, cart2)) {
-            Train train = Train.getLongestTrain(cart1, cart2);
-
             setLinkUnidirectional(cart1, cart2);
             setLinkUnidirectional(cart2, cart1);
-
-            train.rebuild(cart1);
 
             if (cart1 instanceof ILinkableCart)
                 ((ILinkableCart) cart1).onLinkCreated(cart2);
             if (cart2 instanceof ILinkableCart)
                 ((ILinkableCart) cart2).onLinkCreated(cart1);
 
+            MinecraftForge.EVENT_BUS.post(new CartLinkEvent.Link(cart1, cart2));
             return true;
         }
         return false;
@@ -423,6 +421,8 @@ public final class LinkageManager implements ILinkageManager {
         if (linkTwo != null) {
             breakLinkUnidirectional(two, one, linkTwo);
         }
+
+        MinecraftForge.EVENT_BUS.post(new CartLinkEvent.Unlink(one, two));
     }
 
     @Nullable
@@ -437,7 +437,6 @@ public final class LinkageManager implements ILinkageManager {
     }
 
     private void breakLinkUnidirectional(EntityMinecart cart, EntityMinecart other, LinkType linkType) {
-        Train.deleteTrain(cart); //TODO move to events?
         removeLinkTags(cart, linkType);
         if (cart instanceof ILinkableCart)
             ((ILinkableCart) cart).onLinkBroken(other);

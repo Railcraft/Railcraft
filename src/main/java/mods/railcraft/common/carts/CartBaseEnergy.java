@@ -138,7 +138,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             return extra;
 
         try {
-            ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager();
 
             EntityMinecart linkedCart = lm.getLinkedCartA(this);
             if (extra > 0 && linkedCart != source && linkedCart instanceof IEnergyTransfer)
@@ -171,7 +171,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (!passAlong)
             return provide;
 
-        ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
+        ILinkageManager lm = CartToolsAPI.getLinkageManager();
 
         EntityMinecart linkedCart = lm.getLinkedCartA(this);
         if (provide < amount && linkedCart != source && linkedCart instanceof IEnergyTransfer)

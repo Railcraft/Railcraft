@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.events.CartLinkEvent;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -20,8 +21,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -45,6 +49,23 @@ public final class Train implements Iterable<EntityMinecart> {
     private final Collection<UUID> lockingTracks = new HashSet<>();
     private final World world;
     private TrainState trainState = TrainState.NORMAL;
+
+    static {
+        MinecraftForge.EVENT_BUS.register(new Object() {
+            @SubscribeEvent(priority = EventPriority.HIGHEST)
+            public void onLinking(CartLinkEvent.Link event) {
+                EntityMinecart cart = event.getCartOne();
+                Train train = Train.getLongestTrain(cart, event.getCartTwo());
+                train.rebuild(cart);
+            }
+
+            @SubscribeEvent(priority = EventPriority.HIGHEST)
+            public void onUnlinking(CartLinkEvent.Unlink event) {
+                Train.deleteTrain(event.getCartOne());
+                Train.deleteTrain(event.getCartTwo());
+            }
+        });
+    }
 
     Train(EntityMinecart cart) {
         uuid = UUID.randomUUID();

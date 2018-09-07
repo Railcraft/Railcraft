@@ -18,6 +18,7 @@ import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.multi.MultiBlockHelper;
@@ -81,7 +82,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void construction() {
-                LinkageManager.reset();
                 CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
@@ -220,6 +220,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 Blocks.ACTIVATOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
 
                 MachineTileRegistry.registerTileEntities();
+                RailcraftAdvancementTriggers.getInstance().register();
             }
 
             private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
@@ -240,6 +241,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         .tracker(80, 2, true)
                         .build();
                 ForgeRegistries.ENTITIES.register(substitute);
+                Game.log(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
