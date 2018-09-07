@@ -54,7 +54,7 @@ public final class RailcraftRegistry {
 //     */
 //    public static void register(ItemStack stack) {
 //        assert stack != null : "Do not register null items!";
-//        register(stack.getUnlocalizedName(), stack);
+//        register(stack.getTranslationKey(), stack);
 //    }
 
     /**

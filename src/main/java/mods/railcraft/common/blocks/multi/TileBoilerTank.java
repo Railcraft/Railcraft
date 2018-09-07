@@ -21,8 +21,7 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings("rawtypes")
-// java is too bad that TileBoiler<TileBoilerFirebox<?>> just does not work.
-public abstract class TileBoilerTank extends TileBoiler {
+public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends TileBoilerFirebox<F>> extends TileBoiler<T, F> {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);
 
@@ -33,8 +32,8 @@ public abstract class TileBoilerTank extends TileBoiler {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Class<TileBoilerFirebox> defineMasterClass() {
-        return TileBoilerFirebox.class;
+    protected Class<F> defineMasterClass() {
+        return (Class<F>) (Class<?>) TileBoilerFirebox.class; // Idea glitched on this cast
     }
 
     @Override

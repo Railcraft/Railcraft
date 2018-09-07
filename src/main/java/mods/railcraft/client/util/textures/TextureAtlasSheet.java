@@ -44,15 +44,15 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         int columns = textureDimensions.getFirst();
         int rows = textureDimensions.getSecond();
         if (columns <= 1 && rows <= 1)
-            return new ResourceLocation[]{new ResourceLocation(textureResource.getResourceDomain(), textureFolder + textureResource.getResourcePath())};
+            return new ResourceLocation[]{new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
 
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
 
         int numIcons = rows * columns;
         ResourceLocation[] locations = new ResourceLocation[numIcons];
-        String domain = textureResource.getResourceDomain();
-        String name = textureResource.getResourcePath();
+        String domain = textureResource.getNamespace();
+        String name = textureResource.getPath();
 
         for (int i = 0; i < numIcons; i++) {
             String texName = domain + ":" + textureFolder + name;
@@ -80,7 +80,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     @Override
     public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> resourceGetter) {
         // Remove the index from the resource path so we can find the original texture.
-        location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().replace("_" + index, ""));
+        location = new ResourceLocation(location.getNamespace(), location.getPath().replace("_" + index, ""));
 
         BufferedImage image;
         IResource resource = null;
@@ -88,7 +88,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
             resource = manager.getResource(location);
             image = ImageIO.read(resource.getInputStream());
         } catch (IOException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0}: {1}", location.getResourcePath(), ex.getLocalizedMessage());
+            Game.log(Level.WARN, "Failed to load sub-texture from {0}: {1}", location.getPath(), ex.getLocalizedMessage());
             return true;
         } finally {
             if (resource != null)
@@ -108,7 +108,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         try {
             subImage = image.getSubimage(x * size, y * size, size, size);
         } catch (RasterFormatException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", location.getResourcePath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
+            Game.log(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", location.getPath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
             return true;
         }
         this.height = subImage.getHeight();

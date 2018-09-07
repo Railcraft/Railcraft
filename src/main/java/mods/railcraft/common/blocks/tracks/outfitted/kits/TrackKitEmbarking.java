@@ -92,7 +92,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
         if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
-            box = box.expand(a, a, a);
+            box = box.grow(a, a, a);
             List<EntityLivingBase> entities = theWorldAsserted().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
             if (entities.size() > 0) {

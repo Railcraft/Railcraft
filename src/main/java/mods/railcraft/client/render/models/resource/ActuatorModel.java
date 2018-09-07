@@ -122,8 +122,8 @@ public class ActuatorModel implements IModel {
 
             @Override
             public boolean accepts(ResourceLocation modelLocation) {
-                return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                        && modelLocation.getResourcePath().startsWith("actuator") && !modelLocation.getResourcePath().startsWith("actuator_");
+                return Objects.equals(modelLocation.getNamespace(), "railcraft")
+                        && modelLocation.getPath().startsWith("actuator") && !modelLocation.getPath().startsWith("actuator_");
             }
 
             @Override

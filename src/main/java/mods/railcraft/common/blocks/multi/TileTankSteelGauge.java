@@ -13,7 +13,13 @@ import static mods.railcraft.common.blocks.multi.TileTankSteelWall.STEEL_TANK;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankSteelGauge extends TileTankIronGauge {
+public final class TileTankSteelGauge<M extends TileTankBase<M, M>> extends TileTankIronGauge<TileTankSteelGauge<M>, M> {
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Class<TileTankSteelGauge<M>> defineSelfClass() {
+        return (Class<TileTankSteelGauge<M>>) (Class<?>) TileTankSteelGauge.class;
+    }
 
     @Override
     public MetalTank getTankType() {

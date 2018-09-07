@@ -56,11 +56,11 @@ public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         IVariantEnum variant = getVariant(stack);
         if (variant == null)
-            return getUnlocalizedName();
-        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
+            return getTranslationKey();
+        String tag = getTranslationKey() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);
     }
 }

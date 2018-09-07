@@ -103,8 +103,8 @@ public class TileRitual extends RailcraftTickingTileEntity {
         if (Fluids.LAVA.is(block)) {
             boolean placed = WorldPlugin.setBlockState(world, pos, Blocks.OBSIDIAN.getDefaultState());
             if (placed) {
-                Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
-                Vec3d endPosition = new Vec3d(getPos()).addVector(0.5, 0.8, 0.5);
+                Vec3d startPosition = new Vec3d(pos).add(0.5, 0.5, 0.5);
+                Vec3d endPosition = new Vec3d(getPos()).add(0.5, 0.8, 0.5);
                 EffectManager.instance.fireSparkEffect(world, startPosition, endPosition);
                 queueAdjacent(pos);
                 expandQueue();

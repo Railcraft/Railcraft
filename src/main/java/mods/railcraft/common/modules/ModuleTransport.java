@@ -32,8 +32,6 @@ public class ModuleTransport extends RailcraftModulePayload {
                 add(
                         RailcraftCarts.CARGO,
                         RailcraftCarts.TANK,
-//                        RailcraftBlocks.machine_alpha,
-//                        RailcraftBlocks.machine_beta,
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.CHEST_VOID,
                         RailcraftCarts.CHEST_VOID
@@ -42,28 +40,6 @@ public class ModuleTransport extends RailcraftModulePayload {
 
             @Override
             public void init() {
-//                EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
-//                if (alpha.isAvailable())
-//                    CraftingPlugin.addRecipe(alpha.getStack(6),
-//                            "WWW",
-//                            "ISI",
-//                            "WWW",
-//                            'I', "ingotIron",
-//                            'S', "slimeball",
-//                            'W', "plankWood");
-
-//                initIronTank();
-//                initSteelTank();
-
-//                EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
-//                if (voidChest.isAvailable())
-//                    CraftingPlugin.addRecipe(voidChest.getStack(),
-//                            "OOO",
-//                            "OPO",
-//                            "OOO",
-//                            'O', new ItemStack(Blocks.OBSIDIAN),
-//                            'P', new ItemStack(Items.ENDER_PEARL));
-
                 ManipulatorVariant itemLoader = ManipulatorVariant.ITEM_LOADER;
                 if (itemLoader.isAvailable()) {
                     ItemStack stack = itemLoader.getStack();
@@ -155,50 +131,6 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                'W', new ItemStack(Item.wheat),
 //                'P', ItemPlate.getPlate(ItemPlate.EnumPlate.STEEL));
             }
-
-//            private void initIronTank() {
-//                defineIronTank(EnumMachineBeta.TANK_IRON_WALL,
-//                        "PP",
-//                        "PP",
-//                        'P', RailcraftItems.PLATE, Metal.IRON);
-
-//                defineIronTank(EnumMachineBeta.TANK_IRON_GAUGE,
-//                        "GPG",
-//                        "PGP",
-//                        "GPG",
-//                        'P', RailcraftItems.PLATE, Metal.IRON,
-//                        'G', "paneGlassColorless");
-
-//                defineIronTank(EnumMachineBeta.TANK_IRON_VALVE,
-//                        "GPG",
-//                        "PLP",
-//                        "GPG",
-//                        'P', RailcraftItems.PLATE, Metal.IRON,
-//                        'L', new ItemStack(Blocks.LEVER),
-//                        'G', new ItemStack(Blocks.IRON_BARS));
-//            }
-
-//            private void initSteelTank() {
-//                defineTank(EnumMachineBeta.TANK_STEEL_WALL,
-//                        "PP",
-//                        "PP",
-//                        'P', RailcraftItems.PLATE, Metal.STEEL);
-
-//                defineTank(EnumMachineBeta.TANK_STEEL_GAUGE,
-//                        "GPG",
-//                        "PGP",
-//                        "GPG",
-//                        'P', RailcraftItems.PLATE, Metal.STEEL,
-//                        'G', "paneGlassColorless");
-
-//                defineTank(EnumMachineBeta.TANK_STEEL_VALVE,
-//                        "GPG",
-//                        "PLP",
-//                        "GPG",
-//                        'P', RailcraftItems.PLATE, Metal.STEEL,
-//                        'L', new ItemStack(Blocks.LEVER),
-//                        'G', new ItemStack(Blocks.IRON_BARS));
-//            }
         });
     }
 }

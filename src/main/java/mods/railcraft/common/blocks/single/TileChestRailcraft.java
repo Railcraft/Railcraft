@@ -163,7 +163,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
     }
 
     @Override
@@ -175,6 +175,6 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        facing = EnumFacing.getFront(data.readByte());
+        facing = EnumFacing.byIndex(data.readByte());
     }
 }

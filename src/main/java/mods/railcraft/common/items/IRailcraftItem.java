@@ -32,7 +32,7 @@ import java.util.List;
 public interface IRailcraftItem extends IRailcraftObject<Item> {
 
     default String getTooltipTag(ItemStack stack) {
-        return stack.getUnlocalizedName() + ".tips";
+        return stack.getTranslationKey() + ".tips";
     }
 
     @Nullable

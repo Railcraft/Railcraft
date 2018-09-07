@@ -47,8 +47,8 @@ public enum RailcraftFluids {
         Block makeBlock(Fluid fluid) {
             return new BlockRailcraftFluid(fluid, Material.WATER) {
                 @Override
-                public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-                    super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+                public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+                    super.onEntityCollision(worldIn, pos, state, entityIn);
                     if (entityIn instanceof EntityLivingBase && RailcraftPotions.CREOSOTE.isEnabled()) {
                         EntityLivingBase living = (EntityLivingBase) entityIn;
                         Potion potion = RailcraftPotions.CREOSOTE.get();
@@ -151,7 +151,7 @@ public enum RailcraftFluids {
         if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
             railcraftBlock = makeBlock(fluid);
             railcraftBlock.setRegistryName(name);
-            railcraftBlock.setUnlocalizedName("railcraft." + tag);
+            railcraftBlock.setTranslationKey("railcraft." + tag);
             railcraftItem = new ItemBlockRailcraft(railcraftBlock);
             railcraftItem.setRegistryName(name);
             RailcraftRegistry.register(railcraftBlock, railcraftItem);

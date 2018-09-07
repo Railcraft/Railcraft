@@ -15,7 +15,6 @@ import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;

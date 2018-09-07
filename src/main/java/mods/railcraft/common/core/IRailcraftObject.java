@@ -117,8 +117,8 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
         return null;
     }
 
-    default String getResourcePath() {
-        return getRegistryName().getResourcePath();
+    default String getPath() {
+        return getRegistryName().getPath();
     }
 
     @Override

@@ -141,7 +141,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             returnValue = EnumActionResult.SUCCESS;
         }
         if (t instanceof TileMultiBlock) {
-            TileMultiBlock<?, ?> tile = (TileMultiBlock<?, ?>) t;
+            TileMultiBlock<?, ?, ?> tile = (TileMultiBlock<?, ?, ?>) t;
             if (tile.isStructureValid()) {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isMaster() ? "true" : "false"));

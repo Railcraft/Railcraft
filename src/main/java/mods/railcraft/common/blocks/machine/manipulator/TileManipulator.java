@@ -80,7 +80,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (canRotate())
-            facing = EnumFacing.getFront(data.getByte("direction"));
+            facing = EnumFacing.byIndex(data.getByte("direction"));
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         if (canRotate())
-            facing = EnumFacing.getFront(data.readByte());
+            facing = EnumFacing.byIndex(data.readByte());
     }
 
 }

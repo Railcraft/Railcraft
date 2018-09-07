@@ -22,7 +22,6 @@ public class ModuleTracksHighSpeed extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.TRACK_FLEX_HIGH_SPEED,
-//                        RailcraftBlocks.TRACK_JUNCTION_HIGH_SPEED,
                         TrackKits.HIGH_SPEED_TRANSITION
                 );
             }

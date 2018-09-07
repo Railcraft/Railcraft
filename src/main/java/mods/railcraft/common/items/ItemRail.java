@@ -11,7 +11,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -19,6 +18,8 @@ import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -40,12 +41,22 @@ public class ItemRail extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         RailcraftItems item = RailcraftItems.RAIL;
 
+        Ingredient ironIngot = new OreIngredient("ingotIron");
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .grid(new Ingredient[][] {
+                        {ironIngot, Ingredient.EMPTY, ironIngot},
+                        {ironIngot, Ingredient.EMPTY, ironIngot},
+                        {ironIngot, Ingredient.EMPTY, ironIngot},
+                })
+                .output(item.getStack(8, EnumRail.STANDARD))
+                .buildAndRegister();
+
         // Standard
-        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', Items.IRON_INGOT);
+//        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.STANDARD),
+//                "I I",
+//                "I I",
+//                "I I",
+//                'I', Items.IRON_INGOT);
 
         RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(6, EnumRail.STANDARD),
                 "I I",

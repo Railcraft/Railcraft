@@ -16,7 +16,7 @@ import net.minecraft.world.World;
  */
 public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox {
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileBoilerFireboxFluid();
     }
 
@@ -34,12 +34,13 @@ public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox {
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
         CraftingPlugin.addRecipe(stack,
-                "BBB",
+                "PUP",
                 "BCB",
-                "BFB",
-                'B', Items.BRICK,
+                "PFP",
+                'P', RailcraftItems.PLATE, Metal.STEEL,
+                'U', Items.BUCKET,
+                'B', Blocks.IRON_BARS,
                 'C', Items.FIRE_CHARGE,
-                'F', Blocks.FURNACE
-        );
+                'F', Blocks.FURNACE);
     }
 }

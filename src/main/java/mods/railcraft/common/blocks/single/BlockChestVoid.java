@@ -94,17 +94,17 @@ public class BlockChestVoid extends BlockChestRailcraft {
             double pz = pos.getZ();
 
             if (facing.getAxis() == EnumFacing.Axis.X)
-                px += pixel * facing.getFrontOffsetX() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                px += pixel * facing.getXOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 px += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Y)
-                py += pixel * facing.getFrontOffsetY() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                py += pixel * facing.getYOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 py += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Z)
-                pz += pixel * facing.getFrontOffsetZ() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                pz += pixel * facing.getZOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 pz += random.nextFloat();
 

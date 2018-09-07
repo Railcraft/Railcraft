@@ -71,8 +71,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -158,6 +158,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockTank::new),
     TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemMultiBlock::new),
     FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemMultiBlock::new),
+    BOILER_FIREBOX_FLUID("boiler_firebox_fluid", BlockBoilerFireboxFluid.class, BlockBoilerFireboxFluid::new, ItemMultiBlock::new),
+    BOILER_FIREBOX_SOLID("boiler_firebox_solid", BlockBoilerFireboxSolid.class, BlockBoilerFireboxSolid::new, ItemMultiBlock::new),
+    BOILER_TANK_PRESSURE_HIGH("boiler_tank_pressure_high", BlockBoilerTankHigh.class, BlockBoilerTankHigh::new, ItemMultiBlock::new),
+    BOILER_TANK_PRESSURE_LOW("boiler_tank_pressure_low", BlockBoilerTankLow.class, BlockBoilerTankLow::new, ItemMultiBlock::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();
@@ -197,7 +201,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         if (isEnabled()) {
             block = blockSupplier.get();
             block.setRegistryName(getRegistryName());
-            block.setUnlocalizedName("railcraft." + getBaseTag().replace("_", "."));
+            block.setTranslationKey("railcraft." + getBaseTag().replace("_", "."));
 
             if (itemSupplier != null) {
                 item = itemSupplier.apply(block);
@@ -285,6 +289,5 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public String toString() {
         return "Block{" + getBaseTag() + "}";
     }
-
 
 }

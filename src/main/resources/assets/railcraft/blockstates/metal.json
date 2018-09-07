@@ -8,7 +8,7 @@
     "inventory": [{"transform": "forge:default-block"}],
     "variant": {
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
-	        "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
+	  "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
       "tin": {"textures": {"all": "railcraft:blocks/metal_tin"}},
       "lead": {"textures": {"all": "railcraft:blocks/metal_lead"}},
       "silver": {"textures": {"all": "railcraft:blocks/metal_silver"}},

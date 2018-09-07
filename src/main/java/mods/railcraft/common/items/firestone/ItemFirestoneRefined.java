@@ -145,9 +145,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
-        String tipTag = getUnlocalizedName() + ".tips.charged";
+        String tipTag = getTranslationKey() + ".tips.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
-            tipTag = getUnlocalizedName() + ".tips.empty";
+            tipTag = getTranslationKey() + ".tips.empty";
         ToolTip tip = ToolTip.buildToolTip(tipTag);
         if (tip != null)
             info.addAll(tip.convertToStrings());

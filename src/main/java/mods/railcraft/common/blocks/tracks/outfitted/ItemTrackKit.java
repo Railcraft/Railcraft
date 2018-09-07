@@ -87,23 +87,23 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
         return "item.railcraft.track_kit";
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String locTag = getUnlocalizedName(stack) + ".name";
+        String locTag = getTranslationKey(stack) + ".name";
         if (LocalizationPlugin.hasTag(locTag))
             return LocalizationPlugin.translateFast(locTag);
         Map<String, ILocalizedObject> args = new HashMap<>();
         args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
-        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+        return LocalizationPlugin.translateArgs(getTranslationKey() + ".name", args);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class ItemTrackKit extends ItemRailcraft {
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
         TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> ModelManager.registerItemModel(this, trackKit.ordinal(),
-                trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath()));
+                trackKit.getRegistryName().getNamespace(), "track_kits/" + trackKit.getRegistryName().getPath()));
     }
 
     @Override

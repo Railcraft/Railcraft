@@ -44,7 +44,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         public Definition(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
             this.tag = tag;
             this.altRecipeObject = altRecipeObject;
-            registryName = new ResourceLocation(obj.getResourceDomain() + ":" + tag);
+            registryName = new ResourceLocation(obj.getNamespace() + ":" + tag);
             conditions.add(c -> !modules.isEmpty(), () -> "it has no module");
         }
     }
@@ -100,7 +100,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         }).orElse(false);
     }
 
-    default String getResourceDomain() {
+    default String getNamespace() {
         return RailcraftConstants.RESOURCE_DOMAIN;
     }
 

@@ -21,7 +21,6 @@ public class ModuleTracksStrapIron extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.TRACK_FLEX_STRAP_IRON
-//                        RailcraftBlocks.TRACK_JUNCTION_STRAP_IRON
                 );
             }
         });

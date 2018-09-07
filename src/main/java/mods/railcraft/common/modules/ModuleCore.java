@@ -156,7 +156,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         if (riding instanceof EntityMinecart) {
                             EntityMinecart cart = (EntityMinecart) riding;
                             if (Train.getTrain(cart).size() > 1)
-                                CartTools.removePassengers(cart, event.player.getPositionVector().addVector(0, 1, 0));
+                                CartTools.removePassengers(cart, event.player.getPositionVector().add(0, 1, 0));
                         }
                     }
                 });
@@ -195,23 +195,15 @@ public class ModuleCore extends RailcraftModulePayload {
                     registry.register(CraftingPlugin.createDummyRecipe(each));
                 }
 
-//                register(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecart.Type.COMMAND_BLOCK.getName());
-//                register(41, "boat", EntityBoat.class, "Boat");
-//                register(42, "minecart", EntityMinecartEmpty.class, EntityMinecart.Type.RIDEABLE.getName());
-//                register(43, "chest_minecart", EntityMinecartChest.class, EntityMinecart.Type.CHEST.getName());
-//                register(44, "furnace_minecart", EntityMinecartFurnace.class, EntityMinecart.Type.FURNACE.getName());
-//                register(45, "tnt_minecart", EntityMinecartTNT.class, EntityMinecart.Type.TNT.getName());
-//                register(46, "hopper_minecart", EntityMinecartHopper.class, EntityMinecart.Type.HOPPER.getName());
-//                register(47, "spawner_minecart", EntityMinecartMobSpawner.class, EntityMinecart.Type.SPAWNER.getName());
-
+                // Vanilla ids:
                 Map<EntityMinecart.Type, ResourceLocation> names = new EnumMap<>(EntityMinecart.Type.class);
-                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart"));
-                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart"));
-                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart"));
-                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart"));
-                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart"));
-                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart"));
-                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart"));
+                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart")); // 42
+                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart")); // 40
+                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart")); // 43
+                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart")); // 44
+                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart")); // 45
+                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart")); // 46
+                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart")); // 47
 
                 // Items
                 replaceVanillaCart(names, RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);

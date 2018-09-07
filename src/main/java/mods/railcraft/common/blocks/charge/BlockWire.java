@@ -230,7 +230,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

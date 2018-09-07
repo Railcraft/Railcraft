@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerTankHigh extends TileBoilerTank {
+public final class TileBoilerTankHigh<M extends TileBoilerFirebox<M>> extends TileBoilerTank<TileBoilerTankHigh<M>, M> {
 
     public TileBoilerTankHigh() {
         super();
@@ -24,5 +24,11 @@ public final class TileBoilerTankHigh extends TileBoilerTank {
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Class<TileBoilerTankHigh<M>> defineSelfClass() {
+        return (Class<TileBoilerTankHigh<M>>) (Class<?>) TileBoilerTankHigh.class;
     }
 }

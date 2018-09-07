@@ -35,7 +35,7 @@ public class ApothecariesBackpack extends BaseBackpack {
         add(Items.POTIONITEM);
         add(Items.GLASS_BOTTLE);
 
-        add(s -> !(s.getItem() instanceof ItemBlock) && s.getItem().getRegistryName().getResourcePath().contains("potion"));
+        add(s -> !(s.getItem() instanceof ItemBlock) && s.getItem().getRegistryName().getPath().contains("potion"));
     }
 
     @Override

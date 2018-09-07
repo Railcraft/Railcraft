@@ -59,7 +59,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

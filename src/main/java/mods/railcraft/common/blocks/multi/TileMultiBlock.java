@@ -47,16 +47,17 @@ import java.util.*;
 /**
  * @param <T> The least common component tile class, might not be the same as self class
  */
-public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T> extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile<T, M> {
+public abstract class TileMultiBlock<L extends TileMultiBlock<L, ? extends L, M>, T extends TileMultiBlock<L, T, M>, M extends TileMultiBlock<L, M, M>> extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile<L, T, M> {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 64;
-    protected final Class<T> componentClass = defineCommonClass();
+    protected final Class<L> leastCommonClass = defineLeastCommonClass();
+    protected final Class<T> selfClass = defineSelfClass();
     protected final Class<M> masterClass = defineMasterClass();
     private final Timer netTimer = new Timer();
     protected final List<MultiBlockPattern> patterns;
-    protected final List<T> components = new ArrayList<>();
-    protected final List<T> componentsView = Collections.unmodifiableList(components);
+    protected final List<L> components = new ArrayList<>();
+    protected final List<L> componentsView = Collections.unmodifiableList(components);
     public final ListMultimap<MultiBlockStateReturn, Integer> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockStateReturn.class), ArrayList::new);
     protected boolean isMaster;
     private BlockPos posInPattern;
@@ -73,11 +74,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         tested = FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER;
     }
 
-    protected abstract Class<T> defineCommonClass();
+    protected abstract Class<T> defineSelfClass();
 
     protected abstract Class<M> defineMasterClass();
 
-    public List<T> getComponents() {
+    protected abstract Class<L> defineLeastCommonClass();
+
+    public List<L> getComponents() {
         return componentsView;
     }
 
@@ -180,8 +183,8 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
                         BlockPos pos = new BlockPos(px, py, pz).add(offset);
 
                         TileEntity tile = world.getTileEntity(pos);
-                        if (componentClass.isInstance(tile)) {
-                            T multiBlock = componentClass.cast(tile);
+                        if (leastCommonClass.isInstance(tile)) {
+                            L multiBlock = leastCommonClass.cast(tile);
                             if (multiBlock != this)
                                 multiBlock.components.clear();
                             components.add(multiBlock);
@@ -328,7 +331,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         for (EnumFacing side : EnumFacing.VALUES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (isStructureTile(tile))
-                ((TileMultiBlock<?, ?>) tile).onBlockChange(getMaxRecursionDepth());
+                ((TileMultiBlock<?, ?, ?>) tile).onBlockChange(getMaxRecursionDepth());
         }
     }
 
@@ -339,7 +342,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         if (tested) {
             tested = false;
 
-            TileMultiBlock<T, M> mBlock = getMasterBlock();
+            TileMultiBlock<L, M, M> mBlock = getMasterBlock();
             if (mBlock != null) {
                 mBlock.onBlockChange(getMaxRecursionDepth());
                 return;
@@ -348,21 +351,21 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
             for (EnumFacing side : EnumFacing.VALUES) {
                 TileEntity tile = tileCache.getTileOnSide(side);
                 if (isStructureTile(tile))
-                    ((TileMultiBlock<?, ?>) tile).onBlockChange(depth);
+                    ((TileMultiBlock<?, ?, ?>) tile).onBlockChange(depth);
             }
         }
     }
 
     @Contract("null -> false")
     protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return componentClass.isInstance(tile);
+        return selfClass.isInstance(tile);
     }
 
     @Override
     public void markDirty() {
         super.markDirty();
         if (!isMaster) {
-            T mBlock = getMasterBlock();
+            M mBlock = getMasterBlock();
             if (mBlock != null)
                 mBlock.markDirty();
         }
@@ -493,7 +496,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        T masterBlock = getMasterBlock();
+        M masterBlock = getMasterBlock();
         if (masterBlock != null && isStructureValid()) {
             GuiHandler.openGui(getGui(), player, world, masterBlock.getPos());
             return true;
@@ -521,8 +524,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
     }
 
     @Override
-    public Class<T> getCommonType() {
-        return componentClass;
+    public Class<T> getSelfType() {
+        return selfClass;
+    }
+
+    @Override
+    public Class<L> getLeastCommonType() {
+        return leastCommonClass;
     }
 
     @Override

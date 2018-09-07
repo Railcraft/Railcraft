@@ -38,7 +38,7 @@ public class ShapedFluidRecipe extends BaseRecipe {
     protected boolean mirrored = true;
 
     public ShapedFluidRecipe(ItemStack result, Object... recipe) {
-        super(CraftingPlugin.getGenerator().next().getResourcePath());
+        super(CraftingPlugin.getGenerator().next().getPath());
         output = result.copy();
 
         StringBuilder sb = new StringBuilder();

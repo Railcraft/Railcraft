@@ -30,7 +30,11 @@ public class ModuleSteam extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.EQUIPMENT,
-                        RailcraftBlocks.ADMIN_STEAM_PRODUCER
+                        RailcraftBlocks.ADMIN_STEAM_PRODUCER,
+                        RailcraftBlocks.BOILER_FIREBOX_FLUID,
+                        RailcraftBlocks.BOILER_FIREBOX_SOLID,
+                        RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH,
+                        RailcraftBlocks.BOILER_TANK_PRESSURE_LOW
                 );
             }
 

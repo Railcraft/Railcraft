@@ -95,15 +95,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                     generateDefaultMine(100, 20, 2, 2, 47, Metal.SILVER, "mine_silver.cfg");
                     generateDefaultMine(100, 50, 2, 4, 50, Metal.TIN, "mine_tin.cfg");
                     generateDefaultMine(100, 30, 3, 4, 30, Metal.ZINC, "mine_zinc.cfg");
-
-//                    generateDefaultMine(100, 60, 3, 8, 29, "diffuse_copper.cfg");
-//                    generateDefaultMine(100, 15, 1, 1, 79, "diffuse_gold.cfg");
-//                    generateDefaultMine(100, 40, 4, 16, 26, "diffuse_iron.cfg");
-//                    generateDefaultMine(100, 30, 3, 6, 82, "diffuse_lead.cfg");
-//                    generateDefaultMine(100, 40, 6, 4, 26, "diffuse_nickel.cfg");
-//                    generateDefaultMine(100, 20, 2, 2, 47, "diffuse_silver.cfg");
-//                    generateDefaultMine(100, 50, 2, 4, 50, "diffuse_tin.cfg");
-//                    generateDefaultMine(100, 30, 3, 4, 30, "diffuse_zinc.cfg");
                 }
 
                 File[] oreConfigs = oreConfigFolder.listFiles((dir, name) -> name != null && name.endsWith(".cfg"));

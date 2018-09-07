@@ -117,7 +117,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
 
     private void addDescription(IModRegistry registry, ItemStack stack) {
         if (!InvTools.isEmpty(stack)) {
-            String locTag = stack.getUnlocalizedName() + ".desc";
+            String locTag = stack.getTranslationKey() + ".desc";
             if (LocalizationPlugin.hasTag(locTag))
                 registry.addIngredientInfo(stack, VanillaTypes.ITEM, locTag);
         }

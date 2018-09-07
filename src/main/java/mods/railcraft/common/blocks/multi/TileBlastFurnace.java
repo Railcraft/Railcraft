@@ -153,7 +153,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     }
 
     @Override
-    protected Class<TileBlastFurnace> defineCommonClass() {
+    protected Class<TileBlastFurnace> defineSelfClass() {
         return TileBlastFurnace.class;
     }
 

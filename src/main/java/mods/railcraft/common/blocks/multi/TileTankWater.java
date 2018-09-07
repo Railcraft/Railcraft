@@ -35,13 +35,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -125,7 +123,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
     }
 
     @Override
-    protected Class<TileTankWater> defineCommonClass() {
+    protected Class<TileTankWater> defineSelfClass() {
         return TileTankWater.class;
     }
 

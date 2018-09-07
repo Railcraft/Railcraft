@@ -52,7 +52,7 @@ public class ItemOveralls extends ItemRailcraftArmor {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);
-        ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tips");
+        ToolTip tip = ToolTip.buildToolTip(stack.getTranslationKey() + ".tips");
         if (tip != null)
             info.addAll(tip.convertToStrings());
     }

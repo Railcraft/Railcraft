@@ -1,0 +1,21 @@
+{
+  "_comment": "liach - Need to work on the connection states!",
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:tinted_column",
+    "textures": {
+      "end": "railcraft:blocks/boiler_tank_pressure_low_0",
+      "side": "railcraft:blocks/boiler_tank_pressure_low_1"
+    }
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
+  }
+}

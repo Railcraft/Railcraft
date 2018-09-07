@@ -31,7 +31,6 @@ public class ModuleTrain extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
-//                        RailcraftBlocks.track
                 );
             }
 

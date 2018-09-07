@@ -63,8 +63,8 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileTankSteelGauge();
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
+        return new TileTankSteelGauge<>();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

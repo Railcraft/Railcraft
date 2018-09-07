@@ -72,24 +72,24 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
         return "tile.railcraft.track_outfitted";
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + getSuffix(stack);
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + getSuffix(stack);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String locTag = getUnlocalizedName(stack) + ".name";
+        String locTag = getTranslationKey(stack) + ".name";
         if (LocalizationPlugin.hasTag(locTag))
             return LocalizationPlugin.translateFast(locTag);
         Map<String, ILocalizedObject> args = new HashMap<>();
         args.put("track_type", TrackRegistry.TRACK_TYPE.get(stack));
         args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
-        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+        return LocalizationPlugin.translateArgs(getTranslationKey() + ".name", args);
     }
 
     @Override

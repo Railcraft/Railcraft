@@ -71,7 +71,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 

@@ -18,5 +18,5 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IMaterialBlock extends IRailcraftBlock {
-    String getUnlocalizedName(Materials mat);
+    String getTranslationKey(Materials mat);
 }

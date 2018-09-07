@@ -69,7 +69,7 @@ public class CommandDebug extends SubCommand {
 
     static void printTarget(ICommandSender sender, World world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(sender, pos), block.getClass(), block.getUnlocalizedName());
+        printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(sender, pos), block.getClass(), block.getTranslationKey());
         TileEntity t = world.getTileEntity(pos);
         if (t != null)
             printLine(sender, "Target tile [{0}] = {1}", shortCoords(sender, t.getPos()), t.getClass());

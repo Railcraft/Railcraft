@@ -871,7 +871,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                     double yr = (world.rand.nextFloat() - 0.5D) * f;
                     double zr = (world.rand.nextFloat() - 0.5D) * f;
                     Vec3d spewPos = getPositionAhead(-3.2);
-                    spewPos.addVector(xr, 0.3 + yr, zr);
+                    spewPos.add(xr, 0.3 + yr, zr);
                     EntityItem entityitem = new EntityItem(world, spewPos.x, spewPos.y, spewPos.z, stack);
                     world.spawnEntity(entityitem);
                 }
@@ -967,7 +967,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     @Override
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        setFacing(EnumFacing.getFront(data.getByte("facing")));
+        setFacing(EnumFacing.byIndex(data.getByte("facing")));
         setDelay(data.getInteger("delay"));
         setActive(data.getBoolean("active"));
         setBurnTime(data.getInteger("burnTime"));

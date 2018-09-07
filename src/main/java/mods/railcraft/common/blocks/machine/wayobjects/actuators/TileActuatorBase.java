@@ -187,7 +187,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
         byte f = data.readByte();
         if (facing.ordinal() != f) {
-            facing = EnumFacing.getFront(f);
+            facing = EnumFacing.byIndex(f);
             markBlockForUpdate();
         }
         powered = data.readBoolean();

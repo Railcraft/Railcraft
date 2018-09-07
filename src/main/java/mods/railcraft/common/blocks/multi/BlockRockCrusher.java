@@ -45,7 +45,7 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public TileMultiBlockInventory<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileRockCrusher();
     }
 

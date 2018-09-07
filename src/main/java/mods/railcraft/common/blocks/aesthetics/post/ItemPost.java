@@ -35,7 +35,7 @@ public class ItemPost extends ItemBlockRailcraft {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
-        setUnlocalizedName("railcraft.post");
+        setTranslationKey("railcraft.post");
     }
 
     public static void setEmblem(ItemStack stack, String emblemIdentifier) {
@@ -56,7 +56,7 @@ public class ItemPost extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         return EnumPost.fromId(stack.getItemDamage()).getTag().replace('_', '.');
     }
 

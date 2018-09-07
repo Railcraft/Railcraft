@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column",
+    "textures": {
+      "end": "railcraft:blocks/boiler_firebox_solid_0"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "burning": {
+      "true": {
+        "textures": {
+          "side": "railcraft:blocks/boiler_firebox_solid_2"
+        }
+      },
+      "false": {
+        "textures": {
+          "side": "railcraft:blocks/boiler_firebox_solid_1"
+        }
+      }
+    }
+  }
+}

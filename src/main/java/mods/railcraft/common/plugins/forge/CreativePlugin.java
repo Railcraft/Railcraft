@@ -51,7 +51,7 @@ public class CreativePlugin {
         }
 
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return tabItem.get();
         }
 

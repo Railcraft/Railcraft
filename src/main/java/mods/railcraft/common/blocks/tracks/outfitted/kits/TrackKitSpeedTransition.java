@@ -13,7 +13,6 @@ import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,9 +79,9 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
     }
 
     private void slowCartSpeed(EntityMinecart cart) {
-        if (cart instanceof EntityLocomotive) {
-            ((EntityLocomotive) cart).forceIdle(20);
-        }
+//        if (cart instanceof EntityLocomotive) {
+//            ((EntityLocomotive) cart).forceIdle(20);
+//        }
         cart.motionX *= SLOW_FACTOR;
         cart.motionZ *= SLOW_FACTOR;
     }

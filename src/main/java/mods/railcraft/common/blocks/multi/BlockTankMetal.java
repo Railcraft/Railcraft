@@ -166,7 +166,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return super.getUnlocalizedName();
+    public String getTranslationKey() {
+        return super.getTranslationKey();
     }
 }

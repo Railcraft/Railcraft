@@ -34,9 +34,9 @@ public class ItemPostMetal extends ItemBlockRailcraftSubtyped {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         if (stack.getItemDamage() == -1 || stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
             return EnumPost.METAL_UNPAINTED.getTag();
-        return super.getUnlocalizedName() + "." + EnumColor.fromOrdinal(stack.getItemDamage()).getBaseTag();
+        return super.getTranslationKey() + "." + EnumColor.fromOrdinal(stack.getItemDamage()).getBaseTag();
     }
 }

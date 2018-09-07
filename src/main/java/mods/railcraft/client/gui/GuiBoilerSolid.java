@@ -14,7 +14,6 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiBoilerSolid extends TileGui {
 
@@ -28,7 +27,7 @@ public class GuiBoilerSolid extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.boiler"), 6);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

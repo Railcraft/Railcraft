@@ -29,7 +29,7 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
     private final ItemStack locomotive;
 
     public LocomotivePaintingRecipe(ItemStack locomotive) {
-        super(locomotive.getItem().getRegistryName().getResourcePath() + "_painting");
+        super(locomotive.getItem().getRegistryName().getPath() + "_painting");
         this.locomotive = locomotive;
         InvTools.addNBTTag(locomotive, "gregfix", "get the hell off my lawn!");
     }

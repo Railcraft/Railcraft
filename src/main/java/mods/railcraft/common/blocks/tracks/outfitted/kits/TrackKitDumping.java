@@ -47,7 +47,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
                 return;
         }
         if (cart.isBeingRidden()) {
-            CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
+            CartTools.removePassengers(cart, cart.getPositionVector().add(0, -2, 0));
         }
         cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
     }

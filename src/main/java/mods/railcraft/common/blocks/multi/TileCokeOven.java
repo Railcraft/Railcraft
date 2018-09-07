@@ -123,7 +123,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     }
 
     @Override
-    protected Class<TileCokeOven> defineCommonClass() {
+    protected Class<TileCokeOven> defineSelfClass() {
         return TileCokeOven.class;
     }
 

@@ -12,8 +12,8 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.multi.TileSteamOven;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerSteamOven;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiSteamOven extends TileGui {
 
@@ -27,7 +27,7 @@ public class GuiSteamOven extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override
