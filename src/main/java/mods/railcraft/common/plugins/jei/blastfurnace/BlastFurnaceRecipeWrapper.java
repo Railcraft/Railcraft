@@ -1,4 +1,4 @@
-package mods.railcraft.common.plugins.jei.blastfurnace.rockcrusher;
+package mods.railcraft.common.plugins.jei.blastfurnace;
 
 import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
