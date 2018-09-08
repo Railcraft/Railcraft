@@ -1,0 +1,20 @@
+{
+	"textures": {
+		"0": "railcraft:blocks/boiler_tank_pressure_high_0",
+		"1": "railcraft:blocks/boiler_tank_pressure_high_1",
+		"particle": "#1"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 1],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 15, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [1, 0, 16, 16], "texture": "#1"},
+				"up": {"uv": [0, 1, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}

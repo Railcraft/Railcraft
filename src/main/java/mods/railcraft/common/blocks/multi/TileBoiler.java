@@ -149,7 +149,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
                 .attachedData(new BoilerData(width * width * tankHeight, ticks, heat, capacity))
                 .master(offset, 1, offset)
                 .build();
-        Game.log(Game.DEBUG_REPORT, "============Boiler logging: \n{}\n=============", ret);
+        //Game.log(Game.DEBUG_REPORT, "============Boiler logging: \n{}\n=============", ret);
         return ret;
     }
 
@@ -268,7 +268,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(world, getPos());
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
 
         switch (mapPos) {
             case 'O': // Other

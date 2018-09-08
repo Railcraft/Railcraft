@@ -34,6 +34,7 @@ public interface IMultiBlockTile<L extends IMultiBlockTile<L, ? extends L, M>, T
 
     MultiBlockState getState();
 
+    @Nullable
     BlockPos getPatternPosition();
 
     Collection<MultiBlockPattern> getPatterns();
