@@ -3,7 +3,6 @@ package mods.railcraft.common.plugins.jei.rolling;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IStackHelper;
-import mods.railcraft.common.util.crafting.ShapedRollingMachineRecipe;
 import mods.railcraft.common.util.crafting.ShapelessRollingMachineRecipe;
 
 /**

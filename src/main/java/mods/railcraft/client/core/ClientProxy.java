@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.core;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;

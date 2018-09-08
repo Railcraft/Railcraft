@@ -58,6 +58,7 @@ import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexElectric;
+import mods.railcraft.common.blocks.tracks.flex.ItemTrackStateless;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
@@ -126,12 +127,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemTrack::new),
-    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrackStateless::new),
     TRACK_FORCE("track_force", BlockTrackForce.class, BlockTrackForce::new, ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, BlockRailcraftWall::new, ItemMaterial::new),

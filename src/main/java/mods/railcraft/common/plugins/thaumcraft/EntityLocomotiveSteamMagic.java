@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------*/
 //package mods.railcraft.common.plugins.thaumcraft;
 //
-//import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+//import mods.railcraft.client.render.carts.LocomotiveRenderType;
 //import mods.railcraft.common.carts.EntityLocomotiveSteam;
 //import mods.railcraft.common.carts.IRailcraftCartContainer;
 //import mods.railcraft.common.carts.RailcraftCarts;

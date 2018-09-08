@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;

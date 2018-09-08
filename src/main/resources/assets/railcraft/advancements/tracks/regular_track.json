@@ -40,7 +40,7 @@
         "items": [
           {
             "type": "railcraft:is_track",
-            "track_type": "railcraft:strap_iron"
+            "track_type": "railcraft:electric"
           }
         ]
       }

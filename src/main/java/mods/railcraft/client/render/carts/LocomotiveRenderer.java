@@ -9,8 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.plugins.color.EnumColor;
@@ -43,7 +42,7 @@ public class LocomotiveRenderer extends CartModelRenderer {
             emblemTexture = EmblemToolsClient.packageManager.getEmblemTextureLocation(emblem);
 
         LocomotiveRenderType renderType = loco.getRenderType();
-        mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer locoRenderer = renderType.getRenderer(loco.getModel());
+        LocomotiveModelRenderer locoRenderer = renderType.getRenderer(loco.getModel());
 
         locoRenderer.renderLocomotive(renderer, loco, primaryColor, secondaryColor, emblemTexture, light, time);
         return false;

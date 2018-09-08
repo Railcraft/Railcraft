@@ -20,7 +20,7 @@ import java.util.Collection;
 
 final class UseTrackKitTrigger extends BaseTrigger<Instance> {
 
-    static final ResourceLocation ID = RailcraftConstantsAPI.locationOf("used_track_kit");
+    static final ResourceLocation ID = RailcraftConstantsAPI.locationOf("use_track_kit");
 
     @Override
     public ResourceLocation getId() {

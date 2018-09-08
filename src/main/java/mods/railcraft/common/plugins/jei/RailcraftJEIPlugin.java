@@ -23,6 +23,7 @@ import mods.railcraft.client.gui.GuiRollingMachinePowered;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
+import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
@@ -96,6 +97,9 @@ public class RailcraftJEIPlugin implements IModPlugin {
             jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.CROWBAR_SEASONS.getStack());
         if (RailcraftItems.BLEACHED_CLAY.isLoaded())
             jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.BLEACHED_CLAY.getStack());
+
+        RailcraftObjects.processBlockVariants((block, variant) -> addDescription(registry, block.getStack(variant)));
+        RailcraftObjects.processItemVariants((item, variant) -> addDescription(registry, item.getStack(variant)));
     }
 
     @Override
@@ -141,8 +145,6 @@ public class RailcraftJEIPlugin implements IModPlugin {
 //        if (rolling)
 //            registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()));
 //
-//        RailcraftObjects.processBlockVariants((block, variant) -> addDescription(registry, block.getStack(variant)));
-//        RailcraftObjects.processItemVariants((item, variant) -> addDescription(registry, item.getStack(variant)));
 //    }
 
     private void addDescription(IModRegistry registry, ItemStack stack) {

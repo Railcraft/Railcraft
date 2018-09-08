@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
-import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -672,7 +672,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockBallast() {
         Predicate<ItemStack> filler = InvTools.getFillingChecker(invBallast);
         if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.BALLAST.and(filler));
+            ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.BALLAST.and(filler));
             if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invBallast);
         }
@@ -714,7 +714,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockTracks() {
         Predicate<ItemStack> filler = InvTools.getFillingChecker(invRails);
         if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.TRACK.and(filler));
+            ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.TRACK.and(filler));
             if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invRails);
         }
@@ -863,7 +863,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                     stack = InvTools.moveItemStack(stack, invBallast);
 
                 if (!InvTools.isEmpty(stack))
-                    stack = CartToolsAPI.transferHelper.pushStack(this, stack);
+                    stack = CartToolsAPI.getTransferHelper().pushStack(this, stack);
 
                 if (!InvTools.isEmpty(stack)) {
                     float f = 0.7F;
@@ -1035,7 +1035,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockFuel() {
         Predicate<ItemStack> filler = InvTools.getFillingChecker(invFuel);
         if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL.and(filler));
+            ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
             if (!InvTools.isEmpty(stack))
                 InvTools.moveItemStack(stack, invFuel);
         }

@@ -28,7 +28,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -115,7 +114,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
             return false;
         switch (slot) {
             case SLOT_LIQUID_INPUT:
-                Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
+                FluidStack fluid = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluid == null)
                     return false;
                 if (Fluids.WATER.is(fluid) || FluidFuelManager.getFuelValue(fluid) > 0)

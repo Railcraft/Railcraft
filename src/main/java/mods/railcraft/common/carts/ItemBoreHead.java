@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.ItemMaterials;
 import mods.railcraft.common.plugins.forge.CreativePlugin;

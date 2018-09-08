@@ -1,8 +1,10 @@
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -16,28 +18,32 @@ final class TrackItemPredicate extends ItemPredicate {
 
     static final Function<JsonObject, ItemPredicate> DESERIALIZER = (json) -> {
         Boolean highSpeed = null;
-        if (json.has("high_speed") && json.get("high_speed").isJsonPrimitive()) {
+        if (json.has("high_speed")) {
             highSpeed = json.get("high_speed").getAsBoolean();
         }
 
         Boolean electric = null;
-        if (json.has("electric") && json.get("electric").isJsonPrimitive()) {
+        if (json.has("electric")) {
             electric = json.get("electric").getAsBoolean();
         }
 
         TrackType type = null;
-        if (json.has("track_type") && json.get("track_type").isJsonPrimitive()) {
+        if (json.has("track_type")) {
             ResourceLocation id = new ResourceLocation(json.get("track_type").getAsString());
             if (TrackRegistry.TRACK_TYPE.getRegistry().containsKey(id)) {
                 type = TrackRegistry.TRACK_TYPE.get(id);
+            } else {
+                throw new JsonSyntaxException("Wrong track type id " + id);
             }
         }
 
         TrackKit kit = null;
-        if (json.has("track_kit") && json.get("track_kit").isJsonPrimitive()) {
+        if (json.has("track_kit")) {
             ResourceLocation id = new ResourceLocation(json.get("track_kit").getAsString());
             if (TrackRegistry.TRACK_KIT.getRegistry().containsKey(id)) {
                 kit = TrackRegistry.TRACK_KIT.get(id);
+            } else {
+                throw new JsonSyntaxException("Wrong track kit id " + id);
             }
         }
 
@@ -62,7 +68,7 @@ final class TrackItemPredicate extends ItemPredicate {
 
     @Override
     public boolean test(ItemStack stack) {
-        TrackType type = TrackRegistry.TRACK_TYPE.get(stack);
+        TrackType type = TrackToolsAPI.getTrackType(stack);
         if (highSpeed != null && type.isHighSpeed() != highSpeed) {
             return false;
         }

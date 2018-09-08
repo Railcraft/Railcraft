@@ -118,7 +118,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         Deque<ISpikeMaulTarget> targets = new ArrayDeque<>(ISpikeMaulTarget.spikeMaulTargets);
         ISpikeMaulTarget first = targets.getFirst();
         ISpikeMaulTarget found = null;
-        for (ISpikeMaulTarget each = targets.remove(); !targets.isEmpty(); ) {
+        for (ISpikeMaulTarget each = targets.removeFirst(); !targets.isEmpty(); each = targets.removeFirst()) {
             if (each.matches(worldIn, pos, oldState)) {
                 found = targets.isEmpty() ? first : targets.getFirst();
                 break;
@@ -187,13 +187,13 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
     }
 
     static {
+        ISpikeMaulTarget.spikeMaulTargets.add(new FlexTarget());
         if (TrackKits.TURNOUT.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.TURNOUT::getTrackKit));
         if (TrackKits.WYE.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.WYE::getTrackKit));
         if (TrackKits.JUNCTION.isEnabled())
             ISpikeMaulTarget.spikeMaulTargets.add(new ISpikeMaulTarget.TrackKitTarget(TrackKits.JUNCTION::getTrackKit));
-        ISpikeMaulTarget.spikeMaulTargets.add(new FlexTarget());
     }
 
     private static class FlexTarget implements ISpikeMaulTarget {

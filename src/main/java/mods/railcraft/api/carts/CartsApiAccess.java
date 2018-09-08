@@ -9,6 +9,10 @@ public final class CartsApiAccess {
         CartToolsAPI.linkageManager = instance;
     }
 
+    public static void setTransferHelper(ITrainTransferHelper transferHelper) {
+        CartToolsAPI.transferHelper = transferHelper;
+    }
+
     private CartsApiAccess() {
     }
 }

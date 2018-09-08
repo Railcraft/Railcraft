@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 

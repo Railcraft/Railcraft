@@ -11,7 +11,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IAlternateCartTexture;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;

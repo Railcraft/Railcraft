@@ -174,7 +174,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
                 SoundHelper.playBlockSound(world, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
-                    CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
+                    CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
                 }
                 blink();
             }

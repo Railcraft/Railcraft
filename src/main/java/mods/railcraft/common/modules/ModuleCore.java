@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import com.google.common.base.Throwables;
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.CraftingApiAccess;
@@ -82,7 +83,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void construction() {
-                CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
+                CartsApiAccess.setTransferHelper(TrainTransferHelper.INSTANCE);
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());

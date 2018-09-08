@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -101,12 +101,12 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             Predicate<ItemStack> filler = InvTools.getFillingChecker(invStock);
             if (filler != Predicates.<ItemStack>alwaysFalse()) {
                 // This comparison looks funky, but the identity is real
-                ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL.and(filler));
+                ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
                 if (!InvTools.isEmpty(stack))
                     InvTools.moveItemStack(stack, invStock);
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
-                FluidStack pulled = CartToolsAPI.transferHelper.pullFluid(this, Fluids.WATER.getB(1));
+                FluidStack pulled = CartToolsAPI.getTransferHelper().pullFluid(this, Fluids.WATER.getB(1));
                 if (pulled != null) {
                     tankWater.fill(pulled, true);
                 }

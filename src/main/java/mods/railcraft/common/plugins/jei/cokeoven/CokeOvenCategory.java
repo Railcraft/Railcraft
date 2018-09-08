@@ -7,6 +7,7 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +29,7 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
     private static final ResourceLocation COKE_OVEN_BACKGROUND = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png");
 
     public CokeOvenCategory(IGuiHelper guiHelper) {
-        title = I18n.translateToLocal("gui.railcraft.jei.category.coke");
+        title = LocalizationPlugin.translateFast("gui.railcraft.jei.category.coke");
         background = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 15, 23, 124, 49);
         this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 0, 48, 47);
 

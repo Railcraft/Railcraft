@@ -23,13 +23,13 @@ public class RockCrusherRecipeWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, Lists.newArrayList(recipe.getInput().getMatchingStacks()));
-        ingredients.setOutputLists(VanillaTypes.ITEM, transform());
+        ingredients.setOutputs(VanillaTypes.ITEM, transform());
     }
 
-    public List<List<ItemStack>> transform() {
-        List<List<ItemStack>> lists = new ArrayList<>();
+    public List<ItemStack> transform() {
+        List<ItemStack> lists = new ArrayList<>();
         for (IOutputEntry entry : recipe.getOutputs()) {
-            lists.add(Collections.singletonList(entry.getOutput()));
+            lists.add(entry.getOutput());
         }
         return lists;
     }
