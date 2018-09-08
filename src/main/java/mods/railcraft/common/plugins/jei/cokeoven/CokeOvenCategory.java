@@ -30,7 +30,7 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
     public CokeOvenCategory(IGuiHelper guiHelper) {
         title = I18n.translateToLocal("gui.railcraft.jei.category.coke");
         background = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 15, 23, 124, 49);
-        this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 196, 0, 48, 47);
+        this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 0, 48, 47);
 
         this.flame = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 47, 14, 14),200, IDrawableAnimated.StartDirection.TOP, true);
         this.arrow = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 61, 22, 15),200, IDrawableAnimated.StartDirection.LEFT, false);
