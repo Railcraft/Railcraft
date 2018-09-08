@@ -8,13 +8,11 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.plugins.jei.blastfurnace.rockcrusher;
+package mods.railcraft.common.plugins.jei.blastfurnace;
 
 import mezz.jei.api.IJeiHelpers;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
