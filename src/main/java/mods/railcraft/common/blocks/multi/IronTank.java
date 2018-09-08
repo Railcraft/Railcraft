@@ -37,12 +37,12 @@ public class IronTank implements MetalTank {
 
     @Override
     public boolean isTankBlock(IBlockState state) {
-        return tankBlocks.stream().anyMatch(b -> b.isEqual(state));
+        return tankBlocks.stream().anyMatch(b -> b.isEqual(state.getBlock()));
     }
 
     @Override
     public boolean isWallBlock(IBlockState state) {
-        return RailcraftBlocks.TANK_IRON_WALL.isEqual(state);
+        return RailcraftBlocks.TANK_IRON_WALL.isEqual(state.getBlock());
     }
 
     @Override

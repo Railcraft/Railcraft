@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,12 +37,12 @@ public class SteelTank implements MetalTank {
 
     @Override
     public boolean isTankBlock(IBlockState state) {
-        return tankBlocks.stream().anyMatch(b -> b.isEqual(state));
+        return tankBlocks.stream().anyMatch(b -> b.isEqual(state.getBlock()));
     }
 
     @Override
     public boolean isWallBlock(IBlockState state) {
-        return RailcraftBlocks.TANK_STEEL_WALL.isEqual(state);
+        return RailcraftBlocks.TANK_STEEL_WALL.isEqual(state.getBlock());
     }
 
     @Override
