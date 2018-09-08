@@ -12,7 +12,10 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.IOException;
 import java.util.function.Predicate;
@@ -30,10 +33,28 @@ public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends T
     protected TileBoilerTank() {
     }
 
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+        if (getCurrentPattern() == null)
+            return state;
+        BlockPos patternPos = getPatternPosition();
+        if (patternPos == null)
+            return state;
+        char marker = getPatternMarker();
+        if (marker == 'O')
+            return state;
+        state = state
+                .withProperty(BlockBoilerTank.NORTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
+                .withProperty(BlockBoilerTank.SOUTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
+                .withProperty(BlockBoilerTank.EAST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
+                .withProperty(BlockBoilerTank.WEST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
+        return state;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected Class<F> defineMasterClass() {
-        return (Class<F>) (Class<?>) TileBoilerFirebox.class; // Idea glitched on this cast
+        return (Class<F>) TileBoilerFirebox.class; // Idea glitched on this cast
     }
 
     @Override
