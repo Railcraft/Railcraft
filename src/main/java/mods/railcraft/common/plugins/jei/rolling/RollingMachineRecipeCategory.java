@@ -16,6 +16,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.common.core.Railcraft;
@@ -69,17 +70,23 @@ public class RollingMachineRecipeCategory implements IRecipeCategory<IRecipeWrap
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         guiItemStacks.init(craftOutputSlot, false, 94, 18);
+        guiItemStacks.set(craftOutputSlot, outputs.get(0));
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = craftInputSlot1 + x + (y * 3);
                 guiItemStacks.init(index, true, x * 18, y * 18);
+                if (inputs.size() > index-1)
+                    guiItemStacks.set(index, inputs.get(index-1));
+                else
+                    guiItemStacks.set(index, ItemStack.EMPTY);
             }
         }
 
-        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+
     }
 
 }

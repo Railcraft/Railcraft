@@ -38,6 +38,10 @@ public final class ShapelessRollingMachineRecipe implements IRollingMachineRecip
         return RecipeMatcher.findMatches(stacks, ingredients) != null;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     @Override
     public ItemStack getSampleOutput() {
         return output;

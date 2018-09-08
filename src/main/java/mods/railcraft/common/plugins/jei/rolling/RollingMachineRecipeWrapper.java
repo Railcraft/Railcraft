@@ -11,6 +11,12 @@
 package mods.railcraft.common.plugins.jei.rolling;
 
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mods.railcraft.api.crafting.IRollingMachineRecipe;
 
-public abstract class RollingMachineRecipeWrapper implements IRecipeWrapper {
+public abstract class RollingMachineRecipeWrapper<T extends IRollingMachineRecipe> implements IRecipeWrapper {
+    protected T recipe;
+
+    public RollingMachineRecipeWrapper(T recipe) {
+        this.recipe = recipe;
+    }
 }

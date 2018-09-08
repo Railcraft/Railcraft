@@ -14,10 +14,11 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import mods.railcraft.common.util.crafting.ShapedRollingMachineRecipe;
+import mods.railcraft.common.util.crafting.ShapelessRollingMachineRecipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public final class RollingMachineRecipeMaker {
@@ -26,10 +27,13 @@ public final class RollingMachineRecipeMaker {
         List<IRecipeWrapper> wrappers = new ArrayList<>();
         Collection<IRollingMachineRecipe> rawRecipes = RollingMachineCraftingManager.getInstance().getRecipes();
         for (IRollingMachineRecipe recipe : rawRecipes) {
-            //TODO
+            if(recipe instanceof ShapedRollingMachineRecipe)
+                wrappers.add(new ShapedRollingMachineRecipeWrapper((ShapedRollingMachineRecipe)recipe, jeiHelpers.getStackHelper()));
+            else if(recipe instanceof ShapelessRollingMachineRecipe)
+                wrappers.add(new ShapelessRollingMachineRecipeWrapper((ShapelessRollingMachineRecipe)recipe, jeiHelpers.getStackHelper()));
         }
 
-        return Collections.emptyList();
+        return wrappers;
     }
 
     private RollingMachineRecipeMaker() {
