@@ -156,6 +156,19 @@ public final class MultiBlockPattern {
         return master;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pattern.length; i++) {
+            builder.append("Level ").append(i).append(":\n");
+            char[][] level = pattern[i];
+            for (char[] line : level) {
+                builder.append(line).append('\n');
+            }
+        }
+        return builder.toString();
+    }
+
     public static final class Builder {
 
         private int widthX = -1;

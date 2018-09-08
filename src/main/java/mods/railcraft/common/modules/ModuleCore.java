@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import com.google.common.base.Throwables;
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.CraftingApiAccess;
@@ -18,6 +19,7 @@ import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.multi.MultiBlockHelper;
@@ -81,8 +83,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void construction() {
-                LinkageManager.reset();
-                CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
+                CartsApiAccess.setTransferHelper(TrainTransferHelper.INSTANCE);
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());
@@ -156,7 +157,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         if (riding instanceof EntityMinecart) {
                             EntityMinecart cart = (EntityMinecart) riding;
                             if (Train.getTrain(cart).size() > 1)
-                                CartTools.removePassengers(cart, event.player.getPositionVector().addVector(0, 1, 0));
+                                CartTools.removePassengers(cart, event.player.getPositionVector().add(0, 1, 0));
                         }
                     }
                 });
@@ -195,23 +196,15 @@ public class ModuleCore extends RailcraftModulePayload {
                     registry.register(CraftingPlugin.createDummyRecipe(each));
                 }
 
-//                register(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecart.Type.COMMAND_BLOCK.getName());
-//                register(41, "boat", EntityBoat.class, "Boat");
-//                register(42, "minecart", EntityMinecartEmpty.class, EntityMinecart.Type.RIDEABLE.getName());
-//                register(43, "chest_minecart", EntityMinecartChest.class, EntityMinecart.Type.CHEST.getName());
-//                register(44, "furnace_minecart", EntityMinecartFurnace.class, EntityMinecart.Type.FURNACE.getName());
-//                register(45, "tnt_minecart", EntityMinecartTNT.class, EntityMinecart.Type.TNT.getName());
-//                register(46, "hopper_minecart", EntityMinecartHopper.class, EntityMinecart.Type.HOPPER.getName());
-//                register(47, "spawner_minecart", EntityMinecartMobSpawner.class, EntityMinecart.Type.SPAWNER.getName());
-
+                // Vanilla ids:
                 Map<EntityMinecart.Type, ResourceLocation> names = new EnumMap<>(EntityMinecart.Type.class);
-                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart"));
-                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart"));
-                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart"));
-                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart"));
-                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart"));
-                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart"));
-                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart"));
+                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart")); // 42
+                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart")); // 40
+                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart")); // 43
+                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart")); // 44
+                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart")); // 45
+                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart")); // 46
+                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart")); // 47
 
                 // Items
                 replaceVanillaCart(names, RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
@@ -228,6 +221,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 Blocks.ACTIVATOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
 
                 MachineTileRegistry.registerTileEntities();
+                RailcraftAdvancementTriggers.getInstance().register();
             }
 
             private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
@@ -248,6 +242,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         .tracker(80, 2, true)
                         .build();
                 ForgeRegistries.ENTITIES.register(substitute);
+                Game.log(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 

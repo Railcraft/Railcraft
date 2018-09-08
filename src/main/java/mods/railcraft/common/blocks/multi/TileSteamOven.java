@@ -136,7 +136,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     }
 
     @Override
-    protected Class<TileSteamOven> defineCommonClass() {
+    protected Class<TileSteamOven> defineSelfClass() {
         return TileSteamOven.class;
     }
 
@@ -301,7 +301,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
     }
 
     @Override

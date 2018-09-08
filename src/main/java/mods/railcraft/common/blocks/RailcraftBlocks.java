@@ -58,6 +58,7 @@ import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexElectric;
+import mods.railcraft.common.blocks.tracks.flex.ItemTrackStateless;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
@@ -71,8 +72,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -126,12 +127,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemTrack::new),
-    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrackStateless::new),
     TRACK_FORCE("track_force", BlockTrackForce.class, BlockTrackForce::new, ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, BlockRailcraftWall::new, ItemMaterial::new),
@@ -158,6 +159,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockTank::new),
     TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemMultiBlock::new),
     FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemMultiBlock::new),
+    BOILER_FIREBOX_FLUID("boiler_firebox_fluid", BlockBoilerFireboxFluid.class, BlockBoilerFireboxFluid::new, ItemMultiBlock::new),
+    BOILER_FIREBOX_SOLID("boiler_firebox_solid", BlockBoilerFireboxSolid.class, BlockBoilerFireboxSolid::new, ItemMultiBlock::new),
+    BOILER_TANK_PRESSURE_HIGH("boiler_tank_pressure_high", BlockBoilerTankHigh.class, BlockBoilerTankHigh::new, ItemMultiBlock::new),
+    BOILER_TANK_PRESSURE_LOW("boiler_tank_pressure_low", BlockBoilerTankLow.class, BlockBoilerTankLow::new, ItemMultiBlock::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();
@@ -197,7 +202,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         if (isEnabled()) {
             block = blockSupplier.get();
             block.setRegistryName(getRegistryName());
-            block.setUnlocalizedName("railcraft." + getBaseTag().replace("_", "."));
+            block.setTranslationKey("railcraft." + getBaseTag().replace("_", "."));
 
             if (itemSupplier != null) {
                 item = itemSupplier.apply(block);
@@ -285,6 +290,5 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public String toString() {
         return "Block{" + getBaseTag() + "}";
     }
-
 
 }

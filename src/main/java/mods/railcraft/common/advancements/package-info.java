@@ -1,6 +1,6 @@
-@MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.api;
+@MethodsReturnNonnullByDefault
+package mods.railcraft.common.advancements;
 
 import mcp.MethodsReturnNonnullByDefault;
 

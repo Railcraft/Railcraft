@@ -50,8 +50,8 @@ public final class MachineTileRegistry {
         RailcraftRegistry.register(TileEngineSteamHigh.class, "engine_steam_industrial");
         RailcraftRegistry.register(TileBoilerFireboxSolid.class, "boiler_firebox_solid");
         RailcraftRegistry.register(TileBoilerFireboxFluid.class, "boiler_firebox_fluid");
-        RailcraftRegistry.register(TileBoilerTankLow.class, "boiler_tank_lp");
-        RailcraftRegistry.register(TileBoilerTankHigh.class, "boiler_tank_hp");
+        RailcraftRegistry.register(TileBoilerTankLow.class, "boiler_tank_pressure_low");
+        RailcraftRegistry.register(TileBoilerTankHigh.class, "boiler_tank_pressure_high");
         RailcraftRegistry.register(TileTankIronWall.class, "tank_iron_wall");
         RailcraftRegistry.register(TileTankIronGauge.class, "tank_iron_gauge");
         RailcraftRegistry.register(TileTankIronValve.class, "tank_iron_valve");

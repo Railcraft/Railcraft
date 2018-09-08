@@ -31,7 +31,7 @@ public enum SpeedController {
     IRON,
     ABANDONED {
         @Override
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             return 0.499f;
         }
 
@@ -74,7 +74,7 @@ public enum SpeedController {
         }
 
         @Override
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
             if (dir.isAscending())
                 return HighSpeedTools.SPEED_SLOPE;
@@ -86,7 +86,7 @@ public enum SpeedController {
         public static final float CORNER_SPEED = 0.4f;
 
         @Override
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
             if (TrackShapeHelper.isTurn(dir))
                 return CORNER_SPEED;
@@ -95,7 +95,7 @@ public enum SpeedController {
     },
     STRAP_IRON {
         @Override
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             return 0.12f;
         }
     };

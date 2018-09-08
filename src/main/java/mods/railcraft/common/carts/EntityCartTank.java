@@ -103,13 +103,13 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
@@ -220,7 +220,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     public boolean canPassFluidRequests(FluidStack fluid) {
         if (hasFilter())
-            return getFilterFluid() == fluid;
+            return FluidTools.matches(getFilterFluid(), fluid);
         return tank.isEmpty() && FluidTools.matches(tank.getFluid(), fluid);
     }
 

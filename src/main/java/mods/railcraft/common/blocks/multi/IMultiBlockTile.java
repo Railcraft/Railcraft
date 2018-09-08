@@ -1,5 +1,6 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,15 +12,17 @@ import java.util.Collection;
  * @param <T> Common type
  * @param <M> Master type
  */
-public interface IMultiBlockTile<T extends IMultiBlockTile<?, ?>, M extends T> {
+public interface IMultiBlockTile<L extends IMultiBlockTile<L, ? extends L, M>, T extends IMultiBlockTile<L, T, M>, M extends IMultiBlockTile<L, M, M>> extends IOwnable {
 
     default TileEntity tile() {
         return (TileEntity) this;
     }
 
+    Class<L> getLeastCommonType();
+
     Class<M> getMasterType();
 
-    Class<T> getCommonType();
+    Class<T> getSelfType();
 
     boolean isStructureValid();
 
@@ -32,6 +35,7 @@ public interface IMultiBlockTile<T extends IMultiBlockTile<?, ?>, M extends T> {
 
     MultiBlockState getState();
 
+    @Nullable
     BlockPos getPatternPosition();
 
     Collection<MultiBlockPattern> getPatterns();

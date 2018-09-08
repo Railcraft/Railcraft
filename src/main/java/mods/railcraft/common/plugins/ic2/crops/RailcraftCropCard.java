@@ -15,7 +15,7 @@
 //        return "railcraft";
 //    }
 //
-//    public String getUnlocalizedName() {
+//    public String getTranslationKey() {
 //        return "railcraft.ic2.crop." + this.getId();
 //    }
 //

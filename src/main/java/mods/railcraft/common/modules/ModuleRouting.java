@@ -37,8 +37,6 @@ public class ModuleRouting extends RailcraftModulePayload {
                         RailcraftItems.TICKET_GOLD,
                         RailcraftBlocks.DETECTOR,
                         TrackKits.ROUTING
-//                        RailcraftBlocks.track
-//                        RailcraftBlocks.signal
                 );
             }
 

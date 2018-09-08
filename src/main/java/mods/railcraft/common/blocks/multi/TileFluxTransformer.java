@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransformer, TileFluxTransformer> implements IEnergyStorage {
+public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransformer, TileFluxTransformer, TileFluxTransformer> implements IEnergyStorage {
 
     public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
@@ -77,12 +77,17 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
     }
 
     @Override
-    protected Class<TileFluxTransformer> defineCommonClass() {
+    protected Class<TileFluxTransformer> defineSelfClass() {
         return TileFluxTransformer.class;
     }
 
     @Override
     protected Class<TileFluxTransformer> defineMasterClass() {
+        return TileFluxTransformer.class;
+    }
+
+    @Override
+    protected Class<TileFluxTransformer> defineLeastCommonClass() {
         return TileFluxTransformer.class;
     }
 

@@ -71,6 +71,8 @@ public class TrackKitCoupler extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             mode.onMinecartPass(this, cart);
+        } else {
+            mode.onMinecartPassUnpowered(this, cart);
         }
     }
 
@@ -132,14 +134,14 @@ public class TrackKitCoupler extends TrackKitPowered {
         COUPLER("coupler", 8) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).createLink(track.taggedCart, cart);
+                CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
         DECOUPLER("decoupler", 0) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).breakLinks(cart);
+                CartToolsAPI.getLinkageManager().breakLinks(cart);
                 LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
             }
         },
@@ -147,6 +149,11 @@ public class TrackKitCoupler extends TrackKitPowered {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
                 LinkageManager.instance().setAutoLink(cart, true);
+            }
+
+            @Override
+            public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {
+                LinkageManager.instance().setAutoLink(cart, false);
             }
         };
         public static Mode[] VALUES = values();
@@ -176,6 +183,8 @@ public class TrackKitCoupler extends TrackKitPowered {
         }
 
         public abstract void onMinecartPass(TrackKitCoupler track, EntityMinecart cart);
+
+        public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {}
     }
 
 }

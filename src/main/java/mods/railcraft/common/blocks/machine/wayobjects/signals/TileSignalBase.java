@@ -108,7 +108,7 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = EnumFacing.getFront(data.getByte("Facing"));
+        facing = EnumFacing.byIndex(data.getByte("Facing"));
     }
 
     @Override
@@ -122,7 +122,7 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        facing = EnumFacing.getFront(data.readByte());
+        facing = EnumFacing.byIndex(data.readByte());
 
         markBlockForUpdate();
     }

@@ -11,7 +11,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IAlternateCartTexture;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
@@ -183,8 +183,8 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
             x += vec3d.x - mx;
             y += (vec3d1.y + vec3d2.y) / 2D - my;
             z += vec3d.z - mz;
-            Vec3d vec3d3 = vec3d2.addVector(-vec3d1.x, -vec3d1.y, -vec3d1.z);
-            if (vec3d3.lengthVector() != 0.0D) {
+            Vec3d vec3d3 = vec3d2.add(-vec3d1.x, -vec3d1.y, -vec3d1.z);
+            if (vec3d3.length() != 0.0D) {
                 vec3d3 = vec3d3.normalize();
                 yaw = (float) (Math.atan2(vec3d3.z, vec3d3.x) / Math.PI) * 180F;
                 pitch = (float) (Math.atan(vec3d3.y) * 73D);

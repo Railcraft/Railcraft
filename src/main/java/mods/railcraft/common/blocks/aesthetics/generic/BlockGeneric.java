@@ -51,6 +51,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         setResistance(20);
         setHardness(5);
         setSoundType(SoundType.STONE);
+        setTickRandomly(true);
 
         setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
@@ -202,6 +203,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
         EnumGeneric generic = getVariant(state);
         IBlockState newState = null;

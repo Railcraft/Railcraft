@@ -164,7 +164,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         if (TileEntityHopper.pullItems(this)) {
             return true;
         } else {
-            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
+            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
 
             if (!list.isEmpty()) {
                 TileEntityHopper.putDropInInventoryAllSlots(null, this, list.get(0));

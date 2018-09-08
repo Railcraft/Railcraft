@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
@@ -57,8 +57,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -686,7 +686,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean canLinkWithCart(EntityMinecart cart) {
+    public boolean canLink(EntityMinecart cart) {
         if (isExemptFromLinkLimits(cart))
             return true;
 
@@ -712,6 +712,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     @Override
     public float getOptimalDistance(EntityMinecart cart) {
         return 0.9f;
+    }
+
+    @Override
+    public void onLinkCreated(EntityMinecart cart) {
+        // Moved from linkage manager - this should not be there
+        if (getSpeed().compareTo(LocoSpeed.SLOWEST) > 0)
+            setSpeed(LocoSpeed.SLOWEST);
     }
 
     @Override

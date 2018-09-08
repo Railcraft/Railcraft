@@ -10,12 +10,20 @@
 
 package mods.railcraft.common.util.misc;
 
+import java.util.UUID;
+
 /**
  * Created by CovertJaguar on 10/30/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class MathTools {
+
+    public static final UUID NIL_UUID = new UUID(0, 0);
+
+    public static boolean isNil(UUID uuid) {
+        return NIL_UUID.equals(uuid);
+    }
 
     public static float getDistanceBetweenAngles(float angle1, float angle2) {
         angle1 = normalizeAngle(angle1);

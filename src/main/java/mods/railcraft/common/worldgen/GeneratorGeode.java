@@ -50,7 +50,7 @@ public class GeneratorGeode extends Generator {
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {
-        Chunk chunk = world.getChunkFromBlockCoords(pos);
+        Chunk chunk = world.getChunk(pos);
         int y = chunk.getTopFilledSegment() + 15;
 
         int trimmedX = pos.getX() & 15;

@@ -88,7 +88,7 @@ configurations {
 
 dependencies {
     // Railcraft API
-    api project(':api:railcraft')
+    api project('api:railcraft')
     // forestry
     api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     // IC2
@@ -131,6 +131,10 @@ runClient {
         args "--password=${project.mcPassword}"
     }
     outputs.upToDateWhen { false }
+}
+
+compileJava {
+    options.compilerArgs += '-proc:none'
 }
 
 jar {

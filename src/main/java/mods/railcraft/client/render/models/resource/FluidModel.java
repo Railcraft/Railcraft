@@ -86,10 +86,10 @@ public final class FluidModel implements IModel {
 //
 //        @Override
 //        public boolean accepts(ResourceLocation modelLocation) {
-//            return modelLocation.getResourceDomain().equals("railcraft") && (
-//                    modelLocation.getResourcePath().equals("fluid") ||
-//                            modelLocation.getResourcePath().equals("models/block/fluid") ||
-//                            modelLocation.getResourcePath().equals("models/item/fluid"));
+//            return modelLocation.getNamespace().equals("railcraft") && (
+//                    modelLocation.getPath().equals("fluid") ||
+//                            modelLocation.getPath().equals("models/block/fluid") ||
+//                            modelLocation.getPath().equals("models/item/fluid"));
 //        }
 //
 //        @Override
@@ -212,7 +212,7 @@ public final class FluidModel implements IModel {
                 scale = 16;
             }
             for (int i = 0; i < 4; i++) {
-                side = EnumFacing.getHorizontal((5 - i) % 4);
+                side = EnumFacing.byHorizontalIndex((5 - i) % 4);
                 builder = new UnpackedBakedQuad.Builder(format);
                 builder.setQuadOrientation(side);
                 builder.setTexture(sideSprite);
@@ -292,7 +292,7 @@ public final class FluidModel implements IModel {
                             break;
                         }
                     case NORMAL:
-                        builder.put(e, (float) side.getFrontOffsetX(), (float) side.getFrontOffsetY(), (float) side.getFrontOffsetZ(), 0f);
+                        builder.put(e, (float) side.getXOffset(), (float) side.getYOffset(), (float) side.getZOffset(), 0f);
                         break;
                     default:
                         builder.put(e);

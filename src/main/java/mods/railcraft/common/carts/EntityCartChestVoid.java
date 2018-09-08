@@ -66,7 +66,7 @@ public class EntityCartChestVoid extends CartBaseContainer {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
+        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot).isEmpty() || !FluidItemHelper.isContainer(stack);
     }
 
     @Override

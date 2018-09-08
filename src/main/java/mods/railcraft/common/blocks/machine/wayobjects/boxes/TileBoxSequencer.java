@@ -157,7 +157,7 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     @Override
     public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
-        sideOutput = EnumFacing.getFront(data.getByte("sideOutput"));
+        sideOutput = EnumFacing.byIndex(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
         neighborState = data.getBoolean("neighborState");
     }
@@ -171,7 +171,7 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     @Override
     public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        sideOutput = EnumFacing.getFront(data.readByte());
+        sideOutput = EnumFacing.byIndex(data.readByte());
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

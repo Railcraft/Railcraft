@@ -12,15 +12,16 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.multi.TileBlastFurnace;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiBlastFurnace extends TileGui {
 
     private final TileBlastFurnace tile;
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
-        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png");
+        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png",
+                LocalizationPlugin.translateFast("gui.railcraft.coke.oven"));
         this.tile = tile;
     }
 
@@ -31,7 +32,7 @@ public class GuiBlastFurnace extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 
     /**

@@ -156,7 +156,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     }
 
     private void checkPower() {
-        EnumFacing front = ((BlockDetector) tile.getBlockType()).getFront(theWorld(), tile.getPos());
+        EnumFacing front = ((BlockDetector) tile.getBlockType()).byIndex(theWorld(), tile.getPos());
         for (EnumFacing side : EnumFacing.VALUES) {
             if (side == front) continue;
             if (PowerPlugin.isBlockBeingPowered(theWorld(), getTile().getPos(), side)) {

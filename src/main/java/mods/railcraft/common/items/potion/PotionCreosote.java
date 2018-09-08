@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * The creosote potion.
  */
 final class PotionCreosote extends PotionRailcraft {
-    public PotionCreosote() {
+    PotionCreosote() {
         super(false, 0xcca300);
         setIconIndex(0, 0);
     }

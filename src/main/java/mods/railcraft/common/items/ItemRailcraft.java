@@ -80,12 +80,12 @@ public class ItemRailcraft extends Item implements IRailcraftItemSimple {
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey();
     }
 }

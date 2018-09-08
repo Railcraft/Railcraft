@@ -64,7 +64,7 @@ public final class LocalizationPlugin {
         EntityEntry entry = EntityRegistry.getEntry(entity.getClass());
         String s = "generic";
         if (entry != null) {
-            String domain = requireNonNull(entry.getRegistryName()).getResourceDomain();
+            String domain = requireNonNull(entry.getRegistryName()).getNamespace();
             if (domain.equals("minecraft")) {
                 s = entry.getName();
             } else {

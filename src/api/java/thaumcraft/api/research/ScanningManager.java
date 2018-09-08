@@ -121,7 +121,7 @@ public class ScanningManager {
     {
         Vec3d vec3d = player.getPositionEyes(0);
         Vec3d vec3d1 = player.getLook(0);
-        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * 4, vec3d1.y * 4, vec3d1.z * 4);
+        Vec3d vec3d2 = vec3d.add(vec3d1.x * 4, vec3d1.y * 4, vec3d1.z * 4);
         return player.world.rayTraceBlocks(vec3d, vec3d2, true, false, true);
     }
 }

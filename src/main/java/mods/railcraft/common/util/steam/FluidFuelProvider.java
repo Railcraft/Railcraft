@@ -37,11 +37,9 @@ public class FluidFuelProvider implements IFuelProvider {
         if (fuel == null)
             return 0;
 
-        double heatValue = FluidFuelManager.getFuelValue(fuel.getFluid());
+        double heatValue = FluidFuelManager.getFuelValueForSize(fuel);
         if (heatValue > 0) {
             fuelTank.drain(FluidTools.BUCKET_VOLUME, true);
-            if (fuel.amount < FluidTools.BUCKET_VOLUME)
-                heatValue *= (double) fuel.amount / (double) FluidTools.BUCKET_VOLUME;
         }
         return heatValue;
     }

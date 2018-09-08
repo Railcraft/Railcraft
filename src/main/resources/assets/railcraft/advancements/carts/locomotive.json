@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:locomotive_steam_solid"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.locomotive.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.locomotive.desc"
+    },
+    "hidden": true
+  },
+  "parent": "railcraft:carts/link_carts",
+  "criteria": {
+    "place": {
+      "trigger": "minecraft:impossible",
+      "conditions": {
+        "_comment": "Still a work in progress"
+      }
+    }
+  }
+}

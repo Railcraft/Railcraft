@@ -26,7 +26,6 @@ public class ModuleTracksHighSpeedElectric extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC
-//                        RailcraftBlocks.TRACK_JUNCTION_HS_ELECTRIC
                 );
             }
         });

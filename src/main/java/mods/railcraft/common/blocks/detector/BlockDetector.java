@@ -186,7 +186,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FRONT, EnumFacing.getFront(meta));
+        return getDefaultState().withProperty(FRONT, EnumFacing.byIndex(meta));
     }
 
     /**
@@ -231,7 +231,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
@@ -309,14 +309,14 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     public boolean rotateBlock(World world, @NotNull BlockPos pos, EnumFacing axis) {
-        if (getFront(world, pos) == axis)
+        if (byIndex(world, pos) == axis)
             setFront(world, pos, axis.getOpposite());
         else
             setFront(world, pos, axis);
         return true;
     }
 
-    public EnumFacing getFront(World world, BlockPos pos) {
+    public EnumFacing byIndex(World world, BlockPos pos) {
         return WorldPlugin.getBlockState(world, pos).getValue(FRONT);
     }
 

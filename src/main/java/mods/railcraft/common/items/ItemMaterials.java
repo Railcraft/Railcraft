@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemMaterials {
+public final class ItemMaterials {
 
     enum Tool {
         CROWBAR,

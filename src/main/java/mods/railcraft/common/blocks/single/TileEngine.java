@@ -214,7 +214,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
     public boolean switchOrientation() {
         for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
-            EnumFacing dir = EnumFacing.getFront(i % 6);
+            EnumFacing dir = EnumFacing.byIndex(i % 6);
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
@@ -347,7 +347,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = EnumFacing.getFront(data.getByte("direction"));
+        direction = EnumFacing.byIndex(data.getByte("direction"));
         powered = data.getBoolean("powered");
         if (data.hasKey("energy"))
             CapabilityEnergy.ENERGY.readNBT(storage, direction, data.getTag("energy"));
@@ -368,7 +368,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getFront(data.readByte());
+        direction = EnumFacing.byIndex(data.readByte());
         energyStage = EnergyStage.fromOrdinal(data.readByte());
         isActive = data.readBoolean();
     }

@@ -100,7 +100,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             int filled = tank.fill(resource, doFill);
             if (filled > 0)
                 return filled;
@@ -118,7 +118,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             FluidStack fluidStack = tank.drain(resource, doDrain);
             if (fluidStack != null)
                 return fluidStack;
@@ -129,7 +129,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             FluidStack fluidStack = tank.drain(maxDrain, doDrain);
             if (fluidStack != null)
                 return fluidStack;

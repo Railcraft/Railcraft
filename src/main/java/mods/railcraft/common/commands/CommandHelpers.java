@@ -74,7 +74,15 @@ public class CommandHelpers {
         sender.sendMessage(new TextComponentString(message));
     }
 
-    public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
+    /**
+     * Throws a wrong usage exception.
+     *
+     * @param sender The command sender
+     * @param command The command that throws the exception
+     * @return So Java knows this method will throw and does not shout "uninitialized var"
+     * @throws WrongUsageException The exception to ask user to look up help
+     */
+    public static WrongUsageException throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
         throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getUsage(sender))));
     }
 

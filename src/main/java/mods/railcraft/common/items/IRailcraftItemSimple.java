@@ -30,7 +30,7 @@ public interface IRailcraftItemSimple extends IRailcraftItem {
         if (variants != null) {
             for (int i = 0, variantsLength = variants.length; i < variantsLength; i++) {
                 IVariantEnum variant = variants[i];
-                ModelManager.registerItemModel(getObject(), i, getResourcePath() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix());
+                ModelManager.registerItemModel(getObject(), i, getPath() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix());
             }
         } else {
             ModelManager.registerItemModel(getObject(), 0);

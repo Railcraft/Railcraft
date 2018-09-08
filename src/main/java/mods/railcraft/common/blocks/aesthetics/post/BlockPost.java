@@ -35,40 +35,17 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
 
-    enum Texture {
-        WHITE,
-        ORANGE,
-        MAGENTA,
-        LIGHT_BLUE,
-        YELLOW,
-        LIME,
-        PINK,
-        GRAY,
-        SILVER,
-        CYAN,
-        PURPLE,
-        BLUE,
-        BROWN,
-        GREEN,
-        RED,
-        BLACK,
-        WOOD,
-        STONE,
-        RUSTY,
-    }
-
     public BlockPost() {
-        setUnlocalizedName("railcraft.post");
+        setTranslationKey("railcraft.post");
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
 
@@ -90,7 +67,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
     @Override
     public void initializeDefinition() {
-        GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
+        RailcraftRegistry.register(TilePostEmblem.class, "post_emblem");
 
         for (EnumPost post : EnumPost.VALUES) {
             ItemStack stack = post.getStack();

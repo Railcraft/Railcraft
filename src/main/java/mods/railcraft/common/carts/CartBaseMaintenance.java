@@ -26,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 /**
@@ -118,7 +117,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
         List<ItemStack> drops = block.getDrops(world, pos, state, 0);
 
         for (ItemStack stack : drops) {
-            CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
+            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
         }
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
         getEntityWorld().setBlockToAir(pos);

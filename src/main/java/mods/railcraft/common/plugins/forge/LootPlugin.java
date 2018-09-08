@@ -75,11 +75,11 @@ public final class LootPlugin {
 
     @SubscribeEvent
     public void lootLoad(LootTableLoadEvent event) {
-        if (!"minecraft".equals(event.getName().getResourceDomain())) {
+        if (!"minecraft".equals(event.getName().getNamespace())) {
             return;
         }
 
-        ResourceLocation resourceLocation = RailcraftConstantsAPI.locationOf(event.getName().getResourcePath());
+        ResourceLocation resourceLocation = RailcraftConstantsAPI.locationOf(event.getName().getPath());
         LootTable lootTable = LootTableLoader.loadBuiltinLootTable(resourceLocation, event.getLootTableManager());
         if (lootTable != null) {
             for (String poolName : poolNames) {
@@ -160,7 +160,7 @@ public final class LootPlugin {
 
         @Nullable
         public static LootTable loadBuiltinLootTable(ResourceLocation resource, LootTableManager manager) {
-            URL url = LootTableLoader.class.getResource("/assets/" + resource.getResourceDomain() + "/loot_tables/" + resource.getResourcePath() + ".json");
+            URL url = LootTableLoader.class.getResource("/assets/" + resource.getNamespace() + "/loot_tables/" + resource.getPath() + ".json");
 
             if (url != null) {
                 String s;

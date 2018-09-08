@@ -9,7 +9,11 @@
     ],
     "inventory": [
       {
-        "transform": "forge:default-block"
+        "transform": "forge:default-block",
+        "model": "railcraft:steam_oven",
+        "textures": {
+          "face": "railcraft:blocks/steam_oven_6"
+        }
       }
     ],
     "facing": {

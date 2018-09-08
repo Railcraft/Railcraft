@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.PotionPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -19,13 +20,14 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -58,8 +60,10 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
     @Override
     public final void explode(float blastRadius) {
         super.explode(blastRadius);
-        if (Game.isHost(world))
+        if (Game.isHost(world)) {
             spawnSurprises();
+            RailcraftAdvancementTriggers.getInstance().onSurpriseExplode((EntityPlayerMP) CartTools.getCartOwnerEntity(this), this);
+        }
     }
 
     protected void spawnSurprises() {

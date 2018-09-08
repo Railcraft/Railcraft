@@ -197,11 +197,6 @@ public final class Railcraft {
         commandManager.registerCommand(ROOT_COMMAND);
     }
 
-    @Mod.EventHandler
-    public void serverCleanUp(FMLServerStoppingEvent event) {
-        LinkageManager.reset();
-    }
-
 //    @Mod.EventHandler
 //    public void missingMapping(FMLModIdMappingEvent event) {
 //        Remapper.handle(event);

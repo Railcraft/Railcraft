@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.models.programmatic.ModelSimple;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveElectric;
 import mods.railcraft.client.render.tools.OpenGL;

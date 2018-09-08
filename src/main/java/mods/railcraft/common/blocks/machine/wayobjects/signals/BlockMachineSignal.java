@@ -82,7 +82,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     }
 
 //    @Override
-//    public BlockRenderLayer getBlockLayer() {
+//    public BlockRenderLayer getRenderLayer() {
 //        return BlockRenderLayer.CUTOUT_MIPPED;
 //    }
 

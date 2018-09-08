@@ -86,7 +86,7 @@ public class TileDispenserTrain extends TileDispenserCart {
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
-                    CartToolsAPI.getLinkageManager(world).createLink(cartPlaced, lastCart);
+                    CartToolsAPI.getLinkageManager().createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())

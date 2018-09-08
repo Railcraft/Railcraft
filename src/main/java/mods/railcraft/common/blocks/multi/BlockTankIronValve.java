@@ -49,8 +49,8 @@ public class BlockTankIronValve extends BlockTankIron {
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileTankIronValve();
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
+        return new TileTankIronValve<>();
     }
 
     @Override

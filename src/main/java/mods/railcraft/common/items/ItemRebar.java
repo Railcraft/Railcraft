@@ -21,7 +21,7 @@ public class ItemRebar extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(this, 4),
+        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",

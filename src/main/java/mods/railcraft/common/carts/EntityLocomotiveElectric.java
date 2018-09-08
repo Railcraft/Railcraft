@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CartBattery;

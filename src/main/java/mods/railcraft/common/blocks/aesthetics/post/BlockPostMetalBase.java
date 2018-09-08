@@ -200,4 +200,9 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     public int getMetaFromState(IBlockState state) {
         return getColor(state).ordinal();
     }
+
+    @Override
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
+    }
 }

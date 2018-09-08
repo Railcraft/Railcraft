@@ -11,9 +11,15 @@ package mods.railcraft.common.blocks.multi;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankSteelWall extends TileTankIronWall {
+public final class TileTankSteelWall<M extends TileTankBase<M, M>> extends TileTankIronWall<TileTankSteelWall<M>, M> {
 
     public static final MetalTank STEEL_TANK = new SteelTank();
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Class<TileTankSteelWall<M>> defineSelfClass() {
+        return (Class<TileTankSteelWall<M>>) (Class<?>) TileTankSteelWall.class;
+    }
 
     @Override
     public MetalTank getTankType() {

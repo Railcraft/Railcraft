@@ -88,7 +88,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.wall." + mat.getLocalizationSuffix();
     }
 

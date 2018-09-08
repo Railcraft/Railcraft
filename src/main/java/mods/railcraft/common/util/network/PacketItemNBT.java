@@ -144,7 +144,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
             IEditableItem eItem = (IEditableItem) readStack.getItem();
 
             if (!eItem.canPlayerEdit(player, targetStack)) {
-                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getUnlocalizedName());
+                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getTranslationKey());
                 return;
             }
 

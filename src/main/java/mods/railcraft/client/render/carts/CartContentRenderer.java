@@ -10,7 +10,6 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.models.programmatic.ModelTextured;
-import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

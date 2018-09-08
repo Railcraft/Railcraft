@@ -108,7 +108,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
 
     //TODO: test, can we draw this?
     public List<EntityLivingBase> getEntitiesInSteamArea() {
-        Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).addVector(0.5D, 0.5D, 0.5D);
+        Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).add(0.5D, 0.5D, 0.5D);
         AxisAlignedBB area = AABBFactory.start().box().expandToCoordinate(jetVector).offset(getPos()).build();
         return world.getEntitiesWithinAABB(EntityLivingBase.class, area);
     }
@@ -166,7 +166,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        direction = EnumFacing.getFront(data.getByte("direction"));
+        direction = EnumFacing.byIndex(data.getByte("direction"));
         powered = data.getBoolean("powered");
         tankManager.readTanksFromNBT(data);
     }
@@ -182,7 +182,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
-        direction = EnumFacing.getFront(data.readByte());
+        direction = EnumFacing.byIndex(data.readByte());
         markBlockForUpdate();
     }
 

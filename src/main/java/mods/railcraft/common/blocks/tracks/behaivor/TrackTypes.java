@@ -132,8 +132,8 @@ public enum TrackTypes {
         }
 
         @Override
-        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-            collisionHandler.onEntityCollidedWithBlock(world, pos, state, entity);
+        public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+            collisionHandler.onEntityCollision(world, pos, state, entity);
         }
 
         @Nullable

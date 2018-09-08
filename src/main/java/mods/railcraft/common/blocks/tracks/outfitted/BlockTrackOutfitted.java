@@ -288,13 +288,13 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         if (Game.isClient(world))
             return;
 
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
-            ((TileTrackOutfitted) tile).getTrackType().getEventHandler().onEntityCollidedWithBlock(world, pos, state, entity);
+            ((TileTrackOutfitted) tile).getTrackType().getEventHandler().onEntityCollision(world, pos, state, entity);
         }
     }
 

@@ -26,6 +26,6 @@ public class BoilerFuelTank extends StandardTank {
 
     @Override
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
-        return fluidStack != null && !Fluids.WATER.is(fluidStack) && FluidFuelManager.getFuelValue(fluidStack.getFluid()) > 0 && super.matchesFilter(fluidStack);
+        return fluidStack != null && !Fluids.WATER.is(fluidStack) && FluidFuelManager.getFuelValue(fluidStack) > 0 && super.matchesFilter(fluidStack);
     }
 }

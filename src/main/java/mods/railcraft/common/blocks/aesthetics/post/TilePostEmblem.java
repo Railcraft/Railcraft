@@ -98,7 +98,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         emblem = data.getString("emblem");
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
 
         if (data.hasKey("color"))
             color = EnumColor.fromOrdinal(data.getByte("color"));
@@ -117,7 +117,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
         super.readPacketData(data);
 
         boolean needsUpdate = false;
-        EnumFacing f = EnumFacing.getFront(data.readByte());
+        EnumFacing f = EnumFacing.byIndex(data.readByte());
         if (facing != f) {
             facing = f;
             needsUpdate = true;

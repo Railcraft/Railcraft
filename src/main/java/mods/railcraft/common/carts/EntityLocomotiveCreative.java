@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
@@ -131,5 +131,10 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_CREATIVE;
+    }
+
+    @Override
+    public ItemStack[] getItemsDropped(EntityMinecart cart) {
+        return new ItemStack[0]; // Prevent survival players from getting admin tools
     }
 }

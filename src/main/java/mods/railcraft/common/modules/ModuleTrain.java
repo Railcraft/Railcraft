@@ -10,13 +10,19 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.api.events.CartLinkEvent;
 import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -28,10 +34,23 @@ public class ModuleTrain extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                MinecraftForge.EVENT_BUS.register(new Object() {
+                    @SubscribeEvent(priority = EventPriority.HIGHEST)
+                    public void onLinking(CartLinkEvent.Link event) {
+                        EntityMinecart cart = event.getCartOne();
+                        Train train = Train.getLongestTrain(cart, event.getCartTwo());
+                        train.rebuild(cart);
+                    }
+
+                    @SubscribeEvent(priority = EventPriority.HIGHEST)
+                    public void onUnlinking(CartLinkEvent.Unlink event) {
+                        Train.deleteTrain(event.getCartOne());
+                        Train.deleteTrain(event.getCartTwo());
+                    }
+                });
                 add(
                         RailcraftBlocks.MANIPULATOR,
                         TrackKits.COUPLER
-//                        RailcraftBlocks.track
                 );
             }
 

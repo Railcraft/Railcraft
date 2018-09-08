@@ -142,7 +142,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -223,7 +223,7 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         entityIn.fallDistance = 0;
         if (Game.isClient(worldIn) || !(entityIn instanceof EntityMinecart))
             return;

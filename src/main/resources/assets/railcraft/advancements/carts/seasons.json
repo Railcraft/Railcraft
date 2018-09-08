@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:tool_crowbar_seasons"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.seasons.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.seasons.desc"
+    },
+    "frame": "goal",
+    "hidden": true
+  },
+  "parent": "railcraft:carts/surprise",
+  "criteria": {
+    "set_season": {
+      "trigger": "railcraft:set_season",
+      "conditions": {
+      }
+    }
+  }
+}

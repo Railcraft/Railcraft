@@ -81,7 +81,7 @@ public class BlockWorldLogic extends BlockRailcraft {
                 return;
 
             int airCount = 0;
-            for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
+            for (EnumFacing side : EnumFacing.HORIZONTALS) {
                 boolean isAir = world.isAirBlock(belowSurface.offset(side));
                 if (isAir)
                     airCount++;

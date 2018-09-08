@@ -35,7 +35,7 @@ public class CrushedObsidian extends SimpleCube {
             return true;
 
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        return state == Blocks.FIRE || state.getMaterial().isLiquid();
+        return state.getBlock() == Blocks.FIRE || state.getMaterial().isLiquid();
 
     }
 

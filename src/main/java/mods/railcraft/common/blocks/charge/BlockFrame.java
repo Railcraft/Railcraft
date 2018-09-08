@@ -71,7 +71,7 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.IRailcraftObject;
@@ -270,7 +270,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                     ItemCart itemCart = (ItemCart) item;
                     railcraftObject = Optional.of(itemCart);
                     itemCart.setRegistryName(getRegistryName());
-                    itemCart.setUnlocalizedName("railcraft.entity." + getBaseTag().replace("_", "."));
+                    itemCart.setTranslationKey("railcraft.entity." + getBaseTag().replace("_", "."));
                     itemCart.setRarity(rarity);
                     RailcraftRegistry.register(itemCart);
 

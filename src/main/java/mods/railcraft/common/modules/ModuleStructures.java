@@ -10,14 +10,12 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -25,12 +23,10 @@ import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 @RailcraftModule(value = "railcraft:structures", description = "glass, posts, stairs, slabs, lanterns, walls")
 public class ModuleStructures extends RailcraftModulePayload {
@@ -111,13 +107,13 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotIron");
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
@@ -130,37 +126,37 @@ public class ModuleStructures extends RailcraftModulePayload {
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotSteel");
 
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotSteel");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(12);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotBronze");
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotBronze");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(20);
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotRefinedIron");
-                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",

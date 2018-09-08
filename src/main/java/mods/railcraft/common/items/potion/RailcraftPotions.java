@@ -2,6 +2,7 @@ package mods.railcraft.common.items.potion;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ public final class RailcraftPotions {
 
         PotionContainer(String name, Supplier<PotionRailcraft> supplier) {
             this.name = name;
-            this.def = new Definition(this, "potion." + name, null);
+            this.def = new Definition(this, name, null);
             this.supplier = supplier;
         }
 
@@ -34,7 +35,7 @@ public final class RailcraftPotions {
         @Override
         public void register() {
             this.potion = checkNotNull(supplier.get());
-            this.potion.setPotionName(getBaseTag());
+            this.potion.setPotionName("potion." + Railcraft.MOD_ID + '.' + getBaseTag());
             this.potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
             this.potion.initializeDefinition();
             ForgeRegistries.POTIONS.register(this.potion);

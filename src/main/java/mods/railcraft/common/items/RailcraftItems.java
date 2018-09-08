@@ -209,7 +209,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             else
                 item = newItem;
             item.setRegistryName(getBaseTag());
-            item.setUnlocalizedName(LocalizationPlugin.convertTag(getFullTag()));
+            item.setTranslationKey(LocalizationPlugin.convertTag(getFullTag()));
             RailcraftRegistry.register(item);
             IRailcraftItemSimple railcraftItem;
             if (newItem instanceof IRailcraftItemSimple)

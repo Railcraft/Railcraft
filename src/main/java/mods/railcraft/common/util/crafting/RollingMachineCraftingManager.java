@@ -79,7 +79,7 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
     }
 
     public static void copyRecipesToWorkbench() {
-        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().stream().map(recipe -> new BaseRecipe(CraftingPlugin.getGenerator().next().getResourcePath()) {
+        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().stream().map(recipe -> new BaseRecipe(CraftingPlugin.getGenerator().next().getPath()) {
             @Override
             public boolean matches(InventoryCrafting inv, World worldIn) {
                 return recipe.test(inv);
@@ -210,6 +210,8 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
         @Override
         public ShapedRecipeBuilder grid(Ingredient[][] ingredients) {
             this.ingredients = Arrays.asList(ArrayTools.flatten(ingredients));
+            this.width = ingredients[0].length;
+            this.height = ingredients.length;
             return this;
         }
 

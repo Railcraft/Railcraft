@@ -85,6 +85,7 @@ public final class FluidItemHelper {
     }
 
     @Nullable
+    @Deprecated // Use fluidstack version
     public static Fluid getFluidInContainer(ItemStack stack) {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }

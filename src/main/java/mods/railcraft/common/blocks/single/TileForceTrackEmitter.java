@@ -389,7 +389,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
         state = State.valueOf(data.getString("state"));
         color = data.getInteger("color");

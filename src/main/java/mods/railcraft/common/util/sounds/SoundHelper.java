@@ -139,11 +139,11 @@ public final class SoundHelper {
     }
 
     public static boolean matchesSoundResource(ResourceLocation resource, String type) {
-        return resource.getResourceDomain().startsWith("railcraft") && resource.getResourcePath().startsWith(type);
+        return resource.getNamespace().startsWith("railcraft") && resource.getPath().startsWith(type);
     }
 
     public static SoundEvent matchSoundEvent(ResourceLocation resource, SoundType soundType) {
-        String soundPath = resource.getResourcePath();
+        String soundPath = resource.getPath();
         String typeString = soundPath.substring(soundPath.lastIndexOf(".") + 1);
         switch (typeString) {
             case "break":

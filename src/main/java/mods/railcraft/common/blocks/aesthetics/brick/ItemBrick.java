@@ -21,8 +21,8 @@ public class ItemBrick extends ItemBlockRailcraftSubtyped {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + BrickVariant.fromOrdinal(stack.getItemDamage());
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + BrickVariant.fromOrdinal(stack.getItemDamage());
     }
 
 }

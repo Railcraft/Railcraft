@@ -16,7 +16,7 @@ public abstract class FocusNode implements IFocusElement {
 		initialize();
 	}
 	
-	public String getUnlocalizedName() {
+	public String getTranslationKey() {
 		return getKey()+".name";
 	}
 

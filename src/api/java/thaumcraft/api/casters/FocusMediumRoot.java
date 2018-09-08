@@ -91,7 +91,7 @@ public class FocusMediumRoot extends FocusMedium {
 	
 	private Vec3d generateSourceVector(EntityLivingBase e) {
 		Vec3d v = e.getPositionVector();		
-		v = v.addVector(0, e.getEyeHeight() - 0.10000000149011612D, 0);		
+		v = v.add(0, e.getEyeHeight() - 0.10000000149011612D, 0);
 		return v;
 	}
 

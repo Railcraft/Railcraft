@@ -27,7 +27,7 @@ public class ItemBlockMetal extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         return EnumMetal.fromOrdinal(stack.getItemDamage()).getTag();
     }
 }

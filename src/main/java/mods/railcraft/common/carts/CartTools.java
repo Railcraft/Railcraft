@@ -126,7 +126,7 @@ public final class CartTools {
         cart.motionZ = 0;
         if (Game.isClient(cart.world))
             return;
-        removePassengers(cart, cart.getPositionVector().addVector(0.0, 1.5, 0.0));
+        removePassengers(cart, cart.getPositionVector().add(0.0, 1.5, 0.0));
         cart.world.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();

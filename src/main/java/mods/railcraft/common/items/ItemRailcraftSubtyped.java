@@ -60,12 +60,12 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         int damage = stack.getItemDamage();
         IVariantEnum[] variants = getVariants();
         if (variants == null || damage < 0 || damage >= variants.length)
-            return getUnlocalizedName();
-        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
+            return getTranslationKey();
+        String tag = getTranslationKey() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);
     }
 

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

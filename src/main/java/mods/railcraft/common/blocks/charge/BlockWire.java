@@ -101,7 +101,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.rollingMachine.addRecipe(
+        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(
                 getStack(8, null),
                 "LPL",
                 "PCP",
@@ -230,7 +230,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

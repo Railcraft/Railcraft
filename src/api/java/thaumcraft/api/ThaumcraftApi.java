@@ -469,11 +469,11 @@ public class ThaumcraftApi {
 	 * @param seed
 	 */
 	public static void registerSeed(Block block, ItemStack seed) {
-		CommonInternals.seedList.put(block.getUnlocalizedName(), seed);
+		CommonInternals.seedList.put(block.getTranslationKey(), seed);
 	}
 
 	public static ItemStack getSeed(Block block) {
-		return CommonInternals.seedList.get(block.getUnlocalizedName());
+		return CommonInternals.seedList.get(block.getTranslationKey());
 	}
 		
 		

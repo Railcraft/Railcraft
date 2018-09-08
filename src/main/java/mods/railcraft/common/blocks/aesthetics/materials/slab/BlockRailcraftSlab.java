@@ -131,7 +131,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.slab." + mat.getLocalizationSuffix();
     }
 

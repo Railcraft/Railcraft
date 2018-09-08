@@ -82,7 +82,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     @Override
     public String getName(ItemStack backpack) {
         Item item = backpack.getItem();
-        String name = ("" + I18n.translateToLocal(LocalizationPlugin.convertTag(item.getUnlocalizedName()) + ".name")).trim();
+        String name = ("" + I18n.translateToLocal(LocalizationPlugin.convertTag(item.getTranslationKey()) + ".name")).trim();
 
         if (backpack.getTagCompound() != null && backpack.getTagCompound().hasKey("display", 10)) {
             NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");

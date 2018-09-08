@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.blocks.charge.BlockChargeBattery;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemGear;
@@ -20,7 +20,6 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 /**
  * Created by CovertJaguar on 8/30/2016 for Railcraft.

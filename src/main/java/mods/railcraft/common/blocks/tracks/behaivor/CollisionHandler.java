@@ -26,11 +26,11 @@ public enum CollisionHandler {
     NULL,
     ELECTRIC {
         @Override
-        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
             ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.TRACK_ELECTRIC, 2F, 2000.0);
         }
     };
 
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
     }
 }

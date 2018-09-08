@@ -18,6 +18,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryFactory;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
@@ -95,6 +96,7 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, Predicate<ItemStack> filter) {
         ItemStack result = ItemStack.EMPTY;
         EntityMinecart upTo = null;
+        InventoryComposite targetInv = null;
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty()) {
@@ -102,10 +104,11 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
                 for (StackKey stackKey : items) {
                     ItemStack stack = stackKey.get();
                     if (canProvidePulledItem(requester, cart, stack)) {
-                        ItemStack removed = InvTools.removeOneItem(inv, stack);
-                        if (!InvTools.isEmpty(removed)) {
-                            result = removed;
+                        ItemStack toRemove = InvTools.findMatchingItem(inv, StackFilters.of(stack));
+                        if (!InvTools.isEmpty(toRemove)) {
+                            result = toRemove;
                             upTo = cart;
+                            targetInv = inv;
                             break;
                         }
                     }
@@ -126,7 +129,11 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
             }
         }
 
-        return result;
+        if (targetInv != null) {
+            return InvTools.removeOneItem(targetInv, result);
+        }
+
+        return ItemStack.EMPTY;
     }
 
     private boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
@@ -184,7 +191,10 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
     }
 
     @Override
-    public FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack) {
+    public FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack) {
+        if (fluidStack == null) {
+            return null;
+        }
         Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         FluidStack pulled = _pullFluid(requester, carts, fluidStack);
         if (pulled != null)

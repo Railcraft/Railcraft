@@ -243,7 +243,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        Vec3d start = es.getPosF().addVector(0.0, yOffset, 0.0);
+        Vec3d start = es.getPosF().add(0.0, yOffset, 0.0);
         world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.x, start.y, start.z, vx, vy, vz);
     }
 
@@ -255,7 +255,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        spawnParticle(new ParticleSteam(world, es.getPosF().addVector(0.0, yOffset, 0.0), new Vec3d(vx, vy, vz)));
+        spawnParticle(new ParticleSteam(world, es.getPosF().add(0.0, yOffset, 0.0), new Vec3d(vx, vy, vz)));
     }
 
     @Override
@@ -263,7 +263,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (thinParticles(true))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
-        vel = vel.addVector(rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02);
+        vel = vel.add(rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02);
         ParticleSteam fx = new ParticleSteam(world, es.getPosF(), vel, 1.5F);
         fx.setParticleGravity(0F);
         spawnParticle(fx);

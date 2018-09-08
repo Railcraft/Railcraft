@@ -203,7 +203,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @NotNull
     public String getLocalizationTag() {
-        return getBlockType().getUnlocalizedName() + ".name";
+        return getBlockType().getTranslationKey() + ".name";
     }
 
     public List<String> getDebugOutput() {

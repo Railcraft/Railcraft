@@ -100,7 +100,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.lantern." + mat.getLocalizationSuffix();
     }
 

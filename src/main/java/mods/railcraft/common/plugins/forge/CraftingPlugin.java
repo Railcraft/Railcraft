@@ -16,7 +16,10 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.util.crafting.*;
+import mods.railcraft.common.util.crafting.FluidIngredient;
+import mods.railcraft.common.util.crafting.InvalidRecipeException;
+import mods.railcraft.common.util.crafting.RemainingItemShapedRecipe;
+import mods.railcraft.common.util.crafting.RemainingItemShapelessRecipe;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
@@ -39,8 +42,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Contract;
@@ -69,11 +70,11 @@ public final class CraftingPlugin {
                 Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both null. Skipping");
                 return;
             }
-            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getUnlocalizedName());
+            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getTranslationKey());
             return;
         }
         if (isEmpty(output)) {
-            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getUnlocalizedName());
+            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getTranslationKey());
             return;
         }
 
@@ -257,11 +258,11 @@ public final class CraftingPlugin {
 
     private static final class MissingIngredientException extends InvalidRecipeException {
         MissingIngredientException(RecipeType recipeType, ItemStack result) {
-            super("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
+            super("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getTranslationKey());
         }
 
         MissingIngredientException(ItemStack result) {
-            super("Tried to define invalid recipe for {0}, a necessary item was probably disabled. Skipping", result.getUnlocalizedName());
+            super("Tried to define invalid recipe for {0}, a necessary item was probably disabled. Skipping", result.getTranslationKey());
         }
     }
 

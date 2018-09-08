@@ -96,8 +96,6 @@ public abstract class BlockPostBase extends BlockRailcraft {
             return BOUNDING_BOX;
     }
 
-
-
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
