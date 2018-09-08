@@ -9,23 +9,27 @@
     "description": {
       "translate": "advancements.railcraft.carts.root.desc"
     },
-    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "background": "railcraft:textures/blocks/stone_quarried.png",
     "show_toast": false,
     "announce_to_chat": false
   },
   "criteria": {
-    "touch_minecart": {
+    "get_cart": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:minecart"
-          },
+            "type": "railcraft:is_cart"
+          }
+        ]
+      }
+    },
+    "get_track": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
           {
-            "item": "minecraft:chest_minecart"
-          },
-          {
-            "item": "railcraft:locomotive_steam_solid"
+            "type": "railcraft:is_track"
           }
         ]
       }
@@ -39,7 +43,8 @@
   },
   "requirements": [
     [
-      "touch_minecart",
+      "get_cart",
+      "get_track",
       "step_on_track"
     ]
   ]

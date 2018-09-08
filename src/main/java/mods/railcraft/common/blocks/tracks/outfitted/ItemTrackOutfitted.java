@@ -36,6 +36,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * Note: the nbt for the item is as such:
+ * /give @s railcraft:track_outfitted 1 0 {railcraft:{rail:"railcraft_reinforced",kit:"railcraft_buffer"}
+ * Gives the sender a reinforced buffer stop track item.
+ *
+ * /give @s railcraft:track_outfitted 1 0 {railcraft:{rail:"railcraft:reinforced",kit:"railcraft:buffer"}
+ * This can be recognized too, but this one cannot stack with those from the creative tab (should be avoided).
+ */
 public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     public static final String MODEL_PREFIX = "track_outfitted_item.";
 

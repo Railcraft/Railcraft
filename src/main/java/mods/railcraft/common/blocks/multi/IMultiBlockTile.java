@@ -1,5 +1,6 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +12,7 @@ import java.util.Collection;
  * @param <T> Common type
  * @param <M> Master type
  */
-public interface IMultiBlockTile<L extends IMultiBlockTile<L, ? extends L, M>, T extends IMultiBlockTile<L, T, M>, M extends IMultiBlockTile<L, M, M>> {
+public interface IMultiBlockTile<L extends IMultiBlockTile<L, ? extends L, M>, T extends IMultiBlockTile<L, T, M>, M extends IMultiBlockTile<L, M, M>> extends IOwnable {
 
     default TileEntity tile() {
         return (TileEntity) this;

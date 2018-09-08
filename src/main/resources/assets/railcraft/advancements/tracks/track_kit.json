@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:track_kit",
+      "nbt": "{railcraft:{kit:\"railcraft_buffer_stop\"}}"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.track_kit.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.track_kit.desc"
+    }
+  },
+  "parent": "railcraft:tracks/manual_rolling_machine",
+  "criteria": {
+    "build": {
+      "trigger": "railcraft:use_track_kit",
+      "conditions": {
+        "items": [
+          {
+            "item": "railcraft:track_kit"
+          }
+        ]
+      }
+    }
+  }
+}

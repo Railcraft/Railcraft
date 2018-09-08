@@ -1,0 +1,45 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:equipment",
+      "data": 0
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.manual_rolling_machine.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.manual_rolling_machine.desc"
+    }
+  },
+  "parent": "railcraft:tracks/coke_oven",
+  "criteria": {
+    "manual": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "railcraft:equipment",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "powered": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "railcraft:equipment",
+            "data": 1
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "manual",
+      "powered"
+    ]
+  ]
+}

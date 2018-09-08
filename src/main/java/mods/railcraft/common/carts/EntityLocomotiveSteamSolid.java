@@ -107,8 +107,9 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
                 FluidStack pulled = CartToolsAPI.transferHelper.pullFluid(this, Fluids.WATER.getB(1));
-                if (pulled != null)
+                if (pulled != null) {
                     tankWater.fill(pulled, true);
+                }
             }
         }
     }

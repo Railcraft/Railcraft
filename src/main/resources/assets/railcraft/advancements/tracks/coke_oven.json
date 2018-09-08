@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:coke_oven"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.coke_oven.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.coke_oven.desc"
+    }
+  },
+  "parent": "railcraft:tracks/root",
+  "criteria": {
+    "build": {
+      "trigger": "railcraft:multiblock_formed",
+      "conditions": {
+        "type": "railcraft:coke_oven"
+      }
+    }
+  }
+}

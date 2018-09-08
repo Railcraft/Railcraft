@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PotionPlugin {
+public final class PotionPlugin {
     private static final List<ItemStack> POTIONS = new ArrayList<>();
     private static final List<ItemStack> POTIONS_SPLASH = new ArrayList<>();
     private static final List<ItemStack> POTIONS_LINGERING = new ArrayList<>();
@@ -60,4 +60,6 @@ public class PotionPlugin {
             init();
         return Collections.unmodifiableList(POTIONS_LINGERING);
     }
+
+    private PotionPlugin() {}
 }

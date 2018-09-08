@@ -94,7 +94,7 @@ public class HighSpeedTools {
         return TrackTools.getTrackTypeAt(world, pos).isHighSpeed();
     }
 
-    public static float speedForNextTrack(World world, BlockPos pos, int dist, EntityMinecart cart) {
+    public static float speedForNextTrack(World world, BlockPos pos, int dist, @Nullable EntityMinecart cart) {
         float maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
             for (EnumFacing side : EnumFacing.HORIZONTALS) {

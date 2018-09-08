@@ -1,6 +1,7 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.MapMaker;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -48,6 +49,7 @@ public final class BedCartEventListener {
             cart.sleeping = new WeakReference<>(player);
             cart.rideAfterSleep = true;
             riderToBed.put(player, cart);
+            RailcraftAdvancementTriggers.getInstance().onPlayerSleepInCart(player, cart);
         }
     }
 

@@ -11,26 +11,26 @@ package mods.railcraft.client.util.textures;
 
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.Level;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.IOException;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TextureAtlasSheet extends TextureAtlasSprite {
+public final class TextureAtlasSheet extends TextureAtlasSprite {
 
     private final int index;
     private final int rows;
@@ -44,7 +44,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         int columns = textureDimensions.getFirst();
         int rows = textureDimensions.getSecond();
         if (columns <= 1 && rows <= 1)
-            return new ResourceLocation[]{new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
+            return new ResourceLocation[] {new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
 
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
@@ -75,27 +75,17 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         return true;
     }
 
-
-
     @Override
     public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> resourceGetter) {
         // Remove the index from the resource path so we can find the original texture.
-        location = new ResourceLocation(location.getNamespace(), location.getPath().replace("_" + index, ""));
+        ResourceLocation fullLocation = new ResourceLocation(location.getNamespace(), location.getPath().replace("_" + index, ""));
 
         BufferedImage image;
-        IResource resource = null;
-        try {
-            resource = manager.getResource(location);
+        try (IResource resource = manager.getResource(fullLocation)) {
             image = ImageIO.read(resource.getInputStream());
         } catch (IOException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0}: {1}", location.getPath(), ex.getLocalizedMessage());
+            Game.log(Level.WARN, "Failed to load sub-texture from {0}: {1}", fullLocation.getPath(), ex.getLocalizedMessage());
             return true;
-        } finally {
-            if (resource != null)
-                try {
-                    resource.getInputStream().close();
-                } catch (IOException ignored) {
-                }
         }
 
         int mipmapLevels = Minecraft.getMinecraft().gameSettings.mipmapLevels;
@@ -108,7 +98,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         try {
             subImage = image.getSubimage(x * size, y * size, size, size);
         } catch (RasterFormatException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", location.getPath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
+            Game.log(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", fullLocation.getPath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
             return true;
         }
         this.height = subImage.getHeight();
@@ -118,11 +108,31 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         int[][] imageData = new int[1 + mipmapLevels][];
         imageData[0] = rgbaData;
         framesTextureData.add(imageData);
+
+        // Hack to use sheet textures for advancement backgrounds
+        Game.log(Level.INFO, "registering custom textures {0}", location);
+        Minecraft.getMinecraft().getTextureManager().loadTexture(location, new SheetTexture(subImage));
+
         return false;
     }
 
     @Override
     public String toString() {
         return super.toString().replace("TextureAtlasSprite", "TextureAtlasSheet");
+    }
+
+    static final class SheetTexture extends AbstractTexture {
+
+        final BufferedImage image;
+
+        SheetTexture(BufferedImage image) {
+            this.image = image;
+        }
+
+        @Override
+        public void loadTexture(IResourceManager resourceManager) {
+            this.deleteGlTexture();
+            TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), image, false, false);
+        }
     }
 }

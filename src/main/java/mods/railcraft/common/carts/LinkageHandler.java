@@ -317,12 +317,12 @@ public final class LinkageHandler {
 //        savePosition(cart);
     }
 
-    private boolean isLaunched(EntityMinecart cart) {
+    public boolean isLaunched(EntityMinecart cart) {
         int launched = cart.getEntityData().getInteger("Launched");
         return launched > 0;
     }
 
-    private boolean isOnElevator(EntityMinecart cart) {
+    public boolean isOnElevator(EntityMinecart cart) {
         int elevator = cart.getEntityData().getByte("elevator");
         return elevator > 0;
     }

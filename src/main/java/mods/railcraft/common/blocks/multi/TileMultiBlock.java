@@ -13,6 +13,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.events.MultiBlockEvent.Form;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -34,6 +35,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.Contract;
@@ -197,6 +199,8 @@ public abstract class TileMultiBlock<L extends TileMultiBlock<L, ? extends L, M>
                     }
                 }
             }
+
+            MinecraftForge.EVENT_BUS.post(new Form(this));
         } else if (isMaster) {
             isMaster = false;
             onMasterReset();
