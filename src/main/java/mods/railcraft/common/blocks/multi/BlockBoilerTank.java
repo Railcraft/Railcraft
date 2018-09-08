@@ -5,20 +5,11 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-/**
- *
- */
 public abstract class BlockBoilerTank extends BlockMultiBlock {
 
     public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -40,21 +31,22 @@ public abstract class BlockBoilerTank extends BlockMultiBlock {
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileEntity t = worldIn.getTileEntity(pos);
-        state = state.withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(EAST, false).withProperty(WEST, false);
         if (!(t instanceof TileBoilerTank))
             return state;
-        TileBoilerTank tile = (TileBoilerTank) t;
-        MultiBlockPattern pattern = tile.getCurrentPattern();
+        MultiBlockPattern pattern = ((TileBoilerTank) t).getCurrentPattern();
         if (pattern == null)
             return state;
-        BlockPos patternPos = tile.getPatternPosition();
+        BlockPos patternPos = ((TileBoilerTank) t).getPatternPosition();
         if (patternPos == null)
             return state;
-        char marker = tile.getPatternMarker();
-        state = state.withProperty(NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker);
-        state = state.withProperty(SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker);
-        state = state.withProperty(EAST, pattern.getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker);
-        state = state.withProperty(WEST, pattern.getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
+        char marker = ((TileBoilerTank) t).getPatternMarker();
+        if (marker == 'O')
+            return state;
+        state = state
+                .withProperty(NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
+                .withProperty(SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
+                .withProperty(EAST, pattern.getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
+                .withProperty(WEST, pattern.getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
         return state;
     }
 
