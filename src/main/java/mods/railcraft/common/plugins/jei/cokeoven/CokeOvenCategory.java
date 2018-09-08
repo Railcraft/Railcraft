@@ -28,7 +28,7 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
     private static final ResourceLocation COKE_OVEN_BACKGROUND = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png");
 
     public CokeOvenCategory(IGuiHelper guiHelper) {
-        title = I18n.translateToLocal("railcraft.coke");
+        title = I18n.translateToLocal("gui.railcraft.jei.category.coke");
         background = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 15, 23, 124, 49);
         this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 196, 0, 48, 47);
 
@@ -71,7 +71,7 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
         guiItemStacks.init(INPUT_SLOTS, true, 0, 19);
-        guiItemStacks.init(OUTPUT_SLOTS, false, 46, 19);
+        guiItemStacks.init(OUTPUT_SLOTS, false, 45, 19);
         guiFluidStacks.init(OUTPUT_TANKS, false, 75, 1, 48, 47, 10_000, true, tankOverlay);
         guiItemStacks.set(INPUT_SLOTS, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         guiItemStacks.set(OUTPUT_SLOTS, ingredients.getOutputs(VanillaTypes.ITEM).get(0));

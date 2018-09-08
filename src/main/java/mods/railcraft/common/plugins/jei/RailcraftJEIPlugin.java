@@ -16,11 +16,13 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mods.railcraft.client.gui.GuiRockCrusher;
 import mods.railcraft.client.gui.GuiRollingMachine;
 import mods.railcraft.client.gui.GuiRollingMachinePowered;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
+import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import mods.railcraft.common.gui.containers.ContainerRollingMachinePowered;
 import mods.railcraft.common.items.RailcraftItems;
@@ -30,6 +32,8 @@ import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenRecipeMaker;
 import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
 import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeWrapper;
 import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeWrapper;
+import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineCategory;
+import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineRecipeMaker;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
 import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
@@ -63,6 +67,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
 
         registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
         registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROLLING);
+        registry.addRecipes(RockCrusherMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROCK_CRUSHER);
 
         registry.addRecipeCatalyst(RailcraftBlocks.STEAM_OVEN.getStack(), VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN.getStack(), COKE);
@@ -74,9 +79,11 @@ public class RailcraftJEIPlugin implements IModPlugin {
         IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
         transferRegistry.addRecipeTransferHandler(ContainerRollingMachine.class, ROLLING, 2, 9, 11, 36);
         transferRegistry.addRecipeTransferHandler(ContainerRollingMachinePowered.class, ROLLING, 2, 9, 11, 36);
+        transferRegistry.addRecipeTransferHandler(ContainerRockCrusher.class, ROCK_CRUSHER, 0, 9, 17, 36);
 
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
         registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 36, 23, 9, ROLLING);
+        registry.addRecipeClickArea(GuiRockCrusher.class, 73, 20, 30, 38, ROCK_CRUSHER);
 
         if (RailcraftItems.CROWBAR_SEASONS.isLoaded())
             jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(RailcraftItems.CROWBAR_SEASONS.getStack());
@@ -91,6 +98,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
 
         registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
         registry.addRecipeCategories(new CokeOvenCategory(guiHelper));
+        registry.addRecipeCategories(new RockCrusherMachineCategory(guiHelper));
     }
 
 //    @Override
