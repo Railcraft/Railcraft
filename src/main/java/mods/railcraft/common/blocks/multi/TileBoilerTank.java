@@ -54,7 +54,7 @@ public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends T
     @SuppressWarnings("unchecked")
     @Override
     protected Class<F> defineMasterClass() {
-        return (Class<F>) TileBoilerFirebox.class; // Idea glitched on this cast
+        return (Class<F>) (Class<?>) TileBoilerFirebox.class; // Idea glitched on this cast
     }
 
     @Override
