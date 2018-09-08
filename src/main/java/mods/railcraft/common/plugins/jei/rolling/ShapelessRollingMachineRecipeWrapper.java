@@ -4,15 +4,16 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IStackHelper;
 import mods.railcraft.common.util.crafting.ShapedRollingMachineRecipe;
+import mods.railcraft.common.util.crafting.ShapelessRollingMachineRecipe;
 
 /**
  *
  */
-public final class ShapedRollingMachineRecipeWrapper extends RollingMachineRecipeWrapper<ShapedRollingMachineRecipe> {
+public final class ShapelessRollingMachineRecipeWrapper extends RollingMachineRecipeWrapper<ShapelessRollingMachineRecipe> {
 
     private IStackHelper helper;
 
-    public ShapedRollingMachineRecipeWrapper(ShapedRollingMachineRecipe recipe, IStackHelper helper) {
+    public ShapelessRollingMachineRecipeWrapper(ShapelessRollingMachineRecipe recipe, IStackHelper helper) {
         super(recipe);
         this.helper = helper;
     }

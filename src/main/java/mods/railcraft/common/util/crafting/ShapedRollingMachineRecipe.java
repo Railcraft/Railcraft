@@ -69,6 +69,10 @@ public final class ShapedRollingMachineRecipe implements IRollingMachineRecipe {
         return true;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     @Override
     public ItemStack getSampleOutput() {
         return output;
