@@ -3,12 +3,12 @@ package mods.railcraft.common.plugins.jei.cokeoven;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
@@ -21,21 +21,19 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
 
     private final IDrawable background;
     private final IDrawable tankOverlay;
-    private final IDrawableAnimated progress;
-    private final ICraftingGridHelper craftingGridHelper;
+    private final IDrawable flame;
+    private final IDrawable arrow;
     private final String title;
 
     private static final ResourceLocation COKE_OVEN_BACKGROUND = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png");
 
     public CokeOvenCategory(IGuiHelper guiHelper) {
         title = I18n.translateToLocal("railcraft.coke");
-        background = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 29, 16, 116, 54);
-        this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 196, 0, 12, 47);
+        background = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 15, 23, 124, 49);
+        this.tankOverlay = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 196, 0, 48, 47);
 
-        IDrawableStatic progressStatic = guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 14, 20, 18);
-        progress = guiHelper.createAnimatedDrawable(progressStatic, 250, IDrawableAnimated.StartDirection.LEFT, false);
-
-        craftingGridHelper = guiHelper.createCraftingGridHelper(INPUT_SLOTS, OUTPUT_SLOTS);
+        this.flame = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 47, 14, 14),200, IDrawableAnimated.StartDirection.TOP, true);
+        this.arrow = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(COKE_OVEN_BACKGROUND, 176, 61, 22, 15),200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
     @Nonnull
@@ -63,7 +61,8 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
 
     @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
-        progress.draw(minecraft, 62, 18);
+        flame.draw(minecraft,2,4);
+        arrow.draw(minecraft, 20, 21);
     }
 
     @Override
@@ -71,11 +70,11 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
                           @Nonnull IIngredients ingredients) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-        guiItemStacks.init(INPUT_SLOTS, true, 18, 18);
-        guiItemStacks.init(OUTPUT_SLOTS, false, 94, 18);
-        guiFluidStacks.init(OUTPUT_TANKS, false, 94, 18, 12, 47, 10_000, true, tankOverlay);
-
-        craftingGridHelper.setInputs(guiItemStacks, ingredients.getInputs(ItemStack.class));
-        guiItemStacks.set(OUTPUT_SLOTS, ingredients.getOutputs(ItemStack.class).get(0));
+        guiItemStacks.init(INPUT_SLOTS, true, 0, 19);
+        guiItemStacks.init(OUTPUT_SLOTS, false, 46, 19);
+        guiFluidStacks.init(OUTPUT_TANKS, false, 75, 1, 48, 47, 10_000, true, tankOverlay);
+        guiItemStacks.set(INPUT_SLOTS, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        guiItemStacks.set(OUTPUT_SLOTS, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        guiFluidStacks.set(OUTPUT_TANKS, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 }
