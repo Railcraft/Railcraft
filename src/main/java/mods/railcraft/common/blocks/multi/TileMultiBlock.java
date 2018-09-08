@@ -113,6 +113,7 @@ public abstract class TileMultiBlock<L extends TileMultiBlock<L, ? extends L, M>
         return currentPattern.getPatternMarker(posInPattern.getX(), posInPattern.getY(), posInPattern.getZ());
     }
 
+    @Nullable
     public final BlockPos getPatternPosition() {
         return posInPattern;
     }
