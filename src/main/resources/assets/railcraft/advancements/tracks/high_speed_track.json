@@ -12,7 +12,7 @@
   },
   "parent": "railcraft:tracks/blast_furnace",
   "criteria": {
-    "wooden": {
+    "track": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -21,6 +21,13 @@
             "high_speed": true
           }
         ]
+      }
+    },
+    "ride": {
+      "trigger": "railcraft:cart_riding",
+      "conditions": {
+        "high_speed": true,
+        "check_owner": true
       }
     }
   }
