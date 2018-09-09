@@ -32,7 +32,7 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
         addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 21));
         addSlot(new SlotFurnaceOutput(player.player, tile, 3, 116, 53));
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }

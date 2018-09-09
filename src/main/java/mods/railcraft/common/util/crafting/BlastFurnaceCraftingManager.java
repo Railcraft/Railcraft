@@ -15,6 +15,7 @@ import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -44,6 +45,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
         fuel.add(new ItemStack(Items.COAL, 1, 1));
         fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());
         fuel.add(RailcraftItems.FIRESTONE_CRACKED.getWildcard());
+        fuel.add(OreDictPlugin.getOre("blockCharcoal", 1));
         for (ItemStack each : fuel) {
             fuels.add(createFuel(Ingredient.fromStacks(each), FuelPlugin.getBurnTime(each)));
         }
