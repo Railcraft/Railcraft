@@ -24,8 +24,10 @@ import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRecipeWrapper> {
 
@@ -37,10 +39,10 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
     private final IDrawable progress;
 
     public RockCrusherMachineCategory(IGuiHelper guiHelper) {
-        ResourceLocation location =  new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
-        background = guiHelper.createDrawable(location, 16, 20, width, height);
+        ResourceLocation location = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
+        background = guiHelper.createDrawable(location, 0, 166, width, height);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.crushing");
-        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 176, 0, 29, 38),500, IDrawableAnimated.StartDirection.TOP, false);
+        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 176, 0, 29, 38), 500, IDrawableAnimated.StartDirection.TOP, false);
 
     }
 
@@ -66,20 +68,24 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        progress.draw(minecraft,57,0);
+        progress.draw(minecraft, 57, 8);
     }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, RockCrusherRecipeWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 18, 18);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-
-
+        recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+            if (slotIndex == 0)
+                return;
+            if (recipeWrapper.getRecipe().getOutputs().size() >= slotIndex)
+                tooltip.addAll(recipeWrapper.getRecipe().getOutputs().get(slotIndex - 1).getGenRule().getToolTip().stream().map(ITextComponent::getFormattedText).collect(Collectors.toSet()));
+        });
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = 1 + x + (y * 3);
-                recipeLayout.getItemStacks().init(index, true, 90+x * 18, y * 18);
+                recipeLayout.getItemStacks().init(index, true, 90 + x * 18, y * 18);
                 if (outputs.size() > index - 1)
                     recipeLayout.getItemStacks().set(index, outputs.get(index - 1));
                 else
