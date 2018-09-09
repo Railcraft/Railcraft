@@ -33,4 +33,8 @@ public class RockCrusherRecipeWrapper implements IRecipeWrapper {
         }
         return lists;
     }
+
+    public ICrusherRecipe getRecipe() {
+        return recipe;
+    }
 }
