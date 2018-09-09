@@ -40,7 +40,7 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
         ResourceLocation location =  new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
         background = guiHelper.createDrawable(location, 16, 20, width, height);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.crushing");
-        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 176, 0, 29, 38),500, IDrawableAnimated.StartDirection.BOTTOM, false);
+        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 176, 0, 29, 38),500, IDrawableAnimated.StartDirection.TOP, false);
 
     }
 
