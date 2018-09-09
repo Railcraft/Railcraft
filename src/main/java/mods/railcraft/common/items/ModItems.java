@@ -27,7 +27,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
  */
 public enum ModItems implements IRailcraftRecipeIngredient {
 
-    SILK(Mod.FORESTRY, "crafting_material", 2),
+    SILK(Mod.FORESTRY, "crafting_material", 3),
     STURDY_CASING(Mod.FORESTRY, "sturdy_machine"),
     HONEY_DROP(Mod.FORESTRY, "honey_drop"),
     HONEYDEW_DROP(Mod.FORESTRY, "honeydew"),
