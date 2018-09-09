@@ -108,6 +108,10 @@ public class WorldPlugin {
         return blockClass.isInstance(getBlock(world, pos));
     }
 
+    public static boolean isMaterialAt(IBlockAccess world, BlockPos pos, Material material) {
+        return world.getBlockState(pos).getMaterial() == material;
+    }
+
     public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState) {
         return world.setBlockState(pos, blockState);
     }

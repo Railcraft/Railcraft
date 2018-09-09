@@ -3,7 +3,6 @@ package mods.railcraft.common.advancements.criterion;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,6 +23,7 @@ public final class RailcraftAdvancementTriggers {
     private final SetSeasonTrigger setSeason = new SetSeasonTrigger();
     private final SpikeMaulUseTrigger spikeMaulUse = new SpikeMaulUseTrigger();
     private final UseTrackKitTrigger useTrackKit = new UseTrackKitTrigger();
+    private final CartRidingTrigger cartRiding = new CartRidingTrigger();
 
     public static RailcraftAdvancementTriggers getInstance() {
         return Holder.INSTANCE;
@@ -38,6 +38,7 @@ public final class RailcraftAdvancementTriggers {
         CriteriaTriggers.register(setSeason);
         CriteriaTriggers.register(spikeMaulUse);
         CriteriaTriggers.register(useTrackKit);
+        CriteriaTriggers.register(cartRiding);
         ItemPredicates.register(RailcraftConstantsAPI.locationOf("is_cart"), (json) -> new CartItemPredicate());
         ItemPredicates.register(RailcraftConstantsAPI.locationOf("is_track"), TrackItemPredicate.DESERIALIZER);
     }
@@ -73,6 +74,7 @@ public final class RailcraftAdvancementTriggers {
     }
 
     static final class Holder {
+        // Lazy init because there are a lot of triggers
         static final RailcraftAdvancementTriggers INSTANCE = new RailcraftAdvancementTriggers();
 
         private Holder() {

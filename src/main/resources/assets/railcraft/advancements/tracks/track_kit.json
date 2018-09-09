@@ -2,7 +2,7 @@
   "display": {
     "icon": {
       "item": "railcraft:track_kit",
-      "nbt": "{railcraft:{kit:\"railcraft_buffer_stop\"}}"
+      "nbt": "{railcraft:{kit:\"railcraft_buffer\"}}"
     },
     "title": {
       "translate": "advancements.railcraft.tracks.track_kit.name"

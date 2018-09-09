@@ -12,7 +12,6 @@ package mods.railcraft.common.worldgen;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -34,19 +33,18 @@ public class GeneratorGeode extends Generator {
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
-        BlockPos geodeCenter = targetPos.add(8, 0, 8);
-        OceanFloor floor = scanOceanFloor(world, geodeCenter);
+        OceanFloor floor = scanOceanFloor(world, targetPos);
         if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
             int deviation = MIN_Y + Math.round(Math.abs((float) rand.nextGaussian()) * (floor.floorY - MIN_Y) * 0.5F);
 //            Game.log(Level.INFO, "Deviation from floor: {0}", deviation - floor.floorY);
             int y = Math.min(floor.floorY, deviation);
-            generator.generate(world, rand, new BlockPos(geodeCenter.getX(), y, geodeCenter.getZ()));
+            generator.generate(world, rand, new BlockPos(targetPos.getX(), y, targetPos.getZ()));
         }
     }
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos pos, Biome biome) {
-        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.2;
+        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.1;
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {
@@ -59,7 +57,7 @@ public class GeneratorGeode extends Generator {
         int depth = 0;
         for (; y > 0; --y) {
             IBlockState blockState = chunk.getBlockState(trimmedX, y, trimmedZ);
-            if (blockState.getBlock() == Blocks.AIR)
+            if (blockState.getBlock().isAir(blockState, world, pos))
                 continue;
             else if (blockState.getMaterial() == Material.WATER)
                 depth++;
@@ -70,11 +68,11 @@ public class GeneratorGeode extends Generator {
         return new OceanFloor(y, depth);
     }
 
-    private class OceanFloor {
+    private final class OceanFloor {
         public final int floorY;
         public final int depth;
 
-        public OceanFloor(int floorY, int depth) {
+        OceanFloor(int floorY, int depth) {
             this.floorY = floorY;
             this.depth = depth;
         }
