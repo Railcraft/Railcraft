@@ -46,6 +46,11 @@ public abstract class BlockBoilerTank extends BlockMultiBlock {
     }
 
     @Override
+    public int getLightOpacity(IBlockState state) {
+        return 0;
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer.Builder(this).add(NORTH, SOUTH, EAST, WEST).build();
     }
