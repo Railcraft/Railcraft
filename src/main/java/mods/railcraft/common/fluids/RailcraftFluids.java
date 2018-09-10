@@ -112,7 +112,7 @@ public enum RailcraftFluids {
 
     private void postInit() {
         checkStandardFluidBlock();
-        if (standardFluid.get() == null)
+        if (standardFluid.get() == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag()))
             throw new MissingFluidException(standardFluid.getTag());
     }
 
@@ -134,14 +134,16 @@ public enum RailcraftFluids {
 
     @SideOnly(Side.CLIENT)
     private void initClient() {
-        ModelBakery.registerItemVariants(railcraftItem);
-        ModelLoader.setCustomMeshDefinition(railcraftItem, (stack) -> location);
-        ModelLoader.setCustomStateMapper(railcraftBlock, new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-                return location;
-            }
-        });
+        if (railcraftBlock != null && railcraftItem != null) {
+            ModelBakery.registerItemVariants(railcraftItem);
+            ModelLoader.setCustomMeshDefinition(railcraftItem, (stack) -> location);
+            ModelLoader.setCustomStateMapper(railcraftBlock, new StateMapperBase() {
+                @Override
+                protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                    return location;
+                }
+            });
+        }
     }
 
     abstract Block makeBlock(Fluid fluid);
