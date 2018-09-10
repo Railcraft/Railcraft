@@ -1,11 +1,12 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.charge.ChargeNodeDefinition;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,9 +24,7 @@ import java.util.Random;
  */
 public final class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
 
-    public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
-            (world, pos) -> WorldPlugin.getTileEntity(world, pos, TileFluxTransformer.class).map(TileFluxTransformer::getMasterBattery).orElse(null)
-    );
+    public static final ChargeNodeDefinition DEFINITION = new ChargeNodeDefinition(ConnectType.BLOCK, 0.5);
 
     public BlockFluxTransformer() {
         super(Material.IRON);
@@ -41,7 +40,7 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     }
 
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return DEFINITION;
     }
 
@@ -78,7 +77,13 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+        return ChargeManager.getDimension(worldIn).getGraph(pos).getComparatorOutput();
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        registerNode(state, worldIn, pos);
     }
 
     @Override

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.state.IBlockState;

@@ -1,7 +1,9 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -31,7 +33,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public static final int DEFAULT_SHADE = EnumColor.LIGHT_BLUE.getHexColor();
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.025);
+    public static final ChargeNodeDefinition CHARGE_DEF = new ChargeNodeDefinition(ConnectType.BLOCK, 0.025);
 
     public BlockForceTrackEmitter() {
         super(Material.IRON);
@@ -54,6 +56,18 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        deregisterNode(worldIn, pos);
+    }
+
+    @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileForceTrackEmitter();
     }
@@ -65,7 +79,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
 
     @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
     }
 

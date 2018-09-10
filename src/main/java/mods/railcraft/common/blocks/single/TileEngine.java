@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.EnergyPlugin;

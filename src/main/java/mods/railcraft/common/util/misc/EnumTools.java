@@ -15,7 +15,7 @@ package mods.railcraft.common.util.misc;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EnumTools {
+public final class EnumTools {
     public static <T extends Enum<T>> T next(T e, T[] values) {
         return values[(e.ordinal() + 1) % values.length];
     }
@@ -36,5 +36,8 @@ public class EnumTools {
         if (ordinal < 0 || ordinal >= values.length)
             return values[0];
         return values[ordinal];
+    }
+
+    private EnumTools() {
     }
 }

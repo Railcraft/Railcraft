@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.IBlockBattery;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -23,36 +23,38 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.Level;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Created by CovertJaguar on 8/1/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class BatterySaveData extends WorldSavedData {
+public final class ChargeSaveData extends WorldSavedData {
     private static final String NAME = "railcraft.batteries";
-    private Long2DoubleMap chargeLevels = new Long2DoubleLinkedOpenHashMap();
+    private Map<BlockPos, Double> chargeLevels = new HashMap<>();
+    private Map<BlockPos, ChargeNodeDefinition> positions = new HashMap<>();
 
-    public static BatterySaveData forWorld(World world) {
+    static ChargeSaveData forWorld(World world) {
         MapStorage storage = world.getPerWorldStorage();
-        BatterySaveData result = (BatterySaveData) storage.getOrLoadData(BatterySaveData.class, NAME);
+        ChargeSaveData result = (ChargeSaveData) storage.getOrLoadData(ChargeSaveData.class, NAME);
         if (result == null) {
-            result = new BatterySaveData();
+            result = new ChargeSaveData();
             storage.setData(NAME, result);
         }
         return result;
     }
 
-    BatterySaveData() {
+    ChargeSaveData() {
         super(NAME);
-        chargeLevels.defaultReturnValue(Double.NaN);
     }
 
     @Deprecated // called by reflection
-    public BatterySaveData(String name) {
+    public ChargeSaveData(String name) {
         super(name);
-        chargeLevels.defaultReturnValue(Double.NaN);
     }
 
     @Override
@@ -60,13 +62,21 @@ public final class BatterySaveData extends WorldSavedData {
         if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
-        for (Long2DoubleMap.Entry entry : chargeLevels.long2DoubleEntrySet()) {
+        for (Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
             NBTTagCompound dataEntry = new NBTTagCompound();
-            NBTPlugin.writeBlockPos(dataEntry, "pos", BlockPos.fromLong(entry.getLongKey()));
-            dataEntry.setDouble("value", entry.getDoubleValue());
+            NBTPlugin.writeBlockPos(dataEntry, "pos", entry.getKey());
+            dataEntry.setDouble("value", entry.getValue());
             list.appendTag(dataEntry);
         }
         nbt.setTag("batteries", list);
+        NBTTagList nodes = new NBTTagList();
+        for (Entry<BlockPos, ChargeNodeDefinition> pair : positions.entrySet()) {
+            NBTTagCompound dataEntry = new NBTTagCompound();
+            NBTPlugin.writeBlockPos(dataEntry, "pos", pair.getKey());
+            pair.getValue().writeToNBT(dataEntry);
+            nodes.appendTag(dataEntry);
+        }
+        nbt.setTag("nodes", nodes);
         return nbt;
     }
 
@@ -78,24 +88,33 @@ public final class BatterySaveData extends WorldSavedData {
         for (NBTTagCompound entry : list) {
             BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");
             if (pos != null)
-                chargeLevels.put(pos.toLong(), entry.getDouble("value"));
+                chargeLevels.put(pos, entry.getDouble("value"));
+        }
+
+        List<NBTTagCompound> nodes = NBTPlugin.getNBTList(nbt, "nodes", NBTPlugin.EnumNBTType.COMPOUND);
+        for (NBTTagCompound entry : nodes) {
+            BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");
+            ChargeNodeDefinition definition = ChargeNodeDefinition.readFromNBT(entry);
+            positions.put(pos, definition);
         }
     }
 
-    public void initBattery(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        double charge = chargeLevels.get(pos.toLong());
-        if (Double.isNaN(charge))
-            charge = 0.0;
-        chargeBattery.initCharge(charge);
+    void initBattery(BlockPos pos, IBlockBattery chargeBattery) {
+        Double charge = chargeLevels.get(pos);
+        chargeBattery.initCharge(charge == null ? 0.0 : charge);
     }
 
-    public void updateBatteryRecord(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        chargeLevels.put(pos.toLong(), chargeBattery.getCharge());
+    void updateBatteryRecord(BlockPos pos, IBlockBattery chargeBattery) {
+        chargeLevels.put(pos, chargeBattery.getCharge());
         markDirty();
     }
 
-    public void removeBattery(BlockPos pos) {
-        if (!Double.isNaN(chargeLevels.remove(pos.toLong())))
+    void removeBattery(BlockPos pos) {
+        if (chargeLevels.remove(pos) != null)
             markDirty();
+    }
+
+    Map<BlockPos, ChargeNodeDefinition> getPositions() {
+        return positions;
     }
 }

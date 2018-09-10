@@ -14,7 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.ISubtypedBlock;
 import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;

@@ -21,7 +21,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -78,7 +77,7 @@ public enum SpeedController {
             BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
             if (dir.isAscending())
                 return HighSpeedTools.SPEED_SLOPE;
-            return HighSpeedTools.speedForNextTrack(world, pos, 0, cart);
+            return (float) HighSpeedTools.speedForNextTrack(world, pos, 0, cart);
         }
     },
     REINFORCED {

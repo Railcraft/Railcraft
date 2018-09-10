@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;

@@ -8,10 +8,13 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.machine.interfaces;
+package mods.railcraft.common.blocks.interfaces;
 
-import mcp.MethodsReturnNonnullByDefault;
+/**
+ * @author wshadow
+ */
+public interface ITileCompare {
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    int getComparatorInputOverride();
+
+}

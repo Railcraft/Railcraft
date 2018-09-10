@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;

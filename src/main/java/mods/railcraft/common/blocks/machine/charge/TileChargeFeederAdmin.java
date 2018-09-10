@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.charge.ChargeBattery;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,8 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -27,12 +27,12 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileChargeFeederAdmin extends TileCharge {
-    private static class InfiniteBattery extends IChargeBlock.ChargeBattery {
+    private static class InfiniteBattery extends ChargeBattery {
         boolean enabled;
 
         @Override
         public double getMaxDraw() {
-            return enabled ? Double.MAX_VALUE : 0.0;
+            return enabled ? Double.MAX_VALUE : 0;
         }
 
         @Override
@@ -46,13 +46,17 @@ public class TileChargeFeederAdmin extends TileCharge {
         }
 
         @Override
-        public double removeCharge(double request) {
-            if (enabled)
-                return request;
-            return 0.0;
+        public double getAvailableCharge() {
+            return getMaxDraw();
         }
 
+        @Override
+        public double removeCharge(double request) {
+            return enabled ? request : 0;
+        }
     }
+
+    private final InfiniteBattery battery = new InfiniteBattery();
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -60,8 +64,8 @@ public class TileChargeFeederAdmin extends TileCharge {
     }
 
     @Override
-    protected IChargeBlock.ChargeBattery createBattery() {
-        return new InfiniteBattery();
+    public InfiniteBattery getBattery() {
+        return battery;
     }
 
     @Override
@@ -72,24 +76,24 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        ((InfiniteBattery) getChargeBattery()).enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        battery.enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        ((InfiniteBattery) getChargeBattery()).enabled = state.getValue(BlockChargeFeeder.REDSTONE);
+        battery.enabled = state.getValue(BlockChargeFeeder.REDSTONE);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        nbt.setBoolean("enabled", ((InfiniteBattery) getChargeBattery()).enabled);
+        nbt.setBoolean("enabled", battery.enabled);
         return nbt;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        ((InfiniteBattery) getChargeBattery()).enabled = nbt.getBoolean("enabled");
+        battery.enabled = nbt.getBoolean("enabled");
     }
 }

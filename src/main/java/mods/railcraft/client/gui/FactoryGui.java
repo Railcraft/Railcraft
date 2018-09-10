@@ -21,7 +21,7 @@ import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;

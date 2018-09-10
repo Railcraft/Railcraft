@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import net.minecraft.util.EnumFacing;
 
 public class TileItemLoaderAdvanced extends TileItemLoader implements ITileRotate {

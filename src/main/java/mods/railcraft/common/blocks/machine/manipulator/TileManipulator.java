@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
