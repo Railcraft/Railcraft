@@ -15,12 +15,6 @@
         "transform": "forge:default-block"
       }
     ],
-    "axis": {
-      "x": {},
-      "z": {
-        "y": 90
-      }
-    },
     "position": {
       "single": {
         "textures": {

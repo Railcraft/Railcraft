@@ -82,10 +82,6 @@ public class TileTankIronGauge<T extends TileTankBase<T, M>, M extends TileTankB
                 base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.SINGLE);
             }
         }
-
-        char c = getPattern().getPatternMarkerChecked(getPatternPosition().north());
-        base = base.withProperty(BlockTankIronGauge.AXIS, c == 'A' || c == MultiBlockPattern.EMPTY_PATTERN ? X : Z);
-
         return base;
     }
 }

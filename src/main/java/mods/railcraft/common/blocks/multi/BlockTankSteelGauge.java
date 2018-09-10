@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.AXIS;
 import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.POSITION;
 
 /**
@@ -36,7 +35,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     public BlockTankSteelGauge() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
+        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -44,7 +43,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
+        return new BlockStateContainer(this, COLOR, POSITION);
     }
 
     @Override

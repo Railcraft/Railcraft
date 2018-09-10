@@ -1,7 +1,11 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_bottom_top"
+    "model": "cube",
+    "textures": {
+      "up": "railcraft:blocks/steam_turbine_5",
+      "down": "railcraft:blocks/steam_turbine_5"
+    }
   },
   "variants": {
     "normal": [
@@ -9,86 +13,55 @@
     ],
     "inventory": [
       {
-        "transform": "forge:default-block"
+        "transform": "forge:default-block",
+        "model": "railcraft:detector",
+        "textures": {
+          "front": "railcraft:blocks/steam_turbine_6",
+          "side": "railcraft:blocks/steam_turbine_2"
+        }
       }
     ],
-    "icon": {
-      "4f": {
+    "window": {
+      "true": {
         "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_11",
-          "bottom": "railcraft:blocks/rock_crusher_3"
+          "north": "railcraft:blocks/steam_turbine_7",
+          "south": "railcraft:blocks/steam_turbine_7"
         }
       },
-      "a": {
+      "false": {
         "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_0",
-          "bottom": "railcraft:blocks/rock_crusher_3"
+          "north": "railcraft:blocks/steam_turbine_2",
+          "south": "railcraft:blocks/steam_turbine_2"
         }
+      }
+    },
+    "long_axis": {
+      "x": {
       },
-      "b": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_1",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
+      "z": {
+        "y": 90
+      }
+    },
+    "texture": {
+      "top_left": {
+        "east": "railcraft:blocks/steam_turbine_0",
+        "west": "railcraft:blocks/steam_turbine_1"
       },
-      "c": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_2",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
+      "top_right": {
+        "east": "railcraft:blocks/steam_turbine_1",
+        "west": "railcraft:blocks/steam_turbine_0"
       },
-      "d": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_4",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
+      "bottom_left": {
+        "east": "railcraft:blocks/steam_turbine_3",
+        "west": "railcraft:blocks/steam_turbine_4"
       },
-      "e": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_6",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
+      "bottom_right": {
+        "east": "railcraft:blocks/steam_turbine_4",
+        "west": "railcraft:blocks/steam_turbine_3"
       },
-      "f": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_8",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
-      },
-      "g": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_9",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
-      },
-      "h": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_10",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
-      },
-      "42": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_3",
-          "top": "railcraft:blocks/rock_crusher_11",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
-      },
-      "44": {
-        "textures": {
-          "side": "railcraft:blocks/rock_crusher_7",
-          "top": "railcraft:blocks/rock_crusher_11",
-          "bottom": "railcraft:blocks/rock_crusher_3"
-        }
+      "none": {
+        "east": "railcraft:blocks/steam_turbine_2",
+        "west": "railcraft:blocks/steam_turbine_2"
       }
     }
   }

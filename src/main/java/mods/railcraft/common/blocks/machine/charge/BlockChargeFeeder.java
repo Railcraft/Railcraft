@@ -132,4 +132,9 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     protected boolean isSparking(IBlockState state) {
         return state.getValue(REDSTONE);
     }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(getVariantProperty()).ordinal();
+    }
 }

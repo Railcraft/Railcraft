@@ -165,13 +165,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }},
     TRACK_PARTS(ItemTrackParts::new, "track_parts", () -> "ingotIron"),
     TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", () -> "ingotSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", () -> "blockSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();

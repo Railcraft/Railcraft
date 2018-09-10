@@ -163,6 +163,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BOILER_FIREBOX_SOLID("boiler_firebox_solid", BlockBoilerFireboxSolid.class, BlockBoilerFireboxSolid::new, ItemMultiBlock::new),
     BOILER_TANK_PRESSURE_HIGH("boiler_tank_pressure_high", BlockBoilerTankHigh.class, BlockBoilerTankHigh::new, ItemMultiBlock::new),
     BOILER_TANK_PRESSURE_LOW("boiler_tank_pressure_low", BlockBoilerTankLow.class, BlockBoilerTankLow::new, ItemMultiBlock::new),
+    STEAM_TURBINE("steam_turbine", BlockSteamTurbine.class, BlockSteamTurbine::new, ItemMultiBlock::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();

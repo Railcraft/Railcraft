@@ -32,13 +32,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockTankIronGauge extends BlockTankIron {
 
-    public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
     public static final PropertyEnum<ColumnPosition> POSITION = PropertyEnum.create("position", ColumnPosition.class);
 
     public BlockTankIronGauge() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
+        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -56,7 +55,7 @@ public class BlockTankIronGauge extends BlockTankIron {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
+        return new BlockStateContainer(this, COLOR, POSITION);
     }
 
     @Override
