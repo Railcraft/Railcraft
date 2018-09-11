@@ -11,10 +11,8 @@ package mods.railcraft.client.util.textures;
 
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -111,7 +109,7 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
 
         // Hack to use sheet textures for advancement backgrounds
         Game.log(Level.INFO, "registering custom textures {0}", location);
-        Minecraft.getMinecraft().getTextureManager().loadTexture(location, new SheetTexture(subImage));
+        Minecraft.getMinecraft().getTextureManager().loadTexture(location, new Texture(subImage));
 
         return false;
     }
@@ -119,20 +117,5 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
     @Override
     public String toString() {
         return super.toString().replace("TextureAtlasSprite", "TextureAtlasSheet");
-    }
-
-    static final class SheetTexture extends AbstractTexture {
-
-        final BufferedImage image;
-
-        SheetTexture(BufferedImage image) {
-            this.image = image;
-        }
-
-        @Override
-        public void loadTexture(IResourceManager resourceManager) {
-            this.deleteGlTexture();
-            TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), image, false, false);
-        }
     }
 }

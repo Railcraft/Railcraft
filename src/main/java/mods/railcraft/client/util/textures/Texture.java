@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
@@ -16,12 +16,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class Texture extends AbstractTexture {
+public class Texture extends AbstractTexture {
 
     protected BufferedImage imageData;
+
+    protected Texture() {
+    }
+
+    protected Texture(BufferedImage image) {
+        this.imageData = image;
+    }
 
     @Override
     public void loadTexture(IResourceManager iResourceManager) throws IOException {
