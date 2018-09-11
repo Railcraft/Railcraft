@@ -9,8 +9,11 @@
 package mods.railcraft.client.util.textures;
 
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.IResourceManager;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  *
@@ -19,6 +22,12 @@ import java.awt.image.BufferedImage;
 public abstract class Texture extends AbstractTexture {
 
     protected BufferedImage imageData;
+
+    @Override
+    public void loadTexture(IResourceManager iResourceManager) throws IOException {
+        deleteGlTexture();
+        TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), imageData, false, false);
+    }
 
     public BufferedImage getImage() {
         return imageData;

@@ -11,8 +11,6 @@ package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -37,8 +35,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,7 +44,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileEngravingBench extends TileSmartItemTicking implements ITileCharge, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
-//TODO: Finish conversion to RCUs
+    //TODO: Finish conversion to RCUs
     public enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
@@ -60,8 +58,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements ITileCha
     private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
-    private static ChargeNodeDefinition chargeDef = new ChargeNodeDefinition(ConnectType.BLOCK, 0.1);
-//    public final FEEnergyIndicator rfIndicator;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
@@ -175,7 +171,7 @@ public class TileEngravingBench extends TileSmartItemTicking implements ITileCha
             isCrafting = true;
         }
 
-        if (getStackInSlot(SLOT_RESULT) != null)
+        if (!getStackInSlot(SLOT_RESULT).isEmpty())
             isCrafting = false;
 
         if (!isCrafting) {
@@ -191,6 +187,8 @@ public class TileEngravingBench extends TileSmartItemTicking implements ITileCha
             progress = 0;
             return;
         }
+
+        // TODO charge usage
 
         if (progress >= PROCESS_TIME) {
             isCrafting = false;

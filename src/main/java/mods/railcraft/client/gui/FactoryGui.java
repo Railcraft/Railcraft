@@ -10,24 +10,22 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.detector.TileDetector;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.blocks.multi.*;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.single.TileEngineSteam;
-import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
+import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.single.TileEngineSteam;
+import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
@@ -35,6 +33,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
@@ -174,7 +173,7 @@ public class FactoryGui {
                     return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
                 default:
                     //TODO: Fix this
-//                    return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
+                    return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
             Game.log(Level.WARN, "Error when attempting to build gui {0}: {1}", gui, ex);
