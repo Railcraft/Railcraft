@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
+import mods.railcraft.common.plugins.ic2.TileIC2EmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -177,13 +179,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         super.update();
 
         if (Game.isHost(world)) {
-            if (isStructureValid()) {
-                if (isMaster())
-                    addToNet();
-            } else
-                dropFromNet();
-
-
             double chargeNeeded = battery.getCapacity() - battery.getCharge();
             if (chargeNeeded > 0) {
                 double draw = (chargeNeeded / IC2_OUTPUT) * BC_OUTPUT;
@@ -198,7 +193,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                 boolean addedEnergy = false;
                 if (energy < BC_OUTPUT * 2) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
-//                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
                         if (InvTools.isItemEqual(rotor, getSampleRotor()) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
@@ -226,6 +220,14 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty())
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
+    }
+
+    @Override
+    protected void onPatternChanged() {
+        super.onPatternChanged();
+        if (isMaster) {
+            addToNet();
+        }
     }
 
     private void addToNet() {
@@ -378,7 +380,14 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
 
     @Override
     public List<? extends TileEntity> getSubTiles() {
-        return getComponents().stream().map(turbine -> turbine.emitterDelegate).collect(Collectors.toList());
+        if (!isStructureValid()) {
+            return Collections.emptyList();
+        }
+        List<TileEntity> ret = getComponents().stream().filter(te -> te != this).map(TileIC2EmitterDelegate::new).collect(Collectors.toList());
+        if (emitterDelegate != null) {
+            ret.add(emitterDelegate);
+        }
+        return ret;
     }
 
     @Override

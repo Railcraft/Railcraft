@@ -119,7 +119,7 @@ public class FactoryGui {
                 case BOILER_LIQUID:
                     return new GuiBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
                 case TURBINE:
-                    return new GuiTurbine(inv, (TileSteamTurbine) obj);
+                    return new GuiSteamTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:
                     return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:

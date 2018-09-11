@@ -15,25 +15,24 @@ import mods.railcraft.common.gui.containers.ContainerTurbine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiTurbine extends TileGui
-{
+public class GuiSteamTurbine extends TileGui {
 
     private final String label;
     private final TileSteamTurbine tile;
 
-    public GuiTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
+    public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
         super(tile, new ContainerTurbine(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
         xSize = 176;
         ySize = 140;
 
-        label = LocalizationPlugin.translate("gui.railcraft.turbine");
+        label = LocalizationPlugin.translate("gui.railcraft.steam.turbine");
         this.tile = tile;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.turbine.rotor"), 20, 29, 0x404040);
-        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.steam.turbine.rotor"), 20, 29, 0x404040);
+        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.steam.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
     }
 }

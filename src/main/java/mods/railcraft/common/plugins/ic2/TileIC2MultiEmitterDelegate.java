@@ -22,9 +22,10 @@ import java.util.stream.Collectors;
 public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implements IMetaDelegate {
     private final List<IEnergyTile> subTiles;
 
+    @SuppressWarnings("unchecked")
     public TileIC2MultiEmitterDelegate(IMultiEmitterDelegate delegate) {
         super(delegate);
-        subTiles = delegate.getSubTiles().stream().map(IEnergyTile.class::cast).collect(Collectors.toList());
+        subTiles = (List<IEnergyTile>) (List<?>) delegate.getSubTiles();
     }
 
     @Override
@@ -34,6 +35,11 @@ public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implemen
 
     @Override
     public List<IEnergyTile> getSubTiles() {
+        for (IEnergyTile tile : subTiles) {
+            if (tile == null) {
+                throw new NullPointerException();
+            }
+        }
         return subTiles;
     }
 
