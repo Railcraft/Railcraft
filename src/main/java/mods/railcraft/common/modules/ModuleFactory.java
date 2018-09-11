@@ -19,6 +19,7 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
@@ -68,7 +69,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftBlocks.TANK_STEEL_VALVE,
                         RailcraftBlocks.TANK_STEEL_WALL,
                         RailcraftBlocks.TANK_WATER,
-                        RailcraftBlocks.CHEST_METALS
+                        RailcraftBlocks.CHEST_METALS,
+                        RailcraftCarts.CHEST_METALS
                 );
             }
 

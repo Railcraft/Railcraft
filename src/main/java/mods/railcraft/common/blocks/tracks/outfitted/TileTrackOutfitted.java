@@ -126,9 +126,4 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).readGuiData(data, sender);
     }
-
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newSate) {
-        return oldState.getBlock() != newSate.getBlock();
-    }
 }

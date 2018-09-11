@@ -60,7 +60,12 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     // Railcraft Carts
     BORE(1, "bore", EntityTunnelBore.class, EntityTunnelBore::new, ItemTunnelBore::new),
     CARGO(0, "cart_cargo", EntityCartCargo.class, EntityCartCargo::new, ItemCartCargo::new, from(Blocks.TRAPPED_CHEST)),
-    CHEST_VOID(0, "cart_void", EntityCartChestVoid.class, EntityCartChestVoid::new, ItemCartChestVoid::new, RailcraftBlocks.CHEST_VOID::getStack) {
+    CHEST_METALS(0, "cart_chest_metals", EntityCartChestMetals.class, EntityCartChestMetals::new, ItemCartChestMetals::new, RailcraftBlocks.CHEST_METALS::getStack) {
+        {
+            conditions().add(RailcraftBlocks.CHEST_METALS);
+        }
+    },
+    CHEST_VOID(0, "cart_chest_void", EntityCartChestVoid.class, EntityCartChestVoid::new, ItemCartChestVoid::new, RailcraftBlocks.CHEST_VOID::getStack) {
         {
             conditions().add(RailcraftBlocks.CHEST_VOID);
         }
@@ -68,7 +73,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, EntityCartEnergyBatBox::new, ItemCart::new, ModItems.BAT_BOX::get),
     ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, EntityCartEnergyCESU::new, ItemCart::new, ModItems.CESU::get),
     ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, EntityCartEnergyMFE::new, ItemCart::new, ModItems.MFE::get),
-    ENERGY_MFSU(1, "cart_ic2_MFSU", EntityCartEnergyMFSU.class, EntityCartEnergyMFSU::new, ItemCart::new, ModItems.MFSU::get),
+    ENERGY_MFSU(1, "cart_ic2_mfsu", EntityCartEnergyMFSU.class, EntityCartEnergyMFSU::new, ItemCart::new, ModItems.MFSU::get),
     GIFT(3, "cart_gift", EntityCartGift.class, EntityCartGift::new, ItemCartGift::new),
     JUKEBOX(0, "cart_jukebox", EntityCartJukebox.class, EntityCartJukebox::new, ItemCartJukebox::new, from(Blocks.JUKEBOX)),
     BED(0, "cart_bed", EntityCartBed.class, EntityCartBed::new, ItemCartBed::new, () -> new ItemStack(Items.BED)),
