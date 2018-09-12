@@ -10,12 +10,13 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.events.CartLockdownEvent;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.api.tracks.ITrackKitPowered;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.BoardingLockingProfile;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.locking.HoldingLockingProfile;
@@ -187,6 +188,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     private void lockCurrentCart() {
         if (currentCart != null) {
+            HighSpeedTools.performHighSpeedChecks(theWorldAsserted(), getPos(), currentCart, getTrackKit());
             Train train = Train.getTrain(currentCart);
             if (currentTrain != train && currentTrain != null)
                 currentTrain.removeLock(getUUID());
@@ -380,7 +382,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             profile = p;
             profileInstance = p.create(this);
         }
-        BitSet bits = BitSet.valueOf(new byte[]{data.readByte()});
+        BitSet bits = BitSet.valueOf(new byte[] {data.readByte()});
         redstone = bits.get(0);
         locked = bits.get(1);
         justLoaded = bits.get(2);

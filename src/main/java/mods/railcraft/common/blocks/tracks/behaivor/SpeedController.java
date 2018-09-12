@@ -13,6 +13,7 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.carts.MinecartHooks;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockRailBase;
@@ -38,7 +39,7 @@ public enum SpeedController {
             if (CartToolsAPI.getCartSpeedUncapped(cart) > 0.35F && MiscTools.RANDOM.nextInt(500) == 250)
                 return true;
             for (EntityMinecart c : Train.getTrain(cart)) {
-                if (c.getEntityData().getInteger("derail") > 0)
+                if (MinecartHooks.getInstance().isDerailed(cart))
                     return true;
             }
             return false;
@@ -87,7 +88,7 @@ public enum SpeedController {
         @Override
         public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
-            if (TrackShapeHelper.isTurn(dir))
+            if (TrackShapeHelper.isTurn(dir) || TrackShapeHelper.isAscending(dir))
                 return CORNER_SPEED;
             return MAX_SPEED;
         }

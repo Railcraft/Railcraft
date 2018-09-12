@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.ChestLogic;
-import mods.railcraft.common.util.entity.VoidChestLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -29,7 +28,6 @@ import net.minecraft.world.World;
 import java.util.List;
 
 import static net.minecraft.util.EnumFacing.DOWN;
-import static net.minecraft.util.EnumFacing.UP;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -57,7 +55,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     }
 
     public final EnumFacing getFacing() {
-        return getBlockState().getValue(BlockChestRailcraft.FACING);
+        return hasWorld() ? getBlockState().getValue(BlockChestRailcraft.FACING) : EnumFacing.NORTH;
     }
 
     @Override

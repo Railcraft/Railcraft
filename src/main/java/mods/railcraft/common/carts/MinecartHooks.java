@@ -72,15 +72,20 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
     private static final float CART_WIDTH = 0.98f;
     private static final float COLLISION_EXPANSION = 0.2f;
     private static final int MAX_INTERACT_DIST_SQ = 5 * 5;
-    private static MinecartHooks instance;
 
-    private MinecartHooks() {
+    MinecartHooks() {
     }
 
     public static MinecartHooks getInstance() {
-        if (instance == null)
-            instance = new MinecartHooks();
-        return instance;
+        return Holder.INSTANCE;
+    }
+
+    public boolean isDerailed(EntityMinecart cart) {
+        return cart.getEntityData().getInteger("derail") > 0;
+    }
+
+    public boolean canMount(EntityMinecart cart) {
+        return cart.getEntityData().getInteger("MountPrevention") <= 0;
     }
 
     @SuppressWarnings("unused")
@@ -130,8 +135,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         if (isLiving && !isPlayer && cart.canBeRidden() && !(other instanceof EntityIronGolem)
                 && cart.motionX * cart.motionX + cart.motionZ * cart.motionZ > 0.001D
                 && !cart.isBeingRidden() && !other.isRiding()) {
-            int mountPrevention = cart.getEntityData().getInteger("MountPrevention");
-            if (mountPrevention <= 0)
+            if (canMount(cart))
                 other.startRiding(cart);
         }
 
@@ -217,8 +221,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
     @Override
     public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
-            return other.getEntityBoundingBox();
-        return other.canBePushed() ? other.getEntityBoundingBox() : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
+            return other.getEntityBoundingBox().grow(-0.01);
+        return other.canBePushed() ? other.getEntityBoundingBox().grow(-COLLISION_EXPANSION) : null;
     }
 
     @Override
@@ -273,20 +277,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
             data.setBoolean("ghost", false);
         }
 
-// Code Added by Yopu to replace vanilla carts, deemed incomplete and unnecessary, pursuing other solutions
-//        if (classReplacements.containsKey(cart.getClass())) {
-//            cart.setDead();
-//            if (Game.isHost(cart.world)) {
-//                EnumCart enumCart = classReplacements.get(cart.getClass());
-//                GameProfile cartOwner = CartTools.getCartOwner(cart);
-//                int x = MathHelper.floor_double(cart.posX);
-//                int y = MathHelper.floor_double(cart.posY);
-//                int z = MathHelper.floor_double(cart.posZ);
-//                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.world, x, y, z);
-//            }
-//            return;
-//        }
-
         Block block = WorldPlugin.getBlock(cart.world, event.getPos());
         int launched = data.getInteger("Launched");
         if (TrackTools.isRailBlock(block)) {
@@ -328,7 +318,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         }
 
         if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
-            if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
+            if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_EXPLODE))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
             else if (data.getInteger("Launched") == 0)
                 HighSpeedTools.checkSafetyAndExplode(cart.world, event.getPos(), cart);
@@ -504,6 +494,13 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
 
     @Override
     public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
+    }
+
+    private static final class Holder {
+        static final MinecartHooks INSTANCE = new MinecartHooks();
+
+        private Holder() {
+        }
     }
 
 }
