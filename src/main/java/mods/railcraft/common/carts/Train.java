@@ -10,15 +10,15 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
-import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin.EnumNBTType;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate;
@@ -37,24 +37,34 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings("unused")
 public final class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
-    private static final Map<World, Map<UUID, Train>> trains = new MapMaker().weakKeys().makeMap();
+
     private final UUID uuid;
-    private final Deque<UUID> carts = new ArrayDeque<>();
-    private final Collection<UUID> safeCarts = Collections.unmodifiableCollection(carts);
-    @Deprecated // Should not have its logic here
-    private final Collection<UUID> lockingTracks = new HashSet<>();
+    private final Deque<UUID> carts;
+    private final Collection<UUID> locks;
     private final World world;
-    private TrainState trainState = TrainState.NORMAL;
+    private final TrainInfo info;
+    private final Collection<UUID> safeCarts;
 
     Train(EntityMinecart cart) {
-        uuid = UUID.randomUUID();
-        world = cart.world;
-
+        this(UUID.randomUUID(), new ArrayDeque<>(), new HashSet<>(), cart.world, TrainState.NORMAL);
         buildTrain(cart);
     }
 
+    private Train(UUID uuid, Deque<UUID> carts, Set<UUID> locks, World world, TrainState state) {
+        this(new TrainInfo(uuid, state, carts, locks), world);
+    }
+
+    Train(TrainInfo info, World world) {
+        this.info = info;
+        this.uuid = info.id;
+        this.carts = info.carts;
+        this.locks = info.locks;
+        this.world = world;
+        safeCarts = Collections.unmodifiableCollection(carts);
+    }
+
     public static Map<UUID, Train> getTrainMap(World world) {
-        return trains.computeIfAbsent(world, k -> new HashMap<>());
+        return TrainManager.getInstance(world).trains;
     }
 
     public static Train getTrain(EntityMinecart cart) {
@@ -213,7 +223,7 @@ public final class Train implements Iterable<EntityMinecart> {
             }
         }
         carts.clear();
-        lockingTracks.clear();
+        locks.clear();
     }
 
     public UUID getUUID() {
@@ -352,12 +362,12 @@ public final class Train implements Iterable<EntityMinecart> {
         for (EntityMinecart c : this) {
             float baseSpeed = c.getMaxCartSpeedOnRail();
             //TODO remove this nonsense, if we keep it leave it somewhere else
-            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-                ICartBattery battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-                if (battery.getType() != ICartBattery.Type.USER) {
-                    baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
-                }
-            }
+//            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
+//                ICartBattery battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
+//                if (battery.getType() != ICartBattery.Type.USER) {
+//                    baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
+//                }
+//            }
             speed = Math.min(speed, baseSpeed);
         }
         return speed;
@@ -369,31 +379,28 @@ public final class Train implements Iterable<EntityMinecart> {
         }
     }
 
-    @Deprecated
     public boolean isTrainLockedDown() {
-        return !lockingTracks.isEmpty();
+        return !locks.isEmpty();
     }
 
-    @Deprecated
-    public void addLockingTrack(UUID track) {
-        lockingTracks.add(track);
+    public void addLock(UUID lock) {
+        locks.add(lock);
     }
 
-    @Deprecated
-    public void removeLockingTrack(UUID track) {
-        lockingTracks.remove(track);
+    public void removeLock(UUID lock) {
+        locks.remove(lock);
     }
 
     public boolean isIdle() {
-        return trainState == TrainState.IDLE || isTrainLockedDown();
+        return info.state == TrainState.IDLE || isTrainLockedDown();
     }
 
     public boolean isStopped() {
-        return trainState == TrainState.STOPPED;
+        return info.state == TrainState.STOPPED;
     }
 
     public void setTrainState(TrainState state) {
-        this.trainState = state;
+        this.info.state = state;
     }
 
     public enum TrainState {
@@ -401,5 +408,60 @@ public final class Train implements Iterable<EntityMinecart> {
         STOPPED,
         IDLE,
         NORMAL
+    }
+
+    TrainInfo getInfo() {
+        return info;
+    }
+
+    static final class TrainInfo {
+
+        UUID id;
+        TrainState state;
+        Deque<UUID> carts;
+        Set<UUID> locks;
+
+        TrainInfo() {
+        }
+
+        TrainInfo(UUID id, TrainState state, Deque<UUID> carts, Set<UUID> locks) {
+            this.id = id;
+            this.state = state;
+            this.carts = carts;
+            this.locks = locks;
+        }
+
+        void readFromNBT(NBTTagCompound tag) {
+            id = NBTPlugin.readUUID(tag, "id");
+            state = NBTPlugin.readEnumOrdinal(tag, "state", TrainState.values(), TrainState.NORMAL);
+            carts = new ArrayDeque<>();
+            for (NBTTagCompound each : NBTPlugin.<NBTTagCompound>getNBTList(tag, "carts", EnumNBTType.COMPOUND)) {
+                carts.add(NBTUtil.getUUIDFromTag(each));
+            }
+            locks = new HashSet<>();
+            for (NBTTagCompound each : NBTPlugin.<NBTTagCompound>getNBTList(tag, "locks", EnumNBTType.COMPOUND)) {
+                locks.add(NBTUtil.getUUIDFromTag(each));
+            }
+        }
+
+        void writeToNBT(NBTTagCompound tag) {
+            NBTPlugin.writeUUID(tag, "id", id);
+            NBTPlugin.writeEnumOrdinal(tag, "state", state);
+            NBTTagList listTag = new NBTTagList();
+            for (UUID uuid : carts) {
+                listTag.appendTag(NBTUtil.createUUIDTag(uuid));
+            }
+            tag.setTag("carts", listTag);
+
+            NBTTagList locks = new NBTTagList();
+            for (UUID uuid : this.locks) {
+                locks.appendTag(NBTUtil.createUUIDTag(uuid));
+            }
+            tag.setTag("locks", locks);
+        }
+
+        Train build(World world) {
+            return new Train(this, world);
+        }
     }
 }

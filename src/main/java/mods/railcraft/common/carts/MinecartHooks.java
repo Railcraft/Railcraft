@@ -122,6 +122,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         boolean isLiving = other instanceof EntityLivingBase;
         boolean isPlayer = other instanceof EntityPlayer;
 
+        if (isPlayer && ((EntityPlayer) other).isSpectator()) {
+            return;
+        }
+
         //TODO: needs more thought in regards to passenger handling
         if (isLiving && !isPlayer && cart.canBeRidden() && !(other instanceof EntityIronGolem)
                 && cart.motionX * cart.motionX + cart.motionZ * cart.motionZ > 0.001D
@@ -350,6 +354,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
     public void onMinecartEntityCollision(MinecartCollisionEvent event) {
         EntityMinecart cart = event.getMinecart();
         Entity other = event.getCollider();
+
+        if (other instanceof EntityPlayer && ((EntityPlayer) other).isSpectator())
+            return;
+
         if (cart.isPassenger(other))
             return;
 

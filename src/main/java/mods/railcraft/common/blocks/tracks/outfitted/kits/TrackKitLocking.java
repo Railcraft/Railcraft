@@ -189,9 +189,9 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         if (currentCart != null) {
             Train train = Train.getTrain(currentCart);
             if (currentTrain != train && currentTrain != null)
-                currentTrain.removeLockingTrack(getUUID());
+                currentTrain.removeLock(getUUID());
             currentTrain = train;
-            currentTrain.addLockingTrack(getUUID());
+            currentTrain.addLock(getUUID());
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getPos()));
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
@@ -212,7 +212,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     private void releaseCurrentCart() {
         if (currentTrain != null)
-            currentTrain.removeLockingTrack(getUUID());
+            currentTrain.removeLock(getUUID());
         if (currentCart != null) {
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getPos()));
             profileInstance.onRelease(currentCart);

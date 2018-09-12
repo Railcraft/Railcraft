@@ -15,8 +15,9 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
-
+import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,14 +32,15 @@ public final class NBTPlugin {
         if (profile == null || (profile.getName() == null && profile.getId() == null))
             return null;
         NBTTagCompound nbt = new NBTTagCompound();
-        if (profile.getName() != null)
-            nbt.setString("name", profile.getName());
-        if (profile.getId() != null)
-            nbt.setString("id", profile.getId().toString());
+        NBTUtil.writeGameProfile(nbt, profile);
         return nbt;
     }
 
     public static GameProfile readGameProfileTag(NBTTagCompound data) {
+        if (data.hasKey("Name")) {
+            GameProfile ret = NBTUtil.readGameProfileFromNBT(data);
+            return ret == null ? new GameProfile(null, PlayerPlugin.UNKNOWN_PLAYER_NAME) : ret;
+        }
         String ownerName = PlayerPlugin.UNKNOWN_PLAYER_NAME;
         if (data.hasKey("name"))
             ownerName = data.getString("name");
@@ -76,9 +78,7 @@ public final class NBTPlugin {
     public static void writeUUID(NBTTagCompound data, String tag, @Nullable UUID uuid) {
         if (uuid == null)
             return;
-        NBTTagCompound nbtTag = new NBTTagCompound();
-        nbtTag.setLong("most", uuid.getMostSignificantBits());
-        nbtTag.setLong("least", uuid.getLeastSignificantBits());
+        NBTTagCompound nbtTag = NBTUtil.createUUIDTag(uuid);
         data.setTag(tag, nbtTag);
     }
 
@@ -86,20 +86,28 @@ public final class NBTPlugin {
     public static UUID readUUID(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
             NBTTagCompound nbtTag = data.getCompoundTag(tag);
-            return new UUID(nbtTag.getLong("most"), nbtTag.getLong("least"));
+            if (nbtTag.hasKey("most")) {
+                return new UUID(nbtTag.getLong("most"), nbtTag.getLong("least"));
+            } else {
+                return NBTUtil.getUUIDFromTag(nbtTag);
+            }
         }
         return null;
     }
 
     public static void writeBlockPos(NBTTagCompound data, String tag, BlockPos pos) {
-        data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
+        data.setIntArray(tag, new int[] {pos.getX(), pos.getY(), pos.getZ()});
     }
 
     @Nullable
     public static BlockPos readBlockPos(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
-            int[] c = data.getIntArray(tag);
-            return new BlockPos(c[0], c[1], c[2]);
+            if (data.hasKey(tag, NBT.TAG_INT_ARRAY)) {
+                int[] c = data.getIntArray(tag);
+                return new BlockPos(c[0], c[1], c[2]);
+            } else {
+                return NBTUtil.getPosFromTag(data.getCompoundTag(tag));
+            }
         }
         return null;
     }
