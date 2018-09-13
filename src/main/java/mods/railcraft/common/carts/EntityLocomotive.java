@@ -795,6 +795,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             return MAX;
         }
 
+        public static LocoSpeed fromLevel(int level) {
+            return VALUES[level - 1];
+        }
+
         public int getLevel() {
             return level;
         }

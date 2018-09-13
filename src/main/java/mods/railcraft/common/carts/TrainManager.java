@@ -19,7 +19,7 @@ import java.util.UUID;
 /**
  *
  */
-public final class TrainManager {
+final class TrainManager {
 
     static final Map<World, TrainManager> instances = new MapMaker().weakKeys().makeMap();
 
@@ -27,7 +27,7 @@ public final class TrainManager {
     final World world;
     final SaveData data;
 
-    public static TrainManager getInstance(World world) {
+    static TrainManager getInstance(World world) {
         return instances.computeIfAbsent(world, TrainManager::new);
     }
 

@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -41,18 +42,18 @@ public class TrackKitThrottle extends TrackKitPowered {
     public int getRenderState() {
         int state = speed.ordinal();
         if (getReverse())
-        	state = 4;
+            state |= 4;
         if (isPowered())
-        	state += 5;
+            state |= 8;
         return state;
     }
 
     public LocoSpeed getSpeed() {
         return speed;
     }
-    
+
     public boolean getReverse() {
-    	return reverse;
+        return reverse;
     }
 
     public void setSpeed(LocoSpeed speed) {
@@ -62,13 +63,13 @@ public class TrackKitThrottle extends TrackKitPowered {
                 markBlockNeedsUpdate();
         }
     }
-    
+
     public void setReverse(boolean state) {
-    	if (this.reverse != state) {
-    		this.reverse = state;
-    		if (Game.isClient(theWorldAsserted()))
-    			markBlockNeedsUpdate();
-    	}
+        if (this.reverse != state) {
+            this.reverse = state;
+            if (Game.isClient(theWorldAsserted()))
+                markBlockNeedsUpdate();
+        }
     }
 
     @Override
@@ -77,16 +78,11 @@ public class TrackKitThrottle extends TrackKitPowered {
         if (heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-            	if (speed == LocoSpeed.MAX) {
-            		if (!getReverse()) {
-            			setReverse(true);
-            		} else {
-            			setReverse(false);
-            			setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
-            		}
-            	} else {
-            		setSpeed(EnumTools.next(speed, LocoSpeed.VALUES));
-            	}
+                if (speed == LocoSpeed.SLOWEST) {
+                    setReverse(!reverse);
+                }
+                setSpeed(EnumTools.previous(speed, LocoSpeed.VALUES));
+
                 crowbar.onWhack(player, hand, heldItem, getPos());
                 sendUpdateToClient();
                 return true;
@@ -99,12 +95,8 @@ public class TrackKitThrottle extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
-            	if (getReverse()) {
-            		((EntityLocomotive) cart).setReverse(true);
-            	} else {
-            		((EntityLocomotive) cart).setReverse(false);
-            		((EntityLocomotive) cart).setSpeed(getSpeed());
-            	}
+                ((EntityLocomotive) cart).setReverse(getReverse());
+                ((EntityLocomotive) cart).setSpeed(getSpeed());
             }
         }
     }
@@ -120,7 +112,7 @@ public class TrackKitThrottle extends TrackKitPowered {
         data.setString("locoSpeed", speed.getName());
         NBTPlugin.writeEnumName(data, "locoSpeed", speed);
         data.setBoolean("locoReverse", reverse);
-        
+
     }
 
     @Override
@@ -130,7 +122,7 @@ public class TrackKitThrottle extends TrackKitPowered {
         if (data.hasKey("locoSpeed"))
             speed = NBTPlugin.readEnumName(data, "locoSpeed", LocoSpeed.MAX);
         if (data.hasKey("locoReverse"))
-        	reverse = data.getBoolean("locoReverse");
+            reverse = data.getBoolean("locoReverse");
     }
 
     @Override
@@ -145,5 +137,10 @@ public class TrackKitThrottle extends TrackKitPowered {
         super.readPacketData(data);
         setSpeed(((RailcraftInputStream) data).readEnum(LocoSpeed.VALUES));
         setReverse(data.readBoolean());
+    }
+
+    @Override
+    public World theWorld() {
+        return getTile().getWorld();
     }
 }

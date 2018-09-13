@@ -147,7 +147,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemBlockEntityDelegate::new),
     CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemBlockEntityDelegate::new),
     // multiblocks
-    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemBlockCustomModel::new),
+    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOvenRegular::new, ItemBlockCustomModel::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlockCustomModel::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemBlockEntityDelegate::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemBlockCustomModel::new),
@@ -164,6 +164,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BOILER_TANK_PRESSURE_HIGH("boiler_tank_pressure_high", BlockBoilerTankHigh.class, BlockBoilerTankHigh::new, ItemBlockEntityDelegate::new),
     BOILER_TANK_PRESSURE_LOW("boiler_tank_pressure_low", BlockBoilerTankLow.class, BlockBoilerTankLow::new, ItemBlockEntityDelegate::new),
     STEAM_TURBINE("steam_turbine", BlockSteamTurbine.class, BlockSteamTurbine::new, ItemBlockCustomModel::new),
+    COKE_OVEN_RED("coke_oven_red", BlockCokeOven.class, BlockCokeOvenRed::new, ItemBlockCustomModel::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();

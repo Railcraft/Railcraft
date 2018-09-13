@@ -47,6 +47,7 @@ public enum EnumGui {
     TRACK_LAUNCHER(false),
     TRACK_EMBARKING(false),
     TRACK_ROUTING(true),
+    TRACK_DELAYED(false),
     CART_BORE(true),
     CART_TNT_FUSE(false),
     CART_TNT_BLAST(false),

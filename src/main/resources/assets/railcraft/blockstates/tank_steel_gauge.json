@@ -30,8 +30,8 @@
         "textures": {
           "north": "railcraft:blocks/tank_steel_gauge_1",
           "south": "railcraft:blocks/tank_steel_gauge_1",
-          "east": "railcraft:blocks/tank_steel_gauge_4",
-          "west": "railcraft:blocks/tank_steel_gauge_4",
+          "east": "railcraft:blocks/tank_steel_gauge_1",
+          "west": "railcraft:blocks/tank_steel_gauge_1",
           "up": "railcraft:blocks/tank_steel_gauge_0",
           "down": "railcraft:blocks/tank_steel_gauge_4"
         }
@@ -40,8 +40,8 @@
         "textures": {
           "north": "railcraft:blocks/tank_steel_gauge_2",
           "south": "railcraft:blocks/tank_steel_gauge_2",
-          "east": "railcraft:blocks/tank_steel_gauge_4",
-          "west": "railcraft:blocks/tank_steel_gauge_4",
+          "east": "railcraft:blocks/tank_steel_gauge_2",
+          "west": "railcraft:blocks/tank_steel_gauge_2",
           "up": "railcraft:blocks/tank_steel_gauge_4",
           "down": "railcraft:blocks/tank_steel_gauge_4"
         }
@@ -50,8 +50,8 @@
         "textures": {
           "north": "railcraft:blocks/tank_steel_gauge_3",
           "south": "railcraft:blocks/tank_steel_gauge_3",
-          "east": "railcraft:blocks/tank_steel_gauge_4",
-          "west": "railcraft:blocks/tank_steel_gauge_4",
+          "east": "railcraft:blocks/tank_steel_gauge_3",
+          "west": "railcraft:blocks/tank_steel_gauge_3",
           "up": "railcraft:blocks/tank_steel_gauge_4",
           "down": "railcraft:blocks/tank_steel_gauge_0"
         }

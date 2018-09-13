@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -57,7 +58,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
-        ArrayList<ModelResourceLocation> textures = new ArrayList<>();
+        List<ModelResourceLocation> textures = new ArrayList<>();
         for (TrackType trackType : TrackRegistry.TRACK_TYPE) {
             for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
                 textures.add(new ModelResourceLocation(

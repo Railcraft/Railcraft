@@ -28,6 +28,7 @@ public class CommandTrack extends SubCommand {
     public CommandTrack() {
         super("track");
         addChildCommand(new CommandTrackMessage());
+        addChildCommand(new CommandTrackMessageSubtitle());
     }
 
     private static class CommandTrackMessage extends SubCommand {

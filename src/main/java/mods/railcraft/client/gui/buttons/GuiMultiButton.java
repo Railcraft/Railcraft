@@ -42,11 +42,6 @@ public final class GuiMultiButton<T extends IMultiButtonState> extends GuiBetter
     }
 
     @Override
-    public GuiMultiButton<T> getThis() {
-        return this;
-    }
-
-    @Override
     public int getHeight() {
         return texture.getHeight();
     }

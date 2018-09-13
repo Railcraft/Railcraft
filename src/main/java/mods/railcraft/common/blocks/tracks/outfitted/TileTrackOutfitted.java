@@ -12,19 +12,17 @@ package mods.railcraft.common.blocks.tracks.outfitted;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
+import mods.railcraft.common.items.IMagnifiable;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler {
+public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler, IMagnifiable {
     @NotNull
     private ITrackKitInstance trackKitInstance = new TrackKitMissing(false);
     private TrackType trackType = TrackTypes.IRON.getTrackType();
@@ -54,7 +52,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
 
     @Override
     public String getLocalizationTag() {
-        return "tile." + trackKitInstance.getTrackKit().getName().replace(':', '.') + ".name";
+        return "tile.railcraft.track_outfitted." + trackType.getName() + "." + trackKitInstance.getTrackKit().getName();
     }
 
     @NotNull
@@ -125,5 +123,12 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).readGuiData(data, sender);
+    }
+
+    @Override
+    public void onMagnify(EntityPlayer viewer) {
+        if (trackKitInstance instanceof IMagnifiable) {
+            ((IMagnifiable) trackKitInstance).onMagnify(viewer);
+        }
     }
 }

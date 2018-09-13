@@ -14,6 +14,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin.EnumNBTType;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,13 +46,15 @@ public final class Train implements Iterable<EntityMinecart> {
     private final TrainInfo info;
     private final Collection<UUID> safeCarts;
 
-    Train(EntityMinecart cart) {
-        this(UUID.randomUUID(), new ArrayDeque<>(), new HashSet<>(), cart.world, TrainState.NORMAL);
-        buildTrain(cart);
+    private static Deque<UUID> makeCarts(EntityMinecart cart) {
+        Deque<UUID> ret = new ArrayDeque<>();
+        ret.add(cart.getPersistentID());
+        return ret;
     }
 
-    private Train(UUID uuid, Deque<UUID> carts, Set<UUID> locks, World world, TrainState state) {
-        this(new TrainInfo(uuid, state, carts, locks), world);
+    Train(EntityMinecart cart) {
+        this(new TrainInfo(UUID.randomUUID(), TrainState.NORMAL, makeCarts(cart), new HashSet<>()), cart.world);
+        buildTrain(null, cart);
     }
 
     Train(TrainInfo info, World world) {
@@ -61,6 +64,9 @@ public final class Train implements Iterable<EntityMinecart> {
         this.locks = info.locks;
         this.world = world;
         safeCarts = Collections.unmodifiableCollection(carts);
+        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.getInstance(world).trains.containsKey(info.id)) {
+            throw new RuntimeException("Duplicate trains, things will be broken!");
+        }
     }
 
     public static Map<UUID, Train> getTrainMap(World world) {
@@ -102,7 +108,7 @@ public final class Train implements Iterable<EntityMinecart> {
         UUID train1 = getTrainUUID(cart1);
         UUID train2 = getTrainUUID(cart2);
 
-        return train1 != null && train1 == train2;
+        return train1 != null && Objects.equals(train1, train2);
     }
 
     public static Train getLongestTrain(EntityMinecart cart1, EntityMinecart cart2) {
@@ -408,6 +414,23 @@ public final class Train implements Iterable<EntityMinecart> {
         STOPPED,
         IDLE,
         NORMAL
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Train)) {
+            return false;
+        }
+        Train other = (Train) obj;
+        return world.provider.getDimension() == other.world.provider.getDimension() && uuid.equals(other.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return world.provider.getDimension() ^ uuid.hashCode();
     }
 
     TrainInfo getInfo() {

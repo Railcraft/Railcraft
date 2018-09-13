@@ -38,36 +38,38 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.BitSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockdown, ITrackKitPowered {
-//    public static final PropertyEnum<LockingProfileType> PROFILE = PropertyEnum.create("profile", LockingProfileType.class);
-
     public static double START_BOOST = 0.04;
     public static double BOOST_FACTOR = 0.06;
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
-    private LockingProfile profileInstance = profile.create(this);
-    private EntityMinecart currentCart, prevCart;
-    private Train currentTrain;
-    private UUID uuid;
-    private boolean trainLeaving;
-    private boolean redstone;
-    private boolean locked;
+    protected LockingProfile profileInstance = profile.create(this);
+    @Nullable
+    protected EntityMinecart currentCart;
+    @Nullable
+    protected EntityMinecart prevCart;
+    @Nullable
+    protected Train currentTrain;
+    protected UUID uuid;
+    protected boolean trainLeaving;
+    protected boolean redstone;
+    protected boolean locked;
     private int trainDelay;
     // Temporary variables to hold loaded data while we restore from NBT
     private UUID prevCartUUID;
     private UUID currentCartUUID;
-    private boolean justLoaded = true;
+    boolean justLoaded = true;
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -99,7 +101,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             return;
         profile = type;
         profileInstance = profile.create(this);
-        if (getTile() != null && Game.isHost(theWorldAsserted()))
+        if (getTile().hasWorld() && Game.isHost(theWorldAsserted()))
             sendUpdateToClient();
     }
 
@@ -180,13 +182,13 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         releaseCart(); // Release any carts still holding on
     }
 
-    private UUID getUUID() {
+    UUID getUUID() {
         if (uuid == null)
             uuid = UUID.randomUUID();
         return uuid;
     }
 
-    private void lockCurrentCart() {
+    void lockCurrentCart() {
         if (currentCart != null) {
             HighSpeedTools.performHighSpeedChecks(theWorldAsserted(), getPos(), currentCart, getTrackKit());
             Train train = Train.getTrain(currentCart);
@@ -212,7 +214,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         profileInstance.onPass(currentCart);
     }
 
-    private void releaseCurrentCart() {
+    void releaseCurrentCart() {
         if (currentTrain != null)
             currentTrain.removeLock(getUUID());
         if (currentCart != null) {
@@ -239,7 +241,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
      *
      * @return whether the current cart or train (depending on LockType) is the same as previous cart or trains
      */
-    private boolean isSameTrainOrCart() {
+    boolean isSameTrainOrCart() {
         if (profile.lockType == LockType.TRAIN) {
             if (currentCart != null) {
                 if (Train.areInSameTrain(currentCart, prevCart))
@@ -284,20 +286,20 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
      * implies, <code>trainLeaving</code> indicates whether the train or cart is in the process
      * of leaving the track.
      */
-    private void calculateLocked() {
+    void calculateLocked() {
         boolean isSameCart = isSameTrainOrCart();
         if (trainLeaving) {
-            if (!isSameCart && !redstone) {
+            locked = !(isSameCart || redstone);
+            if (locked) {
                 // When the train is in the process of leaving, we know that the "trainLeaving" state ends
                 // when both the carts and redstone signal are false
                 trainLeaving = false;
             }
-            locked = !(isSameCart || redstone);
         } else {
-            if (isSameCart && redstone) { // When we get both signals we know a train is leaving, so we set the state as so
+            locked = !redstone;
+            if (!locked && isSameCart) { // When we get both signals we know a train is leaving, so we set the state as so
                 trainLeaving = true;
             }
-            locked = !redstone;
         }
     }
 
@@ -313,7 +315,9 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     @Override
     public void setPowered(boolean powered) {
-        this.redstone = powered;
+        if (this.redstone != powered) {
+            this.redstone = powered;
+        }
     }
 
     @Override
@@ -364,11 +368,17 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         super.writePacketData(data);
 
         data.writeByte(profile.ordinal());
-        BitSet bits = new BitSet();
-        bits.set(0, redstone);
-        bits.set(1, locked);
-        bits.set(2, justLoaded);
-        data.write(bits.toByteArray());
+        byte b = 0;
+        if (redstone) {
+            b |= 1;
+        }
+        if (locked) {
+            b |= 2;
+        }
+        if (justLoaded) {
+            b |= 4;
+        }
+        data.writeByte(b);
 
         profileInstance.writePacketData(data);
     }
@@ -382,10 +392,10 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
             profile = p;
             profileInstance = p.create(this);
         }
-        BitSet bits = BitSet.valueOf(new byte[] {data.readByte()});
-        redstone = bits.get(0);
-        locked = bits.get(1);
-        justLoaded = bits.get(2);
+        byte b = data.readByte();
+        redstone = (b & 1) == 1;
+        locked = ((b >> 1) & 1) == 1;
+        justLoaded = ((b >> 2) & 1) == 1;
         profileInstance.readPacketData(data);
 
         markBlockNeedsUpdate();
@@ -398,21 +408,21 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     public enum LockingProfileType implements IStringSerializable {
 
-        LOCKDOWN(LockdownLockingProfile.class, LockType.CART, "lockdown"),
-        LOCKDOWN_TRAIN(LockdownLockingProfile.class, LockType.TRAIN, "lockdown.train"),
-        HOLDING(HoldingLockingProfile.class, LockType.CART, "holding"),
-        HOLDING_TRAIN(HoldingLockingProfile.class, LockType.TRAIN, "holding.train"),
-        BOARDING_A(BoardingLockingProfile.class, LockType.CART, "boarding"),
-        BOARDING_B(BoardingLockingProfile.class, LockType.CART, "boarding"),
-        BOARDING_A_TRAIN(BoardingLockingProfile.class, LockType.TRAIN, "boarding.train"),
-        BOARDING_B_TRAIN(BoardingLockingProfile.class, LockType.TRAIN, "boarding.train");
+        LOCKDOWN(LockdownLockingProfile::new, LockType.CART, "lockdown"),
+        LOCKDOWN_TRAIN(LockdownLockingProfile::new, LockType.TRAIN, "lockdown.train"),
+        HOLDING(HoldingLockingProfile::new, LockType.CART, "holding"),
+        HOLDING_TRAIN(HoldingLockingProfile::new, LockType.TRAIN, "holding.train"),
+        BOARDING_A(BoardingLockingProfile::new, LockType.CART, "boarding"),
+        BOARDING_B(BoardingLockingProfile::new, LockType.CART, "boarding"),
+        BOARDING_A_TRAIN(BoardingLockingProfile::new, LockType.TRAIN, "boarding.train"),
+        BOARDING_B_TRAIN(BoardingLockingProfile::new, LockType.TRAIN, "boarding.train");
         public static final LockingProfileType[] VALUES = values();
         public final LockType lockType;
         public final String tag;
-        private final Class<? extends LockingProfile> profileClass;
+        private final Function<? super TrackKitLocking, ? extends LockingProfile> profileSource;
 
-        LockingProfileType(Class<? extends LockingProfile> profileClass, LockType lockType, String tag) {
-            this.profileClass = profileClass;
+        LockingProfileType(Function<? super TrackKitLocking, ? extends LockingProfile> profileSource, LockType lockType, String tag) {
+            this.profileSource = profileSource;
             this.lockType = lockType;
             this.tag = tag;
         }
@@ -432,13 +442,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
         }
 
         public LockingProfile create(TrackKitLocking track) {
-            try {
-                Constructor<? extends LockingProfile> con = profileClass.getConstructor(TrackKitLocking.class);
-                return con.newInstance(track);
-            } catch (Throwable ex) {
-                Game.logThrowable("Failed to create Locking Profile!", 10, ex);
-                throw new RuntimeException(ex);
-            }
+            return profileSource.apply(track);
         }
 
         @Override

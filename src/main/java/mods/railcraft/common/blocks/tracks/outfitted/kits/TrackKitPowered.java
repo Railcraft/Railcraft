@@ -23,7 +23,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TrackKitPowered extends TrackKitRailcraft implements ITrackKitPowered {
-    private boolean powered;
+    protected boolean powered;
 
     @Override
     public int getRenderState() {
@@ -37,7 +37,10 @@ public abstract class TrackKitPowered extends TrackKitRailcraft implements ITrac
 
     @Override
     public void setPowered(boolean powered) {
-        this.powered = powered;
+        if (this.powered != powered) {
+            this.powered = powered;
+            sendUpdateToClient();
+        }
     }
 
     @Override

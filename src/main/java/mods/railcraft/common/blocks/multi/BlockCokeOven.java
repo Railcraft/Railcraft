@@ -17,11 +17,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public final class BlockCokeOven extends BlockMultiBlockInventory {
+public abstract class BlockCokeOven extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
-    public BlockCokeOven() {
+    protected BlockCokeOven() {
         super(Material.ROCK);
         setHarvestLevel("pickaxe", 0);
     }
@@ -53,23 +53,5 @@ public final class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public void defineRecipes() {
-        ItemStack stack = new ItemStack(this);
-        CraftingPlugin.addRecipe(stack,
-                "MBM",
-                "BMB",
-                "MBM",
-                'B', "ingotBrick",
-                'M', "sand");
-        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                .input(CraftingPlugin.getIngredient(this))
-                .addOutput(new ItemStack(Items.BRICK, 3))
-                .addOutput(new ItemStack(Items.BRICK), 0.5f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .buildAndRegister();
-    }
+    public abstract void defineRecipes();
 }

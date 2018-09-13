@@ -25,7 +25,6 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.model.IModelState;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
@@ -96,9 +95,8 @@ public class OutfittedTrackItemModel implements IModel {
                             "blocks/tracks/outfitted/kit/" + trackKit.getRegistryName().getPath() + "_0"));
                     break;
                 case UNIFIED:
-                    // TODO: fix this
                     texBuilder.add(new ResourceLocation(trackType.getRegistryName().getNamespace(),
-                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getPath()));
+                            "blocks/tracks/outfitted/unified/" + trackType.getRegistryName().getPath() + "/" + trackKit.getRegistryName().getPath() + "_0"));
                     break;
             }
             return new OutfittedTrackItemModel(texBuilder.build());

@@ -30,11 +30,6 @@ public class GuiToggleButton extends GuiBetterButton<GuiToggleButton> {
         this.active = active;
     }
 
-    @Override
-    public GuiToggleButton getThis() {
-        return this;
-    }
-
     public void toggle() {
         active = !active;
     }

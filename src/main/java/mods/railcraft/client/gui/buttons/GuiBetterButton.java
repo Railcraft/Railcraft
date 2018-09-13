@@ -31,20 +31,17 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
     protected final IButtonTextureSet texture;
     private ToolTip toolTip;
     @Nullable
-    private Consumer<T> clickConsumer;
+    private Consumer<? super T> clickConsumer;
     @Nullable
-    private Consumer<T> statusUpdater;
+    private Consumer<? super T> statusUpdater;
 
     protected GuiBetterButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
         super(id, x, y, width, texture.getHeight(), label);
         this.texture = texture;
     }
 
-    public abstract T getThis();
-
-    public T setClickConsumer(Consumer<T> clickConsumer) {
+    public void setClickConsumer(Consumer<? super T> clickConsumer) {
         this.clickConsumer = clickConsumer;
-        return (T) this;
     }
 
     public void consumeClick() {
@@ -52,9 +49,8 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
             clickConsumer.accept((T) this);
     }
 
-    public T setStatusUpdater(Consumer<T> statusUpdater) {
+    public void setStatusUpdater(Consumer<? super T> statusUpdater) {
         this.statusUpdater = statusUpdater;
-        return (T) this;
     }
 
     public void updateStatus() {

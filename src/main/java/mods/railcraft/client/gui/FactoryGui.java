@@ -27,10 +27,7 @@ import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -143,6 +140,8 @@ public class FactoryGui {
                     return new GuiTrackPriming((TrackKitPriming) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case TRACK_EMBARKING:
                     return new GuiTrackEmbarking((TrackKitEmbarking) ((TileTrackOutfitted) obj).getTrackKitInstance());
+                case TRACK_DELAYED:
+                    return new GuiTrackDelayedLocking((TrackKitDelayedLocking) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:

@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
@@ -110,6 +111,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
+                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.train", LocalizationPlugin.getEntityLocalizationTag(cart), Train.getTrainUUID(cart));
                 event.setCanceled(true);
             }
             if (entity instanceof IMagnifiable) {

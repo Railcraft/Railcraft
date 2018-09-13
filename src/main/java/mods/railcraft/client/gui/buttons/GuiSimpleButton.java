@@ -28,9 +28,4 @@ public class GuiSimpleButton extends GuiBetterButton<GuiSimpleButton> {
     public GuiSimpleButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
         super(id, x, y, width, texture, label);
     }
-
-    @Override
-    public GuiSimpleButton getThis() {
-        return this;
-    }
 }
