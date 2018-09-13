@@ -21,11 +21,8 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackTileFactory;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.*;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
-import net.minecraft.block.BlockStainedGlass;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -115,12 +112,12 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             public void selectBlocks(Random rand, int x, int y, int z, boolean wall) {
                 float f = rand.nextFloat();
 
-                this.blockstate = Blocks.RAIL.getDefaultState();
+                this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) Blocks.RAIL, EnumRailDirection.NORTH_SOUTH);;
 
                 if (f < 0.1F && RailcraftBlocks.TRACK_FLEX_STRAP_IRON.isLoaded()) {
-                    this.blockstate = RailcraftBlocks.TRACK_FLEX_STRAP_IRON.getDefaultState();
+                    this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) RailcraftBlocks.TRACK_FLEX_STRAP_IRON.block(), EnumRailDirection.NORTH_SOUTH);
                 } else if (f < 0.3F && RailcraftBlocks.TRACK_FLEX_ABANDONED.isLoaded()) {
-                    this.blockstate = RailcraftBlocks.TRACK_FLEX_ABANDONED.getDefaultState();
+                    this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) RailcraftBlocks.TRACK_FLEX_ABANDONED.block(), EnumRailDirection.NORTH_SOUTH);
                 }
             }
         });

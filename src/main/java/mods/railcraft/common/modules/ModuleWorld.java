@@ -32,7 +32,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
 
 import java.io.File;
 
@@ -44,6 +46,8 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 @RailcraftModule(value = "railcraft:world", description = "world gen, ores, villages")
 public class ModuleWorld extends RailcraftModulePayload {
 
+    @ObjectHolder("minecraft:smith")
+    static VillagerRegistry.VillagerProfession smith;
     public static final String VILLAGER_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/trackman.png";
     public static final String ZOMBIE_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/zombie_trackman.png";
     public static final String VILLAGER_ID = RailcraftConstants.RESOURCE_DOMAIN + ":trackman";
@@ -156,8 +160,19 @@ public class ModuleWorld extends RailcraftModulePayload {
                     villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
                     ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerTrackman); //TODO registry event
 
-                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
-                    VillagerTrades.define(trackmanCareer);
+                    VillagerCareer trackmanCareer = new VillagerCareer(villagerTrackman, "trackman");
+                    VillagerCareer cartmanCareer = new VillagerCareer(villagerTrackman, "cartman");
+
+                    VillagerTrades.addTradeForTrackman(trackmanCareer);
+                    VillagerTrades.addTradeForCartman(cartmanCareer);
+
+                    if (smith != null) {
+                        VillagerCareer alloyer = new VillagerCareer(smith, "alloyer");
+                        VillagerCareer steelForger = new VillagerCareer(smith, "steel_forger");
+
+                        VillagerTrades.addTradeForAlloyer(alloyer);
+                        VillagerTrades.addTradeForSteelForger(steelForger);
+                    }
 
                     try {
                         MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");

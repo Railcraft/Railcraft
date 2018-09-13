@@ -23,6 +23,7 @@ public class MetalsChestLogic extends ChestLogic {
     static final Map<Metal, Predicate<ItemStack>> blockFilters = new EnumMap<>(Metal.class);
 
     static {
+        //TODO add compressions e.g. emerald, lapis, coke, diamond, redstone
         for (Metal m : Metal.VALUES) {
             nuggetFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.NUGGET)).and(m.nuggetFilter));
             ingotFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.INGOT)).and(m.ingotFilter));

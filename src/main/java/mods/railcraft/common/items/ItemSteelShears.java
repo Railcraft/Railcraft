@@ -12,12 +12,19 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTripWire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,6 +72,14 @@ public class ItemSteelShears extends ItemShears implements IRailcraftItemSimple 
         if (block instanceof IShearable)
             return 15;
         return super.getDestroySpeed(stack, state);
+    }
+
+    @Override
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+        if (state.getBlock() == Blocks.TRIPWIRE.delegate.get()) {
+            WorldPlugin.setBlockState(worldIn, pos, state.withProperty(BlockTripWire.DISARMED, true));
+        }
+        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     @SideOnly(Side.CLIENT)
