@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -87,6 +88,16 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
             world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        F mBlock = getMasterBlock();
+        if (mBlock != null) {
+            GuiHandler.openGui(getGui(), player, world, mBlock.getPos());
+            return true;
+        }
+        return false;
     }
 
     @Override

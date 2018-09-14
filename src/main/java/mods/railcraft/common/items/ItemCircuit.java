@@ -82,7 +82,8 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
 
         CONTROLLER(Items.COMPARATOR),
         RECEIVER(Blocks.REDSTONE_TORCH),
-        SIGNAL(Items.REPEATER);
+        SIGNAL(Items.REPEATER),
+        RADIO(Items.AIR);
         public static EnumCircuit[] VALUES = values();
         private Object alternate;
 
