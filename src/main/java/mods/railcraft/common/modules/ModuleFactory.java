@@ -240,7 +240,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BIRCH_STAIRS)))
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BRICK_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.BRICK_STAIRS), false, false);
                             .addOutput(new ItemStack(Items.BRICK, 4))
                             .addOutput(new ItemStack(Items.BRICK), 0.5f)

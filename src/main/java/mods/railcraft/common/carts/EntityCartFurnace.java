@@ -9,7 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.items.IMagnifiable;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +26,7 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart {
+public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcraftCart, IMagnifiable {
 
     public EntityCartFurnace(World world) {
         super(world);
@@ -72,7 +75,9 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
 
     @Override
     public void killMinecart(DamageSource par1DamageSource) {
-        killAndDrop(this);
+        if (!par1DamageSource.isExplosion()) {
+            killAndDrop(this);
+        }
     }
 
 //    public double getDrag() {
@@ -83,21 +88,24 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)))
             return true;
+
         ItemStack stack = player.getHeldItem(hand);
-        if (!InvTools.isEmpty(stack)) {
-            int burnTime = FuelPlugin.getBurnTime(stack);
+        int burnTime = FuelPlugin.getBurnTime(stack);
+        if (burnTime > 0 && fuel + burnTime <= 32000) {
+            if (!player.capabilities.isCreativeMode)
+                InvTools.depleteItem(stack);
+            fuel += burnTime;
 
-            if (burnTime > 0 && fuel + burnTime <= 32000) {
-                if (!player.capabilities.isCreativeMode)
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
-                fuel += burnTime;
-
-                pushX = posX - player.posX;
-                pushZ = posZ - player.posZ;
-            }
+            pushX = posX - player.posX;
+            pushZ = posZ - player.posZ;
         }
 
         return true;
+    }
+
+    @Override
+    public void onMagnify(EntityPlayer viewer) {
+        viewer.sendMessage(ChatPlugin.translateMessage("gui.railcraft.mag.glass.cart.furnace", fuel, pushX, pushZ));
     }
 
     //    private static final double DRAG_FACTOR = 0.99;

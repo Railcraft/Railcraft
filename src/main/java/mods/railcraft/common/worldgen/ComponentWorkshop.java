@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import com.google.common.collect.ImmutableList;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
@@ -41,7 +40,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -107,12 +105,12 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithBlocks(world, sbb, 0, 0, 1, 3, 0, 5, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
 
         // track
-        fillWithRandomizedBlocks(world, sbb, 7, 1, 2, 7, 1, 8, true, random, new BlockSelector() {
+        fillWithRandomizedBlocks(world, sbb, 7, 1, 2, 7, 1, 8, false, random, new BlockSelector() {
             @Override
             public void selectBlocks(Random rand, int x, int y, int z, boolean wall) {
                 float f = rand.nextFloat();
 
-                this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) Blocks.RAIL, EnumRailDirection.NORTH_SOUTH);;
+                this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) Blocks.RAIL, EnumRailDirection.NORTH_SOUTH);
 
                 if (f < 0.1F && RailcraftBlocks.TRACK_FLEX_STRAP_IRON.isLoaded()) {
                     this.blockstate = TrackToolsAPI.makeTrackState((BlockRailBase) RailcraftBlocks.TRACK_FLEX_STRAP_IRON.block(), EnumRailDirection.NORTH_SOUTH);
@@ -265,7 +263,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
     }
 
-    private void placeOutfittedTrack(TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
+    private void placeOutfittedTrack(TrackKits track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean southEnd) {
         BlockTrackOutfitted blockTrack = (BlockTrackOutfitted) RailcraftBlocks.TRACK_OUTFITTED.block();
         if (blockTrack == null)
             return;
@@ -295,7 +293,12 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
             TrackTileFactory.initTrackTile((TileTrackOutfitted) tile, type, trackKit);
-            ((ITrackKitReversible) ((TileTrackOutfitted) tile).getTrackKitInstance()).setReversed(reversed);
+            ITrackKitInstance kit = ((TileTrackOutfitted) tile).getTrackKitInstance();
+            if (kit instanceof ITrackKitReversible) {
+                BlockPos tracks = getPosWithOffset(x, y, southEnd ? z - 1 : z + 1);
+                BlockPos self = getPosWithOffset(x, y, z);
+                ((ITrackKitReversible) kit).setReversed(tracks.south().equals(self) || tracks.west().equals(self));
+            }
         }
     }
 
