@@ -21,7 +21,7 @@ public class GuiBlastFurnace extends TileGui {
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
         super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png",
-                LocalizationPlugin.translateFast("gui.railcraft.coke.oven"));
+                LocalizationPlugin.translateFast("gui.railcraft.blast.furnace"));
         this.tile = tile;
     }
 

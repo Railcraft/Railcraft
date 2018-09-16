@@ -1,6 +1,8 @@
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -19,15 +21,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
-
 /**
  *
  */
 public final class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
-    private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
+    private static final ChargeNodeDefinition DEFINITION = new ChargeNodeDefinition(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
         super(Material.IRON);
@@ -37,7 +37,7 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return DEFINITION;
     }
 
@@ -59,12 +59,6 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     @Override
     public Class<TileRockCrusher> getTileClass(IBlockState state) {
         return TileRockCrusher.class;
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
     }
 
     @Override

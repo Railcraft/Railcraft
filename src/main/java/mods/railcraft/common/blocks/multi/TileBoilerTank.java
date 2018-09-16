@@ -35,7 +35,7 @@ public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends T
 
     @Override
     public IBlockState getActualState(IBlockState state) {
-        if (getCurrentPattern() == null)
+        if (!isStructureValid())
             return state;
         BlockPos patternPos = getPatternPosition();
         if (patternPos == null)

@@ -11,12 +11,13 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
@@ -28,19 +29,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends RailcraftTileEntity implements ISmartTile {
+public class TileAdminSteamProducer extends RailcraftTickingTileEntity implements ISmartTile {
 
     private static final IFluidHandler HANDLER = new IFluidHandler() {
         @Override
         public IFluidTankProperties[] getTankProperties() {
-            return new IFluidTankProperties[]{new IFluidTankProperties() {
+            return new IFluidTankProperties[] {new IFluidTankProperties() {
                 final FluidStack steam = Fluids.STEAM.getB(4);
 
                 @Nullable
@@ -133,15 +135,18 @@ public class TileAdminSteamProducer extends RailcraftTileEntity implements ISmar
         }
     }
 
-//    @Override
-//    public void update() {
-//        super.update();
-//        if (Game.isClient(world))
-//            return;
+    @Override
+    public void update() {
+        super.update();
+        if (Game.isClient(world))
+            return;
 
-//        if (powered)
-//            tankManager.push(tileCache, Predicates.alwaysTrue(), EnumFacing.VALUES, 0, FluidTools.BUCKET_VOLUME);
-//    }
+        if (powered) {
+            for (IFluidHandler handler : FluidTools.findNeighbors(tileCache, Predicates.alwaysTrue(), EnumFacing.VALUES)) {
+                FluidUtil.tryFluidTransfer(handler, HANDLER, FluidTools.BUCKET_VOLUME * 4, true);
+            }
+        }
+    }
 
     @Nullable
     @Override

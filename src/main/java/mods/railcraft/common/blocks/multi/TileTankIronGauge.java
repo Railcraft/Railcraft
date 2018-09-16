@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.state.IBlockState;
@@ -82,10 +82,6 @@ public class TileTankIronGauge<T extends TileTankBase<T, M>, M extends TileTankB
                 base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.SINGLE);
             }
         }
-
-        char c = getPattern().getPatternMarkerChecked(getPatternPosition().north());
-        base = base.withProperty(BlockTankIronGauge.AXIS, c == 'A' || c == MultiBlockPattern.EMPTY_PATTERN ? X : Z);
-
         return base;
     }
 }

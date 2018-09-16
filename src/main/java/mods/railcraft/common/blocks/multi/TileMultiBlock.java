@@ -228,8 +228,6 @@ public abstract class TileMultiBlock<L extends TileMultiBlock<L, ? extends L, M>
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         IBlockState self = getBlockState();
         IBlockState other = WorldPlugin.getBlockState(world, pos);
-//        Block block = other.getBlock();
-//        int meta = block.getMetaFromState(other);
         switch (mapPos) {
             case 'O': // Other
                 if (self == other)

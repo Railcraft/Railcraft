@@ -19,7 +19,8 @@ import java.util.Locale;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class HumanReadableNumberFormatter {
+//TODO needs a cleanup
+public final class HumanReadableNumberFormatter {
     private static final DecimalFormat smallNumberFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
     private static final DecimalFormat largeNumberFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
     private static String[] suffix = {"", "K", "M", "B", "T"};
@@ -36,7 +37,14 @@ public class HumanReadableNumberFormatter {
         return format(number, 0);
     }
 
+    private static String specialHandle(double number) {
+        return Double.toString(number);
+    }
+
     private static String format(double number, int iteration) {
+        if (number >= 1e15) {
+            return specialHandle(number);
+        }
         boolean negative = number < 0.0;
         number = Math.abs(number);
         if (number < 10_000.0) {

@@ -14,7 +14,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.primitives.Ints;
 import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -28,8 +27,8 @@ import net.minecraft.block.Block;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -108,20 +107,15 @@ public final class Railcraft {
                 }
                 BallastRegistry.registerBallast(Block.getBlockFromName(blockName), metadata);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
-            } else if (mess.key.equals("boiler-fuel-liquid")) {
-                String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
-                if (tokens.length != 2) {
-                    Game.log(Level.WARN, String.format("Mod %s attempted to register a liquid Boiler fuel, but failed: %s", mess.getSender(), mess.getStringValue()));
+            } else if (mess.key.equals("fluid-fuel")) {
+                FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
+                int fuel = mess.getNBTValue().getInteger("Fuel");
+                if (fuel == 0) {
+                    Game.log(Level.WARN, String.format("Mod %s attempted to register a fluid fuel, but failed: %s", mess.getSender(), mess.getNBTValue()));
                     continue;
                 }
-                Fluid fluid = FluidRegistry.getFluid(tokens[0]);
-                Integer fuel = Ints.tryParse(tokens[1]);
-                if (fluid == null || fuel == null) {
-                    Game.log(Level.WARN, String.format("Mod %s attempted to register a liquid Boiler fuel, but failed: %s", mess.getSender(), mess.getStringValue()));
-                    continue;
-                }
-                FluidFuelManager.addFuel(fluid, fuel);
-                Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
+                FluidFuelManager.addFuel(fluidStack, fuel);
+                Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
             } else if (mess.key.equals("rock-crusher")) {
                 throw new UnsupportedOperationException("rock crusher");
             } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {

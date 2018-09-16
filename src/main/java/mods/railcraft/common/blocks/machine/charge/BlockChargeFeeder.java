@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
@@ -28,6 +30,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -43,10 +46,10 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.5, (world, pos) -> {
+    public static final ChargeNodeDefinition CHARGE_DEF = new ChargeNodeDefinition(ConnectType.BLOCK, 0.5, (world, pos) -> {
         TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
         if (tileEntity instanceof TileCharge) {
-            return ((TileCharge) tileEntity).getChargeBattery();
+            return ((TileCharge) tileEntity).getBattery();
         }
         //noinspection ConstantConditions
         return null;
@@ -78,7 +81,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
     }
 
@@ -88,8 +91,14 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
-        state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
+        state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES))
+                .withProperty(REDSTONE, ((meta >> 3) & 1) == 1);
         return state;
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return super.getMetaFromState(state) | (state.getValue(REDSTONE) ? 1 << 3 : 0);
     }
 
     @Override
@@ -108,8 +117,8 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
         return detectRedstoneState(state, worldIn, pos);
     }
 
@@ -122,5 +131,10 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     protected boolean isSparking(IBlockState state) {
         return state.getValue(REDSTONE);
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(getVariantProperty()).ordinal();
     }
 }

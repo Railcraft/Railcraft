@@ -14,7 +14,6 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -25,7 +24,6 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -90,16 +88,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
     @Override
     protected Class<TileBoilerFireboxSolid> defineMasterClass() {
         return TileBoilerFireboxSolid.class;
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileBoilerFireboxSolid mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

@@ -97,10 +97,17 @@ public class CartBattery implements ICartBattery {
     }
 
     @Override
-    public void addCharge(double charge) {
+    public double addCharge(double charge) {
         if (type == Type.USER)
-            return;
-        this.charge += charge;
+            return charge;
+        double result = this.charge + charge;
+        if (result > capacity) {
+            this.charge = capacity;
+            return result - capacity;
+        } else {
+            this.charge = result;
+            return 0;
+        }
     }
 
     /**
@@ -199,7 +206,7 @@ public class CartBattery implements ICartBattery {
     @Override
     public void tickOnTrack(EntityMinecart owner, BlockPos pos) {
         if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-            double drawnFromTrack = ChargeManager.getNetwork(owner.world).getNode(pos).removeCharge(capacity - charge);
+            double drawnFromTrack = ChargeManager.getDimension(owner.world).getNode(pos).removeCharge(capacity - charge);
             if (drawnFromTrack > 0.0)
                 drewFromTrack = DRAW_INTERVAL * 4;
             charge += drawnFromTrack;

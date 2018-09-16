@@ -142,7 +142,7 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     @Override
     public void setPowered(boolean powered) {
         boolean state = isGateOpen();
-        super.setPowered(powered);
+        this.powered = powered;
         if (state != isGateOpen()) {
             playSound();
             sendUpdateToClient();

@@ -29,8 +29,9 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class HighSpeedTools {
-    public static final float SPEED_CUTOFF = 0.39f;
+public final class HighSpeedTools {
+    public static final float SPEED_EXPLODE = 0.5f;
+    public static final float SPEED_CUTOFF = 0.499f;
     public static final int LOOK_AHEAD_DIST = 2;
     public static final float SPEED_SLOPE = 0.45f;
 
@@ -77,11 +78,11 @@ public class HighSpeedTools {
         } else if (trackKit == TrackKits.BOOSTER.getTrackKit() || trackKit == TrackKits.HIGH_SPEED_TRANSITION.getTrackKit()) {
             if (isTrackSafeForHighSpeed(world, pos, cart)) {
                 if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
-                    cart.motionX = Math.copySign(0.4f, cart.motionX);
+                    cart.motionX = Math.copySign(SPEED_CUTOFF, cart.motionX);
                     CartTools.setTravellingHighSpeed(cart, true);
                 }
                 if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
-                    cart.motionZ = Math.copySign(0.4f, cart.motionZ);
+                    cart.motionZ = Math.copySign(SPEED_CUTOFF, cart.motionZ);
                     CartTools.setTravellingHighSpeed(cart, true);
                 }
             }
@@ -94,8 +95,8 @@ public class HighSpeedTools {
         return TrackTools.getTrackTypeAt(world, pos).isHighSpeed();
     }
 
-    public static float speedForNextTrack(World world, BlockPos pos, int dist, @Nullable EntityMinecart cart) {
-        float maxSpeed = RailcraftConfig.getMaxHighSpeed();
+    public static double speedForNextTrack(World world, BlockPos pos, int dist, @Nullable EntityMinecart cart) {
+        double maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
                 BlockPos nextPos = pos.offset(side);

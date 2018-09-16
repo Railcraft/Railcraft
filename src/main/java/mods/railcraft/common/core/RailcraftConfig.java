@@ -75,7 +75,7 @@ public class RailcraftConfig {
     private static String[] worldspikeFuelPersonalArray;
     private static String[] worldspikeFuelPassiveArray;
     private static String boreMineableBlocksString;
-    private static float maxHighSpeed = 1.1f;
+    private static double maxHighSpeed = 1.1d;
     private static boolean boreDestroysBlocks;
     private static boolean boreMinesAllBlocks;
     private static boolean locomotiveDamageMobs;
@@ -112,12 +112,12 @@ public class RailcraftConfig {
     private static String[] enchantments;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
-    private static float boreMiningSpeedMultiplier = 1F;
-    private static float chargeMaintenanceCostMultiplier = 1F;
-    private static float boilerMultiplierFuel = 1F;
-    private static float boilerMultiplierBiofuel = 1F;
-    private static float fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
-    private static float steamLocomotiveEfficiencyMultiplier = 3F;
+    private static double boreMiningSpeedMultiplier = 1d;
+    private static double chargeMaintenanceCostMultiplier = 1d;
+    private static double boilerMultiplierFuel = 1d;
+    private static double boilerMultiplierBiofuel = 1d;
+    private static double fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
+    private static double steamLocomotiveEfficiencyMultiplier = 3d;
     private static boolean allowTankStacking;
     public static Configuration configMain;
     public static Configuration configBlocks;
@@ -254,7 +254,7 @@ public class RailcraftConfig {
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
 
-        chargeMaintenanceCostMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "maintenanceCostMultiplier", 0.2F, 1.0F, 10F, "adjust the maintenance costs for the Charge network, min=0.2, default=1.0, max=10.0");
+        chargeMaintenanceCostMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "maintenanceCostMultiplier", 0.2D, 1.0D, 10D, "adjust the maintenance costs for the Charge network, min=0.2, default=1.0, max=10.0");
 
         boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler, min=0.2, default=1.0, max=10.0");
         boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler, min=0.2, default=1.0, max=10.0");
@@ -268,7 +268,7 @@ public class RailcraftConfig {
     }
 
     private static void loadTrackTweaks() {
-        maxHighSpeed = get(CAT_TWEAKS_TRACKS + ".speed", "max.speed", 0.6f, 0.8f, 1.2f, "change '{t}' to limit max speed on high speed rails, useful if your computer can't keep up with chunk loading, min=0.6, default=0.8, max=1.2");
+        maxHighSpeed = get(CAT_TWEAKS_TRACKS + ".speed", "max.speed", 0.6d, 0.8d, 1.2d, "change '{t}' to limit max speed on high speed rails, useful if your computer can't keep up with chunk loading, min=0.6, default=0.8, max=1.2");
 
         launchRailMaxForce = get(CAT_TWEAKS_TRACKS + ".launch", "force.max", 5, 30, 50, "change the value to your desired max launch rail force, min=5, default=30, max=50");
 
@@ -715,7 +715,7 @@ public class RailcraftConfig {
         return boreMinesAllBlocks;
     }
 
-    public static float boreMiningSpeedMultiplier() {
+    public static double boreMiningSpeedMultiplier() {
         return boreMiningSpeedMultiplier;
     }
 
@@ -811,7 +811,7 @@ public class RailcraftConfig {
         return nerfWaterBottle;
     }
 
-    public static float getMaxHighSpeed() {
+    public static double getMaxHighSpeed() {
         return maxHighSpeed;
     }
 
@@ -847,23 +847,23 @@ public class RailcraftConfig {
         return trackingAuraEnabled;
     }
 
-    public static float chargeMaintenanceCostMultiplier() {
+    public static double chargeMaintenanceCostMultiplier() {
         return chargeMaintenanceCostMultiplier;
     }
 
-    public static float boilerFuelMultiplier() {
+    public static double boilerFuelMultiplier() {
         return boilerMultiplierFuel;
     }
 
-    public static float boilerBiofuelMultiplier() {
+    public static double boilerBiofuelMultiplier() {
         return boilerMultiplierBiofuel;
     }
 
-    public static float fuelPerSteamMultiplier() {
+    public static double fuelPerSteamMultiplier() {
         return fuelPerSteamMultiplier;
     }
 
-    public static float steamLocomotiveEfficiencyMultiplier() {
+    public static double steamLocomotiveEfficiencyMultiplier() {
         return steamLocomotiveEfficiencyMultiplier;
     }
 
@@ -1041,11 +1041,11 @@ public class RailcraftConfig {
         return clamped;
     }
 
-    private static float get(String cat, String tag, float min, float defaultValue, float max, String comment) {
+    private static double get(String cat, String tag, double min, double defaultValue, double max, String comment) {
         return get(configMain, cat, tag, min, defaultValue, max, comment);
     }
 
-    private static float get(Configuration config, String cat, String tag, float min, float defaultValue, float max, String comment) {
+    private static double get(Configuration config, String cat, String tag, double min, double defaultValue, double max, String comment) {
         Property prop = config.get(cat, tag, defaultValue);
         decorateComment(prop, tag, comment);
         double parsed = parseDouble(prop, defaultValue);

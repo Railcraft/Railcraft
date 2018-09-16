@@ -31,7 +31,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.ArrayUtils;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -51,8 +50,9 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     //    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
     HIGH_SPEED_TRANSITION(4, "transition", 8, TrackKitSpeedTransition.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE, Items.REDSTONE)),
     LAUNCHER(2, "launcher", 1, TrackKitLauncher.class, () -> recipe(Blocks.PISTON, "blockSteel", "blockSteel", Items.REDSTONE)),
-    THROTTLE(10, "throttle", 4, TrackKitThrottle.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
+    THROTTLE(16, "throttle", 4, TrackKitThrottle.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
     LOCKING(16, "locking", 4, TrackKitLocking.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.STICKY_PISTON, Items.REDSTONE)),
+    DELAYED(3, "delayed", 4, TrackKitDelayedLocking.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.STICKY_PISTON, Items.REPEATER)),
     LOCOMOTIVE(6, "locomotive", 4, TrackKitLocomotive.class, () -> recipe(RailcraftItems.SIGNAL_LAMP, Items.REDSTONE)),
     ONE_WAY(4, "one_way", 8, TrackKitOneWay.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Blocks.PISTON, Items.REDSTONE)),
     PRIMING(2, "priming", 2, TrackKitPriming.class, () -> recipe(Items.FLINT_AND_STEEL, Items.REDSTONE)),
@@ -74,6 +74,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
         DETECTOR.requiresTicks = true;
         LOCKING.requiresTicks = true;
+        DELAYED.requiresTicks = true;
         TURNOUT.requiresTicks = true;
         WYE.requiresTicks = true;
 
@@ -170,20 +171,19 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
             return;
         //TODO: Add way to disable track kits
         if (trackKit == null) {
-            TrackKit.Builder builder = new TrackKit.Builder(getRegistryName(), trackInstance);
-            builder.setRequiresTicks(requiresTicks);
-            builder.setRenderer(renderer);
-            builder.setRenderStates(states);
-            builder.setVisible(visible);
-            builder.setAllowedOnSlopes(allowedOnSlopes);
-            builder.setTrackTypeFilter(trackTypeFilter);
-            builder.setMaxSupportDistance(maxSupportDistance);
-            trackKit = builder.build();
+            trackKit = new TrackKit.Builder(getRegistryName(), trackInstance)
+                    .setRequiresTicks(requiresTicks)
+                    .setRenderer(renderer)
+                    .setRenderStates(states)
+                    .setVisible(visible)
+                    .setAllowedOnSlopes(allowedOnSlopes)
+                    .setTrackTypeFilter(trackTypeFilter)
+                    .setMaxSupportDistance(maxSupportDistance)
+                    .build();
             try {
                 TrackRegistry.TRACK_KIT.register(trackKit);
                 TRACK_KITS.add(trackKit);
-//                registerRecipe();
-            } catch (Error error) {
+            } catch (Exception error) {
                 Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
             }
         }
@@ -229,17 +229,15 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     }
 
     @Override
-    @Nullable
     public ItemStack getStack() {
         return getStack(1);
     }
 
     @Override
-    @Nullable
     public ItemStack getStack(int qty) {
         if (trackKit != null)
             return RailcraftItems.TRACK_KIT.getStack(qty, getTrackKit());
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

@@ -10,6 +10,9 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -52,7 +55,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     private static final double ZAP_COST = 10000.0;
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, 0.025);
+    private static ChargeNodeDefinition chargeDef = new ChargeNodeDefinition(ConnectType.BLOCK, 0.025);
 
     public BlockChargeTrap() {
         super(Material.IRON);
@@ -85,7 +88,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
 
     @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return chargeDef;
     }
 
@@ -120,12 +123,6 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(REDSTONE) && rand.nextInt(10) == 5)
             EffectManager.instance.zapEffectSurface(stateIn, worldIn, pos);
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
     }
 
     @Override

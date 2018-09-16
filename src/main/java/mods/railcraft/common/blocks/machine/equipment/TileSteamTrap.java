@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -38,6 +38,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -189,5 +190,10 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     @Override
     public EnumFacing getFacing() {
         return direction;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState != newState;
     }
 }

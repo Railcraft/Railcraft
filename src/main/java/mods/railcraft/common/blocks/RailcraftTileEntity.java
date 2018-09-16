@@ -272,4 +272,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
     }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
+    }
 }

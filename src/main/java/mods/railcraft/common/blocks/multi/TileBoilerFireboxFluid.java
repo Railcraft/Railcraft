@@ -18,11 +18,9 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.steam.FluidFuelProvider;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -66,16 +64,6 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
     @Override
     protected Class<TileBoilerFireboxFluid> defineMasterClass() {
         return TileBoilerFireboxFluid.class;
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileBoilerFireboxFluid mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

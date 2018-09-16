@@ -83,7 +83,10 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
 
     @Override
     public void setPowered(boolean powered) {
-        this.powered = powered;
+        if (this.powered != powered) {
+            this.powered = powered;
+            sendUpdateToClient();
+        }
     }
 
     @Override

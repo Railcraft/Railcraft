@@ -20,6 +20,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -308,5 +309,33 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     @Override
     public EnumGui getGui() {
         return EnumGui.COKE_OVEN;
+    }
+
+    @Override
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
+        IBlockState other = WorldPlugin.getBlockState(world, pos);
+        switch (mapPos) {
+            case 'O': // Other
+                if (RailcraftBlocks.COKE_OVEN.isEqual(other) || RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'W': // Window
+            case 'B': // Block
+                if (!RailcraftBlocks.COKE_OVEN.isEqual(other) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'A': // Air
+                if (!other.getBlock().isAir(other, world, pos))
+                    return false;
+                break;
+            case '*': // Anything
+                return true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !RailcraftBlocks.COKE_OVEN.isEqual(newState) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(newState);
     }
 }

@@ -89,13 +89,13 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setShort("fuse", getFuse());
+        data.setShort("delay", getFuse());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        setFuse(data.getShort("fuse"));
+        setFuse(data.getShort("delay"));
     }
 
     @Override

@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
@@ -60,6 +61,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftBlocks.EQUIPMENT,
                         RailcraftItems.COKE,
                         RailcraftBlocks.COKE_OVEN,
+                        RailcraftBlocks.COKE_OVEN_RED,
                         RailcraftBlocks.BLAST_FURNACE,
                         RailcraftBlocks.ROCK_CRUSHER,
                         RailcraftBlocks.STEAM_OVEN,
@@ -70,7 +72,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftBlocks.TANK_STEEL_VALVE,
                         RailcraftBlocks.TANK_STEEL_WALL,
                         RailcraftBlocks.TANK_WATER,
-                        RailcraftBlocks.CHEST_METALS
+                        RailcraftBlocks.CHEST_METALS,
+                        RailcraftCarts.CHEST_METALS
                 );
             }
 
@@ -239,7 +242,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             .buildAndRegister();
 
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BIRCH_STAIRS)))
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.BRICK_STAIRS)))
 //                            .createAndAddRecipe(new ItemStack(Blocks.BRICK_STAIRS), false, false);
                             .addOutput(new ItemStack(Items.BRICK, 4))
                             .addOutput(new ItemStack(Items.BRICK), 0.5f)

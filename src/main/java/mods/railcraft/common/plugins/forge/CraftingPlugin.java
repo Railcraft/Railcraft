@@ -42,6 +42,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Contract;
@@ -158,6 +159,10 @@ public final class CraftingPlugin {
             return new FluidIngredient((FluidStack) source);
         }
         return CraftingHelper.getIngredient(source);
+    }
+
+    public static Ingredient getIngredient(Block source) {
+        return Ingredient.fromStacks(new ItemStack(source, 1, OreDictionary.WILDCARD_VALUE));
     }
 
     public static void addRecipe(ItemStack result, Object... recipeArray) {

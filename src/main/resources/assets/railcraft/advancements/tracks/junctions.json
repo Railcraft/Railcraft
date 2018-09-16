@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "railcraft:tool_spike_maul_iron"
+      "item": "railcraft:track_outfitted",
+      "nbt": "{railcraft:{rail:\"railcraft_iron\",kit:\"railcraft_turnout\"}}"
     },
     "title": {
       "translate": "advancements.railcraft.tracks.junctions.name"

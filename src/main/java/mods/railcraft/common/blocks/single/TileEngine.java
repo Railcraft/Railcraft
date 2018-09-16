@@ -11,11 +11,11 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.EnergyPlugin;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -28,12 +28,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
-
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
@@ -42,7 +42,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileEngine extends RailcraftTickingTileEntity implements ITileRotate, ITileNonSolid, ISmartTile {
-//TODO: Convert to MJ
+    //TODO: Convert to MJ
     public float currentOutput;
     private EnumFacing direction = EnumFacing.UP;
     private float pistonProgress = 0.25F;
@@ -378,20 +378,24 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
         return direction;
     }
 
-
     @Override
     public void setFacing(EnumFacing facing) {
         direction = facing;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         return capability == ENERGY && facing == direction ? ENERGY.cast(storage) : super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState != newState;
     }
 
     public enum EnergyStage {

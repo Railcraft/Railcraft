@@ -21,6 +21,7 @@ public interface IGuiReturnHandler {
     @Nullable
     World theWorld();
 
+    // @SideOnly(Side.CLIENT)
     void writeGuiData(RailcraftOutputStream data) throws IOException;
 
     void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException;

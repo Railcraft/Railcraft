@@ -11,11 +11,11 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.charge.*;
+import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -23,6 +23,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -32,7 +33,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +50,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, IHasWork, ITileCharge {
-    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static ChargeNodeDefinition chargeDef = new ChargeNodeDefinition(ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
@@ -60,7 +64,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public IChargeBlock.ChargeDef getChargeDef() {
+    public ChargeNodeDefinition getChargeDef() {
         return chargeDef;
     }
 
@@ -75,7 +79,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     protected void progress() {
-        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        ChargeNode node = ChargeManager.getDimension(world).getNode(pos);
         if (node.useCharge(CHARGE_PER_TICK)) {
             super.progress();
         }
@@ -216,5 +220,19 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     @Override
     public void actionActivated(IActionExternal action) {
         actions.add(action);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 }

@@ -14,7 +14,7 @@ import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.ISubtypedBlock;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
+import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -186,8 +186,8 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity impleme
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
-                && ((ISubtypedBlock<?>) getBlockType()).getVariant(oldState) == ((ISubtypedBlock<?>) getBlockType()).getVariant(newSate));
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !(oldState.getBlock() == getBlockType() && newState.getBlock() == getBlockType()
+                && ((ISubtypedBlock<?>) getBlockType()).getVariant(oldState) == ((ISubtypedBlock<?>) getBlockType()).getVariant(newState));
     }
 }

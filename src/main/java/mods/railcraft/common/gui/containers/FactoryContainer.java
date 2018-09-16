@@ -9,24 +9,23 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.detector.TileDetector;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.blocks.multi.*;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.single.TileEngineSteam;
-import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
-import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
+import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.single.TileEngineSteam;
+import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -38,7 +37,7 @@ import org.apache.logging.log4j.Level;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FactoryContainer {
+public final class FactoryContainer {
 
     @SuppressWarnings("ConstantConditions")
     public static Container build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
@@ -145,13 +144,15 @@ public class FactoryContainer {
                 case TRACK_ROUTING:
                     return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 default:
-                    //TODO: fix this
-//                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
+                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
             Game.log(Level.WARN, "Error when attempting to build gui container {0}: {1}", gui, ex);
         }
         return null;
+    }
+
+    private FactoryContainer() {
     }
 
 }

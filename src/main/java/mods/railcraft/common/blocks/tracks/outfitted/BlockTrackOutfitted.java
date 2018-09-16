@@ -9,17 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted;
 
+import mods.railcraft.api.charge.ChargeNodeDefinition;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.behaivor.TrackSupportTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.*;
@@ -64,13 +65,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
-    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static ChargeNodeDefinition CHARGE_DEF = new ChargeNodeDefinition(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -147,7 +146,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty(), TICKING}, new IUnlistedProperty[]{TRACK_TYPE, TRACK_KIT, STATE});
+        return new ExtendedBlockState(this, new IProperty[] {getShapeProperty(), TICKING}, new IUnlistedProperty[] {TRACK_TYPE, TRACK_KIT, STATE});
     }
 
     @Override
@@ -228,6 +227,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
@@ -243,6 +243,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
@@ -258,6 +259,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d startVec, Vec3d endVec) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
@@ -299,12 +301,13 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean canProvidePower(IBlockState state) {
         return true;
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
             ITrackKitInstance track = ((TileTrackOutfitted) tile).getTrackKitInstance();
@@ -314,6 +317,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
@@ -324,11 +328,13 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return WorldPlugin.getTileEntity(worldIn, pos, TileTrackOutfitted.class)
                 .filter(t -> t.getTrackKitInstance() instanceof ITrackKitComparator)
@@ -381,16 +387,14 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> items, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         try {
             if (tile instanceof TileTrackOutfitted)
                 items.addAll(((TileTrackOutfitted) tile).getTrackKitInstance().getDrops(fortune));
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class, TrackKitInstance.class);
         }
-        return items;
     }
 
     @Override
@@ -402,7 +406,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        ChargeManager.getDimension(world).deregisterChargeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
         world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
@@ -416,25 +420,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return b;
     }
 
-    //    @Override
-    //TODO obsolete
-    public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
-        if (TrackTools.isRailBlockAt(worldIn, pos.up()) || TrackTools.isRailBlockAt(worldIn, pos.down()))
-            return false;
-        if (super.canPlaceBlockAt(worldIn, pos))
-            return true;
-        if (!InvTools.isEmpty(stack)) {
-            TrackType trackType = TrackRegistry.TRACK_TYPE.get(stack);
-            if (trackType.getMaxSupportDistance() > 0 && TrackSupportTools.isSupported(worldIn, pos, trackType.getMaxSupportDistance()))
-                return true;
-            TrackKit trackKit = TrackRegistry.TRACK_KIT.get(stack);
-            return trackKit.getMaxSupportDistance() > 0 && TrackSupportTools.isSupported(worldIn, pos, trackKit.getMaxSupportDistance());
-        }
-        return false;
-    }
-
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return getDefaultState();
     }
 
@@ -463,7 +450,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
-        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        ChargeManager.getDimension(world).deregisterChargeNode(pos);
     }
 
     @Override
@@ -490,6 +477,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         return Math.max(super.getMaxSupportedDistance(worldIn, pos), getTrackKit(worldIn, pos).getMaxSupportDistance());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -499,11 +487,11 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted)
             return ((TileTrackOutfitted) tile).getTrackType().getResistance() * 3f / 5f;
-        return getExplosionResistance(exploder);
+        return super.getExplosionResistance(world, pos, exploder, explosion);
     }
 
     @Override
@@ -529,13 +517,6 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        if (getTrackType(worldIn, pos).isElectric())
-            registerNode(state, worldIn, pos);
-    }
-
-    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         if (getTrackType(worldIn, pos).isElectric())
@@ -544,7 +525,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (getTrackType(world, pos).isElectric())
             return CHARGE_DEF;
         return null;

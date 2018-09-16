@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -23,6 +24,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,13 +35,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockTankIronGauge extends BlockTankIron {
 
-    public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
     public static final PropertyEnum<ColumnPosition> POSITION = PropertyEnum.create("position", ColumnPosition.class);
 
     public BlockTankIronGauge() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
+        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -56,7 +58,7 @@ public class BlockTankIronGauge extends BlockTankIron {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
+        return new BlockStateContainer(this, COLOR, POSITION);
     }
 
     @Override
@@ -90,6 +92,12 @@ public class BlockTankIronGauge extends BlockTankIron {
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+        return WorldPlugin.getBlock(access, pos.offset(side)) != this && super.shouldSideBeRendered(state, access, pos, side);
     }
 
     public enum ColumnPosition implements IStringSerializable {

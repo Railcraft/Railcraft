@@ -50,6 +50,10 @@ public final class MultiBlockPattern {
         this(pattern, 1, 1, 1);
     }
 
+    public MultiBlockPattern(char[][][] pattern, Object attachedData) {
+        this(pattern, new BlockPos(1, 1, 1), null, attachedData);
+    }
+
     public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ) {
         this(pattern, offsetX, offsetY, offsetZ, null);
     }

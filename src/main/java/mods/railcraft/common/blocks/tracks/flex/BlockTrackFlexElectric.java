@@ -11,8 +11,10 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.api.charge.ChargeNodeDefinition;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.ConnectType;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -32,7 +34,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlock {
-    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static ChargeNodeDefinition CHARGE_DEF = new ChargeNodeDefinition(ConnectType.TRACK, 0.01);
 
     public BlockTrackFlexElectric(TrackType trackType) {
         super(trackType);
@@ -57,12 +59,6 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         registerNode(state, worldIn, pos);
@@ -71,12 +67,12 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        ChargeManager.getDimension(worldIn).deregisterChargeNode(pos);
     }
 
     @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
     }
 }

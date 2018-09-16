@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.world.gen.structure.StructureComponent net.minecraft.world.gen.structure.StructureComponent findIntersecting(java.util.List&lt;net.minecraft.world.gen.structure.StructureComponent&gt;, net.minecraft.world.gen.structure.StructureBoundingBox)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

@@ -14,8 +14,8 @@ import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.charge.ChargeNode;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
@@ -81,7 +81,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
             @Override
             void onTransition(State previous, TileForceTrackEmitter emitter) {
-                //TODO: just emit redstone?
+                //TODO: just emit redstone? I think signals are better
                 TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
                 if (tile instanceof IOutfittedTrackTile) {
                     IOutfittedTrackTile trackTile = (IOutfittedTrackTile) tile;
@@ -223,7 +223,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             state = previous.whenNoCharge(this);
         } else {
             double draw = getMaintenanceCost(numTracks);
-            ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+            ChargeNode node = ChargeManager.getDimension(world).getNode(pos);
             if (node.canUseCharge(draw)) {
                 node.useCharge(draw);
                 state = previous.afterUseCharge(this);
@@ -234,6 +234,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
         if (state != previous) {
             state.onTransition(previous, this);
+            sendUpdateToClient();
         }
     }
 
@@ -291,6 +292,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     public void setColor(int color) {
         this.color = color;
         clearTracks();
+        sendUpdateToClient();
     }
 
     public static double getMaintenanceCost(int tracks) {
@@ -298,7 +300,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     public boolean hasPowerToExtend() {
-        return ChargeManager.getNetwork(world).getNode(pos).canUseCharge(getMaintenanceCost(numTracks + 1));
+        return ChargeManager.getDimension(world).getNode(pos).canUseCharge(getMaintenanceCost(numTracks + 1));
     }
 
     void removeFirstTrack() {
