@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
+import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.EntitySearcher;
@@ -92,8 +93,8 @@ public class BlockTrackElevator extends BlockRailcraft {
                 "IRI",
                 "ISI",
                 "IRI",
-                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
-                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
+                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.STONE),
                 'R', "dustRedstone");
     }
 

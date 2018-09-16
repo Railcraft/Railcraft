@@ -25,7 +25,7 @@ public class ItemTurbineDisk extends ItemRailcraft {
                 "BBB",
                 "BAB",
                 "BBB",
-                'A', "blockSteel",
+                'A', "ingotSteel",
                 'B', RailcraftItems.TURBINE_BLADE);
     }
 }

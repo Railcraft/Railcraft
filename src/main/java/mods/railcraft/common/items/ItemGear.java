@@ -13,8 +13,11 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -43,14 +46,63 @@ public class ItemGear extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         RailcraftItems gear = RailcraftItems.GEAR;
 
-        CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
+        CraftingPlugin.addRecipe(gear.getStack(1, EnumGear.BUSHING),
                 "TT",
                 "TT",
                 'T', "ingotBronze");
-        CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
+        CraftingPlugin.addRecipe(gear.getStack(1, EnumGear.BUSHING),
                 "TT",
                 "TT",
                 'T', "ingotBrass");
+
+        Ingredient ingotBronze = new OreIngredient("ingotBronze");
+        Ingredient plateBronze = new OreIngredient("plateBronze");
+        Ingredient ingotBrass = new OreIngredient("ingotBrass");
+        Ingredient plateBrass = new OreIngredient("plateBrass");
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(2, EnumGear.BUSHING))
+                .ingredients(
+                    ingotBronze, ingotBronze,
+                    ingotBronze, ingotBronze
+                )
+                .height(2)
+                .width(2)
+                .time(200)
+                .buildAndRegister();
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(2, EnumGear.BUSHING))
+                .ingredients(
+                    ingotBrass, ingotBrass,
+                    ingotBrass, ingotBrass
+                )
+                .height(2)
+                .width(2)
+                .time(200)
+                .buildAndRegister();
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(2, EnumGear.BUSHING))
+                .ingredients(
+                    plateBronze, plateBronze,
+                    plateBronze, plateBronze
+                )
+                .height(2)
+                .width(2)
+                .time(100)
+                .buildAndRegister();
+
+        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+                .output(getStack(2, EnumGear.BUSHING))
+                .ingredients(
+                    plateBrass, plateBrass,
+                    plateBrass, plateBrass
+                )
+                .height(2)
+                .width(2)
+                .time(100)
+                .buildAndRegister();
 
         CraftingPlugin.addRecipe(gear.getStack(EnumGear.BRASS),
                 " I ",

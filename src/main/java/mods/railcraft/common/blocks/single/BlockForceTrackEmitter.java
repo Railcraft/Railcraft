@@ -2,6 +2,9 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.ItemCharge;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -102,10 +105,11 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this),
                 "PIP",
-                "IBI",
+                "RBR",
                 "PIP",
                 'P', "plateTin",
-                'I', "ingotCopper",
+                'R', RailcraftItems.CHARGE, ItemCharge.EnumCharge.COIL,
+                'I', RailcraftItems.DUST, ItemDust.EnumDust.ENDER,
                 'B', "blockDiamond");
     }
 

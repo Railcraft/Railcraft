@@ -3,6 +3,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,6 +16,12 @@ import net.minecraft.world.World;
  *
  */
 public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox {
+
+    public BlockBoilerFireboxFluid() {
+        setHarvestLevel("pickaxe", 1);
+        setSoundType(SoundType.METAL);
+    }
+
     @Override
     public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileBoilerFireboxFluid();
@@ -37,7 +44,7 @@ public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox {
                 "PUP",
                 "BCB",
                 "PFP",
-                'P', RailcraftItems.PLATE, Metal.STEEL,
+                'P', RailcraftItems.PLATE, Metal.INVAR,
                 'U', Items.BUCKET,
                 'B', Blocks.IRON_BARS,
                 'C', Items.FIRE_CHARGE,

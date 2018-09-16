@@ -86,6 +86,7 @@ public enum Metal implements IVariantEnum {
     public final Predicate<ItemStack> nuggetFilter;
     public final Predicate<ItemStack> ingotFilter;
     public final Predicate<ItemStack> blockFilter;
+    public final Predicate<ItemStack> plateFilter;
     private final String oreSuffix;
     private final String tag;
 
@@ -95,6 +96,7 @@ public enum Metal implements IVariantEnum {
         nuggetFilter = StackFilters.ofOreType("nugget" + oreSuffix);
         ingotFilter = StackFilters.ofOreType("ingot" + oreSuffix);
         blockFilter = StackFilters.ofOreType("block" + oreSuffix);
+        plateFilter = StackFilters.ofOreType("plate" + oreSuffix);
     }
 
     @Nullable
@@ -156,10 +158,6 @@ public enum Metal implements IVariantEnum {
             }
         },
         PLATE("plate", RailcraftItems.PLATE) {
-            @Override
-            public String getOreDictTag(Metal metal) {
-                return null;
-            }
         },
         BLOCK("block", RailcraftBlocks.METAL, blockMap) {
             @Nullable

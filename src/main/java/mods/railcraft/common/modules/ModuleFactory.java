@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
+import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
@@ -38,6 +39,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -312,12 +314,65 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                             .input(Ingredient.fromItem(Items.BLAZE_ROD))
                             .addOutput(new ItemStack(Items.BLAZE_POWDER, 2))
-                            .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
+                            .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.65f)
+                            .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.5f)
                             .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
                             .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.25f)
                             .buildAndRegister();
 //                    RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.BLAZE_ROD), false, false);
 
+                    //todo: Investigate if we should spawn the respective cobblestone variant from crushing ores. This would need to be applied to IC2 ores as well if done
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.REDSTONE_ORE)))
+                            .addOutput(new ItemStack(Items.REDSTONE, 6))
+                            .addOutput(new ItemStack(Items.REDSTONE, 2), 0.85f)
+                            .addOutput(new ItemStack(Items.REDSTONE, 1), 0.25f)
+                            .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.1f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.DIAMOND_ORE)))
+                            .addOutput(new ItemStack(Items.DIAMOND))
+                            .addOutput(new ItemStack(Items.DIAMOND), 0.85f)
+                            .addOutput(new ItemStack(Items.DIAMOND), 0.25f)
+                            .addOutput(new ItemStack(Items.COAL), 0.1f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(RailcraftBlocks.ORE.getStack(EnumOre.DARK_DIAMOND)))
+                            .addOutput(new ItemStack(Items.DIAMOND))
+                            .addOutput(new ItemStack(Items.DIAMOND), 0.85f)
+                            .addOutput(new ItemStack(Items.DIAMOND), 0.25f)
+                            .addOutput(new ItemStack(Items.COAL), 0.1f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.EMERALD_ORE)))
+                            .addOutput(new ItemStack(Items.EMERALD))
+                            .addOutput(new ItemStack(Items.EMERALD), 0.85f)
+                            .addOutput(new ItemStack(Items.EMERALD), 0.25f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(RailcraftBlocks.ORE.getStack(EnumOre.DARK_EMERALD)))
+                            .addOutput(new ItemStack(Items.EMERALD))
+                            .addOutput(new ItemStack(Items.EMERALD), 0.85f)
+                            .addOutput(new ItemStack(Items.EMERALD), 0.25f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.LAPIS_ORE)))
+                            .addOutput(new ItemStack(Items.DYE, 8, 4))
+                            .addOutput(new ItemStack(Items.DYE, 1, 4), 0.85f)
+                            .addOutput(new ItemStack(Items.DYE, 1, 4), 0.35f)
+                            .buildAndRegister();
+
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(RailcraftBlocks.ORE.getStack(EnumOre.DARK_LAPIS)))
+                            .addOutput(new ItemStack(Items.DYE, 8, 4))
+                            .addOutput(new ItemStack(Items.DYE, 1, 4), 0.85f)
+                            .addOutput(new ItemStack(Items.DYE, 1, 4), 0.35f)
+                            .buildAndRegister();
 
                     if (RailcraftItems.DUST.isEnabled()) {
                         RockCrusherCraftingManager.getInstance().createRecipeBuilder()
@@ -328,6 +383,21 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL));
 
                         RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromItem(Item.getItemFromBlock(Blocks.COAL_ORE)))
+                                .addOutput(RailcraftItems.DUST.getStack(2, ItemDust.EnumDust.COAL))
+                                .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.COAL), 0.65f)
+                                .addOutput(new ItemStack(Items.COAL), 0.15f)
+                                .addOutput(new ItemStack(Items.DIAMOND), 0.001f)
+                                .buildAndRegister();
+
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromStacks(new ItemStack(Blocks.COAL_BLOCK, 1, 0)))
+                                .addOutput(RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.COAL))
+                                .buildAndRegister();
+
+                        Ingredient blockCharcoal = new OreIngredient("blockCharcoal");
+
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                                 .input(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL))
                                 .buildAndRegister();
@@ -335,8 +405,27 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL));
 
                         RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(blockCharcoal)
+                                .addOutput(RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.CHARCOAL))
+                                .buildAndRegister();
+
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
                                 .input(Ingredient.fromItem(Items.ENDER_PEARL))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER))
+                                .buildAndRegister();
+
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromStacks(RailcraftBlocks.ORE.getStack(EnumOre.SULFUR)))
+                                .addOutput(RailcraftItems.DUST.getStack(5, ItemDust.EnumDust.SULFUR))
+                                .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.85f)
+                                .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.35f)
+                                .buildAndRegister();
+
+                        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                                .input(Ingredient.fromStacks(RailcraftBlocks.ORE.getStack(EnumOre.SALTPETER)))
+                                .addOutput(RailcraftItems.DUST.getStack(3, ItemDust.EnumDust.SALTPETER))
+                                .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SALTPETER), 0.85f)
+                                .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SALTPETER), 0.35f)
                                 .buildAndRegister();
 //                        RockCrusherCraftingManager.getInstance().createAndAddRecipe(new ItemStack(Items.ENDER_PEARL), false, false);
 //                        addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER));
@@ -432,6 +521,17 @@ public class ModuleFactory extends RailcraftModulePayload {
                 logs.addAll(OreDictionary.getOres("logWood"));
                 logs.addAll(OreDictionary.getOres("woodRubber"));
                 RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromStacks(logs.toArray(new ItemStack[0])), new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
+
+                if (Mod.FORESTRY.isLoaded()) {
+                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
+                            .input(Ingredient.fromStacks(ModItems.APATITE_ORE.get()))
+                            .addOutput(ModItems.APATITE.get(4))
+                            .addOutput(ModItems.APATITE.get(), 0.85f)
+                            .addOutput(ModItems.APATITE.get(), 0.25f)
+                            .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.2f)
+                            .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SALTPETER), 0.05f)
+                            .buildAndRegister();
+                }
 
                 if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC)) {
                     boolean classic = Mod.IC2_CLASSIC.isLoaded();

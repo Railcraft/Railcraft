@@ -32,6 +32,8 @@ public enum ModItems implements IRailcraftRecipeIngredient {
     HONEY_DROP(Mod.FORESTRY, "honey_drop"),
     HONEYDEW_DROP(Mod.FORESTRY, "honeydew"),
     HONEY_COMB(Mod.FORESTRY, "bee_combs", OreDictionary.WILDCARD_VALUE),
+    APATITE(Mod.FORESTRY, "apatite"),
+    APATITE_ORE(Mod.FORESTRY, "resources", 0),
     STICKY_RESIN(Mod.IC2, "misc_resource#resin"),
     BAT_BOX(Mod.IC2, "te#batbox"),
     MFE(Mod.IC2, "te#mfe"),

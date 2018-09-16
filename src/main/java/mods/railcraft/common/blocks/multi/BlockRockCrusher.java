@@ -1,6 +1,8 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.ItemCharge;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.property.PropertyCharacter;
 import net.minecraft.block.SoundType;
@@ -87,11 +89,12 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 4);
         CraftingPlugin.addRecipe(stack,
-                "PDP",
-                "DSD",
-                "PDP",
+                "DPD",
+                "PSP",
+                "DMD",
                 'D', "gemDiamond",
                 'P', new ItemStack(Blocks.PISTON),
+                'M', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR,
                 'S', "blockSteel");
     }
 }

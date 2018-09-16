@@ -2,6 +2,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -87,9 +88,10 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
         CraftingPlugin.addRecipe(stack,
                 "CGC",
                 "GRG",
-                "CGC",
-                'C', RailcraftItems.PLATE, Metal.COPPER,
-                'G', "ingotGold",
+                "CTC",
+                'G', RailcraftItems.PLATE, Metal.GOLD,
+                'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_SMALL,
+                'T', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL,
                 'R', "blockRedstone");
     }
 }

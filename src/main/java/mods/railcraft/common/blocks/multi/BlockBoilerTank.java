@@ -1,5 +1,6 @@
 package mods.railcraft.common.blocks.multi;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
@@ -21,8 +22,9 @@ public abstract class BlockBoilerTank extends BlockMultiBlock {
     public static final AxisAlignedBB CORE = new AxisAlignedBB(0.0625f,0,0.0625f, 0.9375f,1, 0.9375f);
 
     protected BlockBoilerTank() {
-        super(Material.ROCK);
+        super(Material.IRON);
         setHarvestLevel("pickaxe", 1);
+        setSoundType(SoundType.METAL);
         setDefaultState(getBlockState().getBaseState().withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(EAST, false).withProperty(WEST, false));
     }
 

@@ -30,10 +30,12 @@ public final class BlockBoilerTankHigh extends BlockBoilerTank {
 
     @Override
     public void defineRecipes() {
-        ItemStack stack = new ItemStack(this);
+        ItemStack stack = new ItemStack(this, 2);
         CraftingPlugin.addRecipe(stack,
                 "P",
+                "I",
                 "P",
-                'P', RailcraftItems.PLATE, Metal.STEEL);
+                'P', RailcraftItems.PLATE, Metal.STEEL,
+                'I', RailcraftItems.PLATE, Metal.INVAR); //todo: Replace with steam piping when implemented
     }
 }

@@ -55,6 +55,27 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
                 "III",
                 'P', RailcraftItems.PLATE, Metal.IRON,
                 'I', RailcraftItems.REBAR);
+
+        CraftingPlugin.addRecipe(new ItemStack(this, 6),
+                "PPP",
+                "I I",
+                "III",
+                'P', RailcraftItems.PLATE, Metal.BRONZE,
+                'I', RailcraftItems.REBAR);
+
+        CraftingPlugin.addRecipe(new ItemStack(this, 6),
+                "PPP",
+                "I I",
+                "III",
+                'P', RailcraftItems.PLATE, Metal.BRASS,
+                'I', RailcraftItems.REBAR);
+
+        CraftingPlugin.addRecipe(new ItemStack(this, 10),
+                "PPP",
+                "I I",
+                "III",
+                'P', RailcraftItems.PLATE, Metal.STEEL,
+                'I', RailcraftItems.REBAR);
     }
 
     @Override

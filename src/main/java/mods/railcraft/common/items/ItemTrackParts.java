@@ -20,6 +20,9 @@ public class ItemTrackParts extends ItemRailcraft {
         cm.addShapelessRecipe(getStack(), "ingotBronze");
         cm.addShapelessRecipe(getStack(), "ingotIron");
         cm.addShapelessRecipe(getStack(2), "ingotSteel");
+        cm.addShapelessRecipe(getStack(3), "ingotTungsten");
+        cm.addShapelessRecipe(getStack(3), "ingotTitanium");
+        cm.addShapelessRecipe(getStack(4), "ingotTungstensteel");
     }
 
 }

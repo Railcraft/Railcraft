@@ -36,6 +36,7 @@ import java.util.function.Predicate;
 
 import static mods.railcraft.common.blocks.multi.BlockBoilerFirebox.BURNING;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
+import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -103,9 +104,13 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
                 float f3 = 0.52F;
                 float f4 = random.nextFloat() * 0.6F - 0.3F;
                 world.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }

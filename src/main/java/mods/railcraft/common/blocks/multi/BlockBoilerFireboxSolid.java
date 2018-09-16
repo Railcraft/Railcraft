@@ -42,7 +42,7 @@ public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
                 "BBB",
                 "BCB",
                 "BFB",
-                'B', Items.BRICK,
+                'B', Items.NETHERBRICK,
                 'C', Items.FIRE_CHARGE,
                 'F', Blocks.FURNACE
         );

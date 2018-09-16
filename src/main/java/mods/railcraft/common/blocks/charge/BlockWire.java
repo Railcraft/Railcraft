@@ -109,6 +109,15 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                 'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_LARGE,
                 'P', Items.PAPER,
                 'L', "ingotLead");
+
+        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(
+                getStack(8, null),
+                "LPL",
+                "PCP",
+                "LPL",
+                'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_LARGE,
+                'P', Items.PAPER,
+                'L', "ingotElectricalSteel");
     }
 
     @Nullable

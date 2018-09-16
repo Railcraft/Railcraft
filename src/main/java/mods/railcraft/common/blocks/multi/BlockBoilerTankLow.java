@@ -34,12 +34,14 @@ public final class BlockBoilerTankLow extends BlockBoilerTank {
 
     @Override
     public void defineRecipes() {
-        ItemStack stack = new ItemStack(this);
+        ItemStack stack = new ItemStack(this, 2);
         CraftingPlugin.addRecipe(stack,
                 "P",
+                "I",
                 "P",
-                'P', RailcraftItems.PLATE, Metal.IRON);
+                'P', RailcraftItems.PLATE, Metal.IRON,
+                'I', RailcraftItems.PLATE, Metal.INVAR); //todo: Replace with steam piping when implemented
 
-        BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(this)), 2560, RailcraftItems.INGOT.getStack(2, Metal.STEEL), RailcraftItems.DUST.getStack(2, EnumDust.SLAG));
+        BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(this)), 2560, RailcraftItems.INGOT.getStack(1, Metal.STEEL), RailcraftItems.DUST.getStack(1, EnumDust.SLAG));
     }
 }

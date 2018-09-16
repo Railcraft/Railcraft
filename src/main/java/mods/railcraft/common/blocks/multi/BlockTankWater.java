@@ -39,9 +39,9 @@ public class BlockTankWater extends BlockMultiBlock {
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this, 6),
                 "WWW",
-                "ISI",
+                "BSB",
                 "WWW",
-                'I', "ingotIron",
+                'B', "plateBronze",
                 'S', "slimeball",
                 'W', "plankWood");
     }

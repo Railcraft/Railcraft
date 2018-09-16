@@ -58,7 +58,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
 //                "I I",
 //                'I', Items.IRON_INGOT);
 
-        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(6, EnumRail.STANDARD),
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
@@ -76,6 +76,24 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "I I",
                 'I', "ingotSteel");
 
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(32, EnumRail.STANDARD),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotTungsten");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(32, EnumRail.STANDARD),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotTitanium");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(48, EnumRail.STANDARD),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotTungstensteel");
+
         // Advanced
         RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.ADVANCED),
                 "R G",
@@ -86,6 +104,8 @@ public class ItemRail extends ItemRailcraftSubtyped {
 
         // Wooden
         CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD));
+
+        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotBronze", RailcraftItems.TIE.getRecipeObject(EnumTie.WOOD));
 
         // Speed
         RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.SPEED),
@@ -104,11 +124,24 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'I', "ingotSteel",
                 'D', "dustObsidian");
 
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(8, EnumRail.REINFORCED),
+                "I I",
+                "I I",
+                "I I",
+                'I', "ingotDarkSteel");
+
         RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(4, EnumRail.REINFORCED),
                 "IDI",
                 "IDI",
                 "IDI",
                 'I', "ingotInvar",
+                'D', "dustObsidian");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(16, EnumRail.REINFORCED),
+                "IDI",
+                "IDI",
+                "IDI",
+                'I', "ingotTungstensteel",
                 'D', "dustObsidian");
 
         // Electric
@@ -117,12 +150,20 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 "I I",
                 "I I",
                 'I', "ingotCopper");
+
         RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(12, EnumRail.ELECTRIC),
                 "ICI",
                 "ICI",
                 "ICI",
                 'I', "ingotSteel",
                 'C', "ingotCopper");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(item.getStack(12, EnumRail.ELECTRIC),
+                "ICI",
+                "ICI",
+                "ICI",
+                'I', "ingotElectricalSteel",
+                'C', "ingotConductiveIron");
     }
 
     public enum EnumRail implements IVariantEnum {
