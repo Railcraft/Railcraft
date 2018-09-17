@@ -117,5 +117,11 @@ final class TrainManager {
             ref.put(key, value.getInfo());
             return ret;
         }
+        
+        @Override
+        public Train remove(Object old) {
+            ref.remove(old);
+            return delegate.remove(old);
+        }
     }
 }
