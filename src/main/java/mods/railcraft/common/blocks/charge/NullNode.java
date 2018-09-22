@@ -11,7 +11,7 @@ public class NullNode extends ChargeNode {
     private ChargeDimension chargeNetwork;
 
     public NullNode(ChargeDimension chargeNetwork) {
-        super(chargeNetwork, BlockPos.ORIGIN, new ChargeNodeDefinition(ConnectType.BLOCK, 0.0, null));
+        super(chargeNetwork, BlockPos.ORIGIN, new ChargeNodeDefinition(ConnectType.BLOCK, 0.0, (world, pos) -> null));
         this.chargeNetwork = chargeNetwork;
     }
 
