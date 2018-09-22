@@ -62,7 +62,7 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
         }
         PlayerAdvancements advancements = player.getAdvancements();
         Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : map.get(advancements)) {
+        for (Listener<Instance> listener : manager.get(advancements)) {
             if (listener.getCriterionInstance().matches(tile)) {
                 done.add(listener);
             }

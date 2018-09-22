@@ -133,8 +133,15 @@ runClient {
     outputs.upToDateWhen { false }
 }
 
+runServer.outputs.upToDateWhen { false }
+
 compileJava {
-    options.compilerArgs += '-proc:none'
+    options.compilerArgs += [
+                '-Xlint:-processing',
+                '-proc:none'
+        ]
+    options.deprecation = true
+    options.encoding = 'utf8'
 }
 
 jar {
@@ -299,5 +306,5 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "4.7"
+    gradleVersion = "4.10.2"
 }

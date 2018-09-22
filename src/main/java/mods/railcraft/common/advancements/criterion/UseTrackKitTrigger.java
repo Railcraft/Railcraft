@@ -37,7 +37,7 @@ final class UseTrackKitTrigger extends BaseTrigger<Instance> {
     void trigger(EntityPlayerMP player, WorldServer world, BlockPos location, ItemStack stack) {
         PlayerAdvancements advancements = player.getAdvancements();
         Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : map.get(advancements)) {
+        for (Listener<Instance> listener : manager.get(advancements)) {
             if (listener.getCriterionInstance().test(world, location, stack)) {
                 done.add(listener);
             }

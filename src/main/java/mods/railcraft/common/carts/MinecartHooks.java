@@ -19,10 +19,7 @@ import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.Predicates;
-import mods.railcraft.common.util.misc.Vec2D;
+import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -258,14 +255,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
 
-        // Fix flip TODO test this
-//        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
-//        float cutoff = 120F;
-//        if (distance < -cutoff || distance >= cutoff) {
-//            cart.rotationYaw += 180.0F;
-//            cart.isInReverse = !cart.isInReverse;
-//            cart.rotationYaw = cart.rotationYaw % 360.0F;
-//        }
+        // Fix flip
+        float distance = MathTools.getDistanceBetweenAngles(cart.rotationYaw, cart.prevRotationYaw);
+        float cutoff = 120F;
+        if (distance < -cutoff || distance >= cutoff) {
+            cart.rotationYaw += 180.0F;
+            cart.isInReverse = !cart.isInReverse;
+            cart.rotationYaw = cart.rotationYaw % 360.0F;
+        }
 
 
 //        if (SeasonPlugin.isGhostTrain(cart)) {
@@ -310,6 +307,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         if (derail > 0) {
             derail--;
             data.setByte("derail", derail);
+            if (derail == 0) {
+                cart.setCanUseRail(true);
+            }
         }
 
         if (data.getBoolean("explode")) {
@@ -328,13 +328,11 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         cart.motionY = Math.copySign(Math.min(Math.abs(cart.motionY), 9.5), cart.motionY);
         cart.motionZ = Math.copySign(Math.min(Math.abs(cart.motionZ), 9.5), cart.motionZ);
 
-//        List entities = cart.world.getEntitiesWithinAABB(EntityLiving.class, getMinecartCollisionBox(cart, COLLISION_EXPANSION));
+//        List<EntityLivingBase> entities = cart.world.getEntitiesWithinAABB(EntityLivingBase.class, getMinecartCollisionBox(cart).grow(COLLISION_EXPANSION));
 //
-//        if (entities != null) {
-//            for (Entity entity : (List<Entity>) entities) {
-//                if (entity != cart.riddenByEntity && entity.canBePushed()) {
-//                    cart.applyEntityCollision(entity);
-//                }
+//        for (EntityLivingBase entity : entities) {
+//            if (!cart.isPassenger(entity) && entity.canBePushed()) {
+//                cart.applyEntityCollision(entity);
 //            }
 //        }
     }
@@ -418,18 +416,18 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         }
         if (cart.canBeRidden()) {
             //TODO: this will interfere with carts that multiple players can ride, re-evaluate
-            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
-                event.setCanceled(true);
-                return;
-            }
+//            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
+//                event.setCanceled(true);
+//                return;
+//            }
             if (player.getRidingEntity() != null && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
                 return;
             }
-            if (player.getRidingEntity() != cart && player.isOnLadder()) {
-                event.setCanceled(true);
-                return;
-            }
+//            if (player.getRidingEntity() != cart && player.isOnLadder()) {
+//                event.setCanceled(true);
+//                return;
+//            }
         }
         if (!player.canEntityBeSeen(cart)) {
             event.setCanceled(true);
