@@ -1,3 +1,11 @@
+HEAD:
+    INFO: Minecraft 1.12.2 update with feature ports from 1.7.10.
+    NEW: Restored Coke Oven, Blast Furnace, Steam Oven, Steam Boiler, Water Tank, Rock Crusher, Iron/Steel Tanks, Force Track Emitter,
+    Trade Station (and a few more?)
+    NEW: Bed Cart, allows sleeping while riding.
+    CHANGE: Rock Crusher now uses charge.
+    CHANGE: Blast Furnace now has another output slot for slags.
+
 10.3.0:
     INFO: Merry Christmas!
     NEW: Added Snow to carts!

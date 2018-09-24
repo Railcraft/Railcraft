@@ -2,24 +2,21 @@ package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
-import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.events.CartLinkEvent;
 import mods.railcraft.common.advancements.criterion.CartLinkingTrigger.Instance;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.json.JsonTools;
 import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map.Entry;
 
 final class CartLinkingTrigger extends BaseTrigger<Instance> {
 
@@ -36,42 +33,61 @@ final class CartLinkingTrigger extends BaseTrigger<Instance> {
 
     @Override
     public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-        CartPredicate one = JsonTools.whenPresent(json, "one", CartPredicate::deserialize, CartPredicate.ANY);
-        CartPredicate two = JsonTools.whenPresent(json, "two", CartPredicate::deserialize, CartPredicate.ANY);
-        return new Instance(one, two);
+        CartPredicate owned = JsonTools.whenPresent(json, "owned", CartPredicate::deserialize, CartPredicate.ANY);
+        CartPredicate other = JsonTools.whenPresent(json, "other", CartPredicate::deserialize, CartPredicate.ANY);
+        return new Instance(owned, other);
     }
 
     @SubscribeEvent
     public void onCartLink(CartLinkEvent.Link event) {
         EntityMinecart one = event.getCartOne();
         EntityMinecart two = event.getCartTwo();
-        EntityPlayerMP player = (EntityPlayerMP) RailcraftFakePlayer.get((WorldServer) one.world, BlockPos.ORIGIN);
 
-        Collection<Entry<PlayerAdvancements, Listener<Instance>>> done = new ArrayList<>();
-        for (Entry<PlayerAdvancements, Listener<Instance>> entry : map.entries()) {
-            Listener<Instance> listener = entry.getValue();
-            Instance instance = listener.getCriterionInstance();
-            if (instance.test(player, one, two)) {
-                done.add(entry);
+        EntityPlayerMP ownerOne = (EntityPlayerMP) PlayerPlugin.getPlayer(one.world, CartToolsAPI.getCartOwner(one));
+        EntityPlayerMP ownerTwo = (EntityPlayerMP) PlayerPlugin.getPlayer(two.world, CartToolsAPI.getCartOwner(two));
+
+        Collection<Listener<Instance>> doneOne = new ArrayList<>();
+        Collection<Listener<Instance>> doneTwo = new ArrayList<>();
+
+        if (ownerOne != null) {
+            for (Listener<Instance> listener : manager.get(ownerOne.getAdvancements())) {
+                Instance instance = listener.getCriterionInstance();
+                if (instance.test(ownerOne, one, two)) {
+                    doneOne.add(listener);
+                }
             }
         }
-        for (Entry<PlayerAdvancements, Listener<Instance>> entry : done) {
-            entry.getValue().grantCriterion(entry.getKey());
+
+        if (ownerTwo != null) {
+            for (Listener<Instance> listener : manager.get(ownerTwo.getAdvancements())) {
+                Instance instance = listener.getCriterionInstance();
+                if (instance.test(ownerTwo, two, one)) {
+                    doneTwo.add(listener);
+                }
+            }
+        }
+
+        for (Listener<Instance> listener : doneOne) {
+            listener.grantCriterion(ownerOne.getAdvancements());
+        }
+
+        for (Listener<Instance> listener : doneTwo) {
+            listener.grantCriterion(ownerTwo.getAdvancements());
         }
     }
 
     static final class Instance implements ICriterionInstance {
 
-        final CartPredicate one;
-        final CartPredicate two;
+        final CartPredicate owned;
+        final CartPredicate other;
 
-        Instance(CartPredicate one, CartPredicate two) {
-            this.one = one;
-            this.two = two;
+        Instance(CartPredicate owned, CartPredicate other) {
+            this.owned = owned;
+            this.other = other;
         }
 
-        boolean test(EntityPlayerMP player, EntityMinecart one, EntityMinecart two) {
-            return (this.one.test(player, one) && this.two.test(player, two)) || (this.one.test(player, two) && this.two.test(player, one));
+        boolean test(EntityPlayerMP player, EntityMinecart owned, EntityMinecart other) {
+            return this.owned.test(player, owned) && this.other.test(player, other);
         }
 
         @Override

@@ -40,7 +40,7 @@ public enum SpeedController {
             if (CartToolsAPI.getCartSpeedUncapped(cart) > 0.35F && MiscTools.RANDOM.nextInt(500) == 250)
                 return true;
             for (EntityMinecart c : Train.getTrain(cart)) {
-                if (MinecartHooks.getInstance().isDerailed(cart))
+                if (MinecartHooks.getInstance().isDerailed(c))
                     return true;
             }
             return false;
@@ -57,6 +57,8 @@ public enum SpeedController {
                         cart.motionZ = cart.motionX;
                     else
                         cart.motionX = cart.motionZ;
+
+                    // TODO make derail
                     switch (shape) {
                         case NORTH_SOUTH:
                             return BlockRailBase.EnumRailDirection.EAST_WEST;

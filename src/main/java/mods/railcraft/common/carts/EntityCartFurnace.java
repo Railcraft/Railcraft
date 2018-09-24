@@ -12,14 +12,16 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.items.IMagnifiable;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
@@ -101,6 +103,25 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         }
 
         return true;
+    }
+
+    @Override
+    protected void moveAlongTrack(BlockPos pos, IBlockState state) {
+        final double oldPushX = pushX;
+        final double oldPushZ = pushZ;
+        super.moveAlongTrack(pos, state);
+        this.pushX = oldPushX;
+        this.pushZ = oldPushZ;
+
+        double d0 = this.pushX * this.pushX + this.pushZ * this.pushZ;
+
+        if (d0 > 1.0E-4D && this.motionX * this.motionX + this.motionZ * this.motionZ > 0.001D) {
+            d0 = (double) MathHelper.sqrt(d0);
+            // MC-51053
+            double d1 = (double) MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.pushX = (motionX / d1) * d0;
+            this.pushZ = (motionZ / d1) * d0;
+        }
     }
 
     @Override

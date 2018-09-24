@@ -13,10 +13,12 @@
   },
   "parent": "railcraft:carts/link_carts",
   "criteria": {
-    "place": {
-      "trigger": "minecraft:impossible",
+    "steam_loco": {
+      "trigger": "railcraft:cart_linking",
       "conditions": {
-        "_comment": "Still a work in progress"
+        "owned": {
+          "type": "railcraft:locomotive_steam_solid"
+        }
       }
     }
   }
