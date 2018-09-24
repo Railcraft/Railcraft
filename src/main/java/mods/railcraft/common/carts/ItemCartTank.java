@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
@@ -33,14 +34,13 @@ public class ItemCartTank extends ItemCart implements IPrototypedItem {
 
     @Override
     public void defineRecipes() {
-//        if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) { TODO
-//            CraftingPlugin.addRecipe(getStack(),
-//                    "T",
-//                    "M",
-//                    'T', EnumMachineBeta.TANK_IRON_GAUGE.getStack(),
-//                    'M', Items.MINECART);
-//        } else {
-        {
+        if (RailcraftBlocks.TANK_IRON_GAUGE.isEnabled()) {
+            CraftingPlugin.addRecipe(getStack(),
+                    "T",
+                    "M",
+                    'T', RailcraftBlocks.TANK_IRON_GAUGE,
+                    'M', Items.MINECART);
+        } else {
             CraftingPlugin.addRecipe(getStack(),
                     "GGG",
                     "GMG",

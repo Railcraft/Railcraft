@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,6 +27,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartDisassemblyRecipe;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -72,9 +73,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     PUMPKIN(3, "cart_pumpkin", EntityCartPumpkin.class, ItemCartPumpkin::new),
     REDSTONE_FLUX(0, "cart_redstone_flux", EntityCartRF.class, ItemCartRF::new),
     TANK(0, "cart_tank", EntityCartTank.class, ItemCartTank::new, () -> {
-//        ItemStack stack = EnumMachineBeta.TANK_IRON_GAUGE.getStack();
-//        return !InvTools.isEmpty(stack) ? stack : TODO
-               return new ItemStack(Blocks.GLASS, 8);
+        ItemStack stack = RailcraftBlocks.TANK_IRON_GAUGE.getStack();
+        return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
     TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, ItemCartTNTWood::new),
     WORK(0, "cart_work", EntityCartWork.class, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
