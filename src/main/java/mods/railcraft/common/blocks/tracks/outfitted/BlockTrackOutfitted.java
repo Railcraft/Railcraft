@@ -9,15 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted;
 
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
-import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -69,7 +67,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
-    public static ChargeNodeDefinition CHARGE_DEF = new ChargeNodeDefinition(ConnectType.TRACK, 0.01);
+    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -406,7 +404,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-        ChargeManager.getDimension(world).deregisterChargeNode(pos);
+        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
         world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
@@ -450,7 +448,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
-        ChargeManager.getDimension(world).deregisterChargeNode(pos);
+        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
     }
 
     @Override
@@ -517,6 +515,13 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        if (getTrackType(worldIn, pos).isElectric())
+            registerNode(state, worldIn, pos);
+    }
+
+    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         if (getTrackType(worldIn, pos).isElectric())
@@ -525,7 +530,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Nullable
     @Override
-    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (getTrackType(world, pos).isElectric())
             return CHARGE_DEF;
         return null;

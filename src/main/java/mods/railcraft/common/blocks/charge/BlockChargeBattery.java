@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.charge.ChargeNodeDefinition;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -99,7 +98,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
 
     @Nullable
     @Override
-    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getVariant(state).chargeDef;
     }
 }

@@ -19,7 +19,7 @@ public final class SteamConstants {
     public static final float MAX_HEAT_LOW = 500F;
     public static final float MAX_HEAT_HIGH = 1000F;
     public static final float HEAT_STEP = 0.05f;
-    public static final double FUEL_PER_BOILER_CYCLE = 8d;
+    public static final float FUEL_PER_BOILER_CYCLE = 8f;
     public static final float FUEL_HEAT_INEFFICIENCY = 0.8f;
     public static final float FUEL_PRESSURE_INEFFICIENCY = 4f;
     public static final int STEAM_PER_UNIT_WATER = 160;

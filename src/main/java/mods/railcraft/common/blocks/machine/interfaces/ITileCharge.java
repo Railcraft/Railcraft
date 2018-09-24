@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,15 +8,19 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
+package mods.railcraft.common.blocks.machine.interfaces;
 
-import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Created by CovertJaguar on 9/10/2016 for Railcraft.
+ * Created by CovertJaguar on 6/14/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileTanks {
-    TankManager getTankManager();
+public interface ITileCharge {
+    @Nullable
+    default IChargeBlock.ChargeDef getChargeDef() {
+        return null;
+    }
 }

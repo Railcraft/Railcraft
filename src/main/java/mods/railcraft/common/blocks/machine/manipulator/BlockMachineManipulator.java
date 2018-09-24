@@ -14,7 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;

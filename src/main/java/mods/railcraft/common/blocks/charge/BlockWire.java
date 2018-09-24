@@ -10,9 +10,6 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
-import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -71,14 +68,14 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public static final PropertyEnum<Connection> EAST = PropertyEnum.create("east", Connection.class);
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
-    private static EnumMap<EnumFacing, EnumSet<ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static ChargeNodeDefinition chargeDef = new ChargeNodeDefinition(ConnectType.WIRE, 0.02);
+    private static EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
+    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE, 0.02);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {
-            connectionMatcher.put(side, EnumSet.of(ConnectType.BLOCK, ConnectType.WIRE));
+            connectionMatcher.put(side, EnumSet.of(IChargeBlock.ConnectType.BLOCK, IChargeBlock.ConnectType.WIRE));
         }
-        connectionMatcher.put(EnumFacing.UP, EnumSet.allOf(ConnectType.class));
+        connectionMatcher.put(EnumFacing.UP, EnumSet.allOf(IChargeBlock.ConnectType.class));
     }
 
     public BlockWire() {
@@ -125,7 +122,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
 
     @Nullable
     @Override
-    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return chargeDef;
     }
 
@@ -163,11 +160,11 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
             IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IChargeBlock) {
-                ChargeNodeDefinition chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(neighborState, worldIn, neighborPos);
+                IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(neighborState, worldIn, neighborPos);
                 if (chargeDef != null) {
-                    ConnectType connectType = chargeDef.getConnectType();
+                    IChargeBlock.ConnectType connectType = chargeDef.getConnectType();
                     if (connectionMatcher.get(side).contains(connectType)) {
-                        connections[side.ordinal()] = connectType == ConnectType.WIRE ? Connection.WIRE : Connection.PLUG;
+                        connections[side.ordinal()] = connectType == IChargeBlock.ConnectType.WIRE ? Connection.WIRE : Connection.PLUG;
                     }
                 }
             } else if (side.getAxis() == EnumFacing.Axis.Y && neighborBlock instanceof BlockPostBase) {
@@ -277,6 +274,12 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
         return getAddon(blockState).resistance * 0.6F;
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
     }
 
     @Override

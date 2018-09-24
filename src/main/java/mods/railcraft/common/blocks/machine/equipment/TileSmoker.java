@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.interfaces.ITileCompare;
-import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;

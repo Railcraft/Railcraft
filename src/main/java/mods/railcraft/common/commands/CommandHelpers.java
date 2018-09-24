@@ -135,7 +135,7 @@ public class CommandHelpers {
     public static boolean matches(String commandName, IModCommand command) {
         if (Objects.equals(commandName, command.getName()))
             return true;
-        else if (!command.getAliases().isEmpty())
+        else if (command.getAliases() != null)
             return command.getAliases().stream().anyMatch(alias -> Objects.equals(commandName, alias));
         return false;
     }

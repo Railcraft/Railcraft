@@ -8,13 +8,18 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
+package mods.railcraft.common.blocks.machine.interfaces;
+
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import net.minecraft.util.EnumFacing;
 
 /**
- * Created by CovertJaguar on 9/12/2016 for Railcraft.
+ * Created by CovertJaguar on 3/22/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITile {
-    void markBlockForUpdate();
+public interface ITileRedstoneEmitter {
+    default int getPowerOutput(EnumFacing side) {
+        return PowerPlugin.NO_POWER;
+    }
 }

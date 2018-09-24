@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,19 +8,13 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
-
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.util.EnumFacing;
+package mods.railcraft.common.blocks.machine.interfaces;
 
 /**
- * Created by CovertJaguar on 7/5/2017 for Railcraft.
+ * Created by CovertJaguar on 9/12/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileNonSolid {
-
-    default BlockFaceShape getShape(EnumFacing side) {
-        return BlockFaceShape.SOLID;
-    }
+public interface ITile {
+    void markBlockForUpdate();
 }

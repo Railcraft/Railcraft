@@ -11,9 +11,9 @@
 package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.MapMaker;
-import mods.railcraft.api.charge.ChargeApiAccess;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -26,12 +26,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import org.jetbrains.annotations.Nullable;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * Created by CovertJaguar on 7/26/2016 for Railcraft.
@@ -39,14 +41,10 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ChargeManager {
-    private static final Map<World, ChargeDimension> chargeNetworks = new MapMaker().weakKeys().makeMap();
+    private static final Map<World, ChargeNetwork> chargeNetworks = new MapMaker().weakKeys().makeMap();
 
-    {
-        ChargeApiAccess.setDimensionHook(ChargeManager::getDimension);
-    }
-
-    public static ChargeDimension getDimension(World world) {
-        return chargeNetworks.computeIfAbsent(world, ChargeDimension::new);
+    public static ChargeNetwork getNetwork(World world) {
+        return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
     }
 
     public static ChargeManager getEventListener() {
@@ -56,20 +54,28 @@ public class ChargeManager {
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
-            getDimension(event.world).tick();
+            getNetwork(event.world).tick();
     }
 
-    @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event) {
-        chargeNetworks.put(event.getWorld(), new ChargeDimension(event.getWorld()));
+    public static void forConnections(World world, BlockPos pos, BiConsumer<BlockPos, IChargeBlock.ChargeDef> action) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() instanceof IChargeBlock) {
+            IChargeBlock block = (IChargeBlock) state.getBlock();
+            IChargeBlock.ChargeDef chargeDef = block.getChargeDef(state, world, pos);
+            if (chargeDef != null) {
+                Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
+                for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
+                    IBlockState otherState = WorldPlugin.getBlockState(world, connection.getKey());
+                    if (otherState.getBlock() instanceof IChargeBlock) {
+                        IChargeBlock.ChargeDef other = ((IChargeBlock) otherState.getBlock()).getChargeDef(WorldPlugin.getBlockState(world, connection.getKey()), world, connection.getKey());
+                        if (other != null && other.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
+                            action.accept(connection.getKey(), other);
+                        }
+                    }
+                }
+            }
+        }
     }
-
-    @SubscribeEvent
-    public void onWorldUnload(WorldEvent.Unload event) {
-        chargeNetworks.remove(event.getWorld());
-    }
-
-    //TODO these util methods need more general purposes or move to a util class?
 
     public static void zapEntity(World world, BlockPos pos, IBlockState state, Entity entity, DamageSource damageSource, float damage, double chargeCost) {
         if (Game.isClient(world))
@@ -78,8 +84,8 @@ public class ChargeManager {
         if (!MiscTools.isKillableEntity(entity))
             return;
 
-        ChargeNode node = ChargeManager.getDimension(world).getNode(pos);
-        if (node.getChargeRegion().getCharge() > chargeCost) {
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        if (node.getChargeGraph().getCharge() > chargeCost) {
             boolean shock = true;
             ItemStack overalls = getOveralls(entity);
             ItemStack boots = getRubberBoots(entity);
@@ -107,6 +113,7 @@ public class ChargeManager {
         }
     }
 
+    @Nullable
     private static ItemStack getOveralls(Entity entity) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = ((EntityPlayer) entity);
@@ -117,6 +124,7 @@ public class ChargeManager {
         return InvTools.emptyStack();
     }
 
+    @Nullable
     private static ItemStack getRubberBoots(Entity entity) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = ((EntityPlayer) entity);

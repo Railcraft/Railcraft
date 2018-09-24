@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -46,6 +45,12 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     }
 
     @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         registerNode(state, worldIn, pos);
@@ -54,6 +59,6 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        deregisterNode(worldIn, pos);
+        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
     }
 }

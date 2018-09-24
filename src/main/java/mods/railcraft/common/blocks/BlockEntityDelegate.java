@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.blocks.interfaces.*;
+import mods.railcraft.common.blocks.machine.interfaces.*;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;

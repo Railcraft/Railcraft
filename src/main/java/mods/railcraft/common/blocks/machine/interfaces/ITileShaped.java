@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
+package mods.railcraft.common.blocks.machine.interfaces;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.AxisAlignedBB;

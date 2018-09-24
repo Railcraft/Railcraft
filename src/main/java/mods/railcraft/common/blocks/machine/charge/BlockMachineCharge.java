@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -46,6 +46,12 @@ public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> ex
     }
 
     @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         registerNode(state, worldIn, pos);
@@ -64,6 +70,6 @@ public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> ex
 
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return ChargeManager.getDimension(worldIn).getGraph(pos).getComparatorOutput();
+        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
     }
 }

@@ -11,11 +11,10 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.jetbrains.annotations.Nullable;
+import java.util.Random;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -111,6 +111,13 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
     }
 
     @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        if (getVariant(state) == EquipmentVariant.ROLLING_MACHINE_POWERED)
+            registerNode(state, worldIn, pos);
+    }
+
+    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         if (getVariant(state) == EquipmentVariant.ROLLING_MACHINE_POWERED)
@@ -139,7 +146,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
 
     @Nullable
     @Override
-    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
                 .retrieve(ITileCharge.class, ITileCharge::getChargeDef).orElse(null);
     }

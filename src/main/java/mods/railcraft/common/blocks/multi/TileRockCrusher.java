@@ -15,7 +15,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.blocks.charge.ChargeNode;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -141,7 +141,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     private boolean isWorking;
     private boolean paused;
     @Nullable
-    private ChargeNode node;
+    private ChargeNetwork.ChargeNode node;
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
@@ -427,9 +427,9 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         return false;
     }
 
-    private ChargeNode node() {
+    private ChargeNetwork.ChargeNode node() {
         if (node == null) {
-            node = ChargeManager.getDimension(world).getNode(pos);
+            node = ChargeManager.getNetwork(world).getNode(pos);
         }
         return node;
     }

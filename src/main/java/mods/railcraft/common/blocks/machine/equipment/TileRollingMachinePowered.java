@@ -11,11 +11,11 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.charge.*;
-import mods.railcraft.common.blocks.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -50,7 +50,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, IHasWork, ITileCharge {
-    private static ChargeNodeDefinition chargeDef = new ChargeNodeDefinition(ConnectType.BLOCK, 0.1);
+    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
@@ -64,7 +64,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public ChargeNodeDefinition getChargeDef() {
+    public IChargeBlock.ChargeDef getChargeDef() {
         return chargeDef;
     }
 
@@ -79,7 +79,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     protected void progress() {
-        ChargeNode node = ChargeManager.getDimension(world).getNode(pos);
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
         if (node.useCharge(CHARGE_PER_TICK)) {
             super.progress();
         }

@@ -9,8 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
@@ -28,10 +26,10 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
     NICKEL_IRON(ModuleCharge.class, "nickel_iron", 100_000, 32.0, 0.3, 0.8),
     NICKEL_ZINC(ModuleCharge.class, "nickel_zinc", 150_000, 16.0, 0.2, 0.7),;
 
-    private static final List<BatteryVariant> creativeList = new ArrayList<>();
+    private static final List<BatteryVariant> creativeList = new ArrayList<BatteryVariant>();
     public static final BatteryVariant[] VALUES = values();
     public final double capacity, maxDraw, loss, efficiency;
-    public final ChargeNodeDefinition chargeDef;
+    public final IChargeBlock.ChargeDef chargeDef;
 
     static {
         creativeList.add(NICKEL_IRON);
@@ -46,8 +44,8 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
         this.loss = loss;
         this.efficiency = efficiency;
 
-        this.chargeDef = new ChargeNodeDefinition(ConnectType.BLOCK, loss,
-                (world, pos) -> new ChargeBattery(capacity, maxDraw, efficiency));
+        this.chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, loss,
+                (world, pos) -> new IChargeBlock.ChargeBattery(capacity, maxDraw, efficiency));
     }
 
     public static BatteryVariant fromId(int id) {

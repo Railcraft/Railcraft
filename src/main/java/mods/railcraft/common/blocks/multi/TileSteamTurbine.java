@@ -9,10 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.charge.IBatteryTile;
-import mods.railcraft.api.charge.IBlockBattery;
-import mods.railcraft.common.blocks.charge.ChargeBattery;
-import mods.railcraft.common.blocks.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
 import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -55,7 +52,7 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks, IBatteryTile {
+public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     private static final int IC2_OUTPUT = 220;
     private static final int BC_OUTPUT = 72;
@@ -83,7 +80,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     public double mainGauge;
     private double energy;
     private TileEntity emitterDelegate;
-    private final ChargeBattery battery = new ChargeBattery();
+    //TODO: Properly fix revert
+    //private final ChargeHandler battery = new ChargeHandler();
 
     static {
         char[][][] map1 = {
@@ -174,19 +172,32 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         return TileSteamTurbine.class;
     }
 
+    //    @Override
+//    public ChargeHandler getChargeHandler() {
+//        return chargeHandler;
+//    }
+
     @Override
     public void update() {
         super.update();
 
         if (Game.isHost(world)) {
-            double chargeNeeded = battery.getCapacity() - battery.getCharge();
+            if (isStructureValid()) {
+                if (isMaster())
+                    addToNet();
+//                chargeHandler.tick();
+            } else
+                dropFromNet();
+
+//            double chargeNeeded = chargeHandler.getCapacity() - chargeHandler.getCharge();
+            double chargeNeeded = 0;
             if (chargeNeeded > 0) {
                 double draw = (chargeNeeded / IC2_OUTPUT) * BC_OUTPUT;
                 double e = getEnergy();
                 if (e < draw)
                     draw = e;
                 removeEnergy(draw);
-                battery.addCharge((draw / BC_OUTPUT) * IC2_OUTPUT);
+//                chargeHandler.addCharge((draw / BC_OUTPUT) * IC2_OUTPUT);
             }
 
             if (isMaster()) {
@@ -248,15 +259,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        loadBattery();
-    }
-
-    @Override
     public void onChunkUnload() {
         super.onChunkUnload();
-        unloadBattery();
         dropFromNet();
     }
 
@@ -326,8 +330,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         tankManager.writeTanksToNBT(data);
-        battery.writeToNBT(data);
-        data.setDouble("energy", energy);
+//        chargeHandler.writeToNBT(data);
+        data.setFloat("energy", (float) energy);
         data.setFloat("output", output);
         return data;
     }
@@ -337,8 +341,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         tankManager.readTanksFromNBT(data);
-        battery.readFromNBT(data);
-        energy = data.getDouble("energy");
+//        chargeHandler.readFromNBT(data);
+        energy = data.getFloat("energy");
         output = data.getFloat("output");
     }
 
@@ -388,11 +392,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
             ret.add(emitterDelegate);
         }
         return ret;
-    }
-
-    @Override
-    public IBlockBattery getBattery() {
-        return battery;
     }
 
     public StandaloneInventory getInventory() {

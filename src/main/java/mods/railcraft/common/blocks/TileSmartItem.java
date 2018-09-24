@@ -1,6 +1,6 @@
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.blocks.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;

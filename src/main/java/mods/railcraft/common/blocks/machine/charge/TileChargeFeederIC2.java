@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeBattery;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -17,7 +17,6 @@ import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -27,7 +26,6 @@ import net.minecraft.util.EnumFacing;
 public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-    private final ChargeBattery battery = new ChargeBattery(1024.0, 512.0, 0.65);
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -35,8 +33,8 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     }
 
     @Override
-    public ChargeBattery getBattery() {
-        return battery;
+    protected IChargeBlock.ChargeBattery createBattery() {
+        return new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65);
     }
 
     @Override
@@ -72,8 +70,8 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public double getDemandedEnergy() {
         IBlockState state = getBlockState();
-        if (state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && battery.isInitialized()) {
-            double chargeDifference = battery.getCapacity() - battery.getCharge();
+        if (state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && getChargeBattery().isInitialized()) {
+            double chargeDifference = getChargeBattery().getCapacity() - getChargeBattery().getCharge();
             return chargeDifference > 0.0 ? chargeDifference : 0.0;
         }
         return 0.0;
@@ -86,7 +84,8 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-        return battery.addCharge(amount);
+        getChargeBattery().addCharge(amount);
+        return 0.0;
     }
 
     @Override
@@ -102,18 +101,5 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
                 Game.logErrorAPI("IndustrialCraft", error);
             }
         return sinkDelegate;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        battery.writeToNBT(data);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        battery.readFromNBT(data);
     }
 }
