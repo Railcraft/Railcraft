@@ -36,8 +36,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.Nullable;
 
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -190,8 +190,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements ITileCha
             progress = 0;
             return;
         }
-
-        // TODO charge usage
 
         if (progress >= PROCESS_TIME) {
             isCrafting = false;
