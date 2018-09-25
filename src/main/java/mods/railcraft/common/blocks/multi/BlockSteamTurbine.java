@@ -1,8 +1,6 @@
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.charge.ChargeNodeDefinition;
-import mods.railcraft.api.charge.ConnectType;
-import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -31,7 +29,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
     public static final IProperty<Texture> TEXTURE = PropertyEnum.create("texture", Texture.class);
-    private static final ChargeNodeDefinition DEFINITION = new ChargeNodeDefinition(ConnectType.BLOCK, 0.025D);
+    private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
 
     public BlockSteamTurbine() {
         super(Material.IRON);
@@ -41,7 +39,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
     }
 
     @Override
-    public ChargeNodeDefinition getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return DEFINITION;
     }
 
