@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -151,6 +150,10 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     @Nullable
     default Object getRecipeObject(@Nullable IVariantEnum variant) {
         Object obj = getObject().map(o -> {
+            if (!isEnabled())
+                return null;
+            if (o.getVariantEnum() != null && variant == null)
+                return o.getWildcard();
             o.checkVariant(variant);
             return o.getRecipeObject(variant);
         }).orElse(null);
