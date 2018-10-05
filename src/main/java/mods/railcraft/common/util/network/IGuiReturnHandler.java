@@ -10,8 +10,8 @@ package mods.railcraft.common.util.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -21,6 +21,7 @@ public interface IGuiReturnHandler {
     @Nullable
     World theWorld();
 
+    // @SideOnly(Side.CLIENT)
     void writeGuiData(RailcraftOutputStream data) throws IOException;
 
     void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException;

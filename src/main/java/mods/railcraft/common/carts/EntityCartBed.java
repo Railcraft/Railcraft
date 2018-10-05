@@ -1,52 +1,40 @@
 package mods.railcraft.common.carts;
 
+import mods.railcraft.client.core.SleepKeyHandler;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.world.WorldServer;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.UUID;
 
 /**
- *
+ * A class for the bed carts.
  */
 public class EntityCartBed extends EntityCartBasic {
 
-    private WeakReference<EntityPlayer> lastSleeper = new WeakReference<>(null);
-    private boolean wokeUp = false;
-    private boolean rideAfterSleep = false;
-    private boolean shouldSleep = false;
+    WeakReference<EntityPlayer> sleeping = new WeakReference<>(null);
+    boolean wokeUp = false;
+    boolean rideAfterSleep = false;
+    boolean shouldSleep = false;
+    private boolean notifyRider = false;
 
-    @SuppressWarnings("unused")
     public EntityCartBed(World world) {
         super(world);
-    }
-
-    @SuppressWarnings("unused")
-    public EntityCartBed(World world, double x, double y, double z) {
-        super(world, x, y, z);
-    }
-
-    {
-        if (Game.isHost(world))
-            MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -68,36 +56,54 @@ public class EntityCartBed extends EntityCartBasic {
     public void onUpdate() {
         super.onUpdate();
         if (Game.isClient(world)) {
+            Entity passenger = getFirstPassenger();
+            if (passenger instanceof EntityPlayer) {
+                BedCartEventListener.setRenderOffset((EntityPlayer) passenger, motionX, motionZ);
+            }
+            if (notifyRider) {
+                notifyRider = false;
+                ChatPlugin.sendLocalizedHotBarMessageFromClient(
+                        "gui.railcraft.cart.bed.key",
+                        Minecraft.getMinecraft().gameSettings.keyBindSneak.getDisplayName(),
+                        SleepKeyHandler.INSTANCE.getKeyDisplayName()
+                );
+            }
             return;
         }
 
-        EntityPlayer sleeper = lastSleeper.get();
+        EntityPlayer sleeper = sleeping.get();
         if (sleeper != null) {
-            if (sleeper.getRidingEntity() != this)
+//            BedCartEventListener.setRenderOffset(sleeper, motionX, motionZ);
+            if (sleeper.getRidingEntity() != this) {
                 sleeper.startRiding(this, true);
-            // Riding enforced! Otherwise player dismounts once sleeps
-            if (rideAfterSleep)
-                sendPlayerRiding((EntityPlayerMP) sleeper);
-            if (!wokeUp) {
-                sleeper.bedLocation = getPosition();
-                return;
             }
-            wokeUp = false;
-            lastSleeper = new WeakReference<>(null);
+            // Riding enforced! Otherwise player dismounts once sleeps
+            if (rideAfterSleep) {
+                rideAfterSleep = false;
+                sendPlayerRiding((EntityPlayerMP) sleeper);
+            }
+            if (wokeUp) {
+                wokeUp = false;
+                sleeping = new WeakReference<>(null);
+                BedCartEventListener.INSTANCE.riderToBed.remove(sleeper);
+            } else {
+                sleeper.bedLocation = getPosition();
+            }
         }
 
         Entity rider = getFirstPassenger();
-        if (!(rider instanceof EntityPlayer))
+        if (!(rider instanceof EntityPlayer)) {
             return;
+        }
         EntityPlayer player = (EntityPlayer) rider;
 
         if (shouldSleep && world.provider.isSurfaceWorld() && !player.isPlayerSleeping()) {
             shouldSleep = false;
             EntityPlayer.SleepResult sleepResult = player.trySleep(getPosition());
             if (sleepResult == EntityPlayer.SleepResult.NOT_SAFE) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "tile.bed.notSafe");
+                ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "tile.bed.notSafe");
             } else if (sleepResult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "tile.bed.noSleep");
+                ChatPlugin.sendLocalizedHotBarMessageFromServer(player, "tile.bed.noSleep");
             }
         }
     }
@@ -105,85 +111,15 @@ public class EntityCartBed extends EntityCartBasic {
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        if (Game.isHost(world) && passenger instanceof EntityPlayerMP) {
-            ChatPlugin.sendLocalizedChatFromServer((EntityPlayerMP) passenger, "gui.railcraft.cart.bed.key");
+        if (Game.isClient(world) && passenger instanceof EntityPlayerSP) {
+            notifyRider = true;
+            // vanilla sends a "press shift" message after adding passenger, so.
         }
     }
 
     @Override
     public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
         //No rider removal!
-    }
-
-    @SubscribeEvent
-    public void onPlayerSleep(PlayerSleepInBedEvent event) {
-        EntityPlayer player = event.getEntityPlayer();
-        // Hmm, player is most likely right, although we cannot really guarantee yet!
-        if (event.getPos().equals(getPosition()) && player == getFirstPassenger()) {
-            event.setResult(trySleep(player));
-            if (event.getResultStatus() == EntityPlayer.SleepResult.OK) {
-                lastSleeper = new WeakReference<>(player);
-                rideAfterSleep = true;
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onLocationCheck(SleepingLocationCheckEvent event) {
-        if (event.getEntityPlayer() == lastSleeper.get()) {
-            event.setResult(Event.Result.ALLOW);
-        }
-    }
-
-    @SubscribeEvent
-    public void onWakeUp(PlayerWakeUpEvent event) {
-        if (event.getEntityPlayer() == lastSleeper.get()) {
-            wokeUp = true;
-        }
-    }
-
-    private EntityPlayer.SleepResult trySleep(EntityPlayer player) {
-        if (player.isPlayerSleeping() || !player.isEntityAlive()) {
-            return EntityPlayer.SleepResult.OTHER_PROBLEM;
-        }
-
-        if (!player.world.provider.isSurfaceWorld()) {
-            return EntityPlayer.SleepResult.NOT_POSSIBLE_HERE;
-        }
-
-        if (player.world.isDaytime()) {
-            return EntityPlayer.SleepResult.NOT_POSSIBLE_NOW;
-        }
-
-        double d0 = 8.0D;
-        double d1 = 5.0D;
-        List<EntityMob> list = player.world.getEntitiesWithinAABB(EntityMob.class,
-                AABBFactory.start()
-                        .fromAABB(player.getEntityBoundingBox())
-                        .expandXAxis(d0)
-                        .expandYAxis(d1)
-                        .expandZAxis(d0)
-                        .build());
-
-        if (!list.isEmpty()) {
-            return EntityPlayer.SleepResult.NOT_SAFE;
-        }
-
-        player.setPosition(posX, posY, posZ);
-
-        startSleeping(player);
-        player.setPosition(getPosition().getX(), getPosition().getY(), getPosition().getZ());
-
-        if (!player.world.isRemote) {
-            player.world.updateAllPlayersSleepingFlag();
-        }
-
-        return EntityPlayer.SleepResult.OK;
-    }
-
-    private static void startSleeping(EntityPlayer player) {
-        player.sleeping = true;
-        player.sleepTimer = 0;
     }
 
     private void sendPlayerRiding(EntityPlayerMP player) {
@@ -194,15 +130,33 @@ public class EntityCartBed extends EntityCartBasic {
         shouldSleep = true;
     }
 
-    @Override
-    public void setDead() {
-        super.setDead();
-        MinecraftForge.EVENT_BUS.unregister(this);
-    }
-
     @Nullable
     protected Entity getFirstPassenger() {
         List<Entity> passengers = getPassengers();
         return passengers.isEmpty() ? null : passengers.get(0);
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        EntityPlayer player = sleeping.get();
+        if (player != null) {
+            compound.setUniqueId("sleeping", player.getUniqueID());
+        }
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        if (compound.hasUniqueId("sleeping")) {
+            UUID playerId = compound.getUniqueId("sleeping");
+            if (playerId != null) {
+                Entity ref = ((WorldServer) world).getEntityFromUuid(playerId);
+                if (ref instanceof EntityPlayer) {
+                    sleeping = new WeakReference<>((EntityPlayer) ref);
+                    BedCartEventListener.INSTANCE.riderToBed.put((EntityPlayer) ref, this);
+                }
+            }
+        }
     }
 }

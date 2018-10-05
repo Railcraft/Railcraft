@@ -11,27 +11,23 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.steam.FluidFuelProvider;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -52,9 +48,8 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
-//              //TODO
-//                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.getDefaultState());
-//                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
+                blockMapping.put('F', RailcraftBlocks.BOILER_FIREBOX_FLUID.getDefaultState());
+                blockMapping.put('H', highPressure ? RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.getDefaultState() : RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.getDefaultState());
                 TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
                 if (tile instanceof TileBoilerFireboxFluid) {
                     TileBoilerFireboxFluid master = (TileBoilerFireboxFluid) tile;
@@ -71,21 +66,6 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
         return TileBoilerFireboxFluid.class;
     }
 
-    //    @Override
-//    public EnumMachineBeta getMachineType() {
-//        return EnumMachineBeta.BOILER_FIREBOX_FLUID;
-//    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileBoilerFireboxFluid mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected void process() {
     }
@@ -93,8 +73,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
     @Override
     protected void processBuckets() {
         super.processBuckets();
-        //FIXME
-//        FluidTools.drainContainers(this, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        FluidTools.drainContainers(tankFuel, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -123,10 +102,10 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
             return false;
         switch (slot) {
             case SLOT_LIQUID_INPUT:
-                Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
+                FluidStack fluid = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluid == null)
                     return false;
-                if (Fluids.WATER.is(fluid) || FuelManager.getBoilerFuelValue(fluid) > 0)
+                if (Fluids.WATER.is(fluid) || FluidFuelManager.getFuelValue(fluid) > 0)
                     return true;
         }
         return false;
@@ -140,7 +119,6 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
 
     @NotNull
     @Override
-    @Nonnull
     public EnumGui getGui() {
         return EnumGui.BOILER_LIQUID;
     }

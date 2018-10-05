@@ -18,6 +18,6 @@ public interface ILabelable {
 	 * This method is used by the block or tileentity to do whatever needs doing.	 
 	 * @return if true then label will be subtracted from player inventory
 	 */
-	public boolean applyLabel(EntityPlayer player, BlockPos pos, EnumFacing side, ItemStack labelstack);
+    boolean applyLabel(EntityPlayer player, BlockPos pos, EnumFacing side, ItemStack labelstack);
 	
 }

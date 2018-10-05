@@ -1,3 +1,11 @@
+HEAD:
+    INFO: Minecraft 1.12.2 update with feature ports from 1.7.10.
+    NEW: Restored Coke Oven, Blast Furnace, Steam Oven, Steam Boiler, Water Tank, Rock Crusher, Iron/Steel Tanks, Force Track Emitter,
+    Trade Station (and a few more?)
+    NEW: Bed Cart, allows sleeping while riding.
+    CHANGE: Rock Crusher now uses charge.
+    CHANGE: Blast Furnace now has another output slot for slags.
+
 10.3.0:
     INFO: Merry Christmas!
     NEW: Added Snow to carts!
@@ -406,7 +414,7 @@
 	FIX: Track Tiles should override shouldRefresh() to prevent metadata changes from wiping the TileEntity.
 	FIX: Fix particle velocity values.
 	FIX: Ensure that Gears and Plates are initialized in pre-init when Factory is disabled and Locomotives are enabled.
-	FIX: Fix the broken code that allowedWithoutWhiteList the Furnace Cart to accept any type of Fuel.
+	FIX: Fix the broken code that allowed the Furnace Cart to accept any type of Fuel.
 	FIX: Fix Locomotive shift-clicking.
 	FIX: Fixed corruption issues with the Analog Controller Box, the two Distant Signal variants and the Signal Relay Box caused by reordering the metadata mappings when the Analog Controller Box was added.
 

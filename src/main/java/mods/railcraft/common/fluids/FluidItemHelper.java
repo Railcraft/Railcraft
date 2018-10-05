@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -85,6 +85,7 @@ public final class FluidItemHelper {
     }
 
     @Nullable
+    @Deprecated // Use fluidstack version
     public static Fluid getFluidInContainer(ItemStack stack) {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }

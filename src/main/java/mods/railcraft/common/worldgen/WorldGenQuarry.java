@@ -32,31 +32,34 @@ public class WorldGenQuarry extends WorldGenerator {
 
     private static final int DISTANCE_OUTER_SQ = 8 * 8;
     private final IBlockState quarryStone;
-    public final Set<Block> replaceable = new HashSet<Block>();
+    public final Set<IBlockState> replaceable = new HashSet<>();
 
     public WorldGenQuarry(IBlockState quarryStone) {
         this.quarryStone = quarryStone;
 
-        replaceable.add(Blocks.COAL_ORE);
-        replaceable.add(Blocks.IRON_ORE);
-        replaceable.add(Blocks.GOLD_ORE);
-        replaceable.add(Blocks.DIAMOND_ORE);
-        replaceable.add(Blocks.EMERALD_ORE);
-        replaceable.add(Blocks.LAPIS_ORE);
-        replaceable.add(Blocks.QUARTZ_ORE);
-        replaceable.add(Blocks.REDSTONE_ORE);
-        replaceable.add(Blocks.LIT_REDSTONE_ORE);
-        replaceable.add(Blocks.DIRT);
-        replaceable.add(Blocks.GRAVEL);
-        replaceable.add(Blocks.GRASS);
-        replaceable.add(Blocks.CLAY);
+        add(Blocks.COAL_ORE);
+        add(Blocks.IRON_ORE);
+        add(Blocks.GOLD_ORE);
+        add(Blocks.DIAMOND_ORE);
+        add(Blocks.EMERALD_ORE);
+        add(Blocks.LAPIS_ORE);
+        add(Blocks.QUARTZ_ORE);
+        add(Blocks.REDSTONE_ORE);
+        add(Blocks.LIT_REDSTONE_ORE);
+        add(Blocks.DIRT);
+        add(Blocks.GRAVEL);
+        add(Blocks.GRASS);
+        add(Blocks.CLAY);
 
-        replaceable.addAll(OreDictPlugin.getOreBlocks());
+        replaceable.addAll(OreDictPlugin.getOreBlockStates());
+    }
+
+    private void add(Block block) {
+        replaceable.addAll(block.getBlockState().getValidStates());
     }
 
     @Override
     public boolean generate(World world, Random rand, BlockPos position) {
-        position = position.add(8, 0, 8);
 //        Game.log(Level.INFO, "Generating Quarry at {0}, {1}, {2}", x, y, z);
         boolean clearTop = true;
         for (int x = -8; x < 8; x++) {
@@ -142,7 +145,7 @@ public class WorldGenQuarry extends WorldGenerator {
     private boolean isReplaceable(IBlockState existingState, World world, BlockPos pos) {
         if (existingState.getBlock().isReplaceableOreGen(existingState, world, pos, GenTools.STONE::test))
             return true;
-        return replaceable.contains(existingState.getBlock());
+        return replaceable.contains(existingState);
     }
 
 }

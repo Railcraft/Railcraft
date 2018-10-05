@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:track_flex_high_speed"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.high_speed_track.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.high_speed_track.desc"
+    }
+  },
+  "parent": "railcraft:tracks/blast_furnace",
+  "criteria": {
+    "track": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track",
+            "high_speed": true
+          }
+        ]
+      }
+    },
+    "ride": {
+      "trigger": "railcraft:cart_riding",
+      "conditions": {
+        "high_speed": true,
+        "check_owner": true
+      }
+    }
+  }
+}

@@ -10,14 +10,13 @@
 package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.statements.IActionExternal;
-import cofh.redstoneflux.impl.EnergyStorage;
-import cofh.redstoneflux.api.IEnergyReceiver;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -38,15 +37,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileEngravingBench extends TileSmartItemTicking implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
-
+public class TileEngravingBench extends TileSmartItemTicking implements ITileCharge, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
+    //TODO: Finish conversion to RCUs
     public enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
@@ -60,8 +59,8 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
     private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
-    private final EnergyStorage energyStorage;
-    public final RFEnergyIndicator rfIndicator;
+    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+//    public final FEEnergyIndicator rfIndicator;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
@@ -69,8 +68,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
 
     public TileEngravingBench() {
         super(2);
-        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
-        rfIndicator = new RFEnergyIndicator(energyStorage);
     }
 
     @Override
@@ -82,8 +79,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
         data.setInteger("progress", progress);
         data.setString("currentEmblem", currentEmblem);
 
-        if (energyStorage != null)
-            energyStorage.writeToNBT(data);
         return data;
     }
 
@@ -96,8 +91,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
         progress = data.getInteger("progress");
         currentEmblem = data.getString("currentEmblem");
 
-        if (energyStorage != null)
-            energyStorage.readFromNBT(data);
     }
 
     @Override
@@ -181,7 +174,7 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
             isCrafting = true;
         }
 
-        if (getStackInSlot(SLOT_RESULT) != null)
+        if (!getStackInSlot(SLOT_RESULT).isEmpty())
             isCrafting = false;
 
         if (!isCrafting) {
@@ -204,12 +197,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
                 decrStackSize(SLOT_INPUT, 1);
                 InvTools.moveItemStack(emblem, invResult);
                 progress = 0;
-            }
-        } else if (energyStorage != null) {
-            int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
-            if (energy >= ACTIVATION_POWER) {
-                progress++;
-                energyStorage.extractEnergy(ACTIVATION_POWER, false);
             }
         } else
             progress++;
@@ -287,36 +274,6 @@ public class TileEngravingBench extends TileSmartItemTicking implements IEnergyR
         flippedAxis = !flippedAxis;
         sendUpdateToClient();
         return true;
-    }
-
-    public EnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return energyStorage != null;
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.getMaxEnergyStored();
     }
 
     @Override

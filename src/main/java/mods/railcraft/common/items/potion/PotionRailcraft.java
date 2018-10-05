@@ -9,23 +9,18 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
-/**
- *
- */
-public class PotionRailcraft extends Potion implements IRailcraftObject<Potion> {
+public abstract class PotionRailcraft extends Potion implements IRailcraftObject<Potion> {
 
     private static final ResourceLocation POTION_ICON = RailcraftConstantsAPI.locationOf("textures/misc/potions.png");
 
-    public PotionRailcraft(boolean isBadEffectIn, int liquidColorIn) {
+    protected PotionRailcraft(boolean isBadEffectIn, int liquidColorIn) {
         super(isBadEffectIn, liquidColorIn);
     }
 
-    @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return emptyStack();

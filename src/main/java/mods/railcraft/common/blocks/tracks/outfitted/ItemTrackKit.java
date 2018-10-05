@@ -16,6 +16,7 @@ import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.client.render.models.resource.ModelManager;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -30,6 +31,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -40,8 +42,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +53,10 @@ import static mods.railcraft.common.util.inventory.InvTools.dec;
  * Created by CovertJaguar on 8/11/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
+ */
+/*
+ * /give @s railcraft:track_outfitted 1 0 {railcraft:{kit:"railcraft_buffer"}
+ * Gives a buffer stop track kit.
  */
 public class ItemTrackKit extends ItemRailcraft {
     @Override
@@ -87,23 +93,23 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
         return "item.railcraft.track_kit";
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + TrackRegistry.TRACK_KIT.get(stack).getResourcePathSuffix();
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String locTag = getUnlocalizedName(stack) + ".name";
+        String locTag = getTranslationKey(stack) + ".name";
         if (LocalizationPlugin.hasTag(locTag))
             return LocalizationPlugin.translateFast(locTag);
         Map<String, ILocalizedObject> args = new HashMap<>();
         args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
-        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+        return LocalizationPlugin.translateArgs(getTranslationKey() + ".name", args);
     }
 
     @Override
@@ -122,7 +128,7 @@ public class ItemTrackKit extends ItemRailcraft {
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
         TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> ModelManager.registerItemModel(this, trackKit.ordinal(),
-                trackKit.getRegistryName().getResourceDomain(), "track_kits/" + trackKit.getRegistryName().getResourcePath()));
+                trackKit.getRegistryName().getNamespace(), "track_kits/" + trackKit.getRegistryName().getPath()));
     }
 
     @Override
@@ -153,6 +159,7 @@ public class ItemTrackKit extends ItemRailcraft {
                     }
                     if (BlockTrackOutfitted.placeTrack(worldIn, pos, playerIn, shape, trackType, trackKit)) {
                         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
+                        RailcraftAdvancementTriggers.getInstance().onTrackKitUse((EntityPlayerMP) playerIn, worldIn, pos, stack);
                         dec(stack);
                         return EnumActionResult.SUCCESS;
                     }

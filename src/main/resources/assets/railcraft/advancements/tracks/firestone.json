@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:firestone_raw"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.firestone.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.firestone.desc"
+    },
+    "frame": "challenge"
+  },
+  "parent": "railcraft:tracks/rock_crusher",
+  "criteria": {
+    "build": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "railcraft:firestone_raw"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

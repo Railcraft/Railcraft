@@ -23,7 +23,7 @@ public enum Mod {
     THAUMCRAFT("thaumcraft"),
     FORESTRY("forestry"),
     IC2("ic2"),
-    IC2_CLASSIC("IC2-Classic-Spmod");
+    IC2_CLASSIC("ic2-classic-spmod");
     //TODO fix modid
 
     public final String modId;

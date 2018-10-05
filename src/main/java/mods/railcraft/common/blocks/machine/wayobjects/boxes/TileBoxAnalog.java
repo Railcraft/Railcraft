@@ -27,8 +27,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -47,7 +47,7 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.ANALOG;

@@ -32,6 +32,6 @@ public class ItemPlate extends ItemMetal {
                     'I', m.getOreTag(Form.INGOT));
         }
 
-        RailcraftCraftingManager.getBlastFurnaceCraftings().createRecipe(Ingredient.fromStacks(plate.getStack(Metal.IRON)), 1280, Metal.STEEL.getStack(Form.INGOT));
+        RailcraftCraftingManager.getBlastFurnaceCraftings().createRecipe(Ingredient.fromStacks(plate.getStack(Metal.IRON)), 1280, Metal.STEEL.getStack(Form.INGOT), RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SLAG));
     }
 }

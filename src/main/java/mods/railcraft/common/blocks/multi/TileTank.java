@@ -26,8 +26,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,7 +36,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S, S> implements ITankTile, ISidedInventory {
+public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S, S, S> implements ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
@@ -45,8 +45,13 @@ public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInve
     }
 
     @Override
-    protected Class<S> defineMasterClass() {
-        return defineCommonClass();
+    protected final Class<S> defineMasterClass() {
+        return defineSelfClass();
+    }
+
+    @Override
+    protected final Class<S> defineLeastCommonClass() {
+        return defineSelfClass();
     }
 
     @Override
@@ -55,8 +60,8 @@ public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInve
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override

@@ -17,8 +17,8 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -37,7 +37,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     public TileBoxInterlock() {
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.INTERLOCK;
@@ -114,9 +114,9 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         return controller.getAspect();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
 
         controller.writeToNBT(data);
@@ -125,7 +125,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
 
         controller.readFromNBT(data);
@@ -133,14 +133,14 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         receiver.readPacketData(data);

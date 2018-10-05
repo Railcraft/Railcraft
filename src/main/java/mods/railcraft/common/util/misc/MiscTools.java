@@ -22,8 +22,8 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
@@ -39,7 +39,7 @@ public final class MiscTools {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
-    @Nonnull
+    @NotNull
     private static final Predicate<Entity> livingEntitySelector = entity -> entity != null && entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
@@ -69,7 +69,7 @@ public final class MiscTools {
         Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
         Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
         RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
-        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
+        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.add(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
     }
 
     private static boolean isVecOutsideYZBounds(@Nullable Vec3d vec3d) {
@@ -91,11 +91,11 @@ public final class MiscTools {
         Vec3d eyePos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
 
         Vec3d lookVec = player.getLook(1);
-        Vec3d rayVec = eyePos.addVector(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
+        Vec3d rayVec = eyePos.add(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
         Vec3d hitPos = null;
         List<Entity> foundEntities = player.world.getEntitiesInAABBexcluding(player,
                 player.getEntityBoundingBox().grow(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach)
-                        .expand(1.0D, 1.0D, 1.0D),
+                        .grow(1),
                 com.google.common.base.Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
         double smallestDistance = reach;
 
@@ -164,7 +164,7 @@ public final class MiscTools {
      *
      * @return a side
      */
-    @Nonnull
+    @NotNull
     public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
         int dir = MathHelper.floor((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {

@@ -19,8 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
                 return;
         }
         if (cart.isBeingRidden()) {
-            CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
+            CartTools.removePassengers(cart, cart.getPositionVector().add(0, -2, 0));
         }
         cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
     }

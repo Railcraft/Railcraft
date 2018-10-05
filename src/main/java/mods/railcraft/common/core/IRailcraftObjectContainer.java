@@ -17,13 +17,11 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -46,7 +44,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         public Definition(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
             this.tag = tag;
             this.altRecipeObject = altRecipeObject;
-            registryName = new ResourceLocation(obj.getResourceDomain() + ":" + tag);
+            registryName = new ResourceLocation(obj.getNamespace() + ":" + tag);
             conditions.add(c -> !modules.isEmpty(), () -> "it has no module");
         }
     }
@@ -102,7 +100,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         }).orElse(false);
     }
 
-    default String getResourceDomain() {
+    default String getNamespace() {
         return RailcraftConstants.RESOURCE_DOMAIN;
     }
 
@@ -159,12 +157,6 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;
-    }
-
-    default Ingredient getIngredient() {
-        Object object = getRecipeObject();
-        Ingredient result = CraftingHelper.getIngredient(object);
-        return result == null ? Ingredient.EMPTY : result;
     }
 
     default boolean isEnabled() {

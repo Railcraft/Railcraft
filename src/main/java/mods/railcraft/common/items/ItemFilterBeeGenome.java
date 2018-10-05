@@ -15,8 +15,8 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.IAllele;
-import mods.railcraft.api.core.items.IFilterItem;
-import mods.railcraft.api.core.items.InvToolsAPI;
+import mods.railcraft.api.items.IFilterItem;
+import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**

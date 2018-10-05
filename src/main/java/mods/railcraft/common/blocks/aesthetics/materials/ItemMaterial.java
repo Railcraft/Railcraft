@@ -29,7 +29,7 @@ public class ItemMaterial extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return matBlock.getUnlocalizedName(Materials.from(stack, MATERIAL_KEY));
+    public String getTranslationKey(ItemStack stack) {
+        return matBlock.getTranslationKey(Materials.from(stack, MATERIAL_KEY));
     }
 }

@@ -42,8 +42,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,11 +53,11 @@ import java.util.UUID;
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-    @Nonnull
+    @NotNull
     private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
     @Nullable
     private UUID uuid;
-    @Nonnull
+    @NotNull
     private String customName = "";
 
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
@@ -86,7 +86,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return tileCache;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
@@ -138,9 +138,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public void markBlockForUpdate() {
 //        System.out.println("updating");
-        if (world != null) {
+        if (hasWorld()) {
             IBlockState state = getBlockState();
-            if (state != null)
+            if (state.getBlock().hasTileEntity(state))
                 world.notifyBlockUpdate(getPos(), state, state, 8);
         }
     }
@@ -189,7 +189,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     protected final void setOwner(GameProfile profile) {
         owner = profile;
-        sendUpdateToClient();
+//        sendUpdateToClient();  Sending this when a te is initialized will cause client net handler errors because the tile is not yet on client
     }
 
     @Override
@@ -201,9 +201,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
-    @Nonnull
+    @NotNull
     public String getLocalizationTag() {
-        return getBlockType().getUnlocalizedName();
+        return getBlockType().getTranslationKey() + ".name";
     }
 
     public List<String> getDebugOutput() {
@@ -254,11 +254,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return world;
     }
 
-    @Deprecated //useless
-    public short getId() {
-        return -1;
-    }
-
     @Override
     public boolean hasCustomName() {
         return !customName.isEmpty();
@@ -276,5 +271,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Override
     public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
     }
 }

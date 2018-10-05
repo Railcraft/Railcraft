@@ -24,8 +24,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,14 +40,14 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     private boolean powerState;
     private boolean neighborState;
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.SEQUENCER;
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         if (world.isRemote)
             return;
@@ -144,9 +144,9 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
         return sideOutput == side ? SignalAspect.GREEN : SignalAspect.RED;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("sideOutput", (byte) sideOutput.ordinal());
         data.setBoolean("powerState", powerState);
@@ -155,23 +155,23 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
-        sideOutput = EnumFacing.getFront(data.getByte("sideOutput"));
+        sideOutput = EnumFacing.byIndex(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
         neighborState = data.getBoolean("neighborState");
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(sideOutput.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        sideOutput = EnumFacing.getFront(data.readByte());
+        sideOutput = EnumFacing.byIndex(data.readByte());
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

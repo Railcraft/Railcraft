@@ -166,7 +166,7 @@ public class CartBattery implements ICartBattery {
         if (drewFromTrack > 0)
             drewFromTrack--;
         else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
-            ILinkageManager lm = CartToolsAPI.getLinkageManager(owner.world);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager();
             for (EntityMinecart cart : lm.trainIterator(owner)) {
                 if (cart.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
                     ICartBattery ch = cart.getCapability(CapabilitiesCharge.CART_BATTERY, null);

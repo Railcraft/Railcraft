@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -18,10 +18,10 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,8 +31,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -97,15 +98,18 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         if (Game.isHost(world)) {
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, StandardStackFilters.FUEL.negate()); //TODO fix filter
-            if (InvTools.hasEmptySlot(invStock)) {
-                ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
+            Predicate<ItemStack> filler = InvTools.getFillingChecker(invStock);
+            if (filler != Predicates.<ItemStack>alwaysFalse()) {
+                // This comparison looks funky, but the identity is real
+                ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
                 if (!InvTools.isEmpty(stack))
                     InvTools.moveItemStack(stack, invStock);
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
-                FluidStack pulled = CartToolsAPI.transferHelper.pullFluid(this, Fluids.WATER.getB(1));
-                if (pulled != null)
+                FluidStack pulled = CartToolsAPI.getTransferHelper().pullFluid(this, Fluids.WATER.getB(1));
+                if (pulled != null) {
                     tankWater.fill(pulled, true);
+                }
             }
         }
     }
@@ -182,7 +186,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_STEAM;

@@ -22,8 +22,10 @@ import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.ai.TamingInteractHandler;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,7 +34,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 /**
@@ -127,6 +129,19 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
         super.breakBlock(worldIn, pos, state);
         if (getVariant(state) == EquipmentVariant.ROLLING_MACHINE_POWERED)
             deregisterNode(worldIn, pos);
+    }
+
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        switch (getVariant(state)) {
+            case ROLLING_MACHINE_MANUAL:
+            case FEED_STATION:
+                return SoundType.WOOD;
+            case ROLLING_MACHINE_POWERED:
+            case SMOKER:
+                return SoundType.METAL;
+        }
+        return super.getSoundType(state, world, pos, entity);
     }
 
     @Nullable

@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
-import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IMinecartItem;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.RailcraftItems;

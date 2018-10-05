@@ -19,9 +19,10 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 /**
@@ -89,7 +90,7 @@ public abstract class DetectorSecured extends Detector implements ISecureObject<
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getName() {
         return tile.getName();
@@ -100,7 +101,7 @@ public abstract class DetectorSecured extends Detector implements ISecureObject<
         return tile.hasCustomName();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return tile.getDisplayName();

@@ -25,7 +25,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -100,7 +100,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             int filled = tank.fill(resource, doFill);
             if (filled > 0)
                 return filled;
@@ -118,7 +118,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             FluidStack fluidStack = tank.drain(resource, doDrain);
             if (fluidStack != null)
                 return fluidStack;
@@ -129,7 +129,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        for (StandardTank tank : this) {
+        for (StandardTank tank : tanks) {
             FluidStack fluidStack = tank.drain(maxDrain, doDrain);
             if (fluidStack != null)
                 return fluidStack;
@@ -169,12 +169,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     public void pull(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
-        Collection<IFluidHandler> targets = findNeighbors(cache, filter, sides);
+        Collection<IFluidHandler> targets = FluidTools.findNeighbors(cache, filter, sides);
         pull(targets, tankIndex, amount);
     }
 
     public void push(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
-        Collection<IFluidHandler> targets = findNeighbors(cache, filter, sides);
+        Collection<IFluidHandler> targets = FluidTools.findNeighbors(cache, filter, sides);
         push(targets, tankIndex, amount);
     }
 
@@ -184,20 +184,6 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     public void push(Collection<IFluidHandler> targets, int tankIndex, int amount) {
         transfer(targets, tankIndex, (me, them) -> FluidUtil.tryFluidTransfer(them, me, amount, true));
-    }
-
-    private Collection<IFluidHandler> findNeighbors(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides) {
-        List<IFluidHandler> targets = new ArrayList<>();
-        for (EnumFacing side : sides) {
-            TileEntity tile = cache.getTileOnSide(side);
-            if (tile == null) continue;
-            if (!TANK_FILTER.apply(tile, side.getOpposite())) continue;
-            if (!filter.test(tile)) continue;
-            IFluidHandler tank = FluidTools.getFluidHandler(side.getOpposite(), tile);
-            if (tank != null)
-                targets.add(tank);
-        }
-        return targets;
     }
 
     public void transfer(Collection<IFluidHandler> targets, int tankIndex, BiConsumer<IFluidHandler, IFluidHandler> transfer) {

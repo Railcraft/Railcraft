@@ -12,28 +12,28 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {};
-    final static Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
+
 
     final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
     ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
     ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
 
-    public final void setEnabledEventHandler(@Nonnull ModuleEventHandler enabledEventHandler) {
+    public final void setEnabledEventHandler(@NotNull ModuleEventHandler enabledEventHandler) {
         this.enabledEventHandler = enabledEventHandler;
     }
 
-    public final void setDisabledEventHandler(@Nonnull ModuleEventHandler disabledEventHandler) {
+    public final void setDisabledEventHandler(@NotNull ModuleEventHandler disabledEventHandler) {
         this.disabledEventHandler = disabledEventHandler;
     }
 
@@ -47,7 +47,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         return objectContainers.contains(object);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final ModuleEventHandler getModuleEventHandler(boolean enabled) {
         if (enabled)
@@ -88,9 +88,13 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         public void init() {
             objectContainers.forEach(roc -> {
                 //Use a set to avoid redefine recipes
-                if (!definedContainers.contains(roc)) {
+                if (!RailcraftModuleManager.definedContainers.contains(roc)) {
                     roc.defineRecipes();
-                    definedContainers.add(roc);
+                    RailcraftModuleManager.definedContainers.add(roc);
+                }
+                else
+                {
+                    Game.log(Level.ERROR, "An object is defined by a module more than once. It is {0}.", roc);
                 }
             });
             enabledEventHandler.init();

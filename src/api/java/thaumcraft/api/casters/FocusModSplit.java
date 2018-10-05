@@ -17,7 +17,7 @@ public abstract class FocusModSplit extends FocusMod {
 		NBTTagList nodelist = nbt.getTagList("packages", (byte)10);
 		packages.clear();
 		for (int x=0;x<nodelist.tagCount();x++) {
-			NBTTagCompound nodenbt = (NBTTagCompound) nodelist.getCompoundTagAt(x);
+			NBTTagCompound nodenbt = nodelist.getCompoundTagAt(x);
 			FocusPackage fp = new FocusPackage();
 			fp.deserialize(nodenbt);
 			packages.add(fp);

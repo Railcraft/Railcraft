@@ -12,6 +12,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
@@ -42,4 +44,8 @@ public class EntityCartWorldspikeAdmin extends EntityCartWorldspikeStandard {
         return WorldspikeVariant.ADMIN.getDefaultState().withProperty(BlockWorldspike.ENABLED, hasTicketFlag());
     }
 
+    @Override
+    public ItemStack[] getItemsDropped(EntityMinecart cart) {
+        return new ItemStack[0]; // Prevent survival players from getting admin tools
+    }
 }

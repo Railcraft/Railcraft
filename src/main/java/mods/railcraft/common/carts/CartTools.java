@@ -14,7 +14,7 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -35,17 +35,17 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartTools {
+public final class CartTools {
 
-    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<Item, IRailcraftCartContainer>();
-    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<Class<? extends Entity>, IRailcraftCartContainer>();
+    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<>();
+    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<>();
     public static String HIGH_SPEED_TAG = "HighSpeed";
 
     /**
@@ -126,7 +126,7 @@ public class CartTools {
         cart.motionZ = 0;
         if (Game.isClient(cart.world))
             return;
-        removePassengers(cart, cart.getPositionVector().addVector(0.0, 1.5, 0.0));
+        removePassengers(cart, cart.getPositionVector().add(0.0, 1.5, 0.0));
         cart.world.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
@@ -277,6 +277,16 @@ public class CartTools {
     public static void smackCart(EntityMinecart respect, EntityMinecart cart, EntityPlayer smacker, float smackVelocity) {
         cart.motionX += Math.copySign(smackVelocity, respect.posX - smacker.posX);
         cart.motionZ += Math.copySign(smackVelocity, respect.posZ - smacker.posZ);
+    }
+
+    public static void initCartPos(EntityMinecart entity, double i, double j, double k) {
+        entity.setPosition(i, j, k);
+        entity.motionX = 0.0D;
+        entity.motionY = 0.0D;
+        entity.motionZ = 0.0D;
+        entity.prevPosX = i;
+        entity.prevPosY = j;
+        entity.prevPosZ = k;
     }
 
 }

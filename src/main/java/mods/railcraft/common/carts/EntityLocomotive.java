@@ -14,8 +14,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
+import mods.railcraft.common.carts.LinkageManager.LinkType;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -57,13 +58,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.stream.StreamSupport;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -370,7 +372,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         updateFuel();
 
 //        if (getEntityData().getBoolean("HighSpeed"))
-//            System.out.println(CartTools.getCartSpeedUncapped(this));
+//            System.out.println(CartToolsAPI.getCartSpeedUncapped(this));
         if (whistleDelay > 0)
             whistleDelay--;
 
@@ -420,7 +422,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         LocoSpeed speed = getSpeed();
         if (isRunning()) {
-            float force = RailcraftConfig.locomotiveHorsepower() * 0.006F;
+            float force = RailcraftConfig.locomotiveHorsepower() * 0.01F;
             if (isReverse())
                 force = -force;
             switch (speed) {
@@ -536,7 +538,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (!(entity instanceof EntityLocomotive))
             return false;
         EntityLocomotive otherLoco = (EntityLocomotive) entity;
-        if (getUniqueID() == entity.getUniqueID())
+        if (getPersistentID() == entity.getPersistentID())
             return false;
         if (Train.areInSameTrain(this, otherLoco))
             return false;
@@ -630,7 +632,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         data.writeByte(clientMode.ordinal());
         data.writeByte(clientSpeed.ordinal());
         data.writeByte(lockController.getCurrentState());
-        data.writeBoolean(isReverse());
     }
 
     @Override
@@ -640,7 +641,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         byte lock = data.readByte();
         if (PlayerPlugin.isOwnerOrOp(getOwner(), sender.getGameProfile()))
             lockController.setCurrentState(lock);
-        setReverse(data.readBoolean());
     }
 
     @Override
@@ -686,18 +686,18 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean canLinkWithCart(EntityMinecart cart) {
+    public boolean canLink(EntityMinecart cart) {
         if (isExemptFromLinkLimits(cart))
             return true;
 
         LinkageManager lm = LinkageManager.instance();
 
-        EntityMinecart linkA = lm.getLinkedCartA(this);
-        if (linkA != null && !isExemptFromLinkLimits(linkA))
+        if (StreamSupport.stream(lm.linkIterator(this, LinkType.LINK_A).spliterator(), false)
+                .anyMatch(linked -> !isExemptFromLinkLimits(linked))) {
             return false;
-
-        EntityMinecart linkB = lm.getLinkedCartB(this);
-        return linkB == null || isExemptFromLinkLimits(linkB);
+        }
+        return StreamSupport.stream(lm.linkIterator(this, LinkType.LINK_B).spliterator(), false)
+                .allMatch(this::isExemptFromLinkLimits);
     }
 
     private boolean isExemptFromLinkLimits(EntityMinecart cart) {
@@ -715,7 +715,14 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public void onLinkCreated(EntityMinecart cart) {
+        // Moved from linkage manager - this should not be there
+        if (getSpeed().compareTo(LocoSpeed.SLOWEST) > 0)
+            setSpeed(LocoSpeed.SLOWEST);
+    }
+
+    @Override
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 
@@ -786,6 +793,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                     return speed;
             }
             return MAX;
+        }
+
+        public static LocoSpeed fromLevel(int level) {
+            return VALUES[level - 1];
         }
 
         public int getLevel() {

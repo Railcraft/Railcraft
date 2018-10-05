@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class PacketDispatcher {
+public final class PacketDispatcher {
 
     public static void sendToServer(RailcraftPacket packet) {
         PacketHandler.INSTANCE.channel.sendToServer(packet.getPacket());
@@ -31,7 +31,7 @@ public class PacketDispatcher {
         PacketHandler.INSTANCE.channel.sendTo(packet.getPacket(), player);
     }
 
-    public static void sendToPlayer(Packet packet, EntityPlayerMP player) {
+    public static void sendToPlayer(Packet<?> packet, EntityPlayerMP player) {
         player.connection.sendPacket(packet);
     }
 
@@ -67,7 +67,7 @@ public class PacketDispatcher {
         sendToWatchers(packet.getPacket(), world, worldX, worldZ);
     }
 
-    public static void sendToWatchers(Packet packet, WorldServer world, int worldX, int worldZ) {
+    public static void sendToWatchers(Packet<?> packet, WorldServer world, int worldX, int worldZ) {
         int chunkX = worldX >> 4;
         int chunkZ = worldZ >> 4;
 

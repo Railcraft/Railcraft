@@ -10,19 +10,12 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.entity.ChestLogic;
+import mods.railcraft.common.util.entity.MetalsChestLogic;
+import mods.railcraft.common.util.entity.VoidChestLogic;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.function.Predicate;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,28 +23,21 @@ import java.util.function.Predicate;
 public class TileChestMetals extends TileChestRailcraft {
 
     private static final int TICK_PER_CONDENSE = 16;
-    private static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<>(Metal.class);
-    private static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<>(Metal.class);
-    private static final Map<Metal, Predicate<ItemStack>> blockFilters = new EnumMap<>(Metal.class);
-
-    static {
-        for (Metal m : Metal.VALUES) {
-            nuggetFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.NUGGET)).and(m.nuggetFilter));
-            ingotFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.INGOT)).and(m.ingotFilter));
-            blockFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.BLOCK)).and(m.blockFilter));
-        }
-    }
-
-    private Target target = Target.NUGGET_CONDENSE;
+    private MetalsChestLogic logic = new MetalsChestLogic(getWorld(), this);
 
     @Override
     public void update() {
         super.update();
 
         if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(world))
-            if (!target.evaluate(this))
-                target = target.next();
+            logic.update();
     }
+
+    @Override
+    protected ChestLogic createLogic() {
+        return new MetalsChestLogic(getWorld(), this);
+    }
+
 
     @Nullable
     @Override
@@ -59,99 +45,4 @@ public class TileChestMetals extends TileChestRailcraft {
         return null;
     }
 
-    enum Target {
-
-        NUGGET_CONDENSE {
-            @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
-                for (Metal metal : Metal.VALUES) {
-                    ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
-                        im.removeItems(metal.nuggetFilter, 9);
-                        im.addStack(ingotStack);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-        },
-        INGOT_CONDENSE {
-            @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
-                for (Metal metal : Metal.VALUES) {
-                    ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
-                        im.removeItems(metal.ingotFilter, 9);
-                        im.addStack(blockStack);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-        },
-        NUGGET_SWAP {
-            @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
-                for (Metal metal : Metal.VALUES) {
-                    Predicate<ItemStack> filter = nuggetFilters.get(metal);
-                    ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
-                    if (!InvTools.isEmpty(nuggetStack) && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(nuggetStack);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-        },
-        INGOT_SWAP {
-            @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
-                for (Metal metal : Metal.VALUES) {
-                    Predicate<ItemStack> filter = ingotFilters.get(metal);
-                    ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(ingotStack);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-        },
-        BLOCK_SWAP {
-            @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
-                for (Metal metal : Metal.VALUES) {
-                    Predicate<ItemStack> filter = blockFilters.get(metal);
-                    ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(blockStack);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-        };
-
-        public static final Target[] VALUES = values();
-
-        public abstract boolean evaluate(IInventory inv);
-
-        public Target next() {
-            return VALUES[(ordinal() + 1) % VALUES.length];
-        }
-
-    }
 }

@@ -13,7 +13,7 @@ import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -80,13 +80,13 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey();
     }
 
     @Override

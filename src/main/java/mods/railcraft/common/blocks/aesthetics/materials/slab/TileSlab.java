@@ -16,7 +16,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 /**
@@ -24,9 +24,9 @@ import java.io.IOException;
  */
 public class TileSlab extends RailcraftTileEntity {
 
-    @Nonnull
+    @NotNull
     private Materials top = Materials.NO_MAT;
-    @Nonnull
+    @NotNull
     private Materials bottom = Materials.NO_MAT;
 
     public Materials getTopSlab() {
@@ -85,7 +85,7 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(getUpmostSlab());
+        return ((IMaterialBlock) getBlockType()).getTranslationKey(getUpmostSlab()) + ".name";
     }
 
     @Override
@@ -136,8 +136,4 @@ public class TileSlab extends RailcraftTileEntity {
         markBlockForUpdate();
     }
 
-    @Override
-    public short getId() {
-        return 43;
-    }
 }

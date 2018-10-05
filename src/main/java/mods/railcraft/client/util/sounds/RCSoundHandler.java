@@ -47,7 +47,7 @@ public final class RCSoundHandler {
                 float y = soundEvent.getYPosF();
                 float z = soundEvent.getZPosF();
                 BlockPos pos = new BlockPos(x, y, z);
-                String soundPath = soundEvent.getSoundLocation().getResourcePath();
+                String soundPath = soundEvent.getSoundLocation().getPath();
                 SoundType blockSound = SoundRegistry.getBlockSound(world, pos);
                 if (blockSound == null) {
                     if (soundPath.contains("place")) {

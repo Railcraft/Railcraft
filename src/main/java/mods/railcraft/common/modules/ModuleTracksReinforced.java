@@ -21,18 +21,7 @@ public class ModuleTracksReinforced extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.TRACK_FLEX_REINFORCED
-//                        RailcraftBlocks.TRACK_JUNCTION_REINFORCED
                 );
-//                add(RailcraftBlocks.track);
-            }
-
-            @Override
-            public void preInit() {
-//                TrackKits.REINFORCED.register();
-//                TrackKits.REINFORCED_BOOSTER.register();
-//                TrackKits.REINFORCED_JUNCTION.register();
-//                TrackKits.REINFORCED_SWITCH.register();
-//                TrackKits.REINFORCED_WYE.register();
             }
         });
     }

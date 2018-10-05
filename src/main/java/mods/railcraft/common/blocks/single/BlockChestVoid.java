@@ -1,30 +1,23 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.client.render.tesr.TESRChest;
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -73,10 +66,8 @@ public class BlockChestVoid extends BlockChestRailcraft {
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
-       {
-            BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
-            spawnVoidFaceParticles(worldIn, pos);
-        }
+        BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
+        spawnVoidFaceParticles(worldIn, start);
     }
 
     @SideOnly(Side.CLIENT)
@@ -94,17 +85,17 @@ public class BlockChestVoid extends BlockChestRailcraft {
             double pz = pos.getZ();
 
             if (facing.getAxis() == EnumFacing.Axis.X)
-                px += pixel * facing.getFrontOffsetX() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                px += pixel * facing.getXOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 px += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Y)
-                py += pixel * facing.getFrontOffsetY() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                py += pixel * facing.getYOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 py += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Z)
-                pz += pixel * facing.getFrontOffsetZ() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                pz += pixel * facing.getZOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 pz += random.nextFloat();
 

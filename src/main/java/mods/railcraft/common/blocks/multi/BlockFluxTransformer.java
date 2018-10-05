@@ -2,11 +2,13 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,8 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     );
 
     public BlockFluxTransformer() {
-        super(Material.ROCK);
+        super(Material.IRON);
+        setSoundType(SoundType.METAL);
         setTickRandomly(true);
         setHarvestLevel("pickaxe", 1);
     }
@@ -44,7 +47,7 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileFluxTransformer();
     }
 
@@ -85,9 +88,10 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
         CraftingPlugin.addRecipe(stack,
                 "CGC",
                 "GRG",
-                "CGC",
-                'C', RailcraftItems.PLATE, Metal.COPPER,
-                'G', "ingotGold",
+                "CTC",
+                'G', RailcraftItems.PLATE, Metal.GOLD,
+                'C', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_SMALL,
+                'T', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL,
                 'R', "blockRedstone");
     }
 }

@@ -1,8 +1,11 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.items.ItemCharge;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.property.PropertyCharacter;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -27,7 +30,8 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
-        super(Material.ROCK);
+        super(Material.IRON);
+        setSoundType(SoundType.METAL);
         setDefaultState(getDefaultState().withProperty(ICON, 'O'));
         setHarvestLevel("pickaxe", 1);
     }
@@ -43,7 +47,7 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public TileMultiBlockInventory<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileRockCrusher();
     }
 
@@ -85,11 +89,12 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 4);
         CraftingPlugin.addRecipe(stack,
-                "PDP",
-                "DSD",
-                "PDP",
+                "DPD",
+                "PSP",
+                "DMD",
                 'D', "gemDiamond",
                 'P', new ItemStack(Blocks.PISTON),
+                'M', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR,
                 'S', "blockSteel");
     }
 }

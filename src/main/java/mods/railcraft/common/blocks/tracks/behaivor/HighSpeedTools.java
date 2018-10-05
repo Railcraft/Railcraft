@@ -22,16 +22,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 8/2/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class HighSpeedTools {
-    public static final float SPEED_CUTOFF = 0.39f;
+public final class HighSpeedTools {
+    public static final float SPEED_EXPLODE = 0.5f;
+    public static final float SPEED_CUTOFF = 0.499f;
     public static final int LOOK_AHEAD_DIST = 2;
     public static final float SPEED_SLOPE = 0.45f;
 
@@ -51,17 +51,13 @@ public class HighSpeedTools {
         if (TrackShapeHelper.isNorthSouth(dir)) {
             BlockPos north = pos.north();
             BlockPos south = pos.south();
-            if ((isTrackHighSpeedCapable(world, north) || isTrackHighSpeedCapable(world, north.up()) || isTrackHighSpeedCapable(world, north.down()))
-                    && (isTrackHighSpeedCapable(world, south) || isTrackHighSpeedCapable(world, south.up()) || isTrackHighSpeedCapable(world, south.down()))) {
-                return true;
-            }
+            return (isTrackHighSpeedCapable(world, north) || isTrackHighSpeedCapable(world, north.up()) || isTrackHighSpeedCapable(world, north.down()))
+                    && (isTrackHighSpeedCapable(world, south) || isTrackHighSpeedCapable(world, south.up()) || isTrackHighSpeedCapable(world, south.down()));
         } else if (TrackShapeHelper.isEastWest(dir)) {
             BlockPos east = pos.east();
             BlockPos west = pos.west();
-            if ((isTrackHighSpeedCapable(world, east) || isTrackHighSpeedCapable(world, east.up()) || isTrackHighSpeedCapable(world, east.down()))
-                    && (isTrackHighSpeedCapable(world, west) || isTrackHighSpeedCapable(world, west.up()) || isTrackHighSpeedCapable(world, west.down()))) {
-                return true;
-            }
+            return (isTrackHighSpeedCapable(world, east) || isTrackHighSpeedCapable(world, east.up()) || isTrackHighSpeedCapable(world, east.down()))
+                    && (isTrackHighSpeedCapable(world, west) || isTrackHighSpeedCapable(world, west.up()) || isTrackHighSpeedCapable(world, west.down()));
         }
         return false;
     }
@@ -82,11 +78,11 @@ public class HighSpeedTools {
         } else if (trackKit == TrackKits.BOOSTER.getTrackKit() || trackKit == TrackKits.HIGH_SPEED_TRANSITION.getTrackKit()) {
             if (isTrackSafeForHighSpeed(world, pos, cart)) {
                 if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
-                    cart.motionX = Math.copySign(0.4f, cart.motionX);
+                    cart.motionX = Math.copySign(SPEED_CUTOFF, cart.motionX);
                     CartTools.setTravellingHighSpeed(cart, true);
                 }
                 if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
-                    cart.motionZ = Math.copySign(0.4f, cart.motionZ);
+                    cart.motionZ = Math.copySign(SPEED_CUTOFF, cart.motionZ);
                     CartTools.setTravellingHighSpeed(cart, true);
                 }
             }
@@ -99,7 +95,7 @@ public class HighSpeedTools {
         return TrackTools.getTrackTypeAt(world, pos).isHighSpeed();
     }
 
-    public static float speedForNextTrack(World world, BlockPos pos, int dist, EntityMinecart cart) {
+    public static float speedForNextTrack(World world, BlockPos pos, int dist, @Nullable EntityMinecart cart) {
         float maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
             for (EnumFacing side : EnumFacing.HORIZONTALS) {

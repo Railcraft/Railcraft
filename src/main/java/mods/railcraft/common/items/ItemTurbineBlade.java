@@ -25,6 +25,6 @@ public class ItemTurbineBlade extends ItemRailcraft {
                 "I",
                 "I",
                 "I",
-                'I', "ingotSteel");
+                'I', "plateNickel");
     }
 }

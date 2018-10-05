@@ -28,8 +28,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
@@ -44,7 +43,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
         setResistance(15);
         setHardness(5);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setHarvestLevel("pickaxe", 0);
     }
 

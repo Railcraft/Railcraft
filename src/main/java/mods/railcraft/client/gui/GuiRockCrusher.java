@@ -36,7 +36,7 @@ public class GuiRockCrusher extends TileGui {
         int h = (height - ySize) / 2;
         if (crusher.getProcessTime() > 0) {
             int cookProgress = crusher.getProgressScaled(29);
-            drawTexturedModalRect(w + 64, h + 20, 176, 0, cookProgress + 1, 53);
+            drawTexturedModalRect(w + 73, h + 20, 176, 0, cookProgress + 1, 38);
         }
     }
 }

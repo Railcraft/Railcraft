@@ -20,17 +20,17 @@ public interface IRechargable {
 	 * @param player passed player may be null so check first
 	 * @return how much vis this item can hold
 	 */
-	public int getMaxCharge(ItemStack stack, EntityLivingBase player);
+    int getMaxCharge(ItemStack stack, EntityLivingBase player);
 	
 	/**
 	 * @param stack
 	 * @param player
 	 * @return when the charge will be displayed in the built-in hud display for chargable items
 	 */
-	public EnumChargeDisplay showInHud(ItemStack stack, EntityLivingBase player);
+    EnumChargeDisplay showInHud(ItemStack stack, EntityLivingBase player);
 	
 	enum EnumChargeDisplay {
-    	NEVER, NORMAL, PERIODIC;
+    	NEVER, NORMAL, PERIODIC
     }
 	/*
 	 * NEVER = never

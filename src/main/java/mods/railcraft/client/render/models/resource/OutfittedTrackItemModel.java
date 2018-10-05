@@ -25,7 +25,6 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.model.IModelState;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
@@ -78,27 +77,26 @@ public class OutfittedTrackItemModel implements IModel {
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
-            return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                    && modelLocation.getResourcePath().startsWith(MODEL_PREFIX);
+            return Objects.equals(modelLocation.getNamespace(), "railcraft")
+                    && modelLocation.getPath().startsWith(MODEL_PREFIX);
         }
 
         @Override
-        public IModel loadModel(ResourceLocation modelLocation) throws IOException {
-            String[] tokens = modelLocation.getResourcePath().split("\\.");
+        public IModel loadModel(ResourceLocation modelLocation) {
+            String[] tokens = modelLocation.getPath().split("\\.");
             TrackType trackType = TrackRegistry.TRACK_TYPE.get(tokens[1]);
             TrackKit trackKit = TrackRegistry.TRACK_KIT.get(tokens[2]);
             ImmutableList.Builder<ResourceLocation> texBuilder = ImmutableList.builder();
             switch (trackKit.getRenderer()) {
                 case COMPOSITE:
-                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
-                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
-                    texBuilder.add(new ResourceLocation(trackKit.getRegistryName().getResourceDomain(),
-                            "blocks/tracks/outfitted/kit/" + trackKit.getRegistryName().getResourcePath() + "_0"));
+                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getNamespace(),
+                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getPath()));
+                    texBuilder.add(new ResourceLocation(trackKit.getRegistryName().getNamespace(),
+                            "blocks/tracks/outfitted/kit/" + trackKit.getRegistryName().getPath() + "_0"));
                     break;
                 case UNIFIED:
-                    // TODO: fix this
-                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getResourceDomain(),
-                            "blocks/tracks/outfitted/type/" + trackType.getRegistryName().getResourcePath()));
+                    texBuilder.add(new ResourceLocation(trackType.getRegistryName().getNamespace(),
+                            "blocks/tracks/outfitted/unified/" + trackType.getRegistryName().getPath() + "/" + trackKit.getRegistryName().getPath() + "_0"));
                     break;
             }
             return new OutfittedTrackItemModel(texBuilder.build());

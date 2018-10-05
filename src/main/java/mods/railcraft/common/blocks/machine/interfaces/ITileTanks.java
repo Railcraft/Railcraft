@@ -12,8 +12,6 @@ package mods.railcraft.common.blocks.machine.interfaces;
 
 import mods.railcraft.common.fluids.TankManager;
 
-import javax.annotation.Nullable;
-
 /**
  * Created by CovertJaguar on 9/10/2016 for Railcraft.
  *

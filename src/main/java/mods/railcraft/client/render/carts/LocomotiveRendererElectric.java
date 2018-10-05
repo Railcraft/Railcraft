@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.models.programmatic.ModelSimple;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveElectric;
 import mods.railcraft.client.render.tools.OpenGL;
@@ -21,7 +21,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -14,6 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -34,7 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -47,6 +48,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
 
     protected BlockTankMetal(Material material) {
         super(material);
+        setSoundType(SoundType.METAL);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
@@ -164,7 +166,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return super.getUnlocalizedName();
+    public String getTranslationKey() {
+        return super.getTranslationKey();
     }
 }

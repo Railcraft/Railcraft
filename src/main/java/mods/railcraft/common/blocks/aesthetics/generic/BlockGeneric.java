@@ -28,7 +28,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -36,10 +35,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
+
+import static mods.railcraft.common.blocks.aesthetics.metals.EnumMetal.*;
 
 @RailcraftBlockMetadata(variant = EnumGeneric.class)
 public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
@@ -50,8 +51,9 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         setResistance(20);
         setHardness(5);
         setSoundType(SoundType.STONE);
+        setTickRandomly(true);
 
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     @Override
@@ -59,16 +61,6 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_QUARRIED);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_CONCRETE);
-
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_STEEL);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_SILVER);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_LEAD);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_TIN);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COPPER);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_BRONZE);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_NICKEL);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_INVAR);
 
         HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
@@ -76,16 +68,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         EntityTunnelBore.addMineableBlock(this);
 
         ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_COKE.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_COPPER.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_LEAD.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_STEEL.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_TIN.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_SILVER.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_BRONZE.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_NICKEL.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_INVAR.getStack());
 
-        ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CONCRETE.getStack());
         ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
 
         ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_ABYSSAL.getStack());
@@ -94,6 +77,8 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         for (EnumGeneric block : EnumGeneric.VALUES) {
             MicroBlockPlugin.addMicroBlockCandidate(this, block.ordinal());
         }
+
+        OreDictionary.registerOre("blockCoke", EnumGeneric.BLOCK_COKE.getStack());
     }
 
     @Override
@@ -207,23 +192,58 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         switch (getVariant(state)) {
-            case BLOCK_COPPER:
-            case BLOCK_LEAD:
-            case BLOCK_STEEL:
-            case BLOCK_TIN:
-            case BLOCK_SILVER:
-            case BLOCK_BRONZE:
-            case BLOCK_NICKEL:
-            case BLOCK_INVAR:
-                return SoundType.METAL;
             case BLOCK_CREOSOTE:
                 return SoundType.WOOD;
             case CRUSHED_OBSIDIAN:
                 return SoundType.GROUND;
             case BLOCK_COKE:
                 return SoundType.STONE;
-
         }
         return super.getSoundType(state, world, pos, entity);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
+        EnumGeneric generic = getVariant(state);
+        IBlockState newState = null;
+        switch (generic) {
+            case BLOCK_CONCRETE:
+                newState = RailcraftBlocks.REINFORCED_CONCRETE.getDefaultState();
+                break;
+            case BLOCK_BRASS:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_BRASS);
+                break;
+            case BLOCK_BRONZE:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_BRONZE);
+                break;
+            case BLOCK_COPPER:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_COPPER);
+                break;
+            case BLOCK_INVAR:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_INVAR);
+                break;
+            case BLOCK_LEAD:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_LEAD);
+                break;
+            case BLOCK_NICKEL:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_NICKEL);
+                break;
+            case BLOCK_SILVER:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_SILVER);
+                break;
+            case BLOCK_STEEL:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_STEEL);
+                break;
+            case BLOCK_TIN:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_TIN);
+                break;
+            case BLOCK_ZINC:
+                newState = RailcraftBlocks.METAL.getState(BLOCK_ZINC);
+                break;
+
+        }
+        if (newState != null)
+            WorldPlugin.setBlockState(worldIn, pos, newState);
     }
 }

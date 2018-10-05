@@ -10,9 +10,8 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.ItemMaterials;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -28,14 +27,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
 public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailcraftItemSimple {
-
-    protected static final ImmutableSet<String> TOOL_CLASSES = ImmutableSet.of("pickaxe", "axe", "shovel");
 
     protected ItemBoreHead() {
         super(ItemMaterials.DUMMY, Collections.emptySet());
@@ -63,12 +60,12 @@ public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailc
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
-        return getToolClasses(stack).contains(toolClass) ? getHarvestLevel() : -1;
+        return IBoreHead.super.getHarvestLevel(stack, toolClass, player, blockState);
     }
 
     @Override
     public Set<String> getToolClasses(ItemStack stack) {
-        return TOOL_CLASSES;
+        return IBoreHead.super.getToolClasses(stack);
     }
 
     @Override

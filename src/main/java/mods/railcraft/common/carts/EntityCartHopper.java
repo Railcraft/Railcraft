@@ -19,7 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class EntityCartHopper extends CartBaseContainer implements IHopper {
@@ -43,7 +43,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         return RailcraftCarts.HOPPER;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new UnsupportedOperationException("not supported");
@@ -164,7 +164,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         if (TileEntityHopper.pullItems(this)) {
             return true;
         } else {
-            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
+            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
 
             if (!list.isEmpty()) {
                 TileEntityHopper.putDropInInventoryAllSlots(null, this, list.get(0));
@@ -219,7 +219,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 

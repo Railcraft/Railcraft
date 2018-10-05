@@ -14,8 +14,7 @@ import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.ModuleWorld;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

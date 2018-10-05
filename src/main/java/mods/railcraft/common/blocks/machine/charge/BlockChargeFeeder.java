@@ -31,8 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -89,20 +88,8 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
-        state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
         state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
         return state;
-    }
-
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        int meta = state.getValue(getVariantProperty()).ordinal();
-        if (state.getValue(REDSTONE))
-            meta |= 0x8;
-        return meta;
     }
 
     @Override
@@ -135,5 +122,10 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     protected boolean isSparking(IBlockState state) {
         return state.getValue(REDSTONE);
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(getVariantProperty()).ordinal();
     }
 }

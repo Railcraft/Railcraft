@@ -10,13 +10,10 @@
 package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import org.apache.logging.log4j.Level;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

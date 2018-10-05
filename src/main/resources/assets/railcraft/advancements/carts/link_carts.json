@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:tool_crowbar_iron"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.link_carts.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.link_carts.desc"
+    }
+  },
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "linking": {
+      "trigger": "railcraft:cart_linking",
+      "conditions": {
+        "_comment": "This is WIP"
+      }
+    }
+  }
+}

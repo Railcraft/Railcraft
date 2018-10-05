@@ -15,8 +15,7 @@ import mods.railcraft.common.items.IRailcraftItemSimple;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 /**
  * Defines a cart.
@@ -27,7 +26,8 @@ public interface IRailcraftCartContainer extends IRailcraftObjectContainer<IRail
 
     Class<? extends EntityMinecart> getCartClass();
 
-    @Nullable
+    EntityEntry getRegistration();
+
     ItemStack getContents();
 
     EntityMinecart makeCart(ItemStack stack, World world, double i, double j, double k);

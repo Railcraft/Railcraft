@@ -56,11 +56,20 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'W', getStack(SPOOL_LARGE));
 
         Ingredient ingotCopper = new OreIngredient("ingotCopper");
+        Ingredient ingotConductiveIron = new OreIngredient("ingotConductiveIron");
+
 
         //TODO configure time
         RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_SMALL))
                 .add(ingotCopper)
+                .time(100)
+                .buildAndRegister();
+
+        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+                .output(getStack(SPOOL_SMALL))
+                .add(ingotConductiveIron)
+                .time(100)
                 .buildAndRegister();
 
 //        RailcraftCraftingManager.rollingMachine.addRecipe(
@@ -69,11 +78,19 @@ public class ItemCharge extends ItemRailcraftSubtyped {
 //                'C', "ingotCopper");
 
         Ingredient blockCopper = new OreIngredient("blockCopper");
+        Ingredient blockConductiveIron = new OreIngredient("blockConductiveIron");
 
         //TODO configure time
         RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_LARGE))
                 .add(blockCopper)
+                .time(300)
+                .buildAndRegister();
+
+        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+                .output(getStack(SPOOL_LARGE))
+                .add(blockConductiveIron)
+                .time(300)
                 .buildAndRegister();
 
 //        RailcraftCraftingManager.rollingMachine.addRecipe(
@@ -102,6 +119,7 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 )
                 .width(1)
                 .height(3)
+                .time(150)
                 .buildAndRegister();
 
 //        RailcraftCraftingManager.rollingMachine.addRecipe(
@@ -122,6 +140,7 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 )
                 .height(3)
                 .width(1)
+                .time(150)
                 .buildAndRegister();
 
 //        RailcraftCraftingManager.rollingMachine.addRecipe(
@@ -142,6 +161,7 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 )
                 .height(3)
                 .width(1)
+                .time(150)
                 .buildAndRegister();
 
 //        RailcraftCraftingManager.rollingMachine.addRecipe(

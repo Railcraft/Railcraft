@@ -38,7 +38,7 @@ import org.apache.logging.log4j.Level;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FactoryContainer {
+public final class FactoryContainer {
 
     @SuppressWarnings("ConstantConditions")
     public static Container build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
@@ -145,8 +145,7 @@ public class FactoryContainer {
                 case TRACK_ROUTING:
                     return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 default:
-                    //TODO: fix this
-//                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
+                    //return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
             Game.log(Level.WARN, "Error when attempting to build gui container {0}: {1}", gui, ex);

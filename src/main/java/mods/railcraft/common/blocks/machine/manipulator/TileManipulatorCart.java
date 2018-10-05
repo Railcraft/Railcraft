@@ -40,8 +40,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextFormatting;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -84,8 +84,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
         if (!InvTools.isEmpty(minecartSlot1) || !InvTools.isEmpty(minecartSlot2))
-            if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
-                return false;
+            return CartTools.doesCartMatchFilter(minecartSlot1, cart) || CartTools.doesCartMatchFilter(minecartSlot2, cart);
         return true;
     }
 

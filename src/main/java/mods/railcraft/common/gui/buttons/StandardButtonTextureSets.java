@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
@@ -9,10 +9,9 @@
 package mods.railcraft.common.gui.buttons;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum StandardButtonTextureSets implements IButtonTextureSet{
+public enum StandardButtonTextureSets implements IButtonTextureSet {
 
     LARGE_BUTTON(0, 88, 20, 200),
     SMALL_BUTTON(0, 168, 15, 200),

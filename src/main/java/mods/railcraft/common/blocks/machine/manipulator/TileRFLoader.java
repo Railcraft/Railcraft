@@ -9,18 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import cofh.redstoneflux.api.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-
-public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
+public class TileRFLoader extends TileRFManipulator {
 
     @Override
     public IEnumMachine<?> getMachineType() {
@@ -44,7 +41,7 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
             }
             int used = rfCart.addRF(injection);
             if (used > 0) {
-                energyStorage.modifyEnergyStored(-used);
+                energyStorage.extractEnergy(-used,false);
                 setProcessing(true);
             }
         }
@@ -72,15 +69,5 @@ public class TileRFLoader extends TileRFManipulator implements IEnergyReceiver {
                 return rfCart.getRF() <= 0;
         }
         return false;
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
     }
 }

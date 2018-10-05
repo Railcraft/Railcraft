@@ -35,8 +35,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -53,7 +53,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         return routingController;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return ActuatorVariant.ROUTING;
@@ -96,7 +96,6 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
         return true;
     }
 
-    @Nullable
     @Override
     public ItemStack getRoutingTable() {
         return inv.getStackInSlot(0);
@@ -152,7 +151,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

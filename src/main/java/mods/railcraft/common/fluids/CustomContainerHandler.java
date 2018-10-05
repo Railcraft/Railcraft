@@ -25,8 +25,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IRegistryDelegate;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
@@ -35,7 +34,7 @@ public final class CustomContainerHandler {
     public static final CustomContainerHandler INSTANCE = new CustomContainerHandler();
 
     /* Empty item, fluid name -> filled item */
-    private final Table<IRegistryDelegate<Item>, String, IRegistryDelegate<Item>> containerTable = HashBasedTable.create();
+    final Table<IRegistryDelegate<Item>, String, IRegistryDelegate<Item>> containerTable = HashBasedTable.create();
 
     private CustomContainerHandler() {
         containerTable.put(Items.GLASS_BOTTLE.delegate, "water", Items.POTIONITEM.delegate);

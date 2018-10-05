@@ -39,7 +39,7 @@ public abstract class Generator implements IWorldGenerator {
 
     @Override
     public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        _generate(rand, new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8), world);
+        _generate(rand, new BlockPos((chunkX << 4), 0, (chunkZ << 4)), world);
     }
 
     private void _generate(Random rand, BlockPos pos, World world) {

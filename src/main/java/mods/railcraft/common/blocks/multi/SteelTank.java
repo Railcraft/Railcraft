@@ -10,11 +10,10 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 

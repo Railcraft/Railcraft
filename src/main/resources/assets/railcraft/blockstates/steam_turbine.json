@@ -1,0 +1,75 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+      "up": "railcraft:blocks/steam_turbine_2",
+      "down": "railcraft:blocks/steam_turbine_2"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "model": "railcraft:detector",
+        "textures": {
+          "front": "railcraft:blocks/steam_turbine_6",
+          "side": "railcraft:blocks/steam_turbine_2"
+        }
+      }
+    ],
+    "window": {
+      "true": {
+        "textures": {
+          "north": "railcraft:blocks/steam_turbine_7",
+          "south": "railcraft:blocks/steam_turbine_7"
+        }
+      },
+      "false": {
+        "textures": {
+          "north": "railcraft:blocks/steam_turbine_2",
+          "south": "railcraft:blocks/steam_turbine_2"
+        }
+      }
+    },
+    "long_axis": {
+      "x": {
+        "y": 90
+      },
+      "z": {
+      }
+    },
+    "texture": {
+      "top_left": {
+        "textures": {
+          "west": "railcraft:blocks/steam_turbine_0",
+          "east": "railcraft:blocks/steam_turbine_1"
+        }
+      },
+      "top_right": {
+        "textures": {
+          "west": "railcraft:blocks/steam_turbine_1",
+          "east": "railcraft:blocks/steam_turbine_0"
+        }
+      },
+      "bottom_left": {
+        "textures": {
+          "west": "railcraft:blocks/steam_turbine_3",
+          "east": "railcraft:blocks/steam_turbine_4"
+        }
+      },
+      "bottom_right": {
+        "textures": {
+          "west": "railcraft:blocks/steam_turbine_4",
+          "east": "railcraft:blocks/steam_turbine_3"
+        }
+      },
+      "none": {
+        "textures": {
+          "west": "railcraft:blocks/steam_turbine_2",
+          "east": "railcraft:blocks/steam_turbine_2"
+        }
+      }
+    }
+  }
+}

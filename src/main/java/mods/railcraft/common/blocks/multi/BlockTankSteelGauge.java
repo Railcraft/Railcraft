@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -20,11 +22,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.AXIS;
 import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.POSITION;
 
 /**
@@ -34,7 +37,8 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     public BlockTankSteelGauge() {
         super(Material.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
+        setSoundType(SoundType.GLASS);
+        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -42,7 +46,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
+        return new BlockStateContainer(this, COLOR, POSITION);
     }
 
     @Override
@@ -61,8 +65,8 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileTankSteelGauge();
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
+        return new TileTankSteelGauge<>();
     }
 
     @Override
@@ -72,8 +76,8 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     @Override
@@ -88,4 +92,9 @@ public class BlockTankSteelGauge extends BlockTankMetal {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+        return WorldPlugin.getBlock(access, pos.offset(side)) != this && super.shouldSideBeRendered(state, access, pos, side);
+    }
 }

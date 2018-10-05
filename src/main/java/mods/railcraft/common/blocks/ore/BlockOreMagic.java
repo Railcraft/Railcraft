@@ -59,7 +59,7 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
@@ -74,8 +74,8 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
         if (getVariant(stateIn) == EnumOreMagic.FIRESTONE) {
             BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
-            Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.8, 0.5);
-            Vec3d endPosition = new Vec3d(start).addVector(0.5, 0.5, 0.5);
+            Vec3d startPosition = new Vec3d(pos).add(0.5, 0.8, 0.5);
+            Vec3d endPosition = new Vec3d(start).add(0.5, 0.5, 0.5);
             EffectManager.instance.fireSparkEffect(worldIn, startPosition, endPosition);
             spawnBurningFaceParticles(worldIn, pos);
         }
@@ -96,17 +96,17 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
             double pz = pos.getZ();
 
             if (facing.getAxis() == EnumFacing.Axis.X)
-                px += pixel * facing.getFrontOffsetX() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                px += pixel * facing.getXOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 px += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Y)
-                py += pixel * facing.getFrontOffsetY() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                py += pixel * facing.getYOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 py += random.nextFloat();
 
             if (facing.getAxis() == EnumFacing.Axis.Z)
-                pz += pixel * facing.getFrontOffsetZ() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
+                pz += pixel * facing.getZOffset() + (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? 1.0 : 0.0);
             else
                 pz += random.nextFloat();
 

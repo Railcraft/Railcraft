@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
@@ -100,7 +100,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.blockActivated(playerIn, hand, playerIn.getHeldItem(hand), facing, hitX, hitY, hitZ)).orElse(false);
+        return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.blockActivated(playerIn, hand, facing, hitX, hitY, hitZ)).orElse(false);
     }
 
     @Override
@@ -126,6 +126,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return getBlockFaceShape(world, state, pos, side) == BlockFaceShape.SOLID;
     }

@@ -1,9 +1,14 @@
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,11 +17,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public final class BlockCokeOven extends BlockMultiBlockInventory {
+public abstract class BlockCokeOven extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
-    public BlockCokeOven() {
+    protected BlockCokeOven() {
         super(Material.ROCK);
         setHarvestLevel("pickaxe", 0);
     }
@@ -27,7 +32,7 @@ public final class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileCokeOven();
     }
 
@@ -46,4 +51,7 @@ public final class BlockCokeOven extends BlockMultiBlockInventory {
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
     }
+
+    @Override
+    public abstract void defineRecipes();
 }

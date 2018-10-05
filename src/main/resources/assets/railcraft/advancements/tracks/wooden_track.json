@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:track_flex_strap_iron"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.wooden_track.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.wooden_track.desc"
+    }
+  },
+  "parent": "railcraft:tracks/coke_oven",
+  "criteria": {
+    "wooden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track",
+            "track_type": "railcraft:strap_iron"
+          }
+        ]
+      }
+    }
+  }
+}

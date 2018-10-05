@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
@@ -25,11 +24,7 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class Predicates {
-
-    private static final Predicate ALWAYS_FALSE = t -> false;
-    private static final Predicate ALWAYS_TRUE = t -> true;
+public final class Predicates {
 
     public static <T> Predicate<T> instanceOf(Class<? extends T> clazz) {
         return clazz::isInstance;
@@ -50,10 +45,10 @@ public class Predicates {
     }
 
     public static <T> Predicate<T> alwaysTrue() {
-        return ALWAYS_TRUE;
+        return t -> true; // No need to put in a field
     }
 
     public static <T> Predicate<T> alwaysFalse() {
-        return ALWAYS_FALSE;
+        return t -> false;
     }
 }

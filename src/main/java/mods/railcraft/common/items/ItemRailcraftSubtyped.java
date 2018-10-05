@@ -15,13 +15,9 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/18/2016 for Railcraft.
@@ -64,12 +60,12 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         int damage = stack.getItemDamage();
         IVariantEnum[] variants = getVariants();
         if (variants == null || damage < 0 || damage >= variants.length)
-            return getUnlocalizedName();
-        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
+            return getTranslationKey();
+        String tag = getTranslationKey() + RailcraftConstants.SEPERATOR + variants[damage].getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);
     }
 

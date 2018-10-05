@@ -11,8 +11,6 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.TileSmartItem;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
@@ -40,10 +38,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,26 +62,24 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
 
     protected TileSteamTrap() {
         tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, this);
-        tank.setFilter(Fluids.STEAM::get);
+        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 
-    @Nullable
     @Override
     public TankManager getTankManager() {
         return tankManager;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) getTankManager();
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 
@@ -112,7 +109,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
 
     //TODO: test, can we draw this?
     public List<EntityLivingBase> getEntitiesInSteamArea() {
-        Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).addVector(0.5D, 0.5D, 0.5D);
+        Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).add(0.5D, 0.5D, 0.5D);
         AxisAlignedBB area = AABBFactory.start().box().expandToCoordinate(jetVector).offset(getPos()).build();
         return world.getEntitiesWithinAABB(EntityLivingBase.class, area);
     }
@@ -170,7 +167,7 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        direction = EnumFacing.getFront(data.getByte("direction"));
+        direction = EnumFacing.byIndex(data.getByte("direction"));
         powered = data.getBoolean("powered");
         tankManager.readTanksFromNBT(data);
     }
@@ -186,12 +183,17 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
-        direction = EnumFacing.getFront(data.readByte());
+        direction = EnumFacing.byIndex(data.readByte());
         markBlockForUpdate();
     }
 
     @Override
     public EnumFacing getFacing() {
         return direction;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState != newState;
     }
 }

@@ -13,7 +13,6 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -22,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -42,13 +41,13 @@ public abstract class ItemRailcraftArmor extends ItemArmor implements IRailcraft
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey();
     }
 
     @SideOnly(Side.CLIENT)

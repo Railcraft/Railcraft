@@ -16,8 +16,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -87,11 +87,12 @@ public enum Fluids {
     /**
      * Gets a FluidStack filled with one buckets worth of Fluid.
      */
+    @Nullable
     public FluidStack getBucket() {
         return FluidRegistry.getFluidStack(tag, FluidTools.BUCKET_VOLUME);
     }
 
-    public boolean is(Fluid fluid) {
+    public boolean is(@Nullable Fluid fluid) {
         return get() == fluid;
     }
 

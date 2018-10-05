@@ -2,6 +2,7 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,6 +21,7 @@ public class BlockTradeStation extends BlockEntityDelegate {
     public BlockTradeStation() {
         super(Material.ROCK);
         setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        setSoundType(SoundType.METAL);
     }
 
     @Override

@@ -9,12 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.common.fluids.Fluids;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -27,6 +26,6 @@ public class BoilerFuelTank extends StandardTank {
 
     @Override
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
-        return fluidStack != null && !Fluids.WATER.is(fluidStack) && FuelManager.getBoilerFuelValue(fluidStack.getFluid()) > 0 && super.matchesFilter(fluidStack);
+        return fluidStack != null && !Fluids.WATER.is(fluidStack) && FluidFuelManager.getFuelValue(fluidStack) > 0 && super.matchesFilter(fluidStack);
     }
 }

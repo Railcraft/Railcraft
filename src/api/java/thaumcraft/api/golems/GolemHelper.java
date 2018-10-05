@@ -95,22 +95,22 @@ public class GolemHelper {
 	 * @return
 	 */
 	public static BlockPos getPosInArea(ISealEntity seal, int count) {
-		int xx = 1 + (seal.getArea().getX()-1) * (seal.getSealPos().face.getFrontOffsetX()==0?2:1);
-		int yy = 1 + (seal.getArea().getY()-1) * (seal.getSealPos().face.getFrontOffsetY()==0?2:1);
-		int zz = 1 + (seal.getArea().getZ()-1) * (seal.getSealPos().face.getFrontOffsetZ()==0?2:1);
+		int xx = 1 + (seal.getArea().getX()-1) * (seal.getSealPos().face.getXOffset()==0?2:1);
+		int yy = 1 + (seal.getArea().getY()-1) * (seal.getSealPos().face.getYOffset()==0?2:1);
+		int zz = 1 + (seal.getArea().getZ()-1) * (seal.getSealPos().face.getZOffset()==0?2:1);
 		
-		int qx = seal.getSealPos().face.getFrontOffsetX()!=0?seal.getSealPos().face.getFrontOffsetX():1;
-		int qy = seal.getSealPos().face.getFrontOffsetY()!=0?seal.getSealPos().face.getFrontOffsetY():1;
-		int qz = seal.getSealPos().face.getFrontOffsetZ()!=0?seal.getSealPos().face.getFrontOffsetZ():1;
+		int qx = seal.getSealPos().face.getXOffset()!=0?seal.getSealPos().face.getXOffset():1;
+		int qy = seal.getSealPos().face.getYOffset()!=0?seal.getSealPos().face.getYOffset():1;
+		int qz = seal.getSealPos().face.getZOffset()!=0?seal.getSealPos().face.getZOffset():1;
 		
-		int y = qy*((count/zz)/xx)%yy + seal.getSealPos().face.getFrontOffsetY();		
-		int x = qx*(count/zz)%xx + seal.getSealPos().face.getFrontOffsetX();					
-		int z = qz*count%zz + seal.getSealPos().face.getFrontOffsetZ();		
+		int y = qy*((count/zz)/xx)%yy + seal.getSealPos().face.getYOffset();
+		int x = qx*(count/zz)%xx + seal.getSealPos().face.getXOffset();
+		int z = qz*count%zz + seal.getSealPos().face.getZOffset();
 				
 		BlockPos p = seal.getSealPos().pos.add(
-				x - (seal.getSealPos().face.getFrontOffsetX()==0?xx/2:0), 
-				y - (seal.getSealPos().face.getFrontOffsetY()==0?yy/2:0), 
-				z - (seal.getSealPos().face.getFrontOffsetZ()==0?zz/2:0));
+				x - (seal.getSealPos().face.getXOffset()==0?xx/2:0),
+				y - (seal.getSealPos().face.getYOffset()==0?yy/2:0),
+				z - (seal.getSealPos().face.getZOffset()==0?zz/2:0));
 		
 		return p;
 	}
@@ -126,17 +126,17 @@ public class GolemHelper {
 				seal.getSealPos().pos.getX(), seal.getSealPos().pos.getY(), seal.getSealPos().pos.getZ(), 
 				seal.getSealPos().pos.getX()+1, seal.getSealPos().pos.getY()+1, seal.getSealPos().pos.getZ()+1)
 				.offset(
-					seal.getSealPos().face.getFrontOffsetX(), 
-					seal.getSealPos().face.getFrontOffsetY(), 
-					seal.getSealPos().face.getFrontOffsetZ())
-				.expand(
-					seal.getSealPos().face.getFrontOffsetX()!=0?(seal.getArea().getX()-1) * seal.getSealPos().face.getFrontOffsetX():0, 
-					seal.getSealPos().face.getFrontOffsetY()!=0?(seal.getArea().getY()-1) * seal.getSealPos().face.getFrontOffsetY():0, 
-					seal.getSealPos().face.getFrontOffsetZ()!=0?(seal.getArea().getZ()-1) * seal.getSealPos().face.getFrontOffsetZ():0)
+					seal.getSealPos().face.getXOffset(),
+					seal.getSealPos().face.getYOffset(),
+					seal.getSealPos().face.getZOffset())
 				.grow(
-					seal.getSealPos().face.getFrontOffsetX()==0?seal.getArea().getX()-1:0,
-					seal.getSealPos().face.getFrontOffsetY()==0?seal.getArea().getY()-1:0,
-					seal.getSealPos().face.getFrontOffsetZ()==0?seal.getArea().getZ()-1:0 );
+					seal.getSealPos().face.getXOffset()!=0?(seal.getArea().getX()-1) * seal.getSealPos().face.getXOffset():0,
+					seal.getSealPos().face.getYOffset()!=0?(seal.getArea().getY()-1) * seal.getSealPos().face.getYOffset():0,
+					seal.getSealPos().face.getZOffset()!=0?(seal.getArea().getZ()-1) * seal.getSealPos().face.getZOffset():0)
+				.grow(
+					seal.getSealPos().face.getXOffset()==0?seal.getArea().getX()-1:0,
+					seal.getSealPos().face.getYOffset()==0?seal.getArea().getY()-1:0,
+					seal.getSealPos().face.getZOffset()==0?seal.getArea().getZ()-1:0 );
 	}
 	
 	

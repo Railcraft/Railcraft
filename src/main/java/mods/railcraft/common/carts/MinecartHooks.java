@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -33,23 +34,28 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IMinecartCollisionHandler;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
-public final class MinecartHooks implements IMinecartCollisionHandler {
+public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEventListener {
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_GROUND = 0.5f;
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_AIR = 0.99999f;
     private static final float OPTIMAL_DISTANCE = 1.28f;
@@ -63,15 +69,20 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     private static final float CART_WIDTH = 0.98f;
     private static final float COLLISION_EXPANSION = 0.2f;
     private static final int MAX_INTERACT_DIST_SQ = 5 * 5;
-    private static MinecartHooks instance;
 
-    private MinecartHooks() {
+    MinecartHooks() {
     }
 
     public static MinecartHooks getInstance() {
-        if (instance == null)
-            instance = new MinecartHooks();
-        return instance;
+        return Holder.INSTANCE;
+    }
+
+    public boolean isDerailed(EntityMinecart cart) {
+        return cart.getEntityData().getInteger("derail") > 0;
+    }
+
+    public boolean canMount(EntityMinecart cart) {
+        return cart.getEntityData().getInteger("MountPrevention") <= 0;
     }
 
     @SuppressWarnings("unused")
@@ -113,12 +124,15 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         boolean isLiving = other instanceof EntityLivingBase;
         boolean isPlayer = other instanceof EntityPlayer;
 
+        if (isPlayer && ((EntityPlayer) other).isSpectator()) {
+            return;
+        }
+
         //TODO: needs more thought in regards to passenger handling
         if (isLiving && !isPlayer && cart.canBeRidden() && !(other instanceof EntityIronGolem)
                 && cart.motionX * cart.motionX + cart.motionZ * cart.motionZ > 0.001D
                 && !cart.isBeingRidden() && !other.isRiding()) {
-            int mountPrevention = cart.getEntityData().getInteger("MountPrevention");
-            if (mountPrevention <= 0)
+            if (canMount(cart))
                 other.startRiding(cart);
         }
 
@@ -204,8 +218,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @Override
     public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
-            return other.getEntityBoundingBox();
-        return other.canBePushed() ? other.getEntityBoundingBox() : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
+            return other.getEntityBoundingBox().grow(-0.01);
+        return other.canBePushed() ? other.getEntityBoundingBox().grow(-COLLISION_EXPANSION) : null;
     }
 
     @Override
@@ -215,7 +229,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
         double x = diff * Math.abs(Math.cos(yaw));
         double z = diff * Math.abs(Math.sin(yaw));
-        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
+        return cart.getEntityBoundingBox().grow(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
     @Nullable
@@ -247,8 +261,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (distance < -cutoff || distance >= cutoff) {
             cart.rotationYaw += 180.0F;
             cart.isInReverse = !cart.isInReverse;
-//            boolean reverse = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, cart, IS_REVERSED_VARIABLE_INDEX);
-//            ObfuscationReflectionHelper.setPrivateValue(EntityMinecart.class, cart, !reverse, IS_REVERSED_VARIABLE_INDEX);
             cart.rotationYaw = cart.rotationYaw % 360.0F;
         }
 
@@ -261,20 +273,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             cart.setGlowing(false);
             data.setBoolean("ghost", false);
         }
-
-// Code Added by Yopu to replace vanilla carts, deemed incomplete and unnecessary, pursuing other solutions
-//        if (classReplacements.containsKey(cart.getClass())) {
-//            cart.setDead();
-//            if (Game.isHost(cart.world)) {
-//                EnumCart enumCart = classReplacements.get(cart.getClass());
-//                GameProfile cartOwner = CartTools.getCartOwner(cart);
-//                int x = MathHelper.floor_double(cart.posX);
-//                int y = MathHelper.floor_double(cart.posY);
-//                int z = MathHelper.floor_double(cart.posZ);
-//                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.world, x, y, z);
-//            }
-//            return;
-//        }
 
         Block block = WorldPlugin.getBlock(cart.world, event.getPos());
         int launched = data.getInteger("Launched");
@@ -309,6 +307,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (derail > 0) {
             derail--;
             data.setByte("derail", derail);
+            if (derail == 0) {
+                cart.setCanUseRail(true);
+            }
         }
 
         if (data.getBoolean("explode")) {
@@ -317,7 +318,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         }
 
         if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
-            if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
+            if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_EXPLODE))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
             else if (data.getInteger("Launched") == 0)
                 HighSpeedTools.checkSafetyAndExplode(cart.world, event.getPos(), cart);
@@ -327,13 +328,11 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         cart.motionY = Math.copySign(Math.min(Math.abs(cart.motionY), 9.5), cart.motionY);
         cart.motionZ = Math.copySign(Math.min(Math.abs(cart.motionZ), 9.5), cart.motionZ);
 
-//        List entities = cart.world.getEntitiesWithinAABB(EntityLiving.class, getMinecartCollisionBox(cart, COLLISION_EXPANSION));
+//        List<EntityLivingBase> entities = cart.world.getEntitiesWithinAABB(EntityLivingBase.class, getMinecartCollisionBox(cart).grow(COLLISION_EXPANSION));
 //
-//        if (entities != null) {
-//            for (Entity entity : (List<Entity>) entities) {
-//                if (entity != cart.riddenByEntity && entity.canBePushed()) {
-//                    cart.applyEntityCollision(entity);
-//                }
+//        for (EntityLivingBase entity : entities) {
+//            if (!cart.isPassenger(entity) && entity.canBePushed()) {
+//                cart.applyEntityCollision(entity);
 //            }
 //        }
     }
@@ -343,6 +342,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     public void onMinecartEntityCollision(MinecartCollisionEvent event) {
         EntityMinecart cart = event.getMinecart();
         Entity other = event.getCollider();
+
+        if (other instanceof EntityPlayer && ((EntityPlayer) other).isSpectator())
+            return;
+
         if (cart.isPassenger(other))
             return;
 
@@ -413,21 +416,89 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         }
         if (cart.canBeRidden()) {
             //TODO: this will interfere with carts that multiple players can ride, re-evaluate
-            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
-                event.setCanceled(true);
-                return;
-            }
+//            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
+//                event.setCanceled(true);
+//                return;
+//            }
             if (player.getRidingEntity() != null && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
                 return;
             }
-            if (player.getRidingEntity() != cart && player.isOnLadder()) {
-                event.setCanceled(true);
-                return;
-            }
+//            if (player.getRidingEntity() != cart && player.isOnLadder()) {
+//                event.setCanceled(true);
+//                return;
+//            }
         }
         if (!player.canEntityBeSeen(cart)) {
             event.setCanceled(true);
         }
     }
+
+    @SubscribeEvent
+    public void onWorldCreate(WorldEvent.Load event) {
+        if (Game.isHost(event.getWorld())) {
+            event.getWorld().addEventListener(this);
+        }
+    }
+
+    @Override
+    public void onEntityRemoved(Entity entityIn) {
+        // Fix links for killed carts
+        // Unloaded entities are not "isDead"
+        if (entityIn.isDead && entityIn instanceof EntityMinecart) {
+            LinkageManager.instance().breakLinks((EntityMinecart) entityIn);
+        }
+    }
+
+    @Override
+    public void notifyBlockUpdate(World worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
+    }
+
+    @Override
+    public void notifyLightSet(BlockPos pos) {
+    }
+
+    @Override
+    public void markBlockRangeForRenderUpdate(int x1, int y1, int z1, int x2, int y2, int z2) {
+    }
+
+    @Override
+    public void playSoundToAllNearExcept(@Nullable EntityPlayer player, SoundEvent soundIn, SoundCategory category, double x, double y, double z, float volume, float pitch) {
+    }
+
+    @Override
+    public void playRecord(SoundEvent soundIn, BlockPos pos) {
+    }
+
+    @Override
+    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+    }
+
+    @Override
+    public void spawnParticle(int id, boolean ignoreRange, boolean p_190570_3_, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+    }
+
+    @Override
+    public void onEntityAdded(Entity entityIn) {
+    }
+
+    @Override
+    public void broadcastSound(int soundID, BlockPos pos, int data) {
+    }
+
+    @Override
+    public void playEvent(EntityPlayer player, int type, BlockPos blockPosIn, int data) {
+    }
+
+    @Override
+    public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
+    }
+
+    private static final class Holder {
+        static final MinecartHooks INSTANCE = new MinecartHooks();
+
+        private Holder() {
+        }
+    }
+
 }

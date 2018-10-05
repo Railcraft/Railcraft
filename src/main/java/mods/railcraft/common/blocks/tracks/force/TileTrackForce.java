@@ -11,22 +11,15 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.util.EnumFacing.Axis;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 /**
@@ -34,126 +27,72 @@ import java.io.IOException;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-//TODO total crap
-public class TileTrackForce extends RailcraftTileEntity {
+public final class TileTrackForce extends RailcraftTileEntity {
 
     @Nullable
-    private TileForceTrackEmitter emitter;
+    private TileForceTrackEmitter emitter = null;
+    private int index = 0;
+    private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
+    private boolean eastWest = false;
 
-    private boolean zAxis;
-    //TODO fix this color field
-    private EnumColor color = EnumColor.CYAN;
-
-    public TileTrackForce() {
-        this(true);
+    int getColor() {
+        return color;
     }
 
-    public TileTrackForce(boolean zAxis) {
-        this.zAxis = zAxis;
+    void notifyEmitterForBreak() {
+        if (emitter != null) {
+            emitter.clearTracks(index);
+        }
+    }
+
+    void notifyEmitterForTrackChange() {
+        if (emitter != null) {
+            emitter.notifyTrackChange();
+        }
+    }
+
+    EnumRailDirection getDirection() {
+        return eastWest ? EnumRailDirection.EAST_WEST : EnumRailDirection.NORTH_SOUTH;
+    }
+
+    public void setEmitter(@Nullable TileForceTrackEmitter emitter) {
+        this.emitter = emitter;
+        if (emitter != null) {
+            setOwner(emitter.getOwner());
+            this.color = emitter.getColor();
+            this.index = emitter.getNumberOfTracks();
+            this.eastWest = emitter.getFacing().getAxis() == Axis.X;
+        }
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeEnum(color);
+        data.writeInt(color);
+        data.writeBoolean(eastWest);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        color = data.readEnum(EnumColor.VALUES);
+        color = data.readInt();
+        eastWest = data.readBoolean();
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("Z-Axis", zAxis);
-        data.setInteger("Color", color.ordinal());
+        data.setBoolean("eastWest", eastWest);
+        data.setInteger("color", color);
+        data.setInteger("index", index);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        if (data.hasKey("Z-Axis", Constants.NBT.TAG_BYTE))
-            zAxis = data.getBoolean("Z-Axis");
-        if (data.hasKey("Color", Constants.NBT.TAG_INT))
-            color = EnumColor.VALUES[data.getInteger("Color")];
+        eastWest = data.getBoolean("eastWest");
+        color = data.getInteger("color");
+        index = data.getInteger("index");
     }
-
-    public void checkForEmitter() {
-        BlockRailBase.EnumRailDirection meta = TrackTools.getTrackDirectionRaw(world, getPos());
-        BlockPos checkPos = getPos().down();
-        if (meta == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
-            if (isValidEmitterTile(emitter, EnumFacing.NORTH, EnumFacing.SOUTH))
-                return;
-            else
-                setEmitter(null);
-            for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                BlockPos pos = checkPos.offset(EnumFacing.NORTH, i);
-                if (isValidEmitter(pos, EnumFacing.SOUTH))
-                    return;
-            }
-            for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                BlockPos pos = checkPos.offset(EnumFacing.SOUTH, i);
-                if (isValidEmitter(pos, EnumFacing.NORTH))
-                    return;
-            }
-        } else {
-            if (isValidEmitterTile(emitter, EnumFacing.EAST, EnumFacing.WEST))
-                return;
-            else
-                setEmitter(null);
-            for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                BlockPos pos = checkPos.offset(EnumFacing.EAST, i);
-                if (isValidEmitter(pos, EnumFacing.WEST))
-                    return;
-            }
-            for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                BlockPos pos = checkPos.offset(EnumFacing.WEST, i);
-                if (isValidEmitter(pos, EnumFacing.EAST))
-                    return;
-            }
-        }
-        WorldPlugin.setBlockToAir(world, getPos());
-    }
-
-    @Nullable
-    public TileForceTrackEmitter getEmitter() {
-        return emitter;
-    }
-
-    public void setEmitter(@Nullable TileForceTrackEmitter emitter) {
-        this.emitter = emitter;
-    }
-
-    private boolean isValidEmitter(BlockPos pos, EnumFacing facing) {
-        World world = theWorld();
-        assert world != null;
-        if (!WorldPlugin.isBlockAt(world, pos, Blocks.LAPIS_BLOCK/* TODO EnumMachineEpsilon.FORCE_TRACK_EMITTER.block())*/))
-            return false;
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {
-            setEmitter((TileForceTrackEmitter) tile);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isValidEmitterTile(@Nullable TileForceTrackEmitter tile, EnumFacing... facing) {
-        if (tile == null) {
-            return false;
-        }
-        if (tile.isInvalid())
-            return false;
-        BlockPos expected = getPos().down();
-        if (!expected.equals(tile.getPos())) return false;
-        EnumFacing emitterFacing = tile.getFacing();
-        for (EnumFacing f : facing) {
-            if (f == emitterFacing)
-                return true;
-        }
-        return false;
-    }
-
 }

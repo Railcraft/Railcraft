@@ -13,8 +13,7 @@ import mods.railcraft.common.items.ItemRailcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -48,8 +47,8 @@ public class ItemFirestone extends ItemRailcraft {
      * @return A new Entity object to spawn or null
      */
     @Override
-    @Nonnull
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
+    @NotNull
+    public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
         EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;

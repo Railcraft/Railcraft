@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "east=true,north=false,south=false,west=false": {
+      "model": "railcraft:boiler/high/boiler_east"
+    },
+    "east=true,north=true,south=false,west=false": {
+      "model": "railcraft:boiler/high/boiler_ne"
+    },
+    "east=true,north=false,south=true,west=false": {
+      "model": "railcraft:boiler/high/boiler_se"
+    },
+    "east=true,north=false,south=false,west=true": {
+      "model": "railcraft:boiler/high/boiler_ew"
+    },
+    "east=false,north=true,south=false,west=false": {
+      "model": "railcraft:boiler/high/boiler_north"
+    },
+    "east=false,north=true,south=true,west=false": {
+      "model": "railcraft:boiler/high/boiler_ns"
+    },
+    "east=false,north=true,south=false,west=true": {
+      "model": "railcraft:boiler/high/boiler_nw"
+    },
+    "east=false,north=true,south=true,west=true": {
+      "model": "railcraft:boiler/high/boiler_nsw"
+    },
+    "east=false,north=false,south=false,west=false": {
+      "model": "railcraft:boiler/high/boiler_unconnected"
+    },
+    "east=true,north=true,south=true,west=true": {
+      "model": "railcraft:boiler/high/tinted_column"
+    },
+    "east=true,north=true,south=true,west=false": {
+      "model": "railcraft:boiler/high/boiler_nse"
+    },
+    "east=true,north=false,south=true,west=true": {
+      "model": "railcraft:boiler/high/boiler_sew"
+    },
+    "east=true,north=true,south=false,west=true": {
+      "model": "railcraft:boiler/high/boiler_new"
+    },
+    "east=false,north=false,south=true,west=true": {
+      "model": "railcraft:boiler/high/boiler_sw"
+    },
+    "east=false,north=false,south=true,west=false": {
+      "model": "railcraft:boiler/high/boiler_south"
+    },
+    "east=false,north=false,south=false,west=true": {
+      "model": "railcraft:boiler/high/boiler_west"
+    }
+  }
+}

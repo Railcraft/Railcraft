@@ -11,7 +11,12 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{"transform": "forge:default-block"}],
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "submodel": "railcraft:actuator_lever_off"
+      }
+    ],
     "thrown": {
       "true": {
         "submodel": "railcraft:actuator_lever_on"

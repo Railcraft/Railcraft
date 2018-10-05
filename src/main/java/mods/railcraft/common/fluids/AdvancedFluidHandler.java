@@ -9,12 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class provides some convenience functions for IFluidHandler
@@ -29,24 +27,25 @@ public class AdvancedFluidHandler implements IFluidHandler {
         tankContainer = c;
     }
 
-    public int getFluidQty(@Nullable Fluid fluid) {
+    public int getFluidQty(@Nullable FluidStack fluid) {
         if (fluid == null)
             return 0;
         int amount = 0;
         for (IFluidTankProperties tank : getTankProperties()) {
-            if (tank.getContents() != null && fluid == tank.getContents().getFluid())
-                amount += tank.getContents().amount;
+            FluidStack content = tank.getContents();
+            if (FluidTools.matches(fluid, content))
+                amount += content.amount;
         }
         return amount;
     }
 
-    public boolean isTankEmpty(@Nullable Fluid fluid) {
+    public boolean isTankEmpty(@Nullable FluidStack fluid) {
         if (fluid == null)
             return areTanksEmpty();
         return getFluidQty(fluid) <= 0;
     }
 
-    public boolean isTankFull(@Nullable Fluid fluid) {
+    public boolean isTankFull(@Nullable FluidStack fluid) {
         if (fluid == null)
             return areTanksFull();
         int fill = fill(new FluidStack(fluid, 1), false);
@@ -85,12 +84,12 @@ public class AdvancedFluidHandler implements IFluidHandler {
         return capacity == 0 ? 0 : ((float) amount) / capacity;
     }
 
-    public float getFluidLevel(Fluid fluid) {
+    public float getFluidLevel(FluidStack fluid) {
         int amount = 0;
         int capacity = 0;
         for (IFluidTankProperties tank : getTankProperties()) {
             FluidStack liquid = tank.getContents();
-            if (liquid == null || liquid.getFluid() != fluid)
+            if (liquid == null || !FluidTools.matches(liquid, fluid))
                 continue;
             amount += liquid.amount;
             capacity += tank.getCapacity();

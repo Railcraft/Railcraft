@@ -33,12 +33,11 @@ public class ModuleAutomation extends RailcraftModulePayload {
                     MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
                         RailcraftBlocks.DETECTOR,
-//                        RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.EQUIPMENT,
                         RailcraftBlocks.TRADE_STATION,
                         RailcraftBlocks.FORCE_TRACK_EMITTER,
-//                        RailcraftBlocks.TRACK_FORCE,
+                        RailcraftBlocks.TRACK_FORCE,
 
                         RailcraftItems.FILTER_BLANK,
                         RailcraftItems.FILTER_TYPE,

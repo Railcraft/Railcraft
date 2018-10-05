@@ -13,8 +13,8 @@ import com.google.common.collect.ForwardingMap;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

@@ -77,7 +77,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     }
 
 //    @Override
-//    public BlockRenderLayer getBlockLayer() {
+//    public BlockRenderLayer getRenderLayer() {
 //        return BlockRenderLayer.CUTOUT_MIPPED;
 //    }
 

@@ -49,8 +49,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +115,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public TileSteamOven() {
         super(18, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.STEAM::get);
+        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 
@@ -136,7 +136,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     }
 
     @Override
-    protected Class<TileSteamOven> defineCommonClass() {
+    protected Class<TileSteamOven> defineSelfClass() {
         return TileSteamOven.class;
     }
 
@@ -301,7 +301,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
     }
 
     @Override

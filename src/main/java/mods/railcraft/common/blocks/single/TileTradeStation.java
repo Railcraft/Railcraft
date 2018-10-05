@@ -40,7 +40,7 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -200,7 +200,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
                 p = VillagerRegistry.FARMER;
             profession = p;
         }
-        direction = EnumFacing.getFront(data.getByte("direction"));
+        direction = EnumFacing.byIndex(data.getByte("direction"));
     }
 
     @Override
@@ -214,7 +214,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         profession = ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.readUTF()));
-        EnumFacing f = EnumFacing.getFront(data.readByte());
+        EnumFacing f = EnumFacing.byIndex(data.readByte());
         if (direction != f) {
             direction = f;
             markBlockForUpdate();
@@ -285,8 +285,4 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         return direction;
     }
 
-    @Override
-    public String getLocalizationTag() {
-        return super.getLocalizationTag() + ".name";
-    }
 }

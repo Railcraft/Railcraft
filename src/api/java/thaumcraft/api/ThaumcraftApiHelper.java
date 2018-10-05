@@ -38,7 +38,7 @@ import thaumcraft.api.items.ItemsTC;
 
 public class ThaumcraftApiHelper {
 	
-	public static final IAttribute CHAMPION_MOD = (new RangedAttribute((IAttribute)null, "tc.mobmod", -2D, -2D, 100D)).setDescription("Champion modifier").setShouldWatch(true);
+	public static final IAttribute CHAMPION_MOD = (new RangedAttribute(null, "tc.mobmod", -2D, -2D, 100D)).setDescription("Champion modifier").setShouldWatch(true);
 	
 	public static boolean areItemsEqual(ItemStack s1,ItemStack s2)
     {
@@ -410,7 +410,7 @@ public class ThaumcraftApiHelper {
 	}
 
 	public static IItemHandler wrapInventory(IInventory inventory, EnumFacing side) {
-		return inventory instanceof ISidedInventory? new SidedInvWrapper((ISidedInventory) inventory, side) : new InvWrapper((IInventory) inventory);
+		return inventory instanceof ISidedInventory? new SidedInvWrapper((ISidedInventory) inventory, side) : new InvWrapper(inventory);
 	}
 	
 }

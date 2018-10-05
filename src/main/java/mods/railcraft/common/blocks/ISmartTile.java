@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -32,8 +32,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
@@ -65,9 +65,10 @@ public interface ISmartTile {
             InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
     }
 
-    default boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    default boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking())
             return false;
+        ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem)) {
             if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;

@@ -27,14 +27,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -49,7 +51,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     protected TileEngineSteam() {
         tankSteam = new FilteredTank(TANK_CAPACITY, this);
-        tankSteam.setFilter(Fluids.STEAM::get);
+        tankSteam.setFilter(Fluids.STEAM);
         tankManager.add(tankSteam);
     }
 
@@ -166,7 +168,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public TankManager getTankManager() {
         return tankManager;
     }

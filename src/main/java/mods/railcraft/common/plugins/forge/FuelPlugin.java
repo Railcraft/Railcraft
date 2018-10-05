@@ -53,7 +53,7 @@ public class FuelPlugin {
 
             Block block = InvTools.getBlockFromStack(stack);
             if (block != null) {
-                String name = block.getUnlocalizedName();
+                String name = block.getTranslationKey();
                 if (name != null && name.contains("blockScaffold"))
                     return 0;
             }
@@ -68,7 +68,7 @@ public class FuelPlugin {
             if (liquid != null && Fluids.LAVA.get() == liquid.getFluid())
                 return liquid.amount;
 
-            String name = stack.getItem().getUnlocalizedName();
+            String name = stack.getItem().getTranslationKey();
             if (name != null && name.contains("itemScrap"))
                 return 0;
 

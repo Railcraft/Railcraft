@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.machine.worldspike;
 
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -31,8 +31,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.

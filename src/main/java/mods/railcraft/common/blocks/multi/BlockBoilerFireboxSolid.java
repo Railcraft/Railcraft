@@ -15,8 +15,13 @@ import net.minecraft.world.World;
  *
  */
 public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
+
+    public BlockBoilerFireboxSolid() {
+        setHarvestLevel("pickaxe", 0);
+    }
+
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileBoilerFireboxSolid();
     }
 
@@ -34,13 +39,12 @@ public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
         CraftingPlugin.addRecipe(stack,
-                "PUP",
+                "BBB",
                 "BCB",
-                "PFP",
-                'P', RailcraftItems.PLATE, Metal.STEEL,
-                'U', Items.BUCKET,
-                'B', Blocks.IRON_BARS,
+                "BFB",
+                'B', Items.NETHERBRICK,
                 'C', Items.FIRE_CHARGE,
-                'F', Blocks.FURNACE);
+                'F', Blocks.FURNACE
+        );
     }
 }

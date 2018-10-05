@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -22,47 +23,42 @@ import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
+import mods.railcraft.common.plugins.ic2.TileIC2EmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.ISteamUser;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-//TODO: migrate to new charge API
-public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
-
-    enum Texture {
-
-        END_TL(6), END_TR(7), END_BL(8), END_BR(9), SIDE_A(0), SIDE_B(10), GUAGE(11);
-        private final int index;
-
-        Texture(int index) {
-            this.index = index;
-        }
-    }
+public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     private static final int IC2_OUTPUT = 220;
     private static final int BC_OUTPUT = 72;
     private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
-    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private static ItemStack sampleRotor = null;
 
     public static ItemStack getSampleRotor() {
@@ -84,7 +80,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     public double mainGauge;
     private double energy;
     private TileEntity emitterDelegate;
-//    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK);
+    //TODO: Properly fix revert
+    //private final ChargeHandler battery = new ChargeHandler();
 
     static {
         char[][][] map1 = {
@@ -113,7 +110,8 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                         {'O', 'O', 'O', 'O', 'O'}
                 }
         };
-        patterns.add(new MultiBlockPattern(map1));
+        MultiBlockPattern pattern = new MultiBlockPattern(map1, Axis.X);
+        patterns.add(pattern);
 
         char[][][] map2 = {
                 {
@@ -145,21 +143,27 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                         {'O', 'O', 'O', 'O'}
                 }
         };
-        patterns.add(new MultiBlockPattern(map2));
+        MultiBlockPattern otherPattern = new MultiBlockPattern(map2, Axis.Z);
+        patterns.add(otherPattern);
     }
 
     public TileSteamTurbine() {
         super(patterns);
-        tankSteam.setFilter(Fluids.STEAM::get);
-        tankWater.setFilter(Fluids.WATER::get);
+        tankSteam.setFilter(Fluids.STEAM);
+        tankWater.setFilter(Fluids.WATER);
         tankSteam.setCanDrain(false);
         tankWater.setCanFill(false);
-        tankManager.add(tankSteam); // Steam
-        tankManager.add(tankWater); // Water
+        tankManager.add(TANK_STEAM, tankSteam); // Steam
+        tankManager.add(TANK_WATER, tankWater); // Water
     }
 
     @Override
-    protected Class<TileSteamTurbine> defineCommonClass() {
+    protected Class<TileSteamTurbine> defineLeastCommonClass() {
+        return TileSteamTurbine.class;
+    }
+
+    @Override
+    protected Class<TileSteamTurbine> defineSelfClass() {
         return TileSteamTurbine.class;
     }
 
@@ -200,7 +204,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                 boolean addedEnergy = false;
                 if (energy < BC_OUTPUT * 2) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
-//                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
                         if (InvTools.isItemEqual(rotor, getSampleRotor()) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
@@ -228,6 +231,14 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty())
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
+    }
+
+    @Override
+    protected void onPatternChanged() {
+        super.onPatternChanged();
+        if (isMaster) {
+            addToNet();
+        }
     }
 
     private void addToNet() {
@@ -373,7 +384,14 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
 
     @Override
     public List<? extends TileEntity> getSubTiles() {
-        return getComponents();
+        if (!isStructureValid()) {
+            return Collections.emptyList();
+        }
+        List<TileEntity> ret = getComponents().stream().filter(te -> te != this).map(TileIC2EmitterDelegate::new).collect(Collectors.toList());
+        if (emitterDelegate != null) {
+            ret.add(emitterDelegate);
+        }
+        return ret;
     }
 
     public StandaloneInventory getInventory() {
@@ -403,22 +421,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
             return (T) getTankManager();
         return super.getCapability(capability, facing);
     }
-    /*@Override
-    public void onDisable(int duration) {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
-        if (mBlock != null) {
-            mBlock.disabled = duration;
-        }
-    }
-
-    @Override
-    public boolean isDisabled() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
-        if (mBlock != null) {
-            return mBlock.disabled <= 0;
-        }
-        return true;
-    }*/
 
     @Override
     public boolean needsMaintenance() {
@@ -429,8 +431,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                 return true;
             if (!InvTools.isItemEqual(rotor, getSampleRotor()))
                 return true;
-            if (rotor.getItemDamage() / (double) rotor.getMaxDamage() > 0.75f)
-                return true;
+            return rotor.getItemDamage() / (double) rotor.getMaxDamage() > 0.75f;
         }
         return false;
     }
@@ -439,5 +440,52 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        if (!isStructureValid()) {
+            return base;
+        }
+        MultiBlockPattern currentPattern = getCurrentPattern();
+        Axis axis = currentPattern.getAttachedData(Axis.X);
+        base = base.withProperty(BlockSteamTurbine.WINDOW, getPatternMarker() == 'W')
+                .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
+        BlockPos pos = getPatternPosition();
+        if (pos == null) {
+            return base;
+        }
+        final Texture texture;
+        if (axis == Axis.X) {
+            // x = 2, left; y = 1, bottom
+            if (pos.getX() == 2) {
+                if (pos.getY() == 1) {
+                    texture = Texture.BOTTOM_LEFT;
+                } else {
+                    texture = Texture.TOP_LEFT;
+                }
+            } else {
+                if (pos.getY() == 1) {
+                    texture = Texture.BOTTOM_RIGHT;
+                } else {
+                    texture = Texture.TOP_RIGHT;
+                }
+            }
+        } else {
+            if (pos.getZ() == 1) {
+                if (pos.getY() == 1) {
+                    texture = Texture.BOTTOM_LEFT;
+                } else {
+                    texture = Texture.TOP_LEFT;
+                }
+            } else {
+                if (pos.getY() == 1) {
+                    texture = Texture.BOTTOM_RIGHT;
+                } else {
+                    texture = Texture.TOP_RIGHT;
+                }
+            }
+        }
+        return base.withProperty(BlockSteamTurbine.TEXTURE, texture);
     }
 }

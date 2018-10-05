@@ -20,7 +20,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class OreDictPlugin {
+public final class OreDictPlugin {
 
     public static void registerNewTags() {
         OreDictionary.registerOre("gateWood", Blocks.ACACIA_FENCE_GATE);
@@ -99,9 +98,8 @@ public class OreDictPlugin {
                 .flatMap(n -> OreDictionary.getOres(n).stream())
                 .filter(stack -> stack.getItem() instanceof ItemBlock)
                 .map(InvTools::getBlockStateFromStack)
-                .filter(Objects::nonNull)
+                .filter(state -> state.getBlock() != Blocks.AIR)
                 .collect(Collectors.toSet());
     }
-
 
 }

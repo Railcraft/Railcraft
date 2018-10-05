@@ -25,9 +25,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.materials.Materials.MATERIAL_KEY;
 import static mods.railcraft.common.util.inventory.InvTools.dec;
@@ -51,9 +50,9 @@ public class ItemSlab extends ItemMaterial {
      * clicking, he will have one of those. Return True if something happen and
      * false if it don't. This is for ITEMS, not BLOCKS
      */
-    @Nonnull
+    @NotNull
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, @Nonnull BlockPos pos, EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, @NotNull BlockPos pos, EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if (isEmpty(stack)) {
             return EnumActionResult.PASS;
@@ -110,7 +109,7 @@ public class ItemSlab extends ItemMaterial {
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean canPlaceBlockOnSide(World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side, EntityPlayer player, @Nonnull ItemStack stack) {
+    public boolean canPlaceBlockOnSide(World world, @NotNull BlockPos pos, @NotNull EnumFacing side, EntityPlayer player, @NotNull ItemStack stack) {
         TileSlab tileSlab = BlockRailcraftSlab.getSlabTile(world, pos);
         if (canAddSlab(tileSlab, side)) {
             return true;
@@ -133,7 +132,7 @@ public class ItemSlab extends ItemMaterial {
      * @param side   The side the player (or machine) right-clicked on.
      */
     @Override
-    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState) {
+    public boolean placeBlockAt(@NotNull ItemStack stack, @NotNull EntityPlayer player, World world, @NotNull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @NotNull IBlockState newState) {
         AxisAlignedBB box = newState.getCollisionBoundingBox(world, pos);
         if (box != null && !world.checkNoEntityCollision(box)) {
             return false;

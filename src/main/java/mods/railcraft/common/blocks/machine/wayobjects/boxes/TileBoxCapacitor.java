@@ -32,8 +32,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -82,7 +82,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         return stateModeController;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.CAPACITOR;
@@ -134,7 +134,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos neighborPos) {
+    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos neighborPos) {
         super.onNeighborBlockChange(state, neighborBlock, neighborPos);
         if (world.isRemote)
             return;
@@ -171,9 +171,9 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         return ticksPowered > 0 ? FULL_POWER : NO_POWER;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setShort("ticksPowered", ticksPowered);
@@ -184,7 +184,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
 
         ticksPowered = data.getShort("ticksPowered");
@@ -198,7 +198,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(ticksPowered > 0);
@@ -208,7 +208,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         ticksPowered = (short) (data.readBoolean() ? 1 : 0);
@@ -218,14 +218,14 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeShort(ticksToPower);
         data.writeByte(stateModeController.getCurrentState());
 
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         ticksToPower = data.readShort();
         stateModeController.setCurrentState(data.readByte());
     }

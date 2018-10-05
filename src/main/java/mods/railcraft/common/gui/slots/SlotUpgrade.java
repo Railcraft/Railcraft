@@ -43,8 +43,7 @@ public class SlotUpgrade extends Slot {
                 return true;
             else if (!InvTools.isEmpty(transformer) && stack.isItemEqual(transformer))
                 return true;
-            else if (lapotron != null && stack.getItem() == lapotron)
-                return true;
+            else return lapotron != null && stack.getItem() == lapotron;
         return false;
     }
 

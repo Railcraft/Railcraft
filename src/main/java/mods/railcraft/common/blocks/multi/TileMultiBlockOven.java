@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
@@ -32,7 +32,7 @@ import java.util.Set;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T, T> implements INeedsFuel, IHasWork, ITileLit {
+public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T, T, T> implements INeedsFuel, IHasWork, ITileLit {
 
     protected int cookTime;
     private boolean cooking;
@@ -46,7 +46,12 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
 
     @Override
     protected final Class<T> defineMasterClass() {
-        return defineCommonClass();
+        return defineSelfClass();
+    }
+
+    @Override
+    protected final Class<T> defineLeastCommonClass() {
+        return defineSelfClass();
     }
 
     @Override

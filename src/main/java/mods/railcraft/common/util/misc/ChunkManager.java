@@ -21,9 +21,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
+import net.minecraftforge.common.ForgeChunkManager.PlayerOrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,15 +37,10 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings("unused")
-public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, ForgeChunkManager.PlayerOrderedLoadingCallback {
-
-    private static ChunkManager instance;
+public final class ChunkManager implements OrderedLoadingCallback, PlayerOrderedLoadingCallback {
 
     public static ChunkManager getInstance() {
-        if (instance == null) {
-            instance = new ChunkManager();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     @SubscribeEvent
@@ -54,18 +48,11 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
         Entity entity = event.getEntity();
         if (entity instanceof EntityCartWorldspike) {
             if (Game.isHost(entity.world)) {
-//                System.out.println("Worldspike Cart Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
                 ((EntityCartWorldspike) entity).forceChunkLoading(event.getNewChunkX(), event.getNewChunkZ());
             } else {
                 ((EntityCartWorldspike) entity).setupChunks(event.getNewChunkX(), event.getNewChunkZ());
-
             }
         }
-//        if (entity instanceof EntityTunnelBore) {
-//            if (Game.isHost(entity.world)) {
-//                System.out.println("Bore Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
-//            }
-//        }
     }
 
     /**
@@ -84,7 +71,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
      * @return A set of chunks.
      */
     public Set<ChunkPos> getChunksBetween(int xChunkA, int zChunkA, int xChunkB, int zChunkB, int max) {
-        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
+        Set<ChunkPos> chunkList = new HashSet<>();
 
         if (xChunkA != xChunkB && zChunkA != zChunkB) {
             return chunkList;
@@ -117,7 +104,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
      * @return A set of chunks.
      */
     public Set<ChunkPos> getChunksAround(int xChunk, int zChunk, int radius) {
-        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
+        Set<ChunkPos> chunkList = new HashSet<>();
         for (int xx = xChunk - radius; xx <= xChunk + radius; xx++) {
             for (int zz = zChunk - radius; zz <= zChunk + radius; zz++) {
                 chunkList.add(new ChunkPos(xx, zz));
@@ -141,7 +128,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
         int minZ = (zWorld - radius) >> 4;
         int maxZ = (zWorld + radius) >> 4;
 
-        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
+        Set<ChunkPos> chunkList = new HashSet<>();
         for (int xx = minX; xx <= maxX; xx++) {
             for (int zz = minZ; zz <= maxZ; zz++) {
                 chunkList.add(new ChunkPos(xx, zz));
@@ -158,7 +145,6 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
     @Override
     public void ticketsLoaded(List<Ticket> tickets, World world) {
-//        System.out.println("Callback 2");
         for (Ticket ticket : tickets) {
             if (ticket.isPlayerTicket())
                 continue;
@@ -180,7 +166,6 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 if (entity instanceof EntityCartWorldspike) {
                     EntityCartWorldspike worldspike = (EntityCartWorldspike) entity;
                     worldspike.setChunkTicket(ticket);
-//                    System.out.println("Load Cart Chunks");
                     worldspike.forceChunkLoading(worldspike.chunkCoordX, worldspike.chunkCoordZ);
                     printWorldspike(worldspike.getName(), (int) entity.posX, (int) entity.posY, (int) entity.posZ);
                 }
@@ -190,10 +175,9 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
     @Override
     public List<Ticket> ticketsLoaded(List<Ticket> tickets, World world, int maxTicketCount) {
-//        System.out.println("Callback 1");
-        Set<Ticket> adminTickets = new HashSet<Ticket>();
-        Set<Ticket> worldTickets = new HashSet<Ticket>();
-        Set<Ticket> cartTickets = new HashSet<Ticket>();
+        Set<Ticket> adminTickets = new HashSet<>();
+        Set<Ticket> worldTickets = new HashSet<>();
+        Set<Ticket> cartTickets = new HashSet<>();
         for (Ticket ticket : tickets) {
             Entity entity = ticket.getEntity();
             if (entity == null) {
@@ -210,13 +194,12 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 }
             } else {
                 if (entity instanceof EntityCartWorldspike) {
-//                    System.out.println("Claim Cart Ticket");
                     cartTickets.add(ticket);
                 }
             }
         }
 
-        List<Ticket> claimedTickets = new LinkedList<Ticket>();
+        List<Ticket> claimedTickets = new LinkedList<>();
         claimedTickets.addAll(cartTickets);
         claimedTickets.addAll(adminTickets);
         claimedTickets.addAll(worldTickets);
@@ -240,5 +223,15 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 }
             }
         return LinkedListMultimap.create();
+    }
+
+    ChunkManager() {
+    }
+
+    static final class Holder {
+        static final ChunkManager INSTANCE = new ChunkManager();
+
+        private Holder() {
+        }
     }
 }

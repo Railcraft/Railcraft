@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -39,9 +40,8 @@ public class TileFluidUnloader extends TileFluidManipulator {
     protected void upkeep() {
         super.upkeep();
 
-        // TODO: fix this
-//        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-//            FluidTools.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
+        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
+            FluidTools.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
 
         tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }

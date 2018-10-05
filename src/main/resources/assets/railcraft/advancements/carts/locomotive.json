@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:locomotive_steam_solid"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.locomotive.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.locomotive.desc"
+    },
+    "hidden": true
+  },
+  "parent": "railcraft:carts/link_carts",
+  "criteria": {
+    "steam_loco": {
+      "trigger": "railcraft:cart_linking",
+      "conditions": {
+        "owned": {
+          "type": "railcraft:locomotive_steam_solid"
+        }
+      }
+    }
+  }
+}

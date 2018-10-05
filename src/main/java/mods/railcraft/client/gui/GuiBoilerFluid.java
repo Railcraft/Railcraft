@@ -13,8 +13,8 @@ import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiBoilerFluid extends TileGui {
 
@@ -28,7 +28,7 @@ public class GuiBoilerFluid extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.boiler"), 6);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

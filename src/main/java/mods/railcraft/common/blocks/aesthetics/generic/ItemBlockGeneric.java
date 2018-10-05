@@ -28,7 +28,7 @@ public class ItemBlockGeneric extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         return EnumGeneric.fromOrdinal(stack.getItemDamage()).getTag();
     }
 

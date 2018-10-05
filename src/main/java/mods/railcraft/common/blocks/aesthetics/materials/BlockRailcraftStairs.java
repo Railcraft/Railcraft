@@ -41,8 +41,8 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     public BlockRailcraftStairs() {
         super(Blocks.STONEBRICK.getDefaultState());
         setSoundType(RailcraftSoundTypes.OVERRIDE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         useNeighborBrightness = true;
         hasTileEntity = true;
     }
@@ -71,7 +71,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 
@@ -101,28 +101,28 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         MatTools.defineCrusherRecipes(this);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
     }
 
     @Override
-    @Nonnull
+    @NotNull
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, new IProperty[]{FACING, HALF, SHAPE}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
         return actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
         return MatTools.getPickBlock(state, target, world, pos, player);
     }
 
@@ -131,9 +131,9 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         return MatTools.getDrops(world, pos, state, fortune);
     }
 
@@ -144,14 +144,14 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     }
 
     @Override
-    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode) {
             dropBlockAsItem(world, pos, state, 0);
         }
@@ -159,7 +159,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     }
 
     @Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state) {
+    public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
@@ -169,9 +169,9 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+    public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
         return new TileMaterial();
     }
 
@@ -181,7 +181,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @NotNull Entity exploder, Explosion explosion) {
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
 

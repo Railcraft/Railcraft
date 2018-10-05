@@ -1,19 +1,19 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rail_flat",
+    "model": "railcraft:track_force",
     "textures": {
-      "rail": "railcraft:blocks/tracks/flex/strap_iron_flat"
+      "rail": "railcraft:blocks/tracks/track_force"
     },
     "transform": "forge:default-block"
   },
   "variants": {
     "shape": {
       "north_south": {
-        "model": "rail_flat"
+        "model": "railcraft:track_force"
       },
       "east_west": {
-        "model": "rail_flat",
+        "model": "railcraft:track_force",
         "y": 90
       }
     }

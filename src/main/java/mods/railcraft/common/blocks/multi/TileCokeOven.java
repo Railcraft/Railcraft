@@ -20,6 +20,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -37,8 +38,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +124,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     }
 
     @Override
-    protected Class<TileCokeOven> defineCommonClass() {
+    protected Class<TileCokeOven> defineSelfClass() {
         return TileCokeOven.class;
     }
 
@@ -148,8 +149,8 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -308,5 +309,33 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     @Override
     public EnumGui getGui() {
         return EnumGui.COKE_OVEN;
+    }
+
+    @Override
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
+        IBlockState other = WorldPlugin.getBlockState(world, pos);
+        switch (mapPos) {
+            case 'O': // Other
+                if (RailcraftBlocks.COKE_OVEN.isEqual(other) || RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'W': // Window
+            case 'B': // Block
+                if (!RailcraftBlocks.COKE_OVEN.isEqual(other) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'A': // Air
+                if (!other.getBlock().isAir(other, world, pos))
+                    return false;
+                break;
+            case '*': // Anything
+                return true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !RailcraftBlocks.COKE_OVEN.isEqual(newState) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(newState);
     }
 }

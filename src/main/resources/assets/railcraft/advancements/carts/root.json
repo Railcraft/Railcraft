@@ -1,0 +1,51 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.root.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.root.desc"
+    },
+    "background": "railcraft:textures/blocks/stone_quarried.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "get_cart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_cart"
+          }
+        ]
+      }
+    },
+    "get_track": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track"
+          }
+        ]
+      }
+    },
+    "step_on_track": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minecraft:rail"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_cart",
+      "get_track",
+      "step_on_track"
+    ]
+  ]
+}

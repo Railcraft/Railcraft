@@ -27,10 +27,16 @@ import static net.minecraft.util.EnumFacing.Axis.Z;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronGauge extends TileTankBase implements ITileLit {
+public class TileTankIronGauge<T extends TileTankBase<T, M>, M extends TileTankBase<M, M>> extends TileTankBase<T, M> implements ITileLit {
 
     private int lightValue = 0;
     private final Timer timer = new Timer();
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Class<T> defineSelfClass() {
+        return (Class<T>) (Class<?>) TileTankIronGauge.class; // Intellij bug
+    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -76,10 +82,6 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
                 base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.SINGLE);
             }
         }
-
-        char c = getPattern().getPatternMarkerChecked(getPatternPosition().north());
-        base = base.withProperty(BlockTankIronGauge.AXIS, c == 'A' || c == MultiBlockPattern.EMPTY_PATTERN ? X : Z);
-
         return base;
     }
 }

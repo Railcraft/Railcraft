@@ -29,10 +29,7 @@ import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -119,7 +116,7 @@ public class FactoryGui {
                 case BOILER_LIQUID:
                     return new GuiBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
                 case TURBINE:
-                    return new GuiTurbine(inv, (TileSteamTurbine) obj);
+                    return new GuiSteamTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:
                     return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:
@@ -127,7 +124,7 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
-                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.switch.motor.action"));
+                    return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.actuator.motor.action"));
                 case BOX_RECEIVER:
                     return new GuiAspectAction(inv.player, (ITileAspectResponder) obj, LocalizationPlugin.translate("gui.railcraft.box.aspect.action"));
                 case BOX_RELAY:
@@ -144,6 +141,8 @@ public class FactoryGui {
                     return new GuiTrackPriming((TrackKitPriming) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case TRACK_EMBARKING:
                     return new GuiTrackEmbarking((TrackKitEmbarking) ((TileTrackOutfitted) obj).getTrackKitInstance());
+                case TRACK_DELAYED:
+                    return new GuiTrackDelayedLocking((TrackKitDelayedLocking) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:

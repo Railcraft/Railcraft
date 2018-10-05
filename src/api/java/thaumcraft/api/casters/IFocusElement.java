@@ -2,15 +2,15 @@ package thaumcraft.api.casters;
 
 public interface IFocusElement {
 	
-	public String getKey();
+	String getKey();
 	
-	public String getResearch();
+	String getResearch();
 	
-	public EnumUnitType getType();
+	EnumUnitType getType();
 	
 	enum EnumUnitType {
-		EFFECT, MEDIUM, MOD, PACKAGE; 		
-	}
+		EFFECT, MEDIUM, MOD, PACKAGE
+    }
 	
 	
 }

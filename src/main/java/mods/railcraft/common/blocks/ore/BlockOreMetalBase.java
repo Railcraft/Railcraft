@@ -44,7 +44,7 @@ public abstract class BlockOreMetalBase<V extends Enum<V> & IVariantEnumBlock<V>
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 }

@@ -24,7 +24,7 @@
 //    public static boolean getEssentia(IInventory inv, int slot, Aspect aspect) {
 //        ItemStack stack = inv.getStackInSlot(slot);
 //
-//        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IEssentiaContainerItem && "item.BlockJarFilledItem".equals(stack.getUnlocalizedName())) {
+//        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IEssentiaContainerItem && "item.BlockJarFilledItem".equals(stack.getTranslationKey())) {
 //            IEssentiaContainerItem jar = (IEssentiaContainerItem) stack.getItem();
 //            AspectList aspects = jar.getAspects(stack);
 //            if (aspects.getAmount(aspect) > 0) {

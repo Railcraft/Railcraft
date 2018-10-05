@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.common.blocks.charge.CartBattery;
@@ -33,8 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 /**
@@ -171,7 +171,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         return super.getCapability(capability, facing);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_ELECTRIC;

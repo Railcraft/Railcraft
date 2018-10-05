@@ -19,8 +19,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -32,7 +32,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     private EnumColor color;
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(@NotNull IBlockState state, @NotNull EntityLivingBase placer, @NotNull ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         setFacing(MiscTools.getHorizontalSideFacingPlayer(placer));
         NBTTagCompound nbt = stack.getTagCompound();
@@ -82,9 +82,9 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("emblem", emblem);
         data.setByte("facing", (byte) facing.ordinal());
@@ -95,17 +95,17 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         emblem = data.getString("emblem");
-        facing = EnumFacing.getFront(data.getByte("facing"));
+        facing = EnumFacing.byIndex(data.getByte("facing"));
 
         if (data.hasKey("color"))
             color = EnumColor.fromOrdinal(data.getByte("color"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
         data.writeByte((byte) (color != null ? color.ordinal() : -1));
@@ -113,11 +113,11 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean needsUpdate = false;
-        EnumFacing f = EnumFacing.getFront(data.readByte());
+        EnumFacing f = EnumFacing.byIndex(data.readByte());
         if (facing != f) {
             facing = f;
             needsUpdate = true;
@@ -148,8 +148,4 @@ public class TilePostEmblem extends RailcraftTileEntity {
         return "tile.railcraft.post.emblem.name";
     }
 
-    @Override
-    public short getId() {
-        return (short) EnumPost.EMBLEM.ordinal();
-    }
 }

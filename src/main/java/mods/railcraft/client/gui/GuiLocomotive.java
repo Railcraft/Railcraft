@@ -84,10 +84,11 @@ public abstract class GuiLocomotive extends EntityGui {
         reverseButton.setStatusUpdater(b -> b.active = loco.isReverse());
         speedButtons.add(reverseButton);
         for (LocoSpeed speed : LocoSpeed.VALUES) {
-            String label = "";
+            StringBuilder builder = new StringBuilder();
             for (int i = 0; i < speed.getLevel(); i++) {
-                label += ">";
+                builder.append('>');
             }
+            String label = builder.toString();
             GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 112, 7 + speed.getLevel() * 5, label, loco.clientSpeed == speed);
             button.setClickConsumer(b -> loco.clientSpeed = speed);
             button.setStatusUpdater(b -> b.active = loco.clientSpeed == speed);

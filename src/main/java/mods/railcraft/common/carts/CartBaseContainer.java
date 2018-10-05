@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
@@ -34,12 +35,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 
 /**
@@ -80,7 +83,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         loadFromNBT(compound);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -95,7 +98,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final ItemStack getCartItem() {
         return createCartItem(this);
@@ -191,7 +194,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return false;
     }
 
@@ -205,19 +208,19 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getGuiID() {
         return "railcraft:" + getCartType().getBaseTag();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
+    public Container createContainer(@NotNull InventoryPlayer playerInventory, @NotNull EntityPlayer playerIn) {
         return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
-    @Nonnull
+    @NotNull
     protected abstract EnumGui getGuiType();
 
     @Override
@@ -242,6 +245,20 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Override
     public Iterator<IInventoryObject> iterator() {
         return Iterators.singletonIterator(this);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @javax.annotation.Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @javax.annotation.Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @javax.annotation.Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 
 }

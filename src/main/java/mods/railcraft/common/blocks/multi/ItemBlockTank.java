@@ -21,7 +21,7 @@ public class ItemBlockTank extends ItemBlockRailcraftSubtyped {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName(); // No different names for colors
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey(); // No different names for colors
     }
 }

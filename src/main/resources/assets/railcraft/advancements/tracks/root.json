@@ -1,0 +1,75 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:track_flex_reinforced"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.root.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.root.desc"
+    },
+    "background": "railcraft:textures/blocks/coke_oven_0.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "get_cart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_cart"
+          }
+        ]
+      }
+    },
+    "get_track": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track"
+          }
+        ]
+      }
+    },
+    "get_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "sand"
+          }
+        ]
+      }
+    },
+    "get_brick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "ingotBrick"
+          }
+        ]
+      }
+    },
+    "step_on_track": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minecraft:rail"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_cart",
+      "get_track",
+      "get_sand",
+      "get_brick",
+      "step_on_track"
+    ]
+  ]
+}

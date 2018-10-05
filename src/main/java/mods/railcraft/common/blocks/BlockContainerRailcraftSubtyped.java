@@ -27,9 +27,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
@@ -75,19 +74,19 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public final IProperty<V> getVariantProperty() {
         setup();
         return variantProperty;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final Class<? extends V> getVariantEnum() {
         return variantClass;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public final V[] getVariants() {
         return variantValues;
@@ -96,6 +95,7 @@ public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVaria
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();

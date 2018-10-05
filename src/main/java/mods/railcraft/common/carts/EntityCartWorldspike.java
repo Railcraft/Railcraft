@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
@@ -40,9 +40,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 
 public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart, INeedsFuel {
@@ -113,8 +113,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
             return;
         }
 
-        if (disabled > 0)
-            disabled--;
+//        if (disabled > 0)
+//            disabled--;
 
         if (usesFuel()) {
             if (ticket != null && fuel > 0)
@@ -147,13 +147,13 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     private void stockFuel() {
         ItemStack stack = getStackInSlot(0);
         if (!InvTools.isEmpty(stack) && !getFuelMap().containsKey(stack)) {
-            CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
+            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
             setInventorySlotContents(0, InvTools.emptyStack());
             return;
         }
         stack = getStackInSlot(0);
         if (InvTools.isEmpty(stack)) {
-            ItemStack found = CartToolsAPI.transferHelper.pullStack(this, getFuelMap().getStackFilter());
+            ItemStack found = CartToolsAPI.getTransferHelper().pullStack(this, getFuelMap().getStackFilter());
             if (!InvTools.isEmpty(found))
                 InvTools.moveItemStack(found, this);
         }
@@ -333,12 +333,15 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     @Override
     public void onActivatorRailPass(int x, int y, int z, boolean powered) {
         if (powered) {
-            disabled = 10;
+            disabled = 1;
             releaseTicket();
+        }
+        if (!powered) {
+            disabled = 0;
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_WORLDSPIKE;

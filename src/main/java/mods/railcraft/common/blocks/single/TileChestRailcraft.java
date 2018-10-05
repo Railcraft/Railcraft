@@ -12,29 +12,22 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.ChestLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.List;
 
 import static net.minecraft.util.EnumFacing.DOWN;
-import static net.minecraft.util.EnumFacing.UP;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -42,43 +35,43 @@ import static net.minecraft.util.EnumFacing.UP;
 //TODO: investigate chest locking
 public abstract class TileChestRailcraft extends TileSmartItemTicking implements ITileRotate {
 
-    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int TICK_PER_SYNC = 64;
-    private EnumFacing facing = EnumFacing.NORTH;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
+    protected ChestLogic logic;
 
     protected TileChestRailcraft() {
         super(27);
+        this.logic = createLogic();
+    }
+
+    protected abstract ChestLogic createLogic();
+
+    @Override
+    public void setWorld(World worldIn) {
+        super.setWorld(worldIn);
+        this.logic.setWorld(worldIn);
     }
 
     public final EnumFacing getFacing() {
-        return facing;
+        return hasWorld() ? getBlockState().getValue(BlockChestRailcraft.FACING) : EnumFacing.NORTH;
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityLiving, stack);
-        if (entityLiving != null)
-            facing = entityLiving.getHorizontalFacing().getOpposite();
-    }
-
-    @Override
-    public final boolean rotateBlock(EnumFacing axis) {
-        if (axis == UP || axis == DOWN)
+    public final boolean rotateBlock(EnumFacing face) {
+        if (face.getAxis().isVertical())
             return false;
-        if (facing == axis)
-            facing = axis.getOpposite();
-        else
-            facing = axis;
+        EnumFacing oldFace = getFacing();
+        EnumFacing target = oldFace == face ? face.getOpposite() : face;
+        world.setBlockState(pos, getBlockState().withProperty(BlockChestRailcraft.FACING, target));
         markBlockForUpdate();
         return true;
     }
 
     @Override
     public final EnumFacing[] getValidRotations() {
-        return UP_DOWN_AXES;
+        return EnumFacing.HORIZONTALS;
     }
 
     @Override
@@ -151,30 +144,5 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     public void closeInventory(EntityPlayer player) {
         --this.numUsingPlayers;
         WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setByte("facing", (byte) facing.ordinal());
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        facing = EnumFacing.getFront(data.getByte("facing"));
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-        data.writeByte((byte) facing.ordinal());
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-        facing = EnumFacing.getFront(data.readByte());
     }
 }

@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -19,26 +21,33 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.steam.ISteamUser;
 import mods.railcraft.common.util.steam.SteamBoiler;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import static mods.railcraft.common.blocks.multi.BlockBoilerFirebox.BURNING;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
+import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends TileBoiler<F> implements ISidedInventory, ITileLit {
+public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends TileBoiler<F, F> implements ISidedInventory, ITileLit {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
@@ -55,6 +64,11 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     }
 
     @Override
+    protected Class<F> defineSelfClass() {
+        return defineMasterClass();
+    }
+
+    @Override
     protected void onPatternLock(MultiBlockPattern pattern) {
         int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
@@ -64,7 +78,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     }
 
     public boolean isBurning() {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         return mBlock != null && mBlock.boiler.isBurning();
     }
 
@@ -75,6 +89,16 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
             world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        F mBlock = getMasterBlock();
+        if (mBlock != null) {
+            GuiHandler.openGui(getGui(), player, world, mBlock.getPos());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -96,9 +120,13 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
                 float f3 = 0.52F;
                 float f4 = random.nextFloat() * 0.6F - 0.3F;
                 world.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(SMOKE_NORMAL, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -191,7 +219,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.decrStackSize(i, j);
         return ItemStack.EMPTY;
@@ -199,7 +227,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getStackInSlot(i);
         else
@@ -208,7 +236,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);
     }
@@ -243,7 +271,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.removeStackFromSlot(i);
         else
@@ -252,7 +280,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getField(int id) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getField(id);
         else
@@ -261,7 +289,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setField(int id, int value) {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setField(id, value);
         else
@@ -270,7 +298,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getFieldCount() {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getFieldCount();
         else
@@ -279,10 +307,29 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void clear() {
-        TileBoilerFirebox mBlock = getMasterBlock();
+        F mBlock = getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.clear();
         else
             inventory.clear();
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        return base.withProperty(BURNING, this.wasLit);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 }

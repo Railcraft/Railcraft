@@ -107,7 +107,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
     public TileTankWater() {
         super(2, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.WATER::get);
+        tank.setFilter(Fluids.WATER);
         tankManager.add(tank);
     }
 
@@ -123,7 +123,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
     }
 
     @Override
-    protected Class<TileTankWater> defineCommonClass() {
+    protected Class<TileTankWater> defineSelfClass() {
         return TileTankWater.class;
     }
 

@@ -12,7 +12,6 @@ package mods.railcraft.common.util.routing;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;
@@ -20,18 +19,17 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.Streams;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -43,7 +41,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class RoutingLogic {
+public final class RoutingLogic {
 
     private static final String REGEX_SYMBOL = "\\?";
 
@@ -139,9 +137,9 @@ public class RoutingLogic {
             throw new RoutingLogicException("gui.railcraft.routing.logic.malformed.syntax", line);
         }
         if (Objects.equals(line, "TRUE"))
-            return new ConstantCondition(true);
+            return ConstantCondition.TRUE;
         if (Objects.equals(line, "FALSE"))
-            return new ConstantCondition(false);
+            return ConstantCondition.FALSE;
         try {
             return new ConstantExpression(Integer.parseInt(line));
         } catch (NumberFormatException ignored) {
@@ -166,7 +164,7 @@ public class RoutingLogic {
         throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", line);
     }
 
-    public class RoutingLogicException extends Exception {
+    public static class RoutingLogicException extends Exception {
 
         private final ToolTip tips = new ToolTip();
 
@@ -199,12 +197,12 @@ public class RoutingLogic {
 
     }
 
-    private abstract class ParsedCondition implements Condition {
+    private abstract static class ParsedCondition implements Condition {
 
         public final String value;
         final boolean isRegex;
 
-        private ParsedCondition(String keyword, boolean supportsRegex, String line) throws RoutingLogicException {
+        ParsedCondition(String keyword, boolean supportsRegex, String line) throws RoutingLogicException {
             String keywordMatch = keyword + REGEX_SYMBOL + "?=";
             if (!line.matches(keywordMatch + ".*"))
                 throw new RoutingLogicException("gui.railcraft.routing.logic.unrecognized.keyword", line);
@@ -230,7 +228,7 @@ public class RoutingLogic {
 
     }
 
-    private class IF implements Expression {
+    private static class IF implements Expression {
 
         private final Condition cond;
         private final Expression then, else_;
@@ -248,7 +246,7 @@ public class RoutingLogic {
 
     }
 
-    private class NOT implements Condition {
+    private static class NOT implements Condition {
 
         private final Condition a;
 
@@ -263,7 +261,7 @@ public class RoutingLogic {
 
     }
 
-    private class AND implements Condition {
+    private static class AND implements Condition {
 
         private final Condition a, b;
 
@@ -279,7 +277,7 @@ public class RoutingLogic {
 
     }
 
-    private class OR implements Condition {
+    private static class OR implements Condition {
 
         private final Condition a, b;
 
@@ -295,11 +293,11 @@ public class RoutingLogic {
 
     }
 
-    private class ConstantExpression implements Expression {
+    private static class ConstantExpression implements Expression {
 
         private final int value;
 
-        public ConstantExpression(int value) {
+        ConstantExpression(int value) {
             if (value < NO_POWER || value > FULL_POWER)
                 throw new IllegalArgumentException("Illegal constant value");
             this.value = value;
@@ -312,11 +310,14 @@ public class RoutingLogic {
 
     }
 
-    private class ConstantCondition implements Condition {
+    private static final class ConstantCondition implements Condition {
+
+        static final ConstantCondition TRUE = new ConstantCondition(true);
+        static final ConstantCondition FALSE = new ConstantCondition(false);
 
         private final boolean value;
 
-        public ConstantCondition(boolean value) {
+        private ConstantCondition(boolean value) {
             this.value = value;
         }
 
@@ -327,7 +328,7 @@ public class RoutingLogic {
 
     }
 
-    private class DestCondition extends ParsedCondition {
+    private static class DestCondition extends ParsedCondition {
 
         DestCondition(String line) throws RoutingLogicException {
             super("Dest", true, line);
@@ -350,7 +351,7 @@ public class RoutingLogic {
 
     }
 
-    private class OwnerCondition extends ParsedCondition {
+    private static class OwnerCondition extends ParsedCondition {
 
         OwnerCondition(String line) throws RoutingLogicException {
             super("Owner", false, line);
@@ -381,7 +382,7 @@ public class RoutingLogic {
 
     }
 
-    private class TypeCondition extends ParsedCondition {
+    private static class TypeCondition extends ParsedCondition {
 
         TypeCondition(String line) throws RoutingLogicException {
             super("Type", false, line);
@@ -389,17 +390,12 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(ITileRouting tile, EntityMinecart cart) {
-            ItemStack stack = cart.getCartItem();
-            //noinspection ConstantConditions
-            if (InvTools.isEmpty(stack))
-                return false;
-            String itemName = stack.getItem().getRegistryName().toString();
-            return itemName.equalsIgnoreCase(value);
+            return value.equalsIgnoreCase(String.valueOf(EntityList.getKey(cart)));
         }
 
     }
 
-    private class RefuelCondition extends ParsedCondition {
+    private static class RefuelCondition extends ParsedCondition {
 
         private final boolean needsRefuel;
 
@@ -410,12 +406,12 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(ITileRouting tile, EntityMinecart cart) {
-            return Train.getTrain(cart).stream().flatMap(Streams.toType(INeedsFuel.class)).anyMatch(INeedsFuel::needsFuel);
+            return Train.getTrain(cart).stream().flatMap(Streams.toType(INeedsFuel.class)).anyMatch(needs -> needs.needsFuel() == needsRefuel);
         }
 
     }
 
-    private class RiderCondition extends ParsedCondition {
+    private static class RiderCondition extends ParsedCondition {
         private final String[] tokens;
 
         RiderCondition(String line) throws RoutingLogicException {

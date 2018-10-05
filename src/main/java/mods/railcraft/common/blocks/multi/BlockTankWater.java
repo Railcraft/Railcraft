@@ -1,6 +1,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -15,11 +16,12 @@ public class BlockTankWater extends BlockMultiBlock {
 
     public BlockTankWater() {
         super(Material.WOOD);
+        setSoundType(SoundType.WOOD);
         setHarvestLevel("axe", 0);
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
         return new TileTankWater();
     }
 
@@ -37,9 +39,9 @@ public class BlockTankWater extends BlockMultiBlock {
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this, 6),
                 "WWW",
-                "ISI",
+                "BSB",
                 "WWW",
-                'I', "ingotIron",
+                'B', "plateBronze",
                 'S', "slimeball",
                 'W', "plankWood");
     }

@@ -15,6 +15,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -27,6 +28,7 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -45,13 +47,10 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.Level;
-import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
@@ -71,8 +70,15 @@ public final class FluidTools {
 
     @Contract("null -> null; !null -> !null")
     @Nullable
-    public static @PolyNull FluidStack copy(@Nullable @PolyNull FluidStack fluidStack) {
+    public static FluidStack copy(@Nullable FluidStack fluidStack) {
         return fluidStack == null ? null : fluidStack.copy();
+    }
+
+    @Contract("null, null -> true; null, !null -> false; !null, null -> false")
+    public static boolean matches(@Nullable FluidStack left, @Nullable FluidStack right) {
+        // FluidStack#equals calls isFluidEqual
+        return Objects.equals(left, right);
+//        return left == null ? right == null : left.isFluidEqual(right);
     }
 
     public static String toString(@Nullable FluidStack fluidStack) {
@@ -92,7 +98,7 @@ public final class FluidTools {
     }
 
     @Nullable
-    public static net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
+    public static IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
@@ -367,6 +373,20 @@ public final class FluidTools {
         return Arrays.stream(properties).anyMatch(test);
     }
 
+    public static Collection<IFluidHandler> findNeighbors(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing... sides) {
+        List<IFluidHandler> targets = new ArrayList<>();
+        for (EnumFacing side : sides) {
+            TileEntity tile = cache.getTileOnSide(side);
+            if (tile == null) continue;
+            if (!TankManager.TANK_FILTER.apply(tile, side.getOpposite())) continue;
+            if (!filter.test(tile)) continue;
+            IFluidHandler tank = FluidTools.getFluidHandler(side.getOpposite(), tile);
+            if (tank != null)
+                targets.add(tank);
+        }
+        return targets;
+    }
+
     static final class WaterBottleEventHandler {
         static final WaterBottleEventHandler INSTANCE = new WaterBottleEventHandler();
         int amount;
@@ -382,7 +402,6 @@ public final class FluidTools {
         }
     }
 
-    //TODO fix crap
     private static final class WaterBottleCapabilityDispatcher extends FluidBucketWrapper {
         WaterBottleCapabilityDispatcher(ItemStack container) {
             super(container);
@@ -443,7 +462,7 @@ public final class FluidTools {
 
         @Override
         public IFluidTankProperties[] getTankProperties() {
-            return new FluidTankProperties[]{new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
+            return new FluidTankProperties[] {new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
         }
     }
 }

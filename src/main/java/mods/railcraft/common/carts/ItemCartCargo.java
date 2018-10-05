@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

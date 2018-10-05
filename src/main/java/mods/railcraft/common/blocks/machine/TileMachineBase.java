@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.ISubtypedBlock;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -50,11 +50,6 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity impleme
     @Override
     public String getLocalizationTag() {
         return getMachineType().getLocalizationTag() + ".name";
-    }
-
-    @Override
-    public final short getId() {
-        return (short) getMachineType().ordinal();
     }
 
     @Override
@@ -191,8 +186,8 @@ public abstract class TileMachineBase extends RailcraftTickingTileEntity impleme
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return !(oldState.getBlock() == getBlockType() && newSate.getBlock() == getBlockType()
-                && ((ISubtypedBlock<?>) getBlockType()).getVariant(oldState) == ((ISubtypedBlock<?>) getBlockType()).getVariant(newSate));
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !(oldState.getBlock() == getBlockType() && newState.getBlock() == getBlockType()
+                && ((ISubtypedBlock<?>) getBlockType()).getVariant(oldState) == ((ISubtypedBlock<?>) getBlockType()).getVariant(newState));
     }
 }

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:track_outfitted",
+      "nbt": "{railcraft:{rail:\"railcraft_iron\",kit:\"railcraft_turnout\"}}"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.junctions.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.junctions.desc"
+    }
+  },
+  "parent": "railcraft:tracks/regular_track",
+  "criteria": {
+    "build": {
+      "trigger": "railcraft:spike_maul_use",
+      "conditions": {
+        "_comment": "Will add world and pos predicates later"
+      }
+    }
+  }
+}

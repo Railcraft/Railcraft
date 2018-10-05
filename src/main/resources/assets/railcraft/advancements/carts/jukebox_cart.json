@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:cart_jukebox"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.jukebox_cart.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.jukebox_cart.desc"
+    }
+  },
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "linking": {
+      "trigger": "railcraft:jukebox_cart_play_music",
+      "conditions": {
+      }
+    }
+  }
+}

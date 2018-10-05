@@ -23,8 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -33,6 +32,10 @@ public final class Game {
     public static final boolean OBFUSCATED;
     public static final boolean DEVELOPMENT_ENVIRONMENT;
     public static final boolean BUKKIT;
+    /**
+     * A logging level dedicated to debug reports. It is more prioritized than errors but less serious than fatal.
+     */
+    public static final Level DEBUG_REPORT = Level.forName("DEBUG_REPORT", 150);
 
     static {
         boolean worldFound = false;

@@ -11,5 +11,10 @@ package mods.railcraft.common.blocks.multi;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronWall extends TileTankBase {
+public class TileTankIronWall<T extends TileTankBase<T, M>, M extends TileTankBase<M, M>> extends TileTankBase<T, M> {
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Class<T> defineSelfClass() {
+        return (Class<T>) (Class<?>) TileTankIronWall.class; // Intellij bug
+    }
 }

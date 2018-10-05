@@ -32,12 +32,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
@@ -63,7 +61,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     {
-        tank.setFilter(this::getFilterFluid);
+        tank.setFilter(fluidStack -> FluidTools.matches(this.getFilterFluid(), fluidStack));
         tank.setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
         tankManager.add(tank);
     }
@@ -105,13 +103,13 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
@@ -188,11 +186,11 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Nullable
-    public Fluid getFilterFluid() {
+    public FluidStack getFilterFluid() {
         ItemStack filter = getFilterItem();
         if (InvTools.isEmpty(filter))
             return null;
-        return FluidItemHelper.getFluidInContainer(filter);
+        return FluidItemHelper.getFluidStackInContainer(filter);
     }
 
     public IInventory getInvLiquids() {
@@ -220,23 +218,23 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    public boolean canPassFluidRequests(Fluid fluid) {
+    public boolean canPassFluidRequests(FluidStack fluid) {
         if (hasFilter())
-            return getFilterFluid() == fluid;
-        return !(!tank.isEmpty() && tank.getFluidType() != fluid);
+            return FluidTools.matches(getFilterFluid(), fluid);
+        return tank.isEmpty() && FluidTools.matches(tank.getFluid(), fluid);
     }
 
     @Override
-    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canAcceptPushedFluid(EntityMinecart requester, FluidStack fluid) {
         return canPassFluidRequests(fluid);
     }
 
     @Override
-    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
+    public boolean canProvidePulledFluid(EntityMinecart requester, FluidStack fluid) {
         return canPassFluidRequests(fluid);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.TANK;

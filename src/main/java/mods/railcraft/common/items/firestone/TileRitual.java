@@ -15,37 +15,36 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileRitual extends RailcraftTickingTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
-    private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
-    private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();
+    private final Deque<BlockPos> queue = new ArrayDeque<>();
+    private final Set<BlockPos> visitedBlocks = new HashSet<>();
     public int charge;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
-    private Deque<BlockPos> lavaFound = new LinkedList<BlockPos>();
+    private Deque<BlockPos> lavaFound = new ArrayDeque<>();
     private int rebuildDelay;
     private String itemName;
 
@@ -76,8 +75,8 @@ public class TileRitual extends RailcraftTickingTileEntity {
             return;
         }
 
-        Item firestone = RailcraftItems.FIRESTONE_REFINED.item();
-        if (firestone == null)
+        ItemStack firestone = RailcraftItems.FIRESTONE_REFINED.getStack();
+        if (InvTools.isEmpty(firestone))
             return;
 
         if (charge >= firestone.getMaxDamage())
@@ -104,8 +103,8 @@ public class TileRitual extends RailcraftTickingTileEntity {
         if (Fluids.LAVA.is(block)) {
             boolean placed = WorldPlugin.setBlockState(world, pos, Blocks.OBSIDIAN.getDefaultState());
             if (placed) {
-                Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
-                Vec3d endPosition = new Vec3d(getPos()).addVector(0.5, 0.8, 0.5);
+                Vec3d startPosition = new Vec3d(pos).add(0.5, 0.5, 0.5);
+                Vec3d endPosition = new Vec3d(getPos()).add(0.5, 0.8, 0.5);
                 EffectManager.instance.fireSparkEffect(world, startPosition, endPosition);
                 queueAdjacent(pos);
                 expandQueue();
@@ -181,9 +180,9 @@ public class TileRitual extends RailcraftTickingTileEntity {
         this.itemName = itemName;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("charge", (short) charge);
         data.setByte("rebuildDelay", (byte) rebuildDelay);
@@ -193,7 +192,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         charge = data.getShort("charge");
         rebuildDelay = data.getByte("rebuildDelay");
@@ -202,12 +201,12 @@ public class TileRitual extends RailcraftTickingTileEntity {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
     }
 
@@ -216,8 +215,4 @@ public class TileRitual extends RailcraftTickingTileEntity {
         return "tile.railcraft.firestone.recharge.name";
     }
 
-    @Override
-    public short getId() {
-        return 222;
-    }
 }

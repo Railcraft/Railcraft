@@ -20,8 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemSteelHoe extends ItemHoe implements IRailcraftItemSimple {
@@ -37,13 +37,13 @@ public class ItemSteelHoe extends ItemHoe implements IRailcraftItemSimple {
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey();
     }
 
     @Override
