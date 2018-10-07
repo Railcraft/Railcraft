@@ -39,6 +39,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
      */
     public final NonNullList<Ingredient> recipeItems;
     private final String group;
+    @Nullable private InventoryCrafting lastInv;
     @Nullable private int[] lastResult;
 
     public RemainingItemShapelessRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
@@ -61,7 +62,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
     }
 
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        if (lastResult == null) {
+        if (lastInv != inv) {
             matches(inv, null);
         }
         final int[] mappings = requireNonNull(lastResult);
@@ -111,6 +112,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
             return false;
         }
         lastResult = results;
+        lastInv = inv;
         return true;
     }
 
