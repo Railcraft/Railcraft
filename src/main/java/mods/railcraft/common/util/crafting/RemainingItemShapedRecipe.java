@@ -77,7 +77,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        if (bySlots == null) {
+        if (bySlots == null || bySlots.length != inv.getSizeInventory()) {
             matches(inv, null);
         }
 
