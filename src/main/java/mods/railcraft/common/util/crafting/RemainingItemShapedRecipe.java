@@ -54,6 +54,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
     private final ItemStack recipeOutput;
     private final String group;
 
+    @Nullable private InventoryCrafting lastInv;
     @Nullable IRemainderIngredient[] bySlots;
 
     public RemainingItemShapedRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
@@ -77,7 +78,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        if (bySlots == null || bySlots.length != inv.getSizeInventory()) {
+        if (inv != lastInv) {
             matches(inv, null);
         }
 
@@ -122,15 +123,18 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
         for (int i = 0; i <= inv.getWidth() - this.recipeWidth; ++i) {
             for (int j = 0; j <= inv.getHeight() - this.recipeHeight; ++j) {
                 if (this.checkMatch(inv, i, j, true)) {
+                    lastInv = inv;
                     return true;
                 }
 
                 if (this.checkMatch(inv, i, j, false)) {
+                    lastInv = inv;
                     return true;
                 }
             }
         }
 
+        lastInv = inv;
         return false;
     }
 
