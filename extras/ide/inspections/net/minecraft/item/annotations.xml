@@ -2,9 +2,6 @@
     <item name='net.minecraft.item.Item net.minecraft.entity.Entity createEntity(net.minecraft.world.World, net.minecraft.entity.Entity, net.minecraft.item.ItemStack)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
-    <item name='net.minecraft.item.Item net.minecraft.item.ItemStack getContainerItem(net.minecraft.item.ItemStack)'>
-        <annotation name='javax.annotation.Nullable'/>
-    </item>
     <item name='net.minecraft.item.Item net.minecraft.util.math.RayTraceResult rayTrace(net.minecraft.world.World, net.minecraft.entity.player.EntityPlayer, boolean)'>
         <annotation name='javax.annotation.Nullable'/>
         <annotation name='org.jetbrains.annotations.Nullable'/>

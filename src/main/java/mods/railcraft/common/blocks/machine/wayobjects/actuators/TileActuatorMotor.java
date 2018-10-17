@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,12 +13,11 @@ import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
@@ -28,23 +27,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.io.IOException;
 
-public class TileActuatorMotor extends TileActuatorSecured implements ITileAspectResponder, IGuiReturnHandler, IReceiverTile {
+import java.io.IOException;
+import java.util.BitSet;
+
+public class TileActuatorMotor extends TileActuatorSecured implements ITileAspectResponder, IReceiverTile {
 
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
-    private boolean[] switchOnAspects = new boolean[SignalAspect.values().length];
+    private BitSet switchOnAspects = new BitSet(SignalAspect.VALUES.length);
     private boolean switchAspect;
     private boolean switchOnRedstone = true;
 
     public TileActuatorMotor() {
-        switchOnAspects[SignalAspect.RED.ordinal()] = true;
+        doActionOnAspect(SignalAspect.RED, true);
     }
 
-    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return ActuatorVariant.MOTOR;
@@ -75,7 +73,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
@@ -84,24 +82,19 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public boolean canConnectRedstone(EnumFacing dir) {
+    public boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return true;
     }
 
     private boolean isSwitchAspect() {
-        return switchOnAspects[receiver.getAspect().ordinal()];
+        return doesActionOnAspect(receiver.getAspect());
     }
 
-    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        byte[] array = new byte[switchOnAspects.length];
-        for (int i = 0; i < switchOnAspects.length; i++) {
-            array[i] = (byte) (switchOnAspects[i] ? 1 : 0);
-        }
-        data.setByteArray("PowerOnAspect", array);
+        data.setByteArray("PowerOnAspect", switchOnAspects.toByteArray());
 
         data.setBoolean("switchAspect", switchAspect);
 
@@ -112,15 +105,11 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (data.hasKey("PowerOnAspect")) {
-            byte[] array = data.getByteArray("PowerOnAspect");
-            for (int i = 0; i < switchOnAspects.length; i++) {
-                switchOnAspects[i] = array[i] == 1;
-            }
-        }
+        if (data.hasKey("PowerOnAspect"))
+            switchOnAspects = BitSet.valueOf(data.getByteArray("PowerOnAspect"));
 
         switchAspect = data.getBoolean("switchAspect");
 
@@ -131,7 +120,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         receiver.writePacketData(data);
 
@@ -139,7 +128,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
 
@@ -149,34 +138,27 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         super.writeGuiData(data);
-        byte bits = 0;
-        for (int i = 0; i < switchOnAspects.length; i++) {
-            bits |= (switchOnAspects[i] ? 1 : 0) << i;
-        }
-        data.writeByte(bits);
+        data.writeBitSet(switchOnAspects);
         data.writeBoolean(switchOnRedstone);
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
-        byte bits = data.readByte();
-        for (int bit = 0; bit < switchOnAspects.length; bit++) {
-            switchOnAspects[bit] = ((bits >> bit) & 1) == 1;
-        }
+        switchOnAspects = data.readBitSet();
         switchOnRedstone = data.readBoolean();
     }
 
     @Override
     public boolean doesActionOnAspect(SignalAspect aspect) {
-        return switchOnAspects[aspect.ordinal()];
+        return switchOnAspects.get(aspect.ordinal());
     }
 
     @Override
     public void doActionOnAspect(SignalAspect aspect, boolean trigger) {
-        switchOnAspects[aspect.ordinal()] = trigger;
+        switchOnAspects.flip(aspect.ordinal());
     }
 
     @Override

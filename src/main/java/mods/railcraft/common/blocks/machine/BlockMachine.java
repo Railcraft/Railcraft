@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,83 +9,64 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.ISubtypedBlock;
-import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.plugins.color.ColorPlugin;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.collections.ArrayTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Random;
 
-public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEntityDelegate implements ISubtypedBlock<V>, IPostConnection, ColorPlugin.IColoredBlock {
-    private Class<V> variantClass;
-    private V[] variantValues;
-    private PropertyEnum<V> variantProperty;
+public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEntityDelegate implements ISubtypedBlock<V> {
+    private VariantData<V> variantData;
 
-    public BlockMachine(boolean opaque) {
-        super(Material.ROCK);
+    public BlockMachine(Material mat) {
+        this(mat, MapColor.GRAY);
+    }
+
+    public BlockMachine(Material mat, MapColor mapColor) {
+        super(mat, mapColor);
         setResistance(4.5F);
         setHardness(2.0F);
         // TODO: This can't be right
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
         setDefaultState(getDefaultState().withProperty(getVariantProperty(), getVariants()[0]));
-        this.fullBlock = opaque;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        lightOpacity = opaque ? 255 : 0;
 
         for (IEnumMachine<V> machine : getVariants()) {
             HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
         }
     }
 
-    private void setup() {
-        if (variantClass != null) {
-            return;
-        }
-        RailcraftBlockMetadata annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
-        //noinspection unchecked
-        variantClass = (Class<V>) annotation.variant();
-        variantValues = variantClass.getEnumConstants();
-        variantProperty = PropertyEnum.create("variant", variantClass, variantValues);
+    @Override
+    public VariantData<V> getVariantData() {
+        if (variantData == null)
+            variantData = ISubtypedBlock.super.getVariantData();
+        return variantData;
     }
 
     @Override
@@ -93,43 +74,13 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         return new BlockStateContainer(this, getVariantProperty());
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        if (variant == null)
-            return getDefaultState();
-        checkVariant(variant);
-        return getDefaultState().withProperty(getVariantProperty(), (V) variant);
-    }
-
-    @Override
-    @NotNull
-    public final IProperty<V> getVariantProperty() {
-        setup();
-        return variantProperty;
-    }
-
-    @NotNull
-    @Override
-    public final Class<? extends V> getVariantEnum() {
-        return variantClass;
-    }
-
-    @NotNull
-    @Override
-    public final V[] getVariants() {
-        return variantValues;
-    }
-
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        IBlockState state = getDefaultState();
-        if (ArrayTools.indexInBounds(variantValues.length, meta))
-            state = state.withProperty(getVariantProperty(), variantValues[meta]);
-        return state;
+        return convertMetaToState(meta);
     }
 
     /**
@@ -149,66 +100,10 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
 //        return 0.2F;
 //    }
 
+    @Override
     public Class<? extends TileMachineBase> getTileClass(IBlockState state) {
         return getVariant(state).getTileClass();
     }
-
-    @Override
-    public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> {
-            //TODO: this probably not entirely correct, may need to handle this differently if world/pos null
-            if (worldIn != null && pos != null) {
-                TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-                if (tile instanceof TileMachineBase)
-                    return ((TileMachineBase) tile).colorMultiplier();
-            }
-            return EnumColor.WHITE.getHexColor();
-        };
-    }
-
-    @Override
-    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        return tile instanceof TileMachineBase && ((TileMachineBase) tile).recolourBlock(color);
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (hand == EnumHand.OFF_HAND)
-            return false;
-        return TileManager.forTile(this::getTileClass, state, worldIn, pos)
-                .retrieve(TileMachineBase.class, t -> t.blockActivated(playerIn, hand, side, hitX, hitY, hitZ)).orElse(false);
-    }
-
-    @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
-                .retrieve(ITileRotate.class, t -> t.rotateBlock(axis)).orElse(false);
-    }
-
-    @Override
-    public EnumFacing[] getValidRotations(World world, BlockPos pos) {
-        return TileManager.forTile(this::getTileClass, WorldPlugin.getBlockState(world, pos), world, pos)
-                .retrieve(ITileRotate.class, ITileRotate::getValidRotations).orElse(null);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
-        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-        if (tile instanceof TileMachineBase)
-            ((TileMachineBase) tile).randomDisplayTick(rand);
-    }
-
-//    @Override
-//    public boolean isBlockNormalCube(IBlockState state) {
-//        return false;
-//    }
 
     //TODO: Do we need to do this anymore?
     @Override
@@ -219,7 +114,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.005F);
+        player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
             if (canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand()) > 0) {
                 List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, state, 0);
@@ -235,6 +130,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         return world.setBlockToAir(pos);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -257,6 +153,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getBlockDroppedSilkTouch(fortune);
+        //noinspection deprecation
         return super.getDrops(world, pos, state, fortune);
     }
 
@@ -295,6 +192,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         }
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         // leave this as lambda's instead of method references, it breaks otherwise.
@@ -303,11 +201,6 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
                 .map(m -> m.getStack())
                 .filter(s -> !s.isEmpty())
                 .forEach(list::add);
-    }
-
-    @Override
-    public final boolean isOpaqueCube(IBlockState state) {
-        return fullBlock;
     }
 
     @Override
@@ -324,13 +217,5 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
             return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP);
         }
         return true;
-    }
-
-    @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).connectsToPost(face);
-        return ConnectStyle.NONE;
     }
 }

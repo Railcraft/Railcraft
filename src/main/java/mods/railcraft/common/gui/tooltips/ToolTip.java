@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -77,11 +77,9 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     @NotNull
     public List<String> convertToStrings() {
-        List<String> tips = new ArrayList<>(size());
-        for (ToolTipLine line : this) {
-            tips.add(line.text);
-        }
-        return tips;
+        return stream()
+                .map(line -> line.text)
+                .collect(Collectors.toList());
     }
 
     public static ToolTip buildToolTip(List<String> lines) {
@@ -90,8 +88,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         return toolTip;
     }
 
-    @Nullable
-    public static ToolTip buildToolTip(String tipTag, String... vars) {
+    public static @Nullable ToolTip buildToolTip(String tipTag, String... vars) {
         if (!LocalizationPlugin.hasTag(tipTag))
             return null;
         try {

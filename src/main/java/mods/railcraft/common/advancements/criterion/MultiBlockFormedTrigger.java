@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonDeserializationContext;
@@ -18,8 +28,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -54,19 +64,16 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
 
     @SubscribeEvent
     public void onMultiBlockForm(MultiBlockEvent.Form event) {
-        IMultiBlockTile<?, ?, ?> tile = event.getMultiBlock();
+        IMultiBlockTile tile = event.getMultiBlock();
         GameProfile owner = tile.getOwner();
         EntityPlayerMP player = requireNonNull(FMLCommonHandler.instance().getMinecraftServerInstance()).getPlayerList().getPlayerByUUID(owner.getId());
         if (player == null) {
             return;
         }
         PlayerAdvancements advancements = player.getAdvancements();
-        Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : manager.get(advancements)) {
-            if (listener.getCriterionInstance().matches(tile)) {
-                done.add(listener);
-            }
-        }
+        Collection<Listener<Instance>> done = manager.get(advancements).stream()
+                .filter(listener -> listener.getCriterionInstance().matches(tile))
+                .collect(Collectors.toList());
         for (Listener<Instance> listener : done) {
             listener.grantCriterion(advancements);
         }
@@ -74,15 +81,15 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
 
     static final class Instance implements ICriterionInstance {
 
-        @Nullable
-        final Class<? extends TileEntity> type;
+        final @Nullable Class<? extends TileEntity> clazz;
 
         Instance(@Nullable Class<? extends TileEntity> type) {
-            this.type = type;
+            this.clazz = type;
         }
 
-        boolean matches(IMultiBlockTile<?, ?, ?> tile) {
-            return type == null || tile.getMasterType() == type;
+        // FIXME: This used to use the master class, but I removed that function and probably broke it. - CovertJaguar
+        boolean matches(IMultiBlockTile tile) {
+            return clazz == null || tile.getClass() == clazz;
         }
 
         @Override

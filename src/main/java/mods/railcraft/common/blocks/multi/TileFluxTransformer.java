@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -24,19 +23,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransformer, TileFluxTransformer, TileFluxTransformer> implements IEnergyStorage {
+public final class TileFluxTransformer extends TileMultiBlock implements IEnergyStorage {
 
     public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
-    private IChargeBlock.ChargeBattery battery;
+    private @Nullable IChargeBlock.ChargeBattery battery;
 
     static {
         char[][][] map = {
@@ -76,25 +74,11 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
         pattern.placeStructure(world, pos, blockMapping);
     }
 
-    @Override
-    protected Class<TileFluxTransformer> defineSelfClass() {
-        return TileFluxTransformer.class;
-    }
-
-    @Override
-    protected Class<TileFluxTransformer> defineMasterClass() {
-        return TileFluxTransformer.class;
-    }
-
-    @Override
-    protected Class<TileFluxTransformer> defineLeastCommonClass() {
-        return TileFluxTransformer.class;
-    }
-
     @Nullable
     IChargeBlock.ChargeBattery getMasterBattery() {
-        if (isStructureValid()) {
-            return getMasterBlock().getBattery();
+        TileFluxTransformer mBlock = (TileFluxTransformer) getMasterBlock();
+        if (mBlock != null) {
+            return mBlock.getBattery();
         }
         return null;
     }
@@ -109,12 +93,6 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
     @Override
     protected void setWorldCreate(World worldIn) {
         setWorld(worldIn);
-    }
-
-    @NotNull
-    @Override
-    public EnumGui getGui() {
-        throw new UnsupportedOperationException("No GUI");
     }
 
     @Override
@@ -168,9 +146,8 @@ public final class TileFluxTransformer extends TileMultiBlock<TileFluxTransforme
         return capability == CapabilityEnergy.ENERGY || super.hasCapability(capability, facing);
     }
 
-    @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
             return CapabilityEnergy.ENERGY.cast(this);
         }

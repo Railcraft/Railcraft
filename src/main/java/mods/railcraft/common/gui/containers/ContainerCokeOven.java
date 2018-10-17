@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -26,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCokeOven extends RailcraftContainer {
 
-    private TileCokeOven tile;
+    private final TileCokeOven tile;
     private int lastCookTime, lastCookTimeTotal;
 
     public ContainerCokeOven(InventoryPlayer inventoryplayer, TileCokeOven tile) {
@@ -57,10 +58,8 @@ public class ContainerCokeOven extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int i = 0; i < listeners.size(); i++) {
-            IContainerListener listener = listeners.get(i);
-
-            int cookTime = tile.getMasterCookTime();
+        for (IContainerListener listener : listeners) {
+            int cookTime = tile.getCookTime();
             if (lastCookTime != cookTime)
                 listener.sendWindowProperty(this, 10, cookTime);
 
@@ -69,7 +68,7 @@ public class ContainerCokeOven extends RailcraftContainer {
                 listener.sendWindowProperty(this, 11, cookTimeTotal);
         }
 
-        lastCookTime = tile.getMasterCookTime();
+        lastCookTime = tile.getCookTime();
         lastCookTimeTotal = tile.getTotalCookTime();
     }
 
@@ -77,7 +76,7 @@ public class ContainerCokeOven extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendWindowProperty(this, 10, tile.getMasterCookTime());
+        listener.sendWindowProperty(this, 10, tile.getCookTime());
         listener.sendWindowProperty(this, 11, tile.getTotalCookTime());
     }
 
@@ -102,7 +101,7 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return !InvTools.isEmpty(stack) && !InvTools.isSynthetic(stack) && RailcraftCraftingManager.getCokeOvenCraftings().getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.getCokeOvenCraftings().getRecipe(stack) != null;
         }
 
     }

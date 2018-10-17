@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -48,7 +48,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Optional;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -60,7 +59,7 @@ import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> implements ISidedInventory, ISteamUser, ITileRotate {
+public final class TileSteamOven extends TileMultiBlockOven implements ISidedInventory, ISteamUser, ITileRotate {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -109,8 +108,6 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public int cookTime;
     private boolean finishedCycle;
     private EnumFacing facing = NORTH;
-    //TODO ???
-    private boolean paused = false;
 
     public TileSteamOven() {
         super(18, patterns);
@@ -135,13 +132,8 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
         }
     }
 
-    @Override
-    protected Class<TileSteamOven> defineSelfClass() {
-        return TileSteamOven.class;
-    }
-
     public TankManager getTankManager() {
-        TileSteamOven mBlock = getMasterBlock();
+        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;
@@ -149,7 +141,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
 
     @Override
     public EnumFacing getFacing() {
-        TileSteamOven masterOven = getMasterBlock();
+        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
         return facing;
@@ -157,7 +149,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
 
     @Override
     public void setFacing(EnumFacing facing) {
-        TileSteamOven masterOven = getMasterBlock();
+        TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             masterOven.facing = facing;
         this.facing = facing;
@@ -168,7 +160,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
         super.update();
 
         if (Game.isClient(getWorld())) {
-            if (isMasterCooking())
+            if (isCooking())
                 EffectManager.instance.steamEffect(world, this, +0.25);
             return;
         }
@@ -260,7 +252,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
     public boolean rotateBlock(EnumFacing face) {
         if (face.getAxis() == Axis.Y)
             return false;
-        TileSteamOven master = getMasterBlock();
+        TileSteamOven master = (TileSteamOven) getMasterBlock();
         if (master != null) {
             if (master.facing == face)
                 master.facing = face.getOpposite();
@@ -281,7 +273,7 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileSteamOven masterBlock = getMasterBlock();
+        TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.STEAN_OVEN, player, world, masterBlock.getPos());
             return true;
@@ -351,11 +343,10 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
 
     @Override
     public boolean hasWork() {
-        TileSteamOven mBlock = getMasterBlock();
+        TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         return mBlock != null && mBlock.cookTime > 0;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.STEAN_OVEN;
@@ -439,9 +430,8 @@ public final class TileSteamOven extends TileMultiBlockOven<TileSteamOven> imple
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);

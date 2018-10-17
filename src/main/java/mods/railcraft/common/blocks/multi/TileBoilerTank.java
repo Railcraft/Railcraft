@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings("rawtypes")
-public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends TileBoilerFirebox<F>> extends TileBoiler<T, F> {
+public abstract class TileBoilerTank extends TileBoiler {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);
 
@@ -37,24 +37,16 @@ public abstract class TileBoilerTank<T extends TileBoilerTank<T, F>, F extends T
     public IBlockState getActualState(IBlockState state) {
         if (!isStructureValid())
             return state;
-        BlockPos patternPos = getPatternPosition();
-        if (patternPos == null)
-            return state;
         char marker = getPatternMarker();
         if (marker == 'O')
             return state;
+        BlockPos patternPos = getPatternPosition();
         state = state
                 .withProperty(BlockBoilerTank.NORTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
                 .withProperty(BlockBoilerTank.SOUTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
                 .withProperty(BlockBoilerTank.EAST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
                 .withProperty(BlockBoilerTank.WEST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
         return state;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class<F> defineMasterClass() {
-        return (Class<F>) (Class<?>) TileBoilerFirebox.class; // Idea glitched on this cast
     }
 
     @Override

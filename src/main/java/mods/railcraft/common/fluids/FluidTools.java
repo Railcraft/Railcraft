@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -69,8 +69,7 @@ public final class FluidTools {
     }
 
     @Contract("null -> null; !null -> !null")
-    @Nullable
-    public static FluidStack copy(@Nullable FluidStack fluidStack) {
+    public static @Nullable FluidStack copy(@Nullable FluidStack fluidStack) {
         return fluidStack == null ? null : fluidStack.copy();
     }
 
@@ -97,8 +96,7 @@ public final class FluidTools {
         return stack == null;
     }
 
-    @Nullable
-    public static IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
+    public static @Nullable IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 
@@ -171,28 +169,33 @@ public final class FluidTools {
     }
 
     /**
-     * Process containers in input/output slot like tha in the tank cart.
+     * Process containers in input/output slot like the in the tank cart.
      *
      * @param tank       Fluid tank
      * @param inv        The inventory that contains input/output slots
      * @param inputSlot  The input slot number
      * @param outputSlot The output slot number
      * @return {@code true} if changes have been done to the tank
+     * @deprecated The two slot functions are deprecated in favor of the three slot function in order to support partial containers. All usage should be migrated.
      */
+    @Deprecated
     public static boolean processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot) {
         return processContainers(tank, inv, inputSlot, outputSlot, tank.getFluidType(), true, true);
     }
 
+    @Deprecated
     public static boolean processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
         TankManager tankManger = new TankManager();
         tankManger.add(tank);
         return processContainers(tankManger, inv, inputSlot, outputSlot, fluidToFill, processFilled, processEmpty);
     }
 
+    @Deprecated
     public static boolean processContainers(TankManager tank, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         return processContainers(tank, inv, inputSlot, outputSlot, fluidToFill, true, true);
     }
 
+    @Deprecated
     public static boolean processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
         ItemStack input = inv.getStackInSlot(inputSlot);
 
@@ -207,6 +210,7 @@ public final class FluidTools {
         return false;
     }
 
+    @Deprecated
     public static boolean fillContainers(IFluidHandler source, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         ItemStack input = inv.getStackInSlot(inputSlot);
         //need an empty container
@@ -232,6 +236,7 @@ public final class FluidTools {
         return true;
     }
 
+    @Deprecated
     public static boolean drainContainers(IFluidHandler dest, IInventory inv, int inputSlot, int outputSlot) {
         ItemStack input = inv.getStackInSlot(inputSlot);
         //need a valid container
@@ -251,6 +256,7 @@ public final class FluidTools {
         return true;
     }
 
+    @Deprecated
     private static boolean hasPlaceToPutContainer(ItemStack output, ItemStack container) {
         return isEmpty(output) || isEmpty(container) || output.getCount() < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
     }
@@ -259,6 +265,7 @@ public final class FluidTools {
      * We can assume that if null is passed for the container that the container
      * was consumed by the process and we should just remove the input container.
      */
+    @Deprecated
     private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, @Nullable ItemStack container) {
         if (isEmpty(container)) {
             inv.decrStackSize(inputSlot, 1);
@@ -277,13 +284,11 @@ public final class FluidTools {
         MinecraftForge.EVENT_BUS.register(WaterBottleEventHandler.INSTANCE);
     }
 
-    @Nullable
-    public static FluidStack drainBlock(World world, BlockPos pos, boolean doDrain) {
+    public static @Nullable FluidStack drainBlock(World world, BlockPos pos, boolean doDrain) {
         return drainBlock(WorldPlugin.getBlockState(world, pos), world, pos, doDrain);
     }
 
-    @Nullable
-    public static FluidStack drainBlock(IBlockState state, World world, BlockPos pos, boolean doDrain) {
+    public static @Nullable FluidStack drainBlock(IBlockState state, World world, BlockPos pos, boolean doDrain) {
         FluidStack fluid;
         if ((fluid = drainForgeFluid(state, world, pos, doDrain)) != null)
             return fluid;
@@ -294,8 +299,7 @@ public final class FluidTools {
         return null;
     }
 
-    @Nullable
-    private static FluidStack drainForgeFluid(IBlockState state, World world, BlockPos pos, boolean doDrain) {
+    private static @Nullable FluidStack drainForgeFluid(IBlockState state, World world, BlockPos pos, boolean doDrain) {
         if (state.getBlock() instanceof IFluidBlock) {
             IFluidBlock fluidBlock = (IFluidBlock) state.getBlock();
             if (fluidBlock.canDrain(world, pos))
@@ -304,8 +308,7 @@ public final class FluidTools {
         return null;
     }
 
-    @Nullable
-    private static FluidStack drainVanillaFluid(IBlockState state, World world, BlockPos pos, boolean doDrain, Fluids fluid, Block... blocks) {
+    private static @Nullable FluidStack drainVanillaFluid(IBlockState state, World world, BlockPos pos, boolean doDrain, Fluids fluid, Block... blocks) {
         boolean matches = false;
         for (Block block : blocks) {
             if (state.getBlock() == block)
@@ -336,8 +339,7 @@ public final class FluidTools {
         return false;
     }
 
-    @Nullable
-    public static Fluid getFluid(Block block) {
+    public static @Nullable Fluid getFluid(Block block) {
         if (block instanceof IFluidBlock)
             return ((IFluidBlock) block).getFluid();
         else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER)
@@ -347,8 +349,7 @@ public final class FluidTools {
         return null;
     }
 
-    @Nullable
-    public static Fluid getFluid(IBlockState state) {
+    public static @Nullable Fluid getFluid(IBlockState state) {
         return getFluid(state.getBlock());
     }
 
@@ -419,9 +420,8 @@ public final class FluidTools {
             }
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(FluidStack resource, boolean doDrain) {
+        public @Nullable FluidStack drain(FluidStack resource, boolean doDrain) {
             if (InvTools.sizeOf(container) != 1 || resource == null || resource.amount < WaterBottleEventHandler.INSTANCE.amount) {
                 return null;
             }
@@ -437,9 +437,8 @@ public final class FluidTools {
             return null;
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(int maxDrain, boolean doDrain) {
+        public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
             if (container.getCount() != 1 || maxDrain < WaterBottleEventHandler.INSTANCE.amount) {
                 return null;
             }

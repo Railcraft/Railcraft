@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,10 +12,11 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,7 +26,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -39,7 +39,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockMachineManipulator() {
-        super(true);
+        super(Material.ROCK);
         setDefaultState(getDefaultState().withProperty(FRONT, EnumFacing.DOWN).withProperty(ACTIVE, false));
     }
 

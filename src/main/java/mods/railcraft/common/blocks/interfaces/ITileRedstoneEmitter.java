@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.interfaces;
+package mods.railcraft.common.blocks.interfaces;
 
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import net.minecraft.util.EnumFacing;
@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITileRedstoneEmitter {
+
     default int getPowerOutput(EnumFacing side) {
         return PowerPlugin.NO_POWER;
     }

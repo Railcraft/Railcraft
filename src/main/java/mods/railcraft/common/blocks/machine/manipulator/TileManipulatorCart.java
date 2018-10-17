@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -53,7 +53,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
-    protected EntityMinecart currentCart;
+    protected @Nullable EntityMinecart currentCart;
     private boolean powered;
     private boolean sendCartGateAction;
     private boolean processing;
@@ -73,8 +73,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         return currentCart != null;
     }
 
-    @Nullable
-    public EntityMinecart getCart() {
+    public @Nullable EntityMinecart getCart() {
         return CartToolsAPI.getMinecartOnSide(world, getPos(), 0.1f, getFacing());
     }
 
@@ -249,7 +248,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     protected abstract void processCart(EntityMinecart cart);
 
     @Override
-    public final boolean canConnectRedstone(EnumFacing dir) {
+    public final boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return true;
     }
 

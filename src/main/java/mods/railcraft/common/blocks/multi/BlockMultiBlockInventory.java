@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
 import net.minecraft.block.material.MapColor;
@@ -18,5 +28,5 @@ public abstract class BlockMultiBlockInventory extends BlockMultiBlock {
     }
 
     @Override
-    public abstract TileMultiBlockInventory<?, ?, ?> createTileEntity(World world, IBlockState state);
+    public abstract TileMultiBlockInventory createTileEntity(World world, IBlockState state);
 }

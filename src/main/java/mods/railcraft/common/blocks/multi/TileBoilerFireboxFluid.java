@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,12 +27,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFireboxFluid> {
+public final class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     private static final int TANK_FUEL = 2;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
@@ -59,11 +58,6 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
                 return;
             }
         }
-    }
-
-    @Override
-    protected Class<TileBoilerFireboxFluid> defineMasterClass() {
-        return TileBoilerFireboxFluid.class;
     }
 
     @Override
@@ -113,11 +107,10 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox<TileBoilerFi
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFireboxFluid mBlock = getMasterBlock();
+        TileBoilerFireboxFluid mBlock = (TileBoilerFireboxFluid) getMasterBlock();
         return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_LIQUID;

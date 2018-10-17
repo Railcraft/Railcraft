@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,7 +21,6 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -39,7 +38,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ModuleResources extends RailcraftModulePayload {
 
     private static ModuleResources instance;
-    boolean bottleFree = false;
+    boolean bottleFree;
 
     public ModuleResources() {
         instance = this;
@@ -150,6 +149,17 @@ public class ModuleResources extends RailcraftModulePayload {
                 }
                 checkSteelBlock();
             }
+
+            private void initMetalBlock(Metal m) {
+                String blockTag = m.getOreTag(Metal.Form.BLOCK);
+                OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
+                CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
+                        "III",
+                        "III",
+                        "III",
+                        'I', m.getOreTag(Metal.Form.INGOT));
+                CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
+            }
         });
         setDisabledEventHandler(new ModuleEventHandler() {
             @Override
@@ -157,17 +167,6 @@ public class ModuleResources extends RailcraftModulePayload {
                 checkSteelBlock();
             }
         });
-    }
-
-    private void initMetalBlock(Metal m) {
-        String blockTag = m.getOreTag(Metal.Form.BLOCK);
-        OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
-        CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
-                "III",
-                "III",
-                "III",
-                'I', m.getOreTag(Metal.Form.INGOT));
-        CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.INGOT, 9), blockTag);
     }
 
     private void checkSteelBlock() {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBoilerSolid extends RailcraftContainer {
 
-    private TileBoilerFireboxSolid tile;
+    private final TileBoilerFireboxSolid tile;
     private double lastBurnTime;
     private double lastItemBurnTime;
     private boolean wasBurning;
@@ -32,8 +32,8 @@ public class ContainerBoilerSolid extends RailcraftContainer {
         super(tile);
         this.tile = tile;
 
-        addWidget(new FluidGaugeWidget(tile.getMasterTankManager().get(0), 116, 23, 176, 0, 16, 47));
-        addWidget(new FluidGaugeWidget(tile.getMasterTankManager().get(1), 17, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 116, 23, 176, 0, 16, 47));
+        addWidget(new FluidGaugeWidget(tile.getTankManager().get(1), 17, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 

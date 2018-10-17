@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
 import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -390,7 +390,7 @@ public abstract class TileEngine extends RailcraftTickingTileEntity implements I
 
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == ENERGY && facing == direction ? ENERGY.cast(storage) : super.getCapability(capability, facing);
+        return capability == ENERGY && facing == direction ? ENERGY.cast(EnergyPlugin.DUMMY_STORAGE) : super.getCapability(capability, facing);
     }
 
     @Override

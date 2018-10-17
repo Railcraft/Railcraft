@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -28,8 +28,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static net.minecraft.util.EnumFacing.DOWN;
@@ -93,7 +93,7 @@ public abstract class TileSignalBase extends TileMachineBase implements IAspectP
     }
 
     @Override
-    public void onBlockPlacedBy(@NotNull IBlockState state, @NotNull EntityLivingBase entityLiving, @NotNull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }

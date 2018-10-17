@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -29,20 +28,7 @@ public class ItemBlockEntityDelegate extends ItemBlockRailcraftSubtyped {
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        if (!world.setBlockState(pos, newState, 3))
-            return false;
-
-        if (world.getBlockState(pos).getBlock() == entityDelegate) {
-            entityDelegate.onBlockPlacedBy(world, pos, newState, player, stack);
-            entityDelegate.initFromItem(world, pos, stack);
-        }
-
-        return true;
-    }
-
     @SideOnly(Side.CLIENT)
-    @Override
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
         if (!super.canPlaceBlockOnSide(worldIn, pos, side, player, stack))
             return false;

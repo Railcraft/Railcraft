@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,14 +7,10 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.fluids.tanks;
 
-package mods.railcraft.common.blocks.machine.interfaces;
+import mcp.MethodsReturnNonnullByDefault;
 
-/**
- * Created by CovertJaguar on 9/12/2016 for Railcraft.
- *
- * @author CovertJaguar <http://www.railcraft.info>
- */
-public interface ITile {
-    void markBlockForUpdate();
-}
+import javax.annotation.ParametersAreNonnullByDefault;

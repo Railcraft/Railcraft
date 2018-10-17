@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.ChestLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -39,7 +39,7 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
-    protected ChestLogic logic;
+    protected final ChestLogic logic;
 
     protected TileChestRailcraft() {
         super(27);
@@ -51,9 +51,10 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     @Override
     public void setWorld(World worldIn) {
         super.setWorld(worldIn);
-        this.logic.setWorld(worldIn);
+        logic.setWorld(worldIn);
     }
 
+    @Override
     public final EnumFacing getFacing() {
         return hasWorld() ? getBlockState().getValue(BlockChestRailcraft.FACING) : EnumFacing.NORTH;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,9 +44,8 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
         return SignalBoxVariant.RECEIVER;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return EnumGui.BOX_RECEIVER;
     }
 
@@ -75,15 +74,6 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
         updateNeighborBoxes();
     }
 
-    @Override
-    public int getPowerOutput(EnumFacing side) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, getPos().offset(side.getOpposite()));
-        if (tile instanceof TileBoxBase)
-            return NO_POWER;
-        return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;
-    }
-
-    @NotNull
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
@@ -122,6 +112,14 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
     }
 
     @Override
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, getPos().offset(side.getOpposite()));
+        if (tile instanceof TileBoxBase)
+            return NO_POWER;
+        return isEmittingRedstone(side) ? FULL_POWER : NO_POWER;
+    }
+
+    @Override
     public boolean isEmittingRedstone(EnumFacing side) {
         return doesActionOnAspect(receiver.getAspect());
     }
@@ -133,7 +131,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return receiver.getAspect();
     }
 

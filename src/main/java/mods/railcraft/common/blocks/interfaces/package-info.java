@@ -7,17 +7,11 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.gui.EnumGui;
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.blocks.interfaces;
 
-/**
- * @author CovertJaguar <http://www.railcraft.info>
- */
-public final class TileBoilerTankHigh extends TileBoilerTank {
+import mcp.MethodsReturnNonnullByDefault;
 
-    @Override
-    public EnumGui getGui() {
-        return EnumGui.TANK;
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

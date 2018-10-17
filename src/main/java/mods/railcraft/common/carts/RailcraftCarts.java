@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,9 +39,12 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -143,8 +146,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private final byte rarity;
     private final Function<RailcraftCarts, Item> itemSupplier;
     private final Definition def;
-    @Nullable
-    private final Supplier<ItemStack> contentsSupplier;
+    private final @Nullable Supplier<ItemStack> contentsSupplier;
 //    private Item item;
     private boolean isSetup;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
@@ -188,8 +190,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return fromClass(cart.getClass());
     }
 
-    @Nullable
-    public static IRailcraftCartContainer getCartType(@Nullable ItemStack cart) {
+    public static @Nullable IRailcraftCartContainer getCartType(@Nullable ItemStack cart) {
         if (cart == null)
             return null;
         if (cart.getItem() == Items.MINECART)

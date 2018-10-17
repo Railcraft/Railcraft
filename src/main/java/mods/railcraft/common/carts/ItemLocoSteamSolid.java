@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,7 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
     public void defineRecipes() {
         super.defineRecipes();
         ItemStack tank;
-        //TODO fix
+        //TODO fix, its all wrong
 //        if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
 //            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
 //        else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())

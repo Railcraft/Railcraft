@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.modules;
 
 import com.google.common.base.Throwables;
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
