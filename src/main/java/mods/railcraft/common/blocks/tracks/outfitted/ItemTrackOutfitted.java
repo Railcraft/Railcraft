@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted;
 
 import mods.railcraft.api.core.ILocalizedObject;
-import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
@@ -34,8 +34,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/*
+ * Note: the nbt for the item is as such:
+ * /give @s railcraft:track_outfitted 1 0 {railcraft:{rail:"railcraft_reinforced",kit:"railcraft_buffer"}
+ * Gives the sender a reinforced buffer stop track item.
+ *
+ * /give @s railcraft:track_outfitted 1 0 {railcraft:{rail:"railcraft:reinforced",kit:"railcraft:buffer"}
+ * This can be recognized too, but this one cannot stack with those from the creative tab (should be avoided).
+ */
 public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     public static final String MODEL_PREFIX = "track_outfitted_item.";
 
@@ -49,7 +58,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
-        ArrayList<ModelResourceLocation> textures = new ArrayList<>();
+        List<ModelResourceLocation> textures = new ArrayList<>();
         for (TrackType trackType : TrackRegistry.TRACK_TYPE) {
             for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
                 textures.add(new ModelResourceLocation(
@@ -72,24 +81,24 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
         return "tile.railcraft.track_outfitted";
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + getSuffix(stack);
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + getSuffix(stack);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String locTag = getUnlocalizedName(stack) + ".name";
+        String locTag = getTranslationKey(stack) + ".name";
         if (LocalizationPlugin.hasTag(locTag))
             return LocalizationPlugin.translateFast(locTag);
         Map<String, ILocalizedObject> args = new HashMap<>();
         args.put("track_type", TrackRegistry.TRACK_TYPE.get(stack));
         args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
-        return LocalizationPlugin.translateArgs(getUnlocalizedName() + ".name", args);
+        return LocalizationPlugin.translateArgs(getTranslationKey() + ".name", args);
     }
 
     @Override
@@ -106,8 +115,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
-            if (track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack))
-                return true;
+            return track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack);
         }
         return false;
     }

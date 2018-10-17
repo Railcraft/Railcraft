@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,9 +13,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ForwardingList;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,13 +75,11 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     public void refresh() {
     }
 
-    @Nonnull
+    @NotNull
     public List<String> convertToStrings() {
-        List<String> tips = new ArrayList<String>(size());
-        for (ToolTipLine line : this) {
-            tips.add(line.text);
-        }
-        return tips;
+        return stream()
+                .map(line -> line.text)
+                .collect(Collectors.toList());
     }
 
     public static ToolTip buildToolTip(List<String> lines) {
@@ -89,8 +88,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         return toolTip;
     }
 
-    @Nullable
-    public static ToolTip buildToolTip(String tipTag, String... vars) {
+    public static @Nullable ToolTip buildToolTip(String tipTag, String... vars) {
         if (!LocalizationPlugin.hasTag(tipTag))
             return null;
         try {

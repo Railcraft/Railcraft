@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -31,9 +31,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -46,9 +45,6 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     public short ticksToPower = 200;
     private SignalAspect aspect = SignalAspect.OFF;
     private final MultiButtonController<EnumStateMode> stateModeController = MultiButtonController.create(EnumStateMode.RISING_EDGE.ordinal(), EnumStateMode.values());
-
-    public TileBoxCapacitor() {
-    }
 
     public enum EnumStateMode implements IMultiButtonState {
         RISING_EDGE("rising"),
@@ -82,15 +78,13 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         return stateModeController;
     }
 
-    @Nonnull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.CAPACITOR;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return EnumGui.BOX_CAPACITOR;
     }
 
@@ -104,25 +98,24 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         if (ticksPowered > 0) {
             ticksPowered--;
             if (Objects.equals(stateModeController.getButtonState(), EnumStateMode.FALLING_EDGE)) { //new behavior
-                SignalAspect tmpaspect = SignalAspect.GREEN;
-                Boolean hasInput = false;
+                SignalAspect tmpAspect = SignalAspect.GREEN;
+                boolean hasInput = false;
                 if (PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos()))
                     hasInput = true;
-                for (int side = 2; side < 6; side++) { //get most restrictive aspect from adjacent (active) boxes
-                    EnumFacing forgeSide = EnumFacing.VALUES[side];
-                    TileEntity tile = tileCache.getTileOnSide(forgeSide);
+                for (EnumFacing side : EnumFacing.HORIZONTALS) { //get most restrictive aspect from adjacent (active) boxes
+                    TileEntity tile = tileCache.getTileOnSide(side);
                     if (tile instanceof TileBoxBase) {
                         TileBoxBase box = (TileBoxBase) tile;
-                        if (box.isEmittingRedstone(forgeSide.getOpposite())) {
+                        if (box.isEmittingRedstone(side.getOpposite())) {
                             hasInput = true;
-                            tmpaspect = SignalAspect.mostRestrictive(tmpaspect, box.getBoxSignalAspect(forgeSide.getOpposite()));
+                            tmpAspect = SignalAspect.mostRestrictive(tmpAspect, box.getBoxSignalAspect(side.getOpposite()));
                         }
                     }
                 }
                 if (hasInput) {
                     ticksPowered = ticksToPower; //undo any previous decrements
-                    if (!Objects.equals(aspect, tmpaspect)) {
-                        aspect = tmpaspect; //change to the most restrictive aspect found above.
+                    if (!Objects.equals(aspect, tmpAspect)) {
+                        aspect = tmpAspect; //change to the most restrictive aspect found above.
                         updateNeighbors();
                     }
                 }
@@ -134,7 +127,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos neighborPos) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
         super.onNeighborBlockChange(state, neighborBlock, neighborPos);
         if (world.isRemote)
             return;
@@ -171,9 +164,8 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
         return ticksPowered > 0 ? FULL_POWER : NO_POWER;
     }
 
-    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setShort("ticksPowered", ticksPowered);
@@ -184,7 +176,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         ticksPowered = data.getShort("ticksPowered");
@@ -198,7 +190,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(ticksPowered > 0);
@@ -208,7 +200,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         ticksPowered = (short) (data.readBoolean() ? 1 : 0);
@@ -218,14 +210,14 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeShort(ticksToPower);
         data.writeByte(stateModeController.getCurrentState());
 
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         ticksToPower = data.readShort();
         stateModeController.setCurrentState(data.readByte());
     }
@@ -237,7 +229,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler, 
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return ticksPowered > 0 ? aspect : SignalAspect.RED;
     }
 

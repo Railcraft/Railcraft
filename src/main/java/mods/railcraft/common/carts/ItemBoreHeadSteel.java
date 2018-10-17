@@ -44,8 +44,8 @@ public class ItemBoreHeadSteel extends ItemBoreHead {
     }
 
     @Override
-    public float getDigModifier() {
-        return 1.2f;
+    public double getDigModifier() {
+        return 1.25d;
     }
 
     @Override

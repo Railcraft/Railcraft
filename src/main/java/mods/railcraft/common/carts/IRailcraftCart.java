@@ -22,8 +22,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import org.apache.commons.lang3.ArrayUtils;
 
-import javax.annotation.Nullable;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -36,15 +37,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
-public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> implements ISidedInventory {
+public final class TileCokeOven extends TileMultiBlockOven implements ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -122,13 +122,8 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
         }
     }
 
-    @Override
-    protected Class<TileCokeOven> defineCommonClass() {
-        return TileCokeOven.class;
-    }
-
     public TankManager getTankManager() {
-        TileCokeOven mBlock = getMasterBlock();
+        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;
@@ -148,20 +143,20 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
     public int getTotalCookTime() {
-        TileCokeOven mBlock = getMasterBlock();
+        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
         if (mBlock != null)
             return mBlock.cookTimeTotal;
         return 3600;
     }
 
     public int getBurnProgressScaled(int i) {
-        return ((getTotalCookTime() - getMasterCookTime()) * i) / getTotalCookTime();
+        return ((getTotalCookTime() - getCookTime()) * i) / getTotalCookTime();
     }
 
     @Override
@@ -181,7 +176,7 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
                         setCooking(false);
 
                 ItemStack input = getStackInSlot(SLOT_INPUT);
-                if (!InvTools.isEmpty(input) && !InvTools.isSynthetic(input)) {
+                if (!InvTools.isEmpty(input)) {
                     if (!paused && clock % COOK_STEP_LENGTH == 0) {
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
                         ICokeOvenRecipe recipe = CokeOvenCraftingManager.getInstance().getRecipe(input);
@@ -240,9 +235,9 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileCokeOven masterBlock = getMasterBlock();
-        if (masterBlock != null && isStructureValid()) {
-            GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, masterBlock.getPos());
+        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
+        if (mBlock != null && isStructureValid()) {
+            GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, mBlock.getPos());
             return true;
         }
         return false;
@@ -298,15 +293,42 @@ public final class TileCokeOven extends TileMultiBlockOven<TileCokeOven> impleme
     @Override
     public IBlockState getActualState(IBlockState base) {
         return getPatternMarker() == 'W'
-                ? isMasterBurning()
+                ? isBurning()
                 ? base.withProperty(BlockCokeOven.ICON, 2)
                 : base.withProperty(BlockCokeOven.ICON, 1)
                 : base.withProperty(BlockCokeOven.ICON, 0);
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.COKE_OVEN;
+    }
+
+    @Override
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
+        IBlockState other = WorldPlugin.getBlockState(world, pos);
+        switch (mapPos) {
+            case 'O': // Other
+                if (RailcraftBlocks.COKE_OVEN.isEqual(other) || RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'W': // Window
+            case 'B': // Block
+                if (!RailcraftBlocks.COKE_OVEN.isEqual(other) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                    return false;
+                break;
+            case 'A': // Air
+                if (!other.getBlock().isAir(other, world, pos))
+                    return false;
+                break;
+            case '*': // Anything
+                return true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return !RailcraftBlocks.COKE_OVEN.isEqual(newState) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(newState);
     }
 }

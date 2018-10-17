@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -24,13 +24,11 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,7 +36,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFireboxSolid> {
+public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;
@@ -56,9 +54,9 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         IInventoryObject inventoryObject = InventoryFactory.get(tile);
         return inventoryObject != null && inventoryObject.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
-    private InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
-    private InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
-    private InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
+    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private boolean needsFuel;
 
     public TileBoilerFireboxSolid() {
@@ -70,9 +68,8 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
-                //TODO
-//                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getDefaultState());
-//                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getDefaultState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getDefaultState());
+                blockMapping.put('F', RailcraftBlocks.BOILER_FIREBOX_SOLID.getDefaultState());
+                blockMapping.put('H', highPressure ? RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.getDefaultState() : RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.getDefaultState());
                 TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
                 if (tile instanceof TileBoilerFireboxSolid) {
                     TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
@@ -85,21 +82,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
                 return;
             }
         }
-    }
-
-    @Override
-    protected Class<TileBoilerFireboxSolid> defineMasterClass() {
-        return TileBoilerFireboxSolid.class;
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileBoilerFireboxSolid mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -121,7 +103,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
             needsFuel = !InvTools.numItemsMoreThan(invFuel, 64);
 
         if (needsFuel()) {
-            TileBoilerFireboxSolid mBlock = getMasterBlock();
+            TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
                 InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StandardStackFilters.FUEL);
@@ -156,7 +138,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFireboxSolid mBlock = getMasterBlock();
+        TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
         return mBlock != null && mBlock.needsFuel;
     }
 
@@ -165,7 +147,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         return false;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_SOLID;

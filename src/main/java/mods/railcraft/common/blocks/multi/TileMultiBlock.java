@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,11 +13,12 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.events.MultiBlockEvent.Form;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -34,50 +35,45 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * @param <T> The least common component tile class, might not be the same as self class
- */
-public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T> extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile<T, M> {
+public abstract class TileMultiBlock extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
-    private static final int NETWORK_RECHECK = 64;
-    protected final Class<T> componentClass = defineCommonClass();
-    protected final Class<M> masterClass = defineMasterClass();
+    private static final int NETWORK_RECHECK = 16;
     private final Timer netTimer = new Timer();
-    protected final List<MultiBlockPattern> patterns;
-    protected final List<T> components = new ArrayList<>();
-    protected final List<T> componentsView = Collections.unmodifiableList(components);
+    private final List<? extends MultiBlockPattern> patterns;
+    private final List<TileMultiBlock> components = new ArrayList<>();
+    private final List<TileMultiBlock> componentsView = Collections.unmodifiableList(components);
     public final ListMultimap<MultiBlockStateReturn, Integer> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockStateReturn.class), ArrayList::new);
     protected boolean isMaster;
-    private BlockPos posInPattern;
-    protected boolean tested;
+    private BlockPos posInPattern = new BlockPos(0, 0, 0);
+    private boolean tested;
     private boolean requestPacket;
     private MultiBlockState state;
-    private M masterBlock;
+    private @Nullable TileMultiBlock masterBlock;
     private MultiBlockPattern currentPattern;
-    private UUID uuidMaster;
+    private @Nullable UUID uuidMaster;
 
-    protected TileMultiBlock(List<MultiBlockPattern> patterns) {
+    protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
         tested = FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER;
     }
 
-    protected abstract Class<T> defineCommonClass();
+    public @Nullable UUID getMasterUUID() {
+        return uuidMaster;
+    }
 
-    protected abstract Class<M> defineMasterClass();
-
-    public List<T> getComponents() {
+    public List<TileMultiBlock> getComponents() {
         return componentsView;
     }
 
@@ -85,7 +81,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
     protected void onMasterChanged() {
     }
 
-    protected void setMaster(M master) {
+    private void setMaster(TileMultiBlock master) {
         this.masterBlock = master;
 
         if (uuidMaster != null && !uuidMaster.equals(master.getUUID()))
@@ -99,7 +95,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
 
     protected void onPatternChanged() {
         if (!isMaster && this instanceof IInventory)
-            InvTools.dropInventory((IInventory) this, world, getPos());
+            InvTools.dropInventory(new InventoryMapper((IInventory) this), world, getPos());
     }
 
     public final char getPatternMarker() {
@@ -108,11 +104,12 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         return currentPattern.getPatternMarker(posInPattern.getX(), posInPattern.getY(), posInPattern.getZ());
     }
 
+    @Override
     public final BlockPos getPatternPosition() {
         return posInPattern;
     }
 
-    protected void setPatternPosition(int x, int y, int z) {
+    private void setPatternPosition(int x, int y, int z) {
         posInPattern = new BlockPos(x, y, z);
     }
 
@@ -135,6 +132,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         return 12;
     }
 
+    @Override
     public MultiBlockState getState() {
         return state;
     }
@@ -144,7 +142,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         super.update();
         if (Game.isHost(world)) {
             if (!tested && (state != MultiBlockState.UNKNOWN || clock % UNKNOWN_STATE_RECHECK == 0))
-                testIfMasterBlock();
+                testIfMasterBlock(); //                ClientProxy.getMod().totalMultiBlockUpdates++;
         } else if (requestPacket && netTimer.hasTriggered(world, NETWORK_RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(this));
             requestPacket = false;
@@ -180,13 +178,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
                         BlockPos pos = new BlockPos(px, py, pz).add(offset);
 
                         TileEntity tile = world.getTileEntity(pos);
-                        if (componentClass.isInstance(tile)) {
-                            T multiBlock = componentClass.cast(tile);
+                        if (tile instanceof TileMultiBlock) {
+                            TileMultiBlock multiBlock = (TileMultiBlock) tile;
                             if (multiBlock != this)
                                 multiBlock.components.clear();
                             components.add(multiBlock);
                             multiBlock.tested = true;
-                            multiBlock.setMaster(masterClass.cast(this));
+                            multiBlock.setMaster(this);
                             multiBlock.setPattern(currentPattern);
                             multiBlock.setPatternPosition(px, py, pz);
                             multiBlock.sendUpdateToClient();
@@ -194,6 +192,8 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
                     }
                 }
             }
+
+            MinecraftForge.EVENT_BUS.post(new Form(this));
         } else if (isMaster) {
             isMaster = false;
             onMasterReset();
@@ -220,8 +220,6 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         IBlockState self = getBlockState();
         IBlockState other = WorldPlugin.getBlockState(world, pos);
-//        Block block = other.getBlock();
-//        int meta = block.getMetaFromState(other);
         switch (mapPos) {
             case 'O': // Other
                 if (self == other)
@@ -328,7 +326,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         for (EnumFacing side : EnumFacing.VALUES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (isStructureTile(tile))
-                ((TileMultiBlock<?, ?>) tile).onBlockChange(getMaxRecursionDepth());
+                ((TileMultiBlock) tile).onBlockChange(getMaxRecursionDepth());
         }
     }
 
@@ -339,7 +337,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         if (tested) {
             tested = false;
 
-            TileMultiBlock<T, M> mBlock = getMasterBlock();
+            TileMultiBlock mBlock = getMasterBlock();
             if (mBlock != null) {
                 mBlock.onBlockChange(getMaxRecursionDepth());
                 return;
@@ -348,21 +346,21 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
             for (EnumFacing side : EnumFacing.VALUES) {
                 TileEntity tile = tileCache.getTileOnSide(side);
                 if (isStructureTile(tile))
-                    ((TileMultiBlock<?, ?>) tile).onBlockChange(depth);
+                    ((TileMultiBlock) tile).onBlockChange(depth);
             }
         }
     }
 
     @Contract("null -> false")
     protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return componentClass.isInstance(tile);
+        return tile != null && tile.getClass() == getClass();
     }
 
     @Override
     public void markDirty() {
         super.markDirty();
         if (!isMaster) {
-            T mBlock = getMasterBlock();
+            TileMultiBlock mBlock = getMasterBlock();
             if (mBlock != null)
                 mBlock.markDirty();
         }
@@ -408,12 +406,6 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
         }
     }
 
-    @Nonnull
-    @Override
-    public String getLocalizationTag() {
-        return getBlockType().getUnlocalizedName() + ".name";
-    }
-
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
@@ -451,7 +443,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
             if (tile != null)
                 if (masterBlock != tile && isStructureTile(tile)) {
                     needsRenderUpdate = true;
-                    masterBlock = masterClass.cast(tile);
+                    masterBlock = (TileMultiBlock) tile;
                 }
             if (getMasterBlock() == null)
                 requestPacket = true;
@@ -469,6 +461,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
 //        System.out.printf("tested=%b, invalid=%b, isMaster=%b%n" ,masterBlock.tested, masterBlock.isInvalid(), masterBlock.isMaster());
     }
 
+    @Override
     public final boolean isMaster() {
         return isMaster;
     }
@@ -484,12 +477,13 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
             masterBlock.tested = false;
     }
 
+    @Override
     public final boolean isStructureValid() {
         return masterBlock != null && masterBlock.tested && masterBlock.isMaster && !masterBlock.isInvalid();
     }
 
-    @Nullable
-    public final M getMasterBlock() {
+    @Override
+    public final @Nullable TileMultiBlock getMasterBlock() {
         if (masterBlock != null && !isStructureValid()) {
             masterBlock = null;
             sendUpdateToClient();
@@ -499,36 +493,18 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        T masterBlock = getMasterBlock();
-        if (masterBlock != null && isStructureValid()) {
-            GuiHandler.openGui(getGui(), player, world, masterBlock.getPos());
+        TileMultiBlock masterBlock = getMasterBlock();
+
+        if (masterBlock != null && isStructureValid() && masterBlock.getGui() != null) {
+            GuiHandler.openGui(masterBlock.getGui(), player, world, masterBlock.getPos());
             return true;
         }
         return false;
     }
 
-    @Nonnull
-    @Override
-    public abstract EnumGui getGui();
-
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return (!(isStructureValid() && getPatternPosition().getY() < 2));
-    }
-
-    @Override
-    public TileEntity tile() {
-        return this;
-    }
-
-    @Override
-    public Class<M> getMasterType() {
-        return masterClass;
-    }
-
-    @Override
-    public Class<T> getCommonType() {
-        return componentClass;
     }
 
     @Override
@@ -537,7 +513,7 @@ public abstract class TileMultiBlock<T extends TileMultiBlock<T, M>, M extends T
     }
 
     @Override
-    public Collection<MultiBlockPattern> getPatterns() {
+    public Collection<? extends MultiBlockPattern> getPatterns() {
         return patterns;
     }
 

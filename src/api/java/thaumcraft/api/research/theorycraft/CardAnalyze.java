@@ -58,17 +58,13 @@ public class CardAnalyze extends TheorycraftCard {
 	
 	@Override
 	public String getLocalizedName() {
-		return new TextComponentTranslation("card.analyze.name", new Object[] {
-				TextFormatting.DARK_BLUE+""+TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET
-				}).getUnformattedText();
+		return new TextComponentTranslation("card.analyze.name", TextFormatting.DARK_BLUE+""+TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 	
 	@Override
 	public String getLocalizedText() {
-		return new TextComponentTranslation("card.analyze.text", new Object[] {
-				TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET,
-				TextFormatting.BOLD+new TextComponentTranslation("tc.research_category.BASICS").getFormattedText()+TextFormatting.RESET
-				}).getUnformattedText();
+		return new TextComponentTranslation("card.analyze.text", TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat).getFormattedText()+TextFormatting.RESET,
+                TextFormatting.BOLD+new TextComponentTranslation("tc.research_category.BASICS").getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 	
 	@Override

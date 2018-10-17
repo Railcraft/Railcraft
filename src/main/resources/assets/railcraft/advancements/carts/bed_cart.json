@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:cart_bed"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.bed_cart.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.bed_cart.desc"
+    }
+  },
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "linking": {
+      "trigger": "railcraft:bed_cart_sleep",
+      "conditions": {
+      }
+    }
+  }
+}

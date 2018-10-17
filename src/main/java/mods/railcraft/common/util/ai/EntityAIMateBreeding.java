@@ -16,9 +16,8 @@ import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.*;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -95,7 +94,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
             return false;
         }
 
-        List<EntityAnimal> nearbyEntities = theAnimal.world.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
+        List<EntityAnimal> nearbyEntities = theAnimal.world.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().grow(1));
         if (nearbyEntities.size() > MAX_ANIMALS) {
             return false;
         }
@@ -144,7 +143,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
     @Nullable
     private EntityAnimal getNearbyMate() {
         float var1 = 8.0F;
-        List<EntityAnimal> var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().expand((double) var1, (double) var1, (double) var1));
+        List<EntityAnimal> var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().grow(var1));
         Iterator<EntityAnimal> entity = var2.iterator();
         EntityAnimal target;
 

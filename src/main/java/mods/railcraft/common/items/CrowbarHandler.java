@@ -11,7 +11,8 @@ package mods.railcraft.common.items;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.carts.ILinkableCart;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleSeasonal;
@@ -24,6 +25,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
@@ -52,7 +54,7 @@ public class CrowbarHandler {
         Entity entity = event.getEntity();
         EnumHand hand = event.getHand();
 
-        if (event.getItem() != null && event.getItem().getItem() instanceof IToolCrowbar)
+        if (event.getItem().getItem() instanceof IToolCrowbar)
             event.setCanceled(true);
 
         ItemStack stack = event.getItem();
@@ -73,6 +75,7 @@ public class CrowbarHandler {
                     && RailcraftModuleManager.isModuleEnabled(ModuleSeasonal.class)) {
                 SeasonPlugin.Season season = ItemCrowbarSeasons.getCurrentSeason(stack);
                 ((IRailcraftCart) cart).setSeason(season);
+                RailcraftAdvancementTriggers.getInstance().onSeasonSet((EntityPlayerMP) thePlayer, cart, season);
             } else if (RailcraftModuleManager.isModuleEnabled(ModuleTrain.class)
                     && crowbar.canLink(thePlayer, hand, stack, cart)) {
                 linkCart(thePlayer, hand, stack, cart, crowbar);
@@ -111,7 +114,7 @@ public class CrowbarHandler {
     }
 
     private void boostCart(EntityPlayer player, EnumHand hand, ItemStack stack, EntityMinecart cart, IToolCrowbar crowbar) {
-        player.addExhaustion(1F);
+        player.addExhaustion(.25F);
 
         //noinspection StatementWithEmptyBody
         if (player.getRidingEntity() != null) {

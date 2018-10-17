@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class TileChargeFeederAdmin extends TileCharge {
     private static class InfiniteBattery extends IChargeBlock.ChargeBattery {
-        private boolean enabled;
+        boolean enabled;
 
         @Override
         public double getMaxDraw() {

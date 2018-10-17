@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileTanks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -31,9 +31,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -49,7 +48,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     protected TileEngineSteam() {
         tankSteam = new FilteredTank(TANK_CAPACITY, this);
-        tankSteam.setFilter(Fluids.STEAM::get);
+        tankSteam.setFilter(Fluids.STEAM);
         tankManager.add(tankSteam);
     }
 
@@ -166,7 +165,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
     }
 
     @Override
-    @Nonnull
+
     public TankManager getTankManager() {
         return tankManager;
     }

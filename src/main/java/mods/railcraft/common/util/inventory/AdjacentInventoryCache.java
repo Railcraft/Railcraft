@@ -15,7 +15,7 @@ import mods.railcraft.common.util.misc.AdjacentTileCache;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.EnumSet;

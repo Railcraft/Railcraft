@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/12/2016 for Railcraft.

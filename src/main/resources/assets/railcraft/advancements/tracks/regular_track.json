@@ -1,0 +1,56 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:rail"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.regular_track.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.regular_track.desc"
+    }
+  },
+  "parent": "railcraft:tracks/manual_rolling_machine",
+  "criteria": {
+    "iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track",
+            "track_type": "railcraft:iron"
+          }
+        ]
+      }
+    },
+    "abandoned": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track",
+            "track_type": "railcraft:abandoned"
+          }
+        ]
+      }
+    },
+    "electric": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "railcraft:is_track",
+            "track_type": "railcraft:electric"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "abandoned",
+      "electric",
+      "iron"
+    ]
+  ]
+}

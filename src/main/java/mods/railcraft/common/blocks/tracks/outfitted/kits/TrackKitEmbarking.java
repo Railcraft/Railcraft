@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
@@ -38,7 +38,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -92,7 +92,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
         if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
-            box = box.expand(a, a, a);
+            box = box.grow(a, a, a);
             List<EntityLivingBase> entities = theWorldAsserted().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
             if (entities.size() > 0) {

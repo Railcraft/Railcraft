@@ -9,9 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.filters;
 
-import mods.railcraft.api.core.RailcraftStackFilters;
-import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.items.IMinecartItem;
+import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -23,10 +22,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -36,7 +33,7 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum StandardStackFilters implements Predicate<ItemStack> {
+public enum StandardStackFilters implements Predicate<@Nullable ItemStack> {
 
     ALL {
         @Override
@@ -102,14 +99,6 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
         }
 
     };
-
-    public static void initialize() {
-        Map<String, Predicate<ItemStack>> filters = new HashMap<>();
-        for (StandardStackFilters type : StandardStackFilters.values()) {
-            filters.put(type.name(), type);
-        }
-        RailcraftStackFilters.init(filters);
-    }
 
     @Override
     @Contract("null->false")

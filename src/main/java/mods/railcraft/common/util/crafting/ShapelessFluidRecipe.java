@@ -49,7 +49,7 @@ public class ShapelessFluidRecipe extends BaseRecipe {
     protected int[] drains;
 
     public ShapelessFluidRecipe(ItemStack result, Object... recipe) {
-        super(CraftingPlugin.getGenerator().next().getResourcePath());
+        super(CraftingPlugin.getGenerator().next().getPath());
         output = result.copy();
         for (Object in : recipe) {
             if (in instanceof ItemStack) {

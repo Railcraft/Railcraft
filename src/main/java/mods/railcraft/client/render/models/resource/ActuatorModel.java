@@ -27,8 +27,8 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -122,12 +122,12 @@ public class ActuatorModel implements IModel {
 
             @Override
             public boolean accepts(ResourceLocation modelLocation) {
-                return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                        && modelLocation.getResourcePath().startsWith("actuator") && !modelLocation.getResourcePath().startsWith("actuator_");
+                return Objects.equals(modelLocation.getNamespace(), "railcraft")
+                        && modelLocation.getPath().startsWith("actuator") && !modelLocation.getPath().startsWith("actuator_");
             }
 
             @Override
-            public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+            public IModel loadModel(ResourceLocation modelLocation) {
                 return ActuatorModel.INSTANCE;
             }
         }

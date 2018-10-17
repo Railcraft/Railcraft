@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import net.minecraft.block.BlockRailBase;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
@@ -21,7 +21,7 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackShapeHelper {
+public final class TrackShapeHelper {
     public static boolean isLevelStraight(@Nullable BlockRailBase.EnumRailDirection dir) {
         return dir != null && dir.ordinal() < 2;
     }

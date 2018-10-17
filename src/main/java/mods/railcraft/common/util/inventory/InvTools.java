@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,8 @@
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.api.core.items.IFilterItem;
-import mods.railcraft.api.core.items.InvToolsAPI;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.api.items.IFilterItem;
+import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
@@ -29,6 +28,7 @@ import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -48,12 +48,14 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue", "unused"})
 public abstract class InvTools {
@@ -136,6 +138,13 @@ public abstract class InvTools {
         return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
     }
 
+    public static ItemStack copyOne(ItemStack stack) {
+        ItemStack ret = copy(stack);
+        if (!isEmpty(ret))
+            ret.setCount(1);
+        return ret;
+    }
+
     public static boolean canMerge(ItemStack target, ItemStack source) {
         return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }
@@ -172,8 +181,7 @@ public abstract class InvTools {
 //        return map;
 //    }
 
-    @Nullable
-    public static IItemHandler getItemHandler(@Nullable Object obj) {
+    public static @Nullable IItemHandler getItemHandler(@Nullable Object obj) {
         if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
             return ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         }
@@ -181,28 +189,25 @@ public abstract class InvTools {
     }
 
     public static int[] buildSlotArray(int start, int size) {
-        int[] slots = new int[size];
-        for (int i = 0; i < size; i++) {
-            slots[i] = start + i;
-        }
-        return slots;
+        return IntStream.range(0, size).map(i -> start + i).toArray();
     }
 
-    public static boolean isSynthetic(ItemStack stack) {
-        NBTTagCompound nbt = stack.getTagCompound();
-        return nbt != null && nbt.hasKey("synthetic");
-    }
-
-    @SuppressWarnings("unused")
-    public static void markItemSynthetic(ItemStack stack) {
-        NBTTagCompound nbt = getItemData(stack);
-        nbt.setBoolean("synthetic", true);
-        NBTTagCompound display = nbt.getCompoundTag("display");
-        nbt.setTag("display", display);
-        NBTTagList lore = display.getTagList("Lore", 8);
-        display.setTag("Lore", lore);
-        lore.appendTag(new NBTTagString("\u00a77\u00a7o" + LocalizationPlugin.translate("item.synthetic")));
-    }
+//    @Deprecated
+//    public static boolean isSynthetic(ItemStack stack) {
+//        NBTTagCompound nbt = stack.getTagCompound();
+//        return nbt != null && nbt.hasKey("synthetic");
+//    }
+//
+//    @SuppressWarnings("unused")
+//    public static void markItemSynthetic(ItemStack stack) {
+//        NBTTagCompound nbt = getItemData(stack);
+//        nbt.setBoolean("synthetic", true);
+//        NBTTagCompound display = nbt.getCompoundTag("display");
+//        nbt.setTag("display", display);
+//        NBTTagList lore = display.getTagList("Lore", 8);
+//        display.setTag("Lore", lore);
+//        lore.appendTag(new NBTTagString("\u00a77\u00a7o" + LocalizationPlugin.translate("item.synthetic")));
+//    }
 
     public static void addItemToolTip(ItemStack stack, String msg) {
         NBTTagCompound nbt = getItemData(stack);
@@ -213,7 +218,7 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
-    @Nonnull
+    @NotNull
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -321,8 +326,8 @@ public abstract class InvTools {
     public static void validateInventory(IInventory inv, World world, BlockPos pos) {
         for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
             ItemStack stack = slot.getStack();
-            if (stack != null && !inv.isItemValidForSlot(slot.getIndex(), stack)) {
-                slot.setStack(null);
+            if (!isEmpty(stack) && !inv.isItemValidForSlot(slot.getIndex(), stack)) {
+                slot.setStack(emptyStack());
                 dropItem(stack, world, pos);
             }
         }
@@ -350,6 +355,29 @@ public abstract class InvTools {
             }
         }
         return false;
+    }
+
+    /**
+     * Usually used during train transfers.
+     *
+     * @param inv The inventory to be filled
+     * @return A predicate, to be combined with original one to request items
+     */
+    public static Predicate<ItemStack> getFillingChecker(IInventoryComposite inv) {
+        Collection<ItemStack> stacksPossible = new ArrayList<>();
+        for (IInventoryObject inventoryObject : inv) {
+            for (IInvSlot slot : InventoryIterator.getRailcraft(inventoryObject)) {
+                if (!slot.hasStack()) {
+                    return Predicates.alwaysTrue();
+                } else {
+                    ItemStack stack = slot.getStack();
+                    if (stack.getCount() < stack.getMaxStackSize()) {
+                        stacksPossible.add(stack);
+                    }
+                }
+            }
+        }
+        return stacksPossible.isEmpty() ? Predicates.alwaysFalse() : StackFilters.anyOf(stacksPossible);
     }
 
     public static int countMaxItemStackSize(IInventoryComposite inv) {
@@ -462,7 +490,6 @@ public abstract class InvTools {
      * @param dest   the destination inventory
      * @return null if nothing was moved, the stack moved otherwise
      */
-    @Nullable
     public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest) {
         return moveOneItem(source, dest, Predicates.alwaysTrue());
     }
@@ -522,23 +549,23 @@ public abstract class InvTools {
         return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
     }
 
-    @Contract("null,_->false;")
-    public static boolean isItem(@Nullable ItemStack stack, @Nullable Item item) {
-        return isEmpty(stack) && item != null && stack.getItem() == item;
+    @Contract("_,null->false;")
+    public static boolean isItem(ItemStack stack, @Nullable Item item) {
+        return !isEmpty(stack) && item != null && stack.getItem() == item;
     }
 
     @Contract("null,_->false;")
-    public static boolean isItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean isItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
         return !isEmpty(stack) && stack.getItem().getClass() == itemClass;
     }
 
     @Contract("null,_->false;")
-    public static boolean extendsItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean extendsItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
         return isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
-    public static boolean matchesFilter(@Nullable ItemStack filter, @Nullable ItemStack stack) {
-        if (stack == null || filter == null)
+    public static boolean matchesFilter(ItemStack filter, ItemStack stack) {
+        if (isEmpty(stack) || isEmpty(filter))
             return false;
         if (filter.getItem() instanceof IFilterItem) {
             return ((IFilterItem) filter.getItem()).matches(filter, stack);
@@ -561,7 +588,7 @@ public abstract class InvTools {
      * @return True if equal
      */
     @SuppressWarnings("SimplifiableIfStatement")
-    @Contract("null,null->true;null,!null->false;!null,null->false;")
+    @Contract("null,null->true")
     public static boolean isItemEqualStrict(@Nullable ItemStack a, @Nullable ItemStack b) {
         if (isEmpty(a) && isEmpty(b))
             return true;
@@ -631,7 +658,7 @@ public abstract class InvTools {
     }
 
     @Contract("null,_,_,_ -> false;_,null,_,_ -> false;")
-    public static boolean isItemEqual(@Nullable final ItemStack a, @Nullable final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
+    public static boolean isItemEqual(final @Nullable ItemStack a, final @Nullable ItemStack b, final boolean matchDamage, final boolean matchNBT) {
         if (isEmpty(a) || isEmpty(b))
             return false;
         if (a.getItem() != b.getItem())
@@ -641,14 +668,13 @@ public abstract class InvTools {
         if (matchDamage && a.getHasSubtypes()) {
             if (isWildcard(a) || isWildcard(b))
                 return true;
-            if (a.getItemDamage() != b.getItemDamage())
-                return false;
+            return a.getItemDamage() == b.getItemDamage();
         }
         return true;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isCartItemEqual(@Nullable final ItemStack a, @Nullable final ItemStack b, final boolean matchDamage) {
+    public static boolean isCartItemEqual(final @Nullable ItemStack a, final @Nullable ItemStack b, final boolean matchDamage) {
         if (!isItemEqual(a, b, matchDamage, false))
             return false;
         return !(a.hasDisplayName() && !a.getDisplayName().equals(b.getDisplayName()));
@@ -681,6 +707,7 @@ public abstract class InvTools {
         return isItemEqual(stackA, stackB) && sizeOf(stackA) >= sizeOf(stackB);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @Contract("null,_ -> false;_,null -> false;")
     public static boolean isItemLessThanOrEqualTo(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
         return isItemEqual(stackA, stackB) && sizeOf(stackA) <= sizeOf(stackB);
@@ -951,31 +978,29 @@ public abstract class InvTools {
         return !(isEmpty(stack) || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 
-    @Nullable
+    /**
+     * @deprecated As of MC 1.12, replaced by
+     * {@link #getBlockStateFromStack(ItemStack)} }
+     */
     @Deprecated
-    public static Block getBlockFromStack(ItemStack stack) {
-        if (stack.getItem() instanceof ItemBlock)
-            return ((ItemBlock) stack.getItem()).getBlock();
-        return null;
+    public static @Nullable Block getBlockFromStack(ItemStack stack) {
+        return GameData.getBlockItemMap().inverse().get(stack.getItem());
+//        if (stack.getItem() instanceof ItemBlock)
+//            return ((ItemBlock) stack.getItem()).getBlock();
+//        return null;
     }
 
-    @Nullable
     @SuppressWarnings("deprecation")
-    @Contract("null->null")
-    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack) {
+    public static IBlockState getBlockStateFromStack(ItemStack stack) {
         if (isEmpty(stack))
-            return null;
+            return Blocks.AIR.getDefaultState();
         Item item = stack.getItem();
-        if (item instanceof ItemBlock) {
-            int meta = item.getMetadata(stack.getMetadata());
-            return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
-        }
-        return null;
+        Block block = GameData.getBlockItemMap().inverse().get(stack.getItem());
+        return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
     }
 
-    @Nullable
     @Contract("null,_,_->null")
-    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack, World world, BlockPos pos) {
+    public static @Nullable IBlockState getBlockStateFromStack(@Nullable ItemStack stack, World world, BlockPos pos) {
         if (isEmpty(stack))
             return null;
         Item item = stack.getItem();
@@ -985,6 +1010,7 @@ public abstract class InvTools {
                 return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()), EnumHand.MAIN_HAND);
                 //TODO fix get state for placement for that hand
             else
+                //noinspection deprecation
                 return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
         }
         return null;

@@ -16,7 +16,7 @@ public interface IRevealer {
 	/*
 	 * If this method returns true the nodes will be visible.
 	 */
-	public boolean showNodes(ItemStack itemstack, EntityLivingBase player);
+    boolean showNodes(ItemStack itemstack, EntityLivingBase player);
 	
 
 }

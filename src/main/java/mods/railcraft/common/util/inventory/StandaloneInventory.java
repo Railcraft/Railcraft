@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,8 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -39,10 +39,10 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 public class StandaloneInventory implements IInventory, IInventoryObject, IInventoryComposite {
 
-    @Nullable
-    private final String name;
-    @Nullable
-    private final Callback callback;
+    public static final StandaloneInventory ZERO_SIZE_INV = new StandaloneInventory(0);
+
+    private final @Nullable String name;
+    private final @Nullable Callback callback;
     private final ItemStack[] contents;
     private int inventoryStackLimit = 64;
 
@@ -89,11 +89,7 @@ public class StandaloneInventory implements IInventory, IInventoryObject, IInven
 
     @Override
     public boolean isEmpty() {
-        for (ItemStack stack : contents) {
-            if (!InvTools.isEmpty(stack))
-                return false;
-        }
-        return true;
+        return Arrays.stream(contents).allMatch(InvTools::isEmpty);
     }
 
     @Override

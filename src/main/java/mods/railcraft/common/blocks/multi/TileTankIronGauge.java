@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,27 +9,26 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.EnumSet;
 import java.util.Random;
-
-import static net.minecraft.util.EnumFacing.Axis.X;
-import static net.minecraft.util.EnumFacing.Axis.Z;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronGauge extends TileTankBase implements ITileLit {
 
-    private int lightValue = 0;
+    private int lightValue;
     private final Timer timer = new Timer();
 
     @Override
@@ -50,36 +49,31 @@ public class TileTankIronGauge extends TileTankBase implements ITileLit {
     }
 
     private void updateLightValue() {
-        Fluid fluid = getTank().getFluidType();
-        lightValue = fluid != null ? fluid.getLuminosity() : 0;
+        StandardTank tank = getTank();
+        if (tank == null) {
+            lightValue = 0;
+        } else {
+            Fluid fluid = getTank().getFluidType();
+            lightValue = fluid != null ? fluid.getLuminosity() : 0;
+        }
     }
 
     @Override
-    public IBlockState getActualState(IBlockState base) {
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
         if (!isStructureValid()) {
-            return base;
+            return state;
         }
 
-        boolean upConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.UP)) == getBlockType();
-        boolean downConnected = WorldPlugin.getBlock(world, this.pos.offset(EnumFacing.DOWN)) == getBlockType();
+        EnumSet<BlockStrengthGlass.Position> neighbors = EnumSet.noneOf(BlockStrengthGlass.Position.class);
 
-        if (upConnected) {
-            if (downConnected) {
-                base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.MIDDLE);
-            } else {
-                base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.BOTTOM);
-            }
-        } else {
-            if (downConnected) {
-                base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.TOP);
-            } else {
-                base = base.withProperty(BlockTankIronGauge.POSITION, BlockTankIronGauge.ColumnPosition.SINGLE);
-            }
-        }
+        if (WorldPlugin.getBlockState(world, pos.up()) == state)
+            neighbors.add(BlockStrengthGlass.Position.TOP);
 
-        char c = getPattern().getPatternMarkerChecked(getPatternPosition().north());
-        base = base.withProperty(BlockTankIronGauge.AXIS, c == 'A' || c == MultiBlockPattern.EMPTY_PATTERN ? X : Z);
+        if (WorldPlugin.getBlockState(world, pos.down()) == state)
+            neighbors.add(BlockStrengthGlass.Position.BOTTOM);
 
-        return base;
+        state = state.withProperty(BlockTankIronGauge.POSITION, BlockStrengthGlass.Position.patterns.get(neighbors));
+        return state;
     }
 }

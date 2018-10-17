@@ -21,7 +21,7 @@ public class ItemRebar extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(this, 4),
+        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",
@@ -50,6 +50,24 @@ public class ItemRebar extends ItemRailcraft {
                 " I ",
                 "I  ",
                 'I', "ingotSteel");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 8),
+                "  I",
+                " I ",
+                "I  ",
+                'I', "ingotDarkSteel");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 16),
+                "  I",
+                " I ",
+                "I  ",
+                'I', "ingotTungsten");
+
+        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 16),
+                "  I",
+                " I ",
+                "I  ",
+                'I', "ingotTitanium");
 
     }
 

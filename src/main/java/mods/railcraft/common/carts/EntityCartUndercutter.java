@@ -32,8 +32,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -174,7 +174,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
                 SoundHelper.playBlockSound(world, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
-                    CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
+                    CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
                 }
                 blink();
             }
@@ -190,6 +190,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             int existMeta = OreDictionary.WILDCARD_VALUE;
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
+            //TODO wrong
             Block stackBlock = InvTools.getBlockFromStack(stack);
             return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.DIRT && stackBlock == Blocks.GRASS);
         }
@@ -237,7 +238,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_UNDERCUTTER;

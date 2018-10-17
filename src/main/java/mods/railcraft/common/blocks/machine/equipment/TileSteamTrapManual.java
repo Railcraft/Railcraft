@@ -9,8 +9,7 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.gui.EnumGui;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -27,8 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
 
     public static final float SENSITIVITY = 0.2f;
     public int powerState;
-    @Nonnull
+    @NotNull
     public Detector detector = Detector.DUMMY;
     //    private boolean tested;
     private int powerDelay;
@@ -58,7 +58,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     public ItemStack getRoutingTable() {
         if (detector instanceof ITileRouting)
             return ((ITileRouting) detector).getRoutingTable();
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -166,11 +166,6 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     }
 
     @Override
-    public short getId() {
-        return 76;
-    }
-
-    @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
         detector.writeGuiData(data);
     }
@@ -181,7 +176,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return oldState.getBlock() != newSate.getBlock();
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
     }
 }

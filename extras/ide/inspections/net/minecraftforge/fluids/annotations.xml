@@ -11,6 +11,9 @@
     <item name='net.minecraftforge.fluids.FluidTank net.minecraftforge.fluids.FluidStack drainInternal(net.minecraftforge.fluids.FluidStack, boolean)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
+    <item name='net.minecraftforge.fluids.FluidTank tile'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
     <item name='net.minecraftforge.fluids.FluidUtil net.minecraftforge.fluids.capability.IFluidHandler getFluidHandler(net.minecraft.item.ItemStack) 0'>
         <annotation name='javax.annotation.Nullable'/>
     </item>

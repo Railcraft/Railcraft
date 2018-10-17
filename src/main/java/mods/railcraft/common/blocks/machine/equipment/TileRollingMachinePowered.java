@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,11 +11,11 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.machine.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.interfaces.ITileCharge;
+import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -23,6 +23,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -32,6 +33,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,14 +49,11 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, IHasWork, ITileCharge {
-    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, ITileInventory, IHasWork, ITileCharge {
+    private static final IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
-
-    public TileRollingMachinePowered() {
-    }
 
     @Override
     public EquipmentVariant getMachineType() {
@@ -132,75 +133,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        return !getStackInSlot(slot).isEmpty();
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 10;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inv.getStackInSlot(slot);
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int count) {
-        return inv.decrStackSize(slot, count);
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-        inv.setInventorySlotContents(slot, stack);
-    }
-
-    @Override
-    public void openInventory(EntityPlayer player) {
-    }
-
-    @Override
-    public void closeInventory(EntityPlayer player) {
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return inv.removeStackFromSlot(index);
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public int getField(int id) {
-        return inv.getField(id);
-    }
-
-    @Override
-    public int getFieldCount() {
-        return inv.getFieldCount();
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        inv.setField(id, value);
-    }
-
-    @Override
-    public void clear() {
-        inv.clear();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return inv.isEmpty();
-    }
-
-    @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+        return !InvTools.isEmpty(getStackInSlot(slot));
     }
 
     @Override
@@ -216,5 +149,18 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     @Override
     public void actionActivated(IActionExternal action) {
         actions.add(action);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 }

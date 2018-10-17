@@ -10,15 +10,13 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.modules.ModuleWorld;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.passive.EntityZombieHorse;
@@ -44,7 +42,9 @@ public class EntityCartPumpkin extends CartBaseSurprise {
         MOBS.add(SurpriseEntity.create(EntityWitch.class, 25, 1));
         MOBS.add(SurpriseEntity.create(EntityGhast.class, 25, 1));
         MOBS.add(SurpriseEntity.create(EntityPigZombie.class, 25, 1));
-        MOBS.add(SurpriseEntity.create(EntityWither.class, 5, 1));
+        MOBS.add(SurpriseEntity.create(EntityWither.class, 5, 1, (cart, wither) -> {
+            wither.setDropItemsWhenDead(false); // Uhh no free nether stars
+        }));
 
         MOBS.add(SurpriseEntity.create(EntityWitherSkeleton.class, 50, 1, (cart, skeleton) -> {
             Random rand = cart.getRandom();
@@ -71,13 +71,13 @@ public class EntityCartPumpkin extends CartBaseSurprise {
                 (cart, horse) -> horse.setGrowingAge(0)
         ));
 
-//        if (ModuleWorld.villagerTrackman != null) {
-//            MOBS.add(SurpriseEntity.create(EntityZombie.class, 200, 1,
-//                    (cart, villager) -> {
-//                        villager.setVillagerType(ModuleWorld.villagerTrackman);
-//                    }
-//            ));
-//        }
+        if (ModuleWorld.villagerTrackman != null) {
+            MOBS.add(SurpriseEntity.create(EntityZombieVillager.class, 200, 1,
+                    (cart, villager) -> {
+                        villager.setForgeProfession(ModuleWorld.villagerTrackman);
+                    }
+            ));
+        }
     }
 
     public EntityCartPumpkin(World world) {

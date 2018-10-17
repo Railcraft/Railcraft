@@ -56,5 +56,5 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void fireSparkEffect(World world, Vec3d start, Vec3d end);
 
-    void forceTrackSpawnEffect(World world, BlockPos pos);
+    void forceTrackSpawnEffect(World world, BlockPos pos, int color);
 }

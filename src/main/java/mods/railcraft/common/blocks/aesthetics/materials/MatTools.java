@@ -26,8 +26,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,8 +70,8 @@ public class MatTools {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @Nonnull
-    public static ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+    @NotNull
+    public static ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
         IMaterialBlock block = ((IMaterialBlock) state.getBlock());
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMaterial) {
@@ -88,8 +88,8 @@ public class MatTools {
         return Materials.getPlaceholder();
     }
 
-    @Nonnull
-    public static List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    @NotNull
+    public static List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileMaterial)
@@ -110,7 +110,7 @@ public class MatTools {
         return Blocks.STONEBRICK.getBlockHardness(state, worldIn, pos);
     }
 
-    public static float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public static float getExplosionResistance(World world, BlockPos pos, @NotNull Entity exploder, Explosion explosion) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMaterial)
             return ((TileMaterial) tile).getMaterial().getExplosionResistance(exploder);

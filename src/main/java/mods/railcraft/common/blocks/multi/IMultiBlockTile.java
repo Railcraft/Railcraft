@@ -1,32 +1,31 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 
-/**
- * @param <T> Common type
- * @param <M> Master type
- */
-public interface IMultiBlockTile<T extends IMultiBlockTile<?, ?>, M extends T> {
-
-    default TileEntity tile() {
-        return (TileEntity) this;
-    }
-
-    Class<M> getMasterType();
-
-    Class<T> getCommonType();
+public interface IMultiBlockTile extends IOwnable, ITile {
 
     boolean isStructureValid();
 
     boolean isMaster();
 
     @Nullable
-    M getMasterBlock();
+    TileMultiBlock getMasterBlock();
 
     MultiBlockPattern getCurrentPattern();
 
@@ -34,5 +33,5 @@ public interface IMultiBlockTile<T extends IMultiBlockTile<?, ?>, M extends T> {
 
     BlockPos getPatternPosition();
 
-    Collection<MultiBlockPattern> getPatterns();
+    Collection<? extends MultiBlockPattern> getPatterns();
 }

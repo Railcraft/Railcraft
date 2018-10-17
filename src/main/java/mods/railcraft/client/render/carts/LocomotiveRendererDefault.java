@@ -9,8 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.ICartRenderer;
-import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
+import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -21,9 +20,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -24,8 +24,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,21 +40,21 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     private boolean powerState;
     private boolean neighborState;
 
-    @Nonnull
+
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.SEQUENCER;
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         if (world.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(world, getPos());
         if (!powerState && p) {
             powerState = true;
-            incrementSequencer(true, new HashSet<TileEntity>(), 0);
+            incrementSequencer(true, new HashSet<>(), 0);
         } else
             powerState = p;
     }
@@ -70,7 +70,7 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
         boolean p = neighbor.isEmittingRedstone(side);
         if (!neighborState && p) {
             neighborState = true;
-            incrementSequencer(true, new HashSet<TileEntity>(), 0);
+            incrementSequencer(true, new HashSet<>(), 0);
         } else
             neighborState = p;
     }
@@ -140,13 +140,13 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return sideOutput == side ? SignalAspect.GREEN : SignalAspect.RED;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("sideOutput", (byte) sideOutput.ordinal());
         data.setBoolean("powerState", powerState);
@@ -155,23 +155,23 @@ public class TileBoxSequencer extends TileBoxBase implements ITileRedstoneEmitte
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        sideOutput = EnumFacing.getFront(data.getByte("sideOutput"));
+        sideOutput = EnumFacing.byIndex(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
         neighborState = data.getBoolean("neighborState");
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(sideOutput.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        sideOutput = EnumFacing.getFront(data.readByte());
+        sideOutput = EnumFacing.byIndex(data.readByte());
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;

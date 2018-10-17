@@ -17,6 +17,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -32,10 +33,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
@@ -68,7 +73,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
                 return super.fillInternal(resource, doFill);
             }
         };
-        tankWater.setFilter(Fluids.WATER::get);
+        tankWater.setFilter(Fluids.WATER);
         tankManager.add(tankWater);
         tankSteam.setCapacity(4 * FluidTools.BUCKET_VOLUME);
 
@@ -101,8 +106,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager()) || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager()) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -281,5 +286,19 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void explode() {
         explode = true;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 }

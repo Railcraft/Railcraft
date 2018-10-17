@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.api.fuel.INeedsFuel;
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -32,21 +32,16 @@ import java.util.Set;
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extends TileMultiBlockInventory<T, T> implements INeedsFuel, IHasWork, ITileLit {
+public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork, ITileLit {
 
     protected int cookTime;
     private boolean cooking;
     protected boolean paused;
     private boolean wasBurning;
-    protected final Set<Object> actions = new HashSet<>();
+    private final Set<Object> actions = new HashSet<>();
 
-    protected TileMultiBlockOven(int invNum, List<MultiBlockPattern> patterns) {
+    protected TileMultiBlockOven(int invNum, List<? extends MultiBlockPattern> patterns) {
         super(invNum, patterns);
-    }
-
-    @Override
-    protected final Class<T> defineMasterClass() {
-        return defineCommonClass();
     }
 
     @Override
@@ -69,7 +64,7 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
     }
 
     private void updateLighting() {
-        boolean b = isMasterBurning();
+        boolean b = isBurning();
         if (wasBurning != b) {
             wasBurning = b;
             world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
@@ -81,7 +76,7 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(Random random) {
         updateLighting();
-        if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isMasterBurning()) {
+        if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isBurning()) {
             float x = getPos().getX() + 0.5F;
             float y = getPos().getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
             float z = getPos().getZ() + 0.5F;
@@ -127,8 +122,8 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
         cooking = data.readBoolean();
     }
 
-    public int getMasterCookTime() {
-        T masterOven = getMasterBlock();
+    public int getCookTime() {
+        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cookTime;
         }
@@ -139,13 +134,10 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
         cookTime = i;
     }
 
-    public boolean isMasterCooking() {
-        T masterOven = getMasterBlock();
-        return masterOven != null && masterOven.isCooking();
-    }
-
+    @SuppressWarnings("WeakerAccess")
     public boolean isCooking() {
-        return cooking;
+        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
+        return masterOven != null && masterOven.cooking;
     }
 
     protected void setCooking(boolean c) {
@@ -155,8 +147,8 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
         }
     }
 
-    public boolean isMasterBurning() {
-        return isMasterCooking();
+    public boolean isBurning() {
+        return isCooking();
     }
 
     public abstract int getTotalCookTime();
@@ -173,7 +165,7 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
 
     @Override
     public int getLightValue() {
-        if (getPatternMarker() == 'W' && isStructureValid() && isMasterBurning()) {
+        if (getPatternMarker() == 'W' && isStructureValid() && isBurning()) {
             return 13;
         }
         return 0;
@@ -186,7 +178,7 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
 
     @Override
     public void actionActivated(IActionExternal action) {
-        T mBlock = getMasterBlock();
+        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
         if (mBlock != null) {
             mBlock.actions.add(action);
         }
@@ -194,7 +186,7 @@ public abstract class TileMultiBlockOven<T extends TileMultiBlockOven<T>> extend
 
     @Override
     public boolean hasWork() {
-        return isMasterCooking();
+        return isCooking();
     }
 
 }

@@ -42,10 +42,8 @@ public class CardNotation extends TheorycraftCard {
 	
 	@Override
 	public String getLocalizedText() {
-		return new TextComponentTranslation("card.notation.text", new Object[] {
-				TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat1).getFormattedText()+TextFormatting.RESET,
-				TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat2).getFormattedText()+TextFormatting.RESET
-				}).getUnformattedText();
+		return new TextComponentTranslation("card.notation.text", TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat1).getFormattedText()+TextFormatting.RESET,
+                TextFormatting.BOLD+new TextComponentTranslation("tc.research_category."+cat2).getFormattedText()+TextFormatting.RESET).getUnformattedText();
 	}
 
 	@Override

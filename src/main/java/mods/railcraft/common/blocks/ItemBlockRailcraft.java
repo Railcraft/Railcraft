@@ -15,14 +15,13 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -52,13 +51,13 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return LocalizationPlugin.convertTag(super.getUnlocalizedName());
+    public String getTranslationKey() {
+        return LocalizationPlugin.convertTag(super.getTranslationKey());
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName();
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey();
     }
 
     @Override

@@ -25,9 +25,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -80,7 +79,7 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
     }
 
     public static void copyRecipesToWorkbench() {
-        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().stream().map(recipe -> new BaseRecipe(CraftingPlugin.getGenerator().next().getResourcePath()) {
+        ForgeRegistries.RECIPES.registerAll(getInstance().getRecipes().stream().map(recipe -> new BaseRecipe(CraftingPlugin.getGenerator().next().getPath()) {
             @Override
             public boolean matches(InventoryCrafting inv, World worldIn) {
                 return recipe.test(inv);
@@ -144,15 +143,15 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
         }
 
         IRollingMachineRecipe recipe = newShapelessRecipeBuilder()
-                .ingredients(ArrayTools.transform(processedRecipe.recipeArray, CraftingHelper::getIngredient, Ingredient[]::new))
+                .ingredients(ArrayTools.transform(processedRecipe.recipeArray, CraftingPlugin::getIngredient, Ingredient[]::new))
                 .output(processedRecipe.result)
                 .build();
         addRecipe(recipe);
     }
 
     private static abstract class RecipeBuilderImpl<S extends RecipeBuilder<S>> implements RecipeBuilder<S> {
-        @MonotonicNonNull List<Ingredient> ingredients;
-        @MonotonicNonNull ItemStack output;
+        List<Ingredient> ingredients;
+        ItemStack output;
         int time = TileRollingMachine.PROCESS_TIME;
 
         @SuppressWarnings("unchecked")
@@ -211,6 +210,8 @@ public final class RollingMachineCraftingManager implements IRollingMachineCraft
         @Override
         public ShapedRecipeBuilder grid(Ingredient[][] ingredients) {
             this.ingredients = Arrays.asList(ArrayTools.flatten(ingredients));
+            this.width = ingredients[0].length;
+            this.height = ingredients.length;
             return this;
         }
 

@@ -30,7 +30,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -45,8 +44,8 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -61,7 +60,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     public BlockLantern() {
         super(Material.REDSTONE_LIGHT);
         setSoundType(SoundType.STONE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         setHardness(5);
         setResistance(15);
 //        useNeighborBrightness[id] = false;
@@ -101,19 +100,19 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public String getUnlocalizedName(Materials mat) {
+    public String getTranslationKey(Materials mat) {
         return "tile.railcraft.lantern." + mat.getLocalizationSuffix();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
         return MatTools.getPickBlock(state, target, world, pos, player);
     }
 
@@ -152,9 +151,9 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         return false;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
         return MatTools.getDrops(world, pos, state, fortune);
     }
 
@@ -165,14 +164,14 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode) {
             dropBlockAsItem(world, pos, state, 0);
         }
@@ -180,7 +179,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state) {
+    public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
@@ -190,9 +189,9 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+    public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
         return new TileMaterial();
     }
 
@@ -202,7 +201,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @NotNull Entity exploder, Explosion explosion) {
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
 
@@ -222,19 +221,19 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
-    @Nonnull
+    @NotNull
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return EnumColor.YELLOW.getMapColor();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);

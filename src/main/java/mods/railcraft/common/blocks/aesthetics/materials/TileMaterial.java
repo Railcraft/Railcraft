@@ -14,7 +14,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 /**
@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public class TileMaterial extends RailcraftTileEntity {
 
-    @Nonnull
+    @NotNull
     private Materials material = Materials.getPlaceholder();
 
     public Materials getMaterial() {
@@ -35,7 +35,7 @@ public class TileMaterial extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(material);
+        return ((IMaterialBlock) getBlockType()).getTranslationKey(material) + ".name";
     }
 
     @Override
@@ -63,10 +63,5 @@ public class TileMaterial extends RailcraftTileEntity {
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         material = Materials.fromName(data.readUTF());
-    }
-
-    @Override
-    public short getId() {
-        return 42;
     }
 }

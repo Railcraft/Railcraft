@@ -74,8 +74,8 @@ public class ResearchEntry
     	REVERSE,
     	HIDDEN,//these also grant .1 bonus inspiration for theorycrafting
     	AUTOUNLOCK,
-    	HEX;
-	}
+    	HEX
+    }
     
     /**
      * The various stages present in this research entry
@@ -246,7 +246,7 @@ public class ResearchEntry
 	}
 	
 	public boolean hasMeta(EnumResearchMeta me) {
-		return meta==null ? false : Arrays.asList(meta).contains(me);
+		return meta != null && Arrays.asList(meta).contains(me);
 	}
 
 	/**

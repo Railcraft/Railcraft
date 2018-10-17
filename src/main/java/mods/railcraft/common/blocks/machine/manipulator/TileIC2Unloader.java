@@ -86,9 +86,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
         if (!waitTillEmpty)
             return false;
-        else if (energyCart.getEnergy() == 0)
-            return false;
-        return true;
+        else return !(energyCart.getEnergy() == 0);
     }
 
     @Override

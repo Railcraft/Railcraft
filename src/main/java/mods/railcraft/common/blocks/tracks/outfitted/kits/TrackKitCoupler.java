@@ -10,13 +10,12 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,6 +71,8 @@ public class TrackKitCoupler extends TrackKitPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             mode.onMinecartPass(this, cart);
+        } else {
+            mode.onMinecartPassUnpowered(this, cart);
         }
     }
 
@@ -133,14 +134,14 @@ public class TrackKitCoupler extends TrackKitPowered {
         COUPLER("coupler", 8) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).createLink(track.taggedCart, cart);
+                CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
         DECOUPLER("decoupler", 0) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager(cart.world).breakLinks(cart);
+                CartToolsAPI.getLinkageManager().breakLinks(cart);
                 LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
             }
         },
@@ -148,6 +149,11 @@ public class TrackKitCoupler extends TrackKitPowered {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
                 LinkageManager.instance().setAutoLink(cart, true);
+            }
+
+            @Override
+            public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {
+                LinkageManager.instance().setAutoLink(cart, false);
             }
         };
         public static Mode[] VALUES = values();
@@ -177,6 +183,8 @@ public class TrackKitCoupler extends TrackKitPowered {
         }
 
         public abstract void onMinecartPass(TrackKitCoupler track, EntityMinecart cart);
+
+        public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {}
     }
 
 }

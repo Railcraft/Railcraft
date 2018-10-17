@@ -13,7 +13,11 @@ package mods.railcraft.common.util.collections;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by CovertJaguar on 3/25/2016 for Railcraft.
@@ -35,6 +39,10 @@ public final class CollectionTools {
             biMap.put(i, elements.get(i));
         }
         return biMap;
+    }
+
+    public static <T> Collection<T> makeSafeSet(@Nullable Collection<T> original) {
+        return original == null ? Collections.emptySet() : original;
     }
 
     public static <T> boolean intersects(Collection<T> collection, T[] array) {

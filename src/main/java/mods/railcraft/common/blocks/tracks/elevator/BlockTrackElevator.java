@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
+import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.EntitySearcher;
@@ -40,8 +41,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation of the iron ladder blocks. Iron ladders act much like normal
@@ -93,8 +93,8 @@ public class BlockTrackElevator extends BlockRailcraft {
                 "IRI",
                 "ISI",
                 "IRI",
-                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
-                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
+                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.STONE),
                 'R', "dustRedstone");
     }
 
@@ -143,7 +143,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -224,7 +224,7 @@ public class BlockTrackElevator extends BlockRailcraft {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         entityIn.fallDistance = 0;
         if (Game.isClient(worldIn) || !(entityIn instanceof EntityMinecart))
             return;

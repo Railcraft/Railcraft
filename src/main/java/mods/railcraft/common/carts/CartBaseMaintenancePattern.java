@@ -59,7 +59,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
         ItemStack stackStock = getStackInSlot(slotStock);
 
         if (!stackStock.isEmpty() && !InvTools.isItemEqual(stackReplace, stackStock)) {
-            CartToolsAPI.transferHelper.offerOrDropItem(this, stackStock);
+            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stackStock);
             setInventorySlotContents(slotStock, InvTools.emptyStack());
             stackStock = null;
         }
@@ -68,7 +68,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
             return;
 
         if (stackStock == null)
-            setInventorySlotContents(slotStock, CartToolsAPI.transferHelper.pullStack(this, StackFilters.of(stackReplace)));
+            setInventorySlotContents(slotStock, CartToolsAPI.getTransferHelper().pullStack(this, StackFilters.of(stackReplace)));
     }
 
     @Override

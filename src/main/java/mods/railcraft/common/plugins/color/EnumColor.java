@@ -21,13 +21,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
@@ -35,22 +33,22 @@ import java.util.*;
  */
 public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
 
-    WHITE(0xFFFFFF, "dyeWhite", "white"),
-    ORANGE(0xFF6A00, "dyeOrange", "orange"),
-    MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
-    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "light_blue", "lightBlue"),
-    YELLOW(0xFFC700, "dyeYellow", "yellow"),
-    LIME(0x3FAA36, "dyeLime", "lime"),
-    PINK(0xE585A0, "dyePink", "pink"),
-    GRAY(0x444444, "dyeGray", "gray"),
-    SILVER(0x888888, "dyeLightGray", "light_gray", "silver", "lightGray"),
-    CYAN(0x36809E, "dyeCyan", "cyan"),
-    PURPLE(0x843FBF, "dyePurple", "purple"),
-    BLUE(0x3441A2, "dyeBlue", "blue"),
-    BROWN(0x5C3A24, "dyeBrown", "brown"),
-    GREEN(0x394C1E, "dyeGreen", "green"),
-    RED(0xA33835, "dyeRed", "red"),
-    BLACK(0x2D2D2D, "dyeBlack", "black"),;
+    WHITE(0xF9FFFE, "dyeWhite", "white"),
+    ORANGE(0xF9801D, "dyeOrange", "orange"),
+    MAGENTA(0xC74EBD, "dyeMagenta", "magenta"),
+    LIGHT_BLUE(0x3AB3DA, "dyeLightBlue", "light_blue", "lightBlue"),
+    YELLOW(0xFED83D, "dyeYellow", "yellow"),
+    LIME(0x80C71F, "dyeLime", "lime"),
+    PINK(0xF38BAA, "dyePink", "pink"),
+    GRAY(0x474F52, "dyeGray", "gray"),
+    SILVER(0x9D9D97, "dyeLightGray", "light_gray", "silver", "lightGray"),
+    CYAN(0x169C9C, "dyeCyan", "cyan"),
+    PURPLE(0x8932B8, "dyePurple", "purple"),
+    BLUE(0x3C44AA, "dyeBlue", "blue"),
+    BROWN(0x835432, "dyeBrown", "brown"),
+    GREEN(0x5E7C16, "dyeGreen", "green"),
+    RED(0xB02E26, "dyeRed", "red"),
+    BLACK(0x1D1D21, "dyeBlack", "black"),;
     public static final EnumColor[] VALUES = values();
     public static final EnumColor[] VALUES_INVERTED = values();
     public static final String DEFAULT_COLOR_TAG = "color";

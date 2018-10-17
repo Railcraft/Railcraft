@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileTankWater extends TileTank<TileTankWater> {
+public class TileTankWater extends TileTank {
 
     private static final int OUTPUT_RATE = 40;
     private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 400;
@@ -107,7 +106,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
     public TileTankWater() {
         super(2, patterns);
         tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.WATER::get);
+        tank.setFilter(Fluids.WATER);
         tankManager.add(tank);
     }
 
@@ -120,11 +119,6 @@ public final class TileTankWater extends TileTank<TileTankWater> {
             TileTankWater master = (TileTankWater) tile;
             master.tank.setFluid(Fluids.WATER.get(water));
         }
-    }
-
-    @Override
-    protected Class<TileTankWater> defineCommonClass() {
-        return TileTankWater.class;
     }
 
     @Override
@@ -154,7 +148,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
                     for (int x = getX() - 1; x <= getX() + 1; x++) {
                         for (int z = getZ() - 1; z <= getZ() + 1; z++) {
                             outside = world.canBlockSeeSky(new BlockPos(x, getY() + 3, z));
-//                            System.out.println(x + ", " + (y + 3) + ", " + z);
+//                            System.out.println(x + ", " + (yCoord + 3) + ", " + z);
                             if (outside)
                                 break;
                         }
@@ -191,7 +185,7 @@ public final class TileTankWater extends TileTank<TileTankWater> {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileTankWater mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
             return true;
@@ -225,7 +219,6 @@ public final class TileTankWater extends TileTank<TileTankWater> {
         return false;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TANK;

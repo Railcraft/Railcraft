@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,58 +9,42 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<T, M>, M extends T> extends TileMultiBlock<T, M> implements IInventory {
+public abstract class TileMultiBlockInventory extends TileMultiBlock implements ITileInventory {
 
     protected final StandaloneInventory inv;
 
-    protected TileMultiBlockInventory(int invSize, List<MultiBlockPattern> patterns) {
+    protected TileMultiBlockInventory(int invSize, List<? extends MultiBlockPattern> patterns) {
         super(patterns);
         inv = new StandaloneInventory(invSize, (IInventory) this);
     }
 
-    protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, world, getPos());
-    }
-
     @Override
-    public ItemStack decrStackSize(int i, int j) {
-        T mBlock = getMasterBlock();
+    public IInventory getInventory() {
+        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
-            return mBlock.inv.decrStackSize(i, j);
-        return ItemStack.EMPTY;
+            return mBlock.inv;
+        return StandaloneInventory.ZERO_SIZE_INV;
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
-        T mBlock = getMasterBlock();
-        if (mBlock != null)
-            return mBlock.inv.getStackInSlot(i);
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
-        T mBlock = getMasterBlock();
-        if (mBlock != null)
-            mBlock.inv.setInventorySlotContents(i, itemstack);
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return isStructureValid();
     }
 
@@ -78,26 +62,8 @@ public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<
     }
 
     @Override
-    public int getSizeInventory() {
-        return inv.getSizeInventory();
-    }
-
-    @Override
     public String getName() {
         return LocalizationPlugin.translate(getLocalizationTag());
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return inv.getInventoryStackLimit();
-    }
-
-    @Override
-    public void openInventory(EntityPlayer player) {
-    }
-
-    @Override
-    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
@@ -106,34 +72,16 @@ public abstract class TileMultiBlockInventory<T extends TileMultiBlockInventory<
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
+    @Nullable
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        ItemStack inSlot = getStackInSlot(index);
-        setInventorySlotContents(index, InvTools.emptyStack());
-        return inSlot;
-    }
-
-    @Override
-    public int getField(int id) {
-        return inv.getField(id);
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        inv.setField(id, value);
-    }
-
-    @Override
-    public int getFieldCount() {
-        return inv.getFieldCount();
-    }
-
-    @Override
-    public void clear() {
-        inv.clear();
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+        }
+        return super.getCapability(capability, facing);
     }
 }

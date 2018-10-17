@@ -21,7 +21,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,7 +79,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new Error("This does not have GUIs or containers");

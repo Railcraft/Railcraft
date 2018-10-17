@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,8 +21,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -56,7 +56,6 @@ public class RailcraftInputStream extends DataInputStream {
         return new UUID(readLong(), readLong());
     }
 
-    //TODO: this badly needs testing
     public BitSet readBitSet() throws IOException {
         int length = readByte();
         byte[] bytes = new byte[length];
@@ -68,8 +67,7 @@ public class RailcraftInputStream extends DataInputStream {
         return enumConstants[readByte()];
     }
 
-    @Nullable
-    public NBTTagCompound readNBT() throws IOException {
+    public @Nullable NBTTagCompound readNBT() throws IOException {
         mark(1);
         byte b = readByte();
 
@@ -97,8 +95,8 @@ public class RailcraftInputStream extends DataInputStream {
         return stack;
     }
 
-    @Nullable
-    public FluidStack readFluidStack() throws IOException {
+    @SuppressWarnings("ConstantConditions")
+    public @Nullable FluidStack readFluidStack() throws IOException {
         int amount = readInt();
         if (amount > 0) {
             try {

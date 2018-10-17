@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +48,10 @@ public final class MultiBlockPattern {
 
     public MultiBlockPattern(char[][][] pattern) {
         this(pattern, 1, 1, 1);
+    }
+
+    public MultiBlockPattern(char[][][] pattern, Object attachedData) {
+        this(pattern, new BlockPos(1, 1, 1), null, attachedData);
     }
 
     public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ) {
@@ -154,6 +158,19 @@ public final class MultiBlockPattern {
             }
         }
         return master;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pattern.length; i++) {
+            builder.append("Level ").append(i).append(":\n");
+            char[][] level = pattern[i];
+            for (char[] line : level) {
+                builder.append(line).append('\n');
+            }
+        }
+        return builder.toString();
     }
 
     public static final class Builder {

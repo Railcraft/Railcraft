@@ -43,8 +43,8 @@ public class ItemBoreHeadIron extends ItemBoreHead {
     }
 
     @Override
-    public float getDigModifier() {
-        return 1.0f;
+    public double getDigModifier() {
+        return 1.0d;
     }
 
     @Override

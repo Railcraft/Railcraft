@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,11 +139,11 @@ public final class SoundHelper {
     }
 
     public static boolean matchesSoundResource(ResourceLocation resource, String type) {
-        return resource.getResourceDomain().startsWith("railcraft") && resource.getResourcePath().startsWith(type);
+        return resource.getNamespace().startsWith("railcraft") && resource.getPath().startsWith(type);
     }
 
     public static SoundEvent matchSoundEvent(ResourceLocation resource, SoundType soundType) {
-        String soundPath = resource.getResourcePath();
+        String soundPath = resource.getPath();
         String typeString = soundPath.substring(soundPath.lastIndexOf(".") + 1);
         switch (typeString) {
             case "break":

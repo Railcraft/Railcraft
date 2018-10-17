@@ -9,14 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.BatteryVariant;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -32,6 +35,12 @@ public class CreativePlugin {
         return stack;
     });
     public static final CreativeTabs TRACK_TAB = new RailcraftTab("railcraft.track", () -> new ItemStack(Blocks.DETECTOR_RAIL));
+    public static final CreativeTabs STRUCTURE_TAB = new RailcraftTab("railcraft.structure", () -> {
+        ItemStack stack = RailcraftBlocks.LANTERN.getStack();
+        if (InvTools.isEmpty(stack))
+            stack = RailcraftBlocks.REINFORCED_CONCRETE.getStack(EnumColor.SILVER);
+        return stack;
+    });
 
     private static final class RailcraftTab extends CreativeTabs {
         private final Supplier<ItemStack> tabItem;
@@ -42,7 +51,7 @@ public class CreativePlugin {
         }
 
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return tabItem.get();
         }
 

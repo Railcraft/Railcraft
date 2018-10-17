@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.ItemCartWorldspike;
 import mods.railcraft.common.carts.ItemLocomotive;
@@ -86,7 +86,7 @@ public class TileDispenserTrain extends TileDispenserCart {
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
-                    CartToolsAPI.getLinkageManager(world).createLink(cartPlaced, lastCart);
+                    CartToolsAPI.getLinkageManager().createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())

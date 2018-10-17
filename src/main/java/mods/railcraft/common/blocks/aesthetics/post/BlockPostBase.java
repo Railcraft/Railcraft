@@ -25,9 +25,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 import static net.minecraft.util.EnumFacing.DOWN;
@@ -64,7 +64,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
         setResistance(15);
         setHardness(3);
 
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     public Column getColumnStyle(IBlockAccess world, IBlockState state, BlockPos pos) {
@@ -96,8 +96,6 @@ public abstract class BlockPostBase extends BlockRailcraft {
             return BOUNDING_BOX;
     }
 
-
-
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
@@ -110,9 +108,9 @@ public abstract class BlockPostBase extends BlockRailcraft {
         return COLLISION_BOX;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, @NotNull World worldIn, @NotNull BlockPos pos) {
         if (isPlatform(state))
             return AABBFactory.start().createBoxForTileAt(pos).build();
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
@@ -124,7 +122,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EnumFacing side) {
         return side == DOWN || (isPlatform(state) && side == UP);
     }
 
@@ -154,7 +152,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

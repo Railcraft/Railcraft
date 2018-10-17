@@ -9,17 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import cofh.redstoneflux.api.IEnergyProvider;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
+import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
 
-public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider {
+public class TileRFUnloader extends TileRFManipulator {
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
 
     @Override
@@ -36,7 +34,7 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
     @Override
     public void upkeep() {
         super.upkeep();
-        RedstoneFluxPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);
+        EnergyPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);
     }
 
     @Override
@@ -52,7 +50,7 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
             }
 
             int extracted = rfCart.removeRF(request);
-            energyStorage.modifyEnergyStored(extracted);
+            energyStorage.extractEnergy(extracted,false);
             setProcessing(extracted > 0);
         }
     }
@@ -69,15 +67,5 @@ public class TileRFUnloader extends TileRFManipulator implements IEnergyProvider
                 return rfCart.getRF() >= rfCart.getMaxRF();
         }
         return false;
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return energyStorage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
     }
 }

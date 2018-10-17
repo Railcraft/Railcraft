@@ -43,7 +43,7 @@ public class GuiDetectorVillager extends GuiBasic {
         villager = new EntityVillager(tile.getWorld());
         mode = detector.getMode();
 
-        professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValues());
+        professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValuesCollection());
 
         professions.setCurrent(detector.getProfession());
         villager.setProfession(professions.getCurrent());

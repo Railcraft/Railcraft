@@ -5,7 +5,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.util.RecipeMatcher;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +14,19 @@ import java.util.List;
  *
  */
 public final class ShapelessRollingMachineRecipe implements IRollingMachineRecipe {
-    private final List<@NonNull Ingredient> ingredients;
+    private final List<@NotNull Ingredient> ingredients;
     private final ItemStack output;
 
     private final int time;
 
-    ShapelessRollingMachineRecipe(List<@NonNull Ingredient> items, ItemStack output, int time) {
+    ShapelessRollingMachineRecipe(List<@NotNull Ingredient> items, ItemStack output, int time) {
         this.ingredients = items;
         this.output = output;
         this.time = time;
     }
 
     @Override
-    public boolean test(@NonNull InventoryCrafting inv) {
+    public boolean test(@NotNull InventoryCrafting inv) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             if (!inv.getStackInSlot(i).isEmpty()) {
@@ -36,6 +36,10 @@ public final class ShapelessRollingMachineRecipe implements IRollingMachineRecip
         if (stacks.isEmpty())
             return false;
         return RecipeMatcher.findMatches(stacks, ingredients) != null;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     @Override

@@ -15,7 +15,7 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.aesthetics.metals.EnumMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -27,7 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 import java.util.function.Predicate;
 
@@ -50,9 +50,9 @@ public enum Metal implements IVariantEnum {
     BRASS("Brass"),;
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
-    private static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
-    private static final BiMap<Metal, IVariantEnum> poorOreMap = HashBiMap.create();
-    private static final BiMap<Metal, IVariantEnum> blockMap = HashBiMap.create();
+    static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
+    static final BiMap<Metal, IVariantEnum> poorOreMap = HashBiMap.create();
+    static final BiMap<Metal, IVariantEnum> blockMap = HashBiMap.create();
 
     public static void init() {
         oreMap.put(COPPER, EnumOreMetal.COPPER);
@@ -71,21 +71,22 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(NICKEL, EnumOreMetalPoor.NICKEL);
         poorOreMap.put(ZINC, EnumOreMetalPoor.ZINC);
 
-        blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
-        blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
-        blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
-        blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
-        blockMap.put(SILVER, EnumGeneric.BLOCK_SILVER);
-        blockMap.put(BRONZE, EnumGeneric.BLOCK_BRONZE);
-        blockMap.put(NICKEL, EnumGeneric.BLOCK_NICKEL);
-        blockMap.put(INVAR, EnumGeneric.BLOCK_INVAR);
-        blockMap.put(ZINC, EnumGeneric.BLOCK_ZINC);
-        blockMap.put(BRASS, EnumGeneric.BLOCK_BRASS);
+        blockMap.put(STEEL, EnumMetal.BLOCK_STEEL);
+        blockMap.put(COPPER, EnumMetal.BLOCK_COPPER);
+        blockMap.put(TIN, EnumMetal.BLOCK_TIN);
+        blockMap.put(LEAD, EnumMetal.BLOCK_LEAD);
+        blockMap.put(SILVER, EnumMetal.BLOCK_SILVER);
+        blockMap.put(BRONZE, EnumMetal.BLOCK_BRONZE);
+        blockMap.put(NICKEL, EnumMetal.BLOCK_NICKEL);
+        blockMap.put(INVAR, EnumMetal.BLOCK_INVAR);
+        blockMap.put(ZINC, EnumMetal.BLOCK_ZINC);
+        blockMap.put(BRASS, EnumMetal.BLOCK_BRASS);
     }
 
     public final Predicate<ItemStack> nuggetFilter;
     public final Predicate<ItemStack> ingotFilter;
     public final Predicate<ItemStack> blockFilter;
+    public final Predicate<ItemStack> plateFilter;
     private final String oreSuffix;
     private final String tag;
 
@@ -95,6 +96,7 @@ public enum Metal implements IVariantEnum {
         nuggetFilter = StackFilters.ofOreType("nugget" + oreSuffix);
         ingotFilter = StackFilters.ofOreType("ingot" + oreSuffix);
         blockFilter = StackFilters.ofOreType("block" + oreSuffix);
+        plateFilter = StackFilters.ofOreType("plate" + oreSuffix);
     }
 
     @Nullable
@@ -113,12 +115,10 @@ public enum Metal implements IVariantEnum {
         return form.orePrefix + oreSuffix;
     }
 
-    @Nullable
     public ItemStack getStack(Form form) {
         return getStack(form, 1);
     }
 
-    @Nullable
     public ItemStack getStack(Form form, int qty) {
         return form.getStack(this, qty);
     }
@@ -130,7 +130,6 @@ public enum Metal implements IVariantEnum {
 
     public enum Form {
         NUGGET("nugget", RailcraftItems.NUGGET) {
-            @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
                 switch (metal) {
@@ -143,7 +142,6 @@ public enum Metal implements IVariantEnum {
             }
         },
         INGOT("ingot", RailcraftItems.INGOT) {
-            @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
                 switch (metal) {
@@ -156,12 +154,8 @@ public enum Metal implements IVariantEnum {
             }
         },
         PLATE("plate", RailcraftItems.PLATE) {
-            @Override
-            public String getOreDictTag(Metal metal) {
-                return null;
-            }
         },
-        BLOCK("block", RailcraftBlocks.GENERIC, blockMap) {
+        BLOCK("block", RailcraftBlocks.METAL, blockMap) {
             @Nullable
             @Override
             public IBlockState getState(Metal metal) {
@@ -174,7 +168,6 @@ public enum Metal implements IVariantEnum {
                 return super.getState(metal);
             }
 
-            @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
                 switch (metal) {
@@ -204,7 +197,6 @@ public enum Metal implements IVariantEnum {
                 return super.getState(metal);
             }
 
-            @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {
                 switch (metal) {
@@ -218,9 +210,9 @@ public enum Metal implements IVariantEnum {
         },
         POOR_ORE("orePoor", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
         };
-        private static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
+        static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
-        private final String orePrefix;
+        final String orePrefix;
         protected final IRailcraftObjectContainer<?> container;
         private final BiMap<Metal, IVariantEnum> variantMap;
 
@@ -260,12 +252,10 @@ public enum Metal implements IVariantEnum {
             return null;
         }
 
-        @Nullable
         public final ItemStack getStack(Metal metal) {
             return getStack(metal, 1);
         }
 
-        @Nullable
         public ItemStack getStack(Metal metal, int qty) {
             IVariantEnum variant = getVariantObject(metal);
             ItemStack stack = InvTools.emptyStack();

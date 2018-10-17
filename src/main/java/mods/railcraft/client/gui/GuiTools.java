@@ -9,8 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -105,6 +108,11 @@ public final class GuiTools {
             pointer += b.getWidth() + spacing;
             buttonList.add(b);
         }
+    }
+
+    public static String getDisplayTitle(ITrackKitInstance kitInstance) {
+        TileTrackOutfitted tile = kitInstance.getTile();
+        return tile.hasCustomName() ? tile.getName() : LocalizationPlugin.translate(tile.getLocalizationTag());
     }
 
     public static void drawVillager(EntityVillager villager, int x, int y, int scale, float yaw, float pitch) {

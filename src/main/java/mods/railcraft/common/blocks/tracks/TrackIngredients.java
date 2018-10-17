@@ -18,7 +18,7 @@ import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.init.Blocks;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 /**

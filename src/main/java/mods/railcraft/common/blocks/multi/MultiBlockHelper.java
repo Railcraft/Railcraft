@@ -42,8 +42,8 @@ public final class MultiBlockHelper implements StructureHelper {
     }
 
     @Override
-    public void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
-        TileBlastFurnace.placeBlastFurnace(world, pos, input, output, fuel);
+    public void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
+        TileBlastFurnace.placeBlastFurnace(world, pos, input, output, secondOutput, fuel);
     }
 
     @Override

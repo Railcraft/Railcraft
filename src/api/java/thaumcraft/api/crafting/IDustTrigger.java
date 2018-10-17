@@ -20,7 +20,7 @@ public interface IDustTrigger {
 	 * @param face
 	 * @return the placement offset (from clicked block) and facing (if used). Can contain . Return Null if not valid
 	 */
-	public Placement getValidFace(World world, EntityPlayer player, BlockPos pos, EnumFacing face);
+    Placement getValidFace(World world, EntityPlayer player, BlockPos pos, EnumFacing face);
 	
 	class Placement {
 		public int xOffset,yOffset,zOffset;
@@ -42,7 +42,7 @@ public interface IDustTrigger {
 	 * @param placement
 	 * @param side 
 	 */
-	public void execute(World world, EntityPlayer player, BlockPos pos, Placement placement, EnumFacing side);
+    void execute(World world, EntityPlayer player, BlockPos pos, Placement placement, EnumFacing side);
 	
 	/**
 	 * This method returns a list of block locations that should display the dust sparkle fx.
@@ -54,20 +54,20 @@ public interface IDustTrigger {
 	 * @param side
 	 * @return
 	 */
-	public default List<BlockPos> sparkle(World world, EntityPlayer player, BlockPos pos, Placement placement) {
-		return Arrays.asList(new BlockPos[]{pos});
+	default List<BlockPos> sparkle(World world, EntityPlayer player, BlockPos pos, Placement placement) {
+		return Arrays.asList(pos);
 	}
 	
 	/* 
 	 * Internal methods
 	 */
-	public static ArrayList<IDustTrigger> triggers = new ArrayList<>();
+    ArrayList<IDustTrigger> triggers = new ArrayList<>();
 	
 	/**
 	 * Adds a custom trigger class to the registry
 	 * @param trigger
 	 */
-	public static void registerDustTrigger(IDustTrigger trigger) {
+	static void registerDustTrigger(IDustTrigger trigger) {
 		triggers.add(trigger);
 	}
 	

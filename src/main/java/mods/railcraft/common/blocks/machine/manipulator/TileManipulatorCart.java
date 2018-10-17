@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -40,8 +40,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextFormatting;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -53,7 +53,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
-    protected EntityMinecart currentCart;
+    protected @Nullable EntityMinecart currentCart;
     private boolean powered;
     private boolean sendCartGateAction;
     private boolean processing;
@@ -73,8 +73,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         return currentCart != null;
     }
 
-    @Nullable
-    public EntityMinecart getCart() {
+    public @Nullable EntityMinecart getCart() {
         return CartToolsAPI.getMinecartOnSide(world, getPos(), 0.1f, getFacing());
     }
 
@@ -84,8 +83,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
         if (!InvTools.isEmpty(minecartSlot1) || !InvTools.isEmpty(minecartSlot2))
-            if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
-                return false;
+            return CartTools.doesCartMatchFilter(minecartSlot1, cart) || CartTools.doesCartMatchFilter(minecartSlot2, cart);
         return true;
     }
 
@@ -250,7 +248,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     protected abstract void processCart(EntityMinecart cart);
 
     @Override
-    public final boolean canConnectRedstone(EnumFacing dir) {
+    public final boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return true;
     }
 

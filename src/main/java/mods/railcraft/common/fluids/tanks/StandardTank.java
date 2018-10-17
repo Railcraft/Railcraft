@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -35,8 +35,7 @@ public class StandardTank extends FluidTank {
     };
     private int tankIndex;
     private boolean hidden;
-    @Nullable
-    private Consumer<StandardTank> updateCallback;
+    private @Nullable Consumer<StandardTank> updateCallback;
 
     public StandardTank(int capacity) {
         super(capacity);
@@ -78,8 +77,7 @@ public class StandardTank extends FluidTank {
         return capacity - getFluidAmount();
     }
 
-    @Nullable
-    public Fluid getFluidType() {
+    public @Nullable Fluid getFluidType() {
         return getFluid() != null ? getFluid().getFluid() : null;
     }
 
@@ -102,7 +100,7 @@ public class StandardTank extends FluidTank {
     }
 
     @Override
-    public int fillInternal(FluidStack resource, boolean doFill) {
+    public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
         if (!matchesFilter(resource))
             return 0;
         int ret = super.fillInternal(resource, doFill);
@@ -112,7 +110,7 @@ public class StandardTank extends FluidTank {
     }
 
     @Override
-    public int fill(final FluidStack resource, final boolean doFill) {
+    public int fill(final @Nullable FluidStack resource, final boolean doFill) {
         if (resource == null)
             return 0;
         if (resource.amount <= 0)
@@ -142,16 +140,16 @@ public class StandardTank extends FluidTank {
         int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
         if (!Fluids.isEmpty(fluidStack)) {
-            toolTip.add(getFluidNameToolTip(fluidStack.getFluid()));
+            toolTip.add(getFluidNameToolTip(fluidStack));
         }
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
     }
 
-    protected ToolTipLine getFluidNameToolTip(Fluid fluid) {
-        EnumRarity rarity = fluid.getRarity();
+    protected ToolTipLine getFluidNameToolTip(FluidStack fluidStack) {
+        EnumRarity rarity = fluidStack.getFluid().getRarity(fluidStack);
         if (rarity == null)
             rarity = EnumRarity.COMMON;
-        ToolTipLine fluidName = new ToolTipLine(fluid.getLocalizedName(getFluid()), rarity.rarityColor);
+        ToolTipLine fluidName = new ToolTipLine(fluidStack.getLocalizedName(), rarity.color);
         fluidName.setSpacing(2);
         return fluidName;
     }

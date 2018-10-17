@@ -11,7 +11,7 @@ public class ScanBlock implements IScanThing {
 	Block[] blocks;
 	
 	public ScanBlock(Block block) {
-		this("!"+block.getRegistryName().toString(),new Block[] {block});
+		this("!"+block.getRegistryName().toString(), block);
 	}
 
 	public ScanBlock(String research, Block ... blocks) {

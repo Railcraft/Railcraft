@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Tuple;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -114,13 +113,11 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
 
     IRailcraftBlockContainer getContainer();
 
-    @Nullable
     @Override
     default Block block() {
         return getContainer().block();
     }
 
-    @Nullable
     @Override
     default IBlockState getDefaultState() {
         return getContainer().getState(this);

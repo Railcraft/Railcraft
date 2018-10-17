@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:cart_gift"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.surprise.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.surprise.desc"
+    }
+  },
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "linking": {
+      "trigger": "railcraft:surprise",
+      "conditions": {
+      }
+    }
+  }
+}

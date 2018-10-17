@@ -13,7 +13,7 @@ package mods.railcraft.common.fluids;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/16/2016 for Railcraft.

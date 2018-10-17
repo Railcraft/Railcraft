@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.client.util.sounds.JukeboxSound;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -29,7 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
@@ -84,6 +85,7 @@ public final class EntityCartJukebox extends CartBase {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString(RECORD_DISPLAY_NAME, display);
             PacketBuilder.instance().sendMovingSoundPacket(sound, SoundCategory.RECORDS, this, SoundHelper.MovingSoundType.RECORD, tag);
+            RailcraftAdvancementTriggers.getInstance().onJukeboxCartPlay(player, this, sound.soundName);
         }
         return true;
     }

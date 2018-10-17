@@ -29,7 +29,6 @@ public class ModuleTracks extends RailcraftModulePayload {
                         RailcraftItems.TRACK_PARTS,
                         RailcraftBlocks.ACTUATOR,
                         RailcraftBlocks.TRACK_OUTFITTED,
-//                        RailcraftBlocks.TRACK_JUNCTION_IRON,
                         TrackKits.ACTIVATOR,
                         TrackKits.BOOSTER,
                         TrackKits.BUFFER_STOP,
@@ -44,7 +43,8 @@ public class ModuleTracks extends RailcraftModulePayload {
                         TrackKits.JUNCTION,
                         TrackKits.TURNOUT,
                         TrackKits.WYE,
-                        TrackKits.MESSENGER
+                        TrackKits.MESSENGER,
+                        TrackKits.DELAYED
                 );
             }
 

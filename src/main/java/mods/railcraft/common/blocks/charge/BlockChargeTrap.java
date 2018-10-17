@@ -39,8 +39,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -144,8 +144,8 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
      * Called When an Entity Collided with the Block
      */
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+        super.onEntityCollision(world, pos, state, entity);
         ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 10F, ZAP_COST);
     }
 

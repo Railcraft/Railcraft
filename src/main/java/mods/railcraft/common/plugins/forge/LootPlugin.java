@@ -29,8 +29,8 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
@@ -75,11 +75,11 @@ public final class LootPlugin {
 
     @SubscribeEvent
     public void lootLoad(LootTableLoadEvent event) {
-        if (!"minecraft".equals(event.getName().getResourceDomain())) {
+        if (!"minecraft".equals(event.getName().getNamespace())) {
             return;
         }
 
-        ResourceLocation resourceLocation = RailcraftConstantsAPI.locationOf(event.getName().getResourcePath());
+        ResourceLocation resourceLocation = RailcraftConstantsAPI.locationOf(event.getName().getPath());
         LootTable lootTable = LootTableLoader.loadBuiltinLootTable(resourceLocation, event.getLootTableManager());
         if (lootTable != null) {
             for (String poolName : poolNames) {
@@ -160,7 +160,7 @@ public final class LootPlugin {
 
         @Nullable
         public static LootTable loadBuiltinLootTable(ResourceLocation resource, LootTableManager manager) {
-            URL url = LootTableLoader.class.getResource("/assets/" + resource.getResourceDomain() + "/loot_tables/" + resource.getResourcePath() + ".json");
+            URL url = LootTableLoader.class.getResource("/assets/" + resource.getNamespace() + "/loot_tables/" + resource.getPath() + ".json");
 
             if (url != null) {
                 String s;

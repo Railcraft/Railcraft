@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,16 +14,19 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
+import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
+import mods.railcraft.common.blocks.aesthetics.concrete.ItemReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
-import mods.railcraft.common.blocks.aesthetics.glass.ItemStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
+import mods.railcraft.common.blocks.aesthetics.metals.BlockMetal;
+import mods.railcraft.common.blocks.aesthetics.metals.ItemBlockMetal;
 import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
@@ -54,6 +57,7 @@ import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexAbandoned;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlexElectric;
+import mods.railcraft.common.blocks.tracks.flex.ItemTrackStateless;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
@@ -67,8 +71,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -102,7 +106,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     EQUIPMENT("equipment", BlockMachineEquipment.class, BlockMachineEquipment::new, ItemMachine::new),
     FRAME("frame", BlockFrame.class, BlockFrame::new, ItemBlockRailcraft::new),
     GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
-    GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
+    METAL("metal", BlockMetal.class, BlockMetal::new, ItemBlockMetal::new),
+    GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemBlockRailcraftColored::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
@@ -113,6 +118,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     POST("post", BlockPost.class, BlockPost::new, ItemPost::new),
     POST_METAL("post_metal", BlockPostMetal.class, BlockPostMetal::new, ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetalPlatform.class, BlockPostMetalPlatform::new, ItemPostMetal::new),
+    REINFORCED_CONCRETE("reinforced_concrete", BlockReinforcedConcrete.class, BlockReinforcedConcrete::new, ItemReinforcedConcrete::new),
     RITUAL("ritual", BlockRitual.class, BlockRitual::new, null),
     SIGNAL("signal", BlockMachineSignalRailcraft.class, BlockMachineSignalRailcraft::new, ItemSignal::new),
     SIGNAL_DUAL("signal_dual", BlockMachineSignalDualRailcraft.class, BlockMachineSignalDualRailcraft::new, ItemSignal::new),
@@ -120,12 +126,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     SLAB("slab", BlockRailcraftSlab.class, BlockRailcraftSlab::new, ItemSlab::new),
     STAIR("stair", BlockRailcraftStairs.class, BlockRailcraftStairs::new, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, BlockTrackElevator::new, ItemTrack::new),
-    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrack::new),
-    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrack::new),
+    TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HIGH_SPEED("track_flex_high_speed", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.HIGH_SPEED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_HS_ELECTRIC("track_flex_hs_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.HIGH_SPEED_ELECTRIC.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_REINFORCED("track_flex_reinforced", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.REINFORCED.getTrackType()), ItemTrackStateless::new),
+    TRACK_FLEX_STRAP_IRON("track_flex_strap_iron", BlockTrackFlex.class, () -> new BlockTrackFlex(TrackTypes.STRAP_IRON.getTrackType()), ItemTrackStateless::new),
     TRACK_FORCE("track_force", BlockTrackForce.class, BlockTrackForce::new, ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, BlockTrackOutfitted::new, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, BlockRailcraftWall::new, ItemMaterial::new),
@@ -135,29 +141,34 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, BlockWorldspikePoint::new, ItemBlockRailcraft::new),
     // singles
     TRADE_STATION("trade_station", BlockTradeStation.class, BlockTradeStation::new, ItemBlockEntityDelegate::new),
-    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemBlockEntityDelegate::new),
+    FORCE_TRACK_EMITTER("force_track_emitter", BlockForceTrackEmitter.class, BlockForceTrackEmitter::new, ItemForceTrackEmitter::new),
     ADMIN_STEAM_PRODUCER("admin_steam_producer", BlockAdminSteamProducer.class, BlockAdminSteamProducer::new, ItemBlockEntityDelegate::new),
     CHEST_METALS("chest_metals", BlockChestMetals.class, BlockChestMetals::new, ItemBlockEntityDelegate::new),
     CHEST_VOID("chest_void", BlockChestVoid.class, BlockChestVoid::new, ItemBlockEntityDelegate::new),
     // multiblocks
-    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOven::new, ItemCokeOven::new),
-    BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlastFurnace::new),
-    ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemMultiBlock::new),
-    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemMultiBlock::new),
-    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockTank::new),
-    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockTank::new),
-    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockTank::new),
-    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockTank::new),
-    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockTank::new),
-    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockTank::new),
-    TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemMultiBlock::new),
-    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemMultiBlock::new),
+    COKE_OVEN("coke_oven", BlockCokeOven.class, BlockCokeOvenRegular::new, ItemBlockCustomModel::new),
+    BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlockCustomModel::new),
+    ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemBlockEntityDelegate::new),
+    STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemBlockCustomModel::new),
+    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockRailcraftColored::new),
+    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockRailcraftColored::new),
+    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockRailcraftColored::new),
+    TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemBlockEntityDelegate::new),
+    FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemBlockEntityDelegate::new),
+    BOILER_FIREBOX_FLUID("boiler_firebox_fluid", BlockBoilerFireboxFluid.class, BlockBoilerFireboxFluid::new, ItemBlockEntityDelegate::new),
+    BOILER_FIREBOX_SOLID("boiler_firebox_solid", BlockBoilerFireboxSolid.class, BlockBoilerFireboxSolid::new, ItemBlockEntityDelegate::new),
+    BOILER_TANK_PRESSURE_HIGH("boiler_tank_pressure_high", BlockBoilerTankHigh.class, BlockBoilerTankHigh::new, ItemBlockEntityDelegate::new),
+    BOILER_TANK_PRESSURE_LOW("boiler_tank_pressure_low", BlockBoilerTankLow.class, BlockBoilerTankLow::new, ItemBlockEntityDelegate::new),
+    STEAM_TURBINE("steam_turbine", BlockSteamTurbine.class, BlockSteamTurbine::new, ItemBlockCustomModel::new),
+    COKE_OVEN_RED("coke_oven_red", BlockCokeOven.class, BlockCokeOvenRed::new, ItemBlockCustomModel::new),
     // others
     ;
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;
-    private final Class<? extends Block> blockClass;
     private final Class<? extends IVariantEnum> variantClass;
     private final Definition def;
     private Block block;
@@ -170,7 +181,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier,
                     @Nullable Function<Block, ItemBlock> itemSupplier, @Nullable Supplier<?> altRecipeObject) {
         this.def = new Definition(this, tag, altRecipeObject);
-        this.blockClass = blockClass;
         RailcraftBlockMetadata annotation = blockClass.getAnnotation(RailcraftBlockMetadata.class);
         this.variantClass = annotation != null ? annotation.variant() : null;
         this.blockSupplier = blockSupplier;
@@ -191,7 +201,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         if (isEnabled()) {
             block = blockSupplier.get();
             block.setRegistryName(getRegistryName());
-            block.setUnlocalizedName("railcraft." + getBaseTag().replace("_", "."));
+            block.setTranslationKey("railcraft." + getBaseTag().replace("_", "."));
 
             if (itemSupplier != null) {
                 item = itemSupplier.apply(block);
@@ -247,7 +257,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    @Nullable
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (block instanceof IRailcraftBlock)
             return ((IRailcraftBlock) block).getState(variant);
@@ -255,13 +264,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    @Nullable
-    public ItemBlock item() {
+    public @Nullable ItemBlock item() {
         return item;
     }
 
-    @Nullable
-    public Class<? extends IVariantEnum> getVariantClass() {
+    public @Nullable Class<? extends IVariantEnum> getVariantClass() {
         return variantClass;
     }
 
@@ -279,6 +286,5 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public String toString() {
         return "Block{" + getBaseTag() + "}";
     }
-
 
 }

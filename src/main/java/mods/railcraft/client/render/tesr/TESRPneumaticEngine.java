@@ -24,7 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
@@ -67,7 +67,7 @@ public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEng
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
 
         float[] angle = {0, 0, 0};
-        float[] translate = {orientation.getFrontOffsetX(), orientation.getFrontOffsetY(), orientation.getFrontOffsetZ()};
+        float[] translate = {orientation.getXOffset(), orientation.getYOffset(), orientation.getZOffset()};
 
         switch (orientation) {
             case EAST:

@@ -11,44 +11,44 @@ import thaumcraft.api.golems.parts.GolemMaterial;
 
 public interface IGolemProperties {
 
-	public abstract Set<EnumGolemTrait> getTraits();
+	Set<EnumGolemTrait> getTraits();
 
-	public abstract boolean hasTrait(EnumGolemTrait tag);
+	boolean hasTrait(EnumGolemTrait tag);
 	
-	public abstract long toLong();
+	long toLong();
 
-	public abstract ItemStack[] generateComponents();
+	ItemStack[] generateComponents();
 	
 	
 	//material
-	public abstract void setMaterial(GolemMaterial mat);
+    void setMaterial(GolemMaterial mat);
 
-	public abstract GolemMaterial getMaterial();
+	GolemMaterial getMaterial();
 
 	//head
-	public abstract void setHead(GolemHead mat);
+    void setHead(GolemHead mat);
 
-	public abstract GolemHead getHead();
+	GolemHead getHead();
 
 	//arms
-	public abstract void setArms(GolemArm mat);
+    void setArms(GolemArm mat);
 
-	public abstract GolemArm getArms();
+	GolemArm getArms();
 
 	//legs
-	public abstract void setLegs(GolemLeg mat);
+    void setLegs(GolemLeg mat);
 
-	public abstract GolemLeg getLegs();
+	GolemLeg getLegs();
 
 	//addon
-	public abstract void setAddon(GolemAddon mat);
+    void setAddon(GolemAddon mat);
 
-	public abstract GolemAddon getAddon();
+	GolemAddon getAddon();
 
 	//rank
-	public abstract void setRank(int r);
+    void setRank(int r);
 
-	public abstract int getRank();
+	int getRank();
 
 	
 	

@@ -29,8 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
@@ -139,7 +138,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             return extra;
 
         try {
-            ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager();
 
             EntityMinecart linkedCart = lm.getLinkedCartA(this);
             if (extra > 0 && linkedCart != source && linkedCart instanceof IEnergyTransfer)
@@ -172,7 +171,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (!passAlong)
             return provide;
 
-        ILinkageManager lm = CartToolsAPI.getLinkageManager(world);
+        ILinkageManager lm = CartToolsAPI.getLinkageManager();
 
         EntityMinecart linkedCart = lm.getLinkedCartA(this);
         if (provide < amount && linkedCart != source && linkedCart instanceof IEnergyTransfer)
@@ -215,7 +214,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         return this;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_ENERGY;

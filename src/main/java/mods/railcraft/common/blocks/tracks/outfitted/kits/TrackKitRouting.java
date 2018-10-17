@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackKitPowered;
 import mods.railcraft.api.tracks.ITrackKitRouting;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -84,7 +83,10 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
 
     @Override
     public void setPowered(boolean powered) {
-        this.powered = powered;
+        if (this.powered != powered) {
+            this.powered = powered;
+            sendUpdateToClient();
+        }
     }
 
     @Override

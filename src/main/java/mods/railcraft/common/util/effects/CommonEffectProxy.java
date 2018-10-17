@@ -56,7 +56,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void forceTrackSpawnEffect(World world, BlockPos pos) {
+    public void forceTrackSpawnEffect(World world, BlockPos pos, int color) {
         if (Game.isClient(world))
             return;
 
@@ -64,6 +64,7 @@ public class CommonEffectProxy implements IEffectManager {
             PacketEffect pkt = new PacketEffect(Effect.FORCE_SPAWN);
             RailcraftOutputStream data = pkt.getOutputStream();
             data.writeBlockPos(pos);
+            data.writeInt(color);
             pkt.sendPacket(world, pos);
         } catch (IOException ignored) {
         }

@@ -13,6 +13,8 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -37,13 +39,14 @@ public class ModuleCharge extends RailcraftModulePayload {
                         RailcraftBlocks.CHARGE_FEEDER,
                         RailcraftBlocks.CHARGE_TRAP,
                         RailcraftBlocks.CHARGE_BATTERY,
+                        RailcraftBlocks.STEAM_TURBINE,
                         RailcraftBlocks.FRAME,
                         RailcraftBlocks.WIRE
                 );
             }
 
             @Override
-            public void preInit() {
+            public void init() {
 //                EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
 //                if (alpha.isAvailable()) {
 //                    CraftingPlugin.addRecipe(alpha.getStack(3),
@@ -55,9 +58,9 @@ public class ModuleCharge extends RailcraftModulePayload {
 
 //                    CraftingPlugin.addRecipe(new RotorRepairRecipe());
 
-//                ItemStack rotor = RailcraftPartItems.getTurbineRotor();
-//                rotor.setItemDamage(25000);
-//                CraftingPlugin.addShapelessRecipe(rotor, RailcraftPartItems.getTurbineRotor());
+                ItemStack rotor = RailcraftItems.TURBINE_ROTOR.getStack();
+                rotor.setItemDamage(25000);
+                CraftingPlugin.addShapelessRecipe(rotor, RailcraftItems.TURBINE_ROTOR.getStack());
 //                }
 
 //                EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;

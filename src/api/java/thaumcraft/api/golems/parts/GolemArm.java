@@ -71,9 +71,9 @@ public class GolemArm {
 	 * This will allow you to create your own projectiles 
 	 */
 	public interface IArmFunction extends IGenericFunction {
-		public void onMeleeAttack(IGolemAPI golem, Entity ent);
-		public void onRangedAttack(IGolemAPI golem, EntityLivingBase target, float range);
-		public EntityAIAttackRanged getRangedAttackAI(IRangedAttackMob golem);
+		void onMeleeAttack(IGolemAPI golem, Entity ent);
+		void onRangedAttack(IGolemAPI golem, EntityLivingBase target, float range);
+		EntityAIAttackRanged getRangedAttackAI(IRangedAttackMob golem);
 	}
 	
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
+import mods.railcraft.common.blocks.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
-import mods.railcraft.common.blocks.machine.interfaces.ITileNonSolid;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -33,7 +33,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 

@@ -32,7 +32,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -91,24 +91,18 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
         boolean sameTrain = Train.getTrain(cart).getUUIDs().contains(currentCart);
 
-        boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(cart) : false;
+        boolean shouldSwitch = (switchDevice != null) && switchDevice.shouldSwitch(cart);
 
         if (isSprung()) {
-            if (shouldSwitch || sameTrain) {
-                // we're either same train or switched so return true
-                return true;
-            }
+            // we're either same train or switched so return true
+            return shouldSwitch || sameTrain;
             // detected new train, we can safely treat this as not switched
-            return false;
         }
 
         if (isLocked()) {
-            if (shouldSwitch && !sameTrain) {
-                // detected new train, we can safely treat this as switched
-                return true;
-            }
+            // detected new train, we can safely treat this as switched
+            return shouldSwitch && !sameTrain;
             // other cases we obey locked
-            return false;
         }
 
         // we're not sprung or locked so we should return shouldSwitch

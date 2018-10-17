@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
@@ -39,8 +39,8 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     protected EnumFacing direction = EnumFacing.NORTH;
 
     public TileTradeStation() {
-        setInventorySize(16);
+        super(16);
         invInput = new InventoryMapper(this, 0, 10);
         invOutput = new InventoryMapper(this, 10, 6, false);
     }
@@ -112,7 +112,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         return MiscTools.getNearbyEntities(world, EntityVillager.class, x, y - 1, y + 3, z, range);
     }
 
-    private boolean attemptTrade(List<EntityVillager> villagers, int tradeSet) {
+    private void attemptTrade(List<EntityVillager> villagers, int tradeSet) {
         ItemStack buy1 = recipeSlots.getStackInSlot(tradeSet * 3 + 0);
         ItemStack buy2 = recipeSlots.getStackInSlot(tradeSet * 3 + 1);
         ItemStack sell = recipeSlots.getStackInSlot(tradeSet * 3 + 2);
@@ -121,6 +121,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
             for (MerchantRecipe recipe : recipes) {
                 if (recipe.isRecipeDisabled())
                     continue;
+                // TODO: There must be clearer way to write this!
                 //noinspection ConstantConditions
                 if (!InvTools.isEmpty(recipe.getItemToBuy()) && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
                     continue;
@@ -133,11 +134,10 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
                 if (canDoTrade(recipe)) {
 //                    System.out.println("Can do trade");
                     doTrade(villager, recipe);
-                    return true;
+                    return;
                 }
             }
         }
-        return false;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -200,7 +200,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
                 p = VillagerRegistry.FARMER;
             profession = p;
         }
-        direction = EnumFacing.getFront(data.getByte("direction"));
+        direction = EnumFacing.byIndex(data.getByte("direction"));
     }
 
     @Override
@@ -214,15 +214,11 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         profession = ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.readUTF()));
-        EnumFacing f = EnumFacing.getFront(data.readByte());
+        EnumFacing f = EnumFacing.byIndex(data.readByte());
         if (direction != f) {
             direction = f;
             markBlockForUpdate();
         }
-    }
-
-    @Override
-    public void writeGuiData(RailcraftOutputStream data) throws IOException {
     }
 
     @Override
@@ -243,6 +239,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         EntityVillager villager = new EntityVillager(world);
         villager.setProfession(profession);
         MerchantRecipeList recipes = villager.getRecipes(null);
+        assert recipes != null;
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 0, recipe.getItemToBuy());
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 1, recipe.getSecondItemToBuy());
@@ -269,9 +266,8 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         return slot >= 10;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return EnumGui.TRADE_STATION;
     }
 
@@ -285,8 +281,4 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         return direction;
     }
 
-    @Override
-    public String getLocalizationTag() {
-        return super.getLocalizationTag() + ".name";
-    }
 }

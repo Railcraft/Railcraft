@@ -18,9 +18,10 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -85,12 +86,12 @@ public class DetectorTrain extends Detector {
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeShort(getTrainSize());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         setTrainSize(data.readShort());
     }
 

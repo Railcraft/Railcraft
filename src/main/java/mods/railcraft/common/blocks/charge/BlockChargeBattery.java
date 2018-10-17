@@ -26,8 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -86,8 +85,8 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
      * Called When an Entity Collided with the Block
      */
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+        super.onEntityCollision(world, pos, state, entity);
         ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 1F, 1000.0);
     }
 

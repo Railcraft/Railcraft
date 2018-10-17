@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,13 +17,11 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -37,16 +35,15 @@ import java.util.function.Supplier;
 public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IRailcraftRecipeIngredient {
     class Definition {
         public final Set<Class<? extends IRailcraftModule>> modules = new HashSet<>();
-        final InitializationConditional conditions = new InitializationConditional();
+        private final InitializationConditional conditions = new InitializationConditional();
         private final String tag;
-        @Nullable
-        private final Supplier<?> altRecipeObject;
+        private final @Nullable Supplier<?> altRecipeObject;
         public final ResourceLocation registryName;
 
         public Definition(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
             this.tag = tag;
             this.altRecipeObject = altRecipeObject;
-            registryName = new ResourceLocation(obj.getResourceDomain() + ":" + tag);
+            registryName = new ResourceLocation(obj.getNamespace() + ":" + tag);
             conditions.add(c -> !modules.isEmpty(), () -> "it has no module");
         }
     }
@@ -96,13 +93,13 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
             if (obj instanceof Item) {
                 return obj == stack.getItem();
             } else if (obj instanceof Block) {
-                return InvTools.getBlockFromStack(stack) == obj;
+                return InvTools.getBlockStateFromStack(stack).getBlock() == obj;
             }
             return false;
         }).orElse(false);
     }
 
-    default String getResourceDomain() {
+    default String getNamespace() {
         return RailcraftConstants.RESOURCE_DOMAIN;
     }
 
@@ -137,18 +134,28 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 
     Optional<T> getObject();
 
-    @Override
-    @Nullable
+    /**
+     * @deprecated As of MC 1.12, replaced by
+     * {@link #getIngredient()} }
+     */
     @Deprecated
-    default Object getRecipeObject() {
+    @Override
+    default @Nullable Object getRecipeObject() {
         return getRecipeObject(null);
     }
 
+    /**
+     * @deprecated As of MC 1.12, replaced by
+     * {@link #getIngredient(IVariantEnum)} }
+     */
+    @Deprecated
     @Override
-    @Nullable
-    @Deprecated // Use ingredient
-    default Object getRecipeObject(@Nullable IVariantEnum variant) {
+    default @Nullable Object getRecipeObject(@Nullable IVariantEnum variant) {
         Object obj = getObject().map(o -> {
+            if (!isEnabled())
+                return null;
+            if (o.getVariantEnum() != null && variant == null)
+                return o.getWildcard();
             o.checkVariant(variant);
             return o.getRecipeObject(variant);
         }).orElse(null);
@@ -159,12 +166,6 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;
-    }
-
-    default Ingredient getIngredient() {
-        Object object = getRecipeObject();
-        Ingredient result = CraftingHelper.getIngredient(object);
-        return result == null ? Ingredient.EMPTY : result;
     }
 
     default boolean isEnabled() {

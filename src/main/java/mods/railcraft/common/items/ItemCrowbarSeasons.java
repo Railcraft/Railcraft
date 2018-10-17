@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -38,9 +38,9 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public static SeasonPlugin.Season getCurrentSeason(@Nullable ItemStack crowbar) {
+    public static SeasonPlugin.Season getCurrentSeason(ItemStack crowbar) {
         SeasonPlugin.Season aura = SeasonPlugin.Season.NONE;
-        if (crowbar != null && crowbar.getItem() instanceof ItemCrowbarSeasons) {
+        if (crowbar.getItem() instanceof ItemCrowbarSeasons) {
             NBTTagCompound data = crowbar.getTagCompound();
             if (data != null)
                 aura = SeasonPlugin.Season.VALUES[data.getByte("season")];
@@ -48,8 +48,8 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
         return aura;
     }
 
-    public static void incrementSeason(@Nullable ItemStack crowbar) {
-        if (crowbar != null && crowbar.getItem() instanceof ItemCrowbarSeasons) {
+    public static void incrementSeason(ItemStack crowbar) {
+        if (crowbar.getItem() instanceof ItemCrowbarSeasons) {
             NBTTagCompound data = crowbar.getTagCompound();
             if (data == null) {
                 data = new NBTTagCompound();

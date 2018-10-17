@@ -30,7 +30,6 @@ public final class RailcraftConstants {
     public static final String EMBLEM_URL = "https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Emblems/";
     public static final long TICKS_PER_HOUR = 72000;
     public static final long TICKS_PER_MIN = 1200;
-    public static final int IS_REVERSED_VARIABLE_INDEX = 6;
 
     public static final int BOOK_LINE_LENGTH = 37;
     public static final int BOOK_LINES_PER_PAGE = 13;

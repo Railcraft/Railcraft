@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.core;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
@@ -26,6 +26,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
+import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
@@ -34,13 +35,13 @@ import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
-import mods.railcraft.common.items.potion.RailcraftPotionTypes;
-import mods.railcraft.common.items.potion.RailcraftPotions;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -49,6 +50,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.resource.IResourceType;
+import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
+import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -57,14 +61,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends CommonProxy implements ISelectiveResourceReloadListener {
+    public ClientProxy() {
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
+    }
+
     @Override
     public World getClientWorld() {
         return FMLClientHandler.instance().getClient().world;
@@ -157,8 +166,8 @@ public class ClientProxy extends CommonProxy {
                         block.registerItemModel(stack, variant);
                 });
 
-        RailcraftPotions.VALUES.forEach(RailcraftPotions::initializeClient);
-        RailcraftPotionTypes.VALUES.forEach(RailcraftPotionTypes::initializeClient);
+//        RailcraftPotions.VALUES.forEach(RailcraftPotions::initializeClient);
+//        RailcraftPotionTypes.VALUES.forEach(RailcraftPotionTypes::initializeClient);
 
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.CORE_MODEL);
         JSONModelRenderer.INSTANCE.registerModel(CartContentRendererRedstoneFlux.FRAME_MODEL);
@@ -201,6 +210,7 @@ public class ClientProxy extends CommonProxy {
 //        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
         //TODO move to block classes
+        bindTESR(TileSteamTurbine.class, TESRTurbineGauge::new);
         bindTESR(TileTankBase.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
@@ -282,4 +292,9 @@ public class ClientProxy extends CommonProxy {
 //        }
 //    }
 
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+        if (Game.DEVELOPMENT_ENVIRONMENT && resourcePredicate.test(VanillaResourceType.TEXTURES))
+            Game.log(Game.DEBUG_REPORT, "Detected texture reload");
+    }
 }

@@ -17,7 +17,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
@@ -85,7 +84,7 @@ public class CartDisassemblyRecipe extends BaseRecipe {
         private final RailcraftCarts cart;
 
         public RailcraftVariant(RailcraftCarts cart) {
-            super(cart.getDef().registryName.getResourcePath() + "_recipe", cart.getContents(), cart.getItem(), Items.MINECART);
+            super(cart.getDef().registryName.getPath() + "_recipe", cart.getContents(), cart.getItem(), Items.MINECART);
             this.cart = cart;
         }
 

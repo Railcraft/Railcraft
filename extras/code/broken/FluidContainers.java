@@ -34,7 +34,7 @@ public class FluidContainers {
 //        if (item == null) {
 //            String tag = "railcraft.fluid.creosote.bucket";
 //            item = new ItemBucketRailcraft(Fluids.CREOSOTE.get());
-//            item.setUnlocalizedName(tag);
+//            item.setTranslationKey(tag);
 //            RailcraftRegistry.register(item);
 //
 //            FluidTools.registerBucket(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
@@ -55,7 +55,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.creosote.bottle";
 //
 //            if (RailcraftConfig.isItemEnabled(tag)) {
-//                item = new ItemFluidContainer().setUnlocalizedName(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//                item = new ItemFluidContainer().setTranslationKey(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 //                RailcraftRegistry.register(item);
 //
 //                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.RAILWAY);
@@ -81,7 +81,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.creosote.can";
 //            if (RailcraftConfig.isItemEnabled(tag)) {
 //                item = new ItemFluidContainer();
-//                item.setUnlocalizedName(tag);
+//                item.setTranslationKey(tag);
 //                RailcraftRegistry.register(item);
 //
 //                boolean forestry = FluidTools.registerCan(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
@@ -106,7 +106,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.creosote.wax";
 //            if (RailcraftConfig.isItemEnabled(tag)) {
 //                item = new ItemFluidContainer();
-//                item.setUnlocalizedName(tag);
+//                item.setTranslationKey(tag);
 //                RailcraftRegistry.register(item);
 //
 //                boolean forestry = FluidTools.registerWax(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
@@ -131,7 +131,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.creosote.refactory";
 //            if (RailcraftConfig.isItemEnabled(tag)) {
 //                item = new ItemFluidContainer();
-//                item.setUnlocalizedName(tag);
+//                item.setTranslationKey(tag);
 //                RailcraftRegistry.register(item);
 //
 //                boolean forestry = FluidTools.registerRefactory(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
@@ -156,7 +156,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.creosote.cell";
 //            if (RailcraftConfig.isItemEnabled(tag)) {
 //                item = new ItemFluidContainer();
-//                item.setUnlocalizedName(tag);
+//                item.setTranslationKey(tag);
 //                RailcraftRegistry.register(item);
 //
 //                boolean ic2 = FluidTools.registerCell(Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));
@@ -181,7 +181,7 @@ public class FluidContainers {
 //            String tag = "railcraft.fluid.steam.bottle";
 //
 //            item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.GLASS_BOTTLE));
-//            item.setUnlocalizedName(tag);
+//            item.setTranslationKey(tag);
 //            RailcraftRegistry.register(item);
 //
 //            FluidTools.registerBottle(Fluids.STEAM.get(FluidTools.BUCKET_VOLUME), new ItemStack(item));

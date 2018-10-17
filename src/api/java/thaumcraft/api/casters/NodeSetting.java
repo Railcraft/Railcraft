@@ -68,12 +68,12 @@ public class NodeSetting {
 
 
 	public interface INodeSettingType {
-		public int getDefault();
+		int getDefault();
 
-		public int clamp(int i);
+		int clamp(int i);
 
-		public int getValue(int value);
-		public String getValueText(int value);
+		int getValue(int value);
+		String getValueText(int value);
 	}
 	
 	public static class NodeSettingIntList implements INodeSettingType {

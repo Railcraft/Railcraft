@@ -31,7 +31,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -54,8 +54,8 @@ public class OutfittedTrackModel implements IModel {
 
     private ResourceLocation getModelLocation(String modelPrefix, ResourceLocation registryName) {
         return new ResourceLocation(
-                registryName.getResourceDomain(),
-                modelPrefix + registryName.getResourcePath());
+                registryName.getNamespace(),
+                modelPrefix + registryName.getPath());
     }
 
     private ModelResourceLocation getTrackTypeModelLocation(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
@@ -70,8 +70,8 @@ public class OutfittedTrackModel implements IModel {
         ResourceLocation trackTypeName = trackType.getRegistryName();
         ResourceLocation trackKitName = trackKit.getRegistryName();
         ResourceLocation modelLocation = new ResourceLocation(
-                trackTypeName.getResourceDomain(),
-                UNIFIED_MODEL_FOLDER + trackTypeName.getResourcePath() + "/" + trackKitName.getResourcePath()
+                trackTypeName.getNamespace(),
+                UNIFIED_MODEL_FOLDER + trackTypeName.getPath() + "/" + trackKitName.getPath()
         );
         return new ModelResourceLocation(modelLocation, "shape=" + shape.getName() + ",state=" + state);
     }
@@ -160,12 +160,12 @@ public class OutfittedTrackModel implements IModel {
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
-            return Objects.equals(modelLocation.getResourceDomain(), "railcraft")
-                    && modelLocation.getResourcePath().contains("outfitted_rail");
+            return Objects.equals(modelLocation.getNamespace(), "railcraft")
+                    && modelLocation.getPath().contains("outfitted_rail");
         }
 
         @Override
-        public IModel loadModel(ResourceLocation modelLocation) throws IOException {
+        public IModel loadModel(ResourceLocation modelLocation) {
             return OutfittedTrackModel.INSTANCE;
         }
     }

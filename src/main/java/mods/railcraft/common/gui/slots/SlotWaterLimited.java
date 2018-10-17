@@ -14,8 +14,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class SlotWaterLimited extends SlotWater {
 

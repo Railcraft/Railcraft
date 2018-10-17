@@ -18,13 +18,14 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PowerPlugin {
+public final class PowerPlugin {
 
     public static final int NO_POWER = 0;
     public static final int FULL_POWER = 15;
 
     public static boolean isBlockBeingPowered(World world, BlockPos pos) {
-        return world.isBlockIndirectlyGettingPowered(pos) > 0;
+        return world.isBlockPowered(pos);
+//        return world.isBlockIndirectlyGettingPowered(pos) > 0;
     }
 
     public static boolean isBlockBeingPowered(World world, BlockPos pos, EnumFacing from) {

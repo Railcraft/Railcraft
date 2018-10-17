@@ -5,7 +5,7 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 
-public class PotionTypeCreosote extends PotionTypeRailcraft {
+final class PotionTypeCreosote extends PotionTypeRailcraft {
     public PotionTypeCreosote() {
         super("creosote", new PotionEffect(RailcraftPotions.CREOSOTE.get(), 3600, 0));
     }

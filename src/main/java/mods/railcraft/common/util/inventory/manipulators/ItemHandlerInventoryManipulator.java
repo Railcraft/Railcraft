@@ -13,8 +13,8 @@ import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -43,8 +43,8 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         if (isEmpty(stack))
             return emptyStack();
         stack = stack.copy();
-        List<IInvSlot> filledSlots = new ArrayList<IInvSlot>(inv.getSlots());
-        List<IInvSlot> emptySlots = new ArrayList<IInvSlot>(inv.getSlots());
+        List<IInvSlot> filledSlots = new ArrayList<>(inv.getSlots());
+        List<IInvSlot> emptySlots = new ArrayList<>(inv.getSlots());
         for (IInvSlot slot : InventoryIterator.getForge(inv)) {
             if (slot.canPutStackInSlot(stack)) {
                 if (isEmpty(slot.getStack()))
@@ -80,11 +80,11 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         return injected;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
-        List<ItemStack> outputList = new ArrayList<ItemStack>();
+        List<ItemStack> outputList = new ArrayList<>();
         for (IInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;

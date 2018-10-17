@@ -14,8 +14,6 @@ import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -31,58 +29,87 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileAdminSteamProducer extends RailcraftTickingTileEntity implements ISmartTile {
 
-    private final TankManager tankManager = new TankManager();
-    private boolean powered;
+    private static final IFluidHandler HANDLER = new IFluidHandler() {
+        @Override
+        public IFluidTankProperties[] getTankProperties() {
+            return new IFluidTankProperties[] {new IFluidTankProperties() {
+                final FluidStack steam = Fluids.STEAM.getB(4);
+
+                @Nullable
+                @Override
+                public FluidStack getContents() {
+                    return steam;
+                }
+
+                @Override
+                public int getCapacity() {
+                    return 4 * FluidTools.BUCKET_VOLUME;
+                }
+
+                @Override
+                public boolean canFill() {
+                    return false;
+                }
+
+                @Override
+                public boolean canDrain() {
+                    return true;
+                }
+
+                @Override
+                public boolean canFillFluidType(FluidStack fluidStack) {
+                    return false;
+                }
+
+                @Override
+                public boolean canDrainFluidType(FluidStack fluidStack) {
+                    return Fluids.STEAM.is(fluidStack);
+                }
+            }};
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            return 0;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain) {
+            return Fluids.STEAM.is(resource) ? resource : null;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            return Fluids.STEAM.get(maxDrain);
+        }
+    };
+    boolean powered;
 
     public TileAdminSteamProducer() {
-        StandardTank tankSteam = new StandardTank(FluidTools.BUCKET_VOLUME * 4) {
-            @Override
-            public int fillInternal(FluidStack resource, boolean doFill) {
-                return 0;
-            }
-
-            @Nullable
-            @Override
-            public FluidStack drainInternal(int maxDrain, boolean doDrain) {
-                if (!powered)
-                    return null;
-                return Fluids.STEAM.get(maxDrain);
-            }
-
-            @Nullable
-            @Override
-            public FluidStack drainInternal(FluidStack resource, boolean doDrain) {
-                if (!powered)
-                    return null;
-                if (Fluids.STEAM.is(resource))
-                    return resource.copy();
-                return null;
-            }
-        };
-        tankSteam.setCanFill(false);
-        tankManager.add(tankSteam);
-    }
-
-    public TankManager getTankManager() {
-        return tankManager;
+        powered = false;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return (powered && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (powered && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(HANDLER);
         return super.getCapability(capability, facing);
     }
 
@@ -114,8 +141,11 @@ public class TileAdminSteamProducer extends RailcraftTickingTileEntity implement
         if (Game.isClient(world))
             return;
 
-        if (powered)
-            tankManager.push(tileCache, Predicates.alwaysTrue(), EnumFacing.VALUES, 0, FluidTools.BUCKET_VOLUME);
+        if (powered) {
+            for (IFluidHandler handler : FluidTools.findNeighbors(tileCache, Predicates.alwaysTrue(), EnumFacing.VALUES)) {
+                FluidUtil.tryFluidTransfer(handler, HANDLER, FluidTools.BUCKET_VOLUME * 4, true);
+            }
+        }
     }
 
     @Nullable

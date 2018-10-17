@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,14 +12,11 @@ package mods.railcraft.common.core;
 
 import net.minecraft.block.state.IBlockState;
 
-import javax.annotation.Nullable;
-
 /**
  * Lets see if we can remove some boilerplate with this.
  * <p>
  * Created by CovertJaguar on 3/24/2016.
  */
 public interface IContainerState {
-    @Nullable
     IBlockState getDefaultState();
 }

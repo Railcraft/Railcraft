@@ -22,13 +22,12 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
 
-import javax.annotation.Nullable;
-
-public class RailcraftModuleManager {
+public final class RailcraftModuleManager {
 
     private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
     private static final String CATEGORY_MODULES = "modules";
@@ -36,6 +35,7 @@ public class RailcraftModuleManager {
     private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<>();
     private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
     private static final List<Class<? extends IRailcraftModule>> loadOrder = new LinkedList<>();
+    static final Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
     private static Stage stage = Stage.LOADING;
     public static Configuration config;
 
@@ -294,26 +294,5 @@ public class RailcraftModuleManager {
         public void passToModule(IRailcraftModule.ModuleEventHandler eventHandler) {
         }
     }
-
-//    @SideOnly(Side.CLIENT)
-//    public static GuiScreen getGuiScreen(EnumGui guiType, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
-//        for (Class<? extends IRailcraftModule> m : enabledModules) {
-//            IRailcraftModule module = classToInstanceMapping.get(m);
-//            GuiScreen gui = module.getModuleEventHandler(true).getGuiScreen(guiType, inv, obj, world, x, y, z);
-//            if (gui != null)
-//                return gui;
-//        }
-//        return null;
-//    }
-//
-//    public static Container getGuiContainer(EnumGui guiType, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
-//        for (Class<? extends IRailcraftModule> m : enabledModules) {
-//            IRailcraftModule module = classToInstanceMapping.get(m);
-//            Container gui = module.getModuleEventHandler(true).getGuiContainer(guiType, inv, obj, world, x, y, z);
-//            if (gui != null)
-//                return gui;
-//        }
-//        return null;
-//    }
 
 }

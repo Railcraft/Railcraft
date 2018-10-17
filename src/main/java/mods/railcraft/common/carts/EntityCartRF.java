@@ -135,13 +135,13 @@ public final class EntityCartRF extends CartBase {
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
-        setRF(nbt.getInteger("rf"));
+        setRF(nbt.getInteger("fe"));
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
-        nbt.setInteger("rf", getRF());
+        nbt.setInteger("fe", getRF());
     }
 
 //    @Override

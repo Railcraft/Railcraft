@@ -9,12 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -24,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

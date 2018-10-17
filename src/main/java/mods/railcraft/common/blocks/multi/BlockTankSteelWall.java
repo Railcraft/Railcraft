@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class BlockTankSteelWall extends BlockTankMetal {
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock createTileEntity(World world, IBlockState state) {
         return new TileTankSteelWall();
     }
 

@@ -25,8 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCartChest extends CartBaseContainer {
     public EntityCartChest(World world) {
@@ -37,7 +36,7 @@ public class EntityCartChest extends CartBaseContainer {
         super(world, x, y, z);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Type getType() {
         return Type.CHEST;
@@ -77,11 +76,11 @@ public class EntityCartChest extends CartBaseContainer {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
+        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot).isEmpty() || !FluidItemHelper.isContainer(stack);
     }
 
     @Override
-    public boolean canPassItemRequests() {
+    public boolean canPassItemRequests(ItemStack stack) {
         return true;
     }
 
@@ -105,7 +104,7 @@ public class EntityCartChest extends CartBaseContainer {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new Error("Should not be called");

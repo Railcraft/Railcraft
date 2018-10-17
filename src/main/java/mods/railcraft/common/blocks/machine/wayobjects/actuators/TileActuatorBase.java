@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitSwitch;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -36,11 +36,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Arrays;
 
 public abstract class TileActuatorBase extends TileMachineBase implements ISwitchActuator, ITileShaped, ITileRotate {
     private static final float BOUNDS = -0.2F;
@@ -135,8 +134,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
             markBlockForUpdate();
     }
 
-    @Nullable
-    private ArrowDirection mergeArrowDirection(@Nullable ArrowDirection arrow1, @Nullable ArrowDirection arrow2) {
+    private @Nullable ArrowDirection mergeArrowDirection(@Nullable ArrowDirection arrow1, @Nullable ArrowDirection arrow2) {
         if (arrow1 == arrow2) return arrow1;
         if (arrow1 == null) return arrow2;
         if (arrow2 == null) return arrow1;
@@ -154,7 +152,6 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         return false;
     }
 
-    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -188,7 +185,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
 
         byte f = data.readByte();
         if (facing.ordinal() != f) {
-            facing = EnumFacing.getFront(f);
+            facing = EnumFacing.byIndex(f);
             markBlockForUpdate();
         }
         powered = data.readBoolean();
@@ -207,9 +204,8 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
         }
     }
 
-    @Nullable
     @Override
-    public EnumFacing[] getValidRotations() {
+    public @Nullable EnumFacing[] getValidRotations() {
         return EnumFacing.HORIZONTALS;
     }
 
@@ -219,12 +215,9 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     private void determineOrientation() {
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (TrackTools.isTrackInstanceAt(world, getPos().offset(side), ITrackKitSwitch.class)) {
-                setFacing(side);
-                return;
-            }
-        }
+        Arrays.stream(EnumFacing.HORIZONTALS)
+                .filter(side -> TrackTools.isTrackInstanceAt(world, getPos().offset(side), ITrackKitSwitch.class))
+                .findFirst().ifPresent(this::setFacing);
     }
 
     public boolean isPowered() {

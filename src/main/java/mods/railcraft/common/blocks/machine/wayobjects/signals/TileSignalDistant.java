@@ -15,8 +15,8 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileSignalDistant extends TileSignalBase implements IReceiverTile {
@@ -44,9 +44,9 @@ public class TileSignalDistant extends TileSignalBase implements IReceiverTile {
         sendUpdateToClient();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
 
         receiver.writeToNBT(data);
@@ -54,19 +54,19 @@ public class TileSignalDistant extends TileSignalBase implements IReceiverTile {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         super.readFromNBT(data);
         receiver.readFromNBT(data);
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
     }

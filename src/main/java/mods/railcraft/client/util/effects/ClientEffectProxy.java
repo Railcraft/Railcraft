@@ -52,13 +52,14 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-// TODO: Where you stupid when you decided to use a Proxy? Just no, no...
+// TODO: Where you stupid when you decided to use a Proxy? Just no, no... liach comment: say were instead of where
 @SideOnly(Side.CLIENT)
+@SuppressWarnings("unused")
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
 
-    @SuppressWarnings("unused")
+
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
     }
@@ -97,6 +98,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             return;
 
         BlockPos pos = data.readBlockPos();
+        int color = data.readInt();
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -104,10 +106,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
 //        double vy = RANDOM.nextDouble() * 0.01;
 //        double vz = RANDOM.nextGaussian() * 0.1;
         Vec3d vel = new Vec3d(0, 0, 0);
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.1), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.1), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.9), vel));
-        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.9), vel));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.1), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.1), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.1, y, z + 0.9), vel, color));
+        spawnParticle(new ParticleForceSpawn(world, new Vec3d(x + 0.9, y, z + 0.9), vel, color));
     }
 
     @Override
@@ -117,7 +119,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
-        if (RailcraftItems.GOGGLES.item() != null) {
+        if (RailcraftItems.GOGGLES.isLoaded()) {
             ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().player);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }
@@ -241,7 +243,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        Vec3d start = es.getPosF().addVector(0.0, yOffset, 0.0);
+        Vec3d start = es.getPosF().add(0.0, yOffset, 0.0);
         world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.x, start.y, start.z, vx, vy, vz);
     }
 
@@ -253,7 +255,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        spawnParticle(new ParticleSteam(world, es.getPosF().addVector(0.0, yOffset, 0.0), new Vec3d(vx, vy, vz)));
+        spawnParticle(new ParticleSteam(world, es.getPosF().add(0.0, yOffset, 0.0), new Vec3d(vx, vy, vz)));
     }
 
     @Override
@@ -261,7 +263,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (thinParticles(true))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
-        vel = vel.addVector(rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02);
+        vel = vel.add(rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.02);
         ParticleSteam fx = new ParticleSteam(world, es.getPosF(), vel, 1.5F);
         fx.setParticleGravity(0F);
         spawnParticle(fx);

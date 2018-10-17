@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,12 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -36,7 +35,7 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
     public void defineRecipes() {
         super.defineRecipes();
         ItemStack tank;
-        //TODO fix
+        //TODO fix, its all wrong
 //        if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
 //            tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getStack();
 //        else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())

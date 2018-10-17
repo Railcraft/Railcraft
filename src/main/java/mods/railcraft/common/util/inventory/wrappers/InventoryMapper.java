@@ -12,8 +12,6 @@ package mods.railcraft.common.util.inventory.wrappers;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
-
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
  * a complete inventory. Used primarily to map a side of an ISidedInventory, but

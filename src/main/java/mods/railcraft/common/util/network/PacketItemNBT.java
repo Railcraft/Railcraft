@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.stream.Stream;
 
@@ -36,7 +36,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
         }
 
         @Override
-        protected ItemStack findTargetStack(ItemStack readStack) throws IOException {
+        protected ItemStack findTargetStack(ItemStack readStack) {
             // Since dual wielding was introduced, the server may have "lost"
             // the active item by the time it gets this packet. In this case,
             // check the player's hands as well.
@@ -78,7 +78,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
         }
 
         @Override
-        protected ItemStack findTargetStack(ItemStack readStack) throws IOException {
+        protected ItemStack findTargetStack(ItemStack readStack) {
             if (tile instanceof ITileRouting)
                 return ((ITileRouting) tile).getRoutingTable();
             return null;
@@ -128,7 +128,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
     }
 
     @Override
-    public void readData(RailcraftInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) {
         try {
             readLocationData(data);
             ItemStack readStack = data.readItemStack();
@@ -144,7 +144,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
             IEditableItem eItem = (IEditableItem) readStack.getItem();
 
             if (!eItem.canPlayerEdit(player, targetStack)) {
-                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getUnlocalizedName());
+                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getTranslationKey());
                 return;
             }
 

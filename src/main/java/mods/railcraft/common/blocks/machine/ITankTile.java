@@ -12,8 +12,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

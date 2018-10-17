@@ -50,14 +50,7 @@ public class WorldGenSaltpeter extends WorldGenerator {
         if (block != Blocks.SAND) {
             return false;
         }
-        if (SimplexNoise.noise(pos.getX() * 0.01, pos.getZ() * 0.01) < 0.75) {
-            return false;
-        }
-
-//        if(world.isAirBlock(x, y + 1, z)){
-//            return false;
-//        }
-        return true;
+        return !(SimplexNoise.noise(pos.getX() * 0.01, pos.getZ() * 0.01) < 0.75);
     }
 
 }

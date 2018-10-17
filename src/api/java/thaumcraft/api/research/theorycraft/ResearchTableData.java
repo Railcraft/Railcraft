@@ -180,7 +180,7 @@ public class ResearchTableData
 		NBTTagList savedTag = nbt.getTagList("savedCards", (byte)10);
 		savedCards = new ArrayList<Long>();
 		for (int x=0;x<savedTag.tagCount();x++) {
-			NBTTagCompound nbtdata = (NBTTagCompound) savedTag.getCompoundTagAt(x);
+			NBTTagCompound nbtdata = savedTag.getCompoundTagAt(x);
 			savedCards.add(nbtdata.getLong("card"));
 		}
 		
@@ -188,7 +188,7 @@ public class ResearchTableData
 		NBTTagList categoriesBlockedTag = nbt.getTagList("categoriesBlocked", (byte)10);
 		categoriesBlocked = new ArrayList<String>();
 		for (int x=0;x<categoriesBlockedTag.tagCount();x++) {
-			NBTTagCompound nbtdata = (NBTTagCompound) categoriesBlockedTag.getCompoundTagAt(x);
+			NBTTagCompound nbtdata = categoriesBlockedTag.getCompoundTagAt(x);
 			categoriesBlocked.add(nbtdata.getString("category"));
 		}
 		
@@ -196,7 +196,7 @@ public class ResearchTableData
 		NBTTagList categoryTotalsTag = nbt.getTagList("categoryTotals", (byte)10);
 		categoryTotals = new TreeMap<String,Integer>();
 		for (int x=0;x<categoryTotalsTag.tagCount();x++) {
-			NBTTagCompound nbtdata = (NBTTagCompound) categoryTotalsTag.getCompoundTagAt(x);
+			NBTTagCompound nbtdata = categoryTotalsTag.getCompoundTagAt(x);
 			categoryTotals.put(nbtdata.getString("category"), nbtdata.getInteger("total"));
 		}
 		
@@ -204,7 +204,7 @@ public class ResearchTableData
 		NBTTagList aidCardsTag = nbt.getTagList("aidCards", (byte)10);
 		aidCards = new ArrayList<String>();
 		for (int x=0;x<aidCardsTag.tagCount();x++) {
-			NBTTagCompound nbtdata = (NBTTagCompound) aidCardsTag.getCompoundTagAt(x);
+			NBTTagCompound nbtdata = aidCardsTag.getCompoundTagAt(x);
 			aidCards.add(nbtdata.getString("aidCard"));
 		}
 		
@@ -217,7 +217,7 @@ public class ResearchTableData
 		NBTTagList cardChoicesTag = nbt.getTagList("cardChoices", (byte)10);
 		cardChoices = new ArrayList<CardChoice>();
 		for (int x=0;x<cardChoicesTag.tagCount();x++) {			
-			NBTTagCompound nbtdata = (NBTTagCompound) cardChoicesTag.getCompoundTagAt(x);			
+			NBTTagCompound nbtdata = cardChoicesTag.getCompoundTagAt(x);
 			CardChoice cc = deserializeCardChoice(nbtdata);
 			if (cc!=null) cardChoices.add(cc);
 		}

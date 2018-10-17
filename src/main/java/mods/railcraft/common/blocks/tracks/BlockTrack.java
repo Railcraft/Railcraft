@@ -35,7 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
@@ -162,10 +162,10 @@ public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, I
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         if (Game.isClient(world))
             return;
-        getTrackType(world, pos).getEventHandler().onEntityCollidedWithBlock(world, pos, state, entity);
+        getTrackType(world, pos).getEventHandler().onEntityCollision(world, pos, state, entity);
     }
 
     @Override

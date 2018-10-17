@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,19 +11,23 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IOwnable;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
+import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import mods.railcraft.common.blocks.multi.TileMultiBlock;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -31,8 +35,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -42,12 +50,33 @@ import java.util.List;
  */
 public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlockingItem {
 
+    private static final String CART_NUMBERING_KEY = "cartNumber";
+
     public ItemMagnifyingGlass() {
         setMaxDamage(0);
         setMaxStackSize(1);
         setFull3D();
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    public void setCartNumber(ItemStack stack, int number) {
+        stack.setTagInfo(CART_NUMBERING_KEY, new NBTTagInt(number));
+    }
+
+    public void clearCartNumber(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null) {
+            tag.removeTag(CART_NUMBERING_KEY);
+        }
+    }
+
+    public int getCartNumber(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey(CART_NUMBERING_KEY, NBT.TAG_INT)) {
+            return tag.getInteger(CART_NUMBERING_KEY);
+        }
+        return 0;
     }
 
     @Override
@@ -78,12 +107,28 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (Game.isClient(thePlayer.world))
             return;
 
-        if (stack.getItem() instanceof ItemMagnifyingGlass)
+        if (stack.getItem() instanceof ItemMagnifyingGlass) {
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
+                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.train", LocalizationPlugin.getEntityLocalizationTag(cart), Train.getTrainUUID(cart));
                 event.setCanceled(true);
             }
+            if (entity instanceof IMagnifiable) {
+                ((IMagnifiable) entity).onMagnify(thePlayer);
+            }
+        }
+    }
+
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        int t = getCartNumber(stack);
+        if (t > 0 && entity instanceof EntityMinecart) {
+            entity.setCustomNameTag("Cart " + t);
+            setCartNumber(stack, t + 1);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -98,7 +143,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             returnValue = EnumActionResult.SUCCESS;
         }
         if (t instanceof TileMultiBlock) {
-            TileMultiBlock<?, ?> tile = (TileMultiBlock<?, ?>) t;
+            TileMultiBlock tile = (TileMultiBlock) t;
             if (tile.isStructureValid()) {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isMaster() ? "true" : "false"));
@@ -121,6 +166,19 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = EnumActionResult.SUCCESS;
         }
+        if (t instanceof IMagnifiable) {
+            ((IMagnifiable) t).onMagnify(player);
+        }
         return returnValue;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+        super.addInformation(stack, world, info, adv);
+        int t = getCartNumber(stack);
+        if (t > 0) {
+            info.add(LocalizationPlugin.translate("gui.railcraft.mag.glass.cart.number", t));
+        }
     }
 }

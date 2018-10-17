@@ -83,7 +83,7 @@ public class GoggleAuraWorldRenderer {
                     }
                     setColor(cartInfo.train.hashCode());
                     OpenGL.glVertex(cart.getPositionVector());
-                    Vec3d top = cart.getPositionVector().addVector(0.0, 2.0, 0.0);
+                    Vec3d top = cart.getPositionVector().add(0.0, 2.0, 0.0);
                     OpenGL.glVertex(top);
 
                     renderLink(world, top, cartInfo.linkA);
@@ -116,7 +116,7 @@ public class GoggleAuraWorldRenderer {
         EntityMinecart link = CartTools.getCartFromUUID(world, linkId);
         if (link != null) {
             OpenGL.glVertex(top);
-            OpenGL.glVertex(link.getPositionVector().addVector(0.0, 1.5, 0.0));
+            OpenGL.glVertex(link.getPositionVector().add(0.0, 1.5, 0.0));
         }
     }
 

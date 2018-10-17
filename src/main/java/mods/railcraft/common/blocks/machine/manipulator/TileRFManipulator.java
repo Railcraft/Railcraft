@@ -9,24 +9,27 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import cofh.redstoneflux.impl.EnergyStorage;
-import cofh.redstoneflux.api.IEnergyHandler;
 import mods.railcraft.common.carts.EntityCartRF;
-import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
+import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.EnergyStorage;
 
 import java.io.IOException;
 
-public abstract class TileRFManipulator extends TileManipulatorCart implements IEnergyHandler {
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+
+public abstract class TileRFManipulator extends TileManipulatorCart {
     protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
     private static final int RF_CAP = 4000000;
     protected final EnergyStorage energyStorage = new EnergyStorage(RF_CAP);
-    public final RFEnergyIndicator rfIndicator = new RFEnergyIndicator(energyStorage);
+    public final FEEnergyIndicator rfIndicator = new FEEnergyIndicator(energyStorage);
 
     protected TileRFManipulator() {
         setInventorySize(0);
@@ -52,14 +55,17 @@ public abstract class TileRFManipulator extends TileManipulatorCart implements I
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        energyStorage.writeToNBT(data);
+        NBTBase nbt = ENERGY.writeNBT(energyStorage, null);
+        data.setTag("energy", nbt);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        energyStorage.readFromNBT(data);
+        NBTBase nbt = data.getTag("energy");
+        if (nbt != null)
+            ENERGY.readNBT(energyStorage, null, nbt);
     }
 
     @Override
@@ -81,12 +87,12 @@ public abstract class TileRFManipulator extends TileManipulatorCart implements I
     }
 
     @Override
-    public final int getEnergyStored(EnumFacing from) {
-        return energyStorage.getEnergyStored();
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public final int getMaxEnergyStored(EnumFacing from) {
-        return energyStorage.getMaxEnergyStored();
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        return capability == ENERGY ? ENERGY.cast(energyStorage) : super.getCapability(capability, facing);
     }
 }

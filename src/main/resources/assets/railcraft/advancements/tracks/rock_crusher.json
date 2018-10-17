@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:rock_crusher"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.rock_crusher.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.rock_crusher.desc"
+    }
+  },
+  "parent": "railcraft:tracks/blast_furnace",
+  "criteria": {
+    "build": {
+      "trigger": "railcraft:multiblock_formed",
+      "conditions": {
+        "type": "railcraft:rock_crusher"
+      }
+    }
+  }
+}

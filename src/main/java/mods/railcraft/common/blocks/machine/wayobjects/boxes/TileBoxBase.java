@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,17 +10,15 @@
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.interfaces.ITileShaped;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.interfaces.ITileShaped;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class TileBoxBase extends TileMachineBase implements ITileShaped {
 
@@ -64,14 +62,24 @@ public abstract class TileBoxBase extends TileMachineBase implements ITileShaped
         }
     }
 
-    //TODO: remove this (stupid CJ, why?)
-    @Deprecated
+    /**
+     * This function is essentially the same as {@link mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter#getPowerOutput(EnumFacing)},
+     * but that function interfaces with the world and is filtered to not emit redstone in the direction of other boxes.
+     * This is done to reduce the amount of redstone pollution in the world.
+     *
+     * This function is unfiltered and used by other boxes to determine what its neighbors are doing.
+     *
+     * Some semantics changes may be in order.
+     *
+     * @param side the side being tested
+     * @return true if "emitting" redstone
+     */
     public boolean isEmittingRedstone(EnumFacing side) {
         return false;
     }
 
     @Override
-    public boolean canConnectRedstone(EnumFacing dir) {
+    public boolean canConnectRedstone(@Nullable EnumFacing dir) {
         return true;
     }
 

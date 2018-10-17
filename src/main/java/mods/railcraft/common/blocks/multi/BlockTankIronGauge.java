@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,12 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.color.EnumColor;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,8 +24,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,12 +36,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockTankIronGauge extends BlockTankIron {
 
-    public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
-    public static final PropertyEnum<ColumnPosition> POSITION = PropertyEnum.create("position", ColumnPosition.class);
+    public static final PropertyEnum<BlockStrengthGlass.Position> POSITION = PropertyEnum.create("position", BlockStrengthGlass.Position.class);
 
     public BlockTankIronGauge() {
         super(Material.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, ColumnPosition.SINGLE).withProperty(AXIS, EnumFacing.Axis.X));
+        setSoundType(SoundType.GLASS);
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE).withProperty(POSITION, BlockStrengthGlass.Position.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -54,7 +59,7 @@ public class BlockTankIronGauge extends BlockTankIron {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, AXIS, POSITION);
+        return new BlockStateContainer(this, getVariantProperty(), POSITION);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class BlockTankIronGauge extends BlockTankIron {
     }
 
     @Override
-    public TileMultiBlock<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlock createTileEntity(World world, IBlockState state) {
         return new TileTankIronGauge();
     }
 
@@ -74,8 +79,17 @@ public class BlockTankIronGauge extends BlockTankIron {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+        Block block = iblockstate.getBlock();
+        return block == this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }
 
     @Override
@@ -88,19 +102,5 @@ public class BlockTankIronGauge extends BlockTankIron {
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
-    }
-
-    public enum ColumnPosition implements IStringSerializable {
-        SINGLE,
-        TOP,
-        MIDDLE,
-        BOTTOM;
-
-        private final String name = name().toLowerCase();
-
-        @Override
-        public String getName() {
-            return name;
-        }
     }
 }

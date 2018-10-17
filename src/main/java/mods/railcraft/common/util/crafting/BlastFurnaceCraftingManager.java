@@ -15,15 +15,16 @@ import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.apache.logging.log4j.Level;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
         fuel.add(new ItemStack(Items.COAL, 1, 1));
         fuel.add(RailcraftItems.FIRESTONE_REFINED.getWildcard());
         fuel.add(RailcraftItems.FIRESTONE_CRACKED.getWildcard());
+        fuel.add(OreDictPlugin.getOre("blockCharcoal", 1));
         for (ItemStack each : fuel) {
             fuels.add(createFuel(Ingredient.fromStacks(each), FuelPlugin.getBurnTime(each)));
         }
@@ -65,7 +67,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output) {
+    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput) {
         return new IBlastFurnaceRecipe() {
             @Override
             public Ingredient getInput() {
@@ -80,6 +82,11 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
             @Override
             public ItemStack getOutput() {
                 return output.copy();
+            }
+
+            @Override
+            public ItemStack getSecondOutput() {
+                return secondoutput.copy();
             }
         };
     }
@@ -108,7 +115,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public List<@NonNull IBlastFurnaceFuel> getFuels() {
+    public List<@NotNull IBlastFurnaceFuel> getFuels() {
         return fuels;
     }
 

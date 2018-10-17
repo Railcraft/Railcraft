@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.api.tracks.IBlockTrack;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.TrackKit;
@@ -31,13 +31,14 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -47,7 +48,7 @@ import java.util.function.BiFunction;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings({"WeakerAccess"})
-public class TrackTools {
+public final class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
     public static boolean isRailBlockAt(IBlockAccess world, BlockPos pos) {
@@ -77,32 +78,32 @@ public class TrackTools {
         return item instanceof ITrackItem || (item instanceof ItemBlock && isRailBlock(((ItemBlock) item).getBlock()));
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state) {
+    public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state) {
         return getTrackDirection(world, pos, state, null);
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos) {
+    public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos) {
         return getTrackDirection(world, pos, (EntityMinecart) null);
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, @Nullable EntityMinecart cart) {
+    public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, @Nullable EntityMinecart cart) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getTrackDirection(world, pos, state, cart);
     }
 
-    @Nonnull
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+    @NotNull
+    public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         if (state.getBlock() instanceof BlockRailBase)
             return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);
         throw new IllegalArgumentException("Block was not a track");
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirectionRaw(IBlockAccess world, BlockPos pos) {
+    public static EnumRailDirection getTrackDirectionRaw(IBlockAccess world, BlockPos pos) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getTrackDirectionRaw(state);
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirectionRaw(IBlockState state) {
+    public static EnumRailDirection getTrackDirectionRaw(IBlockState state) {
         IProperty<EnumRailDirection> prop = getRailDirectionProperty(state.getBlock());
         return state.getValue(prop);
     }
@@ -144,7 +145,6 @@ public class TrackTools {
         return null;
     }
 
-    @Nullable
     public static <T extends ITrackKitInstance> boolean isTrackInstanceAt(IBlockAccess world, BlockPos pos, Class<T> instanceClass) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
@@ -270,6 +270,24 @@ public class TrackTools {
             chance = 75;
         if (rand.nextInt(chance) == 50)
             EffectManager.instance.zapEffectSurface(state, world, pos);
+    }
+
+    public static EnumRailDirection getAxisAlignedDirection(Axis axis) {
+        switch (axis) {
+            case X:
+                return EnumRailDirection.EAST_WEST;
+            case Z:
+                return EnumRailDirection.NORTH_SOUTH;
+            default:
+                throw new IllegalArgumentException("No corresponding direction for other axes");
+        }
+    }
+
+    public static EnumRailDirection getAxisAlignedDirection(EnumFacing facing) {
+        return getAxisAlignedDirection(facing.getAxis());
+    }
+
+    private TrackTools() {
     }
 
 }

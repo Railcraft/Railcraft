@@ -2,26 +2,30 @@ package mods.railcraft.common.items.potion;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.Railcraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
-/**
- *
- */
-public class PotionTypeRailcraft extends PotionType implements IRailcraftObject<PotionType> {
+public abstract class PotionTypeRailcraft extends PotionType implements IRailcraftObject<PotionType> {
 
-    public PotionTypeRailcraft(String name, PotionEffect... effects) {
+    protected final String name;
+
+    protected PotionTypeRailcraft(String name, PotionEffect... effects) {
         super(name, effects);
+        this.name = name;
     }
 
-    @Nullable
+    @Override
+    public String getNamePrefixed(String prefix) {
+        return prefix + Railcraft.MOD_ID + '.' + name; // Prevents mod conflicts
+    }
+
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return emptyStack();

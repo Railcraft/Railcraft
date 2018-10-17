@@ -11,8 +11,8 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.core.items.IActivationBlockingItem;
-import mods.railcraft.api.core.items.InvToolsAPI;
+import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.api.signals.IPair;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 /**
@@ -54,7 +54,7 @@ public class ItemPairingTool extends ItemRailcraft implements IActivationBlockin
 
     public void setPairData(ItemStack stack, TileEntity tile) {
         NBTTagCompound pairData = new NBTTagCompound();
-        WorldCoordinate pos = new WorldCoordinate(tile);
+        WorldCoordinate pos = WorldCoordinate.from(tile);
         pos.writeToNBT(pairData, COORD_TAG);
         InvToolsAPI.setItemDataRailcraft(stack, PAIR_DATA_TAG, pairData);
     }

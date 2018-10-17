@@ -11,8 +11,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
 public class BlockAdminSteamProducer extends BlockEntityDelegate {
@@ -52,7 +50,6 @@ public class BlockAdminSteamProducer extends BlockEntityDelegate {
         // No drops!
     }
 
-    @Nullable
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         return emptyStack();

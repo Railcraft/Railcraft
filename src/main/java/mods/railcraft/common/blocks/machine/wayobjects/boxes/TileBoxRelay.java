@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
 import mods.railcraft.api.signals.*;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
@@ -23,9 +23,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
@@ -36,7 +35,7 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
 
-    @Nonnull
+
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.RELAY;
@@ -93,9 +92,9 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
         return doesActionOnAspect(getBoxSignalAspect(side));
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         signalBlock.writeToNBT(data);
@@ -104,7 +103,7 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         signalBlock.readFromNBT(data);
@@ -112,29 +111,24 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         signalBlock.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         signalBlock.readPacketData(data);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         updateNeighbors();
     }
-
-//    @Override
-//    public SimpleSignalController getController() {
-//        return controller;
-//    }
 
     @Override
     public SignalBlock getSignalBlock() {

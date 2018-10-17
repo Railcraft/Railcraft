@@ -219,8 +219,8 @@ public class OreGeneratorFactory {
 
 //        private Stream<Biome> getBiomes(String name) {
 //            ResourceLocation resource = new ResourceLocation(name);
-//            if ("all".equalsIgnoreCase(resource.getResourcePath()))
-//                return StreamSupport.stream(Biome.REGISTRY.spliterator(), false).filter(b -> resource.getResourceDomain().equalsIgnoreCase(b.getRegistryName().getResourceDomain()));
+//            if ("all".equalsIgnoreCase(resource.getPath()))
+//                return StreamSupport.stream(Biome.REGISTRY.spliterator(), false).filter(b -> resource.getNamespace().equalsIgnoreCase(b.getRegistryName().getNamespace()));
 //            Biome biome = Biome.REGISTRY.getObject(resource);
 //            if (biome == null)
 //                return Stream.empty();

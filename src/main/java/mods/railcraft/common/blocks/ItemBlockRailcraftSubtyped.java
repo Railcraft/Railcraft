@@ -15,8 +15,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -57,11 +56,11 @@ public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         IVariantEnum variant = getVariant(stack);
         if (variant == null)
-            return getUnlocalizedName();
-        String tag = getUnlocalizedName() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
+            return getTranslationKey();
+        String tag = getTranslationKey() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);
     }
 }

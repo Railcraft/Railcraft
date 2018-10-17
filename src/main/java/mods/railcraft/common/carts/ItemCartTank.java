@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,11 +10,10 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -35,21 +34,19 @@ public class ItemCartTank extends ItemCart implements IPrototypedItem {
 
     @Override
     public void defineRecipes() {
-        if (!InvTools.isEmpty(RailcraftBlocks.TANK_IRON_GAUGE.getStack())) {
+        if (RailcraftBlocks.TANK_IRON_GAUGE.isEnabled()) {
             CraftingPlugin.addRecipe(getStack(),
                     "T",
                     "M",
-                    'T', RailcraftBlocks.TANK_IRON_GAUGE.getStack(),
+                    'T', RailcraftBlocks.TANK_IRON_GAUGE,
                     'M', Items.MINECART);
         } else {
-            {
-                CraftingPlugin.addRecipe(getStack(),
-                        "GGG",
-                        "GMG",
-                        "GGG",
-                        'G', "blockGlassColorless",
-                        'M', Items.MINECART);
-            }
+            CraftingPlugin.addRecipe(getStack(),
+                    "GGG",
+                    "GMG",
+                    "GGG",
+                    'G', "blockGlassColorless",
+                    'M', Items.MINECART);
         }
     }
 }

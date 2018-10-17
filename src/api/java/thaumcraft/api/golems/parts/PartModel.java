@@ -20,7 +20,7 @@ public class PartModel {
 	private ResourceLocation texture;	
 	private EnumAttachPoint attachPoint;
 	
-	public enum EnumAttachPoint { ARMS, LEGS, BODY, HEAD; }
+	public enum EnumAttachPoint { ARMS, LEGS, BODY, HEAD}
 	
 	public PartModel(ResourceLocation objModel, ResourceLocation objTexture, EnumAttachPoint attachPoint) {
 		this.objModel = objModel;
@@ -95,6 +95,6 @@ public class PartModel {
 	}
 
 	public enum EnumLimbSide {
-		LEFT,RIGHT,MIDDLE;
-	}
+		LEFT,RIGHT,MIDDLE
+    }
 }

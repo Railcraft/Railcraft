@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,6 +21,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * This utility class allows us to reduce the number of tile entity retrieval operations we do.
+ * Such operations are quite expensive due to some poor design choices from Mojang.
+ * We only retrieve the tile entity if it actually needs to override the functionality of the default block behaviour.
+ * This is determined by looking at whether the TileEntity class implements the requested interface.
+ *
+ * Example:
+ *
+ * return TileManager.forTile(this::getTileClass, state, worldIn, pos).retrieve(ITileNonSolid.class, t -> t.getShape(face)).orElseGet(() -> super.getBlockFaceShape(worldIn, state, pos, face));
+ *
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -38,7 +47,7 @@ public class TileManager<T extends TileEntity> {
     }
 
     public static <T extends TileEntity> TileManager<T> forTile(Function<IBlockState, Class<T>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new TileManager<T>(classMapper, state, world, pos);
+        return new TileManager<>(classMapper, state, world, pos);
     }
 
     public static <T extends TileEntity, I> boolean isInstance(Function<IBlockState, Class<T>> classMapper, Class<I> interfaceClass, IBlockState state) {

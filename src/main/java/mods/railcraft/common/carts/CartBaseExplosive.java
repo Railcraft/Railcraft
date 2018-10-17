@@ -34,7 +34,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
@@ -235,13 +235,13 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeShort(getFuse());
         data.writeByte(dataManager.get(BLAST).intValue());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         setFuse(data.readShort());
         setBlastRadius(data.readByte());
     }

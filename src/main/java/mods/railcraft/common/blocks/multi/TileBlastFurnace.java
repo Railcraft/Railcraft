@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,10 +37,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +48,16 @@ import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
 import static mods.railcraft.common.util.inventory.InvTools.incSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
-public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace> implements ISidedInventory {
+public final class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
     public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && BlastFurnaceCraftingManager.getInstance().getRecipe(stack) != null;
     public static final Predicate<ItemStack> FUEL_FILTER = stack -> BlastFurnaceCraftingManager.getInstance().getCookTime(stack) > 0;
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
+    public static final int SLOT_SECOND_OUTPUT = 3;
     private static final int FUEL_PER_TICK = 5;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
@@ -121,7 +120,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     /**
      * The number of ticks that the furnace will keep burning
      */
-    public int fuelTimeLeft;
+    public int burnTime;
     /**
      * The number of ticks that a fresh copy of the currently-burning item would
      * keep the furnace burning for
@@ -130,10 +129,9 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     public boolean clientBurning;
     private int finishedAt;
     private ItemStack lastInput = ItemStack.EMPTY;
-    @Nullable
-    private IBlastFurnaceRecipe currentRecipe;
+    private @Nullable IBlastFurnaceRecipe currentRecipe;
 
-    public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
+    public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
@@ -143,17 +141,13 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             TileBlastFurnace master = (TileBlastFurnace) tile;
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SECOND_OUTPUT, secondOutput);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
     }
 
     public TileBlastFurnace() {
-        super(3, patterns);
-    }
-
-    @Override
-    protected Class<TileBlastFurnace> defineCommonClass() {
-        return TileBlastFurnace.class;
+        super(4, patterns);
     }
 
     @Override
@@ -190,9 +184,9 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     }
 
     public int getBurnProgressScaled(int i) {
-        if (fuelTimeLeft <= 0 || currentItemBurnTime <= 0)
+        if (burnTime <= 0 || currentItemBurnTime <= 0)
             return 0;
-        int scale = fuelTimeLeft * i / currentItemBurnTime;
+        int scale = burnTime * i / currentItemBurnTime;
         scale = Math.min(scale, i);
         scale = Math.max(scale, 0);
         return scale;
@@ -231,7 +225,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         if (Game.isClient(getWorld()))
             return;
 
-        TileBlastFurnace mBlock = getMasterBlock();
+        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
 
         if (mBlock != null)
             InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, FUEL_FILTER);
@@ -248,10 +242,10 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         if (clock > finishedAt + 10 && cookTime <= 0)
             setCooking(false);
 
-        if (fuelTimeLeft >= FUEL_PER_TICK)
-            fuelTimeLeft -= FUEL_PER_TICK;
+        if (burnTime >= FUEL_PER_TICK)
+            burnTime -= FUEL_PER_TICK;
         else
-            fuelTimeLeft = 0;
+            burnTime = 0;
 
         if (isBurning())
             setLavaBurn();
@@ -284,6 +278,13 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             return;
         }
 
+        ItemStack secondOutputSlot = getStackInSlot(SLOT_SECOND_OUTPUT);
+        ItemStack nextSecondOutput = currentRecipe.getSecondOutput();
+
+        if (!InvTools.canMerge(secondOutputSlot, nextSecondOutput, getInventoryStackLimit())) {
+            return;
+        }
+
         if (!isBurning()) {
             return;
         }
@@ -301,6 +302,10 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             setInventorySlotContents(SLOT_OUTPUT, nextOutput);
         else
             incSize(outputSlot, nextOutput.getCount());
+        if (InvTools.isEmpty(secondOutputSlot))
+            setInventorySlotContents(SLOT_SECOND_OUTPUT, nextSecondOutput);
+        else
+            incSize(secondOutputSlot, nextSecondOutput.getCount());
         decrStackSize(SLOT_INPUT, 1);
 
         // TODO fix mess
@@ -343,7 +348,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             return;
         }
 
-        if (fuelTimeLeft > FUEL_PER_TICK * 2) {
+        if (burnTime > FUEL_PER_TICK * 2) {
             return;
         }
         ItemStack fuel = getStackInSlot(SLOT_FUEL);
@@ -354,8 +359,8 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         if (itemBurnTime <= 0) {
             return;
         }
-        currentItemBurnTime = itemBurnTime + fuelTimeLeft;
-        fuelTimeLeft = currentItemBurnTime;
+        currentItemBurnTime = itemBurnTime + burnTime;
+        burnTime = currentItemBurnTime;
         setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
     }
 
@@ -366,7 +371,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileBlastFurnace masterBlock = getMasterBlock();
+        TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, world, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
             return true;
@@ -378,7 +383,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setInteger("fuelTimeLeft", fuelTimeLeft);
+        data.setInteger("burnTime", burnTime);
         data.setInteger("currentItemBurnTime", currentItemBurnTime);
         return data;
     }
@@ -387,14 +392,14 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        fuelTimeLeft = data.getInteger("fuelTimeLeft");
+        burnTime = data.getInteger("burnTime");
         currentItemBurnTime = data.getInteger("currentItemBurnTime");
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeBoolean(fuelTimeLeft > 0);
+        data.writeBoolean(burnTime > 0);
     }
 
     @Override
@@ -409,19 +414,14 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         return sizeOf(fuel) < 8;
     }
 
-    // Must be called on server side and on master block
-    public boolean isBurning() {
-        return fuelTimeLeft > 0;
-    }
-
     @Override
-    public boolean isMasterBurning() {
-        TileBlastFurnace mBlock = getMasterBlock();
+    public boolean isBurning() {
+        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
         if (mBlock != null)
             if (world.isRemote)
                 return mBlock.clientBurning;
             else
-                return mBlock.isBurning();
+                return mBlock.burnTime > 0;
         return false;
     }
 
@@ -431,6 +431,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
             return false;
         switch (slot) {
             case SLOT_OUTPUT:
+            case SLOT_SECOND_OUTPUT:
                 return false;
             case SLOT_FUEL:
                 return FUEL_FILTER.test(stack);
@@ -452,7 +453,14 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == SLOT_OUTPUT;
+        switch (direction) {
+            case NORTH:
+            case SOUTH:
+            case EAST:
+            case WEST:
+                return index == SLOT_OUTPUT;
+        }
+        return index == SLOT_SECOND_OUTPUT;
     }
 
     @Override
@@ -460,8 +468,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
         return inv.isEmpty();
     }
 
-    @NotNull
-    @Nonnull
+
     @Override
     public EnumGui getGui() {
         return EnumGui.BLAST_FURNACE;
@@ -470,7 +477,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven<TileBlastFurnace>
     @Override
     public IBlockState getActualState(IBlockState base) {
         return getPatternMarker() == 'W'
-                ? isMasterBurning()
+                ? isBurning()
                 ? base.withProperty(ICON, 2)
                 : base.withProperty(ICON, 1)
                 : base.withProperty(ICON, 0);

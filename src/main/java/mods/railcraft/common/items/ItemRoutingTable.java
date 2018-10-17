@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import com.google.common.base.Strings;
 import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -37,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 

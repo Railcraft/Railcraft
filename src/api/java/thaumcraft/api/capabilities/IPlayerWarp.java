@@ -50,8 +50,8 @@ public interface IPlayerWarp extends INBTSerializable<NBTTagCompound>
      */
     int reduce(@Nonnull EnumWarpType type, int amount);
     
-    public enum EnumWarpType {
-    	PERMANENT, NORMAL, TEMPORARY;
+    enum EnumWarpType {
+    	PERMANENT, NORMAL, TEMPORARY
     }
     
 	

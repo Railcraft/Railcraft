@@ -41,8 +41,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
@@ -110,8 +110,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (!isInCreativeTab(tab))
             return;
-        list.add(new ItemStack(this, 1, getMaxDamage()));
-        list.add(new ItemStack(this, 1, 0));
+        ItemStack noDamage = new ItemStack(this, 1, 0);
+        list.add(new ItemStack(this, 1, noDamage.getMaxDamage()));
+        list.add(noDamage);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public final int getItemBurnTime(ItemStack stack) {
-        if (stack.getItemDamage() < getMaxDamage())
+        if (stack.getItemDamage() < stack.getMaxDamage())
             return heat;
         return 0;
     }
@@ -144,9 +145,9 @@ public class ItemFirestoneRefined extends ItemFirestone {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
-        String tipTag = getUnlocalizedName() + ".tips.charged";
+        String tipTag = getTranslationKey() + ".tips.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
-            tipTag = getUnlocalizedName() + ".tips.empty";
+            tipTag = getTranslationKey() + ".tips.empty";
         ToolTip tip = ToolTip.buildToolTip(tipTag);
         if (tip != null)
             info.addAll(tip.convertToStrings());
@@ -212,8 +213,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
      * @return A new Entity object to spawn or null
      */
     @Override
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
-        EntityItemFirestone entity = (EntityItemFirestone) super.createEntity(world, location, stack);
+    public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
+        EntityItemFirestone entity = super.createEntity(world, location, stack);
         entity.setRefined(true);
         return entity;
     }

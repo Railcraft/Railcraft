@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.core.items.IPrototypedItem;
+import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
@@ -21,7 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
     private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(DataSerializers.ITEM_STACK);

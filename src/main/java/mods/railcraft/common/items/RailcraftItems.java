@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,8 +34,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -108,7 +108,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     BOTTLE_STEAM(() -> new ItemBottle(Fluids.STEAM), "fluid_bottle_steam"),
     CROWBAR_IRON(ItemCrowbarIron::new, "tool_crowbar_iron"),
     CROWBAR_STEEL(ItemCrowbarSteel::new, "tool_crowbar_steel"),
-//    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
+    //    CROWBAR_THAUMIUM(ItemCrowbarThaumium::new, "tool_crowbar_thaumium") {{
 //        conditions().add(Mod.THAUMCRAFT);
 //    }},
 //    CROWBAR_VOID(ItemCrowbarVoid::new, "tool_crowbar_void") {{
@@ -165,13 +165,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }},
     TRACK_PARTS(ItemTrackParts::new, "track_parts", () -> "ingotIron"),
     TURBINE_BLADE(ItemTurbineBlade::new, "turbine_blade", () -> "ingotSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     TURBINE_DISK(ItemTurbineDisk::new, "turbine_disk", () -> "blockSteel") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     TURBINE_ROTOR(ItemTurbineRotor::new, "turbine_rotor") {{
-//        conditions().add(EnumMachineAlpha.TURBINE); // TODO
+        conditions().add(RailcraftBlocks.STEAM_TURBINE);
     }},
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();
@@ -209,7 +209,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
             else
                 item = newItem;
             item.setRegistryName(getBaseTag());
-            item.setUnlocalizedName(LocalizationPlugin.convertTag(getFullTag()));
+            item.setTranslationKey(LocalizationPlugin.convertTag(getFullTag()));
             RailcraftRegistry.register(item);
             IRailcraftItemSimple railcraftItem;
             if (newItem instanceof IRailcraftItemSimple)
@@ -236,8 +236,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         return item != null && this.item == item;
     }
 
-    @Nullable
-    public Item item() {
+    public @Nullable Item item() {
         return getObject().map(IRailcraftObject::getObject).orElse(null);
     }
 
@@ -258,7 +257,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariantObject(variant);
-        return getObject().map(i -> i.getStack(qty, variant)).orElse(ItemStack.EMPTY);
+        return getObject().map(i -> i.getStack(qty, variant)).orElse(InvTools.emptyStack());
     }
 
     @Override

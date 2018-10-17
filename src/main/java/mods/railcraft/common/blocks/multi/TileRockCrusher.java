@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -42,14 +42,12 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
@@ -58,7 +56,7 @@ import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrusher, TileRockCrusher> implements IHasWork, ISidedInventory {
+public final class TileRockCrusher extends TileMultiBlockInventory implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -139,21 +137,13 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     private final Set<Object> actions = new HashSet<>();
     private int processTime;
     private final Random random = new Random();
-    //    @Nullable
-//    private final EnergyStorage energyStorage;
-//    @Nullable
-//    public final RFEnergyIndicator rfIndicator;
     private boolean isWorking;
     private boolean paused;
-    @Nullable
-    private ChargeNetwork.ChargeNode node;
+    private @Nullable ChargeNetwork.ChargeNode node;
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
         super(18, patterns);
-
-//        energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
-//        rfIndicator = new RFEnergyIndicator(energyStorage);
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
@@ -211,34 +201,15 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         return false;
     }
 
-//    private boolean useMasterEnergy(double amount, boolean doRemove) {
-//        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
-//
-//        if (master == null)
-//            return false;
-//        return mBlock != null && (mBlock.energyStorage == null || mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount);
-//        return false;
-//    }
-
-    @Override
-    protected Class<TileRockCrusher> defineCommonClass() {
-        return TileRockCrusher.class;
-    }
-
-    @Override
-    protected Class<TileRockCrusher> defineMasterClass() {
-        return TileRockCrusher.class;
-    }
-
     private boolean useMasterEnergy(double amount) {
-        TileRockCrusher master = getMasterBlock();
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
         if (master == null)
             return false;
         return master.node().useCharge(amount);
     }
 
     private boolean canUseMasterEnergy(double amount) {
-        TileRockCrusher master = getMasterBlock();
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
         if (master == null)
             return false;
         return master.node().canUseCharge(amount);
@@ -250,24 +221,22 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
         if (Game.isHost(getWorld())) {
             BlockPos pos = getPos();
-            double x = pos.getX();
-            double y = pos.getZ();
-            double z = pos.getZ();
 
             if (isStructureValid()) {
-                // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
-                for (EntityItem item : TileEntityHopper.getCaptureItems(getWorld(), x, y + 1, z)) {
-                    if (item != null && useMasterEnergy(SUCKING_POWER_COST)) {
+                BlockPos target = pos.up();
+                for (EntityItem item : MiscTools.getEntitiesAt(world, EntityItem.class, target)) {
+                    if (useMasterEnergy(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
                         item.setDead();
                     }
                 }
 
-                EntityLivingBase entity = MiscTools.getEntityAt(world, EntityLivingBase.class, getPos().up());
-                if (entity != null && canUseMasterEnergy(KILLING_POWER_COST))
-                    if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
-                        useMasterEnergy(KILLING_POWER_COST);
+                for (EntityLivingBase entity : MiscTools.getEntitiesAt(world, EntityLivingBase.class, target)) {
+                    if (entity != null && canUseMasterEnergy(KILLING_POWER_COST))
+                        if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
+                            useMasterEnergy(KILLING_POWER_COST);
+                }
             }
 
             if (isMaster()) {
@@ -293,15 +262,10 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
                     if (processTime >= PROCESS_TIME) {
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
-                        boolean hasRoom = true;
                         List<ItemStack> outputs = recipe.pollOutputs(random);
-                        for (ItemStack output : outputs) {
-                            output = InvTools.moveItemStack(output, tempInv);
-                            if (!InvTools.isEmpty(output)) {
-                                hasRoom = false;
-                                break;
-                            }
-                        }
+                        boolean hasRoom = outputs.stream()
+                                .map(output -> InvTools.moveItemStack(output, tempInv))
+                                .allMatch(InvTools::isEmpty);
 
                         if (hasRoom) {
                             for (ItemStack output : outputs) {
@@ -341,7 +305,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos());
             return true;
@@ -369,14 +333,14 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     }
 
     public int getProcessTime() {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             return mBlock.processTime;
         return -1;
     }
 
     public void setProcessTime(int processTime) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             mBlock.processTime = processTime;
     }
@@ -387,7 +351,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public boolean hasWork() {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         return mBlock != null && mBlock.isWorking;
     }
 
@@ -404,7 +368,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             mBlock.actions.add(action);
     }
@@ -448,41 +412,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         return node;
     }
 
-//    @Nullable
-//    public EnergyStorage getEnergyStorage() {
-//        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-//        if (mBlock != null && mBlock.energyStorage != null)
-//            return mBlock.energyStorage;
-//        return energyStorage;
-//    }
-
-//    @Override
-//    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-//        if (getEnergyStorage() == null)
-//            return 0;
-//        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
-//    }
-
-//    @Override
-//    public int getEnergyStored(EnumFacing from) {
-//        if (getEnergyStorage() == null)
-//            return 0;
-//        return getEnergyStorage().getEnergyStored();
-//    }
-
-//    @Override
-//    public int getMaxEnergyStored(EnumFacing from) {
-//        if (getEnergyStorage() == null)
-//            return 0;
-//        return getEnergyStorage().getMaxEnergyStored();
-//    }
-
-//    @Override
-//    public boolean canConnectEnergy(EnumFacing from) {
-//        return true;
-//    }
-
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.ROCK_CRUSHER;

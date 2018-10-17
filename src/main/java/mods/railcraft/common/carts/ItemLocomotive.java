@@ -10,10 +10,10 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
-import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveModelRenderer;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.core.items.IFilterItem;
+import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -34,8 +34,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**

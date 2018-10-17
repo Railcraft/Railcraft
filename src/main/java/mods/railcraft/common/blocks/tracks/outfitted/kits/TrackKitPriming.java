@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.carts.IExplosiveCart;
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -25,7 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -89,13 +89,13 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setShort("fuse", getFuse());
+        data.setShort("delay", getFuse());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        setFuse(data.getShort("fuse"));
+        setFuse(data.getShort("delay"));
     }
 
     @Override

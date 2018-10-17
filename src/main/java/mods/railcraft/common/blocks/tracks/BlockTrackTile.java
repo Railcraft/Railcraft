@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockTrackTile extends BlockTrack {
 
@@ -54,7 +54,7 @@ public abstract class BlockTrackTile extends BlockTrack {
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
-        player.addExhaustion(0.025F);
+        player.addExhaustion(0.005F);
         if (Game.isHost(world)) {
             if (player.capabilities.isCreativeMode) {
                 return clearBlock(state, world, pos, player);

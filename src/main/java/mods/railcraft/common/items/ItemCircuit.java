@@ -74,6 +74,16 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
                         'S', new ItemStack(Blocks.WOOL, 1, 4),
                         'R', "dustRedstone",
                         'B', glue);
+                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RADIO.ordinal()),
+                        " #S",
+                        "BGR",
+                        "SRL",
+                        'L', gem,
+                        '#', Items.REPEATER,
+                        'G', RailcraftItems.PLATE, Metal.GOLD,
+                        'S', new ItemStack(Blocks.WOOL, 1, 11),
+                        'R', "dustRedstone",
+                        'B', glue);
             }
         }
     }
@@ -82,7 +92,8 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
 
         CONTROLLER(Items.COMPARATOR),
         RECEIVER(Blocks.REDSTONE_TORCH),
-        SIGNAL(Items.REPEATER);
+        SIGNAL(Items.REPEATER),
+        RADIO(Blocks.REDSTONE_BLOCK);
         public static EnumCircuit[] VALUES = values();
         private Object alternate;
 

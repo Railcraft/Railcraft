@@ -35,8 +35,8 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
 import java.util.*;
 import java.util.function.Function;
@@ -86,10 +86,10 @@ public final class FluidModel implements IModel {
 //
 //        @Override
 //        public boolean accepts(ResourceLocation modelLocation) {
-//            return modelLocation.getResourceDomain().equals("railcraft") && (
-//                    modelLocation.getResourcePath().equals("fluid") ||
-//                            modelLocation.getResourcePath().equals("models/block/fluid") ||
-//                            modelLocation.getResourcePath().equals("models/item/fluid"));
+//            return modelLocation.getNamespace().equals("railcraft") && (
+//                    modelLocation.getPath().equals("fluid") ||
+//                            modelLocation.getPath().equals("models/block/fluid") ||
+//                            modelLocation.getPath().equals("models/item/fluid"));
 //        }
 //
 //        @Override
@@ -110,7 +110,7 @@ public final class FluidModel implements IModel {
         private final boolean gas, sideFlowing;
         private static final LoadingCache<Key, BakedFluid> modelCache = CacheBuilder.newBuilder().maximumSize(200).build(new CacheLoader<BakedFluid.Key, BakedFluid>() {
             @Override
-            public BakedFluid load(Key key) throws Exception {
+            public BakedFluid load(Key key) {
                 return new BakedFluid(Optional.empty(), DefaultVertexFormats.BLOCK, key.color, key.still, key.flowing, key.gas, key.sideFlowing, key.cornerRound, key.flowRound);
             }
         });
@@ -212,7 +212,7 @@ public final class FluidModel implements IModel {
                 scale = 16;
             }
             for (int i = 0; i < 4; i++) {
-                side = EnumFacing.getHorizontal((5 - i) % 4);
+                side = EnumFacing.byHorizontalIndex((5 - i) % 4);
                 builder = new UnpackedBakedQuad.Builder(format);
                 builder.setQuadOrientation(side);
                 builder.setTexture(sideSprite);
@@ -292,7 +292,7 @@ public final class FluidModel implements IModel {
                             break;
                         }
                     case NORMAL:
-                        builder.put(e, (float) side.getFrontOffsetX(), (float) side.getFrontOffsetY(), (float) side.getFrontOffsetZ(), 0f);
+                        builder.put(e, (float) side.getXOffset(), (float) side.getYOffset(), (float) side.getZOffset(), 0f);
                         break;
                     default:
                         builder.put(e);

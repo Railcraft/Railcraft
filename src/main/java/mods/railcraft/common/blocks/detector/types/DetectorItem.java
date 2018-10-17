@@ -23,8 +23,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -146,13 +146,13 @@ public class DetectorItem extends DetectorFilter {
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
         data.writeByte((byte) primaryMode.ordinal());
         data.writeByte((byte) filterMode.ordinal());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         primaryMode = PrimaryMode.values()[data.readByte()];
         filterMode = FilterMode.values()[data.readByte()];
     }

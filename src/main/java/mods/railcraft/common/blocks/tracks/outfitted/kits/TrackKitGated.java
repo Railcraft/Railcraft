@@ -31,7 +31,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -142,7 +142,7 @@ public class TrackKitGated extends TrackKitPowered implements ITrackKitReversibl
     @Override
     public void setPowered(boolean powered) {
         boolean state = isGateOpen();
-        super.setPowered(powered);
+        this.powered = powered;
         if (state != isGateOpen()) {
             playSound();
             sendUpdateToClient();

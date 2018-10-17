@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
 import net.minecraft.block.material.Material;
@@ -12,11 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public final class BlockCokeOven extends BlockMultiBlockInventory {
+public abstract class BlockCokeOven extends BlockMultiBlockInventory {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
-    public BlockCokeOven() {
+    protected BlockCokeOven() {
         super(Material.ROCK);
         setHarvestLevel("pickaxe", 0);
     }
@@ -27,7 +37,7 @@ public final class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory<?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
         return new TileCokeOven();
     }
 
@@ -46,4 +56,7 @@ public final class BlockCokeOven extends BlockMultiBlockInventory {
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
     }
+
+    @Override
+    public abstract void defineRecipes();
 }

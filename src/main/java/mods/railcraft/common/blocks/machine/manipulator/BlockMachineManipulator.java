@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,18 +12,21 @@ package mods.railcraft.common.blocks.machine.manipulator;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -36,7 +39,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockMachineManipulator() {
-        super(true);
+        super(Material.ROCK);
         setDefaultState(getDefaultState().withProperty(FRONT, EnumFacing.DOWN).withProperty(ACTIVE, false));
     }
 
@@ -63,6 +66,26 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
                     break;
             }
         return getState(variant).withProperty(ACTIVE, true).withProperty(FRONT, facing);
+    }
+
+
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        switch (getVariant(state)) {
+            case ITEM_LOADER:
+            case ITEM_UNLOADER:
+            case FLUID_LOADER:
+            case FLUID_UNLOADER:
+            case DISPENSER_CART:
+                return SoundType.STONE;
+            case ITEM_LOADER_ADVANCED:
+            case ITEM_UNLOADER_ADVANCED:
+            case RF_LOADER:
+            case RF_UNLOADER:
+            case DISPENSER_TRAIN:
+                return SoundType.METAL;
+        }
+        return super.getSoundType(state, world, pos, entity);
     }
 
     @Override

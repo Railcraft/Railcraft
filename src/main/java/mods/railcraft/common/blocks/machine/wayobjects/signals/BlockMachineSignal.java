@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -34,8 +35,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -55,7 +56,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     public static ResourceLocation[] lowerLampTextures = new ResourceLocation[4];
 
     protected BlockMachineSignal() {
-        super(false);
+        super(Material.CIRCUITS);
         IBlockState defaultState = getDefaultState()
                 .withProperty(FRONT, EnumFacing.NORTH)
                 .withProperty(CONNECTION_NORTH, false)
@@ -81,20 +82,20 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
         lowerLampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_bottom"), new Tuple<>(4, 1));
     }
 
-//    @Override
-//    public BlockRenderLayer getBlockLayer() {
-//        return BlockRenderLayer.CUTOUT_MIPPED;
-//    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         return 8;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
 
@@ -134,6 +135,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
         return face == EnumFacing.UP ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;

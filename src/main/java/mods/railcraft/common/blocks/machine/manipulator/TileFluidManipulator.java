@@ -29,12 +29,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 public abstract class TileFluidManipulator extends TileManipulatorCart implements ISidedInventory {
@@ -55,7 +54,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     protected TileFluidManipulator() {
         setInventorySize(3);
         tankManager.add(tank);
-        tank.setFilter(this::getFilterFluid);
+        tank.setFilter(fluidStack -> FluidTools.matches(this.getFilterFluid(), fluidStack));
     }
 
     public TankManager getTankManager() {
@@ -67,20 +66,19 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Nullable
-    public Fluid getFilterFluid() {
-        if (invFilter.getStackInSlot(0) != null) {
-            FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
-            return fluidStack != null ? fluidStack.getFluid() : null;
+    public FluidStack getFilterFluid() {
+        if (!invFilter.getStackInSlot(0).isEmpty()) {
+            return FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
         }
         return null;
     }
 
     @Nullable
-    public Fluid getFluidHandled() {
-        Fluid fluid = getFilterFluid();
+    public FluidStack getFluidHandled() {
+        FluidStack fluid = getFilterFluid();
         if (fluid != null)
             return fluid;
-        return tank.getFluidType();
+        return tank.getFluid();
     }
 
     @Nullable
@@ -117,10 +115,10 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         switch (slot) {
             case SLOT_INPUT:
-                Fluid filter;
+                FluidStack filter;
                 return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
         }
         return false;
@@ -180,15 +178,14 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) tankManager;
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
         return super.getCapability(capability, facing);
     }
 }

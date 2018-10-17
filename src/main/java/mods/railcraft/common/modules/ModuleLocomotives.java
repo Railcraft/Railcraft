@@ -10,13 +10,8 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
-import mods.railcraft.common.carts.EntityLocomotive;
-import mods.railcraft.common.carts.EntityLocomotiveCreative;
-import mods.railcraft.common.carts.EntityLocomotiveElectric;
-import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
-import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.dynamiclights.DynamicLightsPlugin;
@@ -42,7 +37,6 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         RailcraftCarts.LOCO_STEAM_SOLID,
                         RailcraftCarts.LOCO_ELECTRIC,
                         RailcraftCarts.LOCO_CREATIVE
-//                        RailcraftBlocks.TRACK_OUTFITTED
                 );
             }
 

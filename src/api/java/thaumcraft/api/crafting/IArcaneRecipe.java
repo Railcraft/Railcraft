@@ -5,7 +5,7 @@ import thaumcraft.api.aspects.AspectList;
 
 public interface IArcaneRecipe extends IRecipe
 {	
-    public int getVis();
-    public String getResearch();    
-    public AspectList getCrystals();
+    int getVis();
+    String getResearch();
+    AspectList getCrystals();
 }

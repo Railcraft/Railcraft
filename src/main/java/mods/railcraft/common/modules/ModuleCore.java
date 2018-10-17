@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
-import mods.railcraft.api.carts.CartToolsAPI;
+import com.google.common.base.Throwables;
+import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.CraftingApiAccess;
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.blocks.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
 import mods.railcraft.common.blocks.multi.MultiBlockHelper;
@@ -35,7 +37,6 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -53,17 +54,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Level;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -73,10 +78,11 @@ public class ModuleCore extends RailcraftModulePayload {
 
     public ModuleCore() {
         setEnabledEventHandler(new ModuleEventHandler() {
+            private final Field modField = ReflectionHelper.findField(EntityEntryBuilder.class, "mod");
+
             @Override
             public void construction() {
-                LinkageManager.reset();
-                CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
+                CartsApiAccess.setTransferHelper(TrainTransferHelper.INSTANCE);
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());
@@ -96,17 +102,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 Helpers.structures = new MultiBlockHelper();
 
                 EntityItemFireproof.register();
-
-                //TODO move all these mess
-                RecipeSorter.register("railcraft:rotor.repair", RotorRepairRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:locomotive.painting", LocomotivePaintingRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:cart.uncrafting", CartDisassemblyRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:cart.uncrafting.railcraft", CartDisassemblyRecipe.RailcraftVariant.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:prototype", PrototypeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-                RecipeSorter.register("railcraft:fluid.shaped", ShapedFluidRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-                RecipeSorter.register("railcraft:fluid.shapeless", ShapelessFluidRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
                 OreDictPlugin.registerNewTags();
 
@@ -150,7 +145,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(CrowbarHandler.instance());
                 MinecraftForge.EVENT_BUS.register(MinecartHooks.getInstance());
                 MinecraftForge.EVENT_BUS.register(LinkageHandler.getInstance());
-                MinecraftForge.EVENT_BUS.register(new CraftingHandler());
+//                MinecraftForge.EVENT_BUS.register(new CraftingHandler());
                 MinecraftForge.EVENT_BUS.register(new SoundLimiterTicker());
                 MinecraftForge.EVENT_BUS.register(new MinecartRiderAIDisabler());
                 MinecraftForge.EVENT_BUS.register(new ShuntingAuraTickHandler());
@@ -161,13 +156,12 @@ public class ModuleCore extends RailcraftModulePayload {
                         if (riding instanceof EntityMinecart) {
                             EntityMinecart cart = (EntityMinecart) riding;
                             if (Train.getTrain(cart).size() > 1)
-                                CartTools.removePassengers(cart, event.player.getPositionVector().addVector(0, 1, 0));
+                                CartTools.removePassengers(cart, event.player.getPositionVector().add(0, 1, 0));
                         }
                     }
                 });
 
                 if (RailcraftConfig.useCollisionHandler()) {
-                    //noinspection ConstantConditions
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
@@ -198,26 +192,18 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 for (ResourceLocation each : toRemove) {
-                    registry.register(CraftingPlugin.disabledRecipe(each));
+                    registry.register(CraftingPlugin.createDummyRecipe(each));
                 }
 
-//                register(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecart.Type.COMMAND_BLOCK.getName());
-//                register(41, "boat", EntityBoat.class, "Boat");
-//                register(42, "minecart", EntityMinecartEmpty.class, EntityMinecart.Type.RIDEABLE.getName());
-//                register(43, "chest_minecart", EntityMinecartChest.class, EntityMinecart.Type.CHEST.getName());
-//                register(44, "furnace_minecart", EntityMinecartFurnace.class, EntityMinecart.Type.FURNACE.getName());
-//                register(45, "tnt_minecart", EntityMinecartTNT.class, EntityMinecart.Type.TNT.getName());
-//                register(46, "hopper_minecart", EntityMinecartHopper.class, EntityMinecart.Type.HOPPER.getName());
-//                register(47, "spawner_minecart", EntityMinecartMobSpawner.class, EntityMinecart.Type.SPAWNER.getName());
-
+                // Vanilla ids:
                 Map<EntityMinecart.Type, ResourceLocation> names = new EnumMap<>(EntityMinecart.Type.class);
-                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart"));
-                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart"));
-                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart"));
-                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart"));
-                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart"));
-                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart"));
-                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart"));
+                names.put(EntityMinecart.Type.RIDEABLE, new ResourceLocation("minecart")); // 42
+                names.put(EntityMinecart.Type.COMMAND_BLOCK, new ResourceLocation("commandblock_minecart")); // 40
+                names.put(EntityMinecart.Type.CHEST, new ResourceLocation("chest_minecart")); // 43
+                names.put(EntityMinecart.Type.FURNACE, new ResourceLocation("furnace_minecart")); // 44
+                names.put(EntityMinecart.Type.TNT, new ResourceLocation("tnt_minecart")); // 45
+                names.put(EntityMinecart.Type.HOPPER, new ResourceLocation("hopper_minecart")); // 46
+                names.put(EntityMinecart.Type.SPAWNER, new ResourceLocation("spawner_minecart")); // 47
 
                 // Items
                 replaceVanillaCart(names, RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
@@ -234,30 +220,47 @@ public class ModuleCore extends RailcraftModulePayload {
                 Blocks.ACTIVATOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
 
                 MachineTileRegistry.registerTileEntities();
+                RailcraftAdvancementTriggers.getInstance().register();
             }
 
             private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.register();
 
-                //TODO fix this
                 ResourceLocation key = names.get(minecartType);
                 EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
                 Class<? extends Entity> minecartClass = old.getEntityClass();
-//                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
                 CartTools.classReplacements.put(minecartClass, cartType);
                 CartTools.vanillaCartItemMap.put(original, cartType);
 
-                EntityEntry substitute = new EntityEntry(cartType.getCartClass(), old.getName());
-                substitute.setRegistryName(key);
+                EntityEntry substitute = createHackedEntityEntryBuilder()
+                        .id(key, entityId)
+                        .entity(minecartClass)
+                        .name(old.getName())
+                        .factory(cartType.getFactory())
+                        .tracker(80, 2, true)
+                        .build();
                 ForgeRegistries.ENTITIES.register(substitute);
-//                EntityList.ID_TO_CLASS.remove(entityId);
-//                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
+                Game.log(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
                 original.setCreativeTab(CreativeTabs.TRANSPORTATION);
+            }
+
+            private EntityEntryBuilder<Entity> createHackedEntityEntryBuilder() {
+                EntityEntryBuilder<Entity> ret = EntityEntryBuilder.create();
+
+                // So that entity registry does not add substitute entity entries with wrong ids to railcraft's network ids
+                try {
+                    EnumHelper.setFailsafeFieldValue(modField, ret, Loader.instance().getMinecraftModContainer());
+                } catch (Throwable ex) {
+                    Throwables.throwIfUnchecked(ex);
+                    throw new RuntimeException("cannot substitute vanilla carts", ex);
+                }
+
+                return ret;
             }
 
             @Override
@@ -286,25 +289,25 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
                     ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
-                    Object woodRailbed = RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD);
+                    Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
                     CraftingPlugin.addRecipe(stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed);
                     CraftingPlugin.addRecipe(stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
                     CraftingPlugin.addRecipe(stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
@@ -312,7 +315,7 @@ public class ModuleCore extends RailcraftModulePayload {
                             "ItI",
                             "I#I",
                             "ItI",
-                            'I', RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed,
                             't', new ItemStack(Blocks.REDSTONE_TORCH));
 
@@ -377,27 +380,27 @@ public class ModuleCore extends RailcraftModulePayload {
                 int bioHeat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
                 Fluid ethanol = Fluids.BIOETHANOL.get();
                 if (ethanol != null)
-                    FuelManager.addBoilerFuel(ethanol, bioHeat); // Biofuel
+                    FluidFuelManager.addFuel(ethanol, bioHeat); // Biofuel
 
                 Fluid biofuel = Fluids.BIOFUEL.get();
                 if (biofuel != null)
-                    FuelManager.addBoilerFuel(biofuel, bioHeat); // Biofuel
+                    FluidFuelManager.addFuel(biofuel, bioHeat); // Biofuel
 
                 Fluid fuel = Fluids.FUEL.get();
                 if (fuel != null)
-                    FuelManager.addBoilerFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
+                    FluidFuelManager.addFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
 
                 Fluid coal = Fluids.COAL.get();
                 if (coal != null)
-                    FuelManager.addBoilerFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
+                    FluidFuelManager.addFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
 
                 Fluid pyrotheum = Fluids.PYROTHEUM.get();
                 if (pyrotheum != null)
-                    FuelManager.addBoilerFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
+                    FluidFuelManager.addFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
 
                 Fluid creosote = Fluids.CREOSOTE.get();
                 if (creosote != null)
-                    FuelManager.addBoilerFuel(creosote, 4800); // Creosote
+                    FluidFuelManager.addFuel(creosote, 4800); // Creosote
             }
         });
     }
