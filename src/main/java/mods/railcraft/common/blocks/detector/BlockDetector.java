@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,9 +44,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,9 +212,8 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return state;
     }
 
-    @NotNull
     @Override
-    public ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
@@ -236,7 +234,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -245,11 +243,10 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return getMetaFromState(state);
     }
 
-    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
         if (tile instanceof TileDetector)
             items.add(((TileDetector) tile).getDetector().getType().getStack());
         return items;
@@ -257,11 +254,11 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
-    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.005F);
@@ -308,7 +305,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public boolean rotateBlock(World world, @NotNull BlockPos pos, EnumFacing axis) {
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
         if (byIndex(world, pos) == axis)
             setFront(world, pos, axis.getOpposite());
         else
@@ -324,9 +321,8 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         WorldPlugin.setBlockState(world, pos, getDefaultState().withProperty(FRONT, front));
     }
 
-    @NotNull
     @Override
-    public EnumFacing[] getValidRotations(World world, @NotNull BlockPos pos) {
+    public EnumFacing[] getValidRotations(World world, BlockPos pos) {
         return EnumFacing.VALUES;
     }
 
@@ -383,7 +379,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public void breakBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         if (Game.isClient(worldIn))
             return;
@@ -393,7 +389,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         EnumFacing front = state.getValue(FRONT);
         return side == front.getOpposite();
     }

@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.util.crafting;
 
 import com.google.gson.JsonObject;
@@ -17,7 +27,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -27,8 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public final class FluidIngredient extends Ingredient implements IRemainderIngredient {
 
     private final FluidStack fluidStack;
-    @Nullable
-    private IntList compressed;
+    private @Nullable IntList compressed;
     private final ItemStack[] matching;
 
     public FluidIngredient(FluidStack fluidStack) {
@@ -56,17 +64,17 @@ public final class FluidIngredient extends Ingredient implements IRemainderIngre
 
     @Override
     public IntList getValidItemStacksPacked() {
-        if (this.compressed == null) {
-            this.compressed = new IntArrayList(this.matching.length);
+        if (compressed == null) {
+            this.compressed = new IntArrayList(matching.length);
 
-            for (ItemStack itemstack : this.matching) {
-                this.compressed.add(RecipeItemHelper.pack(itemstack));
+            for (ItemStack itemstack : matching) {
+                compressed.add(RecipeItemHelper.pack(itemstack));
             }
 
-            this.compressed.sort(IntComparators.NATURAL_COMPARATOR);
+            compressed.sort(IntComparators.NATURAL_COMPARATOR);
         }
 
-        return this.compressed;
+        return compressed;
     }
 
     @Override
@@ -99,7 +107,6 @@ public final class FluidIngredient extends Ingredient implements IRemainderIngre
             Game.log(Level.INFO, "Fluid ingredient factory loaded");
         }
 
-        @NotNull
         @Override
         public Ingredient parse(JsonContext context, JsonObject json) {
             return new FluidIngredient(CraftingPlugin.getFluidStackFromRecipeFile(json));

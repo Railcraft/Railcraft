@@ -15,8 +15,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +73,6 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     public void refresh() {
     }
 
-    @NotNull
     public List<String> convertToStrings() {
         return stream()
                 .map(line -> line.text)

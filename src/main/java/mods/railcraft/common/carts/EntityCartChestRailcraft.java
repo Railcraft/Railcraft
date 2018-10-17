@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
@@ -15,13 +25,12 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class EntityCartChestRailcraft extends CartBaseContainer {
     private int clock = MiscTools.RANDOM.nextInt();
-    protected ChestLogic logic = createLogic();
+    protected final ChestLogic logic = createLogic();
 
-    public EntityCartChestRailcraft(World world) {
+    protected EntityCartChestRailcraft(World world) {
         super(world);
     }
 
@@ -97,7 +106,6 @@ public abstract class EntityCartChestRailcraft extends CartBaseContainer {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
-    @NotNull
     @Override
     protected final EnumGui getGuiType() {
         throw new Error("Should not be called");

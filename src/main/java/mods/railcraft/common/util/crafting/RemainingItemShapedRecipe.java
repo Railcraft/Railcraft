@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.util.crafting;
 
 import com.google.common.collect.Maps;
@@ -6,7 +16,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -19,11 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -83,21 +89,21 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
         requireNonNull(bySlots);
 
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> nonNullList = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-        for (int i = 0; i < nonnulllist.size(); ++i) {
+        for (int i = 0; i < nonNullList.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
 
             IRemainderIngredient ingredient = bySlots[i];
 
             if (ingredient != null) {
-                nonnulllist.set(i, ingredient.getRemaining(itemstack));
+                nonNullList.set(i, ingredient.getRemaining(itemstack));
             } else {
-                nonnulllist.set(i, ForgeHooks.getContainerItem(itemstack));
+                nonNullList.set(i, ForgeHooks.getContainerItem(itemstack));
             }
         }
 
-        return nonnulllist;
+        return nonNullList;
     }
 
     @Override
@@ -168,14 +174,17 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
     /**
      * Returns an Item that is the result of this recipe
      */
+    @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         return this.getRecipeOutput().copy();
     }
 
+    @Override
     public int getRecipeWidth() {
         return this.recipeWidth;
     }
 
+    @Override
     public int getRecipeHeight() {
         return this.recipeHeight;
     }
@@ -189,7 +198,6 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
             Game.log(Level.INFO, "Remaining item shaped recipe factory loaded");
         }
 
-        @NotNull
         @Override
         public IRecipe parse(JsonContext context, JsonObject json) {
             // copied from forge's code for making shaped recipes

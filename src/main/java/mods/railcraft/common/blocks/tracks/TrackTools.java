@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,13 +36,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -91,7 +89,6 @@ public final class TrackTools {
         return getTrackDirection(world, pos, state, cart);
     }
 
-    @NotNull
     public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         if (state.getBlock() instanceof BlockRailBase)
             return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);
@@ -136,8 +133,7 @@ public final class TrackTools {
         return TrackTypes.IRON.getTrackType();
     }
 
-    @Nullable
-    public static TrackKit getTrackKitAt(IBlockAccess world, BlockPos pos) {
+    public static @Nullable TrackKit getTrackKitAt(IBlockAccess world, BlockPos pos) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (state.getBlock() instanceof BlockTrackOutfitted) {
             return ((BlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos);
@@ -154,8 +150,7 @@ public final class TrackTools {
         return false;
     }
 
-    @Nullable
-    public static <T extends ITrackKitInstance> T getTrackInstance(IBlockAccess world, BlockPos pos, Class<T> instanceClass) {
+    public static @Nullable <T extends ITrackKitInstance> T getTrackInstance(IBlockAccess world, BlockPos pos, Class<T> instanceClass) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrackOutfitted) {
             ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
@@ -165,8 +160,7 @@ public final class TrackTools {
         return null;
     }
 
-    @Nullable
-    public static <T extends ITrackKitInstance> T getTrackInstance(@Nullable TileEntity tile, Class<T> instanceClass) {
+    public static @Nullable <T extends ITrackKitInstance> T getTrackInstance(@Nullable TileEntity tile, Class<T> instanceClass) {
         if (tile instanceof TileTrackOutfitted) {
             ITrackKitInstance trackInstance = ((TileTrackOutfitted) tile).getTrackKitInstance();
             if (instanceClass.isAssignableFrom(trackInstance.getClass()))
@@ -225,22 +219,20 @@ public final class TrackTools {
     }
 
     public static Set<BlockPos> getConnectedTracks(IBlockAccess world, BlockPos pos) {
-        Set<BlockPos> connectedTracks = new HashSet<>();
+        Set<BlockPos> connectedTracks;
         EnumRailDirection shape;
         if (isRailBlockAt(world, pos))
             shape = getTrackDirectionRaw(world, pos);
         else
             shape = EnumRailDirection.NORTH_SOUTH;
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            BlockPos trackPos = getTrackConnectedTrackAt(world, pos.offset(side), shape);
-            if (trackPos != null)
-                connectedTracks.add(trackPos);
-        }
+        connectedTracks = Arrays.stream(EnumFacing.HORIZONTALS)
+                .map(side -> getTrackConnectedTrackAt(world, pos.offset(side), shape))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         return connectedTracks;
     }
 
-    @Nullable
-    public static BlockPos getTrackConnectedTrackAt(IBlockAccess world, BlockPos pos, EnumRailDirection shape) {
+    public static @Nullable BlockPos getTrackConnectedTrackAt(IBlockAccess world, BlockPos pos, EnumRailDirection shape) {
         if (isRailBlockAt(world, pos))
             return pos;
         BlockPos up = pos.up();

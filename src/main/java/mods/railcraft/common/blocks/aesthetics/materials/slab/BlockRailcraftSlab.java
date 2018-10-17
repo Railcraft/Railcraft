@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
@@ -52,12 +53,10 @@ import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static net.minecraft.util.EnumFacing.DOWN;
@@ -78,14 +77,13 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return Materials.class;
     }
 
     @Override
-    @NotNull
+
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{TOP_MATERIAL, BOTTOM_MATERIAL});
     }
@@ -124,7 +122,6 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         }
     }
 
-    @NotNull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         return Materials.getStack(this, qty, variant);
@@ -151,8 +148,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return Materials.NO_MAT;
     }
 
-    @Nullable
-    static TileSlab getSlabTile(IBlockAccess world, BlockPos pos) {
+    static @Nullable TileSlab getSlabTile(IBlockAccess world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile);
@@ -179,13 +175,13 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(Objects::nonNull).collect(Collectors.toList()));
+        list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(InvTools::nonEmpty).collect(Collectors.toList()));
     }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
         if (tile instanceof TileSlab) {
             Materials top = ((TileSlab) tile).getTopSlab();
             Materials bottom = ((TileSlab) tile).getBottomSlab();
@@ -236,7 +232,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileSlab) {
             TileSlab slab = (TileSlab) tile;

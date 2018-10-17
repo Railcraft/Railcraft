@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
@@ -78,8 +77,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         dataManager.register(FILLING, false);
     }
 
-    @Nullable
-    public FluidStack getFluidStack() {
+    public @Nullable FluidStack getFluidStack() {
         return dataManager.get(FLUID_STACK).orElse(null);
     }
 
@@ -185,8 +183,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         dataManager.set(FILLING, fill);
     }
 
-    @Nullable
-    public FluidStack getFilterFluid() {
+    public @Nullable FluidStack getFilterFluid() {
         ItemStack filter = getFilterItem();
         if (InvTools.isEmpty(filter))
             return null;
@@ -234,7 +231,6 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         return canPassFluidRequests(fluid);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.TANK;

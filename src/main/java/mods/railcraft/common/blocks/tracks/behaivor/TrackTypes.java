@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -100,7 +99,6 @@ public enum TrackTypes {
         }
     },;
 
-    @NotNull
     private final TrackType trackType;
 
     TrackTypes(ResourceLocation baseBlock, IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed) {
@@ -136,9 +134,8 @@ public enum TrackTypes {
             collisionHandler.onEntityCollision(world, pos, state, entity);
         }
 
-        @Nullable
         @Override
-        public BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+        public @Nullable BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
             return speedController.getRailDirectionOverride(world, pos, state, cart);
         }
 

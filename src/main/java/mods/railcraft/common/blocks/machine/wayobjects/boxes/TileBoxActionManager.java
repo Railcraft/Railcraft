@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,98 +15,76 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import org.jetbrains.annotations.NotNull;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.BitSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class TileBoxActionManager extends TileBoxSecured {
 
-    private final boolean[] powerOnAspects = new boolean[SignalAspect.values().length];
+    private BitSet powerOnAspects = new BitSet(SignalAspect.VALUES.length);
 
-    public TileBoxActionManager() {
-        powerOnAspects[SignalAspect.GREEN.ordinal()] = true;
+    protected TileBoxActionManager() {
+        doActionOnAspect(SignalAspect.GREEN, true);
     }
 
     @Override
     public boolean doesActionOnAspect(SignalAspect aspect) {
-        return powerOnAspects[aspect.ordinal()];
+        return powerOnAspects.get(aspect.ordinal());
     }
 
     @Override
     public void doActionOnAspect(SignalAspect aspect, boolean trigger) {
-        powerOnAspects[aspect.ordinal()] = trigger;
+        powerOnAspects.set(aspect.ordinal(), trigger);
     }
 
-    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        byte[] array = new byte[powerOnAspects.length];
-        for (int i = 0; i < powerOnAspects.length; i++) {
-            array[i] = (byte) (powerOnAspects[i] ? 1 : 0);
-        }
-        data.setByteArray("powerOnAspects", array);
+        data.setByteArray("powerOnAspects", powerOnAspects.toByteArray());
         return data;
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("PowerOnAspect")) {
-            byte[] array = data.getByteArray("PowerOnAspect");
-            for (int i = 0; i < powerOnAspects.length; i++) {
-                powerOnAspects[i] = array[i] == 1;
-            }
+            powerOnAspects = BitSet.valueOf(data.getByteArray("PowerOnAspect"));
         } else if (data.hasKey("powerOnAspects")) {
-            byte[] array = data.getByteArray("powerOnAspects");
-            for (int i = 0; i < powerOnAspects.length; i++) {
-                powerOnAspects[i] = array[i] == 1;
-            }
+            powerOnAspects = BitSet.valueOf(data.getByteArray("powerOnAspects"));
         }
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         writeActionInfo(data);
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        readActionInfo(data.readByte());
+        powerOnAspects = data.readBitSet();
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         super.writeGuiData(data);
         writeActionInfo(data);
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
-        byte bits = data.readByte();
+        BitSet bits = data.readBitSet();
         if (sender == null || canAccess(sender.getGameProfile())) {
-            readActionInfo(bits);
+            powerOnAspects = bits;
         }
     }
 
-    private void writeActionInfo(DataOutputStream data) throws IOException {
-        byte bits = 0;
-        for (int i = 0; i < powerOnAspects.length; i++) {
-            bits |= (powerOnAspects[i] ? 1 : 0) << i;
-        }
-        data.writeByte(bits);
-    }
-
-    private void readActionInfo(byte bits) {
-        for (int bit = 0; bit < powerOnAspects.length; bit++) {
-            powerOnAspects[bit] = ((bits >> bit) & 1) == 1;
-        }
+    private void writeActionInfo(RailcraftOutputStream data) throws IOException {
+        data.writeBitSet(powerOnAspects);
     }
 
 }

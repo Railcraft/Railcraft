@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -53,8 +52,7 @@ public class DetectorTank extends DetectorFilter {
         return buttonController;
     }
 
-    @Nullable
-    public FluidStack getFilterFluid() {
+    public @Nullable FluidStack getFilterFluid() {
         ItemStack filter = getFilters().getStackInSlot(0);
         if (!InvTools.isEmpty(filter))
             return FluidItemHelper.getFluidStackInContainer(filter);
@@ -165,12 +163,12 @@ public class DetectorTank extends DetectorFilter {
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(buttonController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         buttonController.setCurrentState(data.readByte());
     }
 

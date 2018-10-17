@@ -13,8 +13,8 @@ import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
+import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -25,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -38,7 +37,6 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
     private static final int FORCED_UPDATE = 512;
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
-    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.RECEIVER;
@@ -75,32 +73,32 @@ public class TileBoxReceiver extends TileBoxActionManager implements IReceiverTi
     }
 
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         receiver.writeToNBT(data);
         return data;
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         receiver.readFromNBT(data);
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         updateNeighbors();
     }

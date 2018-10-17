@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,8 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -41,11 +39,10 @@ public class DetectorTrain extends Detector {
 
     @Override
     public int testCarts(List<EntityMinecart> carts) {
-        for (EntityMinecart cart : carts) {
-            int count = Train.getTrain(cart).size();
-            if (count >= getTrainSize()) {
-                return FULL_POWER;
-            }
+        if (carts.stream()
+                .mapToInt(cart -> Train.getTrain(cart).size())
+                .anyMatch(count -> count >= getTrainSize())) {
+            return FULL_POWER;
         }
         return NO_POWER;
     }
@@ -86,12 +83,12 @@ public class DetectorTrain extends Detector {
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeShort(getTrainSize());
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         setTrainSize(data.readShort());
     }
 

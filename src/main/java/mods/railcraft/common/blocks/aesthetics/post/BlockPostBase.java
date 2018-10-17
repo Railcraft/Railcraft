@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -96,9 +95,8 @@ public abstract class BlockPostBase extends BlockRailcraft {
             return BOUNDING_BOX;
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         if (isPlatform(blockState))
             return FULL_BLOCK_AABB;
         BlockPos down = pos.down();
@@ -108,9 +106,9 @@ public abstract class BlockPostBase extends BlockRailcraft {
         return COLLISION_BOX;
     }
 
-    @NotNull
+
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, @NotNull World worldIn, @NotNull BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         if (isPlatform(state))
             return AABBFactory.start().createBoxForTileAt(pos).build();
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
@@ -122,7 +120,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side == DOWN || (isPlatform(state) && side == UP);
     }
 
@@ -152,7 +150,7 @@ public abstract class BlockPostBase extends BlockRailcraft {
     }
 
     @Override
-    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,7 +17,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -41,7 +40,7 @@ public class BlockPostMetal extends BlockPostMetalBase {
     }
 
     @Override
-    @NotNull
+
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, COLOR, COLUMN, NORTH, SOUTH, EAST, WEST);
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,9 +26,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -39,7 +38,7 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private int strongestSignal;
 
-    public EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
+    public EnumMap<SignalAspect, BitSet> aspects = new EnumMap<>(SignalAspect.class);
 
     public TileBoxAnalog() {
         for (SignalAspect aspect : SignalAspect.VALUES) {
@@ -47,15 +46,14 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
         }
     }
 
-    @NotNull
+
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.ANALOG;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return EnumGui.BOX_ANALOG_CONTROLLER;
     }
 
@@ -201,7 +199,7 @@ public class TileBoxAnalog extends TileBoxBase implements IControllerTile, IGuiR
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return controller.getAspect();
     }
 
