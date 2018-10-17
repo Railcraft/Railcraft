@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
@@ -25,7 +25,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.materials.Materials.MATERIAL_KEY;
@@ -50,9 +49,9 @@ public class ItemSlab extends ItemMaterial {
      * clicking, he will have one of those. Return True if something happen and
      * false if it don't. This is for ITEMS, not BLOCKS
      */
-    @NotNull
+
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, @NotNull BlockPos pos, EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if (isEmpty(stack)) {
             return EnumActionResult.PASS;
@@ -109,7 +108,7 @@ public class ItemSlab extends ItemMaterial {
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean canPlaceBlockOnSide(World world, @NotNull BlockPos pos, @NotNull EnumFacing side, EntityPlayer player, @NotNull ItemStack stack) {
+    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
         TileSlab tileSlab = BlockRailcraftSlab.getSlabTile(world, pos);
         if (canAddSlab(tileSlab, side)) {
             return true;
@@ -132,7 +131,7 @@ public class ItemSlab extends ItemMaterial {
      * @param side   The side the player (or machine) right-clicked on.
      */
     @Override
-    public boolean placeBlockAt(@NotNull ItemStack stack, @NotNull EntityPlayer player, World world, @NotNull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @NotNull IBlockState newState) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         AxisAlignedBB box = newState.getCollisionBoundingBox(world, pos);
         if (box != null && !world.checkNoEntityCollision(box)) {
             return false;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,9 +18,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,7 +118,6 @@ public interface IChargeBlock {
 
         };
 
-        @NotNull
         public abstract Map<BlockPos, EnumSet<ConnectType>> getPossibleConnectionLocations(BlockPos pos);
 
     }
@@ -138,7 +136,6 @@ public interface IChargeBlock {
         }
 
         @Override
-        @NotNull
         public EnumSet<ConnectType> get(@Nullable Object key) {
             EnumSet<ConnectType> ret = super.get(key);
             return ret == null ? EnumSet.noneOf(ConnectType.class) : ret;
@@ -146,20 +143,19 @@ public interface IChargeBlock {
     }
 
     final class ChargeDef {
-        @NotNull
         private final ConnectType connectType;
         private final double cost;
         private final BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
 
-        public ChargeDef(@NotNull ConnectType connectType, double cost) {
+        public ChargeDef(ConnectType connectType, double cost) {
             this(connectType, cost, null);
         }
 
-        public ChargeDef(@NotNull ConnectType connectType, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(ConnectType connectType, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this(connectType, 0.0, batterySupplier);
         }
 
-        public ChargeDef(@NotNull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this.connectType = connectType;
             this.cost = cost * RailcraftConfig.chargeMaintenanceCostMultiplier();
             this.batterySupplier = batterySupplier;
@@ -237,6 +233,7 @@ public interface IChargeBlock {
             setCharge(charge);
         }
 
+        @Override
         public void setCharge(double charge) {
             this.charge = charge;
         }
@@ -246,6 +243,7 @@ public interface IChargeBlock {
             return capacity;
         }
 
+        @Override
         public void addCharge(double charge) {
             this.charge += charge;
         }
@@ -256,6 +254,7 @@ public interface IChargeBlock {
          *
          * @return charge removed
          */
+        @Override
         public double removeCharge(double request) {
             double availableCharge = getAvailableCharge();
             if (availableCharge >= request) {

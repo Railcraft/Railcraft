@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
@@ -44,13 +44,13 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilitiesCharge.CART_BATTERY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilitiesCharge.CART_BATTERY)
             return (T) cartBattery;
         return super.getCapability(capability, facing);
@@ -214,7 +214,6 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         return this;
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_ENERGY;

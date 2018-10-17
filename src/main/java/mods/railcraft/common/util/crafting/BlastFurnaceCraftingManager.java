@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput) {
+    public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondOutput) {
         return new IBlastFurnaceRecipe() {
             @Override
             public Ingredient getInput() {
@@ -86,7 +85,7 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
 
             @Override
             public ItemStack getSecondOutput() {
-                return secondoutput.copy();
+                return secondOutput.copy();
             }
         };
     }
@@ -115,27 +114,24 @@ public final class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingM
     }
 
     @Override
-    public List<@NotNull IBlastFurnaceFuel> getFuels() {
+    public List<IBlastFurnaceFuel> getFuels() {
         return fuels;
     }
 
     @Override
     public int getCookTime(ItemStack stack) {
-        for (IBlastFurnaceFuel fuel : fuels) {
-            if (fuel.getInput().test(stack)) {
-                return fuel.getCookTime();
-            }
-        }
-        return 0;
+        return fuels.stream()
+                .filter(fuel -> fuel.getInput().test(stack))
+                .findFirst()
+                .map(IBlastFurnaceFuel::getCookTime)
+                .orElse(0);
     }
 
-    @Nullable
     @Override
-    public IBlastFurnaceRecipe getRecipe(ItemStack stack) {
-        for (IBlastFurnaceRecipe recipe : recipes) {
-            if (recipe.getInput().test(stack))
-                return recipe;
-        }
-        return null;
+    public @Nullable IBlastFurnaceRecipe getRecipe(ItemStack stack) {
+        return recipes.stream()
+                .filter(recipe -> recipe.getInput().test(stack))
+                .findFirst()
+                .orElse(null);
     }
 }

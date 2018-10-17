@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,12 +11,11 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.*;
-import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.single.TileEngine;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
@@ -33,7 +32,7 @@ public class TriggerProvider implements ITriggerProvider {
     }
 
     @Override
-    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @NotNull EnumFacing side) {
+    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, EnumFacing side) {
     }
 
     @Override

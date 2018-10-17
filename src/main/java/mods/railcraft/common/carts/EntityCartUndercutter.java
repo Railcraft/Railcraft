@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +39,7 @@ import java.util.Set;
 
 public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
-    public static final Set<Block> EXCLUDED_BLOCKS = new HashSet<Block>();
+    public static final Set<Block> EXCLUDED_BLOCKS = new HashSet<>();
     private static final int SLOT_EXIST_UNDER_A = 0;
     private static final int SLOT_EXIST_UNDER_B = 1;
     private static final int SLOT_EXIST_SIDE_A = 2;
@@ -60,8 +59,6 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         if (InvTools.isEmpty(stack))
             return false;
         IBlockState state = InvTools.getBlockStateFromStack(stack);
-        if (state == null)
-            return false;
         if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(state.getBlock()))
             return false;
         if (state.causesSuffocation())
@@ -159,7 +156,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
         IBlockState oldState = WorldPlugin.getBlockState(world, pos);
 
-        if (oldState == null || !blockMatches(oldState, exist))
+        if (!blockMatches(oldState, exist))
             return;
 
         if (safeToReplace(pos)) {
@@ -238,7 +235,6 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         return false;
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_UNDERCUTTER;

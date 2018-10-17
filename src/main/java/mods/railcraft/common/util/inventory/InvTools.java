@@ -50,9 +50,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -64,6 +63,11 @@ public abstract class InvTools {
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {
         return InvToolsAPI.isEmpty(stack);
+    }
+
+    @Contract("null -> false; !null -> _;")
+    public static boolean nonEmpty(@Nullable ItemStack stack) {
+        return !InvToolsAPI.isEmpty(stack);
     }
 
     public static ItemStack emptyStack() {
@@ -218,7 +222,6 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
-    @NotNull
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -554,13 +557,11 @@ public abstract class InvTools {
         return !isEmpty(stack) && item != null && stack.getItem() == item;
     }
 
-    @Contract("null,_->false;")
-    public static boolean isItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
+    public static boolean isItemClass(ItemStack stack, Class<? extends Item> itemClass) {
         return !isEmpty(stack) && stack.getItem().getClass() == itemClass;
     }
 
-    @Contract("null,_->false;")
-    public static boolean extendsItemClass(@Nullable ItemStack stack, @NotNull Class<? extends Item> itemClass) {
+    public static boolean extendsItemClass(ItemStack stack, Class<? extends Item> itemClass) {
         return isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.common.items.ItemRailcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -47,7 +46,7 @@ public class ItemFirestone extends ItemRailcraft {
      * @return A new Entity object to spawn or null
      */
     @Override
-    @NotNull
+
     public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
         EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
         entity.motionX = location.motionX;

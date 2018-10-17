@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
@@ -122,7 +121,6 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
         return InvTools.isItemEqual(stack, trackReplace);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_TRACK_LAYER;

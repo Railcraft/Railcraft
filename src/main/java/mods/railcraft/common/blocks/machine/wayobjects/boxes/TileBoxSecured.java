@@ -19,7 +19,6 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -84,7 +83,7 @@ public abstract class TileBoxSecured extends TileBoxBase implements ITileAspectR
     }
 
     @Override
-    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         int lockState = data.readByte();
         if (sender == null || canAccess(sender.getGameProfile())) {
             lockController.setCurrentState(lockState);

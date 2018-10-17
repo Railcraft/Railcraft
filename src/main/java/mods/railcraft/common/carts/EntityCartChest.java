@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 public class EntityCartChest extends CartBaseContainer {
     public EntityCartChest(World world) {
@@ -36,7 +35,6 @@ public class EntityCartChest extends CartBaseContainer {
         super(world, x, y, z);
     }
 
-    @NotNull
     @Override
     public Type getType() {
         return Type.CHEST;
@@ -104,7 +102,6 @@ public class EntityCartChest extends CartBaseContainer {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new Error("Should not be called");

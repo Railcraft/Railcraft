@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,7 +17,7 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -34,10 +34,6 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     private Interlock interlock = new Interlock(this);
     private SignalAspect overrideAspect = SignalAspect.RED;
 
-    public TileBoxInterlock() {
-    }
-
-    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.INTERLOCK;
@@ -110,13 +106,13 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return controller.getAspect();
     }
 
-    @NotNull
+
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         controller.writeToNBT(data);
@@ -125,7 +121,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         controller.readFromNBT(data);
@@ -133,14 +129,14 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         receiver.readPacketData(data);
@@ -213,9 +209,9 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
     private class Interlock {
         private static final int DELAY = 20 * 10;
-        private final TreeSet<TileBoxInterlock> interlocks = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
-        private final TreeSet<TileBoxInterlock> lockRequests = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
-        private TileBoxInterlock active;
+        private final TreeSet<TileBoxInterlock> interlocks = new TreeSet<>(TileComparator.INSTANCE);
+        private final TreeSet<TileBoxInterlock> lockRequests = new TreeSet<>(TileComparator.INSTANCE);
+        private @Nullable TileBoxInterlock active;
         private int delay;
 
         public Interlock(TileBoxInterlock tile) {

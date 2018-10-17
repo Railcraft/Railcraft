@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,7 +35,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
 
     public static final float SENSITIVITY = 0.2f;
     public int powerState;
-    @NotNull
+
     public Detector detector = Detector.DUMMY;
     //    private boolean tested;
     private int powerDelay;

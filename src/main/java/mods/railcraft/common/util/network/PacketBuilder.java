@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -48,7 +47,6 @@ public final class PacketBuilder implements ISignalPacketBuilder {
     private PacketBuilder() {
     }
 
-    @NotNull
     public static PacketBuilder instance() {
         if (instance == null)
             instance = new PacketBuilder();

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +70,8 @@ public class MatTools {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @NotNull
-    public static ItemStack getPickBlock(@NotNull IBlockState state, RayTraceResult target, @NotNull World world, @NotNull BlockPos pos, EntityPlayer player) {
+
+    public static ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IMaterialBlock block = ((IMaterialBlock) state.getBlock());
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMaterial) {
@@ -88,10 +88,9 @@ public class MatTools {
         return Materials.getPlaceholder();
     }
 
-    @NotNull
-    public static List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
+    public static List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
         if (tile instanceof TileMaterial)
             items.add(((IMaterialBlock) state.getBlock()).getStack(((TileMaterial) tile).getMaterial()));
         return items;
@@ -110,7 +109,7 @@ public class MatTools {
         return Blocks.STONEBRICK.getBlockHardness(state, worldIn, pos);
     }
 
-    public static float getExplosionResistance(World world, BlockPos pos, @NotNull Entity exploder, Explosion explosion) {
+    public static float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMaterial)
             return ((TileMaterial) tile).getMaterial().getExplosionResistance(exploder);

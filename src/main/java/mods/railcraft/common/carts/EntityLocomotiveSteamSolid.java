@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -186,7 +185,6 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         return false;
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_STEAM;

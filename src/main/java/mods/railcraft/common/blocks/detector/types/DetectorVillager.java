@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,9 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -33,7 +32,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorVillager extends Detector {
 
-    @NotNull
+
     private VillagerRegistry.VillagerProfession profession = VillagerRegistry.FARMER;
     private Mode mode = Mode.ANY;
 
@@ -136,13 +135,13 @@ public class DetectorVillager extends Detector {
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeUTF(checkNotNull(profession.getRegistryName()).toString());
         data.writeByte(mode.ordinal());
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         profession = checkNotNull(ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation(data.readUTF())));
         mode = Mode.values()[data.readByte()];
     }

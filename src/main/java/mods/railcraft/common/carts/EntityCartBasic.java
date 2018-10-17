@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCart {
 
@@ -57,7 +56,6 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
         loadFromNBT(compound);
     }
 
-    @NotNull
     @Override
     public EntityMinecart.Type getType() {
         return Type.RIDEABLE;

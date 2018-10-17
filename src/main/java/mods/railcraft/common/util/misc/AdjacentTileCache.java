@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,9 +13,8 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 /**
@@ -29,7 +28,7 @@ public final class AdjacentTileCache {
     private final TileEntity[] cache = new TileEntity[6];
     private final int[] delay = new int[6];
     private final TileEntity source;
-    private final Set<ICacheListener> listeners = new LinkedHashSet<ICacheListener>();
+    private final Set<ICacheListener> listeners = new LinkedHashSet<>();
 
     public AdjacentTileCache(TileEntity tile) {
         this.source = tile;
@@ -43,8 +42,7 @@ public final class AdjacentTileCache {
         listeners.add(listener);
     }
 
-    @Nullable
-    private TileEntity searchSide(EnumFacing side) {
+    private @Nullable TileEntity searchSide(EnumFacing side) {
         return WorldPlugin.getBlockTile(source.getWorld(), source.getPos().offset(side));
     }
 
@@ -91,8 +89,7 @@ public final class AdjacentTileCache {
         return pos.getX() >> 4 == sidePos.getX() >> 4 && pos.getZ() >> 4 == sidePos.getZ() >> 4;
     }
 
-    @Nullable
-    public TileEntity getTileOnSide(EnumFacing side) {
+    public @Nullable TileEntity getTileOnSide(EnumFacing side) {
         if (Game.BUKKIT || !isInSameChunk(side)) {
             changed(side);
             return searchSide(side);
@@ -121,9 +118,8 @@ public final class AdjacentTileCache {
             delay[side] = DELAY_MAX;
     }
 
-    @NotNull
     public List<String> getDebugOutput() {
-        List<String> debug = new ArrayList<String>();
+        List<String> debug = new ArrayList<>();
         debug.add("Neighbor Cache: " + Arrays.toString(cache));
         return debug;
     }

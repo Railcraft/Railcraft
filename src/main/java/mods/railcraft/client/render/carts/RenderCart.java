@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IAlternateCartTexture;
-import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.ICartRenderer;
+import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
@@ -26,9 +26,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,8 +59,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     // **********************************
     private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
 
-    @Nullable
-    private Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
+    private @Nullable Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
         int i = MathHelper.floor(x);
         int j = MathHelper.floor(y);
         int k = MathHelper.floor(z);
@@ -101,8 +99,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         }
     }
 
-    @Nullable
-    public Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
+    public @Nullable Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
         int i = MathHelper.floor(p_70489_1_);
         int j = MathHelper.floor(p_70489_3_);
         int k = MathHelper.floor(p_70489_5_);
@@ -326,12 +323,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
     }
 
     @Override
-    public void bindTex(@NotNull ResourceLocation texture) {
+    public void bindTex(ResourceLocation texture) {
         super.bindTexture(texture);
     }
 
     @Override
-    public void bindTex(@NotNull EntityMinecart cart) {
+    public void bindTex(EntityMinecart cart) {
         super.bindEntityTexture(cart);
     }
 

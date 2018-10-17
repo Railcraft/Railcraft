@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -49,9 +48,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return EnumPost.class;
     }
 
@@ -106,15 +104,15 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         }
     }
 
-    @NotNull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         if (state.getValue(VARIANT) == EnumPost.EMBLEM) {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
                 List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
-                post.getColor().setItemColor(drops.get(0));
+                if (post.getColor() != null)
+                    post.getColor().setItemColor(drops.get(0));
                 ItemPost.setEmblem(drops.get(0), post.getEmblem());
                 return drops;
             }
@@ -123,11 +121,11 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void harvestBlock(@NotNull World worldIn, EntityPlayer player, @NotNull BlockPos pos, @NotNull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@NotNull IBlockState state, World world, @NotNull BlockPos pos, @NotNull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.005F);
@@ -142,7 +140,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         if (isVariant(state, EnumPost.EMBLEM))
             return new TilePostEmblem();
         return null;
@@ -185,12 +183,12 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isFlammable(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return getVariant(world, pos).canBurn();
     }
 
     @Override
-    public boolean recolorBlock(World world, @NotNull BlockPos pos, EnumFacing side, @NotNull EnumDyeColor color) {
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (isVariant(state, EnumPost.METAL_UNPAINTED))
             if (RailcraftBlocks.POST_METAL.isLoaded()) {
@@ -214,7 +212,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TilePostEmblem) {
             TilePostEmblem tileEmblem = (TilePostEmblem) tile;
@@ -248,7 +246,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    @NotNull
+
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(VARIANT, EnumPost.fromId(meta));
     }
@@ -262,7 +260,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    @NotNull
+
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, VARIANT);
     }

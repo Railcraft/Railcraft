@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.util.misc;
 
 import com.google.common.base.Predicate;
-import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,15 +20,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public final class MiscTools {
 
     public static final Random RANDOM = new Random();
@@ -39,7 +35,6 @@ public final class MiscTools {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
-    @NotNull
     private static final Predicate<Entity> livingEntitySelector = entity -> entity != null && entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
@@ -52,8 +47,7 @@ public final class MiscTools {
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
-    @Nullable
-    public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
+    public static @Nullable <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
         List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
@@ -64,8 +58,7 @@ public final class MiscTools {
     /**
      * Same as {@link net.minecraft.block.Block#rayTrace(BlockPos, Vec3d, Vec3d, AxisAlignedBB)}
      */
-    @Nullable
-    public static RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+    public static @Nullable RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
         Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
         Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
         RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
@@ -84,8 +77,7 @@ public final class MiscTools {
         return vec3d == null || vec3d.x < 0 || vec3d.x > 1 || vec3d.y < 0 || vec3d.y > 1;
     }
 
-    @Nullable
-    public static RayTraceResult rayTracePlayerLook(EntityPlayer player) {
+    public static @Nullable RayTraceResult rayTracePlayerLook(EntityPlayer player) {
         Entity pointedEntity = null;
         final double reach = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
         Vec3d eyePos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
@@ -140,8 +132,7 @@ public final class MiscTools {
      * @param player EntityPlayer
      * @return a side value 0-5
      */
-    @Nullable
-    public static EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
+    public static @Nullable EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
         RayTraceResult mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
             return mouseOver.sideHit;
@@ -164,8 +155,10 @@ public final class MiscTools {
      *
      * @return a side
      */
-    @NotNull
-    public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
+
+    public static EnumFacing getHorizontalSideFacingPlayer(@Nullable EntityLivingBase player) {
+        if (player == null)
+            return EnumFacing.NORTH;
         int dir = MathHelper.floor((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
             case 0:
@@ -180,13 +173,11 @@ public final class MiscTools {
         return EnumFacing.NORTH;
     }
 
-    @Nullable
-    public static EnumFacing getSideFacingTrack(World world, BlockPos pos) {
-        for (EnumFacing dir : EnumFacing.VALUES) {
-            if (TrackTools.isRailBlockAt(world, pos.offset(dir)))
-                return dir;
-        }
-        return null;
+    public static @Nullable EnumFacing getSideFacingTrack(World world, BlockPos pos) {
+        return Arrays.stream(EnumFacing.VALUES)
+                .filter(dir -> TrackTools.isRailBlockAt(world, pos.offset(dir)))
+                .findFirst()
+                .orElse(null);
     }
 
     public static boolean areCoordinatesOnSide(BlockPos start, BlockPos end, EnumFacing side) {

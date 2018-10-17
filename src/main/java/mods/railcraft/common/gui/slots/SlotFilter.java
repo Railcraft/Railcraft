@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,14 +11,12 @@ package mods.railcraft.common.gui.slots;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.BooleanSupplier;
 
 public class SlotFilter extends SlotRailcraft {
 
-    @NotNull
     public BooleanSupplier isEnabled = () -> true;
 
     public SlotFilter(IInventory iinventory, int slotIndex, int posX, int posY) {

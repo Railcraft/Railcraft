@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,12 +18,11 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler, IMagnifiable {
-    @NotNull
+
     private ITrackKitInstance trackKitInstance = new TrackKitMissing(false);
     private TrackType trackType = TrackTypes.IRON.getTrackType();
 
@@ -45,7 +44,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         return trackKitInstance;
     }
 
-    public void setTrackKitInstance(@NotNull ITrackKitInstance trackKit) {
+    public void setTrackKitInstance(ITrackKitInstance trackKit) {
         this.trackKitInstance = trackKit;
         trackKitInstance.setTile(this);
     }
@@ -55,9 +54,9 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
         return "tile.railcraft.track_outfitted." + trackType.getName() + "." + trackKitInstance.getTrackKit().getName();
     }
 
-    @NotNull
+
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setString(TrackType.NBT_TAG, getTrackType().getName());
@@ -68,7 +67,7 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey(TrackType.NBT_TAG)) {
@@ -114,13 +113,13 @@ public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfitte
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).writeGuiData(data);
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         if (trackKitInstance instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) trackKitInstance).readGuiData(data, sender);
     }
