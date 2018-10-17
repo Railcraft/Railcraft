@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
-import mods.railcraft.common.blocks.machine.interfaces.ITileAspectResponder;
+import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerAspectAction;
@@ -23,18 +23,18 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import org.jetbrains.annotations.Nullable;
 
 public class GuiAspectAction extends GuiContainerRailcraft {
 
     private final ITileAspectResponder actionManager;
     private final String title;
-    private final EntityPlayer player;
     private final boolean[] aspects = new boolean[SignalAspect.values().length];
     private GuiMultiButton lockButton;
     private boolean changed;
-    private ToolTip lockedToolTips;
-    private ToolTip unlockedToolTips;
-    private ToolTip notOwnedToolTips;
+    private @Nullable ToolTip lockedToolTips;
+    private @Nullable ToolTip unlockedToolTips;
+    private @Nullable ToolTip notOwnedToolTips;
     public String ownerName = "[Unknown]";
 
     public GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title) {
@@ -44,7 +44,6 @@ public class GuiAspectAction extends GuiContainerRailcraft {
 
     protected GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title, String texture) {
         super(new ContainerAspectAction(player, actionManager), texture);
-        this.player = player;
         this.actionManager = actionManager;
         this.title = title;
         for (SignalAspect aspect : SignalAspect.values()) {

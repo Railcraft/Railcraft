@@ -1,61 +1,22 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:tinted_cube",
+    "model": "railcraft:glass",
     "textures": {
-      "particle": "railcraft:blocks/tank_steel_gauge_0"
+      "particle": "railcraft:blocks/tank_steel_gauge_0",
+      "overlay": "railcraft:blocks/tank_steel_gauge_4",
+      "down": "railcraft:blocks/tank_steel_gauge_0",
+      "up": "railcraft:blocks/tank_steel_gauge_0"
     }
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ],
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
     "position": {
-      "single": {
-        "textures": {
-          "north": "railcraft:blocks/tank_steel_gauge_0",
-          "south": "railcraft:blocks/tank_steel_gauge_0",
-          "east": "railcraft:blocks/tank_steel_gauge_0",
-          "west": "railcraft:blocks/tank_steel_gauge_0",
-          "up": "railcraft:blocks/tank_steel_gauge_0",
-          "down": "railcraft:blocks/tank_steel_gauge_0"
-        }
-      },
-      "top": {
-        "textures": {
-          "north": "railcraft:blocks/tank_steel_gauge_1",
-          "south": "railcraft:blocks/tank_steel_gauge_1",
-          "east": "railcraft:blocks/tank_steel_gauge_1",
-          "west": "railcraft:blocks/tank_steel_gauge_1",
-          "up": "railcraft:blocks/tank_steel_gauge_0",
-          "down": "railcraft:blocks/tank_steel_gauge_4"
-        }
-      },
-      "middle": {
-        "textures": {
-          "north": "railcraft:blocks/tank_steel_gauge_2",
-          "south": "railcraft:blocks/tank_steel_gauge_2",
-          "east": "railcraft:blocks/tank_steel_gauge_2",
-          "west": "railcraft:blocks/tank_steel_gauge_2",
-          "up": "railcraft:blocks/tank_steel_gauge_4",
-          "down": "railcraft:blocks/tank_steel_gauge_4"
-        }
-      },
-      "bottom": {
-        "textures": {
-          "north": "railcraft:blocks/tank_steel_gauge_3",
-          "south": "railcraft:blocks/tank_steel_gauge_3",
-          "east": "railcraft:blocks/tank_steel_gauge_3",
-          "west": "railcraft:blocks/tank_steel_gauge_3",
-          "up": "railcraft:blocks/tank_steel_gauge_4",
-          "down": "railcraft:blocks/tank_steel_gauge_0"
-        }
-      }
+      "single": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_0"}},
+      "top": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_1"}},
+      "center": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_2"}},
+      "bottom": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_3"}}
     }
   }
 }

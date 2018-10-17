@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,6 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         loadFromNBT(compound);
     }
 
-    @NotNull
+
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -94,9 +93,8 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     /**
      * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
      */
-    @Nullable
     @Override
-    public EntityMinecart.Type getType() {
+    public @Nullable EntityMinecart.Type getType() {
         FMLLog.bigWarning("This method should NEVER be called");
         return null;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,14 +10,15 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.ISubtypedBlock;
+import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -25,7 +26,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -34,8 +34,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -43,13 +43,21 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankMetal extends BlockMultiBlock {
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
+@RailcraftBlockMetadata(variant = EnumColor.class, propertyName = "color")
+public abstract class BlockTankMetal extends BlockMultiBlock implements ColorPlugin.IColoredBlock, ISubtypedBlock<EnumColor> {
+    private VariantData<EnumColor> variantData;
 
     protected BlockTankMetal(Material material) {
         super(material);
         setSoundType(SoundType.METAL);
-        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE));
+    }
+
+    @Override
+    public VariantData<EnumColor> getVariantData() {
+        if (variantData == null)
+            variantData = ISubtypedBlock.super.getVariantData();
+        return variantData;
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -65,7 +73,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
                     "OOO",
                     "ODO",
                     "OOO",
-                    'O', Item.getItemFromBlock(this),
+                    'O', getWildcard(),
                     'D', color.getDyeOreDictTag());
         }
     }
@@ -74,35 +82,23 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
         CraftingPlugin.addRecipe(getStack(8), recipe);
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumColor.class;
-    }
-
-    @Nullable
-    @Override
-    public IVariantEnum[] getVariants() {
-        return EnumColor.VALUES;
+    public void finalizeDefinition() {
+        ColorPlugin.instance.register(this, this);
     }
 
     @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        IBlockState state = getDefaultState();
-        if (variant != null) {
-            checkVariant(variant);
-            state = state.withProperty(COLOR, (EnumColor) variant);
-        }
-        return state;
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, getVariantProperty());
     }
 
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    @Override
     @SuppressWarnings("deprecation")
+    @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
+        return convertMetaToState(meta);
     }
 
     /**
@@ -110,35 +106,25 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return getColor(state).ordinal();
+        return state.getValue(getVariantProperty()).ordinal();
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR);
-    }
-
     @SideOnly(Side.CLIENT)
-    @Nullable
-    @Override
-    public StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(COLOR).build();
-    }
-
-    public EnumColor getColor(IBlockState state) {
-        return state.getValue(COLOR);
+    public @Nullable StateMapperBase getStateMapper() {
+        return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
 
     @Override
     public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
+        return (state, worldIn, pos, tintIndex) -> getVariant(state).getHexColor();
     }
 
     @Override
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        if (getColor(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
+        if (getVariant(state).getDye() != color) {
+            world.setBlockState(pos, getDefaultState().withProperty(getVariantProperty(), EnumColor.fromDye(color)));
             return true;
         }
         return false;
@@ -147,15 +133,15 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
-    @Override
     @SuppressWarnings("deprecation")
+    @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return getColor(state).getMapColor();
+        return getVariant(state).getMapColor();
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return getColor(state).ordinal();
+        return getVariant(state).ordinal();
     }
 
     @Override
@@ -163,10 +149,5 @@ public abstract class BlockTankMetal extends BlockMultiBlock {
         for (int meta = 0; meta < 16; meta++) {
             items.add(new ItemStack(this, 1, meta));
         }
-    }
-
-    @Override
-    public String getTranslationKey() {
-        return super.getTranslationKey();
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,9 +34,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreIngredient;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -160,7 +159,7 @@ public enum Materials implements IVariantEnum {
     NO_MAT("no_mat", () -> null);
     public static final String MATERIAL_KEY = "mat";
     public static final IUnlistedProperty<Materials> MATERIAL_PROPERTY = net.minecraftforge.common.property.Properties.toUnlisted(PropertyEnum.create("material", Materials.class));
-    public static final Map<String, Materials> NAMES = new HashMap<String, Materials>();
+    public static final Map<String, Materials> NAMES = new HashMap<>();
     //    public static final BlockMaterial[] OLD_WALL1_MATS;
 //    public static final BlockMaterial[] OLD_WALL2_MATS;
     public static final EnumSet<Materials> MAT_SET_VANILLA = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK, PURPUR);
@@ -222,8 +221,7 @@ public enum Materials implements IVariantEnum {
     private final String name;
     private final Supplier<IBlockState> stateSupplier;
     private SoundType sound = SoundType.STONE;
-    @Nullable
-    private IBlockState state;
+    private @Nullable IBlockState state;
     private String oreTag;
 
     Materials(String name, Supplier<IBlockState> stateSupplier) {
@@ -311,7 +309,7 @@ public enum Materials implements IVariantEnum {
         throw new RuntimeException("this should never happen");
     }
 
-    @NotNull
+
     public static ItemStack getStack(Block block, int qty, @Nullable IVariantEnum variant) {
         ((IRailcraftObject) block).checkVariant(variant);
         ItemStack stack = new ItemStack(block, qty);
@@ -339,8 +337,7 @@ public enum Materials implements IVariantEnum {
         return getPlaceholder();
     }
 
-    @Nullable
-    public IBlockState getState() {
+    public @Nullable IBlockState getState() {
         if (state == null)
             state = stateSupplier.get();
         return state;
@@ -356,8 +353,7 @@ public enum Materials implements IVariantEnum {
     }
 
     @Override
-    @Nullable
-    public String getOreTag() {
+    public @Nullable String getOreTag() {
         return oreTag;
     }
 
@@ -420,7 +416,7 @@ public enum Materials implements IVariantEnum {
         }
     }
 
-    public float getExplosionResistance(Entity entity) {
+    public float getExplosionResistance(@Nullable Entity entity) {
         switch (this) {
             case CREOSOTE:
                 return EnumGeneric.BLOCK_CREOSOTE.getResistance() * 3f / 5f;
@@ -460,9 +456,8 @@ public enum Materials implements IVariantEnum {
         return getState() != null;
     }
 
-    @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
+    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,15 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.manipulators;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,17 +27,17 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class InventoryManipulator<T extends IInvSlot> implements Iterable<T> {
-    @NotNull
+
     public static InventoryManipulator<IExtInvSlot> get(IInventory inv) {
         return new StandardInventoryManipulator(inv);
     }
 
-    @NotNull
+
     public static InventoryManipulator<IInvSlot> get(IItemHandler inv) {
         return new ItemHandlerInventoryManipulator(inv);
     }
 
-    @NotNull
+
     public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
         if (inv.getBackingObject() instanceof IInventory)
             return new StandardInventoryManipulator((IInventory) inv.getBackingObject());
@@ -53,8 +53,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return isEmpty(tryAddStack(stack));
     }
 
-    @Nullable
-    public ItemStack tryAddStack(ItemStack stack) {
+    public @Nullable ItemStack tryAddStack(ItemStack stack) {
         return addStack(stack, false);
     }
 
@@ -63,13 +62,11 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      *
      * @return The remainder
      */
-    @Nullable
-    public ItemStack addStack(ItemStack stack) {
+    public @Nullable ItemStack addStack(ItemStack stack) {
         return addStack(stack, true);
     }
 
-    @Nullable
-    protected abstract ItemStack addStack(ItemStack stack, boolean doAdd);
+    protected abstract @Nullable ItemStack addStack(ItemStack stack, boolean doAdd);
 
     /**
      * Returns true if an item matching the filter can be removed from the
@@ -83,8 +80,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * Returns the item that would be returned if an item matching the filter
      * was removed. Does not modify the inventory.
      */
-    @Nullable
-    public ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
+    public @Nullable ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
@@ -99,8 +95,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     /**
      * Removed an item matching the filter.
      */
-    @Nullable
-    public ItemStack removeItem(Predicate<ItemStack> filter) {
+    public @Nullable ItemStack removeItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack))
@@ -111,23 +106,17 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
 
     public boolean canRemoveItems(Predicate<ItemStack> filter, int maxAmount) {
         List<ItemStack> outputList = removeItem(filter, maxAmount, false);
-        int found = 0;
-        for (ItemStack stack : outputList) {
-            found += sizeOf(stack);
-        }
+        int found = outputList.stream().mapToInt(InvTools::sizeOf).sum();
         return found == maxAmount;
     }
 
-    @NotNull
     public List<ItemStack> removeItems(Predicate<ItemStack> filter, int maxAmount) {
         return removeItem(filter, maxAmount, true);
     }
 
-    @NotNull
     protected abstract List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove);
 
-    @Nullable
-    public ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
+    public @Nullable ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();

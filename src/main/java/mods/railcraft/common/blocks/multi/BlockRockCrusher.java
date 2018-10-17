@@ -1,8 +1,18 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.property.PropertyCharacter;
 import net.minecraft.block.SoundType;
@@ -47,7 +57,7 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public TileMultiBlockInventory<?, ?, ?> createTileEntity(World world, IBlockState state) {
+    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
         return new TileRockCrusher();
     }
 

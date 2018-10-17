@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,7 +36,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFireboxSolid> {
+public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;
@@ -55,9 +54,9 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         IInventoryObject inventoryObject = InventoryFactory.get(tile);
         return inventoryObject != null && inventoryObject.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
-    private InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
-    private InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
-    private InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
+    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private boolean needsFuel;
 
     public TileBoilerFireboxSolid() {
@@ -86,11 +85,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
     }
 
     @Override
-    protected Class<TileBoilerFireboxSolid> defineMasterClass() {
-        return TileBoilerFireboxSolid.class;
-    }
-
-    @Override
     protected void process() {
         if (clock % 4 == 0) {
             InvTools.moveOneItem(invStock, invBurn);
@@ -109,7 +103,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
             needsFuel = !InvTools.numItemsMoreThan(invFuel, 64);
 
         if (needsFuel()) {
-            TileBoilerFireboxSolid mBlock = getMasterBlock();
+            TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
                 InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StandardStackFilters.FUEL);
@@ -144,7 +138,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
 
     @Override
     public boolean needsFuel() {
-        TileBoilerFireboxSolid mBlock = getMasterBlock();
+        TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
         return mBlock != null && mBlock.needsFuel;
     }
 
@@ -153,7 +147,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox<TileBoilerFi
         return false;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.BOILER_SOLID;

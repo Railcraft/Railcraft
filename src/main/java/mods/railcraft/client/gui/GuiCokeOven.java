@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCokeOven extends TileGui {
 
-    private TileCokeOven tile;
+    private final TileCokeOven tile;
 
     public GuiCokeOven(InventoryPlayer inventoryplayer, TileCokeOven tile) {
         super(tile, new ContainerCokeOven(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png",
@@ -38,7 +38,7 @@ public class GuiCokeOven extends TileGui {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (tile.getMasterCookTime() > 0) {
+        if (tile.getCookTime() > 0) {
             int burnProgress = tile.getBurnProgressScaled(12);
             drawTexturedModalRect(x + 16, (y + 38) - burnProgress, 176, 59 - burnProgress, 14, burnProgress + 2);
             int cookProgress = tile.getCookProgressScaled(20);

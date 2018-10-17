@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
@@ -88,7 +87,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
             if (nextToSuspended)
                 return;
 
-            if (trackExist != null && trackStock != null)
+            if (InvTools.nonEmpty(trackExist) && InvTools.nonEmpty(trackStock))
                 if (trackExist.getItem() instanceof ITrackItem) {
                     ITrackItem trackItem = (ITrackItem) trackExist.getItem();
                     if (trackItem.getPlacedBlock() == block) {
@@ -123,7 +122,6 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
         return InvTools.isItemEqual(stack, trackReplace);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_TRACK_RELAYER;

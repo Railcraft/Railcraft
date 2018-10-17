@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,13 +8,10 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.interfaces;
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.plugins.buildcraft;
 
-/**
- * @author wshadow
- */
-public interface ITileCompare {
+import mcp.MethodsReturnNonnullByDefault;
 
-    int getComparatorInputOverride();
-
-}
+import javax.annotation.ParametersAreNonnullByDefault;

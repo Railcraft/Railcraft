@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.manipulator;
 
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -20,8 +20,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 /**
@@ -43,11 +43,13 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         if (canRotate()) {
-            facing = MiscTools.getSideFacingTrack(world, getPos());
-            if (facing == null)
+            EnumFacing newFacing = MiscTools.getSideFacingTrack(world, getPos());
+            if (newFacing == null) {
                 if (entityLiving != null) {
-                    facing = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
-                } else facing = getDefaultFacing();
+                    newFacing = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
+                } else newFacing = getDefaultFacing();
+            }
+            facing = newFacing;
         }
     }
 

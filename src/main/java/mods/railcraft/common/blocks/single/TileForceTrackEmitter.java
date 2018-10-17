@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,11 +15,10 @@ import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.IMagnifiable;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -41,8 +40,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 import static mods.railcraft.common.blocks.RailcraftBlocks.TRACK_FORCE;
@@ -106,7 +105,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         EXTENDING(true) {
             @Override
             State afterUseCharge(TileForceTrackEmitter emitter) {
-                if (!emitter.hasPowerToExtend())
+                if (emitter.isOutOfPower())
                     return HALTED;
                 if (emitter.numTracks >= MAX_TRACKS)
                     return EXTENDED;
@@ -187,11 +186,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         if (entityLiving != null)
             facing = entityLiving.getHorizontalFacing().getOpposite();
         checkRedstone();
-    }
-
-    @Override
-    public void initFromItem(ItemStack stack) {
-        super.initFromItem(stack);
         this.color = ItemForceTrackEmitter.getColor(stack);
     }
 
@@ -218,7 +212,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         if (Game.isClient(world))
             return;
 
-        State previous = this.state;
+        State previous = state;
         if (!powered) {
             state = previous.whenNoCharge(this);
         } else {
@@ -262,6 +256,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         return true;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean placeTrack(BlockPos toPlace, IBlockState prevState, EnumRailDirection direction) {
         BlockTrackForce trackForce = (BlockTrackForce) TRACK_FORCE.block();
         if (trackForce != null && WorldPlugin.isBlockAir(getWorld(), toPlace, prevState)) {
@@ -297,12 +292,12 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         return BASE_DRAW + CHARGE_PER_TRACK * tracks;
     }
 
-    public boolean hasPowerToExtend() {
-        return ChargeManager.getNetwork(world).getNode(pos).canUseCharge(getMaintenanceCost(numTracks + 1));
+    public boolean isOutOfPower() {
+        return !ChargeManager.getNetwork(world).getNode(pos).canUseCharge(getMaintenanceCost(numTracks + 1));
     }
 
     void removeFirstTrack() {
-        BlockPos toRemove = this.pos.up().offset(facing, numTracks);
+        BlockPos toRemove = pos.up().offset(facing, numTracks);
         removeTrack(toRemove);
     }
 
@@ -314,12 +309,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         }
         numTracks--;
         removingTrack = false;
-    }
-
-    @Nullable
-    @Override
-    public EnumGui getGui() {
-        return null;
     }
 
     @Override
@@ -354,7 +343,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             return;
         }
         BlockPos.PooledMutableBlockPos toRemove = BlockPos.PooledMutableBlockPos.retain();
-        toRemove.setPos(this.pos);
+        toRemove.setPos(pos);
         toRemove.move(EnumFacing.UP);
         toRemove.move(facing, numTracks);
         while (numTracks > lastIndex) {
@@ -437,6 +426,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             markBlockForUpdate();
     }
 
+    @Override
     public EnumFacing getFacing() {
         return facing;
     }

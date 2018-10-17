@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -47,7 +48,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     public static final PropertyBool THROWN = PropertyBool.create("thrown");
 
     public BlockMachineActuator() {
-        super(false);
+        super(Material.CIRCUITS);
         setDefaultState(getDefaultState()
                 .withProperty(FACING, EnumFacing.NORTH)
                 .withProperty(RED_FLAG, ISwitchActuator.ArrowDirection.NORTH_SOUTH)
@@ -64,8 +65,15 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         return 8;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -143,7 +151,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                     'W', "dyeWhite",
                     'I', "ingotIron",
                     'P', Blocks.PISTON,
-                    'C', RailcraftItems.CIRCUIT.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
+                    'C', RailcraftItems.CIRCUIT.getIngredient(ItemCircuit.EnumCircuit.RECEIVER),
                     'B', "dyeBlack",
                     'R', "dyeRed");
             CraftingPlugin.addRecipe(stack,
@@ -152,7 +160,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                     'W', "dyeWhite",
                     'I', "ingotIron",
                     'P', Blocks.PISTON,
-                    'C', RailcraftItems.CIRCUIT.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
+                    'C', RailcraftItems.CIRCUIT.getIngredient(ItemCircuit.EnumCircuit.RECEIVER),
                     'B', "dyeBlack",
                     'R', "dyeRed");
         }

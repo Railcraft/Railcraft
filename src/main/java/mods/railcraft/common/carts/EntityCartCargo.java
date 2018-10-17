@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,8 +23,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
 
 public class EntityCartCargo extends CartBaseFiltered {
     private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(DataSerializers.VARINT);
@@ -106,7 +104,6 @@ public class EntityCartCargo extends CartBaseFiltered {
         return true;
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_CARGO;

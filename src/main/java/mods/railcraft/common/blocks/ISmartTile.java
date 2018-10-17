@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,11 +12,13 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -24,9 +26,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -34,17 +34,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
 /**
  *
  */
-public interface ISmartTile {
-
-    default TileEntity tile() {
-        return (TileEntity) this;
-    }
+public interface ISmartTile extends ITile {
 
     default boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
@@ -53,16 +48,12 @@ public interface ISmartTile {
     default void onBlockAdded() {
     }
 
-    @OverridingMethodsMustInvokeSuper
-    default void initFromItem(ItemStack stack) {
-    }
-
     /**
      * Called before the block is removed.
      */
     default void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
+            InvTools.dropInventory(new InventoryMapper((IInventory) this), tile().getWorld(), tile().getPos());
     }
 
     default boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -80,17 +71,18 @@ public interface ISmartTile {
 
     default boolean openGui(EntityPlayer player) {
         EnumGui gui = getGui();
-        BlockPos pos = tile().getPos();
 
         if (gui != null) {
+            BlockPos pos = tile().getPos();
             GuiHandler.openGui(gui, player, tile().getWorld(), pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
     }
 
-    @Nullable
-    EnumGui getGui();
+    default @Nullable EnumGui getGui() {
+        return null;
+    }
 
     default boolean isSideSolid(EnumFacing side) {
         return true;
@@ -112,14 +104,6 @@ public interface ISmartTile {
     default void randomDisplayTick(Random rand) {
     }
 
-    default int colorMultiplier() {
-        return 16777215;
-    }
-
-    default boolean recolourBlock(EnumDyeColor color) {
-        return false;
-    }
-
     default IPostConnection.ConnectStyle connectsToPost(EnumFacing side) {
         if (isSideSolid(side.getOpposite()))
             return IPostConnection.ConnectStyle.TWO_THIN;
@@ -136,8 +120,12 @@ public interface ISmartTile {
         WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());
     }
 
-    default IBlockState getActualState(IBlockState base) {
-        return base;
+    default IBlockState getActualState(IBlockState state) {
+        return state;
+    }
+
+    default IBlockState getExtendedState(IBlockState state) {
+        return state;
     }
 
 }

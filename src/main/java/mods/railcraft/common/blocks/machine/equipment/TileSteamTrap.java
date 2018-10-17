@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
-import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -38,18 +37,17 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap extends RailcraftTickingTileEntity implements ISmartTile, ISteamUser, ITileRotate, ITileTanks {
+public abstract class TileSteamTrap extends TileMachineBase implements ISteamUser, ITileRotate, ITileTanks {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
@@ -64,6 +62,12 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
         tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, this);
         tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
+    }
+
+    //TODO: Fix
+    @Override
+    public EquipmentVariant getMachineType() {
+        return null;
     }
 
     @Override
@@ -190,10 +194,5 @@ public abstract class TileSteamTrap extends RailcraftTickingTileEntity implement
     @Override
     public EnumFacing getFacing() {
         return direction;
-    }
-
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-        return oldState != newState;
     }
 }

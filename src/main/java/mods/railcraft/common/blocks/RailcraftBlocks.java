@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,6 @@ import mods.railcraft.common.blocks.aesthetics.concrete.ItemReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
-import mods.railcraft.common.blocks.aesthetics.glass.ItemStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
@@ -108,7 +107,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     FRAME("frame", BlockFrame.class, BlockFrame::new, ItemBlockRailcraft::new),
     GENERIC("generic", BlockGeneric.class, BlockGeneric::new, ItemBlockGeneric::new),
     METAL("metal", BlockMetal.class, BlockMetal::new, ItemBlockMetal::new),
-    GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemStrengthGlass::new),
+    GLASS("glass", BlockStrengthGlass.class, BlockStrengthGlass::new, ItemBlockRailcraftColored::new),
     LANTERN("lantern", BlockLantern.class, BlockLantern::new, ItemMaterial::new),
     LOGBOOK("logbook", BlockLogbook.class, BlockLogbook::new, ItemBlockRailcraft::new),
     MANIPULATOR("manipulator", BlockMachineManipulator.class, BlockMachineManipulator::new, ItemMachine::new),
@@ -151,12 +150,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, BlockBlastFurnace::new, ItemBlockCustomModel::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, BlockRockCrusher::new, ItemBlockEntityDelegate::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, BlockSteamOven::new, ItemBlockCustomModel::new),
-    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockTank::new),
-    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockTank::new),
-    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockTank::new),
-    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockTank::new),
-    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockTank::new),
-    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockTank::new),
+    TANK_IRON_GAUGE("tank_iron_gauge", BlockTankIronGauge.class, BlockTankIronGauge::new, ItemBlockRailcraftColored::new),
+    TANK_IRON_VALVE("tank_iron_valve", BlockTankIronValve.class, BlockTankIronValve::new, ItemBlockRailcraftColored::new),
+    TANK_IRON_WALL("tank_iron_wall", BlockTankIronWall.class, BlockTankIronWall::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_GAUGE("tank_steel_gauge", BlockTankSteelGauge.class, BlockTankSteelGauge::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_VALVE("tank_steel_valve", BlockTankSteelValve.class, BlockTankSteelValve::new, ItemBlockRailcraftColored::new),
+    TANK_STEEL_WALL("tank_steel_wall", BlockTankSteelWall.class, BlockTankSteelWall::new, ItemBlockRailcraftColored::new),
     TANK_WATER("tank_water", BlockTankWater.class, BlockTankWater::new, ItemBlockEntityDelegate::new),
     FLUX_TRANSFORMER("flux_transformer", BlockFluxTransformer.class, BlockFluxTransformer::new, ItemBlockEntityDelegate::new),
     BOILER_FIREBOX_FLUID("boiler_firebox_fluid", BlockBoilerFireboxFluid.class, BlockBoilerFireboxFluid::new, ItemBlockEntityDelegate::new),
@@ -170,7 +169,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;
-    private final Class<? extends Block> blockClass;
     private final Class<? extends IVariantEnum> variantClass;
     private final Definition def;
     private Block block;
@@ -183,7 +181,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     RailcraftBlocks(String tag, Class<? extends Block> blockClass, Supplier<Block> blockSupplier,
                     @Nullable Function<Block, ItemBlock> itemSupplier, @Nullable Supplier<?> altRecipeObject) {
         this.def = new Definition(this, tag, altRecipeObject);
-        this.blockClass = blockClass;
         RailcraftBlockMetadata annotation = blockClass.getAnnotation(RailcraftBlockMetadata.class);
         this.variantClass = annotation != null ? annotation.variant() : null;
         this.blockSupplier = blockSupplier;
@@ -260,7 +257,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    @Nullable
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (block instanceof IRailcraftBlock)
             return ((IRailcraftBlock) block).getState(variant);
@@ -268,13 +264,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     @Override
-    @Nullable
-    public ItemBlock item() {
+    public @Nullable ItemBlock item() {
         return item;
     }
 
-    @Nullable
-    public Class<? extends IVariantEnum> getVariantClass() {
+    public @Nullable Class<? extends IVariantEnum> getVariantClass() {
         return variantClass;
     }
 

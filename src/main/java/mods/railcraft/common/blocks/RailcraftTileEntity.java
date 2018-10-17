@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import io.netty.buffer.Unpooled;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -41,23 +42,21 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable, ITile {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-    @NotNull
+
     private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
-    @Nullable
-    private UUID uuid;
-    @NotNull
+    private @Nullable UUID uuid;
+
     private String customName = "";
 
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
@@ -86,7 +85,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return tileCache;
     }
 
-    @Nullable
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
@@ -136,6 +134,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 //        owner = data.readUTF();
     }
 
+    @Override
     public void markBlockForUpdate() {
 //        System.out.println("updating");
         if (hasWorld()) {
@@ -201,7 +200,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
-    @NotNull
     public String getLocalizationTag() {
         return getBlockType().getTranslationKey() + ".name";
     }
@@ -248,9 +246,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return getPos().getZ();
     }
 
-    @Nullable
     @Override
-    public final World theWorld() {
+    public final @Nullable World theWorld() {
         return world;
     }
 

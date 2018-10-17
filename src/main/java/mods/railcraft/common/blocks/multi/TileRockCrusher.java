@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,7 +46,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -57,7 +56,7 @@ import static mods.railcraft.common.blocks.multi.BlockRockCrusher.ICON;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrusher, TileRockCrusher, TileRockCrusher> implements IHasWork, ISidedInventory {
+public final class TileRockCrusher extends TileMultiBlockInventory implements IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -140,8 +139,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     private final Random random = new Random();
     private boolean isWorking;
     private boolean paused;
-    @Nullable
-    private ChargeNetwork.ChargeNode node;
+    private @Nullable ChargeNetwork.ChargeNode node;
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
@@ -203,30 +201,15 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         return false;
     }
 
-    @Override
-    protected Class<TileRockCrusher> defineSelfClass() {
-        return TileRockCrusher.class;
-    }
-
-    @Override
-    protected Class<TileRockCrusher> defineMasterClass() {
-        return TileRockCrusher.class;
-    }
-
-    @Override
-    protected Class<TileRockCrusher> defineLeastCommonClass() {
-        return TileRockCrusher.class;
-    }
-
     private boolean useMasterEnergy(double amount) {
-        TileRockCrusher master = getMasterBlock();
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
         if (master == null)
             return false;
         return master.node().useCharge(amount);
     }
 
     private boolean canUseMasterEnergy(double amount) {
-        TileRockCrusher master = getMasterBlock();
+        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
         if (master == null)
             return false;
         return master.node().canUseCharge(amount);
@@ -279,15 +262,10 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
                     if (processTime >= PROCESS_TIME) {
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
-                        boolean hasRoom = true;
                         List<ItemStack> outputs = recipe.pollOutputs(random);
-                        for (ItemStack output : outputs) {
-                            output = InvTools.moveItemStack(output, tempInv);
-                            if (!InvTools.isEmpty(output)) {
-                                hasRoom = false;
-                                break;
-                            }
-                        }
+                        boolean hasRoom = outputs.stream()
+                                .map(output -> InvTools.moveItemStack(output, tempInv))
+                                .allMatch(InvTools::isEmpty);
 
                         if (hasRoom) {
                             for (ItemStack output : outputs) {
@@ -327,7 +305,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos());
             return true;
@@ -355,14 +333,14 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
     }
 
     public int getProcessTime() {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             return mBlock.processTime;
         return -1;
     }
 
     public void setProcessTime(int processTime) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             mBlock.processTime = processTime;
     }
@@ -373,7 +351,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public boolean hasWork() {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         return mBlock != null && mBlock.isWorking;
     }
 
@@ -390,7 +368,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileRockCrusher mBlock = getMasterBlock();
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             mBlock.actions.add(action);
     }
@@ -434,7 +412,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory<TileRockCrush
         return node;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.ROCK_CRUSHER;

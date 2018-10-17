@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,6 +32,14 @@ import java.util.List;
  */
 public class BlockTankIronValve extends BlockTankIron {
 
+    public static final EnumMap<EnumFacing, PropertyBool> TOUCHES = new EnumMap<>(EnumFacing.class);
+
+    static {
+        for (EnumFacing face : EnumFacing.VALUES) {
+            TOUCHES.put(face, PropertyBool.create(face.getName2()));
+        }
+    }
+
     public BlockTankIronValve() {
         super(Material.IRON);
         setHarvestLevel("pickaxe", 1);
@@ -49,8 +57,18 @@ public class BlockTankIronValve extends BlockTankIron {
     }
 
     @Override
-    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileTankIronValve<>();
+    protected BlockStateContainer createBlockState() {
+        List<IProperty> props = new ArrayList<>();
+        props.add(getVariantProperty());
+        for (EnumFacing face : EnumFacing.VALUES) {
+            props.add(TOUCHES.get(face));
+        }
+        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
+    }
+
+    @Override
+    public TileMultiBlock createTileEntity(World world, IBlockState state) {
+        return new TileTankIronValve();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -578,9 +578,9 @@ public class ModuleFactory extends RailcraftModulePayload {
 
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {
 
-                        ItemStack firestoneore = EnumOreMagic.FIRESTONE.getStack();
-                        ItemStack rawfirestone = RailcraftItems.FIRESTONE_RAW.getStack();
-                        IC2Plugin.addMaceratorRecipe(firestoneore, rawfirestone);
+                        ItemStack firestoneOre = EnumOreMagic.FIRESTONE.getStack();
+                        ItemStack firestoneRaw = RailcraftItems.FIRESTONE_RAW.getStack();
+                        IC2Plugin.addMaceratorRecipe(firestoneOre, firestoneRaw);
 
                         List<ItemStack> ores = OreDictionary.getOres("orePoorCopper");
                         for (ItemStack ore : ores) {

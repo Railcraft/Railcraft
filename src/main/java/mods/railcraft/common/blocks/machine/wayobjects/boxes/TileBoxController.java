@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,9 +26,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -40,15 +39,14 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public SignalAspect poweredAspect = SignalAspect.RED;
     private boolean powered;
 
-    @NotNull
+
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.CONTROLLER;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return EnumGui.BOX_CONTROLLER;
     }
 
@@ -73,7 +71,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void onNeighborBlockChange(@NotNull IBlockState state, @NotNull Block neighborBlock, BlockPos pos) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos pos) {
         super.onNeighborBlockChange(state, neighborBlock, pos);
         if (Game.isClient(getWorld()))
             return;
@@ -122,9 +120,9 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         return newAspect;
     }
 
-    @NotNull
+
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Powered", powered);
 
@@ -136,7 +134,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("Powered");
 
@@ -147,7 +145,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(defaultAspect.ordinal());
@@ -157,7 +155,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         defaultAspect = SignalAspect.values()[data.readByte()];
@@ -167,13 +165,13 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writeGuiData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(defaultAspect.ordinal());
         data.writeByte(poweredAspect.ordinal());
     }
 
     @Override
-    public void readGuiData(@NotNull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         defaultAspect = SignalAspect.values()[data.readByte()];
         poweredAspect = SignalAspect.values()[data.readByte()];
     }
@@ -187,7 +185,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return controller.getAspect();
     }
 

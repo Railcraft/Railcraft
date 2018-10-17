@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileRotate;
 import net.minecraft.util.EnumFacing;
 
-public class TileItemLoaderAdvanced extends TileItemLoader implements ITileRotate {
+public class TileItemLoaderAdvanced extends TileItemLoader {
 
     @Override
     public ManipulatorVariant getMachineType() {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -35,7 +34,7 @@ import java.util.function.Predicate;
 public abstract class BaseBackpack implements IBackpackDefinition {
     private final String id;
     protected final IBackpackFilterConfigurable backpackFilter = BackpackManager.backpackInterface.createBackpackFilter();
-    @NotNull
+
     protected Predicate<ItemStack> compoundFilter = backpackFilter;
 
     protected BaseBackpack(String id) {
@@ -46,7 +45,6 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         return id;
     }
 
-    @NotNull
     @Override
     public Predicate<ItemStack> getFilter() {
         return compoundFilter;

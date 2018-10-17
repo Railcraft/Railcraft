@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.util.crafting;
 
 import com.google.gson.JsonElement;
@@ -17,9 +27,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.common.util.RecipeMatcher;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -39,8 +47,8 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
      */
     public final NonNullList<Ingredient> recipeItems;
     private final String group;
-    @Nullable private InventoryCrafting lastInv;
-    @Nullable private int[] lastResult;
+    private @Nullable InventoryCrafting lastInv;
+    private @Nullable int[] lastResult;
 
     public RemainingItemShapelessRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
         super(group, output, ingredients);
@@ -49,18 +57,22 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
         this.recipeItems = ingredients;
     }
 
+    @Override
     public String getGroup() {
         return this.group;
     }
 
+    @Override
     public ItemStack getRecipeOutput() {
         return this.recipeOutput;
     }
 
+    @Override
     public NonNullList<Ingredient> getIngredients() {
         return this.recipeItems;
     }
 
+    @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         if (lastInv != inv) {
             matches(inv, null);
@@ -90,6 +102,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
     /**
      * Used to check if a recipe matches current crafting inventory
      */
+    @Override
     public boolean matches(InventoryCrafting inv, @Nullable World worldIn) {
         int ingredientCount = 0;
         List<ItemStack> inputs = new ArrayList<>();
@@ -119,6 +132,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
     /**
      * Returns an Item that is the result of this recipe
      */
+    @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         return this.recipeOutput.copy();
     }
@@ -126,6 +140,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
+    @Override
     public boolean canFit(int width, int height) {
         return width * height >= this.recipeItems.size();
     }
@@ -139,24 +154,23 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
             Game.log(Level.INFO, "Remaining item shaped recipe factory loaded");
         }
 
-        @NotNull
         @Override
         public IRecipe parse(JsonContext context, JsonObject json) {
             // copied from forge's code for making shaped recipes
             String group = JsonUtils.getString(json, "group", "");
 
-            NonNullList<Ingredient> ings = NonNullList.create();
+            NonNullList<Ingredient> ingredients = NonNullList.create();
             for (JsonElement ele : JsonUtils.getJsonArray(json, "ingredients"))
-                ings.add(CraftingHelper.getIngredient(ele, context));
+                ingredients.add(CraftingHelper.getIngredient(ele, context));
 
-            if (ings.isEmpty())
+            if (ingredients.isEmpty())
                 throw new JsonParseException("No ingredients for shapeless recipe");
-            if (ings.size() > 9)
+            if (ingredients.size() > 9)
                 throw new JsonParseException("Too many ingredients for shapeless recipe");
 
             ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
             // railcraft: changed the output
-            return new RemainingItemShapelessRecipe(group, itemstack, ings);
+            return new RemainingItemShapelessRecipe(group, itemstack, ingredients);
         }
     }
 

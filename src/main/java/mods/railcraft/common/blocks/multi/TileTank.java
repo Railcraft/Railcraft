@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,6 @@ import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -28,7 +26,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.List;
 
 import static net.minecraft.util.EnumFacing.UP;
@@ -36,22 +33,12 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInventory<S, S, S> implements ITankTile, ISidedInventory {
+public abstract class TileTank extends TileMultiBlockInventory implements ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
     protected TileTank(int invNum, List<MultiBlockPattern> patterns) {
         super(invNum, patterns);
-    }
-
-    @Override
-    protected final Class<S> defineMasterClass() {
-        return defineSelfClass();
-    }
-
-    @Override
-    protected final Class<S> defineLeastCommonClass() {
-        return defineSelfClass();
     }
 
     @Override
@@ -66,9 +53,9 @@ public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInve
 
     @Override
     public TankManager getTankManager() {
-        S mBlock = getMasterBlock();
-        if (mBlock != null) {
-            return mBlock.tankManager;
+        TileMultiBlock mBlock = getMasterBlock();
+        if (mBlock instanceof TileTank) {
+            return ((TileTank) mBlock).tankManager;
         }
         return TankManager.NIL;
     }
@@ -87,9 +74,8 @@ public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInve
     }
 
     @Override
-    @Nullable
-    public StandardTank getTank() {
-        S mBlock = getMasterBlock();
+    public @Nullable StandardTank getTank() {
+        TileTank mBlock = (TileTank) getMasterBlock();
         if (mBlock != null) {
             return mBlock.tankManager.get(0);
         }
@@ -130,16 +116,6 @@ public abstract class TileTank<S extends TileTank<S>> extends TileMultiBlockInve
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
     }
 
     @Override

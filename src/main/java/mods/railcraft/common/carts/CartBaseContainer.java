@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,10 +39,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Iterator;
 
 /**
@@ -52,10 +51,8 @@ import java.util.Iterator;
  */
 public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject, IInventoryComposite {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
-    @Nullable
-    protected EnumFacing travelDirection;
-    @Nullable
-    protected EnumFacing verticalTravelDirection;
+    protected @Nullable EnumFacing travelDirection;
+    protected @Nullable EnumFacing verticalTravelDirection;
 
     protected CartBaseContainer(World world) {
         super(world);
@@ -83,7 +80,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         loadFromNBT(compound);
     }
 
-    @NotNull
+
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -98,7 +95,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return true;
     }
 
-    @NotNull
+
     @Override
     public final ItemStack getCartItem() {
         return createCartItem(this);
@@ -148,8 +145,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         travelDirectionHistory[1] = facing;
     }
 
-    @Nullable
-    private EnumFacing determineTravelDirection(BlockRailBase.EnumRailDirection shape) {
+    private @Nullable EnumFacing determineTravelDirection(BlockRailBase.EnumRailDirection shape) {
         if (TrackShapeHelper.isStraight(shape)) {
             if (posX - prevPosX > 0)
                 return EnumFacing.EAST;
@@ -186,8 +182,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return null;
     }
 
-    @Nullable
-    private EnumFacing determineVerticalTravelDirection(BlockRailBase.EnumRailDirection shape) {
+    private @Nullable EnumFacing determineVerticalTravelDirection(BlockRailBase.EnumRailDirection shape) {
         if (shape.isAscending())
             return prevPosY < posY ? EnumFacing.UP : EnumFacing.DOWN;
         return null;
@@ -208,19 +203,16 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return false;
     }
 
-    @NotNull
     @Override
     public String getGuiID() {
         return "railcraft:" + getCartType().getBaseTag();
     }
 
-    @NotNull
     @Override
-    public Container createContainer(@NotNull InventoryPlayer playerInventory, @NotNull EntityPlayer playerIn) {
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
         return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
-    @NotNull
     protected abstract EnumGui getGuiType();
 
     @Override

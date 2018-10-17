@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,9 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -32,15 +31,14 @@ import java.util.UUID;
 public final class PlayerPlugin {
     public static final String UNKNOWN_PLAYER_NAME = "[Unknown]";
 
-    public static void writeOwnerToNBT(@NotNull NBTTagCompound nbt, @NotNull GameProfile owner) {
+    public static void writeOwnerToNBT(NBTTagCompound nbt, GameProfile owner) {
         if (owner.getName() != null)
             nbt.setString("owner", owner.getName());
         if (owner.getId() != null)
             nbt.setString("ownerId", owner.getId().toString());
     }
 
-    @NotNull
-    public static GameProfile readOwnerFromNBT(@NotNull NBTTagCompound nbt) {
+    public static GameProfile readOwnerFromNBT(NBTTagCompound nbt) {
         String ownerName = UNKNOWN_PLAYER_NAME;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
@@ -50,8 +48,7 @@ public final class PlayerPlugin {
         return new GameProfile(ownerUUID, ownerName);
     }
 
-    @Nullable
-    public static EntityPlayer getPlayer(@NotNull World world, @NotNull GameProfile gameProfile) {
+    public static @Nullable EntityPlayer getPlayer(World world, GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
@@ -61,7 +58,7 @@ public final class PlayerPlugin {
         return null;
     }
 
-    public static String getUsername(@NotNull World world, @NotNull GameProfile gameProfile) {
+    public static String getUsername(World world, GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
@@ -69,7 +66,7 @@ public final class PlayerPlugin {
                 return player.getDisplayNameString();
         }
         String username = gameProfile.getName();
-        if (username != null && !username.equals(""))
+        if (!Strings.isEmpty(username))
             return username;
         return UNKNOWN_PLAYER_NAME;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,11 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.color.EnumColor;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,8 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static mods.railcraft.common.blocks.multi.BlockTankIronGauge.POSITION;
-
 /**
  *
  */
@@ -38,7 +38,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     public BlockTankSteelGauge() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
-        setDefaultState(getDefaultState().withProperty(POSITION, BlockTankIronGauge.ColumnPosition.SINGLE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE).withProperty(BlockTankIronGauge.POSITION, BlockStrengthGlass.Position.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -46,7 +46,7 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, POSITION);
+        return new BlockStateContainer(this, getVariantProperty(), BlockTankIronGauge.POSITION);
     }
 
     @Override
@@ -65,8 +65,8 @@ public class BlockTankSteelGauge extends BlockTankMetal {
     }
 
     @Override
-    public TileMultiBlock<?, ?, ?> createTileEntity(World world, IBlockState state) {
-        return new TileTankSteelGauge<>();
+    public TileMultiBlock createTileEntity(World world, IBlockState state) {
+        return new TileTankSteelGauge();
     }
 
     @Override
@@ -94,7 +94,10 @@ public class BlockTankSteelGauge extends BlockTankMetal {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
-        return WorldPlugin.getBlock(access, pos.offset(side)) != this && super.shouldSideBeRendered(state, access, pos, side);
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+        Block block = iblockstate.getBlock();
+        return block == this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }
 }

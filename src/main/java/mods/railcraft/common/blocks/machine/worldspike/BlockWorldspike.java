@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -31,8 +32,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 
 /**
@@ -45,7 +46,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     public static final PropertyBool ENABLED = PropertyBool.create("enabled");
 
     public BlockWorldspike() {
-        super(false);
+        super(Material.ROCK);
         setDefaultState(getDefaultState()
                 .withProperty(ENABLED, true)
         );
@@ -53,11 +54,16 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
         setResistance(50);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().withName(getVariantProperty()).build();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
 //        return 60f * 3f / 5f;
         return 90f;
     }

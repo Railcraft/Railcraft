@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.multi.TileBlastFurnace;
@@ -46,8 +47,8 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        player.sendWindowProperty(this, 0, furnace.getMasterCookTime());
-        player.sendWindowProperty(this, 1, furnace.fuelTimeLeft);
+        player.sendWindowProperty(this, 0, furnace.getCookTime());
+        player.sendWindowProperty(this, 1, furnace.burnTime);
         player.sendWindowProperty(this, 2, furnace.currentItemBurnTime);
     }
 
@@ -59,18 +60,18 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener listener : listeners) {
-            if (lastCookTime != furnace.getMasterCookTime())
-                listener.sendWindowProperty(this, 0, furnace.getMasterCookTime());
+            if (lastCookTime != furnace.getCookTime())
+                listener.sendWindowProperty(this, 0, furnace.getCookTime());
 
-            if (lastBurnTime != furnace.fuelTimeLeft)
-                listener.sendWindowProperty(this, 1, furnace.fuelTimeLeft);
+            if (lastBurnTime != furnace.burnTime)
+                listener.sendWindowProperty(this, 1, furnace.burnTime);
 
             if (lastItemBurnTime != furnace.currentItemBurnTime)
                 listener.sendWindowProperty(this, 2, furnace.currentItemBurnTime);
         }
 
-        lastCookTime = furnace.getMasterCookTime();
-        lastBurnTime = furnace.fuelTimeLeft;
+        lastCookTime = furnace.getCookTime();
+        lastBurnTime = furnace.burnTime;
         lastItemBurnTime = furnace.currentItemBurnTime;
     }
 
@@ -81,7 +82,7 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
             furnace.setCookTime(data);
 
         if (id == 1)
-            furnace.fuelTimeLeft = data;
+            furnace.burnTime = data;
 
         if (id == 2)
             furnace.currentItemBurnTime = data;

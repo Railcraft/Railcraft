@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,10 +39,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * An item for copying settings from one block to another.
@@ -121,9 +121,9 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         }
     }
 
-    @NotNull
+
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
-        EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
+        EnumMap<Contents, NBTTagCompound> contents = new EnumMap<>(Contents.class);
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, false);
             if (nbt != null && nbt.hasKey("contents")) {
@@ -146,10 +146,9 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         if (contents.isEmpty()) {
             contentString = LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.contents.empty");
         } else {
-            List<String> contentTypes = new ArrayList<String>();
-            for (Contents content : contents.keySet()) {
-                contentTypes.add(LocalizationPlugin.translate(content.locTag));
-            }
+            List<String> contentTypes = contents.keySet().stream()
+                    .map(content -> LocalizationPlugin.translate(content.locTag))
+                    .collect(Collectors.toList());
             contentString = StringUtils.join(contentTypes, ", ");
         }
         info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tips.contents", contentString));
@@ -182,7 +181,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         if (tileEntity != null) {
             if (player.isSneaking()) // COPY
             {
-                EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
+                EnumMap<Contents, NBTTagCompound> contents = new EnumMap<>(Contents.class);
                 for (Contents contentType : Contents.VALUES) {
                     NBTTagCompound data = contentType.copy(tileEntity);
                     if (data != null)
@@ -299,8 +298,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
             this.locTag = locTag;
         }
 
-        @Nullable
-        abstract NBTTagCompound copy(Object target);
+        abstract @Nullable NBTTagCompound copy(Object target);
 
         abstract boolean paste(Object target, NBTTagCompound nbt);
     }

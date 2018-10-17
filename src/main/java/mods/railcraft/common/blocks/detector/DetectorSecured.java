@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,8 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -90,7 +88,6 @@ public abstract class DetectorSecured extends Detector implements ISecureObject<
         }
     }
 
-    @NotNull
     @Override
     public String getName() {
         return tile.getName();
@@ -101,7 +98,6 @@ public abstract class DetectorSecured extends Detector implements ISecureObject<
         return tile.hasCustomName();
     }
 
-    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return tile.getDisplayName();

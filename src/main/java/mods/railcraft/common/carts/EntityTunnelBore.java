@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.IBoreHead;
+import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -55,7 +55,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -257,13 +256,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             Set<String> toolClasses = item.getToolClasses(head);
             EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) world, posX, posY, posZ);
 
-            for (String tool : toolClasses) {
-                if (item.getHarvestLevel(head, tool, fakePlayer, targetState) >= HarvestPlugin.getHarvestLevel(targetState, tool)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return toolClasses.stream()
+                    .anyMatch(tool -> item.getHarvestLevel(head, tool, fakePlayer, targetState) >= HarvestPlugin.getHarvestLevel(targetState, tool));
         }
 
         return false;
@@ -922,10 +916,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 return 0;
         }
 
-        if (blockState == Blocks.TORCH)
+        if (blockState.getBlock() == Blocks.TORCH)
             return 0;
 
-        if (blockState == Blocks.OBSIDIAN)
+        if (blockState.getBlock() == Blocks.OBSIDIAN)
             return 15;
 
         if (!canMineBlock(pos, blockState))
@@ -1081,8 +1075,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         dataManager.set(BORE_HEAD, boreStack);
     }
 
-    @Nullable
-    public IBoreHead getBoreHead() {
+    public @Nullable IBoreHead getBoreHead() {
         ItemStack boreStack = dataManager.get(BORE_HEAD);
         if (boreStack.getItem() instanceof IBoreHead)
             return (IBoreHead) boreStack.getItem();
@@ -1180,7 +1173,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         return attackEntityFrom(damageSource, damage);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_BORE;

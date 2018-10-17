@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine.interfaces;
+package mods.railcraft.common.blocks.interfaces;
 
 import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.Nullable;
@@ -39,8 +39,7 @@ public interface ITileRotate extends ITile {
         return true;
     }
 
-    @Nullable
-    default EnumFacing[] getValidRotations() {
+    default @Nullable EnumFacing[] getValidRotations() {
         return EnumFacing.VALUES;
     }
 }

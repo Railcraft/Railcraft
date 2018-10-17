@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,27 +9,31 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.interfaces.ITileCompare;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankBase<M, M>> extends TileTankBase<T, M> implements IFluidHandler, ITileCompare {
+public class TileTankIronValve extends TileTankBase implements IFluidHandler, ITileCompare {
 
     private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
     private static final int FLOW_RATE = FluidTools.BUCKET_VOLUME;
@@ -42,12 +46,6 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
     public TileTankIronValve() {
         fillTank.setHidden(true);
         tankManager.add(fillTank);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class<T> defineSelfClass() {
-        return (Class<T>) (Class<?>) TileTankIronValve.class; // Intellij Bug
     }
 
     private void setFilling(FluidStack resource) {
@@ -85,9 +83,9 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
             if (isMaster) {
                 TileEntity tileBelow = tileCache.getTileOnSide(EnumFacing.DOWN);
 
-                TileTankIronValve<?, ?> valveBelow = null;
+                TileTankIronValve valveBelow = null;
                 if (tileBelow instanceof TileTankIronValve) {
-                    valveBelow = (TileTankIronValve<?, ?>) tileBelow;
+                    valveBelow = (TileTankIronValve) tileBelow;
                     if (valveBelow.isStructureValid() && valveBelow.getPatternMarker() == 'T') {
                         //noinspection ConstantConditions
                         StandardTank tankBelow = valveBelow.getTankManager().get(0);
@@ -125,9 +123,10 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
                     tMan.push(tileCache, Predicates.notInstanceOf(TileTankBase.class), FLUID_OUTPUTS, 0, FLOW_RATE);
             }
 
-            M masterBlock = getMasterBlock();
-            if (masterBlock != null) {
-                int compValue = masterBlock.getComparatorValue();
+            TileMultiBlock masterBlock = getMasterBlock();
+            if (masterBlock instanceof TileTankBase) {
+                TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
+                int compValue = masterTileTankBase.getComparatorValue();
                 if (previousComparatorValue != compValue) {
                     previousComparatorValue = compValue;
                     getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
@@ -138,6 +137,18 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
         if (previousStructureValidity != isStructureValid())
             getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
         previousStructureValidity = isStructureValid();
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState base) {
+        if (!isStructureValid())
+            return base.getBlock().getDefaultState();
+        BlockPos pos = getPatternPosition();
+        MultiBlockPattern pattern = getPattern();
+        for (Map.Entry<EnumFacing, PropertyBool> entry : BlockTankIronValve.TOUCHES.entrySet()) {
+            base = base.withProperty(entry.getValue(), !isMapPositionOtherBlock(pattern.getPatternMarkerChecked(pos.offset(entry.getKey()))));
+        }
+        return base;
     }
 
     @Override
@@ -156,8 +167,7 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
     }
 
     @Override
-    @Nullable
-    public FluidStack drain(int maxDrain, boolean doDrain) {
+    public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
         if (!canDrain())
             return null;
         TankManager tMan = getTankManager();
@@ -168,8 +178,7 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
     }
 
     @Override
-    @Nullable
-    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
+    public @Nullable FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
         if (!canDrain())
             return null;
         if (resource == null)
@@ -200,9 +209,9 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
 
     @Override
     public int getComparatorInputOverride() {
-        M masterBlock = getMasterBlock();
-        if (masterBlock != null)
-            return masterBlock.getComparatorValue();
+        TileMultiBlock masterBlock = getMasterBlock();
+        if (masterBlock instanceof TileTankBase)
+            return ((TileTankBase) masterBlock).getComparatorValue();
         return 0;
     }
 
@@ -211,9 +220,8 @@ public class TileTankIronValve<T extends TileTankBase<T, M>, M extends TileTankB
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
     }
 
-    @Nullable
     @Override
-    public <C> C getCapability(Capability<C> capability, @Nullable EnumFacing facing) {
+    public @Nullable <C> C getCapability(Capability<C> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
         }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,28 +12,24 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.util.misc.Game;
-import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
-    private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {};
-
-
-    final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
+    private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler() {
+    };
+    private final LinkedHashSet<IRailcraftObjectContainer<?>> objectContainers = new LinkedHashSet<>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler(this);
-    ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
-    ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
+    private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
+    private ModuleEventHandler disabledEventHandler = BLANK_EVENT_HANDLER;
 
-    public final void setEnabledEventHandler(@NotNull ModuleEventHandler enabledEventHandler) {
+    public final void setEnabledEventHandler(ModuleEventHandler enabledEventHandler) {
         this.enabledEventHandler = enabledEventHandler;
     }
 
-    public final void setDisabledEventHandler(@NotNull ModuleEventHandler disabledEventHandler) {
+    public final void setDisabledEventHandler(ModuleEventHandler disabledEventHandler) {
         this.disabledEventHandler = disabledEventHandler;
     }
 
@@ -47,7 +43,6 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         return objectContainers.contains(object);
     }
 
-    @NotNull
     @Override
     public final ModuleEventHandler getModuleEventHandler(boolean enabled) {
         if (enabled)
@@ -67,7 +62,7 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
     private final class BaseModuleEventHandler implements ModuleEventHandler {
         private final IRailcraftModule owner;
 
-        BaseModuleEventHandler(IRailcraftModule owner) {
+        private BaseModuleEventHandler(IRailcraftModule owner) {
             this.owner = owner;
         }
 
@@ -91,10 +86,6 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
                 if (!RailcraftModuleManager.definedContainers.contains(roc)) {
                     roc.defineRecipes();
                     RailcraftModuleManager.definedContainers.add(roc);
-                }
-                else
-                {
-                    Game.log(Level.ERROR, "An object is defined by a module more than once. It is {0}.", roc);
                 }
             });
             enabledEventHandler.init();

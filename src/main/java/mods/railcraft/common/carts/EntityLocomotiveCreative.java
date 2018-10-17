@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,8 +26,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import java.util.EnumSet;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -127,7 +125,6 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
         }
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_CREATIVE;

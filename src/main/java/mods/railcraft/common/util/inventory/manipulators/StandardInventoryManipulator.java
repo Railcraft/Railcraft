@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,8 +43,8 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
         if (InvTools.isEmpty(stack))
             return InvTools.emptyStack();
         stack = stack.copy();
-        List<IExtInvSlot> filledSlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
-        List<IExtInvSlot> emptySlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
+        List<IExtInvSlot> filledSlots = new ArrayList<>(inv.getSizeInventory());
+        List<IExtInvSlot> emptySlots = new ArrayList<>(inv.getSizeInventory());
         for (IExtInvSlot slot : this) {
             if (slot.canPutStackInSlot(stack))
                 if (InvTools.isEmpty(slot.getStack()))
@@ -116,10 +115,10 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
     }
 
     @Override
-    @NotNull
+
     protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
-        List<ItemStack> outputList = new ArrayList<ItemStack>();
+        List<ItemStack> outputList = new ArrayList<>();
         for (IExtInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;

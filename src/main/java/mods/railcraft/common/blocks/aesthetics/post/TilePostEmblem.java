@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -19,7 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -29,10 +29,10 @@ import java.io.IOException;
 public class TilePostEmblem extends RailcraftTileEntity {
     private EnumFacing facing = EnumFacing.NORTH;
     private String emblem = "";
-    private EnumColor color;
+    private @Nullable EnumColor color;
 
     @Override
-    public void onBlockPlacedBy(@NotNull IBlockState state, @NotNull EntityLivingBase placer, @NotNull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         setFacing(MiscTools.getHorizontalSideFacingPlayer(placer));
         NBTTagCompound nbt = stack.getTagCompound();
@@ -71,7 +71,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    public EnumColor getColor() {
+    public @Nullable EnumColor getColor() {
         return color;
     }
 
@@ -82,9 +82,8 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("emblem", emblem);
         data.setByte("facing", (byte) facing.ordinal());
@@ -95,7 +94,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         emblem = data.getString("emblem");
         facing = EnumFacing.byIndex(data.getByte("facing"));
@@ -105,7 +104,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
         data.writeByte((byte) (color != null ? color.ordinal() : -1));
@@ -113,7 +112,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean needsUpdate = false;

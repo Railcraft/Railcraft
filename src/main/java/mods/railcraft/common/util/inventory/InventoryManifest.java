@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,9 +15,8 @@ import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.item.ItemStack;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
  */
 public final class InventoryManifest extends ForwardingMap<StackKey, InventoryManifest.ManifestEntry> {
 
-    private Map<StackKey, ManifestEntry> entries = new HashMap<>();
+    private final Map<StackKey, ManifestEntry> entries = new HashMap<>();
 
     private InventoryManifest() {
     }
@@ -62,9 +61,9 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
      * number of each type of item in the inventory.
      *
      * @param invs the inventories to generate the manifest for
-     * @return A <code>Multiset</code> that lists how many of each item is in the inventories
+     * @return A {@code Multiset} that lists how many of each item is in the inventories
      */
-    @NotNull
+
     public static InventoryManifest create(IInventoryComposite invs) {
         InventoryManifest manifest = new InventoryManifest();
         invs.stackStream().forEach(stack -> {
@@ -80,9 +79,9 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
      *
      * @param invs the inventories to generate the manifest for
      * @param keys The items to list.
-     * @return A <code>Multiset</code> that lists how many of each item is in the inventories
+     * @return A {@code Multiset} that lists how many of each item is in the inventories
      */
-    @NotNull
+
     public static InventoryManifest create(IInventoryComposite invs, Collection<StackKey> keys) {
         InventoryManifest manifest = new InventoryManifest();
         for (StackKey filterKey : keys) {

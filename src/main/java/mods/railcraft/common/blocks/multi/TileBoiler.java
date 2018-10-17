@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,13 +20,11 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import mods.railcraft.common.util.steam.SteamConstants;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -43,7 +41,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoilerFirebox<F>> extends TileMultiBlock<TileBoiler<?, F>, S, F> implements IBoilerContainer {
+public abstract class TileBoiler extends TileMultiBlock implements IBoilerContainer {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -94,9 +92,9 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
 
         tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
             @Override
-            public int fillInternal(FluidStack resource, boolean doFill) {
+            public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
                 if (!isMaster()) return 0;
-                TileBoiler.this.onFillWater();
+                onFillWater();
                 return super.fillInternal(resource, doFill);
             }
         };
@@ -144,6 +142,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
                 level[x][z] = MultiBlockPattern.EMPTY_PATTERN;
             }
         }
+        //noinspection UnnecessaryLocalVariable
         MultiBlockPattern ret = builder
                 .level(level)
                 .attachedData(new BoilerData(width * width * tankHeight, ticks, heat, capacity))
@@ -153,19 +152,9 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
         return ret;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected abstract Class<S> defineSelfClass();
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected final Class<TileBoiler<?, F>> defineLeastCommonClass() {
-        return (Class<TileBoiler<?, F>>) (Class<?>) TileBoiler.class;
-    }
-
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getMasterTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
+        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -195,13 +184,13 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
 
     @Override
     public boolean needsFuel() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         return mBlock != null && mBlock.needsFuel();
     }
 
     @Override
     public float getTemperature() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return (float) mBlock.boiler.getHeat();
         return SteamConstants.COLD_TEMP;
@@ -209,14 +198,14 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
 
     @Override
     public SteamBoiler getBoiler() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.boiler;
         return null;
     }
 
-    public TankManager getMasterTankManager() {
-        F mBlock = getMasterBlock();
+    public TankManager getTankManager() {
+        TileBoiler mBlock = (TileBoiler) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;
@@ -230,7 +219,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getMasterTankManager());
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
         return super.getCapability(capability, facing);
     }
 
@@ -243,7 +232,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
                 explode = false;
                 return;
             }
-            F mBlock = getMasterBlock();
+            TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
             if (mBlock != null) {
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
@@ -257,7 +246,7 @@ public abstract class TileBoiler<S extends TileBoiler<S, F>, F extends TileBoile
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        F mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         return mBlock != null && mBlock.openGui(player);
     }
 

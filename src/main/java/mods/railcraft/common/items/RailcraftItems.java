@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -236,8 +236,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         return item != null && this.item == item;
     }
 
-    @Nullable
-    public Item item() {
+    public @Nullable Item item() {
         return getObject().map(IRailcraftObject::getObject).orElse(null);
     }
 
@@ -258,7 +257,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariantObject(variant);
-        return getObject().map(i -> i.getStack(qty, variant)).orElse(ItemStack.EMPTY);
+        return getObject().map(i -> i.getStack(qty, variant)).orElse(InvTools.emptyStack());
     }
 
     @Override

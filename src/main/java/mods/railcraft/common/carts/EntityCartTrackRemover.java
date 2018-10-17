@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,14 +21,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 public class EntityCartTrackRemover extends CartBaseMaintenance {
 
-    private final Set<BlockPos> tracksBehind = new HashSet<BlockPos>();
-    private final Set<BlockPos> tracksRemoved = new HashSet<BlockPos>();
+    private final Set<BlockPos> tracksBehind = new HashSet<>();
+    private final Set<BlockPos> tracksRemoved = new HashSet<>();
 
     public EntityCartTrackRemover(World world) {
         super(world);
@@ -79,7 +78,6 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
         }
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         throw new Error("This does not have GUIs or containers");

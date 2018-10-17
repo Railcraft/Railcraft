@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.machine.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileTanks;
 import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -41,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -52,14 +51,14 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, TileSteamTurbine, TileSteamTurbine> implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
 
     private static final int IC2_OUTPUT = 220;
     private static final int BC_OUTPUT = 72;
     private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
-    private static ItemStack sampleRotor = null;
+    private static ItemStack sampleRotor;
 
     public static ItemStack getSampleRotor() {
         if (sampleRotor == null)
@@ -79,7 +78,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     // mainGauge is a renderer field 
     public double mainGauge;
     private double energy;
-    private TileEntity emitterDelegate;
+    private @Nullable TileEntity emitterDelegate;
     //TODO: Properly fix revert
     //private final ChargeHandler battery = new ChargeHandler();
 
@@ -157,22 +156,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         tankManager.add(TANK_WATER, tankWater); // Water
     }
 
-    @Override
-    protected Class<TileSteamTurbine> defineLeastCommonClass() {
-        return TileSteamTurbine.class;
-    }
-
-    @Override
-    protected Class<TileSteamTurbine> defineSelfClass() {
-        return TileSteamTurbine.class;
-    }
-
-    @Override
-    protected Class<TileSteamTurbine> defineMasterClass() {
-        return TileSteamTurbine.class;
-    }
-
-    //    @Override
+//    @Override
 //    public ChargeHandler getChargeHandler() {
 //        return chargeHandler;
 //    }
@@ -204,6 +188,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
                 boolean addedEnergy = false;
                 if (energy < BC_OUTPUT * 2) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
+//                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
                         if (InvTools.isItemEqual(rotor, getSampleRotor()) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
@@ -284,7 +269,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TURBINE, player, world, mBlock.getPos());
             return true;
@@ -297,7 +282,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     }
 
     public void removeEnergy(double amount) {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null) {
             mBlock.energy -= amount;
             if (mBlock.energy < 0) mBlock.energy = 0;
@@ -305,21 +290,21 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     }
 
     public double getEnergy() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.energy;
     }
 
     public float getOutput() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.output;
     }
 
     public float getMainGauge() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock == null)
             return 0;
         return mBlock.gaugeState * 0.01F;
@@ -387,7 +372,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         if (!isStructureValid()) {
             return Collections.emptyList();
         }
-        List<TileEntity> ret = getComponents().stream().filter(te -> te != this).map(TileIC2EmitterDelegate::new).collect(Collectors.toList());
+        List<TileEntity> ret = getComponents().stream().filter(te -> te != this).map(te -> new TileIC2EmitterDelegate((TileSteamTurbine) te)).collect(Collectors.toList());
         if (emitterDelegate != null) {
             ret.add(emitterDelegate);
         }
@@ -395,7 +380,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
     }
 
     public StandaloneInventory getInventory() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv;
         return inv;
@@ -403,7 +388,7 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
 
     @Override
     public TankManager getTankManager() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;
@@ -421,10 +406,26 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
             return (T) getTankManager();
         return super.getCapability(capability, facing);
     }
+    /*@Override
+    public void onDisable(int duration) {
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        if (mBlock != null) {
+            mBlock.disabled = duration;
+        }
+    }
+
+    @Override
+    public boolean isDisabled() {
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        if (mBlock != null) {
+            return mBlock.disabled <= 0;
+        }
+        return true;
+    }*/
 
     @Override
     public boolean needsMaintenance() {
-        TileSteamTurbine mBlock = getMasterBlock();
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null) {
             ItemStack rotor = mBlock.inv.getStackInSlot(0);
             if (InvTools.isEmpty(rotor))
@@ -436,7 +437,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         return false;
     }
 
-    @NotNull
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;
@@ -452,9 +452,6 @@ public final class TileSteamTurbine extends TileMultiBlock<TileSteamTurbine, Til
         base = base.withProperty(BlockSteamTurbine.WINDOW, getPatternMarker() == 'W')
                 .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
         BlockPos pos = getPatternPosition();
-        if (pos == null) {
-            return base;
-        }
         final Texture texture;
         if (axis == Axis.X) {
             // x = 2, left; y = 1, bottom

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.blocks.charge.CartBattery;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -32,9 +32,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.EnumSet;
 
 /**
@@ -159,19 +158,18 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilitiesCharge.CART_BATTERY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilitiesCharge.CART_BATTERY)
             return (T) cartBattery;
         return super.getCapability(capability, facing);
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.LOCO_ELECTRIC;
@@ -180,12 +178,14 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
-        ICartBattery.writeToNBT(cartBattery, data);
+        // TODO Fix Charge
+//        ICartBattery.writeToNBT(cartBattery, data);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        ICartBattery.readFromNBT(cartBattery, data);
+        // TODO Fix Charge
+//        ICartBattery.readFromNBT(cartBattery, data);
     }
 }

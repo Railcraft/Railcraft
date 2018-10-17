@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-
+import net.minecraft.init.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IRailcraftBlockContainer extends IRailcraftObjectContainer<IRailcraftBlock>, IContainerBlock, IContainerItem, IContainerState {
-    @Nullable
+
     default IBlockState getState(@Nullable IVariantEnum variant) {
         Block block = block();
         if (block instanceof IRailcraftBlock)
@@ -31,15 +31,13 @@ public interface IRailcraftBlockContainer extends IRailcraftObjectContainer<IRai
         return getDefaultState();
     }
 
-    @Nullable
     @Override
     default IBlockState getDefaultState() {
-        return getObject().map(o -> o.getObject().getDefaultState()).orElse(null);
+        return getObject().map(o -> o.getObject().getDefaultState()).orElse(Blocks.AIR.getDefaultState());
     }
 
-    @Nullable
     @Override
     default Block block() {
-        return getObject().map(IRailcraftObject::getObject).orElse(null);
+        return getObject().map(IRailcraftObject::getObject).orElse(Blocks.AIR);
     }
 }

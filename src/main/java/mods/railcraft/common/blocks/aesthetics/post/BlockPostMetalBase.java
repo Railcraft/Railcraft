@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,9 +33,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
 
-    public BlockPostMetalBase() {
+    protected BlockPostMetalBase() {
         setSoundType(SoundType.METAL);
     }
 
@@ -90,16 +89,14 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(COLOR).build();
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return EnumColor.class;
     }
 
@@ -147,14 +144,14 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     }
 
     @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, @NotNull IBlockState state, EntityPlayer player) {
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
 
-    @NotNull
+
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @NotNull IBlockState state, int fortune) {
-        List<ItemStack> list = new ArrayList<ItemStack>();
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        List<ItemStack> list = new ArrayList<>();
         // TODO: Drop rusty
 //        if (isPlatform)
 //            list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getStack());
@@ -165,7 +162,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     }
 
     @Override
-    public boolean recolorBlock(World world, @NotNull BlockPos pos, EnumFacing side, @NotNull EnumDyeColor color) {
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
             world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
@@ -188,7 +185,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    @NotNull
+
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
     }

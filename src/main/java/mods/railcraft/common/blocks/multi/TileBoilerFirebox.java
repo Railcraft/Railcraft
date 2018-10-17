@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,9 +10,8 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.interfaces.ITileLit;
+import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -47,25 +46,20 @@ import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends TileBoiler<F, F> implements ISidedInventory, ITileLit {
+public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITileLit {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
     public final SteamBoiler boiler;
     private boolean wasLit;
     protected final StandaloneInventory inventory;
-    protected InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
-    protected InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1, false);
+    protected final InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
+    protected final InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1, false);
 
     protected TileBoilerFirebox(int invSize) {
         inventory = new StandaloneInventory(invSize, (IInventory) this);
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTile(this);
-    }
-
-    @Override
-    protected Class<F> defineSelfClass() {
-        return defineMasterClass();
     }
 
     @Override
@@ -78,7 +72,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     }
 
     public boolean isBurning() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         return mBlock != null && mBlock.boiler.isBurning();
     }
 
@@ -89,16 +83,6 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
             world.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        F mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(getGui(), player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -164,7 +148,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
     protected abstract void process();
 
     protected void processBuckets() {
-        FluidTools.drainContainers(this.tankManager, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+        FluidTools.drainContainers(tankManager, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
     }
 
     @Override
@@ -219,7 +203,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.decrStackSize(i, j);
         return ItemStack.EMPTY;
@@ -227,7 +211,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getStackInSlot(i);
         else
@@ -236,7 +220,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);
     }
@@ -271,7 +255,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.removeStackFromSlot(i);
         else
@@ -280,7 +264,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getField(int id) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getField(id);
         else
@@ -289,7 +273,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void setField(int id, int value) {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setField(id, value);
         else
@@ -298,7 +282,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public int getFieldCount() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getFieldCount();
         else
@@ -307,7 +291,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public void clear() {
-        F mBlock = getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.clear();
         else
@@ -316,7 +300,7 @@ public abstract class TileBoilerFirebox<F extends TileBoilerFirebox<F>> extends 
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return base.withProperty(BURNING, this.wasLit);
+        return base.withProperty(BURNING, wasLit);
     }
 
     @Override

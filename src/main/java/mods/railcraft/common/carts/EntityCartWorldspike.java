@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
@@ -20,6 +19,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ChunkManager;
@@ -40,9 +40,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Set;
 
 public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart, INeedsFuel {
@@ -50,9 +50,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
     private final InventoryMapper invWrapper = new InventoryMapper(this);
-    @Nullable
-    protected Ticket ticket;
-    private Set<ChunkPos> chunks;
+    protected @Nullable Ticket ticket;
+    private Set<ChunkPos> chunks = Collections.emptySet();
     private long fuel;
     private boolean teleported;
     private int disabled;
@@ -186,6 +185,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         setTicketFlag(false);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private boolean requestTicket() {
         if (meetsTicketRequirements()) {
             Ticket chunkTicket = getTicketFromForge();
@@ -238,7 +238,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (hasTicketFlag())
             chunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, CHUNK_RADIUS);
         else
-            chunks = null;
+            chunks = Collections.emptySet();
     }
 
     @Override
@@ -341,7 +341,6 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         }
     }
 
-    @NotNull
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_WORLDSPIKE;

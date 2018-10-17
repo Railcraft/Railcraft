@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,8 +30,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -125,7 +123,7 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EnumFacing face) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
         return ConnectStyle.TWO_THIN;
     }
 

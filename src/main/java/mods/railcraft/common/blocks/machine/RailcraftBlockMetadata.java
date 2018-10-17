@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,10 +12,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IVariantEnum;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Created by CovertJaguar on 2/26/2017 for Railcraft.
@@ -24,6 +21,9 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@Inherited
 public @interface RailcraftBlockMetadata {
     Class<? extends IVariantEnum> variant();
+
+    String propertyName() default "variant";
 }

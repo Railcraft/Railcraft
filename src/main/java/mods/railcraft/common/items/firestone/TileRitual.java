@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -29,9 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -114,8 +109,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
         return false;
     }
 
-    @Nullable
-    private BlockPos getNextLavaBlock(boolean remove) {
+    private @Nullable BlockPos getNextLavaBlock(boolean remove) {
         if (queue.isEmpty())
             return null;
 
@@ -139,7 +133,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
     private void expandQueue() {
         while (!lavaFound.isEmpty()) {
             Deque<BlockPos> blocksToExpand = lavaFound;
-            lavaFound = new LinkedList<BlockPos>();
+            lavaFound = new LinkedList<>();
 
             for (BlockPos index : blocksToExpand) {
                 queueAdjacent(index);
@@ -180,9 +174,8 @@ public class TileRitual extends RailcraftTickingTileEntity {
         this.itemName = itemName;
     }
 
-    @NotNull
     @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("charge", (short) charge);
         data.setByte("rebuildDelay", (byte) rebuildDelay);
@@ -192,22 +185,12 @@ public class TileRitual extends RailcraftTickingTileEntity {
     }
 
     @Override
-    public void readFromNBT(@NotNull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         charge = data.getShort("charge");
         rebuildDelay = data.getByte("rebuildDelay");
         if (data.hasKey(itemName))
             itemName = data.getString("itemName");
-    }
-
-    @Override
-    public void writePacketData(@NotNull RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-    }
-
-    @Override
-    public void readPacketData(@NotNull RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
     }
 
     @Override

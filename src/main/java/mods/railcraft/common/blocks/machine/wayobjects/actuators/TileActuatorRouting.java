@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,9 +34,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -46,14 +45,13 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
-    private RoutingLogic logic;
+    private @Nullable RoutingLogic logic;
 
     @Override
     public MultiButtonController<RoutingButtonState> getRoutingController() {
         return routingController;
     }
 
-    @NotNull
     @Override
     public IEnumMachine<?> getMachineType() {
         return ActuatorVariant.ROUTING;
@@ -151,7 +149,6 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 
-    @NotNull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

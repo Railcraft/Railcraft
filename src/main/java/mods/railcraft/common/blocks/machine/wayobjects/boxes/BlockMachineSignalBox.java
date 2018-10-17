@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -55,7 +56,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
     public static ResourceLocation[] lampTextures = new ResourceLocation[4];
 
     protected BlockMachineSignalBox() {
-        super(false);
+        super(Material.CIRCUITS);
         setDefaultState(getDefaultState()
                 .withProperty(CAP, false)
                 .withProperty(CONNECTION_NORTH, false)
@@ -75,11 +76,6 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         super.registerTextures(textureMap);
         lampTextures = TextureAtlasSheet.unstitchIcons(textureMap, new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "signal_lamp_box"), new Tuple<>(4, 1));
     }
-
-//    @Override
-//    public BlockRenderLayer getRenderLayer() {
-//        return BlockRenderLayer.CUTOUT_MIPPED;
-//    }
 
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
@@ -104,19 +100,15 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         return state;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public final boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
     @Override
     public boolean needsSupport() {
         return true;
-    }
-
-    @Deprecated
-    public boolean canTransferAspect() {
-        return false;
-    }
-
-    @Deprecated
-    public boolean canReceiveAspect() {
-        return false;
     }
 
     @Override
@@ -124,6 +116,7 @@ public abstract class BlockMachineSignalBox<V extends Enum<V> & IEnumMachine<V>>
         return face == EnumFacing.UP ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
