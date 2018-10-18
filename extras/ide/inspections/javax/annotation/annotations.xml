@@ -1,5 +1,0 @@
-<root>
-    <item name='javax.annotation.Nullable'>
-        <annotation name='java.lang.Deprecated'/>
-    </item>
-</root>

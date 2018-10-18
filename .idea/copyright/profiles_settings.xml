@@ -1,0 +1,18 @@
+<component name="CopyrightManager">
+  <settings default="">
+    <module2copyright>
+      <element module="Railcraft" copyright="Railcraft" />
+      <element module="Railcraft API" copyright="MIT" />
+    </module2copyright>
+    <LanguageOptions name="JAVA">
+      <option name="separateBefore" value="true" />
+      <option name="separateAfter" value="true" />
+    </LanguageOptions>
+    <LanguageOptions name="__TEMPLATE__">
+      <option name="separateBefore" value="true" />
+      <option name="separateAfter" value="true" />
+      <option name="prefixLines" value="false" />
+      <option name="filler" value="-" />
+    </LanguageOptions>
+  </settings>
+</component>
