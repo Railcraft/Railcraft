@@ -145,7 +145,7 @@ public interface IChargeBlock {
     final class ChargeDef {
         private final ConnectType connectType;
         private final double cost;
-        private final BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
+        private final @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
 
         public ChargeDef(ConnectType connectType, double cost) {
             this(connectType, cost, null);

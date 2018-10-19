@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,21 +35,21 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ChargeNetwork {
-    final ChargeGraph NULL_GRAPH = new NullGraph();
-    final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
+    private final ChargeGraph NULL_GRAPH = new NullGraph();
+    private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
     private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
-    final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
-    final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
+    private final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
     private final WeakReference<World> world;
-    final BatterySaveData batterySaveData;
+    private final BatterySaveData batterySaveData;
 
     public ChargeNetwork(World world) {
         this.world = new WeakReference<>(world);
         this.batterySaveData = BatterySaveData.forWorld(world);
     }
 
-    void printDebug(String msg, Object... args) {
+    private void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, msg, args);
     }
@@ -209,7 +209,7 @@ public class ChargeNetwork {
     public class ChargeGraph extends ForwardingSet<ChargeNode> {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
         private final Map<ChargeNode, IChargeBlock.ChargeBattery> chargeBatteries = new LinkedHashMap<>();
-        boolean invalid;
+        private boolean invalid;
         private double totalMaintenanceCost;
         private double chargeUsedThisTick;
         private double averageUsagePerTick;
@@ -264,7 +264,7 @@ public class ChargeNetwork {
             return Iterators.unmodifiableIterator(super.iterator());
         }
 
-        void destroy(boolean touchNodes) {
+        private void destroy(boolean touchNodes) {
             if (isActive()) {
                 printDebug("Destroying graph: {0}", this);
                 invalid = true;
@@ -283,16 +283,16 @@ public class ChargeNetwork {
             throw new UnsupportedOperationException();
         }
 
-        void tick() {
+        private void tick() {
             removeCharge(totalMaintenanceCost);
 
             // balance the charge in all the batteries in the graph
             double capacity = getCapacity();
             if (capacity > 0.0) {
                 final double chargeLevel = getCharge() / capacity;
-                chargeBatteries.forEach((k, v) -> {
-                    v.setCharge(chargeLevel * v.getCapacity());
-                    batterySaveData.updateBatteryRecord(k.pos, v);
+                chargeBatteries.forEach((node, bat) -> {
+                    bat.setCharge(chargeLevel * bat.getCapacity());
+                    batterySaveData.updateBatteryRecord(node.pos, bat);
                 });
             }
 
@@ -424,20 +424,19 @@ public class ChargeNetwork {
     }
 
     public class ChargeNode {
-        @Nullable
-        protected final IChargeBlock.ChargeBattery chargeBattery;
-        final BlockPos pos;
-        final IChargeBlock.ChargeDef chargeDef;
-        ChargeGraph chargeGraph = NULL_GRAPH;
-        boolean invalid;
+        protected final @Nullable IChargeBlock.ChargeBattery chargeBattery;
+        private final BlockPos pos;
+        private final IChargeBlock.ChargeDef chargeDef;
+        private ChargeGraph chargeGraph = NULL_GRAPH;
+        private boolean invalid;
         private boolean recording;
         private double chargeUsedRecorded;
         private int ticksToRecord;
         private int ticksRecorded;
-        private BiConsumer<ChargeNode, Double> usageConsumer;
-        private Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
+        private Optional<Consumer<Double>> usageConsumer = Optional.empty();
+        private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
-        ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
+        private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
             this.pos = pos;
             this.chargeDef = chargeDef;
             this.chargeBattery = chargeBattery;
@@ -473,10 +472,10 @@ public class ChargeNetwork {
             listeners.remove(listener);
         }
 
-        public void startRecordingUsage(int ticksToRecord, BiConsumer<ChargeNode, Double> usageConsumer) {
+        public void startRecordingUsage(int ticksToRecord, Consumer<Double> usageConsumer) {
             recording = true;
             this.ticksToRecord = ticksToRecord;
-            this.usageConsumer = usageConsumer;
+            this.usageConsumer = Optional.of(usageConsumer);
             chargeUsedRecorded = 0.0;
             ticksRecorded = 0;
             tickingNodes.add(this);
@@ -487,8 +486,8 @@ public class ChargeNetwork {
             if (ticksRecorded > ticksToRecord) {
                 recording = false;
                 double averageUsage = chargeUsedRecorded / ticksToRecord;
-                usageConsumer.accept(this, averageUsage);
-                usageConsumer = null;
+                usageConsumer.ifPresent(c -> c.accept(averageUsage));
+                usageConsumer = Optional.empty();
                 chargeUsedRecorded = 0.0;
                 ticksToRecord = 0;
                 ticksRecorded = 0;
@@ -587,8 +586,7 @@ public class ChargeNetwork {
             return pos.hashCode();
         }
 
-        @Nullable
-        public IChargeBlock.ChargeBattery getBattery() {
+        public @Nullable IChargeBlock.ChargeBattery getBattery() {
             return chargeBattery;
         }
 
