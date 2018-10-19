@@ -81,7 +81,7 @@ public class ChargeNetwork {
         // helps fill out the graph faster and more reliably
         Set<BlockPos> newNodes = new HashSet<>();
         for (Map.Entry<BlockPos, ChargeNode> addedNode : added.entrySet()) {
-            ChargeManager.forConnections(worldObj, addedNode.getKey(), (conPos, conDef) -> {
+            forConnections(worldObj, addedNode.getKey(), (conPos, conDef) -> {
                 if (registerChargeNode(worldObj, conPos, conDef))
                     newNodes.add(conPos);
             });
@@ -95,6 +95,26 @@ public class ChargeNetwork {
 
         if (!newNodes.isEmpty())
             printDebug("Nodes queued: {0}", newNodes.size());
+    }
+
+    private void forConnections(World world, BlockPos pos, BiConsumer<BlockPos, IChargeBlock.ChargeDef> action) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() instanceof IChargeBlock) {
+            IChargeBlock block = (IChargeBlock) state.getBlock();
+            IChargeBlock.ChargeDef chargeDef = block.getChargeDef(state, world, pos);
+            if (chargeDef != null) {
+                Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
+                for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
+                    IBlockState otherState = WorldPlugin.getBlockState(world, connection.getKey());
+                    if (otherState.getBlock() instanceof IChargeBlock) {
+                        IChargeBlock.ChargeDef other = ((IChargeBlock) otherState.getBlock()).getChargeDef(WorldPlugin.getBlockState(world, connection.getKey()), world, connection.getKey());
+                        if (other != null && other.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
+                            action.accept(connection.getKey(), other);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

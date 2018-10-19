@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -87,7 +87,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 1F, 1000.0);
+        ChargeManager.instance.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 1F);
     }
 
     @Nullable

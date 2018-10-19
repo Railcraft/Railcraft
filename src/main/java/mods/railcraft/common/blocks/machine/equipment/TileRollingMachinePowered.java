@@ -76,7 +76,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     protected void progress() {
-        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        ChargeNetwork.ChargeNode node = ChargeManager.instance.getNetwork(world).getNode(pos);
         if (node.useCharge(CHARGE_PER_TICK)) {
             super.progress();
         }

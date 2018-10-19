@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -131,7 +131,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.SUCCESS;
 
         WorldPlugin.setBlockToAir(worldIn, pos);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        ChargeManager.instance.getNetwork(worldIn).deregisterChargeNode(pos);
         if (!found.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
             // TODO check if reversion is right
             WorldPlugin.setBlockState(worldIn, pos, oldState);

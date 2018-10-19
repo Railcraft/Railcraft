@@ -102,7 +102,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (Game.isClient(world))
             return EnumActionResult.PASS;
         EnumActionResult returnValue = EnumActionResult.PASS;
-        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        ChargeNetwork.ChargeNode node = ChargeManager.instance.getNetwork(world).getNode(pos);
         if (!node.isNull() && !node.isGraphNull()) {
             sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
             node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {

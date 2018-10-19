@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,7 @@ public enum CollisionHandler {
     ELECTRIC {
         @Override
         public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-            ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.TRACK_ELECTRIC, 2F, 2000.0);
+            ChargeManager.instance.zapEntity(world, pos, entity, RailcraftDamageSource.TRACK_ELECTRIC, 2F);
         }
     };
 

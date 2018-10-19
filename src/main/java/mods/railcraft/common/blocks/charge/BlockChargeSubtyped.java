@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -59,6 +59,6 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        ChargeManager.instance.getNetwork(worldIn).deregisterChargeNode(pos);
     }
 }

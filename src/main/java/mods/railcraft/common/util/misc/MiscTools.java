@@ -185,7 +185,12 @@ public final class MiscTools {
     }
 
     public static boolean isKillableEntity(Entity entity) {
-        return entity.isEntityAlive() && !(entity.getRidingEntity() instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode)
+            return false;
+        return entity.isEntityAlive()
+                && !(entity.getRidingEntity() instanceof EntityMinecart)
+                && entity instanceof EntityLivingBase
+                && ((EntityLivingBase) entity).getMaxHealth() < 100;
     }
 
     private MiscTools() {

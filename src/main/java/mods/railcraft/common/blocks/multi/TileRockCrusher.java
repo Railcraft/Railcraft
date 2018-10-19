@@ -407,7 +407,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
     private ChargeNetwork.ChargeNode node() {
         if (node == null) {
-            node = ChargeManager.getNetwork(world).getNode(pos);
+            node = ChargeManager.instance.getNetwork(world).getNode(pos);
         }
         return node;
     }

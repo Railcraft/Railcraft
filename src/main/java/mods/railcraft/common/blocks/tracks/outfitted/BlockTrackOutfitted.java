@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -404,7 +404,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        ChargeManager.instance.getNetwork(world).deregisterChargeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
         world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
@@ -448,7 +448,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
-        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        ChargeManager.instance.getNetwork(world).deregisterChargeNode(pos);
     }
 
     @Override

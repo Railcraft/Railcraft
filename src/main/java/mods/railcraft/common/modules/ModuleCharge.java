@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,7 @@ public class ModuleCharge extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                MinecraftForge.EVENT_BUS.register(ChargeManager.getEventListener());
+                MinecraftForge.EVENT_BUS.register(ChargeManager.instance);
 
                 add(
                         RailcraftItems.CHARGE,

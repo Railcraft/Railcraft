@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -22,14 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemOveralls extends ItemRailcraftArmor {
+public class ItemOveralls extends ItemRailcraftArmor implements IChargeProtectionItem {
 
     private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.WOOL, 1, 3);
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";

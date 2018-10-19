@@ -89,7 +89,7 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+        return ChargeManager.instance.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
     }
 
     @Override

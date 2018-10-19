@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,6 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
-    private static final double ZAP_COST = 10000.0;
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
     private static ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, 0.025);
@@ -146,7 +145,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 10F, ZAP_COST);
+        ChargeManager.instance.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 10F);
     }
 
     @Nullable
