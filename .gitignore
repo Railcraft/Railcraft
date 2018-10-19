@@ -13,7 +13,15 @@ README.txt
 .project
 /gradle.properties
 push/
-.idea/
+.idea/modules/
+.idea/shelf/
+.idea/libraries/
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
+.idea/modules.xml
+.idea/gradle.xml
+.idea/compiler.xml
 *.iml
 run/
 private/
