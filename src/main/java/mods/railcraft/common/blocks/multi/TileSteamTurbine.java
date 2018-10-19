@@ -58,13 +58,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
-    private static ItemStack sampleRotor;
-
-    public static ItemStack getSampleRotor() {
-        if (sampleRotor == null)
-            sampleRotor = RailcraftItems.TURBINE_ROTOR.getStack();
-        return sampleRotor;
-    }
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     public float output;
@@ -191,7 +184,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
 //                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
-                        if (InvTools.isItemEqual(rotor, getSampleRotor()) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
+                        if (RailcraftItems.TURBINE_ROTOR.isEqual(rotor) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
                             addedEnergy = true;
                             energy += BC_OUTPUT;
                             tankSteam.drainInternal(STEAM_USAGE, true);
@@ -430,7 +423,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
             ItemStack rotor = mBlock.inv.getStackInSlot(0);
             if (InvTools.isEmpty(rotor))
                 return true;
-            if (!InvTools.isItemEqual(rotor, getSampleRotor()))
+            if (!RailcraftItems.TURBINE_ROTOR.isEqual(rotor))
                 return true;
             return rotor.getItemDamage() / (double) rotor.getMaxDamage() > 0.75f;
         }
