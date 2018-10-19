@@ -105,7 +105,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
         if (!node.isNull() && !node.isGraphNull()) {
             sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
-            node.startRecordingUsage(SECONDS_TO_RECORD * 20, avg -> {
+            node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
                 ChargeNetwork.ChargeGraph graph = node.getChargeGraph();
                 sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaxNetworkDraw(), graph.getMaintenanceCost(), graph.getNetworkEfficiency() * 100.0);
                 if (node.getBattery() == null)

@@ -38,6 +38,7 @@ public class ChargeNetwork {
     private final ChargeGraph NULL_GRAPH = new NullGraph();
     private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
     private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
     private final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
@@ -58,7 +59,7 @@ public class ChargeNetwork {
         World worldObj = world.get();
         if (worldObj == null)
             return;
-        tickingNodes.removeIf(chargeNode -> !chargeNode.tickUsageRecording());
+        tickingNodes.removeIf(ChargeNode::checkUsageRecordingCompletion);
 
         // Process the queue of nodes waiting to be added/removed from the network
         Map<BlockPos, ChargeNode> added = new LinkedHashMap<>();
@@ -423,17 +424,39 @@ public class ChargeNetwork {
         }
     }
 
+    private class UsageRecorder {
+        private final int ticksToRecord;
+        private final Consumer<Double> usageConsumer;
+
+        private double chargeUsed;
+        private int ticksRecorded;
+
+        public UsageRecorder(int ticksToRecord, Consumer<Double> usageConsumer) {
+            this.ticksToRecord = ticksToRecord;
+            this.usageConsumer = usageConsumer;
+        }
+
+        public void useCharge(double amount) {
+            chargeUsed += amount;
+        }
+
+        public Boolean checkCompletion() {
+            ticksRecorded++;
+            if (ticksRecorded > ticksToRecord) {
+                usageConsumer.accept(chargeUsed / ticksToRecord);
+                return true;
+            }
+            return false;
+        }
+    }
+
     public class ChargeNode {
         protected final @Nullable IChargeBlock.ChargeBattery chargeBattery;
         private final BlockPos pos;
         private final IChargeBlock.ChargeDef chargeDef;
         private ChargeGraph chargeGraph = NULL_GRAPH;
         private boolean invalid;
-        private boolean recording;
-        private double chargeUsedRecorded;
-        private int ticksToRecord;
-        private int ticksRecorded;
-        private Optional<Consumer<Double>> usageConsumer = Optional.empty();
+        private Optional<UsageRecorder> usageRecorder = Optional.empty();
         private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
         private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
@@ -472,27 +495,14 @@ public class ChargeNetwork {
             listeners.remove(listener);
         }
 
-        public void startRecordingUsage(int ticksToRecord, Consumer<Double> usageConsumer) {
-            recording = true;
-            this.ticksToRecord = ticksToRecord;
-            this.usageConsumer = Optional.of(usageConsumer);
-            chargeUsedRecorded = 0.0;
-            ticksRecorded = 0;
+        public void startUsageRecording(int ticksToRecord, Consumer<Double> usageConsumer) {
+            usageRecorder = Optional.of(new UsageRecorder(ticksToRecord, usageConsumer));
             tickingNodes.add(this);
         }
 
-        public boolean tickUsageRecording() {
-            ticksRecorded++;
-            if (ticksRecorded > ticksToRecord) {
-                recording = false;
-                double averageUsage = chargeUsedRecorded / ticksToRecord;
-                usageConsumer.ifPresent(c -> c.accept(averageUsage));
-                usageConsumer = Optional.empty();
-                chargeUsedRecorded = 0.0;
-                ticksToRecord = 0;
-                ticksRecorded = 0;
-            }
-            return recording;
+        public boolean checkUsageRecordingCompletion() {
+            usageRecorder = usageRecorder.filter(UsageRecorder::checkCompletion);
+            return !usageRecorder.isPresent();
         }
 
         public boolean canUseCharge(double amount) {
@@ -509,8 +519,7 @@ public class ChargeNetwork {
             boolean removed = chargeGraph.useCharge(amount);
             if (removed) {
                 listeners.forEach(c -> c.accept(this, amount));
-                if (recording)
-                    chargeUsedRecorded += amount;
+                usageRecorder.ifPresent(r -> r.useCharge(amount));
             }
             return removed;
         }
@@ -521,8 +530,7 @@ public class ChargeNetwork {
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
             listeners.forEach(c -> c.accept(this, removed));
-            if (recording)
-                chargeUsedRecorded += removed;
+            usageRecorder.ifPresent(r -> r.useCharge(removed));
             return removed;
         }
 
