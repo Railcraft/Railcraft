@@ -50,11 +50,11 @@ public enum ChargeUtil implements IChargeUtil {
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
-            Charge.util.network(event.world).tick();
+            ((ChargeNetwork) Charge.util.network(event.world)).tick();
     }
 
     @Override
-    public ChargeNetwork network(World world) {
+    public IChargeNetwork network(World world) {
         return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
     }
 

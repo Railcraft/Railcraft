@@ -34,7 +34,7 @@ import java.util.function.Supplier;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ChargeNetwork {
+public class ChargeNetwork implements IChargeNetwork {
     private final ChargeGraph NULL_GRAPH = new NullGraph();
     private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
     private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
@@ -89,7 +89,7 @@ public class ChargeNetwork {
                 addedNode.getValue().constructGraph();
         }
 
-        // Remove discarded graphs and tick what's left
+        // Remove discarded grids and tick what's left
         chargeGraphs.removeIf(g -> g.invalid);
         chargeGraphs.forEach(ChargeGraph::tick);
 
@@ -149,9 +149,7 @@ public class ChargeNetwork {
         batterySaveData.removeBattery(pos);
     }
 
-    /**
-     * Queues the node to be added to the network
-     */
+    @Override
     public boolean addNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         if (!nodeMatches(pos, chargeDef)) {
             printDebug("Registering Node: {0}->{1}", pos, chargeDef);
@@ -161,9 +159,7 @@ public class ChargeNetwork {
         return false;
     }
 
-    /**
-     * Queues the node to be removed to the network
-     */
+    @Override
     public void removeNode(BlockPos pos) {
         chargeQueue.put(pos, null);
     }
@@ -178,13 +174,12 @@ public class ChargeNetwork {
         return chargeNode != null && !chargeNode.isGraphNull();
     }
 
+    @Override
     public ChargeGraph grid(BlockPos pos) {
         return access(pos).getGrid();
     }
 
-    /**
-     * Get any node for the position and add it to the charge network/graphs if it isn't already
-     */
+    @Override
     public ChargeNode access(BlockPos pos) {
         ChargeNode node = chargeNodes.get(pos);
         if (node != null && node.invalid) {
@@ -206,9 +201,7 @@ public class ChargeNetwork {
                 }
             }
         }
-        if (node == null)
-            return NULL_NODE;
-        return node;
+        return node == null ? NULL_NODE : node;
     }
 
     public ChargeNode getNodeSafe(BlockPos pos) {
@@ -221,6 +214,7 @@ public class ChargeNetwork {
         return node != null && node.isValid() && node.chargeDef == chargeDef;
     }
 
+    @Override
     public IChargeBlock.ChargeBattery makeBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
         ChargeNetwork.ChargeNode node = getNodeSafe(pos);
         IChargeBlock.ChargeBattery battery = node.getBattery();
@@ -650,6 +644,21 @@ public class ChargeNetwork {
         @Override
         public ChargeGraph getGrid() {
             return NULL_GRAPH;
+        }
+
+        @Override
+        public boolean hasCapacity(double amount) {
+            return false;
+        }
+
+        @Override
+        public boolean useCharge(double amount) {
+            return false;
+        }
+
+        @Override
+        public double removeCharge(double desiredAmount) {
+            return 0.0;
         }
 
         @Override

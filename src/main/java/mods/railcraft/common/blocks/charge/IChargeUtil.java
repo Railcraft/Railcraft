@@ -22,9 +22,9 @@ import net.minecraft.world.World;
  */
 public interface IChargeUtil {
 
-    default ChargeNetwork network(World world) {
-        // TODO: Make dummy network
-        return null;
+    default IChargeNetwork network(World world) {
+        return new IChargeNetwork() {
+        };
     }
 
     default void zapEntity(World world, BlockPos pos, Entity entity, DamageSource damageSource, float damage) {
