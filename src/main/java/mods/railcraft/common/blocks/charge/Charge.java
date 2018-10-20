@@ -8,13 +8,16 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
+package mods.railcraft.common.blocks.charge;
+
 /**
  * Created by CovertJaguar on 10/19/2018 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.entity;
+public class Charge {
+    public static final double CHARGE_PER_DAMAGE = 1000.0;
 
-import mcp.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    public static IChargeUtil util = new IChargeUtil() {
+    };
+}

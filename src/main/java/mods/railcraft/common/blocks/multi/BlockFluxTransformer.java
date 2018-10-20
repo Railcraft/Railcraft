@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -89,7 +89,7 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+        return Charge.util.network(worldIn).grid(pos).getComparatorOutput();
     }
 
     @Override

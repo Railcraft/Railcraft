@@ -8,13 +8,26 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
+package mods.railcraft.common.util.chest;
+
+import net.minecraft.world.World;
+
 /**
- * Created by CovertJaguar on 10/19/2018 for Railcraft.
+ * A base logic with a world defined.
  */
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.entity;
+public abstract class AbstractLogic implements EntityLogic {
+    protected World world;
 
-import mcp.MethodsReturnNonnullByDefault;
+    AbstractLogic(World world) {
+        this.world = world;
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    @Override
+    public World getWorld() {
+        return world;
+    }
+}

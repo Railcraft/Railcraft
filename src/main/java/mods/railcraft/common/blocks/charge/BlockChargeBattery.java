@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,8 +16,8 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.AABBFactory;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -87,18 +87,17 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 1F, 1000.0);
+        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 1F);
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    @SuppressWarnings("deprecation")
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return COLLISION_BOX;
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getVariant(state).chargeDef;
     }
 }

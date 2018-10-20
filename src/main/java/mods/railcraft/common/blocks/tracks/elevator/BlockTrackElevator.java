@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,9 +16,9 @@ import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -107,6 +107,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(ROTATION, state.getValue(ROTATION) == EnumFacing.Axis.Z ? EnumFacing.Axis.X : EnumFacing.Axis.Z);
@@ -115,6 +116,7 @@ public class BlockTrackElevator extends BlockRailcraft {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int axis = meta & 0x7;
@@ -163,12 +165,13 @@ public class BlockTrackElevator extends BlockRailcraft {
         return state.getValue(POWERED);
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    @SuppressWarnings("deprecation")
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         EnumFacing.Axis axis = getAxis(state);
@@ -184,16 +187,19 @@ public class BlockTrackElevator extends BlockRailcraft {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing.Axis axis = facing.getAxis();
@@ -215,6 +221,7 @@ public class BlockTrackElevator extends BlockRailcraft {
             WorldPlugin.setBlockState(world, pos, state.withProperty(POWERED, !powered));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         super.neighborChanged(state, worldIn, pos, neighborBlock, neighborPos);
@@ -246,7 +253,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      *
      * @param world the world in which the block resides
      * @param cart  the minecart for which the state will be updated. It is
-     *              assumed that the minecart is whithin the area of effect of the block
+     *              assumed that the minecart is within the area of effect of the block
      */
     protected void minecartInteraction(World world, EntityMinecart cart, BlockPos pos) {
         cart.getEntityData().setByte("elevator", ELEVATOR_TIMER);
@@ -340,7 +347,7 @@ public class BlockTrackElevator extends BlockRailcraft {
             factory.raiseCeiling(-0.2);
             factory.raiseFloor(-0.5);
         }
-        return EntitySearcher.findMinecarts().inArea(factory.build()).except(cart).at(cart.world).isEmpty();
+        return EntitySearcher.findMinecarts().around(factory.build()).except(cart).at(cart.world).isEmpty();
     }
 
     /**

@@ -20,6 +20,9 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.entity.EntitySearcher;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
@@ -196,7 +199,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         float headW = 1.5F;
         float headH = 2.6F;
         float headSO = 0.7F;
-        partArray = new EntityTunnelBorePart[] {
+        partArray = new EntityTunnelBorePart[]{
                 // ------------------------------------- name, width, height, forwardOffset, sideOffset
                 new EntityTunnelBorePart(this, "head1", headW, headH, 1.85F, -headSO),
                 new EntityTunnelBorePart(this, "head2", headW, headH, 1.85F, headSO),
@@ -500,7 +503,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
                 List<EntityLivingBase> entities = EntitySearcher.find(EntityLivingBase.class)
-                        .andWith(MiscTools::isKillableEntity).inArea(entitySearchBox).at(world);
+                        .and(RCEntitySelectors.KILLABLE).around(entitySearchBox).at(world);
                 entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
 
                 ItemStack head = getStackInSlot(0);

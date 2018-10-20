@@ -178,14 +178,12 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
-        // TODO Fix Charge
-//        ICartBattery.writeToNBT(cartBattery, data);
+        cartBattery.writeToNBT(data);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        // TODO Fix Charge
-//        ICartBattery.readFromNBT(cartBattery, data);
+        cartBattery.readFromNBT(data);
     }
 }

@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -71,6 +71,6 @@ public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> ex
 
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return ChargeManager.getNetwork(worldIn).getGraph(pos).getComparatorOutput();
+        return Charge.util.network(worldIn).grid(pos).getComparatorOutput();
     }
 }

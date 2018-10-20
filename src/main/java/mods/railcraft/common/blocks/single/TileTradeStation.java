@@ -15,11 +15,13 @@ import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
-import mods.railcraft.common.util.ai.EntityAIMoveToBlock;
-import mods.railcraft.common.util.ai.EntityAIWatchBlock;
+import mods.railcraft.common.util.entity.EntitySearcher;
+import mods.railcraft.common.util.entity.ai.EntityAIMoveToBlock;
+import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -35,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -109,7 +112,8 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         float x = getPos().getX();
         float y = getPos().getY();
         float z = getPos().getZ();
-        return MiscTools.getNearbyEntities(world, EntityVillager.class, x, y - 1, y + 3, z, range);
+        AxisAlignedBB area = AABBFactory.start().setBounds(x, y - 1, z, x + 1, y + 3, z + 1).expandHorizontally(range).build();
+        return EntitySearcher.find(EntityVillager.class).around(area).at(world);
     }
 
     private void attemptTrade(List<EntityVillager> villagers, int tradeSet) {

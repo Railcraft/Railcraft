@@ -28,6 +28,7 @@ import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -252,17 +253,11 @@ public abstract class InvTools {
     }
 
     public static ItemStack damageItem(ItemStack stack, int damage) {
-        if (!stack.isItemStackDamageable()) return stack;
-        int curDamage = stack.getItemDamage();
-        curDamage += damage;
-        stack.setItemDamage(curDamage);
-        if (stack.getItemDamage() > stack.getMaxDamage()) {
-            dec(stack);
-            stack.setItemDamage(0);
-        }
-        if (isEmpty(stack))
-            stack = emptyStack();
-        return stack;
+        return damageItem(stack, damage, null);
+    }
+
+    public static ItemStack damageItem(ItemStack stack, int damage, @Nullable EntityPlayerMP owner) {
+        return stack.attemptDamageItem(damage, owner == null ? MiscTools.RANDOM : owner.getRNG(), owner) ? emptyStack() : stack;
     }
 
     public static void dropItem(@Nullable ItemStack stack, World world, BlockPos pos) {

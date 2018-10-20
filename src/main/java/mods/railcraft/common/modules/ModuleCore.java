@@ -37,9 +37,9 @@ import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
@@ -143,7 +143,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 CapabilityCartBatterySetup.register();
 
                 MinecraftForge.EVENT_BUS.register(CrowbarHandler.instance());
-                MinecraftForge.EVENT_BUS.register(MinecartHooks.getInstance());
+                MinecraftForge.EVENT_BUS.register(MinecartHooks.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(LinkageHandler.getInstance());
 //                MinecraftForge.EVENT_BUS.register(new CraftingHandler());
                 MinecraftForge.EVENT_BUS.register(new SoundLimiterTicker());
@@ -164,7 +164,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 if (RailcraftConfig.useCollisionHandler()) {
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
-                    EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
+                    EntityMinecart.setCollisionHandler(MinecartHooks.INSTANCE);
                 }
 
                 Set<Item> testSet = new HashSet<>();

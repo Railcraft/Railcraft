@@ -21,7 +21,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.ai.TamingInteractHandler;
+import mods.railcraft.common.util.entity.ai.TamingInteractHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

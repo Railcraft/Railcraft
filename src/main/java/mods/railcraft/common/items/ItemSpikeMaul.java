@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.api.items.ISpikeMaulTarget;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
@@ -131,7 +131,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.SUCCESS;
 
         WorldPlugin.setBlockToAir(worldIn, pos);
-        ChargeManager.getNetwork(worldIn).deregisterChargeNode(pos);
+        Charge.util.network(worldIn).removeNode(pos);
         if (!found.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
             // TODO check if reversion is right
             WorldPlugin.setBlockState(worldIn, pos, oldState);
@@ -170,9 +170,8 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         info.add(LocalizationPlugin.translate("item.railcraft.tool.spike.maul.tips"));
     }
 
-    @Nullable
     @Override
-    public String getOreTag(@Nullable IVariantEnum variant) {
+    public @Nullable String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

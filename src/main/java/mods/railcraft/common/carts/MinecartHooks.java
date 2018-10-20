@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,8 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -55,7 +55,8 @@ import java.util.List;
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 
-public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEventListener {
+public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListener {
+    INSTANCE;
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_GROUND = 0.5f;
     // --Commented out by Inspection (3/13/2016 2:18 PM):protected static float DRAG_FACTOR_AIR = 0.99999f;
     private static final float OPTIMAL_DISTANCE = 1.28f;
@@ -69,13 +70,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
     private static final float CART_WIDTH = 0.98f;
     private static final float COLLISION_EXPANSION = 0.2f;
     private static final int MAX_INTERACT_DIST_SQ = 5 * 5;
-
-    MinecartHooks() {
-    }
-
-    public static MinecartHooks getInstance() {
-        return Holder.INSTANCE;
-    }
 
     public boolean isDerailed(EntityMinecart cart) {
         return cart.getEntityData().getInteger("derail") > 0;
@@ -214,9 +208,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         }
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
+    public @Nullable AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
             return other.getEntityBoundingBox().grow(-0.01);
         return other.canBePushed() ? other.getEntityBoundingBox().grow(-COLLISION_EXPANSION) : null;
@@ -232,9 +225,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
         return cart.getEntityBoundingBox().grow(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getBoundingBox(EntityMinecart cart) {
+    public @Nullable AxisAlignedBB getBoundingBox(EntityMinecart cart) {
         if (cart == null || cart.isDead)
             return null;
         if (RailcraftConfig.areCartsSolid())
@@ -363,7 +355,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
 
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
             List<EntityMinecart> carts = EntitySearcher.findMinecarts().collidingWith(cart)
-                    .with(Predicates.notInstanceOf(EntityMinecartCommandBlock.class)).at(cart.world);
+                    .and(Predicates.notInstanceOf(EntityMinecartCommandBlock.class)).at(cart.world);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }
@@ -492,13 +484,6 @@ public final class MinecartHooks implements IMinecartCollisionHandler, IWorldEve
 
     @Override
     public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
-    }
-
-    private static final class Holder {
-        static final MinecartHooks INSTANCE = new MinecartHooks();
-
-        private Holder() {
-        }
     }
 
 }

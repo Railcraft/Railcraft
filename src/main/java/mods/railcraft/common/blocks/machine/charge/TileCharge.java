@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import net.minecraft.block.Block;
@@ -27,7 +27,7 @@ public abstract class TileCharge extends TileMachineBase {
     protected abstract IChargeBlock.ChargeBattery createBattery();
 
     public IChargeBlock.ChargeBattery getChargeBattery() {
-        return ChargeManager.getNetwork(world).getTileBattery(pos, this::createBattery);
+        return Charge.util.network(world).makeBattery(pos, this::createBattery);
     }
 
     private int prevComparatorOutput;
@@ -39,7 +39,7 @@ public abstract class TileCharge extends TileMachineBase {
     public void update() {
         super.update();
         if (clock % 16 == 0) {
-            int newComparatorOutput = ChargeManager.getNetwork(world).getGraph(pos).getComparatorOutput();
+            int newComparatorOutput = Charge.util.network(world).grid(pos).getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
                 world.updateComparatorOutputLevel(pos, getBlockType());
             prevComparatorOutput = newComparatorOutput;
@@ -50,7 +50,7 @@ public abstract class TileCharge extends TileMachineBase {
     public List<String> getDebugOutput() {
         List<String> lines = super.getDebugOutput();
         lines.add("Our Bat: " + getChargeBattery());
-        lines.add("Graph Bat: " + ChargeManager.getNetwork(world).getNode(pos).getBattery());
+        lines.add("Graph Bat: " + Charge.util.network(world).access(pos).getBattery());
         return lines;
     }
 

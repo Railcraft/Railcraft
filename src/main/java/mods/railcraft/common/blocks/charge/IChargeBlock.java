@@ -38,11 +38,11 @@ public interface IChargeBlock {
     default void registerNode(IBlockState state, World world, BlockPos pos) {
         ChargeDef chargeDef = getChargeDef(state, world, pos);
         if (chargeDef != null)
-            ChargeManager.getNetwork(world).registerChargeNode(world, pos, chargeDef);
+            Charge.util.network(world).addNode(world, pos, chargeDef);
     }
 
     default void deregisterNode(World world, BlockPos pos) {
-        ChargeManager.getNetwork(world).deregisterChargeNode(pos);
+        Charge.util.network(world).removeNode(pos);
     }
 
     enum ConnectType {
@@ -145,7 +145,7 @@ public interface IChargeBlock {
     final class ChargeDef {
         private final ConnectType connectType;
         private final double cost;
-        private final BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
+        private final @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
 
         public ChargeDef(ConnectType connectType, double cost) {
             this(connectType, cost, null);
@@ -267,7 +267,15 @@ public interface IChargeBlock {
             return availableCharge;
         }
 
+        /**
+         * The amount of charge that can be withdraw from the battery in a single operation.
+         *
+         * In the future it might make sense to make this tracked per tick if it can be done simply.
+         *
+         * @return The amount of charge that can be withdraw from the battery right now
+         */
         public double getAvailableCharge() {
+            // TODO: Track usage across the entire tick?
             return Math.min(charge, getMaxDraw());
         }
 

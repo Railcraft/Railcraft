@@ -13,7 +13,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.entity.ChestLogic;
+import mods.railcraft.common.util.chest.ChestLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;

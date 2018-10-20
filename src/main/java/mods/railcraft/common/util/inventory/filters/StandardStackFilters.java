@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,8 +21,6 @@ import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -33,54 +31,40 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum StandardStackFilters implements Predicate<@Nullable ItemStack> {
+public enum StandardStackFilters implements Predicate<ItemStack> {
 
-    ALL {
-        @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack);
-        }
-
-    },
+    ALL,
     FUEL {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && FuelPlugin.getBurnTime(stack) > 0;
+        protected boolean testType(ItemStack stack) {
+            return FuelPlugin.getBurnTime(stack) > 0;
         }
 
     },
     TRACK {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack))));
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack)));
         }
 
     },
     MINECART {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem);
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem;
         }
 
     },
     BALLAST {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack);
+        protected boolean testType(ItemStack stack) {
+            return BallastRegistry.isItemBallast(stack);
         }
 
     },
     EMPTY_BUCKET {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            if (InvTools.isEmpty(stack))
-                return false;
+        protected boolean testType(ItemStack stack) {
             if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
                 return true;
             if (InvTools.isItem(stack, Items.BUCKET))
@@ -93,15 +77,18 @@ public enum StandardStackFilters implements Predicate<@Nullable ItemStack> {
     },
     FEED {
         @Override
-        @Contract("null->false")
-        public boolean test(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds);
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds;
         }
 
     };
 
-    @Override
-    @Contract("null->false")
-    public abstract boolean test(@Nullable ItemStack stack);
+    protected boolean testType(ItemStack stack) {
+        return true;
+    }
 
+    @Override
+    public boolean test(ItemStack stack) {
+        return !InvTools.isEmpty(stack) && testType(stack);
+    }
 }

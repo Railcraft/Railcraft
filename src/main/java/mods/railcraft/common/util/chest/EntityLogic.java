@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,10 +7,17 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.ai;
 
-import mcp.MethodsReturnNonnullByDefault;
+package mods.railcraft.common.util.chest;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
+
+/**
+ * A logic shared by block entities and entities.
+ */
+public interface EntityLogic extends ITickable {
+
+    World getWorld();
+
+}

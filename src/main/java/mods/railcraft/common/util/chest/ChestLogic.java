@@ -8,13 +8,20 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
+package mods.railcraft.common.util.chest;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.world.World;
+
 /**
- * Created by CovertJaguar on 10/19/2018 for Railcraft.
+ *
  */
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.entity;
+public abstract class ChestLogic extends AbstractLogic {
 
-import mcp.MethodsReturnNonnullByDefault;
+    protected IInventory inventory;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    ChestLogic(World world, IInventory inventory) {
+        super(world);
+        this.inventory = inventory;
+    }
+}

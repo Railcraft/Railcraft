@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,9 +20,9 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -49,10 +49,9 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
-    private static final double ZAP_COST = 10000.0;
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, 0.025);
+    private static final ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, 0.025);
 
     public BlockChargeTrap() {
         super(Material.IRON);
@@ -83,15 +82,15 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
                 'G', Blocks.IRON_BARS);
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return chargeDef;
     }
 
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
@@ -146,15 +145,16 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.ELECTRIC, 10F, ZAP_COST);
+        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 10F);
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    @SuppressWarnings("deprecation")
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return COLLISION_BOX;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos posIn) {
         super.neighborChanged(state, worldIn, pos, blockIn, posIn);
@@ -163,6 +163,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
             WorldPlugin.setBlockState(worldIn, pos, newState);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);

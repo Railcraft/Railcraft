@@ -8,12 +8,9 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-/**
- * Created by CovertJaguar on 10/19/2018 for Railcraft.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.util.entity;
+package mods.railcraft.common.util.chest;
 
 import mcp.MethodsReturnNonnullByDefault;
 

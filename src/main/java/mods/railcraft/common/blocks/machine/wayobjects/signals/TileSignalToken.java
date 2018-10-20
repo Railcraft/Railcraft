@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.collections.TimerBag;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -61,7 +61,7 @@ public class TileSignalToken extends TileSignalBase implements IControllerTile, 
         if (trackLocator.getTrackStatus() == TrackLocator.Status.VALID) {
             BlockPos trackPos = trackLocator.getTrackLocation();
             if (trackPos != null) {
-                List<EntityMinecart> carts = EntitySearcher.findMinecarts().inFloorBox(trackPos, 0F).at(world);
+                List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(trackPos).at(world);
                 carts.stream().filter(c -> !cartTimers.contains(c.getUniqueID())).forEach(tokenRing::markCart);
                 carts.forEach(c -> cartTimers.add(c.getUniqueID()));
             }

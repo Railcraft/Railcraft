@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +27,7 @@ public enum CollisionHandler {
     ELECTRIC {
         @Override
         public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-            ChargeManager.zapEntity(world, pos, state, entity, RailcraftDamageSource.TRACK_ELECTRIC, 2F, 2000.0);
+            Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.TRACK_ELECTRIC, 2F);
         }
     };
 

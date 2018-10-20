@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonElement;
@@ -23,18 +33,12 @@ public final class CartPredicate {
 
     public static final CartPredicate ANY = new CartPredicate(null, null, null, null, null, null, MinMaxBounds.UNBOUNDED, EntityPredicate.ANY);
 
-    @Nullable
-    final Boolean highSpeed;
-    @Nullable
-    final Boolean launched;
-    @Nullable
-    final Boolean elevator;
-    @Nullable
-    final Boolean derail;
-    @Nullable
-    final Boolean canMount;
-    @Nullable
-    final Boolean checksOwner;
+    final @Nullable Boolean highSpeed;
+    final @Nullable Boolean launched;
+    final @Nullable Boolean elevator;
+    final @Nullable Boolean derail;
+    final @Nullable Boolean canMount;
+    final @Nullable Boolean checksOwner;
 
     final MinMaxBounds speed;
     final EntityPredicate parent;
@@ -60,10 +64,10 @@ public final class CartPredicate {
         if (elevator != null && LinkageHandler.getInstance().isOnElevator(cart) != elevator) {
             return false;
         }
-        if (derail != null && MinecartHooks.getInstance().isDerailed(cart) != derail) {
+        if (derail != null && MinecartHooks.INSTANCE.isDerailed(cart) != derail) {
             return false;
         }
-        if (canMount != null && MinecartHooks.getInstance().canMount(cart) != canMount) {
+        if (canMount != null && MinecartHooks.INSTANCE.canMount(cart) != canMount) {
             return false;
         }
         if (checksOwner != null && !Objects.equals(player.getGameProfile().getId(), CartToolsAPI.getCartOwner(cart).getId())) {

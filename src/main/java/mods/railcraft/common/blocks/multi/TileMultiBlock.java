@@ -128,6 +128,11 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         return (byte) patterns.indexOf(currentPattern);
     }
 
+    public final BlockPos getMasterPos() {
+        TileMultiBlock mBlock = getMasterBlock();
+        return mBlock == null ? pos : mBlock.pos;
+    }
+
     protected int getMaxRecursionDepth() {
         return 12;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,7 +45,7 @@ public class ChargeNetworkIndicator extends IndicatorController {
 
     @Override
     public double getServerValue() {
-        return ChargeManager.getNetwork(world).getGraph(pos).getUsageRatio();
+        return Charge.util.network(world).grid(pos).getUsageRatio();
     }
 
     @Override

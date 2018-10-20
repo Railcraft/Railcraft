@@ -13,7 +13,7 @@
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.util.entity;
+package mods.railcraft.common.util.fuel;
 
 import mcp.MethodsReturnNonnullByDefault;
 

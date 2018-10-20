@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.util.misc;
 import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +26,10 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class Predicates {
+    @SafeVarargs
+    public static <T> Predicate<T> and(Predicate<T>... predicates) {
+        return Arrays.stream(predicates).reduce(alwaysTrue(), Predicate::and);
+    }
 
     public static <T> Predicate<T> instanceOf(Class<? extends T> clazz) {
         return clazz::isInstance;

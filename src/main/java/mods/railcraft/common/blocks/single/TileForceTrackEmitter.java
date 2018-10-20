@@ -13,7 +13,7 @@ import mods.railcraft.api.tracks.IOutfittedTrackTile;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -217,8 +217,8 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             state = previous.whenNoCharge(this);
         } else {
             double draw = getMaintenanceCost(numTracks);
-            ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
-            if (node.canUseCharge(draw)) {
+            ChargeNetwork.ChargeNode node = Charge.util.network(world).access(pos);
+            if (node.hasCapacity(draw)) {
                 node.useCharge(draw);
                 state = previous.afterUseCharge(this);
             } else {
@@ -293,7 +293,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     public boolean isOutOfPower() {
-        return !ChargeManager.getNetwork(world).getNode(pos).canUseCharge(getMaintenanceCost(numTracks + 1));
+        return !Charge.util.network(world).access(pos).hasCapacity(getMaintenanceCost(numTracks + 1));
     }
 
     void removeFirstTrack() {
