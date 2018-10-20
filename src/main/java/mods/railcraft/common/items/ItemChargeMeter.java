@@ -12,7 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.ICartBattery;
 import mods.railcraft.api.items.IActivationBlockingItem;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -102,7 +102,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (Game.isClient(world))
             return EnumActionResult.PASS;
         EnumActionResult returnValue = EnumActionResult.PASS;
-        ChargeNetwork.ChargeNode node = ChargeManager.instance.getNetwork(world).getNode(pos);
+        ChargeNetwork.ChargeNode node = Charge.util.getNetwork(world).getNode(pos);
         if (!node.isNull() && !node.isGraphNull()) {
             sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
             node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {

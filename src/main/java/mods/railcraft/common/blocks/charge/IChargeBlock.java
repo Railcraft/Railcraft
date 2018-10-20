@@ -38,11 +38,11 @@ public interface IChargeBlock {
     default void registerNode(IBlockState state, World world, BlockPos pos) {
         ChargeDef chargeDef = getChargeDef(state, world, pos);
         if (chargeDef != null)
-            ChargeManager.instance.getNetwork(world).registerChargeNode(world, pos, chargeDef);
+            Charge.util.getNetwork(world).registerChargeNode(world, pos, chargeDef);
     }
 
     default void deregisterNode(World world, BlockPos pos) {
-        ChargeManager.instance.getNetwork(world).deregisterChargeNode(pos);
+        Charge.util.getNetwork(world).deregisterChargeNode(pos);
     }
 
     enum ConnectType {

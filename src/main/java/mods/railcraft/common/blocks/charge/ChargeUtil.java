@@ -38,26 +38,27 @@ import java.util.Map;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ChargeManager {
-    public static final double CHARGE_PER_DAMAGE = 1000.0;
+public enum ChargeUtil implements IChargeUtil {
+    INSTANCE;
 
-    public static final ChargeManager instance = new ChargeManager();
+    static {
+        Charge.util = INSTANCE;
+    }
 
     private final Map<World, ChargeNetwork> chargeNetworks = new MapMaker().weakKeys().makeMap();
-
-    private ChargeManager() {
-    }
-
-    public ChargeNetwork getNetwork(World world) {
-        return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
-    }
 
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
-            getNetwork(event.world).tick();
+            Charge.util.getNetwork(event.world).tick();
     }
 
+    @Override
+    public ChargeNetwork getNetwork(World world) {
+        return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
+    }
+
+    @Override
     public void zapEntity(World world, BlockPos pos, Entity entity, DamageSource damageSource, float damage) {
         if (Game.isClient(world))
             return;
@@ -65,7 +66,7 @@ public class ChargeManager {
         if (!MiscTools.isKillableEntity(entity))
             return;
 
-        double chargeCost = damage * CHARGE_PER_DAMAGE;
+        double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;
 
         ChargeNetwork.ChargeNode node = getNetwork(world).getNode(pos);
         if (node.getChargeGraph().getCharge() > chargeCost) {

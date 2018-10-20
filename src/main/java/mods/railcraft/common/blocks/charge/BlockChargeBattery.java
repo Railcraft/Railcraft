@@ -87,7 +87,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.instance.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 1F);
+        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 1F);
     }
 
     @Nullable

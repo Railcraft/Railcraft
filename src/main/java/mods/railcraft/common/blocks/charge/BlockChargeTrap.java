@@ -145,7 +145,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        ChargeManager.instance.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 10F);
+        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 10F);
     }
 
     @Nullable

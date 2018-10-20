@@ -14,7 +14,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -407,7 +407,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
     private ChargeNetwork.ChargeNode node() {
         if (node == null) {
-            node = ChargeManager.instance.getNetwork(world).getNode(pos);
+            node = Charge.util.getNetwork(world).getNode(pos);
         }
         return node;
     }

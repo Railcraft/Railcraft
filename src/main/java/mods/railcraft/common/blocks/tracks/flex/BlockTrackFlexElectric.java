@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -71,7 +71,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.instance.getNetwork(worldIn).deregisterChargeNode(pos);
+        Charge.util.getNetwork(worldIn).deregisterChargeNode(pos);
     }
 
     @Nullable

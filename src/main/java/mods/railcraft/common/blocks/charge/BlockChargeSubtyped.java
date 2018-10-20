@@ -59,6 +59,6 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        ChargeManager.instance.getNetwork(worldIn).deregisterChargeNode(pos);
+        Charge.util.getNetwork(worldIn).deregisterChargeNode(pos);
     }
 }

@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeUtil;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,7 @@ public class ModuleCharge extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                MinecraftForge.EVENT_BUS.register(ChargeManager.instance);
+                MinecraftForge.EVENT_BUS.register(ChargeUtil.INSTANCE);
 
                 add(
                         RailcraftItems.CHARGE,
