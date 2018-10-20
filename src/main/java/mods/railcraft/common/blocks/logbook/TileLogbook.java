@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,8 +15,8 @@ import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class TileLogbook extends RailcraftTickingTileEntity {
     private static final float SEARCH_RADIUS = 16;
-    private Multimap<LocalDate, GameProfile> log = HashMultimap.create();
+    private final Multimap<LocalDate, GameProfile> log = HashMultimap.create();
 
     public Multimap<LocalDate, GameProfile> getLog() {
         return log;
@@ -50,7 +50,7 @@ public class TileLogbook extends RailcraftTickingTileEntity {
             return;
 
         if (clock % 32 == 0) {
-            List<EntityPlayer> players = EntitySearcher.find(EntityPlayer.class).around(getPos(), SEARCH_RADIUS).at(world);
+            List<EntityPlayer> players = EntitySearcher.find(EntityPlayer.class).around(getPos()).outTo(SEARCH_RADIUS).at(world);
             if (!players.isEmpty()) {
                 LocalDate date = LocalDate.now();
                 log.putAll(date, players.stream().map(EntityPlayer::getGameProfile).collect(Collectors.toList()));
@@ -93,7 +93,7 @@ public class TileLogbook extends RailcraftTickingTileEntity {
                 if (date.isBefore(monthAgo))
                     continue;
                 List<NBTTagCompound> playerList = NBTPlugin.getNBTList(dateEntry, "players", NBTPlugin.EnumNBTType.COMPOUND);
-                Set<GameProfile> players = playerList.stream().map(NBTPlugin::readGameProfileTag).filter(Objects::nonNull).collect(Collectors.toSet());
+                Set<GameProfile> players = playerList.stream().map(NBTPlugin::readGameProfileTag).collect(Collectors.toSet());
                 log.putAll(date, players);
             } catch (DateTimeParseException ignored) {
             }

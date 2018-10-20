@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.api.signals.ITokenRing;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -86,7 +86,7 @@ public class TokenRing implements ITokenRing {
                 aabbFactory.expandToCoordinate(pos);
             }
             aabbFactory.grow(16);
-            List<EntityMinecart> carts = EntitySearcher.findMinecarts().inArea(aabbFactory.build()).at(world);
+            List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(aabbFactory.build()).at(world);
             trackedCarts.retainAll(carts.stream().map(Entity::getUniqueID).collect(Collectors.toSet()));
         }
     }

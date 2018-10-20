@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,9 +14,9 @@ import mods.railcraft.api.tracks.ITrackKitEmitter;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartConstants;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -93,7 +93,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
     }
 
     protected List<EntityMinecart> findCarts() {
-        return EntitySearcher.findMinecarts().inFloorBox(getPos(), 0.2F).at(theWorldAsserted());
+        return EntitySearcher.findMinecarts().around(getPos()).upTo(-0.2F).at(theWorldAsserted());
     }
 
     protected void setTrackPowering() {
@@ -117,16 +117,18 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
     public int getComparatorInputOverride() {
         if (isEmittingPower()) {
             World world = theWorldAsserted();
-            List<EntityMinecart> carts = EntitySearcher.findMinecarts().inFloorBox(getPos(), 0.2F).at(world);
+
+            List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(getPos()).upTo(-0.2F).at(world);
             if (!carts.isEmpty() && carts.get(0).getComparatorLevel() > -1) return carts.get(0).getComparatorLevel();
+
             List<EntityMinecartCommandBlock> commandCarts = EntitySearcher.find(EntityMinecartCommandBlock.class)
-                    .inFloorBox(getPos(), 0.2F).with(EntitySelectors.HAS_INVENTORY).at(world);
+                    .around(getPos()).upTo(-0.2F).and(EntitySelectors.HAS_INVENTORY).at(world);
 
             if (!commandCarts.isEmpty()) {
                 return commandCarts.get(0).getCommandBlockLogic().getSuccessCount();
             }
 
-            List<EntityMinecart> chestCarts = EntitySearcher.findMinecarts().inFloorBox(getPos(), 0.2F).andWith(EntitySelectors.HAS_INVENTORY).at(world);
+            List<EntityMinecart> chestCarts = EntitySearcher.findMinecarts().around(getPos()).upTo(-0.2F).and(EntitySelectors.HAS_INVENTORY).at(world);
 
             if (!chestCarts.isEmpty()) {
                 return Container.calcRedstoneFromInventory((IInventory) chestCarts.get(0));
@@ -208,11 +210,8 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
                     isTravelling = cart -> reversed ? cart.motionX < 0.0D : cart.motionX > 0.0D;
                 else
                     isTravelling = cart -> reversed ? cart.motionZ > 0.0D : cart.motionZ < 0.0D;
-                for (EntityMinecart cart : carts) {
-                    if (isTravelling.test(cart)) {
-                        detector.setTrackPowering();
-                        return;
-                    }
+                if (carts.stream().anyMatch(isTravelling)) {
+                    detector.setTrackPowering();
                 }
             }
         }

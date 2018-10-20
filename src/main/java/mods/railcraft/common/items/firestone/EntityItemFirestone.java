@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,11 +14,12 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.EntityIDs;
+import mods.railcraft.common.util.entity.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -67,7 +68,7 @@ public class EntityItemFirestone extends EntityItemFireproof {
         if (!refined || isDead || world.isRemote)
             return;
         IBlockState firestoneBlock = RailcraftBlocks.RITUAL.getDefaultState();
-        if (firestoneBlock == null)
+        if (firestoneBlock.getBlock() == Blocks.AIR)
             return;
         BlockPos surface = new BlockPos(posX, posY, posZ);
         if (WorldPlugin.getBlockMaterial(world, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(world, surface.up()) == Material.LAVA)

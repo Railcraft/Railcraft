@@ -14,8 +14,8 @@ import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -63,7 +63,7 @@ public enum ChargeUtil implements IChargeUtil {
         if (Game.isClient(world))
             return;
 
-        if (!MiscTools.isKillableEntity(entity))
+        if (!RCEntitySelectors.KILLABLE.test(entity))
             return;
 
         double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;

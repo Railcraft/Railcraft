@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,8 +32,13 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.*;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ISecureObject;
+import mods.railcraft.common.util.misc.MathTools;
+import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -63,6 +68,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.stream.StreamSupport;
@@ -512,7 +518,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isHost(world)) {
             if (!entity.isEntityAlive())
                 return;
-            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && MiscTools.isKillableEntity(entity)) {
+            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && RCEntitySelectors.KILLABLE.test(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));
@@ -788,11 +794,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         }
 
         public static LocoSpeed fromName(String name) {
-            for (LocoSpeed speed : VALUES) {
-                if (speed.getName().equals(name))
-                    return speed;
-            }
-            return MAX;
+            return Arrays.stream(VALUES).filter(speed -> speed.getName().equals(name)).findFirst().orElse(MAX);
         }
 
         public static LocoSpeed fromLevel(int level) {
@@ -839,9 +841,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             return texture;
         }
 
-        @Nullable
         @Override
-        public ToolTip getToolTip() {
+        public @Nullable ToolTip getToolTip() {
             return null;
         }
 

@@ -22,6 +22,9 @@ import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
+import mods.railcraft.common.util.entity.EntitySearcher;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -29,8 +32,6 @@ import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -224,19 +225,21 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
             if (isStructureValid()) {
                 BlockPos target = pos.up();
-                for (EntityItem item : MiscTools.getEntitiesAt(world, EntityItem.class, target)) {
-                    if (useMasterEnergy(SUCKING_POWER_COST)) {
+                ChargeNetwork.ChargeNode gridAccess = Charge.util.network(world).access(getMasterPos());
+
+                EntitySearcher.find(EntityItem.class).around(target).at(world).forEach(item -> {
+                    if (gridAccess.useCharge(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
                         item.setDead();
                     }
-                }
+                });
 
-                for (EntityLivingBase entity : MiscTools.getEntitiesAt(world, EntityLivingBase.class, target)) {
-                    if (entity != null && canUseMasterEnergy(KILLING_POWER_COST))
-                        if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
-                            useMasterEnergy(KILLING_POWER_COST);
-                }
+                EntitySearcher.find(EntityLivingBase.class).around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
+                    if (gridHasCapacity(KILLING_POWER_COST)
+                            && e.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
+                        useCharge(KILLING_POWER_COST);
+                });
             }
 
             if (isMaster()) {

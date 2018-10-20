@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.plugins.forge.EntitySearcher;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketShuntingAura;
@@ -45,7 +45,7 @@ public class ShuntingAuraTickHandler {
                 ItemStack goggles = ItemGoggles.getGoggles(player);
                 ItemGoggles.GoggleAura aura = ItemGoggles.getCurrentAura(goggles);
                 if (aura == ItemGoggles.GoggleAura.SHUNTING) {
-                    List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(player, 32F).at(player.world);
+                    List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(player).outTo(32F).at(player.world);
                     PacketShuntingAura pkt = new PacketShuntingAura(carts);
                     PacketDispatcher.sendToPlayer(pkt.getPacket(), player);
                 }

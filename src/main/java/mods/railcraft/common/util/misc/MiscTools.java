@@ -9,11 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
-import com.google.common.base.Predicate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
@@ -33,26 +31,6 @@ public final class MiscTools {
     @SuppressWarnings("ConstantConditions")
     public static String cleanTag(String tag) {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
-    }
-
-    private static final Predicate<Entity> livingEntitySelector = entity -> entity != null && entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
-
-    public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
-        AxisAlignedBB box = AABBFactory.start().setBounds(x, minY, z, x + 1, maxY, z + 1).expandHorizontally(radius).build();
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
-    }
-
-    public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, BlockPos pos) {
-        AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
-    }
-
-    public static @Nullable <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
-        AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
-        if (!entities.isEmpty())
-            return entities.get(0);
-        return null;
     }
 
     /**
@@ -182,15 +160,6 @@ public final class MiscTools {
 
     public static boolean areCoordinatesOnSide(BlockPos start, BlockPos end, EnumFacing side) {
         return start.offset(side).equals(end);
-    }
-
-    public static boolean isKillableEntity(Entity entity) {
-        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode)
-            return false;
-        return entity.isEntityAlive()
-                && !(entity.getRidingEntity() instanceof EntityMinecart)
-                && entity instanceof EntityLivingBase
-                && ((EntityLivingBase) entity).getMaxHealth() < 100;
     }
 
     private MiscTools() {

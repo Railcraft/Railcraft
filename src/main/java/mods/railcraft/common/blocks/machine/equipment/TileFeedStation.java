@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.ai.EntityAIMateBreeding;
+import mods.railcraft.common.util.entity.ai.EntityAIMateBreeding;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
@@ -59,7 +59,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     private int feedTime;
     private byte feedCounter;
     private boolean powered;
-    private InventoryComposite feedInv = InventoryComposite.of(InventoryAdaptor.get(this));
+    private final InventoryComposite feedInv = InventoryComposite.of(InventoryAdaptor.get(this));
 
     public TileFeedStation() {
         super(1);

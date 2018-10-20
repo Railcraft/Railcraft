@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
