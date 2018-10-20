@@ -10,10 +10,12 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -39,7 +41,9 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
     public static final IProperty<Texture> TEXTURE = PropertyEnum.create("texture", Texture.class);
-    private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
+    private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D,
+            (world, pos) -> WorldPlugin.getTileEntity(world, pos, TileSteamTurbine.class).map(TileSteamTurbine::getMasterBattery).orElse(null)
+    );
 
     public BlockSteamTurbine() {
         super(Material.IRON);
@@ -76,7 +80,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
+//        registerNode(state, worldIn, pos);
     }
 
     @Override
@@ -100,6 +104,16 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
                 "BPB",
                 'P', RailcraftItems.PLATE, Metal.STEEL,
                 'B', "blockSteel");
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
+        return Charge.util.network(worldIn).grid(pos).getComparatorOutput();
     }
 
     enum Texture implements IStringSerializable {

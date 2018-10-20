@@ -35,6 +35,8 @@ public final class RailcraftConstants {
     public static final int BOOK_LINES_PER_PAGE = 13;
     public static final int BOOK_MAX_PAGES = 50;
 
+    public static final double EU_FE_RATIO = 4;
+
     private RailcraftConstants() {
     }
 }

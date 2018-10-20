@@ -15,6 +15,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -30,7 +31,6 @@ import java.util.List;
 
 public final class TileFluxTransformer extends TileMultiBlock implements IEnergyStorage {
 
-    public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
         double chargeDifference = battery.getCapacity() - battery.getCharge();
         if (chargeDifference > 0.0) {
             if (!simulate)
-                battery.addCharge((maxReceive / EU_RF_RATIO) * EFFICIENCY);
+                battery.addCharge((maxReceive / RailcraftConstants.EU_FE_RATIO) * EFFICIENCY);
             return maxReceive;
         }
         return 0;
