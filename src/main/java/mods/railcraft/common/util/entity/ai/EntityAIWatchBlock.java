@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,13 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
     /**
      * The closest entity which is being watched by this one.
      */
-    protected BlockPos watchedBlock;
+    protected @Nullable BlockPos watchedBlock;
     private int lookTime;
 
     public EntityAIWatchBlock(EntityLiving entity, IBlockState searchedState, int maxDist) {
@@ -64,6 +65,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
     }
 
     private boolean isBlockInvalid() {
+        assert watchedBlock != null;
         return searchedState != WorldPlugin.getBlockState(theWatcher.world, watchedBlock) || theWatcher.getDistanceSq(watchedBlock) > maxDist * maxDist;
     }
 
@@ -88,6 +90,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public void updateTask() {
+        assert watchedBlock != null;
         theWatcher.getLookHelper().setLookPosition(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5, 10.0F, theWatcher.getVerticalFaceSpeed());
         --this.lookTime;
     }

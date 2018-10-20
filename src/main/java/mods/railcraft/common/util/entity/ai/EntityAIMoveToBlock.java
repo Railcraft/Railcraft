@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +16,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     /**
      * The closest entity which is being watched by this one.
      */
-    protected BlockPos watchedBlock;
+    protected @Nullable BlockPos watchedBlock;
 
     public EntityAIMoveToBlock(EntityCreature entity, IBlockState searchedState, int maxDist) {
         this(entity, searchedState, maxDist, 0.001F);
@@ -66,6 +67,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     }
 
     private boolean isBlockValid() {
+        assert watchedBlock != null;
         return searchedState == WorldPlugin.getBlockState(entity.world, watchedBlock) && entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
     }
 
@@ -74,6 +76,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
      */
     @Override
     public void startExecuting() {
+        assert watchedBlock != null;
         if (entity.getDistanceSq(watchedBlock.getX() + 0.5D, watchedBlock.getY() + 0.5D, watchedBlock.getZ() + 0.5D) > 256.0D) {
             Vec3d vec1 = new Vec3d(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5);
             Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, vec1);

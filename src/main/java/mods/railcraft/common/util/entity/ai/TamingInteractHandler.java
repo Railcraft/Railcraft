@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 public class TamingInteractHandler {
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     //TODO: test
     @SubscribeEvent

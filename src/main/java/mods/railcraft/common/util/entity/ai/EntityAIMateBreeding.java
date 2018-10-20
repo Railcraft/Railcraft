@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -16,8 +16,8 @@ import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.*;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -37,7 +37,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
      * The speed the creature moves at during mating behavior.
      */
     final float moveSpeed;
-    private EntityAnimal targetMate;
+    private @Nullable EntityAnimal targetMate;
 
     public EntityAIMateBreeding(EntityAnimal animal, float moveSpeed) {
         this.theAnimal = animal;
@@ -117,6 +117,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
      */
     @Override
     public void updateTask() {
+        assert targetMate != null;
         theAnimal.getLookHelper().setLookPositionWithEntity(targetMate, 10.0F, (float) theAnimal.getVerticalFaceSpeed());
         theAnimal.getNavigator().tryMoveToEntityLiving(targetMate, moveSpeed);
         ++this.spawnBabyDelay;
@@ -140,8 +141,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
      * Loops through nearby animals and finds another animal of the same type that can be mated with. Returns the first
      * valid mate found.
      */
-    @Nullable
-    private EntityAnimal getNearbyMate() {
+    private @Nullable EntityAnimal getNearbyMate() {
         float var1 = 8.0F;
         List<EntityAnimal> var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().grow(var1));
         Iterator<EntityAnimal> entity = var2.iterator();
@@ -175,6 +175,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
      * Spawns a baby animal of the same type.
      */
     private void spawnBaby() {
+        assert targetMate != null;
         EntityAgeable baby = theAnimal.createChild(targetMate);
 
         if (baby instanceof EntityAnimal) {

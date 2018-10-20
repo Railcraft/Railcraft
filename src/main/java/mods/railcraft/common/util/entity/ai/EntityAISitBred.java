@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,9 +7,8 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.passive.EntityTameable;
@@ -39,13 +38,13 @@ public class EntityAISitBred extends EntityAISit {
         else if (!theEntity.onGround)
             return false;
         else {
-            Entity owner = theEntity.getOwner();
+            EntityLivingBase owner = theEntity.getOwner();
             UUID ownerId = theEntity.getOwnerId();
             if (ownerId != null && owner == null)
                 return true;
 
             //noinspection ConstantConditions
-            if (owner != null && theEntity.getDistanceSq(owner) > 144.0D && ((EntityLivingBase) owner).getRevengeTarget() != null)
+            if (owner != null && theEntity.getDistanceSq(owner) > 144.0D && owner.getRevengeTarget() != null)
                 return false;
 
             return isSitting;

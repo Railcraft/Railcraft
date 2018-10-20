@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.ai;
+package mods.railcraft.common.util.entity.ai;
 
 
 import net.minecraft.entity.ai.EntityAIBase;
@@ -15,16 +15,7 @@ import net.minecraft.entity.passive.EntityTameable;
 
 public class EntityAISitRandom extends EntityAIBase {
 
-    private static final int SIT_TICKS = 600;
     private final EntityTameable theAnimal;
-    /**
-     * Tracks for how long the task has been executing
-     */
-    private int currentTick;
-    /**
-     * For how long the Ocelot should be sitting
-     */
-    private int maxSittingTicks;
 
     public EntityAISitRandom(EntityTameable par1EntityOcelot) {
         this.theAnimal = par1EntityOcelot;
@@ -39,13 +30,16 @@ public class EntityAISitRandom extends EntityAIBase {
         return theAnimal.isTamed() && !theAnimal.isInLove() && !theAnimal.isSitting() && theAnimal.getRNG().nextDouble() <= 0.015D;
     }
 
+    @Override
+    public boolean shouldContinueExecuting() {
+        return theAnimal.isTamed() && !theAnimal.isInLove() && theAnimal.isSitting() && theAnimal.getRNG().nextDouble() > 0.015D;
+    }
+
     /**
      * Execute a one shot task or start executing a continuous task
      */
     @Override
     public void startExecuting() {
-        this.currentTick = 0;
-        this.maxSittingTicks = theAnimal.getRNG().nextInt(theAnimal.getRNG().nextInt(SIT_TICKS) + SIT_TICKS) + SIT_TICKS;
         theAnimal.getAISit().setSitting(false);
     }
 
@@ -62,7 +56,6 @@ public class EntityAISitRandom extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        this.currentTick++;
         theAnimal.getAISit().setSitting(false);
 
         if (!theAnimal.isSitting()) {
