@@ -45,7 +45,7 @@ public class ChargeNetworkIndicator extends IndicatorController {
 
     @Override
     public double getServerValue() {
-        return Charge.util.network(world).grid(pos).getUsageRatio();
+        return Charge.network.distribution(world).grid(pos).getUsageRatio();
     }
 
     @Override

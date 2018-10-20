@@ -10,9 +10,6 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -20,13 +17,15 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IChargeUtil {
+public interface IChargeManager {
 
-    default IChargeNetwork network(World world) {
+    default IChargeNetwork distribution(World world) {
         return new IChargeNetwork() {
         };
     }
 
-    default void zapEntity(World world, BlockPos pos, Entity entity, DamageSource damageSource, float damage) {
+    default IChargeNetwork transmission(World world) {
+        return new IChargeNetwork() {
+        };
     }
 }

@@ -16,7 +16,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -87,7 +86,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 1F);
+        Charge.network.distribution(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 1F);
     }
 
     @Override

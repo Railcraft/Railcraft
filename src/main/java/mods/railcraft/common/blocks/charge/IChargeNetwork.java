@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,6 +38,11 @@ public interface IChargeNetwork {
     default void removeNode(BlockPos pos) {
     }
 
+    /**
+     * Get the grid for the position.
+     *
+     * @return A grid, may be a dummy object if there is no valid grid at the location.
+     */
     default ChargeNetwork.ChargeGraph grid(BlockPos pos) {
         // TODO: Add dummy object
         return null;
@@ -66,5 +72,15 @@ public interface IChargeNetwork {
      */
     default IChargeBlock.ChargeBattery makeBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
         return supplier.get();
+    }
+
+    /**
+     * Apply Charge damage to the target entity from the current network.
+     */
+    default void zap(BlockPos pos, Entity entity, DamageOrigin origin, float damage) {
+    }
+
+    enum DamageOrigin {
+        BLOCK, TRACK
     }
 }

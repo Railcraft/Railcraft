@@ -27,7 +27,7 @@ public abstract class TileCharge extends TileMachineBase {
     protected abstract IChargeBlock.ChargeBattery createBattery();
 
     public IChargeBlock.ChargeBattery getChargeBattery() {
-        return Charge.util.network(world).makeBattery(pos, this::createBattery);
+        return Charge.network.distribution(world).makeBattery(pos, this::createBattery);
     }
 
     private int prevComparatorOutput;
@@ -39,7 +39,7 @@ public abstract class TileCharge extends TileMachineBase {
     public void update() {
         super.update();
         if (clock % 16 == 0) {
-            int newComparatorOutput = Charge.util.network(world).grid(pos).getComparatorOutput();
+            int newComparatorOutput = Charge.network.distribution(world).grid(pos).getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
                 world.updateComparatorOutputLevel(pos, getBlockType());
             prevComparatorOutput = newComparatorOutput;
@@ -50,7 +50,7 @@ public abstract class TileCharge extends TileMachineBase {
     public List<String> getDebugOutput() {
         List<String> lines = super.getDebugOutput();
         lines.add("Our Bat: " + getChargeBattery());
-        lines.add("Graph Bat: " + Charge.util.network(world).access(pos).getBattery());
+        lines.add("Graph Bat: " + Charge.network.distribution(world).access(pos).getBattery());
         return lines;
     }
 
