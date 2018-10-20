@@ -63,11 +63,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
-    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -167,10 +168,9 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
         TrackKit.blockTrackOutfitted = this;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(getShapeProperty()).ignore(TICKING).build();
     }
 
@@ -404,16 +404,12 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-        Charge.util.getNetwork(world).deregisterChargeNode(pos);
+        Charge.util.network(world).removeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
         world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
-        for (EnumFacing face : EnumFacing.VALUES) {
-            Block block = WorldPlugin.getBlock(world, pos.offset(face));
-            if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
-                newState.getBlock().dropBlockAsItem(world, pos, newState, 0);
-                break;
-            }
+        if (Arrays.stream(EnumFacing.VALUES).map(face -> WorldPlugin.getBlock(world, pos.offset(face))).anyMatch(block -> block instanceof IFluidBlock || block instanceof BlockLiquid)) {
+            newState.getBlock().dropBlockAsItem(world, pos, newState, 0);
         }
         return b;
     }
@@ -448,7 +444,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
-        Charge.util.getNetwork(world).deregisterChargeNode(pos);
+        Charge.util.network(world).removeNode(pos);
     }
 
     @Override
@@ -528,9 +524,8 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             registerNode(state, worldIn, pos);
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (getTrackType(world, pos).isElectric())
             return CHARGE_DEF;
         return null;

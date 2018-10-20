@@ -22,7 +22,7 @@ import net.minecraft.world.World;
  */
 public interface IChargeUtil {
 
-    default ChargeNetwork getNetwork(World world) {
+    default ChargeNetwork network(World world) {
         // TODO: Make dummy network
         return null;
     }

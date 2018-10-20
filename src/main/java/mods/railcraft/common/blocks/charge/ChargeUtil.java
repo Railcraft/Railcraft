@@ -50,11 +50,11 @@ public enum ChargeUtil implements IChargeUtil {
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
-            Charge.util.getNetwork(event.world).tick();
+            Charge.util.network(event.world).tick();
     }
 
     @Override
-    public ChargeNetwork getNetwork(World world) {
+    public ChargeNetwork network(World world) {
         return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
     }
 
@@ -68,8 +68,8 @@ public enum ChargeUtil implements IChargeUtil {
 
         double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;
 
-        ChargeNetwork.ChargeNode node = getNetwork(world).getNode(pos);
-        if (node.getChargeGraph().getCharge() > chargeCost) {
+        ChargeNetwork.ChargeNode node = network(world).access(pos);
+        if (node.getGrid().getCharge() > chargeCost) {
             float remainingDamage = damage;
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase livingEntity = (EntityLivingBase) entity;

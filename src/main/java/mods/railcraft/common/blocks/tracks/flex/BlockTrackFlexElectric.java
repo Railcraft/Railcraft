@@ -32,7 +32,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlock {
-    public static ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
 
     public BlockTrackFlexElectric(TrackType trackType) {
         super(trackType);
@@ -71,12 +71,11 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        Charge.util.getNetwork(worldIn).deregisterChargeNode(pos);
+        Charge.util.network(worldIn).removeNode(pos);
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CHARGE_DEF;
     }
 }

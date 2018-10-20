@@ -131,7 +131,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.SUCCESS;
 
         WorldPlugin.setBlockToAir(worldIn, pos);
-        Charge.util.getNetwork(worldIn).deregisterChargeNode(pos);
+        Charge.util.network(worldIn).removeNode(pos);
         if (!found.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
             // TODO check if reversion is right
             WorldPlugin.setBlockState(worldIn, pos, oldState);
@@ -170,9 +170,8 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         info.add(LocalizationPlugin.translate("item.railcraft.tool.spike.maul.tips"));
     }
 
-    @Nullable
     @Override
-    public String getOreTag(@Nullable IVariantEnum variant) {
+    public @Nullable String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

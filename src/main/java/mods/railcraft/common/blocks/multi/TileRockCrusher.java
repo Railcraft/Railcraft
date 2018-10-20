@@ -140,7 +140,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private final Random random = new Random();
     private boolean isWorking;
     private boolean paused;
-    private @Nullable ChargeNetwork.ChargeNode node;
 
     @SuppressWarnings("unused")
     public TileRockCrusher() {
@@ -202,18 +201,16 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
         return false;
     }
 
-    private boolean useMasterEnergy(double amount) {
-        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
-        if (master == null)
-            return false;
-        return master.node().useCharge(amount);
+    private void useCharge(double amount) {
+        if (!isStructureValid())
+            return;
+        Charge.util.network(world).access(getMasterPos()).useCharge(amount);
     }
 
-    private boolean canUseMasterEnergy(double amount) {
-        TileRockCrusher master = (TileRockCrusher) getMasterBlock();
-        if (master == null)
+    private boolean gridHasCapacity(double amount) {
+        if (!isStructureValid())
             return false;
-        return master.node().canUseCharge(amount);
+        return Charge.util.network(world).access(getMasterPos()).hasCapacity(amount);
     }
 
     @Override
@@ -283,8 +280,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                         }
                     } else {
                         isWorking = true;
-                        boolean success = node().useCharge(CRUSHING_POWER_COST_PER_TICK);
-                        if (success) {
+                        if (Charge.util.network(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
                             processTime++;
                         }
 //                        if (!node().isNull()) { //TODO: no charge
@@ -406,13 +402,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
         if (slot < 9)
             return RockCrusherCraftingManager.getInstance().getRecipe(stack) != null;
         return false;
-    }
-
-    private ChargeNetwork.ChargeNode node() {
-        if (node == null) {
-            node = Charge.util.getNetwork(world).getNode(pos);
-        }
-        return node;
     }
 
     @Override
