@@ -116,7 +116,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return Charge.util.network(worldIn).grid(pos).getComparatorOutput();
+        return Charge.network.distribution(worldIn).grid(pos).getComparatorOutput();
     }
 
     enum Texture implements IStringSerializable {
