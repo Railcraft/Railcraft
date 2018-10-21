@@ -41,7 +41,7 @@ public class TileRFLoader extends TileRFManipulator {
             }
             int used = rfCart.addRF(injection);
             if (used > 0) {
-                energyStorage.extractEnergy(-used,false);
+                energyStorage.extractEnergy(used,false);
                 setProcessing(true);
             }
         }
