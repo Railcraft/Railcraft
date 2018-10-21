@@ -20,7 +20,6 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
-import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -145,7 +144,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.util.zapEntity(world, pos, entity, RailcraftDamageSource.ELECTRIC, 10F);
+        Charge.network.distribution(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 10F);
     }
 
     @Override

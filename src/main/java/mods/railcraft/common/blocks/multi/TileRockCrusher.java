@@ -204,13 +204,13 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private void useCharge(double amount) {
         if (!isStructureValid())
             return;
-        Charge.util.network(world).access(getMasterPos()).useCharge(amount);
+        Charge.network.distribution(world).access(getMasterPos()).useCharge(amount);
     }
 
     private boolean gridHasCapacity(double amount) {
         if (!isStructureValid())
             return false;
-        return Charge.util.network(world).access(getMasterPos()).hasCapacity(amount);
+        return Charge.network.distribution(world).access(getMasterPos()).hasCapacity(amount);
     }
 
     @Override
@@ -222,7 +222,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
             if (isStructureValid()) {
                 BlockPos target = pos.up();
-                ChargeNetwork.ChargeNode gridAccess = Charge.util.network(world).access(getMasterPos());
+                ChargeNetwork.ChargeNode gridAccess = Charge.network.distribution(world).access(getMasterPos());
 
                 EntitySearcher.find(EntityItem.class).around(target).at(world).forEach(item -> {
                     if (gridAccess.useCharge(SUCKING_POWER_COST)) {
@@ -280,7 +280,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                         }
                     } else {
                         isWorking = true;
-                        if (Charge.util.network(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
+                        if (Charge.network.distribution(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
                             processTime++;
                         }
 //                        if (!node().isNull()) { //TODO: no charge

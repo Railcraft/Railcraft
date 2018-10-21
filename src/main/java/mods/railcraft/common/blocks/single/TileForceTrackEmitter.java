@@ -217,7 +217,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             state = previous.whenNoCharge(this);
         } else {
             double draw = getMaintenanceCost(numTracks);
-            ChargeNetwork.ChargeNode node = Charge.util.network(world).access(pos);
+            ChargeNetwork.ChargeNode node = Charge.network.distribution(world).access(pos);
             if (node.hasCapacity(draw)) {
                 node.useCharge(draw);
                 state = previous.afterUseCharge(this);
@@ -293,7 +293,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     public boolean isOutOfPower() {
-        return !Charge.util.network(world).access(pos).hasCapacity(getMaintenanceCost(numTracks + 1));
+        return !Charge.network.distribution(world).access(pos).hasCapacity(getMaintenanceCost(numTracks + 1));
     }
 
     void removeFirstTrack() {

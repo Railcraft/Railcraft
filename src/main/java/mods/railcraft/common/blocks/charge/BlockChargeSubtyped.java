@@ -60,6 +60,6 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        Charge.util.network(worldIn).removeNode(pos);
+        Charge.network.distribution(worldIn).removeNode(pos);
     }
 }

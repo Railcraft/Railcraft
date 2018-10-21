@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.api.charge.IChargeBattery;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
@@ -85,7 +86,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
 
     private IChargeBlock.ChargeBattery getBattery() {
         if (battery == null) {
-            battery = Charge.util.network(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
+            battery = Charge.network.distribution(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
         }
         return battery;
     }
@@ -104,7 +105,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     public int receiveEnergy(int maxReceive, boolean simulate) {
         if (!isStructureValid())
             return 0;
-        IChargeBlock.ChargeBattery battery = getMasterBattery();
+        IChargeBattery battery = getMasterBattery();
         if (battery == null)
             return 0;
         double chargeDifference = battery.getCapacity() - battery.getCharge();
@@ -183,7 +184,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     }
 
     private void clean() {
-        Charge.util.network(world).removeNode(pos);
+        Charge.network.distribution(world).removeNode(pos);
         battery = null;
     }
 }

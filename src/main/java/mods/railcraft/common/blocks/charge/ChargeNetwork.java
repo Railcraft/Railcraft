@@ -13,10 +13,20 @@ package mods.railcraft.common.blocks.charge;
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
+import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
+import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -219,6 +229,57 @@ public class ChargeNetwork implements IChargeNetwork {
         ChargeNetwork.ChargeNode node = getNodeSafe(pos);
         IChargeBlock.ChargeBattery battery = node.getBattery();
         return battery == null ? supplier.get() : battery;
+    }
+
+    @Override
+    public void zap(BlockPos pos, Entity entity, DamageOrigin origin, float damage) {
+        if (Game.isClient(entity.world))
+            return;
+
+        if (!RCEntitySelectors.KILLABLE.test(entity))
+            return;
+
+        double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;
+
+        ChargeNode node = access(pos);
+        if (node.getGrid().getCharge() > chargeCost) {
+            float remainingDamage = damage;
+            if (entity instanceof EntityLivingBase) {
+                EntityLivingBase livingEntity = (EntityLivingBase) entity;
+                EnumMap<EntityEquipmentSlot, IChargeProtectionItem> protections = new EnumMap<>(EntityEquipmentSlot.class);
+                EnumSet.allOf(EntityEquipmentSlot.class).forEach(slot -> {
+                            IChargeProtectionItem protection = getChargeProtection(livingEntity, slot);
+                            if (protection != null)
+                                protections.put(slot, protection);
+                        }
+                );
+                for (Map.Entry<EntityEquipmentSlot, IChargeProtectionItem> e : protections.entrySet()) {
+                    if (remainingDamage > 0.1) {
+                        IChargeProtectionItem.ZepResult result = e.getValue().zap(livingEntity.getItemStackFromSlot(e.getKey()), livingEntity, remainingDamage);
+                        entity.setItemStackToSlot(e.getKey(), result.stack);
+                        remainingDamage -= result.damagePrevented;
+                    } else break;
+                }
+            }
+            if (remainingDamage > 0.1 && entity.attackEntityFrom(origin == DamageOrigin.BLOCK ? RailcraftDamageSource.ELECTRIC : RailcraftDamageSource.TRACK_ELECTRIC, remainingDamage)) {
+                node.removeCharge(chargeCost);
+                EffectManager.instance.zapEffectDeath(entity.world, entity);
+            }
+        }
+    }
+
+    private @Nullable IChargeProtectionItem getChargeProtection(EntityLivingBase entity, EntityEquipmentSlot slot) {
+        ItemStack stack = entity.getItemStackFromSlot(slot);
+        Item item = stack.getItem();
+        if (item instanceof IChargeProtectionItem && ((IChargeProtectionItem) item).isZapProtectionActive(stack, entity)) {
+            return (IChargeProtectionItem) item;
+        }
+        if (ModItems.RUBBER_BOOTS.isEqual(stack, false, false)
+                || ModItems.STATIC_BOOTS.isEqual(stack, false, false)) {
+            return new IChargeProtectionItem() {
+            };
+        }
+        return null;
     }
 
     public class ChargeGraph extends ForwardingSet<ChargeNode> {

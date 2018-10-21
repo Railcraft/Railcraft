@@ -18,6 +18,6 @@ package mods.railcraft.common.blocks.charge;
 public class Charge {
     public static final double CHARGE_PER_DAMAGE = 1000.0;
 
-    public static IChargeUtil util = new IChargeUtil() {
+    public static IChargeManager network = new IChargeManager() {
     };
 }
