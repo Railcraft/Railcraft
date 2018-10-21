@@ -225,7 +225,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
 
     private IChargeBlock.ChargeBattery getBattery() {
         if (battery == null) {
-            battery = Charge.util.network(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(IC2_OUTPUT * 2, IC2_OUTPUT, 1));
+            battery = Charge.network.distribution(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(IC2_OUTPUT * 2, IC2_OUTPUT, 1));
         }
         return battery;
     }
@@ -503,7 +503,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     }
 
     private void clean() {
-        Charge.util.network(world).removeNode(pos);
+        Charge.network.distribution(world).removeNode(pos);
         battery = null;
     }
 
