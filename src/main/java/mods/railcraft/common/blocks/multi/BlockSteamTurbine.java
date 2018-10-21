@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -80,7 +81,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
-//        registerNode(state, worldIn, pos);
+        registerNode(state, worldIn, pos);
     }
 
     @Override
@@ -100,10 +101,12 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
         ItemStack stack = new ItemStack(this, 3);
         CraftingPlugin.addRecipe(stack,
                 "BPB",
-                "P P",
+                "PEP",
                 "BPB",
-                'P', RailcraftItems.PLATE, Metal.STEEL,
-                'B', "blockSteel");
+                'P', "plateSteel",
+                'B', "blockSteel",
+                'E', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR
+        );
     }
 
     @Override
