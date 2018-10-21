@@ -78,7 +78,7 @@ public class EnergyPlugin {
             if (source != null && canTileReceivePower(tile, side.getOpposite())) {
                 IEnergyStorage receiver = tile.getCapability(ENERGY, side.getOpposite());
                 if (receiver != null) {
-                    int amountToPush = source.extractEnergy(pushPerSide, false);
+                    int amountToPush = source.extractEnergy(pushPerSide, true);
                     if (amountToPush > 0) {
                         int amountPushed = receiver.receiveEnergy(amountToPush, false);
                         pushed += amountPushed;
