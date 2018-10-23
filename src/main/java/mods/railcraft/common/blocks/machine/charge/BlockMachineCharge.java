@@ -71,6 +71,6 @@ public abstract class BlockMachineCharge<V extends Enum<V> & IEnumMachine<V>> ex
 
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return Charge.network.distribution(worldIn).grid(pos).getComparatorOutput();
+        return Charge.distribution.network(worldIn).grid(pos).getComparatorOutput();
     }
 }

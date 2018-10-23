@@ -27,7 +27,7 @@ public enum CollisionHandler {
     ELECTRIC {
         @Override
         public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-            Charge.network.distribution(world).zap(pos, entity, IChargeNetwork.DamageOrigin.TRACK, 2F);
+            Charge.distribution.network(world).zap(pos, entity, IChargeNetwork.DamageOrigin.TRACK, 2F);
         }
     };
 

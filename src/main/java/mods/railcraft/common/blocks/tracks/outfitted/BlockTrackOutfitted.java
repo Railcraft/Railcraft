@@ -404,7 +404,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     public boolean clearBlock(IBlockState state, World world, BlockPos pos, @Nullable EntityPlayer player) {
         TrackType trackType = getTrackType(world, pos);
         IBlockState newState = TrackToolsAPI.makeTrackState(trackType.getBaseBlock(), TrackTools.getTrackDirectionRaw(state));
-        Charge.network.distribution(world).removeNode(pos);
+        Charge.distribution.network(world).removeNode(pos);
         boolean b = WorldPlugin.setBlockState(world, pos, newState);
         world.notifyNeighborsOfStateChange(pos, this, true);
         // Below is ugly workaround for fluids!
@@ -444,7 +444,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
-        Charge.network.distribution(world).removeNode(pos);
+        Charge.distribution.network(world).removeNode(pos);
     }
 
     @Override

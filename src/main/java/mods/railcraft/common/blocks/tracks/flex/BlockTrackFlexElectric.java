@@ -71,7 +71,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        Charge.network.distribution(worldIn).removeNode(pos);
+        Charge.distribution.network(worldIn).removeNode(pos);
     }
 
     @Override

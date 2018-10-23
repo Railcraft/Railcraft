@@ -86,7 +86,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
 
     private IChargeBlock.ChargeBattery getBattery() {
         if (battery == null) {
-            battery = Charge.network.distribution(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
+            battery = Charge.distribution.network(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
         }
         return battery;
     }
@@ -184,7 +184,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     }
 
     private void clean() {
-        Charge.network.distribution(world).removeNode(pos);
+        Charge.distribution.network(world).removeNode(pos);
         battery = null;
     }
 }

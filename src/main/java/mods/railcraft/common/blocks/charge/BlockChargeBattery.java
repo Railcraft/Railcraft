@@ -86,7 +86,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.network.distribution(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 1F);
+        Charge.distribution.network(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 1F);
     }
 
     @Override

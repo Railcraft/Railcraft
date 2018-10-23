@@ -144,7 +144,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.network.distribution(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 10F);
+        Charge.distribution.network(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 10F);
     }
 
     @Override

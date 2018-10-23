@@ -13,7 +13,6 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
-import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -116,7 +115,7 @@ public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeB
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return Charge.network.distribution(worldIn).grid(pos).getComparatorOutput();
+        return Charge.distribution.network(worldIn).grid(pos).getComparatorOutput();
     }
 
     enum Texture implements IStringSerializable {

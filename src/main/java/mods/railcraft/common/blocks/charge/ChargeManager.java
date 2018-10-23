@@ -23,25 +23,24 @@ import java.util.Map;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum ChargeManager implements IChargeManager {
-    INSTANCE;
+public enum ChargeManager implements Charge.IManager {
+    DISTRIBUTION, TRANSMISSION;
 
     static {
-        Charge.network = INSTANCE;
+        Charge.distribution = DISTRIBUTION;
     }
 
-    private final Map<World, ChargeNetwork> distributionNetworks = new MapMaker().weakKeys().makeMap();
+    private final Map<World, ChargeNetwork> networks = new MapMaker().weakKeys().makeMap();
 
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END) {
-            ((ChargeNetwork) Charge.network.distribution(event.world)).tick();
-//            ((ChargeNetwork) Charge.util.transmission(event.world)).tick();
+            ((ChargeNetwork) network(event.world)).tick();
         }
     }
 
     @Override
-    public IChargeNetwork distribution(World world) {
-        return distributionNetworks.computeIfAbsent(world, ChargeNetwork::new);
+    public IChargeNetwork network(World world) {
+        return networks.computeIfAbsent(world, ChargeNetwork::new);
     }
 }

@@ -199,7 +199,7 @@ public class CartBattery implements ICartBattery {
     @Override
     public void tickOnTrack(EntityMinecart owner, BlockPos pos) {
         if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-            double drawnFromTrack = Charge.network.distribution(owner.world).access(pos).removeCharge(capacity - charge);
+            double drawnFromTrack = Charge.distribution.network(owner.world).access(pos).removeCharge(capacity - charge);
             if (drawnFromTrack > 0.0)
                 drewFromTrack = DRAW_INTERVAL * 4;
             charge += drawnFromTrack;

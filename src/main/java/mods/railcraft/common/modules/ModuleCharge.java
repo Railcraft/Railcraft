@@ -27,7 +27,7 @@ public class ModuleCharge extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                MinecraftForge.EVENT_BUS.register(ChargeManager.INSTANCE);
+                MinecraftForge.EVENT_BUS.register(ChargeManager.DISTRIBUTION);
 
                 add(
                         RailcraftItems.CHARGE,

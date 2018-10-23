@@ -131,7 +131,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.SUCCESS;
 
         WorldPlugin.setBlockToAir(worldIn, pos);
-        Charge.network.distribution(worldIn).removeNode(pos);
+        Charge.distribution.network(worldIn).removeNode(pos);
         if (!found.setToTarget(worldIn, pos, oldState, playerIn, shape, trackType)) {
             // TODO check if reversion is right
             WorldPlugin.setBlockState(worldIn, pos, oldState);
