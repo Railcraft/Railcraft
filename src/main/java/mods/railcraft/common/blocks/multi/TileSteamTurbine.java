@@ -9,8 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileTanks;
 import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -20,6 +23,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTurbineRotor;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
+import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
@@ -39,6 +43,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Nullable;
@@ -51,10 +57,10 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IEnergyStorage, INeedsMaintenance, ISteamUser, ITileTanks {
 
-    private static final int IC2_OUTPUT = 220;
-    private static final int BC_OUTPUT = 72;
+    private static final int IC2_OUTPUT = 225;
+    private static final int FE_OUTPUT = 900;
     private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
@@ -72,8 +78,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     public double mainGauge;
     private double energy;
     private @Nullable TileEntity emitterDelegate;
-    //TODO: Properly fix revert
-    //private final ChargeHandler battery = new ChargeHandler();
+    private @Nullable IChargeBlock.ChargeBattery battery;
 
     static {
         char[][][] map1 = {
@@ -149,11 +154,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
         tankManager.add(TANK_WATER, tankWater); // Water
     }
 
-//    @Override
-//    public ChargeHandler getChargeHandler() {
-//        return chargeHandler;
-//    }
-
     @Override
     public void update() {
         super.update();
@@ -162,31 +162,32 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
             if (isStructureValid()) {
                 if (isMaster())
                     addToNet();
-//                chargeHandler.tick();
             } else
                 dropFromNet();
 
-//            double chargeNeeded = chargeHandler.getCapacity() - chargeHandler.getCharge();
-            double chargeNeeded = 0;
-            if (chargeNeeded > 0) {
-                double draw = (chargeNeeded / IC2_OUTPUT) * BC_OUTPUT;
-                double e = getEnergy();
-                if (e < draw)
-                    draw = e;
-                removeEnergy(draw);
-//                chargeHandler.addCharge((draw / BC_OUTPUT) * IC2_OUTPUT);
+            IChargeBlock.ChargeBattery battery = getMasterBattery();
+            if (battery != null) {
+                double chargeNeeded = battery.getCapacity() - battery.getCharge();
+                if (chargeNeeded > 0) {
+                    double draw = chargeNeeded;
+                    double e = getEnergy();
+                    if (e < draw)
+                        draw = e;
+                    removeEnergy(draw);
+                    battery.addCharge(draw);
+                }
             }
 
             if (isMaster()) {
                 boolean addedEnergy = false;
-                if (energy < BC_OUTPUT * 2) {
+                if (energy < IC2_OUTPUT * 2) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
 //                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
                         ItemStack rotor = inv.getStackInSlot(0);
                         if (RailcraftItems.TURBINE_ROTOR.isEqual(rotor) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
                             addedEnergy = true;
-                            energy += BC_OUTPUT;
+                            energy += IC2_OUTPUT;
                             tankSteam.drainInternal(STEAM_USAGE, true);
                             tankWater.fillInternal(waterFilter, true);
 
@@ -209,6 +210,24 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty())
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
+
+        EnergyPlugin.pushToTiles(this, tileCache, FE_OUTPUT);
+    }
+
+    @Nullable
+    IChargeBlock.ChargeBattery getMasterBattery() {
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        if (mBlock != null) {
+            return mBlock.getBattery();
+        }
+        return null;
+    }
+
+    private IChargeBlock.ChargeBattery getBattery() {
+        if (battery == null) {
+            battery = Charge.network.distribution(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(IC2_OUTPUT * 2, IC2_OUTPUT, 1));
+        }
+        return battery;
     }
 
     @Override
@@ -240,18 +259,21 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     public void onChunkUnload() {
         super.onChunkUnload();
         dropFromNet();
+        clean();
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
         dropFromNet();
+        clean();
     }
 
     @Override
     protected void onMasterReset() {
         super.onMasterReset();
         dropFromNet();
+        clean();
     }
 
     @Override
@@ -271,7 +293,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     }
 
     public boolean hasEnergy() {
-        return getEnergy() >= BC_OUTPUT;
+        return getEnergy() >= IC2_OUTPUT;
     }
 
     public void removeEnergy(double amount) {
@@ -308,7 +330,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         tankManager.writeTanksToNBT(data);
-//        chargeHandler.writeToNBT(data);
         data.setFloat("energy", (float) energy);
         data.setFloat("output", output);
         return data;
@@ -319,7 +340,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         tankManager.readTanksFromNBT(data);
-//        chargeHandler.readFromNBT(data);
         energy = data.getFloat("energy");
         output = data.getFloat("output");
     }
@@ -336,13 +356,13 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     @Override
     public double getOfferedEnergy() {
         if (hasEnergy())
-            return IC2_OUTPUT;
+            return IC2_OUTPUT; //Keep seperate for independent balancing
         return 0;
     }
 
     @Override
     public void drawEnergy(double amount) {
-        removeEnergy((amount / IC2_OUTPUT) * BC_OUTPUT);
+        removeEnergy(amount);
     }
 
     @Override
@@ -388,8 +408,52 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     }
 
     @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        if (!isStructureValid()) {
+            return 0;
+        }
+        if (hasEnergy()) {
+            if (!simulate) {
+                removeEnergy((double) maxExtract / RailcraftConstants.EU_FE_RATIO);
+            }
+            return maxExtract;
+        }
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored() {
+        return (int) (getEnergy() * RailcraftConstants.EU_FE_RATIO);
+    }
+
+    @Override
+    public int getMaxEnergyStored() {
+        return FE_OUTPUT * 2;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return hasEnergy();
+    }
+
+    @Override
+    public boolean canReceive() {
+        return false;
+    }
+
+    @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return true;
+        if (capability == CapabilityEnergy.ENERGY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
@@ -397,6 +461,9 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(this);
+        }
         return super.getCapability(capability, facing);
     }
     /*@Override
@@ -433,6 +500,11 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;
+    }
+
+    private void clean() {
+        Charge.network.distribution(world).removeNode(pos);
+        battery = null;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class TileRFUnloader extends TileRFManipulator {
             }
 
             int extracted = rfCart.removeRF(request);
-            energyStorage.extractEnergy(extracted,false);
+            energyStorage.receiveEnergy(extracted,false);
             setProcessing(extracted > 0);
         }
     }
