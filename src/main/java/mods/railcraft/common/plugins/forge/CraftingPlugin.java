@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.fluids.Fluid;
@@ -238,10 +237,6 @@ public final class CraftingPlugin {
 //                GameRegistry.addShapelessRecipe(gen.next(), GROUP, processedRecipe.result, processedRecipe.recipeArray);
         }
         */
-    }
-
-    public static NonNullList<ItemStack> emptyContainers(InventoryCrafting inv) {
-        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
     @SuppressWarnings("deprecation")

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,12 +11,10 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import java.util.stream.IntStream;
@@ -69,10 +67,5 @@ public class RoutingTicketCopyRecipe extends BaseRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return RailcraftItems.TICKET.getStack();
-    }
-
-    @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        return CraftingPlugin.emptyContainers(inv);
     }
 }

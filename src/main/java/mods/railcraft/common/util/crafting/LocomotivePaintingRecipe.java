@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,12 +11,9 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -88,11 +85,6 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
             return result;
         }
         return ItemStack.EMPTY;
-    }
-
-    @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        return CraftingPlugin.emptyContainers(inv);
     }
 
     @Override
