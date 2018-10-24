@@ -16,11 +16,18 @@ import mods.railcraft.api.core.RailcraftCore;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +42,7 @@ public final class RailcraftModuleManager {
     private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<>();
     private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
     private static final List<Class<? extends IRailcraftModule>> loadOrder = new LinkedList<>();
+    private static final List<IGuiHandleModule> guiHandlers = new ArrayList<>();
     static final Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
     private static Stage stage = Stage.LOADING;
     public static Configuration config;
@@ -57,8 +65,16 @@ public final class RailcraftModuleManager {
         }
     }
 
-    @Nullable
-    public static Class<? extends IRailcraftModule> getModule(String moduleName) {
+    @SideOnly(Side.CLIENT)
+    public static @Nullable GuiScreen getGuiScreen(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
+        return guiHandlers.stream().map(handler -> handler.getGuiScreen(gui, inv, obj, world, x, y, z)).filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
+    public static @Nullable Container getGuiContainer(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
+        return guiHandlers.stream().map(handler -> handler.getGuiContainer(gui, inv, obj, world, x, y, z)).filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
+    public static @Nullable Class<? extends IRailcraftModule> getModule(String moduleName) {
         return nameToClassMapping.get(moduleName);
     }
 
@@ -164,6 +180,12 @@ public final class RailcraftModuleManager {
 
         // Add the valid modules to the enabled list in the load order
         enabledModules.addAll(loadOrder);
+
+        for (Class<? extends IRailcraftModule> moduleType : loadOrder) {
+            if (IGuiHandleModule.class.isAssignableFrom(moduleType)) {
+                guiHandlers.add((IGuiHandleModule) classToInstanceMapping.get(moduleType));
+            }
+        }
 
         // Add the disabled modules to the load order
         loadOrder.addAll(toDisable);

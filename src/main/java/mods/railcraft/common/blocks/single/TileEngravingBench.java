@@ -187,6 +187,8 @@ public class TileEngravingBench extends TileSmartItemTicking implements ITileCha
             return;
         }
 
+        // TODO charge usage
+
         if (progress >= PROCESS_TIME) {
             isCrafting = false;
             if (InvTools.isRoomForStack(emblem, invResult)) {
