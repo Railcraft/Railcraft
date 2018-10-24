@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import com.google.common.annotations.Beta;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,6 +71,7 @@ public interface IChargeNetwork {
      *
      * @return A battery instance either retrieved from the network or created fresh if one doesn't exist.
      */
+    @Beta
     default IChargeBlock.ChargeBattery makeBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
         return supplier.get();
     }
