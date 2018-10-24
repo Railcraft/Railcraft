@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -30,8 +31,9 @@ public class Texture extends AbstractTexture {
         this.imageData = image;
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Override
-    public void loadTexture(IResourceManager iResourceManager) {
+    public void loadTexture(IResourceManager iResourceManager) throws IOException {
         deleteGlTexture();
         TextureUtil.uploadTextureImageAllocate(getGlTextureId(), imageData, false, false);
     }
