@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,9 +26,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
-import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
@@ -37,7 +37,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     public final RailcraftContainer container;
     public final ResourceLocation texture;
 
-    GuiContainerRailcraft(RailcraftContainer container, String texture) {
+    protected GuiContainerRailcraft(RailcraftContainer container, String texture) {
         super(container);
         this.container = container;
         this.texture = new ResourceLocation(texture);
