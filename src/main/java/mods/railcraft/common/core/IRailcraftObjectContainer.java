@@ -61,7 +61,8 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
     /**
      * Register the item. Call {@link IRailcraftObject#initializeDefinition()} in this part!
      */
-    void register();
+    default void register() {
+    }
 
     /**
      * To be called in batch by the client proxy.
