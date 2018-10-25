@@ -1,4 +1,4 @@
-HEAD:
+12.0.0-alpha-1:
     INFO: Minecraft 1.12.2 update with feature ports from 1.7.10.
     NEW: Restored Coke Oven, Blast Furnace, Steam Oven, Steam Boiler, Water Tank, Rock Crusher, Iron/Steel Tanks, Force Track Emitter,
     Trade Station (and a few more?)
