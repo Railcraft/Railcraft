@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.tools;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
@@ -111,20 +110,20 @@ public class CubeRenderer {
 
     }
 
-    public static void render(RenderInfo renderInfo) {
-        if (renderInfo.glow)
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
-
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder vertexBuffer = tessellator.getBuffer();
-//        vertexBuffer.pos(renderInfo.boundingBox.minX, renderInfo.boundingBox.minY, renderInfo.boundingBox.minZ).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
-//        vertexBuffer.pos(0, 1, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
-//        vertexBuffer.pos(1, 1, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
-//        vertexBuffer.pos(1, 0, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
-//        tessellator.draw();
-
-//        GlStateManager.pushMatrix();
-//        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(state, brightness.apply(partialTicks));
-//        GlStateManager.popMatrix();
-    }
+//    public static void render(RenderInfo renderInfo) {
+//        if (renderInfo.glow)
+//            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
+//
+////        Tessellator tessellator = Tessellator.getInstance();
+////        BufferBuilder vertexBuffer = tessellator.getBuffer();
+////        vertexBuffer.pos(renderInfo.boundingBox.minX, renderInfo.boundingBox.minY, renderInfo.boundingBox.minZ).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+////        vertexBuffer.pos(0, 1, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+////        vertexBuffer.pos(1, 1, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
+////        vertexBuffer.pos(1, 0, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
+////        tessellator.draw();
+//
+////        GlStateManager.pushMatrix();
+////        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(state, brightness.apply(partialTicks));
+////        GlStateManager.popMatrix();
+//    }
 }
