@@ -55,8 +55,13 @@ sourceSets {
     }
     api {
         java {
-            srcDir project.apiRailcraft
+            // srcDir project.apiRedstoneFlux + "/src/main/java"
+            // srcDir project.apiThaumcraft
         }
+        // java {
+        // srcDir project.apiBuildcraft + "/api"
+        // exclude 'cofh/**'
+        // }
     }
 }
 
@@ -82,6 +87,8 @@ configurations {
 }
 
 dependencies {
+    // Railcraft API
+    api project('api:railcraft')
     // forestry
     api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     // IC2
@@ -139,7 +146,6 @@ compileJava {
 
 jar {
     from(sourceSets.api.output) {
-        include '**/mods/railcraft/api/**'
         exclude '**/uristqwerty/**'
         exclude '**/thaumcraft/**'
     }
@@ -147,6 +153,7 @@ jar {
     from {
         configurations.api.collect {
             it.isDirectory() ? it : zipTree(it).matching {
+                include '**/mods/railcraft/api/**'
                 include '**/ic2/api/energy/**'
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
