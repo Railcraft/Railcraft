@@ -169,15 +169,30 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+        return TileManager.forTile(
+              this::getTileClass,
+              state,
+              world,
+              pos
+              ).retrieve(
+              ITileShaped.class,
+              t -> 
+              t.getBoundingBox(world, pos)
+              ).orElse(Block.FULL_BLOCK_AABB);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+        return TileManager.forTile(
+              this::getTileClass,
+              state,
+              world,
+              pos).retrieve(
+              ITileShaped.class,
+              t ->
+              t.getCollisionBoundingBox(world, pos)
+              ).orElse(Block.FULL_BLOCK_AABB);
     }
 
     @Override
