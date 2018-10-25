@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.tasks.SignJar
+
 evaluationDependsOn(':version')
 
 buildscript {
@@ -24,7 +26,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Railcraft_" + project.version_minecraft
+archivesBaseName = "railcraft"
 
 ext {
     apiRailcraft = "./api/railcraft"
@@ -53,16 +55,6 @@ sourceSets {
             exclude '**/Thumbs.db'
         }
     }
-    api {
-        java {
-            // srcDir project.apiRedstoneFlux + "/src/main/java"
-            // srcDir project.apiThaumcraft
-        }
-        // java {
-        // srcDir project.apiBuildcraft + "/api"
-        // exclude 'cofh/**'
-        // }
-    }
 }
 
 repositories {
@@ -88,7 +80,7 @@ configurations {
 
 dependencies {
     // Railcraft API
-    api project('api:railcraft')
+    compile project(':api:railcraft')
     // forestry
     api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     // IC2
@@ -117,7 +109,7 @@ processResources {
         expand 'version': project.version, 'version_minecraft': project.minecraft.version
     }
 
-    // copy everything else, thats not the mcmod.info
+    // copy everything else, that is not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude '**/*.md'
@@ -144,21 +136,14 @@ compileJava {
     options.encoding = 'utf8'
 }
 
-jar {
-    from(sourceSets.api.output) {
-        exclude '**/uristqwerty/**'
-        exclude '**/thaumcraft/**'
-    }
-
+tasks.withType(Jar) {
     from {
         configurations.api.collect {
             it.isDirectory() ? it : zipTree(it).matching {
-                include '**/mods/railcraft/api/**'
                 include '**/ic2/api/energy/**'
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
                 include '**/ic2/api/recipe/**'
-                exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
                 // TODO exclude forestry?
@@ -192,46 +177,13 @@ jar {
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    from(sourceSets.api.output) {
-        include '**/mods/railcraft/api/**'
-        exclude '**/uristqwerty/**'
-        exclude '**/buildcraft/**'
-        exclude '**/thaumcraft/**'
-    }
-
-    from {
-        configurations.api.collect {
-            it.isDirectory() ? it : zipTree(it).matching {
-                include '**/ic2/api/energy/**'
-                include '**/ic2/api/info/**'
-                include '**/ic2/api/item/**'
-                include '**/ic2/api/recipe/**'
-                exclude '**/ic2/**/package-info.java'
-                exclude '**/ic2/**/package-info.class'
-            }
-        }
-    }
-
-    exclude '**/Thumbs.db'
-
-    destinationDir = file(dirDest)
-    includeEmptyDirs = false
+    from sourceSets.main.output
 
     extension = 'jar'
     classifier = 'dev'
-
-    manifest {
-        attributes(
-                'FMLAT': 'railcraft_at.cfg'
-        )
-    }
 }
 
-class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
+class JarSigner extends SignJar {
     JarSigner() {
         onlyIf {
             project.hasProperty('signingStorepass')
