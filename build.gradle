@@ -202,15 +202,22 @@ task devJar(type: Jar, dependsOn: 'classes') {
 class JarSigner extends SignJar {
     JarSigner() {
         onlyIf {
-            project.hasProperty('signingStorepass')
+            project.hasProperty('signingPassword')
         }
 
         exclude '**/api/**'
 
-        alias = 'CovertJaguar'
-        if (project.hasProperty('signingStorepass')) {
-            storePass = project.signingStorepass
-            keyPass = project.signingStorepass
+        // These properties are intended to be loaded from a "config.properties" file
+        if (project.hasProperty('signingAlias')) {
+            alias = project.signingAlias
+        }
+        if (project.hasProperty('signingPassword')) {
+            storePass = project.signingPassword
+            keyPass = project.signingPassword
+        }
+        if (project.hasProperty('signingStore')) {
+            keyStore = project.signingKeystore
+        } else {
             keyStore = System.getProperty("user.home") + '/.keystore'
         }
     }
