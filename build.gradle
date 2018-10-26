@@ -1,7 +1,5 @@
 import net.minecraftforge.gradle.tasks.SignJar
 
-evaluationDependsOn(':version')
-
 buildscript {
     repositories {
         jcenter()
@@ -21,22 +19,40 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply from: 'api/railcraft/gradle.properties', to: project.ext
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "railcraft"
 
+allprojects {
+    version = project.version
+}
+
+if (file("config.properties").exists()) {
+    apply from: 'config.properties', to: project.ext
+    println "Loading secure configs..."
+}
+
 ext {
-    apiRailcraft = "./api/railcraft"
+    apiRailcraft = "./api/railcraft/src/main/java"
     // apiForestry = "./api/forestry"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
     dirLang = "./lang"
 
     dirDest = './build/distributions'
+
+    environment = findProject(":private") == null ? "Dev" : "Release"
 }
+
+println ''
+println '*************************************************************'
+println 'Project Version: ' + project.version
+println 'Environment: ' + project.environment
+println '*************************************************************'
+println ''
 
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
@@ -50,6 +66,9 @@ minecraft {
 
 sourceSets {
     main {
+        java {
+            srcDir project.apiRailcraft
+        }
         resources {
             srcDir project.dirLang
             exclude '**/Thumbs.db'
@@ -79,8 +98,6 @@ configurations {
 }
 
 dependencies {
-    // Railcraft API
-    compile project(':api:railcraft')
     // forestry
     api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     // IC2
@@ -129,10 +146,10 @@ runServer.outputs.upToDateWhen { false }
 
 compileJava {
     options.compilerArgs += [
-                '-Xlint:-processing',
-                '-proc:none'
-        ]
-    options.deprecation = true
+            '-Xlint:-processing',
+            '-proc:none'
+    ]
+//    options.deprecation = true
     options.encoding = 'utf8'
 }
 
@@ -146,7 +163,6 @@ tasks.withType(Jar) {
                 include '**/ic2/api/recipe/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
-                // TODO exclude forestry?
             }
         }
     }
@@ -217,23 +233,8 @@ task apiZip(type: Zip) {
     extension = 'zip'
 }
 
-task releaseInit {
-    doLast {
-        println '*************************************************************'
-        println 'This build will be version: ' + project.version
-        println '*************************************************************'
-    }
-}
-
-task release {
-}
-
 build.dependsOn signMainJar, signDevJar, apiZip
-releaseInit.dependsOn clean
-release.dependsOn releaseInit, build
-build.shouldRunAfter releaseInit
-uploadArchives.shouldRunAfter releaseInit, build
-release.shouldRunAfter uploadArchives
+uploadArchives.shouldRunAfter build
 
 if (project.hasProperty("ftpUsername"))
     uploadArchives {

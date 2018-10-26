@@ -11,7 +11,7 @@ README.txt
 .settings/
 .classpath
 .project
-/gradle.properties
+/config.properties
 push/
 .idea/modules/
 .idea/shelf/
@@ -35,3 +35,4 @@ classes/
 .project
 *.launch
 /libs/
+**/Thumbs.db
