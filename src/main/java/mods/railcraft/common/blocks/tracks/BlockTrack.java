@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
@@ -205,7 +204,7 @@ public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, I
      * blockstate.
      */
     @Override
-    @SuppressWarnings("incomplete-switch")
+    @SuppressWarnings({"incomplete-switch", "deprecation"})
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         switch (rot) {
             case CLOCKWISE_180:
@@ -289,7 +288,7 @@ public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, I
      * blockstate.
      */
     @Override
-    @SuppressWarnings("incomplete-switch")
+    @SuppressWarnings({"incomplete-switch", "deprecation"})
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
         BlockRailBase.EnumRailDirection trackShape = state.getValue(getShapeProperty());
 
