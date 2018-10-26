@@ -30,8 +30,8 @@ allprojects {
     version = project.version
 }
 
-if (file("config.properties").exists()) {
-    apply from: 'config.properties', to: project.ext
+if (file("passwords.properties").exists()) {
+    apply from: 'passwords.properties', to: project.ext
     println "Loading secure configs..."
 }
 
@@ -207,7 +207,7 @@ class JarSigner extends SignJar {
 
         exclude '**/api/**'
 
-        // These properties are intended to be loaded from a "config.properties" file
+        // These properties are intended to be loaded from a "passwords.properties" file
         if (project.hasProperty('signingAlias')) {
             alias = project.signingAlias
         }
