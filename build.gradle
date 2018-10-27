@@ -206,7 +206,7 @@ class JarSigner extends SignJar {
         }
 
         exclude '**/api/**'
-
+        
         // These properties are intended to be loaded from a "passwords.properties" file
         if (project.hasProperty('signingAlias')) {
             alias = project.signingAlias
@@ -215,7 +215,7 @@ class JarSigner extends SignJar {
             storePass = project.signingPassword
             keyPass = project.signingPassword
         }
-        if (project.hasProperty('signingStore')) {
+        if (project.hasProperty('signingKeystore')) {
             keyStore = project.signingKeystore
         } else {
             keyStore = System.getProperty("user.home") + '/.keystore'
