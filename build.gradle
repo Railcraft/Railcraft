@@ -220,7 +220,7 @@ class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
             storePass = project.signingPassword
             keyPass = project.signingPassword
         }
-        if (project.hasProperty('signingStore')) {
+        if (project.hasProperty('signingKeystore')) {
             keyStore = project.signingKeystore
         } else {
             keyStore = System.getProperty("user.home") + '/.keystore'
