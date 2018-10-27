@@ -206,7 +206,7 @@ class JarSigner extends SignJar {
         }
 
         exclude '**/api/**'
-        
+
         // These properties are intended to be loaded from a "passwords.properties" file
         if (project.hasProperty('signingAlias')) {
             alias = project.signingAlias
