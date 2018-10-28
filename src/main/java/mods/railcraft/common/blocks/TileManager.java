@@ -34,20 +34,20 @@ import java.util.function.Function;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileManager<T extends TileEntity> {
+public class TileManager {
     private final IBlockAccess world;
     private final BlockPos pos;
-    private final Class<T> tileClass;
+    private final Class<? extends TileEntity> tileClass;
     private Optional<TileEntity> tile = Optional.empty();
 
-    private TileManager(Function<IBlockState, Class<T>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
+    private TileManager(Function<IBlockState, Class<? extends TileEntity>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
         this.tileClass = classMapper.apply(state);
         this.world = world;
         this.pos = pos;
     }
 
-    public static <T extends TileEntity> TileManager<T> forTile(Function<IBlockState, Class<T>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new TileManager<>(classMapper, state, world, pos);
+    public static TileManager forTile(Function<IBlockState, Class<? extends TileEntity>> classMapper, IBlockState state, IBlockAccess world, BlockPos pos) {
+        return new TileManager(classMapper, state, world, pos);
     }
 
     public static <T extends TileEntity, I> boolean isInstance(Function<IBlockState, Class<T>> classMapper, Class<I> interfaceClass, IBlockState state) {
