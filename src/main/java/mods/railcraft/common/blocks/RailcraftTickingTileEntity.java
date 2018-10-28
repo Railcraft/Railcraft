@@ -1,21 +1,20 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ITickable;
 
-import java.util.Random;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * Created by CovertJaguar on 7/13/2016 for Railcraft.
@@ -28,6 +27,7 @@ public abstract class RailcraftTickingTileEntity extends RailcraftTileEntity imp
     private boolean sendClientUpdate;
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void update() {
         clock++;
 
