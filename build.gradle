@@ -1,4 +1,4 @@
-evaluationDependsOn(':version')
+import net.minecraftforge.gradle.tasks.SignJar
 
 buildscript {
     repositories {
@@ -19,22 +19,40 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply from: 'api/railcraft/gradle.properties', to: project.ext
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Railcraft_" + project.version_minecraft
+archivesBaseName = "railcraft"
+
+allprojects {
+    version = project.version
+}
+
+if (file("passwords.properties").exists()) {
+    apply from: 'passwords.properties', to: project.ext
+    println "Loading secure configs..."
+}
 
 ext {
-    apiRailcraft = "./api/railcraft"
+    apiRailcraft = "./api/railcraft/src/main/java"
     // apiForestry = "./api/forestry"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
     dirLang = "./lang"
 
     dirDest = './build/distributions'
+
+    environment = findProject(":private") == null ? "Dev" : "Release"
 }
+
+println ''
+println '*************************************************************'
+println 'Project Version: ' + project.version
+println 'Environment: ' + project.environment
+println '*************************************************************'
+println ''
 
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
@@ -48,14 +66,12 @@ minecraft {
 
 sourceSets {
     main {
+        java {
+            srcDir project.apiRailcraft
+        }
         resources {
             srcDir project.dirLang
             exclude '**/Thumbs.db'
-        }
-    }
-    api {
-        java {
-            srcDir project.apiRailcraft
         }
     }
 }
@@ -110,7 +126,7 @@ processResources {
         expand 'version': project.version, 'version_minecraft': project.minecraft.version
     }
 
-    // copy everything else, thats not the mcmod.info
+    // copy everything else, that is not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude '**/*.md'
@@ -130,20 +146,14 @@ runServer.outputs.upToDateWhen { false }
 
 compileJava {
     options.compilerArgs += [
-                '-Xlint:-processing',
-                '-proc:none'
-        ]
-    options.deprecation = true
+            '-Xlint:-processing',
+            '-proc:none'
+    ]
+//    options.deprecation = true
     options.encoding = 'utf8'
 }
 
-jar {
-    from(sourceSets.api.output) {
-        include '**/mods/railcraft/api/**'
-        exclude '**/uristqwerty/**'
-        exclude '**/thaumcraft/**'
-    }
-
+tasks.withType(Jar) {
     from {
         configurations.api.collect {
             it.isDirectory() ? it : zipTree(it).matching {
@@ -151,10 +161,8 @@ jar {
                 include '**/ic2/api/info/**'
                 include '**/ic2/api/item/**'
                 include '**/ic2/api/recipe/**'
-                exclude '**/buildcraft/**'
                 exclude '**/ic2/**/package-info.java'
                 exclude '**/ic2/**/package-info.class'
-                // TODO exclude forestry?
             }
         }
     }
@@ -185,57 +193,31 @@ jar {
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    from(sourceSets.api.output) {
-        include '**/mods/railcraft/api/**'
-        exclude '**/uristqwerty/**'
-        exclude '**/buildcraft/**'
-        exclude '**/thaumcraft/**'
-    }
-
-    from {
-        configurations.api.collect {
-            it.isDirectory() ? it : zipTree(it).matching {
-                include '**/ic2/api/energy/**'
-                include '**/ic2/api/info/**'
-                include '**/ic2/api/item/**'
-                include '**/ic2/api/recipe/**'
-                exclude '**/ic2/**/package-info.java'
-                exclude '**/ic2/**/package-info.class'
-            }
-        }
-    }
-
-    exclude '**/Thumbs.db'
-
-    destinationDir = file(dirDest)
-    includeEmptyDirs = false
+    from sourceSets.main.output
 
     extension = 'jar'
     classifier = 'dev'
-
-    manifest {
-        attributes(
-                'FMLAT': 'railcraft_at.cfg'
-        )
-    }
 }
 
-class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
+class JarSigner extends SignJar {
     JarSigner() {
         onlyIf {
-            project.hasProperty('signingStorepass')
+            project.hasProperty('signingPassword')
         }
 
         exclude '**/api/**'
 
-        alias = 'CovertJaguar'
-        if (project.hasProperty('signingStorepass')) {
-            storePass = project.signingStorepass
-            keyPass = project.signingStorepass
+        // These properties are intended to be loaded from a "passwords.properties" file
+        if (project.hasProperty('signingAlias')) {
+            alias = project.signingAlias
+        }
+        if (project.hasProperty('signingPassword')) {
+            storePass = project.signingPassword
+            keyPass = project.signingPassword
+        }
+        if (project.hasProperty('signingKeystore')) {
+            keyStore = project.signingKeystore
+        } else {
             keyStore = System.getProperty("user.home") + '/.keystore'
         }
     }
@@ -258,23 +240,8 @@ task apiZip(type: Zip) {
     extension = 'zip'
 }
 
-task releaseInit {
-    doLast {
-        println '*************************************************************'
-        println 'This build will be version: ' + project.version
-        println '*************************************************************'
-    }
-}
-
-task release {
-}
-
 build.dependsOn signMainJar, signDevJar, apiZip
-releaseInit.dependsOn clean
-release.dependsOn releaseInit, build
-build.shouldRunAfter releaseInit
-uploadArchives.shouldRunAfter releaseInit, build
-release.shouldRunAfter uploadArchives
+uploadArchives.shouldRunAfter build
 
 if (project.hasProperty("ftpUsername"))
     uploadArchives {

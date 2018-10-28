@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,16 +49,16 @@ public final class SeasonPlugin {
     }
 
     public static boolean isGhostTrain(EntityMinecart cart) {
-        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.NONE;
-        if (season == Season.NONE)
-            return (RailcraftConfig.isPolarExpressEnabled() && HALLOWEEN)
+        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.DEFAULT;
+        if (season == Season.DEFAULT)
+            return (RailcraftConfig.isGhostTrainEnabled() && HALLOWEEN)
                     || cart.hasCustomName() && GHOST_TRAIN.equals(cart.getCustomNameTag());
         return season == Season.HALLOWEEN;
     }
 
     public static boolean isPolarExpress(EntityMinecart cart) {
-        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.NONE;
-        if (season == Season.NONE)
+        Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.DEFAULT;
+        if (season == Season.DEFAULT)
             return (RailcraftConfig.isPolarExpressEnabled() && CHRISTMAS)
                     || cart.hasCustomName() && POLAR_EXPRESS.equals(cart.getCustomNameTag());
         return season == Season.CHRISTMAS;
@@ -66,9 +66,10 @@ public final class SeasonPlugin {
 
     public enum Season {
 
-        NONE("gui.railcraft.season.none"),
+        DEFAULT("gui.railcraft.season.default"),
         HALLOWEEN("gui.railcraft.season.halloween"),
-        CHRISTMAS("gui.railcraft.season.christmas"),;
+        CHRISTMAS("gui.railcraft.season.christmas"),
+        NONE("gui.railcraft.season.none");
         public static final Season[] VALUES = values();
         private final String locTag;
 
