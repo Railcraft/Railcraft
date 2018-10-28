@@ -4,7 +4,6 @@ import mods.railcraft.common.util.collections.CollectionTools;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger.Listener;
 import net.minecraft.advancements.PlayerAdvancements;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ final class ListenerManager<T extends ICriterionInstance> {
 
     private final Map<PlayerAdvancements, Collection<Listener<T>>> map = new HashMap<>();
 
-    @Contract("mutates=this")
     public void add(PlayerAdvancements advancements, Listener<T> listener) {
         Collection<Listener<T>> collection = map.computeIfAbsent(advancements, advancement -> new HashSet<>());
         collection.add(listener);

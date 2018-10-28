@@ -18,6 +18,10 @@ import net.minecraft.entity.ai.EntityAITasks;
  */
 public class AIPlugin {
 
+    public static final int LOOK_BIT = 1;
+    public static final int MOVE_BIT = 2;
+    public static final int SWIM_BIT = 4;
+
     public static boolean addAITask(EntityLiving entity, int priority, EntityAIBase task) {
         for (EntityAITasks.EntityAITaskEntry entry : entity.tasks.taskEntries) {
             if (entry.action.getClass() == task.getClass())

@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.core;
 
-import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.gui.GuiBookRoutingTable;
 import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
@@ -43,6 +42,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartMobSpawner;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -174,7 +174,10 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         JSONModelRenderer.INSTANCE.registerModel(TESRManipulatorFluid.PIPE_MODEL);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, (m) -> {
+            m.entityRenderMap.remove(EntityMinecartMobSpawner.class); // Override the vanilla one!
+            return new RenderCart(m);
+        });
     }
 
     @Override

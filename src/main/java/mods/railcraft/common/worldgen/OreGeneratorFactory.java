@@ -74,6 +74,7 @@ public class OreGeneratorFactory {
                 IWorldGenerator genImpl = new GeneratorMine(config, dimensionRules, biomeRules, settings);
                 worldGen = new GeneratorRailcraftOre(genImpl, retrogen, retrogenMarker).setRegistryName(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name));
                 break;
+            case DIFFUSE:
             default:
                 throw new OreConfigurationException(config, "Something went wrong. This should be impossible.");
         }

@@ -96,7 +96,7 @@ public final class PlayerPlugin {
     }
 
     public static boolean isPlayerOp(GameProfile player) {
-        return getPermissionLevel(player) > 2;
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player);
     }
 
     public static int getPermissionLevel(GameProfile gameProfile) {

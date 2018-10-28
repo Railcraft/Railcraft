@@ -12,9 +12,14 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.ForwardingList;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +101,7 @@ public final class NBTPlugin {
     }
 
     public static void writeBlockPos(NBTTagCompound data, String tag, BlockPos pos) {
-        data.setIntArray(tag, new int[] {pos.getX(), pos.getY(), pos.getZ()});
+        data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
     }
 
     @Nullable
@@ -125,6 +130,38 @@ public final class NBTPlugin {
             return new ItemStack(nbt);
         }
         return InvTools.emptyStack();
+    }
+
+    public static WeightedSpawnerEntity obtainEntityTagSafe(World world, ItemStack stack, GameProfile player) {
+        NBTTagCompound rootTag = stack.getTagCompound();
+
+        if (rootTag == null || !rootTag.hasKey("EntityTag", 10)) {
+            return new WeightedSpawnerEntity();
+        }
+        NBTTagCompound entityTag = rootTag.getCompoundTag("EntityTag");
+        Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+        if (entity == null) {
+            return new WeightedSpawnerEntity();
+        }
+
+        if (Game.isHost(world) && (entity.ignoreItemEntityData() && !PlayerPlugin.isPlayerOp(player))) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("id", entityTag.getString("id")); // security concerns
+            return new WeightedSpawnerEntity(1, tag);
+        }
+
+        NBTTagCompound target = entity.writeToNBT(new NBTTagCompound());
+
+        target.removeTag("UUIDMost");
+        target.removeTag("UUIDLeast");
+
+        return new WeightedSpawnerEntity(1, target);
+    }
+
+    public static ItemStack copyTag(ItemStack original, ItemStack tagFrom) {
+        ItemStack copy = InvTools.copy(original);
+        copy.setTagCompound(tagFrom.getTagCompound());
+        return copy;
     }
 
     public enum EnumNBTType {

@@ -55,10 +55,11 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     // Vanilla Carts
     BASIC(0, "cart_basic", EntityCartBasic.class, EntityCartBasic::new, (c) -> Items.MINECART),
     CHEST(0, "cart_chest", EntityCartChest.class, EntityCartChest::new, (c) -> Items.CHEST_MINECART, from(Blocks.CHEST)),
-    COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, EntityCartCommand::new, (c) -> Items.COMMAND_BLOCK_MINECART, from(Blocks.COMMAND_BLOCK)),
+    COMMAND_BLOCK(3, "cart_command_block", EntityCartCommand.class, EntityCartCommand::new, (c) -> Items.COMMAND_BLOCK_MINECART, null),
     FURNACE(0, "cart_furnace", EntityCartFurnace.class, EntityCartFurnace::new, (c) -> Items.FURNACE_MINECART, from(Blocks.FURNACE)),
     HOPPER(0, "cart_hopper", EntityCartHopper.class, EntityCartHopper::new, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
     TNT(0, "cart_tnt", EntityCartTNT.class, EntityCartTNT::new, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
+    SPAWNER(0, "cart_spawner", EntityCartSpawner.class, EntityCartSpawner::new, ItemCartSpawner::new, null),
 
     // Railcraft Carts
     BORE(1, "bore", EntityTunnelBore.class, EntityTunnelBore::new, ItemTunnelBore::new),
@@ -250,7 +251,6 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     private void registerEntity() {
         if (id < 0)
             return;
@@ -288,7 +288,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 conditions().printFailureReason(this);
             }
         } else {
-            Game.log(Level.ERROR, "{} has been registered twice", this, new Throwable("Stacktrace"));
+            Game.log(Level.ERROR, "{0} has been registered twice", this, new Throwable("Stacktrace"));
         }
     }
 
