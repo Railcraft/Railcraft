@@ -132,38 +132,6 @@ public final class NBTPlugin {
         return InvTools.emptyStack();
     }
 
-    public static WeightedSpawnerEntity obtainEntityTagSafe(World world, ItemStack stack, GameProfile player) {
-        NBTTagCompound rootTag = stack.getTagCompound();
-
-        if (rootTag == null || !rootTag.hasKey("EntityTag", 10)) {
-            return new WeightedSpawnerEntity();
-        }
-        NBTTagCompound entityTag = rootTag.getCompoundTag("EntityTag");
-        Entity entity = EntityList.createEntityFromNBT(entityTag, world);
-        if (entity == null) {
-            return new WeightedSpawnerEntity();
-        }
-
-        if (Game.isHost(world) && (entity.ignoreItemEntityData() && !PlayerPlugin.isPlayerOp(player))) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("id", entityTag.getString("id")); // security concerns
-            return new WeightedSpawnerEntity(1, tag);
-        }
-
-        NBTTagCompound target = entity.writeToNBT(new NBTTagCompound());
-
-        target.removeTag("UUIDMost");
-        target.removeTag("UUIDLeast");
-
-        return new WeightedSpawnerEntity(1, target);
-    }
-
-    public static ItemStack copyTag(ItemStack original, ItemStack tagFrom) {
-        ItemStack copy = InvTools.copy(original);
-        copy.setTagCompound(tagFrom.getTagCompound());
-        return copy;
-    }
-
     public enum EnumNBTType {
 
         END(NBTTagEnd.class),
