@@ -35,7 +35,6 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
 
-
     @Override
     public IEnumMachine<?> getMachineType() {
         return SignalBoxVariant.RELAY;
@@ -91,7 +90,6 @@ public class TileBoxRelay extends TileBoxActionManager implements ISignalTileBlo
     public boolean isEmittingRedstone(EnumFacing side) {
         return doesActionOnAspect(getBoxSignalAspect(side));
     }
-
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {

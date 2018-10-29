@@ -26,7 +26,7 @@ public abstract class TileBoxActionManager extends TileBoxSecured {
     private BitSet powerOnAspects = new BitSet(SignalAspect.VALUES.length);
 
     protected TileBoxActionManager() {
-        doActionOnAspect(SignalAspect.GREEN, true);
+        setActionState(SignalAspect.GREEN, true);
     }
 
     @Override
@@ -34,9 +34,13 @@ public abstract class TileBoxActionManager extends TileBoxSecured {
         return powerOnAspects.get(aspect.ordinal());
     }
 
+    protected final void setActionState(SignalAspect aspect, boolean trigger) {
+        powerOnAspects.set(aspect.ordinal(), trigger);
+    }
+
     @Override
     public void doActionOnAspect(SignalAspect aspect, boolean trigger) {
-        powerOnAspects.set(aspect.ordinal(), trigger);
+        setActionState(aspect, trigger);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,8 +26,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.Level;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,8 +46,7 @@ public class WorldPlugin {
         return getBlockState(world, pos).getBlock();
     }
 
-    @Nullable
-    public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
+    public static @Nullable TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
         // see flowerpot source code
         if (pos.getY() < 0) {
             // dunno if this will be triggered by tiles at y=0
@@ -209,8 +208,7 @@ public class WorldPlugin {
             world.addBlockEvent(pos, block, key, value);
     }
 
-    @Nullable
-    public static BlockPos findBlock(World world, BlockPos pos, int distance, Predicate<IBlockState> matcher) {
+    public static @Nullable BlockPos findBlock(World world, BlockPos pos, int distance, Predicate<IBlockState> matcher) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();

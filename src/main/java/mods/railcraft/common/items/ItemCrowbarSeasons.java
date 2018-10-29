@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,8 +24,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -39,13 +39,13 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
     }
 
     public static SeasonPlugin.Season getCurrentSeason(ItemStack crowbar) {
-        SeasonPlugin.Season aura = SeasonPlugin.Season.NONE;
+        SeasonPlugin.Season season = SeasonPlugin.Season.DEFAULT;
         if (crowbar.getItem() instanceof ItemCrowbarSeasons) {
             NBTTagCompound data = crowbar.getTagCompound();
             if (data != null)
-                aura = SeasonPlugin.Season.VALUES[data.getByte("season")];
+                season = SeasonPlugin.Season.VALUES[data.getByte("season")];
         }
-        return aura;
+        return season;
     }
 
     public static void incrementSeason(ItemStack crowbar) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -85,7 +85,7 @@ public interface IRailcraftCart {
     }
 
     default void loadFromNBT(NBTTagCompound nbt) {
-        setSeason(NBTPlugin.readEnumOrdinal(nbt, "season", SeasonPlugin.Season.VALUES, SeasonPlugin.Season.NONE));
+        setSeason(NBTPlugin.readEnumOrdinal(nbt, "season", SeasonPlugin.Season.VALUES, SeasonPlugin.Season.DEFAULT));
     }
 
 }

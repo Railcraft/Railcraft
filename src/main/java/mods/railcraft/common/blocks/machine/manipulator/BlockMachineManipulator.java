@@ -91,7 +91,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
-        TileManager<?> tm = TileManager.forTile(this::getTileClass, state, worldIn, pos);
+        TileManager tm = TileManager.forTile(this::getTileClass, state, worldIn, pos);
         state = state.withProperty(FRONT,
                 tm.retrieve(ITileRotate.class, ITileRotate::getFacing).orElse(EnumFacing.DOWN));
         state = state.withProperty(ACTIVE,
