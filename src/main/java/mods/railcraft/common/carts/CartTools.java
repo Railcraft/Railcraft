@@ -76,7 +76,7 @@ public final class CartTools {
         return CartToolsAPI.placeCart(owner, cart, world, pos);
     }
 
-    @Nullable
+    @Nullable // Implementation method
     public static EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))

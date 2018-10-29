@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.entity.ai;
 
+import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
@@ -46,7 +47,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
         this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
-        setMutexBits(1);
+        setMutexBits(AIPlugin.LOOK);
     }
 
     /**

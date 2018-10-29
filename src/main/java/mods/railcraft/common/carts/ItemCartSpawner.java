@@ -12,11 +12,10 @@ package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.crafting.EggInfoCopyRecipe;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedSpawnerEntity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -36,9 +35,14 @@ public class ItemCartSpawner extends ItemCart {
         if (cart == null) {
             return null;
         }
-        WeightedSpawnerEntity entry = NBTPlugin.obtainEntityTagSafe(world, cartStack, owner);
 
-        cart.handleEntry(entry);
+        if (cartStack.hasTagCompound()) {
+            NBTTagCompound cartTag = cart.writeToNBT(new NBTTagCompound());
+            NBTTagCompound sub = cartStack.getOrCreateSubCompound("Spawner");
+            cartTag.merge(sub);
+            cart.readFromNBT(cartTag);
+            cart.sendToClient();
+        }
 
         return cart;
     }

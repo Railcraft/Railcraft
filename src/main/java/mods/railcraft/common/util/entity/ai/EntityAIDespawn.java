@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.entity.ai;
 
+import mods.railcraft.common.plugins.forge.AIPlugin;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -24,7 +25,7 @@ public class EntityAIDespawn extends EntityAIBase {
 
     public EntityAIDespawn(EntityAgeable entity) {
         this.theAnimal = entity;
-        setMutexBits(1);
+        setMutexBits(AIPlugin.LOOK);
     }
 
     /**

@@ -43,5 +43,15 @@ public enum RCEntitySelectors implements Predicate<Entity> {
                     && entity instanceof EntityLivingBase
                     && ((EntityLivingBase) entity).getMaxHealth() < 100;
         }
+    },
+    /**
+     * Checks if an entity does not form a part of the core game mechanics, e.g. pre-generation of map
+     * via command block minecarts.
+     */
+    NON_MECHANICAL {
+        @Override
+        public boolean test(Entity entity) {
+            return !entity.ignoreItemEntityData();
+        }
     }
 }

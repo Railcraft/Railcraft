@@ -36,6 +36,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
 public class EntityCartTank extends CartBaseFiltered implements ISidedInventory, IFluidCart {
@@ -92,7 +94,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         super.notifyDataManagerChange(key);
         if (Game.isHost(world))
             return;
-        if (key == FLUID_STACK)
+        if (Objects.equals(key, FLUID_STACK))
             tank.setFluid(Fluids.copy(getFluidStack()));
     }
 

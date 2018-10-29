@@ -232,7 +232,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                     }
                 });
 
-                EntitySearcher.find(EntityLivingBase.class).around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
+                EntitySearcher.findLivings().around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
                     if (gridHasCapacity(KILLING_POWER_COST)
                             && e.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useCharge(KILLING_POWER_COST);

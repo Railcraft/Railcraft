@@ -19,7 +19,11 @@ import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
-import mods.railcraft.common.util.misc.*;
+import mods.railcraft.common.util.entity.RCEntitySelectors;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MathTools;
+import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +32,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -346,16 +349,19 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
 
         testHighSpeedCollision(cart, other);
 
-        if (EntityMinecart.getCollisionHandler() != this)
-            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block()))
+        if (EntityMinecart.getCollisionHandler() != this) {
+            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block())) {
                 if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
                     other.move(MoverType.SELF, 0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
+            }
+        }
 
+        // TODO Config entry?
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
             List<EntityMinecart> carts = EntitySearcher.findMinecarts().collidingWith(cart)
-                    .and(Predicates.notInstanceOf(EntityMinecartCommandBlock.class)).at(cart.world);
+                    .and(RCEntitySelectors.NON_MECHANICAL).at(cart.world);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }

@@ -113,6 +113,16 @@ public class AABBFactory {
         return this;
     }
 
+    public AABBFactory growUnrestricted(double distance) {
+        minX -= distance;
+        minY -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxY += distance;
+        maxZ += distance;
+        return this;
+    }
+
     public AABBFactory grow(double distance) {
         minX -= distance;
         minY -= distance;
@@ -235,6 +245,15 @@ public class AABBFactory {
 
     public AABBFactory setMaxY(double maxY) {
         this.maxY = maxY;
+        return this;
+    }
+
+    public AABBFactory upTo(double distance) {
+        minX -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxY += distance;
+        maxZ += distance;
         return this;
     }
 

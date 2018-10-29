@@ -16,11 +16,20 @@ import net.minecraft.entity.ai.EntityAITasks;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class AIPlugin {
+public final class AIPlugin {
 
-    public static final int LOOK_BIT = 1;
-    public static final int MOVE_BIT = 2;
-    public static final int SWIM_BIT = 4;
+    /**
+     * The bit shows that a task needs {@link net.minecraft.entity.ai.EntityLookHelper}
+     */
+    public static final int LOOK = 1;
+    /**
+     * The bit shows that a task needs {@link net.minecraft.entity.ai.EntityMoveHelper}
+     */
+    public static final int MOVE = 2;
+    /**
+     * The bit shows that a task needs {@link net.minecraft.entity.ai.EntityJumpHelper}
+     */
+    public static final int JUMP = 4;
 
     public static boolean addAITask(EntityLiving entity, int priority, EntityAIBase task) {
         for (EntityAITasks.EntityAITaskEntry entry : entity.tasks.taskEntries) {
@@ -29,6 +38,9 @@ public class AIPlugin {
         }
         entity.tasks.addTask(priority, task);
         return true;
+    }
+
+    private AIPlugin() {
     }
 
 }

@@ -11,12 +11,12 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -41,19 +41,27 @@ public class EggInfoCopyRecipe extends BaseRecipe {
         if (result == null) {
             return ItemStack.EMPTY;
         }
-        return NBTPlugin.copyTag(inv.getStackInSlot(result.getFirst()), inv.getStackInSlot(result.getSecond()));
+        ItemStack ret = InvTools.copy(inv.getStackInSlot(result.getFirst() ));
+        ResourceLocation id = ItemMonsterPlacer.getNamedIdFrom(inv.getStackInSlot(result.getSecond()));
+        if (id != null) {
+            NBTTagCompound spawner = ret.getOrCreateSubCompound("Spawner");
+            NBTTagCompound spawnData = spawner.getCompoundTag("SpawnData");
+            spawnData.setString("id", id.toString());
+            spawner.setTag("SpawnData", spawnData);
+        }
+        return ret;
     }
 
-    @Override
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-        Tuple<Integer, Integer> tuple = calculate(inv);
-        if (tuple != null) {
-            final int place = tuple.getSecond();
-            list.set(place, InvTools.copy(inv.getStackInSlot(place)));
-        }
-        return list;
-    }
+//    @Override
+//    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+//        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+//        Tuple<Integer, Integer> tuple = calculate(inv);
+//        if (tuple != null) {
+//            final int place = tuple.getSecond();
+//            list.set(place, InvTools.copy(inv.getStackInSlot(place)));
+//        }
+//        return list;
+//    }
 
     @Override
     public boolean canFit(int width, int height) {

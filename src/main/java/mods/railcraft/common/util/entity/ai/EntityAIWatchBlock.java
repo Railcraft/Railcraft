@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.entity.ai;
 
+import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -45,7 +46,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
         this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
-        setMutexBits(3);
+        setMutexBits(AIPlugin.MOVE | AIPlugin.LOOK);
     }
 
     /**
