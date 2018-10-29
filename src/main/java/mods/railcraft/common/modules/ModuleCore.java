@@ -67,6 +67,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -128,7 +129,15 @@ public class ModuleCore extends RailcraftModulePayload {
 
                         RailcraftItems.RAIL,
                         RailcraftItems.TIE,
-                        RailcraftItems.REBAR
+                        RailcraftItems.REBAR,
+
+                        RailcraftCarts.BASIC,
+                        RailcraftCarts.CHEST,
+                        RailcraftCarts.FURNACE,
+                        RailcraftCarts.TNT,
+                        RailcraftCarts.HOPPER,
+                        RailcraftCarts.COMMAND_BLOCK,
+                        RailcraftCarts.SPAWNER
                 );
             }
 
@@ -212,6 +221,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 replaceVanillaCart(names, RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
                 replaceVanillaCart(names, RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
                 replaceVanillaCart(names, RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
+                replaceVanillaCart(names, RailcraftCarts.SPAWNER, null, EntityMinecart.Type.SPAWNER, 47);
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
@@ -223,15 +233,16 @@ public class ModuleCore extends RailcraftModulePayload {
                 RailcraftAdvancementTriggers.getInstance().register();
             }
 
-            private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
-                cartType.register();
-
+            private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names,
+                                            RailcraftCarts cartType, @Nullable Item original,
+                                            EntityMinecart.Type minecartType, int entityId) {
                 ResourceLocation key = names.get(minecartType);
                 EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
                 Class<? extends Entity> minecartClass = old.getEntityClass();
 
                 CartTools.classReplacements.put(minecartClass, cartType);
-                CartTools.vanillaCartItemMap.put(original, cartType);
+                if (original != null)
+                    CartTools.vanillaCartItemMap.put(original, cartType);
 
                 EntityEntry substitute = createHackedEntityEntryBuilder()
                         .id(key, entityId)
@@ -243,10 +254,12 @@ public class ModuleCore extends RailcraftModulePayload {
                 ForgeRegistries.ENTITIES.register(substitute);
                 Game.log(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
 
-                BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
+                if (original != null) {
+                    BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
-                original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
-                original.setCreativeTab(CreativeTabs.TRANSPORTATION);
+                    original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
+                    original.setCreativeTab(CreativeTabs.TRANSPORTATION);
+                }
             }
 
             private EntityEntryBuilder<Entity> createHackedEntityEntryBuilder() {

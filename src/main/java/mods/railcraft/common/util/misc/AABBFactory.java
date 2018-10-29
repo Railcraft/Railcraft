@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,6 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("UnusedReturnValue")
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class AABBFactory {
@@ -116,12 +117,16 @@ public class AABBFactory {
     public AABBFactory grow(double distance) {
         minX -= distance;
         minY -= distance;
-        if (minY < 0)
-            minY = 0;
         minZ -= distance;
         maxX += distance;
         maxY += distance;
         maxZ += distance;
+        return this;
+    }
+
+    public AABBFactory clampToWorld() {
+        if (minY < 0)
+            minY = 0;
         return this;
     }
 
@@ -236,6 +241,21 @@ public class AABBFactory {
     public AABBFactory setMaxY(double maxY) {
         this.maxY = maxY;
         return this;
+    }
+
+    public AABBFactory upTo(double distance) {
+        minX -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxY += distance;
+        maxZ += distance;
+        return this;
+    }
+
+    public boolean isUndefined() {
+        return minX == maxX
+                && minY == maxY
+                && minZ == maxZ;
     }
 
     @Override

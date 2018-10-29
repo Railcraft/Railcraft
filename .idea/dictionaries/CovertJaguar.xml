@@ -4,6 +4,7 @@
       <w>AABB</w>
       <w>Mozilla</w>
       <w>addon</w>
+      <w>aint</w>
       <w>alumentum</w>
       <w>andesite</w>
       <w>backface</w>
@@ -13,6 +14,7 @@
       <w>biomes</w>
       <w>bleachedbone</w>
       <w>blockquote</w>
+      <w>blockrailbase</w>
       <w>blockstate</w>
       <w>borehead</w>
       <w>boxable</w>
@@ -38,6 +40,7 @@
       <w>disassembly</w>
       <w>enchantability</w>
       <w>ender</w>
+      <w>enumraildirection</w>
       <w>essentia</w>
       <w>frostbound</w>
       <w>glowstone</w>

@@ -502,7 +502,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 Vec3d headPos = getPositionAhead(3.3);
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
-                List<EntityLivingBase> entities = EntitySearcher.find(EntityLivingBase.class)
+                List<EntityLivingBase> entities = EntitySearcher.findLiving()
                         .and(RCEntitySelectors.KILLABLE).around(entitySearchBox).at(world);
                 entities.forEach(e -> e.attackEntityFrom(RailcraftDamageSource.BORE, 2));
 

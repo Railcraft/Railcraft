@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,8 +34,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,15 +44,15 @@ import java.util.stream.Collectors;
  */
 public final class CartTools {
 
-    public static Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<>();
-    public static Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<>();
-    public static String HIGH_SPEED_TAG = "HighSpeed";
+    public static final Map<Item, IRailcraftCartContainer> vanillaCartItemMap = new HashMap<>();
+    public static final Map<Class<? extends Entity>, IRailcraftCartContainer> classReplacements = new HashMap<>();
+    public static final String HIGH_SPEED_TAG = "HighSpeed";
 
     /**
      * Spawns a new cart entity using the provided item.
      * <p/>
-     * The backing item must implement <code>IMinecartItem</code> and/or extend
-     * <code>ItemMinecart</code>.
+     * The backing item must implement {@code IMinecartItem} and/or extend
+     * {@code ItemMinecart}.
      * <p/>
      * Generally Forge requires all cart items to extend ItemMinecart.
      *
@@ -63,8 +63,7 @@ public final class CartTools {
      * @return the cart placed or null if failed
      * @see IMinecartItem , ItemMinecart
      */
-    @Nullable
-    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
+    public static @Nullable EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
         if (InvTools.isEmpty(cart))
             return null;
         cart = cart.copy();
@@ -76,8 +75,7 @@ public final class CartTools {
         return CartToolsAPI.placeCart(owner, cart, world, pos);
     }
 
-    @Nullable
-    public static EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+    public static @Nullable EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
             if (!CartToolsAPI.isMinecartAt(world, pos, 0)) {
@@ -232,14 +230,15 @@ public final class CartTools {
      * @param id Cart's persistent UUID
      * @return EntityMinecart
      */
-    @Nullable
-    public static EntityMinecart getCartFromUUID(World world, UUID id) {
+    public static @Nullable EntityMinecart getCartFromUUID(World world, UUID id) {
         if (world instanceof WorldServer) {
             Entity entity = ((WorldServer) world).getEntityFromUuid(id);
             if (entity instanceof EntityMinecart && entity.isEntityAlive()) {
                 return (EntityMinecart) entity;
             }
         } else {
+            // for performance reasons
+            //noinspection Convert2streamapi
             for (Entity entity : world.loadedEntityList) {
                 if (entity instanceof EntityMinecart && entity.isEntityAlive() && entity.getPersistentID().equals(id))
                     return (EntityMinecart) entity;

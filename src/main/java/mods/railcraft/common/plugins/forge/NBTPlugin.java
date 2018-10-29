@@ -12,9 +12,14 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.ForwardingList;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +101,7 @@ public final class NBTPlugin {
     }
 
     public static void writeBlockPos(NBTTagCompound data, String tag, BlockPos pos) {
-        data.setIntArray(tag, new int[] {pos.getX(), pos.getY(), pos.getZ()});
+        data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
     }
 
     @Nullable

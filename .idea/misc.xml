@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="2">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="mods.railcraft.api.core.RailcraftModule" />
       <item index="1" class="java.lang.String" itemvalue="net.minecraftforge.fml.common.eventhandler.SubscribeEvent" />
+      <item index="2" class="java.lang.String" itemvalue="net.minecraftforge.fml.common.Mod" />
+      <item index="3" class="java.lang.String" itemvalue="net.minecraftforge.fml.common.Mod.EventHandler" />
     </list>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">

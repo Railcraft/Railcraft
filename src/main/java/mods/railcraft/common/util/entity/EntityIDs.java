@@ -22,6 +22,7 @@ public class EntityIDs {
     public static final int CART_TNT = 4;
     public static final int CART_HOPPER = 5;
     public static final int CART_COMMAND_BLOCK = 6;
+    public static final int CART_SPAWNER = 7;
 
     public static final int CART_WORLDSPIKE_ADMIN = 20;
     public static final int CART_WORLDSPIKE_PERSONAL = 21;

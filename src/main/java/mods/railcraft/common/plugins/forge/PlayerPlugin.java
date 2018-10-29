@@ -96,7 +96,7 @@ public final class PlayerPlugin {
     }
 
     public static boolean isPlayerOp(GameProfile player) {
-        return getPermissionLevel(player) > 2;
+        return getPermissionLevel(player) >= 2;
     }
 
     public static int getPermissionLevel(GameProfile gameProfile) {
@@ -105,6 +105,7 @@ public final class PlayerPlugin {
         MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (mcServer != null && mcServer.getPlayerList().canSendCommands(gameProfile)) {
             UserListOpsEntry opsEntry = mcServer.getPlayerList().getOppedPlayers().getEntry(gameProfile);
+            //noinspection ConstantConditions
             return opsEntry != null ? opsEntry.getPermissionLevel() : 0;
         }
         return 0;

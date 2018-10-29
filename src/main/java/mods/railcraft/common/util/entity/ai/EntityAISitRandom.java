@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.entity.ai;
 
 
+import mods.railcraft.common.plugins.forge.AIPlugin;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityTameable;
 
@@ -19,7 +20,7 @@ public class EntityAISitRandom extends EntityAIBase {
 
     public EntityAISitRandom(EntityTameable par1EntityOcelot) {
         this.theAnimal = par1EntityOcelot;
-        setMutexBits(5);
+        setMutexBits(AIPlugin.JUMP | AIPlugin.LOOK);
     }
 
     /**

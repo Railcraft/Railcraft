@@ -9,7 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartCommandBlock;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -75,5 +77,10 @@ public class EntityCartCommand extends EntityMinecartCommandBlock implements IRa
     @Override
     public void killMinecart(DamageSource par1DamageSource) {
         killAndDrop(this);
+    }
+
+    @Override
+    public ItemStack[] getItemsDropped(EntityMinecart cart) {
+        return new ItemStack[]{new ItemStack(Items.MINECART)};
     }
 }
