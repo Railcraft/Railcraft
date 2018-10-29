@@ -20,6 +20,9 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -34,6 +37,8 @@ import java.util.Random;
  */
 public final class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
 
+    public static final IProperty<Boolean> ACTIVE = PropertyBool.create("active");
+
     public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
             (world, pos) -> WorldPlugin.getTileEntity(world, pos, TileFluxTransformer.class).map(TileFluxTransformer::getMasterBattery).orElse(null)
     );
@@ -43,6 +48,12 @@ public final class BlockFluxTransformer extends BlockMultiBlock implements IChar
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
         setHarvestLevel("pickaxe", 1);
+        setDefaultState(getDefaultState().withProperty(ACTIVE, false));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, ACTIVE);
     }
 
     @Override

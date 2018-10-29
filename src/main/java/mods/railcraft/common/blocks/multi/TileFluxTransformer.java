@@ -17,6 +17,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +29,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,7 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     private @Nullable IChargeBlock.ChargeBattery battery;
+    private int lastTransformTime;
 
     static {
         char[][][] map = {
@@ -110,8 +114,11 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
             return 0;
         double chargeDifference = battery.getCapacity() - battery.getCharge();
         if (chargeDifference > 0.0) {
-            if (!simulate)
+            if (!simulate) {
+                lastTransformTime = clock;
+                sendUpdateToClient();
                 battery.addCharge((maxReceive / RailcraftConstants.EU_FE_RATIO) * EFFICIENCY);
+            }
             return maxReceive;
         }
         return 0;
@@ -186,5 +193,32 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     private void clean() {
         Charge.distribution.network(world).removeNode(pos);
         battery = null;
+    }
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeInt(clock);
+        data.writeInt(lastTransformTime);
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        clock = data.readInt();
+        lastTransformTime = data.readInt();
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+        return state.withProperty(BlockFluxTransformer.ACTIVE, isActive());
+    }
+
+    private boolean isActive() {
+        if (!isStructureValid()) {
+            return false;
+        }
+        final int t = clock - lastTransformTime;
+        return t >= 0 && t <= 10;
     }
 }

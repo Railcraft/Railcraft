@@ -202,6 +202,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 for (ResourceLocation each : toRemove) {
                     registry.register(CraftingPlugin.createDummyRecipe(each));
+                    Game.log(Level.INFO, "Successfully removed crafting recipe {} with a dummy", each);
                 }
 
                 // Vanilla ids:

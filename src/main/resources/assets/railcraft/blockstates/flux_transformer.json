@@ -1,20 +1,28 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_column",
+    "model": "railcraft:flux_transformer",
     "textures": {
       "end": "railcraft:blocks/flux_transformer_cap",
-      "side": "railcraft:blocks/flux_transformer_side"
+      "side": "railcraft:blocks/flux_transformer_side",
+      "particle": "railcraft:blocks/flux_transformer_cap",
+      "belt": "railcraft:blocks/flux_transformer_side_unpowered"
     }
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "active": {
+      "true": {
+        "textures": {
+          "belt": "railcraft:blocks/flux_transformer_side_powered"
+        }
+      },
+      "false": {
+        "textures": {
+          "belt": "railcraft:blocks/flux_transformer_side_unpowered"
+        }
       }
-    ]
+    }
   }
 }
