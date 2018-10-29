@@ -47,7 +47,6 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
         renderersContent.put(CartBaseExplosive.class, new CartContentRendererTNT());
         renderersContent.put(CartBaseMaintenance.class, new CartContentRendererMaintenance());
-
         renderersContent.put(EntityCartSpawner.class, new CartContentRendererSpawner());
     }
 
