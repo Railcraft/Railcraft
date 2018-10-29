@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -174,10 +174,9 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         JSONModelRenderer.INSTANCE.registerModel(TESRManipulatorFluid.PIPE_MODEL);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, (m) -> {
-            m.entityRenderMap.remove(EntityMinecartMobSpawner.class); // Override the vanilla one!
-            return new RenderCart(m);
-        });
+        // Remove the vanilla EntityMinecartMobSpawner renderer!
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartMobSpawner.class, rm -> null);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
     }
 
     @Override

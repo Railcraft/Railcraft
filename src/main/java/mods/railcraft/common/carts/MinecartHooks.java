@@ -37,6 +37,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -349,19 +350,18 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
 
         testHighSpeedCollision(cart, other);
 
-        if (EntityMinecart.getCollisionHandler() != this) {
-            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block())) {
-                if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
-                    other.move(MoverType.SELF, 0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
-                    other.onGround = true;
-                }
-            }
+        if (EntityMinecart.getCollisionHandler() != this
+                && other instanceof EntityLivingBase
+                && WorldPlugin.isBlockAt(cart.world, cart.getPosition(), RailcraftBlocks.TRACK_ELEVATOR.block())
+                && other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
+            other.move(MoverType.SELF, 0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
+            other.onGround = true;
         }
 
-        // TODO Config entry?
+        // TODO Config entry? ( Go for it -CJ )
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
-            List<EntityMinecart> carts = EntitySearcher.findMinecarts().collidingWith(cart)
-                    .and(RCEntitySelectors.NON_MECHANICAL).at(cart.world);
+            List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(cart)
+                    .and(EntitySelectors.IS_ALIVE, RCEntitySelectors.NON_MECHANICAL).at(cart.world);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }

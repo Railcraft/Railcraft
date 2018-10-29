@@ -288,7 +288,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 conditions().printFailureReason(this);
             }
         } else {
-            Game.log(Level.ERROR, "{0} has been registered twice", this, new Throwable("Stacktrace"));
+            Game.log(Level.INFO, "{0} has been registered twice", this, new Throwable("Stacktrace"));
         }
     }
 

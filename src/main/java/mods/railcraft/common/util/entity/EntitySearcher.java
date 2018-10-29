@@ -38,7 +38,7 @@ public class EntitySearcher {
         return new SearchParameters<>(entityClass);
     }
 
-    public static SearchParameters<EntityLivingBase> findLivings() {
+    public static SearchParameters<EntityLivingBase> findLiving() {
         return new SearchParameters<>(EntityLivingBase.class);
     }
 
@@ -49,7 +49,6 @@ public class EntitySearcher {
     public static class SearchParameters<T extends Entity> {
         private final Class<T> entityClass;
         private AABBFactory box = AABBFactory.start();
-        private boolean needBox = true;
         private Predicate<Entity> filter = RCEntitySelectors.LIVING;
 
         public SearchParameters(Class<T> entityClass) {
@@ -57,7 +56,7 @@ public class EntitySearcher {
         }
 
         public List<T> at(World world) {
-            if (needBox)
+            if (box.isUndefined())
                 throw new NullPointerException("Improperly defined EntitySearcher without a search box");
             return world.getEntitiesWithinAABB(entityClass, box.build(), filter::test);
         }
@@ -69,44 +68,31 @@ public class EntitySearcher {
 
         public SearchParameters<T> around(AxisAlignedBB area) {
             box.fromAABB(area);
-            needBox = false;
+            return this;
+        }
+
+        public SearchParameters<T> around(AABBFactory factory) {
+            box = factory;
             return this;
         }
 
         public SearchParameters<T> around(BlockPos pos) {
             box.createBoxForTileAt(pos);
-            needBox = false;
             return this;
         }
 
         public SearchParameters<T> around(Entity entity) {
             box.fromAABB(entity.getEntityBoundingBox());
-            needBox = false;
-            return this;
-        }
-
-        // TODO difference from #around method?
-        public SearchParameters<T> collidingWith(Entity entity) {
-            box.fromAABB(entity.getEntityBoundingBox());
-            needBox = false;
             return this;
         }
 
         public SearchParameters<T> outTo(float distance) {
-            box.growUnrestricted(distance);
-            needBox = false;
+            box.grow(distance);
             return this;
         }
 
         public SearchParameters<T> upTo(float distance) {
             box.upTo(distance);
-            needBox = false;
-            return this;
-        }
-
-        public SearchParameters<T> boxFactory(AABBFactory factory) {
-            box = factory;
-            needBox = false;
             return this;
         }
 

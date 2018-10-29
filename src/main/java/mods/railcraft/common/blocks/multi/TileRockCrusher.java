@@ -34,7 +34,6 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -232,7 +231,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                     }
                 });
 
-                EntitySearcher.findLivings().around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
+                EntitySearcher.findLiving().around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
                     if (gridHasCapacity(KILLING_POWER_COST)
                             && e.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useCharge(KILLING_POWER_COST);

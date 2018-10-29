@@ -233,15 +233,16 @@ public class ModuleCore extends RailcraftModulePayload {
                 RailcraftAdvancementTriggers.getInstance().register();
             }
 
-            private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names, RailcraftCarts cartType, @Nullable Item original, EntityMinecart.Type minecartType, int entityId) {
+            private void replaceVanillaCart(Map<EntityMinecart.Type, ResourceLocation> names,
+                                            RailcraftCarts cartType, @Nullable Item original,
+                                            EntityMinecart.Type minecartType, int entityId) {
                 ResourceLocation key = names.get(minecartType);
                 EntityEntry old = checkNotNull(ForgeRegistries.ENTITIES.getValue(key));
                 Class<? extends Entity> minecartClass = old.getEntityClass();
 
                 CartTools.classReplacements.put(minecartClass, cartType);
-                if (original != null) {
+                if (original != null)
                     CartTools.vanillaCartItemMap.put(original, cartType);
-                }
 
                 EntityEntry substitute = createHackedEntityEntryBuilder()
                         .id(key, entityId)
