@@ -111,7 +111,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartToolsAPI.getCartOwner(cart));
-                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "gui.railcraft.mag.glass.train", LocalizationPlugin.getEntityLocalizationTag(cart), Train.getTrainUUID(cart));
                 event.setCanceled(true);
             }
             if (entity instanceof IMagnifiable) {

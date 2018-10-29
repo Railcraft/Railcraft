@@ -126,7 +126,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
 
     @Override
     public void onMagnify(EntityPlayer viewer) {
-        viewer.sendMessage(ChatPlugin.translateMessage("gui.railcraft.mag.glass.cart.furnace", fuel, pushX, pushZ));
+        viewer.sendMessage(ChatPlugin.translateMessage("gui.railcraft.mag.glass.cart.furnace", fuel));
     }
 
     //    private static final double DRAG_FACTOR = 0.99;
