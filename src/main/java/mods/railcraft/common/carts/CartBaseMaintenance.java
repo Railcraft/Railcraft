@@ -10,9 +10,12 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -22,10 +25,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +42,6 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
     protected static final double DRAG_FACTOR = 0.9;
     protected static final float MAX_SPEED = 0.1f;
     private static final int BLINK_DURATION = 3;
-    private static final int DATA_ID_BLINK = 25;
 
     protected CartBaseMaintenance(World world) {
         super(world);
@@ -112,16 +116,15 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
         return false;
     }
 
-    protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
-        IBlockState state = WorldPlugin.getBlockState(getEntityWorld(), pos);
-        //noinspection deprecation
-        List<ItemStack> drops = block.getDrops(world, pos, state, 0);
+    protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, IBlockState state) {
+        List<ItemStack> drops = new ArrayList<>();
+        HarvestPlugin.dropRecursively(drops, world, pos, state);
 
         for (ItemStack stack : drops) {
             CartToolsAPI.transferHelper().offerOrDropItem(this, stack);
         }
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
-        getEntityWorld().setBlockToAir(pos);
+        WorldPlugin.setBlockToAir(world, pos);
         return trackShape;
     }
 

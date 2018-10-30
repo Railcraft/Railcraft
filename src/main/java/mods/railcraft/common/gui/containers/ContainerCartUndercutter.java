@@ -18,8 +18,11 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerCartUndercutter extends RailcraftContainer {
 
+    final EntityCartUndercutter cart;
+
     public ContainerCartUndercutter(InventoryPlayer inventoryplayer, EntityCartUndercutter cart) {
         super(cart);
+        this.cart = cart;
 
         addSlot(new SlotBlockFilter(cart.getPattern(), 0, 17, 45));
         addSlot(new SlotBlockFilter(cart.getPattern(), 1, 35, 45));
@@ -52,7 +55,7 @@ public class ContainerCartUndercutter extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return EntityCartUndercutter.isValidBallast(stack);
+            return cart.isValidBallast(stack);
         }
 
     }

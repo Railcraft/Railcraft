@@ -86,6 +86,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         getObject().ifPresent(IRailcraftObject::finalizeDefinition);
     }
 
+    @SuppressWarnings("deprecation")
     default boolean isEqual(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;

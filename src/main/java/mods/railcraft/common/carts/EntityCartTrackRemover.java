@@ -16,7 +16,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -71,8 +70,8 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
         else if (WorldPlugin.isBlockAt(world, track, RailcraftBlocks.TRACK_FORCE.block()))
             tracksRemoved.add(track);
         else if (EntitySearcher.findMinecarts().around(track).outTo(0.2f).in(world).isEmpty()) {
-            Block block = WorldPlugin.getBlock(world, track);
-            removeOldTrack(track, block);
+            IBlockState state = WorldPlugin.getBlockState(world, track);
+            removeOldTrack(track, state);
             blink();
             tracksRemoved.add(track);
         }

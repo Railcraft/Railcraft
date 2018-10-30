@@ -986,7 +986,7 @@ public abstract class InvTools {
 //        return null;
     }
 
-    @SuppressWarnings("deprecation")
+    @Deprecated // Use world/pos version
     public static IBlockState getBlockStateFromStack(ItemStack stack) {
         if (isEmpty(stack))
             return Blocks.AIR.getDefaultState();
@@ -995,21 +995,11 @@ public abstract class InvTools {
         return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
     }
 
-    @Contract("null,_,_->null")
-    public static @Nullable IBlockState getBlockStateFromStack(@Nullable ItemStack stack, World world, BlockPos pos) {
+    public static IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos) {
         if (isEmpty(stack))
-            return null;
-        Item item = stack.getItem();
-        if (item instanceof ItemBlock) {
-            int meta = item.getMetadata(stack.getMetadata());
-            if (world instanceof WorldServer)
-                return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()), EnumHand.MAIN_HAND);
-                //TODO fix get state for placement for that hand
-            else
-                //noinspection deprecation
-                return ((ItemBlock) item).getBlock().getStateFromMeta(meta);
-        }
-        return null;
+            return Blocks.AIR.getDefaultState();
+        Block block = GameData.getBlockItemMap().inverse().get(stack.getItem());
+        return block == null ? Blocks.AIR.getDefaultState() : block.getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, stack.getMetadata(), RailcraftFakePlayer.get((WorldServer) world, pos.up()), EnumHand.MAIN_HAND);
     }
 
     /**

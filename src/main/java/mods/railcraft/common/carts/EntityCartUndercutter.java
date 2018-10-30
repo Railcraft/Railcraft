@@ -55,10 +55,10 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isValidBallast(ItemStack stack) {
+    public boolean isValidBallast(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
-        IBlockState state = InvTools.getBlockStateFromStack(stack);
+        IBlockState state = InvTools.getBlockStateFromStack(stack, world, getPosition());
         if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(state.getBlock()))
             return false;
         if (state.causesSuffocation())

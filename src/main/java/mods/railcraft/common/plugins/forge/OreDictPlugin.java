@@ -91,6 +91,7 @@ public final class OreDictPlugin {
                 .collect(Collectors.toSet());
     }
 
+    @SuppressWarnings("deprecated")
     public static Set<IBlockState> getOreBlockStates() {
         String[] names = OreDictionary.getOreNames();
         return Arrays.stream(names)
