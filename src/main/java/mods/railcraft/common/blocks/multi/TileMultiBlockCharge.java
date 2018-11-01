@@ -30,8 +30,8 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
     }
 
     @Override
-    protected void onPatternChanged() {
-        super.onPatternChanged();
+    protected void onPatternLock(MultiBlockPattern pattern) {
+        super.onPatternLock(pattern);
         if (isMaster) {
             getBattery().setState(IBatteryBlock.State.RECHARGEABLE);
         } else {

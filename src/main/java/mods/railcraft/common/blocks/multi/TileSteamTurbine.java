@@ -205,14 +205,6 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         EnergyPlugin.pushToTiles(this, tileCache, FE_OUTPUT);
     }
 
-    @Override
-    protected void onPatternChanged() {
-        super.onPatternChanged();
-        if (isMaster) {
-            addToNet();
-        }
-    }
-
     private void addToNet() {
         if (emitterDelegate == null)
             try {
@@ -357,7 +349,9 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         if (!isStructureValid()) {
             return Collections.emptyList();
         }
-        List<TileEntity> ret = getComponents().stream().filter(te -> te != this).map(te -> new TileIC2EmitterDelegate((TileSteamTurbine) te)).collect(Collectors.toList());
+        List<TileEntity> ret = getComponents().stream()
+                .filter(te -> te != this)
+                .map(te -> new TileIC2EmitterDelegate((TileSteamTurbine) te)).collect(Collectors.toList());
         if (emitterDelegate != null) {
             ret.add(emitterDelegate);
         }

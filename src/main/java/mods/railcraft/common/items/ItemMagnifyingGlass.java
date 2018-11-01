@@ -16,9 +16,9 @@ import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.multi.MultiBlockPattern.State;
 import mods.railcraft.common.blocks.multi.TileMultiBlock;
-import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockStateReturn;
-import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -147,11 +148,12 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isMaster() ? "true" : "false"));
             } else
-                //TODO fix return state, it is currently wrong
-                for (MultiBlockStateReturn returnState : EnumSet.complementOf(EnumSet.of(MultiBlockStateReturn.VALID))) {
-                    List<Integer> pats = tile.patternStates.get(returnState);
-                    if (!pats.isEmpty())
-                        ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, pats.toString());
+                for (State returnState : EnumSet.complementOf(EnumSet.of(State.VALID))) {
+                    List<MultiBlockPattern> pats = tile.patternStates.get(returnState);
+                    if (!pats.isEmpty()) {
+                        List<Integer> indexList = pats.stream().map(map -> tile.getPatterns().indexOf(map)).collect(Collectors.toList());
+                        ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, indexList.toString());
+                    }
                 }
             returnValue = EnumActionResult.SUCCESS;
         }

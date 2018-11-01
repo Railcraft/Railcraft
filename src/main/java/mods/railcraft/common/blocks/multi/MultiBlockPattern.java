@@ -1,24 +1,26 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +34,8 @@ public final class MultiBlockPattern {
     public static final char EMPTY_PATTERN = 'O';
     private final char[][][] pattern;
     private final BlockPos masterOffset;
-    @Nullable
-    private final AxisAlignedBB entityCheckBounds;
-    @Nullable
-    private final Object attachedData;
+    private final @Nullable AxisAlignedBB entityCheckBounds;
+    private final @Nullable Object attachedData;
 
     /**
      * Creates a multiblock pattern builder.
@@ -72,8 +72,7 @@ public final class MultiBlockPattern {
         this.attachedData = attachedData;
     }
 
-    @Nullable
-    public AxisAlignedBB getEntityCheckBounds(BlockPos masterPos) {
+    public @Nullable AxisAlignedBB getEntityCheckBounds(BlockPos masterPos) {
         if (entityCheckBounds == null)
             return null;
         return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
@@ -122,15 +121,46 @@ public final class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
-    @SuppressWarnings("unchecked")
     @Contract("!null -> !null")
-    @Nullable
-    public <T> T getAttachedData(@Nullable T backup) {
+    @SuppressWarnings("unchecked")
+    public @Nullable <T> T getAttachedData(@Nullable T backup) {
         return attachedData == null ? backup : (T) attachedData;
     }
 
-    @Nullable
-    public TileEntity placeStructure(World world, BlockPos pos, Char2ObjectMap<IBlockState> blockMapping) {
+    public State testPattern(TileMultiBlock tile) {
+        int xWidth = getPatternWidthX();
+        int zWidth = getPatternWidthZ();
+        int height = getPatternHeight();
+
+        BlockPos offset = tile.getPos().subtract(getMasterOffset());
+
+        BlockPos.PooledMutableBlockPos now = BlockPos.PooledMutableBlockPos.retain();
+        for (int patX = 0; patX < xWidth; patX++) {
+            for (int patY = 0; patY < height; patY++) {
+                for (int patZ = 0; patZ < zWidth; patZ++) {
+                    int x = patX + offset.getX();
+                    int y = patY + offset.getY();
+                    int z = patZ + offset.getZ();
+                    now.setPos(x, y, z);
+                    if (!tile.getWorld().isBlockLoaded(now))
+                        return State.NOT_LOADED;
+                    if (!tile.isMapPositionValid(now, getPatternMarker(patX, patY, patZ)))
+                        return State.PATTERN_DOES_NOT_MATCH;
+                }
+            }
+        }
+        now.release();
+
+        AxisAlignedBB entityCheckBounds = getEntityCheckBounds(tile.getPos());
+//                if(entityCheckBounds != null) {
+//                    System.out.println("test entities: " + entityCheckBounds.toString());
+//                }
+        if (entityCheckBounds != null && !tile.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
+            return State.ENTITY_IN_WAY;
+        return State.VALID;
+    }
+
+    public @Nullable TileEntity placeStructure(World world, BlockPos pos, Char2ObjectMap<IBlockState> blockMapping) {
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();
         int height = getPatternHeight();
@@ -173,16 +203,30 @@ public final class MultiBlockPattern {
         return builder.toString();
     }
 
+    public enum State {
+
+        VALID(TileMultiBlock.MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
+        ENTITY_IN_WAY(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
+        PATTERN_DOES_NOT_MATCH(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
+        NOT_LOADED(TileMultiBlock.MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");
+        public final TileMultiBlock.MultiBlockState type;
+        public final String message;
+
+        State(TileMultiBlock.MultiBlockState type, String msg) {
+            this.type = type;
+            this.message = msg;
+        }
+
+    }
+
     public static final class Builder {
 
         private int widthX = -1;
         private int widthZ = -1;
         private BlockPos masterOffset = new BlockPos(1, 1, 1);
-        private List<char[][]> levels = new ArrayList<>();
-        @Nullable
-        private AxisAlignedBB box;
-        @Nullable
-        private Object attachedData;
+        private final List<char[][]> levels = new ArrayList<>();
+        private @Nullable AxisAlignedBB box;
+        private @Nullable Object attachedData;
 
         Builder() {
         }

@@ -27,13 +27,11 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -53,10 +51,9 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     private final List<? extends MultiBlockPattern> patterns;
     private final List<TileMultiBlock> components = new ArrayList<>();
     private final List<TileMultiBlock> componentsView = Collections.unmodifiableList(components);
-    public final ListMultimap<MultiBlockStateReturn, Integer> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockStateReturn.class), ArrayList::new);
+    public final ListMultimap<MultiBlockPattern.State, MultiBlockPattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockPattern.State.class), ArrayList::new);
     protected boolean isMaster;
     private BlockPos posInPattern = new BlockPos(0, 0, 0);
-    private boolean tested;
     private boolean requestPacket;
     private MultiBlockState state;
     private @Nullable TileMultiBlock masterBlock;
@@ -66,7 +63,8 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
-        tested = FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER;
+        state = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? MultiBlockState.VALID : MultiBlockState.UNKNOWN;
+        components.add(this);
     }
 
     public @Nullable UUID getMasterUUID() {
@@ -74,6 +72,9 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     public List<TileMultiBlock> getComponents() {
+        TileMultiBlock mBlock = getMasterBlock();
+        if (mBlock != null)
+            return mBlock.componentsView;
         return componentsView;
     }
 
@@ -118,10 +119,10 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     public final void setPattern(MultiBlockPattern pattern) {
-        if (currentPattern != pattern)
+        if (currentPattern != pattern) {
             onPatternChanged();
-        this.currentPattern = pattern;
-        onPatternLock(pattern);
+            this.currentPattern = pattern;
+        }
     }
 
     public final byte getPatternIndex() {
@@ -146,7 +147,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     public void update() {
         super.update();
         if (Game.isHost(world)) {
-            if (!tested && (state != MultiBlockState.UNKNOWN || clock % UNKNOWN_STATE_RECHECK == 0))
+            if (state == MultiBlockState.UNKNOWN && clock % UNKNOWN_STATE_RECHECK == 0)
                 testIfMasterBlock(); //                ClientProxy.getMod().totalMultiBlockUpdates++;
         } else if (requestPacket && netTimer.hasTriggered(world, NETWORK_RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(this));
@@ -156,27 +157,28 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
 
     private void testIfMasterBlock() {
 //        System.out.println("testing structure");
-        state = getMasterBlockState();
-        tested = true;
+        testPatterns();
         components.clear();
+        components.add(this);
 
-        if (state == MultiBlockState.UNKNOWN)
-            tested = false;
-        else if (state == MultiBlockState.VALID) {
+        if (patternStates.containsKey(MultiBlockPattern.State.VALID)) {
+            state = MultiBlockState.VALID;
             isMaster = true;
 //             System.out.println("structure complete");
 
-            int xWidth = currentPattern.getPatternWidthX();
-            int zWidth = currentPattern.getPatternWidthZ();
-            int height = currentPattern.getPatternHeight();
+            MultiBlockPattern pattern = patternStates.get(MultiBlockPattern.State.VALID).get(0);
 
-            BlockPos offset = getPos().subtract(currentPattern.getMasterOffset());
+            int xWidth = pattern.getPatternWidthX();
+            int zWidth = pattern.getPatternWidthZ();
+            int height = pattern.getPatternHeight();
+
+            BlockPos offset = getPos().subtract(pattern.getMasterOffset());
 
             for (int px = 0; px < xWidth; px++) {
                 for (int py = 0; py < height; py++) {
                     for (int pz = 0; pz < zWidth; pz++) {
 
-                        char marker = currentPattern.getPatternMarker(px, py, pz);
+                        char marker = pattern.getPatternMarker(px, py, pz);
                         if (isMapPositionOtherBlock(marker))
                             continue;
 
@@ -185,30 +187,38 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
                         TileEntity tile = world.getTileEntity(pos);
                         if (tile instanceof TileMultiBlock) {
                             TileMultiBlock multiBlock = (TileMultiBlock) tile;
-                            if (multiBlock != this)
+                            if (multiBlock != this) {
                                 multiBlock.components.clear();
-                            components.add(multiBlock);
-                            multiBlock.tested = true;
+                                components.add(multiBlock);
+                            }
                             multiBlock.setMaster(this);
-                            multiBlock.setPattern(currentPattern);
+                            multiBlock.state = MultiBlockState.VALID;
+                            multiBlock.setPattern(pattern);
                             multiBlock.setPatternPosition(px, py, pz);
-                            multiBlock.sendUpdateToClient();
                         }
                     }
                 }
             }
 
+            components.forEach(tile -> {
+                tile.onPatternLock(pattern);
+                tile.sendUpdateToClient();
+            });
+
             MinecraftForge.EVENT_BUS.post(new Form(this));
-        } else if (isMaster) {
-            isMaster = false;
-            onMasterReset();
-            sendUpdateToClient();
+        } else if (patternStates.containsKey(MultiBlockPattern.State.NOT_LOADED)) {
+            state = MultiBlockState.UNKNOWN;
+        } else {
+            state = MultiBlockState.INVALID;
+            if (isMaster) {
+                isMaster = false;
+                onMasterReset();
+                sendUpdateToClient();
+            }
         }
     }
 
-    @OverridingMethodsMustInvokeSuper
     protected void onMasterReset() {
-        components.clear();
     }
 
     protected boolean isMapPositionOtherBlock(char mapPos) {
@@ -245,55 +255,9 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         return true;
     }
 
-    private MultiBlockState getMasterBlockState() {
-        MultiBlockState endResult = MultiBlockState.INVALID;
+    private void testPatterns() {
         patternStates.clear();
-        for (MultiBlockPattern map : patterns) {
-            MultiBlockStateReturn result = isPatternValid(map);
-            patternStates.put(result, patterns.indexOf(map));
-            switch (result.type) {
-                case VALID:
-                    setPattern(map);
-                    return result.type;
-                case UNKNOWN:
-                    endResult = MultiBlockState.UNKNOWN;
-            }
-        }
-
-        return endResult;
-    }
-
-    private MultiBlockStateReturn isPatternValid(MultiBlockPattern map) {
-        int xWidth = map.getPatternWidthX();
-        int zWidth = map.getPatternWidthZ();
-        int height = map.getPatternHeight();
-
-        BlockPos offset = getPos().subtract(map.getMasterOffset());
-
-        BlockPos.PooledMutableBlockPos now = BlockPos.PooledMutableBlockPos.retain();
-        for (int patX = 0; patX < xWidth; patX++) {
-            for (int patY = 0; patY < height; patY++) {
-                for (int patZ = 0; patZ < zWidth; patZ++) {
-                    int x = patX + offset.getX();
-                    int y = patY + offset.getY();
-                    int z = patZ + offset.getZ();
-                    now.setPos(x, y, z);
-                    if (!world.isBlockLoaded(now))
-                        return MultiBlockStateReturn.NOT_LOADED;
-                    if (!isMapPositionValid(now, map.getPatternMarker(patX, patY, patZ)))
-                        return MultiBlockStateReturn.PATTERN_DOES_NOT_MATCH;
-                }
-            }
-        }
-        now.release();
-
-        AxisAlignedBB entityCheckBounds = map.getEntityCheckBounds(getPos());
-//                if(entityCheckBounds != null) {
-//                    System.out.println("test entities: " + entityCheckBounds.toString());
-//                }
-        if (entityCheckBounds != null && !world.getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
-            return MultiBlockStateReturn.ENTITY_IN_WAY;
-        return MultiBlockStateReturn.VALID;
+        patterns.forEach(map -> patternStates.put(map.testPattern(this), map));
     }
 
     @Override
@@ -313,7 +277,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     public void onChunkUnload() {
         super.onChunkUnload();
         if (Game.isClient(world)) return;
-        tested = false;
+        state = MultiBlockState.UNKNOWN;
         scheduleMasterRetest();
     }
 
@@ -321,7 +285,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     @OverridingMethodsMustInvokeSuper
     public void invalidate() {
         if (world == null || Game.isHost(world)) {
-            tested = false;
+            state = MultiBlockState.UNKNOWN;
             scheduleMasterRetest();
         }
         super.invalidate();
@@ -339,8 +303,8 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         depth--;
         if (depth < 0)
             return;
-        if (tested) {
-            tested = false;
+        if (state != MultiBlockState.UNKNOWN) {
+            state = MultiBlockState.UNKNOWN;
 
             TileMultiBlock mBlock = getMasterBlock();
             if (mBlock != null) {
@@ -479,12 +443,12 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         if (Game.isClient(world))
             return;
         if (masterBlock != null)
-            masterBlock.tested = false;
+            masterBlock.state = MultiBlockState.UNKNOWN;
     }
 
     @Override
     public final boolean isStructureValid() {
-        return masterBlock != null && masterBlock.tested && masterBlock.isMaster && !masterBlock.isInvalid();
+        return masterBlock != null && masterBlock.state == MultiBlockState.VALID && masterBlock.isMaster && !masterBlock.isInvalid();
     }
 
     @Override
@@ -518,7 +482,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     @Override
-    public Collection<? extends MultiBlockPattern> getPatterns() {
+    public List<? extends MultiBlockPattern> getPatterns() {
         return patterns;
     }
 
@@ -527,19 +491,4 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         VALID, INVALID, UNKNOWN
     }
 
-    public enum MultiBlockStateReturn {
-
-        VALID(MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
-        ENTITY_IN_WAY(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
-        PATTERN_DOES_NOT_MATCH(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
-        NOT_LOADED(MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");
-        public final MultiBlockState type;
-        public final String message;
-
-        MultiBlockStateReturn(MultiBlockState type, String msg) {
-            this.type = type;
-            this.message = msg;
-        }
-
-    }
 }
