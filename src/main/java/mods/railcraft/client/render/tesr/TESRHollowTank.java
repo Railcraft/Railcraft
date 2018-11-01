@@ -1,12 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.client.render.models.resource.FluidModelRenderer;
@@ -92,7 +92,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase
             if (fillStack != null && fillStack.amount > 0) {
                 blockLight = Math.max(blockLight, fillStack.getFluid().getLuminosity(fillStack));
                 OpenGL.glPushMatrix();
-                if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition()) == 'A') {
+                if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition().down()) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
