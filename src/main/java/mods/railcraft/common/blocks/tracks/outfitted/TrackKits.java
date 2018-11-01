@@ -46,8 +46,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     DISEMBARK(4, "disembarking", 4, TrackKitDisembark.class, () -> recipe(Blocks.STONE_PRESSURE_PLATE, Items.LEAD, Items.REDSTONE)),
     DUMPING(2, "dumping", 4, TrackKitDumping.class, () -> recipe(RailcraftItems.PLATE, Metal.STEEL, Items.REDSTONE)),
     EMBARKING(2, "embarking", 4, TrackKitEmbarking.class, () -> recipe(Items.ENDER_PEARL, Items.LEAD, Items.REDSTONE)),
-    GATED(4, "gated", 4, TrackKitGated.class, () -> recipe("gateWood", RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
-    //    GATED_ONE_WAY(ModuleTracks.class, 2, "gated_one_way", 4, TrackKitGatedOneWay.class),
+    GATED(8, "gated", 4, TrackKitGated.class, () -> recipe("gateWood", RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE)),
     HIGH_SPEED_TRANSITION(4, "transition", 8, TrackKitSpeedTransition.class, () -> recipe(RailcraftItems.RAIL, EnumRail.ADVANCED, RailcraftItems.RAIL, EnumRail.ADVANCED, Items.REDSTONE, Items.REDSTONE)),
     LAUNCHER(2, "launcher", 1, TrackKitLauncher.class, () -> recipe(Blocks.PISTON, "blockSteel", "blockSteel", Items.REDSTONE)),
     THROTTLE(16, "throttle", 4, TrackKitThrottle.class, () -> recipe("dyeYellow", "dyeBlack", Items.REDSTONE)),
@@ -221,7 +220,6 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     public boolean isDeprecated() {
         try {
-            //noinspection unchecked
             return getClass().getField(name()).isAnnotationPresent(Deprecated.class);
         } catch (NoSuchFieldException ignored) {
         }

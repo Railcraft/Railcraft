@@ -6,6 +6,12 @@
   "variants": {
     "shape=east_west,state=1": [{"y": 270}],
     "shape=east_west,state=3": [{"y": 270}],
+    "shape=east_west,state=5": [{"y": 270}],
+    "shape=east_west,state=7": [{"y": 270}],
+    "shape=north_south,state=1": [{"y": 180}],
+    "shape=north_south,state=3": [{"y": 180}],
+    "shape=north_south,state=5": [{"y": 180}],
+    "shape=north_south,state=7": [{"y": 180}],
     "state": {
       "0": {
         "model": "railcraft:fence_gate_closed_wide",
@@ -22,6 +28,46 @@
       "3": {
         "model": "railcraft:fence_gate_open_wide",
         "uvlock": true
+      },
+      "4": {
+        "model": "railcraft:fence_gate_closed_wide",
+        "uvlock": true,
+        "submodel": {
+          "control": {
+            "model": "rail_flat",
+            "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_0"}
+          }
+        }
+      },
+      "5": {
+        "model": "railcraft:fence_gate_closed_wide",
+        "uvlock": true,
+        "submodel": {
+          "control": {
+            "model": "rail_flat",
+            "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_0"}
+          }
+        }
+      },
+      "6": {
+        "model": "railcraft:fence_gate_open_wide",
+        "uvlock": true,
+        "submodel": {
+          "control": {
+            "model": "rail_flat",
+            "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_0"}
+          }
+        }
+      },
+      "7": {
+        "model": "railcraft:fence_gate_open_wide",
+        "uvlock": true,
+        "submodel": {
+          "control": {
+            "model": "rail_flat",
+            "textures": {"rail": "railcraft:blocks/tracks/outfitted/kit/control_0"}
+          }
+        }
       }
     },
     "shape": {
