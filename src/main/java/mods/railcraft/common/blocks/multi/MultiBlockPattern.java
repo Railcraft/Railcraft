@@ -293,7 +293,7 @@ public final class MultiBlockPattern {
          * Sets the attached data of this pattern/
          *
          * @param data The attached data
-         * @param <T> The data type
+         * @param <T>  The data type
          * @return This builder, for chaining
          */
         public <T> Builder attachedData(@Nullable T data) {
@@ -308,7 +308,7 @@ public final class MultiBlockPattern {
          */
         public MultiBlockPattern build() {
             char[][][] chars = levels.toArray(new char[0][][]);
-            return new MultiBlockPattern(chars, masterOffset, null, attachedData);
+            return new MultiBlockPattern(chars, masterOffset, box, attachedData);
         }
     }
 }
