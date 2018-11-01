@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -41,10 +40,10 @@ public class ItemChargeBattery extends ItemBlockRailcraftSubtyped {
         if (variant != null) {
             if (tips == null)
                 tips = new ToolTip();
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.capacity", HumanReadableNumberFormatter.format(variant.capacity)));
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.maxdraw", HumanReadableNumberFormatter.format(variant.maxDraw)));
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.capacity", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getCapacity())));
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.maxdraw", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getMaxDraw())));
             tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.loss", HumanReadableNumberFormatter.format(variant.loss)));
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.efficiency", HumanReadableNumberFormatter.format(variant.efficiency)));
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.efficiency", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getEfficiency())));
         }
         return tips;
     }

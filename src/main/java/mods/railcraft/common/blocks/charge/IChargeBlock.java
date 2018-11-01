@@ -11,8 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.ForwardingMap;
-import mods.railcraft.api.charge.IChargeBattery;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.api.charge.IBatteryBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * Created by CovertJaguar on 7/25/2016 for Railcraft.
@@ -144,144 +142,43 @@ public interface IChargeBlock {
 
     final class ChargeDef {
         private final ConnectType connectType;
-        private final double cost;
-        private final @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier;
+        private final double losses;
+        private final @Nullable IBatteryBlock.Spec batterySpec;
 
-        public ChargeDef(ConnectType connectType, double cost) {
-            this(connectType, cost, null);
+        public ChargeDef(ConnectType connectType, double losses) {
+            this(connectType, losses, null);
         }
 
-        public ChargeDef(ConnectType connectType, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
-            this(connectType, 0.0, batterySupplier);
+        public ChargeDef(ConnectType connectType, @Nullable IBatteryBlock.Spec batterySpec) {
+            this(connectType, 0.0, batterySpec);
         }
 
-        public ChargeDef(ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
+        public ChargeDef(ConnectType connectType, double losses, @Nullable IBatteryBlock.Spec batterySpec) {
             this.connectType = connectType;
-            this.cost = cost * RailcraftConfig.chargeMaintenanceCostMultiplier();
-            this.batterySupplier = batterySupplier;
+            this.losses = losses;
+            this.batterySpec = batterySpec;
         }
 
-        public double getMaintenanceCost() {
-            return cost;
+        public double getLosses() {
+            return losses;
+        }
+
+        public @Nullable IBatteryBlock.Spec getBatterySpec() {
+            return batterySpec;
         }
 
         ConnectType getConnectType() {
             return connectType;
         }
 
-        @Nullable
-        ChargeBattery getBattery(World world, BlockPos pos) {
-            if (batterySupplier == null)
-                return null;
-            return batterySupplier.apply(world, pos);
-        }
-
         @Override
         public String toString() {
-            return String.format("ChargeDef{%s, cost=%f, hasBat=%s}", connectType, cost, batterySupplier != null);
+            String string = String.format("ChargeDef{%s, losses=%.2f}", connectType, losses);
+            if (batterySpec != null)
+                string += "|" + batterySpec.toString();
+            return string;
         }
+
     }
 
-    class ChargeBattery implements IChargeBattery {
-        public static final double DEFAULT_MAX_CHARGE = 1000.0;
-        public static final double DEFAULT_MAX_DRAW = 20.0;
-        private final double capacity;
-
-        private final double efficiency;
-        private final double maxDraw;
-
-        public ChargeBattery() {
-            this(DEFAULT_MAX_CHARGE);
-        }
-
-        public ChargeBattery(double capacity) {
-            this(capacity, DEFAULT_MAX_DRAW, 1.0);
-        }
-
-        public ChargeBattery(double capacity, double maxDraw, double efficiency) {
-            this.capacity = capacity;
-            this.efficiency = efficiency;
-            this.maxDraw = maxDraw;
-        }
-
-        private boolean initialized;
-        private double charge;
-
-        public boolean isInfinite() {
-            return false;
-        }
-
-        public final boolean isInitialized() {
-            return initialized;
-        }
-
-        @Override
-        public double getCharge() {
-            return charge;
-        }
-
-        public double getEfficiency() {
-            return efficiency;
-        }
-
-        public double getMaxDraw() {
-            return maxDraw;
-        }
-
-        public void initCharge(double charge) {
-            initialized = true;
-            setCharge(charge);
-        }
-
-        @Override
-        public void setCharge(double charge) {
-            this.charge = charge;
-        }
-
-        @Override
-        public double getCapacity() {
-            return capacity;
-        }
-
-        @Override
-        public void addCharge(double charge) {
-            this.charge += charge;
-        }
-
-        /**
-         * Remove up to the requested amount of charge and returns the amount
-         * removed.
-         *
-         * @return charge removed
-         */
-        @Override
-        public double removeCharge(double request) {
-            double availableCharge = getAvailableCharge();
-            if (availableCharge >= request) {
-                charge -= request;
-//                lastTickDraw += request;
-                return request;
-            }
-            charge -= availableCharge;
-//            lastTickDraw += availableCharge;
-            return availableCharge;
-        }
-
-        /**
-         * The amount of charge that can be withdraw from the battery in a single operation.
-         *
-         * In the future it might make sense to make this tracked per tick if it can be done simply.
-         *
-         * @return The amount of charge that can be withdraw from the battery right now
-         */
-        public double getAvailableCharge() {
-            // TODO: Track usage across the entire tick?
-            return Math.min(charge, getMaxDraw());
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s@%s { i:%s; c:%.2f; }", getClass().getSimpleName(), Integer.toHexString(hashCode()), initialized, charge);
-        }
-    }
 }

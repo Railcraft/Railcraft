@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,7 @@ public final class RailcraftConstants {
     public static final int BOOK_LINES_PER_PAGE = 13;
     public static final int BOOK_MAX_PAGES = 50;
 
-    public static final double EU_FE_RATIO = 4;
+    public static final double FE_EU_RATIO = 0.25;
 
     private RailcraftConstants() {
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.modules.ModuleCharge;
@@ -26,11 +28,13 @@ import java.util.List;
  */
 public enum FeederVariant implements IEnumMachine<FeederVariant> {
 
-    IC2(ModuleIC2.class, "ic2", TileChargeFeederIC2.class),
-    ADMIN(ModuleCharge.class, "admin", TileChargeFeederAdmin.class),;
+    IC2(ModuleIC2.class, "ic2", TileChargeFeederIC2.class, new IBatteryBlock.Spec(IBatteryBlock.State.RECHARGEABLE, 1024.0, 512.0, 0.65)),
+    ADMIN(ModuleCharge.class, "admin", TileChargeFeederAdmin.class, new IBatteryBlock.Spec(IBatteryBlock.State.INFINITE, 4000.0, 4000.0, 1.0)),
+    ;
 
     private static final List<FeederVariant> creativeList = new ArrayList<FeederVariant>();
     public static final FeederVariant[] VALUES = values();
+    private final IChargeBlock.ChargeDef chargeDef;
 
     static {
         creativeList.add(IC2);
@@ -39,8 +43,13 @@ public enum FeederVariant implements IEnumMachine<FeederVariant> {
 
     private final Definition def;
 
-    FeederVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
+    FeederVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, IBatteryBlock.Spec batterySpec) {
         this.def = new Definition(tag, tile, module);
+        this.chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.5, batterySpec);
+    }
+
+    public IChargeBlock.ChargeDef getChargeDef() {
+        return chargeDef;
     }
 
     public static FeederVariant fromId(int id) {

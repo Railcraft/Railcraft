@@ -13,7 +13,7 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.common.blocks.charge.CartBattery;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
 
-    private final ICartBattery cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
+    private final IBatteryCart cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
     protected CartBaseEnergy(World world) {
         super(world);

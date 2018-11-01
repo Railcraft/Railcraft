@@ -9,8 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.interfaces.ITileTanks;
 import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -57,9 +56,9 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IEnergyStorage, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlockCharge implements IMultiEmitterDelegate, IEnergyStorage, INeedsMaintenance, ISteamUser, ITileTanks {
 
-    private static final int IC2_OUTPUT = 225;
+    public static final int IC2_OUTPUT = 225;
     private static final int FE_OUTPUT = 900;
     private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
@@ -78,7 +77,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     public double mainGauge;
     private double energy;
     private @Nullable TileEntity emitterDelegate;
-    private @Nullable IChargeBlock.ChargeBattery battery;
 
     static {
         char[][][] map1 = {
@@ -165,22 +163,9 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
             } else
                 dropFromNet();
 
-            IChargeBlock.ChargeBattery battery = getMasterBattery();
-            if (battery != null) {
-                double chargeNeeded = battery.getCapacity() - battery.getCharge();
-                if (chargeNeeded > 0) {
-                    double draw = chargeNeeded;
-                    double e = getEnergy();
-                    if (e < draw)
-                        draw = e;
-                    removeEnergy(draw);
-                    battery.addCharge(draw);
-                }
-            }
-
             if (isMaster()) {
                 boolean addedEnergy = false;
-                if (energy < IC2_OUTPUT * 2) {
+                if (energy < IC2_OUTPUT) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
 //                if(steam != null) System.out.println("steam=" + steam.amount);
                     if (steam != null && steam.amount >= STEAM_USAGE) {
@@ -204,6 +189,12 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
                     gaugeState = (byte) getOutput();
                     WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, gaugeState);
                 }
+
+                IBatteryBlock battery = getBattery();
+                if (battery.needsCharging()) {
+                    battery.addCharge(energy);
+                    energy = 0;
+                }
             }
         }
 
@@ -212,22 +203,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
 
         EnergyPlugin.pushToTiles(this, tileCache, FE_OUTPUT);
-    }
-
-    @Nullable
-    IChargeBlock.ChargeBattery getMasterBattery() {
-        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
-        if (mBlock != null) {
-            return mBlock.getBattery();
-        }
-        return null;
-    }
-
-    private IChargeBlock.ChargeBattery getBattery() {
-        if (battery == null) {
-            battery = Charge.distribution.network(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(IC2_OUTPUT * 2, IC2_OUTPUT, 1));
-        }
-        return battery;
     }
 
     @Override
@@ -259,21 +234,18 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     public void onChunkUnload() {
         super.onChunkUnload();
         dropFromNet();
-        clean();
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
         dropFromNet();
-        clean();
     }
 
     @Override
     protected void onMasterReset() {
         super.onMasterReset();
         dropFromNet();
-        clean();
     }
 
     @Override
@@ -293,7 +265,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     }
 
     public boolean hasEnergy() {
-        return getEnergy() >= IC2_OUTPUT;
+        return getEnergy() > 0.0;
     }
 
     public void removeEnergy(double amount) {
@@ -419,7 +391,7 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
         }
         if (hasEnergy()) {
             if (!simulate) {
-                removeEnergy((double) maxExtract / RailcraftConstants.EU_FE_RATIO);
+                removeEnergy((double) maxExtract / RailcraftConstants.FE_EU_RATIO);
             }
             return maxExtract;
         }
@@ -428,12 +400,12 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
 
     @Override
     public int getEnergyStored() {
-        return (int) (getEnergy() * RailcraftConstants.EU_FE_RATIO);
+        return (int) (getEnergy() * RailcraftConstants.FE_EU_RATIO);
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return FE_OUTPUT * 2;
+        return FE_OUTPUT;
     }
 
     @Override
@@ -500,11 +472,6 @@ public final class TileSteamTurbine extends TileMultiBlock implements IMultiEmit
     @Override
     public EnumGui getGui() {
         return EnumGui.TURBINE;
-    }
-
-    private void clean() {
-        Charge.distribution.network(world).removeNode(pos);
-        battery = null;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -30,11 +29,6 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public IEnumMachine<?> getMachineType() {
         return FeederVariant.IC2;
-    }
-
-    @Override
-    protected IChargeBlock.ChargeBattery createBattery() {
-        return new IChargeBlock.ChargeBattery(1024.0, 512.0, 0.65);
     }
 
     @Override

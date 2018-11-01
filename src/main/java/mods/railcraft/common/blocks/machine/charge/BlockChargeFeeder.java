@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,9 +26,11 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -42,15 +44,6 @@ import org.jetbrains.annotations.Nullable;
 public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.5, (world, pos) -> {
-        TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
-        if (tileEntity instanceof TileCharge) {
-            return ((TileCharge) tileEntity).getChargeBattery();
-        }
-        //noinspection ConstantConditions
-        return null;
-    });
 
     public BlockChargeFeeder() {
         IBlockState defaultState = blockState.getBaseState().withProperty(getVariantProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
@@ -76,10 +69,9 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
                         'T', RailcraftItems.CHARGE, ItemCharge.EnumCharge.TERMINAL));
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return CHARGE_DEF;
+    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return getVariant(state).getChargeDef();
     }
 
     /**
@@ -88,8 +80,25 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
+        state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
         state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
         return state;
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int meta = state.getValue(getVariantProperty()).ordinal();
+        if (state.getValue(REDSTONE))
+            meta |= 0x8;
+        return meta;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return getStack(getVariant(state));
     }
 
     @Override
@@ -107,6 +116,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
                 .action(TileChargeFeederAdmin.class, t -> t.neighborChanged(newState, world, pos, blockIn));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);

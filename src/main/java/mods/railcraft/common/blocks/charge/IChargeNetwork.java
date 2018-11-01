@@ -10,12 +10,9 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import com.google.common.annotations.Beta;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.function.Supplier;
 
 /**
  * Created by CovertJaguar on 10/19/2018 for Railcraft.
@@ -57,23 +54,6 @@ public interface IChargeNetwork {
     default ChargeNetwork.ChargeNode access(BlockPos pos) {
         // TODO: Add dummy object
         return null;
-    }
-
-    /**
-     * Ask the API to provide or create a battery object for a tile entity to hold onto,
-     * this is the only way you should get a battery instance or you could end up with the tile and network holding
-     * different instances.
-     *
-     * The result of this function should be provided to the
-     * {@link mods.railcraft.common.blocks.charge.IChargeBlock.ChargeDef} battery supplier.
-     *
-     * Implementation Note: Is there anyway we could untangle the convoluted code flow for this?
-     *
-     * @return A battery instance either retrieved from the network or created fresh if one doesn't exist.
-     */
-    @Beta
-    default IChargeBlock.ChargeBattery makeBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
-        return supplier.get();
     }
 
     /**

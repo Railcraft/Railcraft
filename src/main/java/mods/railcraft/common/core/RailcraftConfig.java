@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -113,7 +113,7 @@ public class RailcraftConfig {
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
     private static float boreMiningSpeedMultiplier = 1F;
-    private static float chargeMaintenanceCostMultiplier = 1F;
+    private static float chargeLossMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
     private static float boilerMultiplierBiofuel = 1F;
     private static float fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
@@ -254,7 +254,7 @@ public class RailcraftConfig {
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
 
-        chargeMaintenanceCostMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "maintenanceCostMultiplier", 0.2F, 1.0F, 10F, "adjust the maintenance costs for the Charge network, min=0.2, default=1.0, max=10.0");
+        chargeLossMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "lossMultiplier", 0.2F, 1.0F, 10F, "adjust the losses for the Charge network, min=0.2, default=1.0, max=10.0");
 
         boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler, min=0.2, default=1.0, max=10.0");
         boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler, min=0.2, default=1.0, max=10.0");
@@ -847,8 +847,8 @@ public class RailcraftConfig {
         return trackingAuraEnabled;
     }
 
-    public static float chargeMaintenanceCostMultiplier() {
-        return chargeMaintenanceCostMultiplier;
+    public static float chargeLossMultiplier() {
+        return chargeLossMultiplier;
     }
 
     public static float boilerFuelMultiplier() {

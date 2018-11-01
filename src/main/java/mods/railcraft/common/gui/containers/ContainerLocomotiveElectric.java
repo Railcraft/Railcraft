@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.widgets.ChargeBatteryIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
@@ -22,7 +22,7 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
     private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
-        ICartBattery chargeHandler = loco.getCapability(CapabilitiesCharge.CART_BATTERY, null);
+        IBatteryCart chargeHandler = loco.getCapability(CapabilitiesCharge.CART_BATTERY, null);
         this.chargeIndicator = new ChargeBatteryIndicator(chargeHandler);
     }
 

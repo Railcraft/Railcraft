@@ -12,10 +12,8 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.charge.IChargeBattery;
+import mods.railcraft.api.charge.IBattery;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,12 +28,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TileFluxTransformer extends TileMultiBlock implements IEnergyStorage {
+public final class TileFluxTransformer extends TileMultiBlockCharge implements IEnergyStorage {
 
-    public static final double EFFICIENCY = 0.8F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
-
-    private @Nullable IChargeBlock.ChargeBattery battery;
 
     static {
         char[][][] map = {
@@ -75,22 +70,6 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
         pattern.placeStructure(world, pos, blockMapping);
     }
 
-    @Nullable
-    IChargeBlock.ChargeBattery getMasterBattery() {
-        TileFluxTransformer mBlock = (TileFluxTransformer) getMasterBlock();
-        if (mBlock != null) {
-            return mBlock.getBattery();
-        }
-        return null;
-    }
-
-    private IChargeBlock.ChargeBattery getBattery() {
-        if (battery == null) {
-            battery = Charge.distribution.network(world).makeBattery(pos, () -> new IChargeBlock.ChargeBattery(1024, 512, EFFICIENCY));
-        }
-        return battery;
-    }
-
     @Override
     protected void setWorldCreate(World worldIn) {
         setWorld(worldIn);
@@ -105,13 +84,10 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
     public int receiveEnergy(int maxReceive, boolean simulate) {
         if (!isStructureValid())
             return 0;
-        IChargeBattery battery = getMasterBattery();
-        if (battery == null)
-            return 0;
-        double chargeDifference = battery.getCapacity() - battery.getCharge();
-        if (chargeDifference > 0.0) {
+        IBattery battery = getBattery();
+        if (battery.needsCharging()) {
             if (!simulate)
-                battery.addCharge((maxReceive / RailcraftConstants.EU_FE_RATIO) * EFFICIENCY);
+                battery.addCharge(maxReceive * RailcraftConstants.FE_EU_RATIO);
             return maxReceive;
         }
         return 0;
@@ -153,38 +129,5 @@ public final class TileFluxTransformer extends TileMultiBlock implements IEnergy
             return CapabilityEnergy.ENERGY.cast(this);
         }
         return super.getCapability(capability, facing);
-    }
-
-    @Override
-    protected void onMasterChanged() {
-        super.onMasterChanged();
-        if (isStructureValid()) {
-            ((IChargeBlock) getBlockType()).registerNode(getBlockState(), world, pos);
-        } else {
-            clean();
-        }
-    }
-
-    @Override
-    protected void onMasterReset() {
-        super.onMasterReset();
-        clean();
-    }
-
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        clean();
-    }
-
-    @Override
-    public void onChunkUnload() {
-        super.onChunkUnload();
-        clean();
-    }
-
-    private void clean() {
-        Charge.distribution.network(world).removeNode(pos);
-        battery = null;
     }
 }

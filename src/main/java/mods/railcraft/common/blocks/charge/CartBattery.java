@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.charge;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryCart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 
@@ -36,7 +36,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class CartBattery implements ICartBattery {
+public class CartBattery implements IBatteryCart {
 
     static final int DRAW_INTERVAL = 8;
     protected static final Random rand = new Random();
@@ -165,11 +165,11 @@ public class CartBattery implements ICartBattery {
 
         if (drewFromTrack > 0)
             drewFromTrack--;
-        else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
+        else if (type == Type.USER && charge < (capacity * 0.5) && clock % DRAW_INTERVAL == 0) {
             ILinkageManager lm = CartToolsAPI.getLinkageManager();
             for (EntityMinecart cart : lm.trainIterator(owner)) {
                 if (cart.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-                    ICartBattery ch = cart.getCapability(CapabilitiesCharge.CART_BATTERY, null);
+                    IBatteryCart ch = cart.getCapability(CapabilitiesCharge.CART_BATTERY, null);
                     if (ch != null && ch.getType() != Type.USER && ch.getCharge() > 0) {
                         charge += ch.removeCharge(capacity - charge);
                         break;
@@ -182,23 +182,23 @@ public class CartBattery implements ICartBattery {
     /**
      * If you want to be able to draw power from the track, this function
      * needs to be called once per tick. Server side only. Generally this
-     * means overriding the EntityMinecart.func_145821_a() function. You
+     * means overriding the EntityMinecart.moveAlongTrack() function. You
      * don't have to call this function if you don't care about drawing from
      * tracks.
      * <p/>
      * <blockquote><pre>
      * {@code
-     * protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustment, Block trackBlock, int trackMeta)
+     * protected void moveAlongTrack(BlockPos pos, IBlockState state)
      *  {
-     *     super.func_145821_a(trackPos, maxSpeed, slopeAdjustment, trackBlock, trackMeta);
-     *     cartBattery.tickOnTrack(this, trackPos);
+     *     super.moveAlongTrack(pos, state);
+     *     cartBattery.tickOnTrack(this, pos);
      *  }
      * }
      * </pre></blockquote>
      */
     @Override
     public void tickOnTrack(EntityMinecart owner, BlockPos pos) {
-        if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
+        if (!owner.world.isRemote && type == Type.USER && needsCharging()) {
             double drawnFromTrack = Charge.distribution.network(owner.world).access(pos).removeCharge(capacity - charge);
             if (drawnFromTrack > 0.0)
                 drewFromTrack = DRAW_INTERVAL * 4;

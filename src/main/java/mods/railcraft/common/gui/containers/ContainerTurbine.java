@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,13 +11,14 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.widgets.AnalogWidget;
+import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
 
 public class ContainerTurbine extends RailcraftContainer {
@@ -28,6 +29,9 @@ public class ContainerTurbine extends RailcraftContainer {
     public ContainerTurbine(InventoryPlayer inventoryplayer, TileSteamTurbine tile) {
         super(tile.getInventory());
         this.tile = tile;
+
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 110, 38, 28, 14));
+
         addSlot(new SlotTurbine(tile.getInventory(), 0, 60, 24));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {

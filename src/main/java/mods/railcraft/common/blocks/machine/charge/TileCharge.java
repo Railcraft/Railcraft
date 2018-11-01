@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.common.blocks.charge.BatteryBlock;
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,10 +24,8 @@ import java.util.List;
  */
 public abstract class TileCharge extends TileMachineBase {
 
-    protected abstract IChargeBlock.ChargeBattery createBattery();
-
-    public IChargeBlock.ChargeBattery getChargeBattery() {
-        return Charge.distribution.network(world).makeBattery(pos, this::createBattery);
+    public BatteryBlock getChargeBattery() {
+        return Charge.distribution.network(world).access(pos).getBattery();
     }
 
     private int prevComparatorOutput;

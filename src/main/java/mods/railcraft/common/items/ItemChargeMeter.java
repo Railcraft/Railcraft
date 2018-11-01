@@ -10,7 +10,8 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
@@ -85,14 +86,14 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)
             try {
                 if (entity.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-                    ICartBattery battery = entity.getCapability(CapabilitiesCharge.CART_BATTERY, null);
+                    IBatteryCart battery = entity.getCapability(CapabilitiesCharge.CART_BATTERY, null);
                     if (battery != null) {
                         sendChat(player, "gui.railcraft.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
                         event.setCanceled(true);
                     }
                 }
             } catch (Throwable er) {
-                Game.logErrorAPI(Railcraft.MOD_ID, er, ICartBattery.class);
+                Game.logErrorAPI(Railcraft.MOD_ID, er, IBatteryCart.class);
                 ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
             }
     }
@@ -107,12 +108,13 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
             sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
             node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
                 ChargeNetwork.ChargeGraph graph = node.getGrid();
-                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaxNetworkDraw(), graph.getMaintenanceCost(), graph.getNetworkEfficiency() * 100.0);
+                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getAvailableCharge(), graph.getLosses(), graph.getEfficiency() * 100.0);
                 if (node.getBattery() == null)
-                    sendChat(player, "gui.railcraft.charge.meter.node", avg, node.getChargeDef().getMaintenanceCost());
+                    sendChat(player, "gui.railcraft.charge.meter.node", avg, node.getChargeDef().getLosses());
                 else {
-                    boolean infiniteBat = node.getBattery().isInfinite();
-                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeDef().getMaintenanceCost(), node.getBattery().getEfficiency() * 100.0);
+                    // TODO: Handle all battery states better
+                    boolean infiniteBat = node.getBattery().getState() == IBatteryBlock.State.INFINITE;
+                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeDef().getLosses(), node.getBattery().getEfficiency() * 100.0);
                 }
             });
             returnValue = EnumActionResult.SUCCESS;

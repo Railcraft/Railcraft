@@ -10,7 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.charge.CapabilitiesCharge;
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.blocks.charge.CartBattery;
 import mods.railcraft.common.gui.EnumGui;
@@ -48,7 +48,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     private static final int SLOT_TICKET = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
     private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
-    private final ICartBattery cartBattery = new CartBattery(ICartBattery.Type.USER, MAX_CHARGE);
+    private final IBatteryCart cartBattery = new CartBattery(IBatteryCart.Type.USER, MAX_CHARGE);
 
     public EntityLocomotiveElectric(World world) {
         super(world);

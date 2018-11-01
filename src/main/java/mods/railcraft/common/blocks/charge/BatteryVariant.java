@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
@@ -24,11 +25,12 @@ import java.util.List;
 public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
 
     NICKEL_IRON(ModuleCharge.class, "nickel_iron", 100_000, 32.0, 0.3, 0.8),
-    NICKEL_ZINC(ModuleCharge.class, "nickel_zinc", 150_000, 16.0, 0.2, 0.7),;
+    NICKEL_ZINC(ModuleCharge.class, "nickel_zinc", 150_000, 16.0, 0.2, 0.7),
+    ;
 
     private static final List<BatteryVariant> creativeList = new ArrayList<BatteryVariant>();
     public static final BatteryVariant[] VALUES = values();
-    public final double capacity, maxDraw, loss, efficiency;
+    public final double loss;
     public final IChargeBlock.ChargeDef chargeDef;
 
     static {
@@ -39,13 +41,10 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
 
     BatteryVariant(Class<? extends IRailcraftModule> module, String tag, final double capacity, final double maxDraw, final double loss, final double efficiency) {
         this.def = new Definition(tag, module);
-        this.capacity = capacity;
-        this.maxDraw = maxDraw;
         this.loss = loss;
-        this.efficiency = efficiency;
 
         this.chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, loss,
-                (world, pos) -> new IChargeBlock.ChargeBattery(capacity, maxDraw, efficiency));
+                new IBatteryBlock.Spec(IBatteryBlock.State.RECHARGEABLE, capacity, maxDraw, efficiency));
     }
 
     public static BatteryVariant fromId(int id) {

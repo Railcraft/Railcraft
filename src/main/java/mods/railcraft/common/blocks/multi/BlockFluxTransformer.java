@@ -10,13 +10,13 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -35,8 +35,7 @@ import java.util.Random;
 public final class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
 
     public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
-            (world, pos) -> WorldPlugin.getTileEntity(world, pos, TileFluxTransformer.class).map(TileFluxTransformer::getMasterBattery).orElse(null)
-    );
+            new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 0.65));
 
     public BlockFluxTransformer() {
         super(Material.IRON);

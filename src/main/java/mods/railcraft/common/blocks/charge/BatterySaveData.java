@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -82,15 +82,15 @@ public final class BatterySaveData extends WorldSavedData {
         }
     }
 
-    public void initBattery(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        double charge = chargeLevels.get(pos.toLong());
+    public void initBattery(BatteryBlock battery) {
+        double charge = chargeLevels.get(battery.getPos().toLong());
         if (Double.isNaN(charge))
             charge = 0.0;
-        chargeBattery.initCharge(charge);
+        battery.initCharge(charge);
     }
 
-    public void updateBatteryRecord(BlockPos pos, IChargeBlock.ChargeBattery chargeBattery) {
-        chargeLevels.put(pos.toLong(), chargeBattery.getCharge());
+    public void updateBatteryRecord(BatteryBlock battery) {
+        chargeLevels.put(battery.getPos().toLong(), battery.getCharge());
         markDirty();
     }
 

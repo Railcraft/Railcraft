@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.api.charge.ICartBattery;
+import mods.railcraft.api.charge.IBatteryCart;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -24,16 +24,16 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
  */
 public class CapabilityCartBatterySetup {
     public static void register() {
-        CapabilityManager.INSTANCE.register(ICartBattery.class, new Capability.IStorage<ICartBattery>() {
+        CapabilityManager.INSTANCE.register(IBatteryCart.class, new Capability.IStorage<IBatteryCart>() {
             @Override
-            public NBTBase writeNBT(Capability<ICartBattery> capability, ICartBattery instance, EnumFacing side) {
+            public NBTBase writeNBT(Capability<IBatteryCart> capability, IBatteryCart instance, EnumFacing side) {
                 NBTTagCompound nbt = new NBTTagCompound();
                 nbt.setDouble("charge", instance.getCharge());
                 return nbt;
             }
 
             @Override
-            public void readNBT(Capability<ICartBattery> capability, ICartBattery instance, EnumFacing side, NBTBase nbt) {
+            public void readNBT(Capability<IBatteryCart> capability, IBatteryCart instance, EnumFacing side, NBTBase nbt) {
                 NBTTagCompound tags = (NBTTagCompound) nbt;
                 instance.setCharge(tags.getDouble("charge"));
             }

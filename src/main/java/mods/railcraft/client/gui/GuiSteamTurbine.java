@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,7 +21,7 @@ public class GuiSteamTurbine extends TileGui {
     private final TileSteamTurbine tile;
 
     public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
-        super(tile, new ContainerTurbine(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
+        super(tile, new ContainerTurbine(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_turbine.png");
         xSize = 176;
         ySize = 140;
 
@@ -33,6 +33,6 @@ public class GuiSteamTurbine extends TileGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.steam.turbine.rotor"), 20, 29, 0x404040);
-        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.steam.turbine.output"), Math.round(tile.output)), 95, 29, 0x404040);
+        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.steam.turbine.output"), Math.round(tile.output)), 95, 24, 0x404040);
     }
 }

@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.charge;
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
@@ -37,7 +38,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Created by CovertJaguar on 7/23/2016 for Railcraft.
@@ -135,7 +136,7 @@ public class ChargeNetwork implements IChargeNetwork {
 
         // update the battery in the save data tracker
         if (node.chargeBattery != null)
-            batterySaveData.initBattery(pos, node.chargeBattery);
+            batterySaveData.initBattery(node.chargeBattery);
         else
             batterySaveData.removeBattery(pos);
 
@@ -163,7 +164,7 @@ public class ChargeNetwork implements IChargeNetwork {
     public boolean addNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         if (!nodeMatches(pos, chargeDef)) {
             printDebug("Registering Node: {0}->{1}", pos, chargeDef);
-            chargeQueue.put(pos, new ChargeNode(pos, chargeDef, chargeDef.getBattery(world, pos)));
+            chargeQueue.put(pos, new ChargeNode(pos, chargeDef));
             return true;
         }
         return false;
@@ -174,16 +175,6 @@ public class ChargeNetwork implements IChargeNetwork {
         chargeQueue.put(pos, null);
     }
 
-    public boolean isUndefined(BlockPos pos) {
-        ChargeNode chargeNode = chargeNodes.get(pos);
-        return chargeNode == null || chargeNode.isGraphNull() || !chargeQueue.containsKey(pos);
-    }
-
-    public boolean isReady(BlockPos pos) {
-        ChargeNode chargeNode = chargeNodes.get(pos);
-        return chargeNode != null && !chargeNode.isGraphNull();
-    }
-
     @Override
     public ChargeGraph grid(BlockPos pos) {
         return access(pos).getGrid();
@@ -192,7 +183,7 @@ public class ChargeNetwork implements IChargeNetwork {
     @Override
     public ChargeNode access(BlockPos pos) {
         ChargeNode node = chargeNodes.get(pos);
-        if (node != null && node.invalid) {
+        if (node != null && !node.isValid()) {
             removeNodeImpl(pos);
             node = null;
         }
@@ -203,7 +194,7 @@ public class ChargeNetwork implements IChargeNetwork {
                 if (state.getBlock() instanceof IChargeBlock) {
                     IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) state.getBlock()).getChargeDef(state, worldObj, pos);
                     if (chargeDef != null) {
-                        node = new ChargeNode(pos, chargeDef, chargeDef.getBattery(worldObj, pos));
+                        node = new ChargeNode(pos, chargeDef);
                         addNodeImpl(pos, node);
                         if (node.isGraphNull())
                             node.constructGraph();
@@ -214,21 +205,9 @@ public class ChargeNetwork implements IChargeNetwork {
         return node == null ? NULL_NODE : node;
     }
 
-    public ChargeNode getNodeSafe(BlockPos pos) {
-        ChargeNode node = chargeNodes.get(pos);
-        return node == null ? NULL_NODE : node;
-    }
-
     public boolean nodeMatches(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         ChargeNode node = chargeNodes.get(pos);
         return node != null && node.isValid() && node.chargeDef == chargeDef;
-    }
-
-    @Override
-    public IChargeBlock.ChargeBattery makeBattery(BlockPos pos, Supplier<IChargeBlock.ChargeBattery> supplier) {
-        ChargeNetwork.ChargeNode node = getNodeSafe(pos);
-        IChargeBlock.ChargeBattery battery = node.getBattery();
-        return battery == null ? supplier.get() : battery;
     }
 
     @Override
@@ -242,7 +221,7 @@ public class ChargeNetwork implements IChargeNetwork {
         double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;
 
         ChargeNode node = access(pos);
-        if (node.getGrid().getCharge() > chargeCost) {
+        if (node.getGrid().hasCapacity(chargeCost)) {
             float remainingDamage = damage;
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase livingEntity = (EntityLivingBase) entity;
@@ -284,9 +263,9 @@ public class ChargeNetwork implements IChargeNetwork {
 
     public class ChargeGraph extends ForwardingSet<ChargeNode> {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
-        private final Map<ChargeNode, IChargeBlock.ChargeBattery> chargeBatteries = new LinkedHashMap<>();
+        private final List<BatteryBlock> batteries = new ArrayList<>();
         private boolean invalid;
-        private double totalMaintenanceCost;
+        private double totalLosses;
         private double chargeUsedThisTick;
         private double averageUsagePerTick;
 
@@ -299,12 +278,14 @@ public class ChargeNetwork implements IChargeNetwork {
         public boolean add(ChargeNode chargeNode) {
             boolean added = super.add(chargeNode);
             if (added)
-                totalMaintenanceCost += chargeNode.chargeDef.getMaintenanceCost();
+                totalLosses += chargeNode.chargeDef.getLosses();
             chargeNode.chargeGraph = this;
-            if (chargeNode.chargeBattery != null)
-                chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
-            else {
-                chargeBatteries.remove(chargeNode);
+            batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
+            if (chargeNode.chargeBattery != null) {
+                batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
+                batteries.add(chargeNode.chargeBattery);
+                batteries.sort(Comparator.comparing(BatteryBlock::getState));
+            } else {
                 batterySaveData.removeBattery(chargeNode.pos);
             }
             return added;
@@ -344,11 +325,11 @@ public class ChargeNetwork implements IChargeNetwork {
             if (isActive()) {
                 printDebug("Destroying graph: {0}", this);
                 invalid = true;
-                totalMaintenanceCost = 0.0;
+                totalLosses = 0.0;
                 if (touchNodes) {
                     forEach(n -> n.chargeGraph = NULL_GRAPH);
                 }
-                chargeBatteries.clear();
+                batteries.clear();
                 super.clear();
                 chargeGraphs.remove(this);
             }
@@ -360,17 +341,32 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         private void tick() {
-            removeCharge(totalMaintenanceCost);
+            removeCharge(totalLosses * RailcraftConfig.chargeLossMultiplier());
 
-            // balance the charge in all the batteries in the graph
-            double capacity = getCapacity();
+            // balance the charge in all the rechargeable batteries in the graph
+            Set<BatteryBlock> rechargeable = batteries.stream()
+                    .unordered()
+                    .filter(b -> {
+                        switch (b.getState()) {
+                            case DISABLED:
+                            case DISPOSABLE:
+                                return false;
+                        }
+                        return true;
+                    })
+                    .collect(Collectors.toSet());
+
+            double capacity = rechargeable.stream().mapToDouble(BatteryBlock::getCapacity).sum();
             if (capacity > 0.0) {
-                final double chargeLevel = getCharge() / capacity;
-                chargeBatteries.forEach((node, bat) -> {
+                final double charge = rechargeable.stream().mapToDouble(BatteryBlock::getCharge).sum();
+                final double chargeLevel = charge / capacity;
+                rechargeable.forEach(bat -> {
                     bat.setCharge(chargeLevel * bat.getCapacity());
-                    batterySaveData.updateBatteryRecord(node.pos, bat);
+                    batterySaveData.updateBatteryRecord(bat);
                 });
             }
+
+            batteries.forEach(BatteryBlock::tick);
 
             // track usage patterns
             averageUsagePerTick = (averageUsagePerTick * 49D + chargeUsedThisTick) / 50D;
@@ -378,28 +374,35 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         public double getCharge() {
-            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCharge).sum();
+            return batteries.stream().mapToDouble(BatteryBlock::getCharge).sum();
         }
 
         public double getCapacity() {
-            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCapacity).sum();
+            return batteries.stream().mapToDouble(BatteryBlock::getCapacity).sum();
         }
 
-        public double getMaxNetworkDraw() {
-            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getAvailableCharge).sum();
+        public double getAvailableCharge() {
+            return batteries.stream().mapToDouble(BatteryBlock::getAvailableCharge).sum();
         }
 
-        public double getNetworkEfficiency() {
-            return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getEfficiency).average().orElse(1.0);
+        public double getPotentialDraw() {
+            return batteries.stream().mapToDouble(BatteryBlock::getPotentialDraw).sum();
+        }
+
+        public double getEfficiency() {
+            return batteries.stream().mapToDouble(BatteryBlock::getEfficiency).average().orElse(1.0);
         }
 
         public int getComparatorOutput() {
-            double level = getCharge() / getCapacity();
+            double capacity = getCapacity();
+            if (capacity <= 0.0)
+                return 0;
+            double level = getCharge() / capacity;
             return Math.round((float) (15.0 * level));
         }
 
-        public double getMaintenanceCost() {
-            return totalMaintenanceCost;
+        public double getLosses() {
+            return totalLosses;
         }
 
         public double getAverageUsagePerTick() {
@@ -409,14 +412,14 @@ public class ChargeNetwork implements IChargeNetwork {
         public double getUsageRatio() {
             if (isInfinite())
                 return 0.0;
-            double maxDraw = getMaxNetworkDraw();
-            if (maxDraw <= 0.0)
+            double potentialDraw = getPotentialDraw();
+            if (potentialDraw <= 0.0)
                 return 1.0;
-            return Math.min(getAverageUsagePerTick() / maxDraw, 1.0);
+            return Math.min(getAverageUsagePerTick() / potentialDraw, 1.0);
         }
 
         public boolean isInfinite() {
-            return chargeBatteries.values().stream().anyMatch(IChargeBlock.ChargeBattery::isInfinite);
+            return batteries.stream().anyMatch(b -> b.getState() == IBatteryBlock.State.INFINITE);
         }
 
         public boolean isActive() {
@@ -434,8 +437,8 @@ public class ChargeNetwork implements IChargeNetwork {
          * @return true if charge could be removed in full
          */
         public boolean useCharge(double amount) {
-            double efficiency = getNetworkEfficiency();
-            if (getMaxNetworkDraw() >= amount / efficiency) {
+            double efficiency = getEfficiency();
+            if (getAvailableCharge() >= amount / efficiency) {
                 removeCharge(amount, efficiency);
                 return true;
             }
@@ -443,7 +446,7 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         /**
-         * Determines if the grid is capable of providing the required charge in a single operation.
+         * Determines if the grid is capable of providing the required charge.
          * The amount of charge that can be withdraw from the grid is dependant on the overall efficiency
          * of the grid and its available charge.
          *
@@ -451,7 +454,7 @@ public class ChargeNetwork implements IChargeNetwork {
          * @return true if the grid can provide the power
          */
         public boolean hasCapacity(double amount) {
-            return getMaxNetworkDraw() >= amount / getNetworkEfficiency();
+            return getAvailableCharge() >= amount / getEfficiency();
         }
 
         /**
@@ -461,7 +464,7 @@ public class ChargeNetwork implements IChargeNetwork {
          * @return charge removed
          */
         public double removeCharge(double desiredAmount) {
-            return removeCharge(desiredAmount, getNetworkEfficiency());
+            return removeCharge(desiredAmount, getEfficiency());
         }
 
         /**
@@ -473,9 +476,9 @@ public class ChargeNetwork implements IChargeNetwork {
         private double removeCharge(double desiredAmount, double efficiency) {
             final double amountToDraw = desiredAmount / efficiency;
             double amountNeeded = amountToDraw;
-            for (Map.Entry<ChargeNode, IChargeBlock.ChargeBattery> battery : chargeBatteries.entrySet()) {
-                amountNeeded -= battery.getValue().removeCharge(amountNeeded);
-                batterySaveData.updateBatteryRecord(battery.getKey().pos, battery.getValue());
+            for (BatteryBlock battery : batteries) {
+                amountNeeded -= battery.removeCharge(amountNeeded);
+                batterySaveData.updateBatteryRecord(battery);
                 if (amountNeeded <= 0.0)
                     break;
             }
@@ -486,7 +489,7 @@ public class ChargeNetwork implements IChargeNetwork {
 
         @Override
         public String toString() {
-            return String.format("ChargeGraph{s=%d,b=%d}", size(), chargeBatteries.size());
+            return String.format("ChargeGraph{s=%d,b=%d}", size(), batteries.size());
         }
     }
 
@@ -523,18 +526,18 @@ public class ChargeNetwork implements IChargeNetwork {
             chargeUsed += amount;
         }
 
-        public Boolean checkCompletion() {
+        public Boolean run() {
             ticksRecorded++;
             if (ticksRecorded > ticksToRecord) {
                 usageConsumer.accept(chargeUsed / ticksToRecord);
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
     }
 
     public class ChargeNode {
-        protected final @Nullable IChargeBlock.ChargeBattery chargeBattery;
+        protected final @Nullable BatteryBlock chargeBattery;
         private final BlockPos pos;
         private final IChargeBlock.ChargeDef chargeDef;
         private ChargeGraph chargeGraph = NULL_GRAPH;
@@ -542,10 +545,10 @@ public class ChargeNetwork implements IChargeNetwork {
         private Optional<UsageRecorder> usageRecorder = Optional.empty();
         private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
-        private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
+        private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
             this.pos = pos;
             this.chargeDef = chargeDef;
-            this.chargeBattery = chargeBattery;
+            this.chargeBattery = chargeDef.getBatterySpec() == null ? null : new BatteryBlock(pos, chargeDef.getBatterySpec());
         }
 
         public IChargeBlock.ChargeDef getChargeDef() {
@@ -584,7 +587,7 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         public boolean checkUsageRecordingCompletion() {
-            usageRecorder = usageRecorder.filter(UsageRecorder::checkCompletion);
+            usageRecorder = usageRecorder.filter(UsageRecorder::run);
             return !usageRecorder.isPresent();
         }
 
@@ -677,23 +680,26 @@ public class ChargeNetwork implements IChargeNetwork {
             return pos.hashCode();
         }
 
-        public @Nullable IChargeBlock.ChargeBattery getBattery() {
+        public @Nullable BatteryBlock getBattery() {
             return chargeBattery;
         }
 
         @Override
         public String toString() {
-            return String.format("ChargeNode{%s|%s}", pos, chargeDef);
+            String string = String.format("ChargeNode{%s}|%s", pos, chargeDef.toString());
+            if (chargeBattery != null)
+                string += "|State: " + chargeBattery.getState();
+            return string;
         }
     }
 
     public class NullNode extends ChargeNode {
         public NullNode() {
-            super(new BlockPos(0, 0, 0), new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.0), null);
+            super(new BlockPos(0, 0, 0), new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.0));
         }
 
         @Override
-        public @Nullable IChargeBlock.ChargeBattery getBattery() {
+        public @Nullable BatteryBlock getBattery() {
             return null;
         }
 
