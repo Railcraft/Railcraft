@@ -52,24 +52,10 @@ public enum Charge implements IChargeManager {
     @Beta
     catenary;
 
-    /**
-     * User's shouldn't touch this. It's set using reflection by Railcraft.
-     */
-    @SuppressWarnings("CanBeFinal")
-    private IChargeManager manager = new IChargeManager() {
-    };
-
     @Override
     public IChargeNetwork network(World world) {
         return manager.network(world);
     }
-
-    /**
-     * User's shouldn't touch this. It's set using reflection by Railcraft.
-     */
-    @SuppressWarnings("CanBeFinal")
-    private static IZapEffectRenderer effects = new IZapEffectRenderer() {
-    };
 
     /**
      * Entry point for rendering charge related effects.
@@ -115,5 +101,19 @@ public enum Charge implements IChargeManager {
         default void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
         }
     }
+
+    /**
+     * User's shouldn't touch this. It's set using reflection by Railcraft.
+     */
+    @SuppressWarnings("CanBeFinal")
+    private IChargeManager manager = new IChargeManager() {
+    };
+
+    /**
+     * User's shouldn't touch this. It's set using reflection by Railcraft.
+     */
+    @SuppressWarnings("CanBeFinal")
+    private static IZapEffectRenderer effects = new IZapEffectRenderer() {
+    };
 
 }

@@ -50,7 +50,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, ITileInventory, IHasWork, ITileCharge {
-    private static final IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static final IChargeBlock.ChargeDef CHARGE_DEF = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
@@ -61,8 +61,13 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public IChargeBlock.ChargeDef getChargeDef() {
-        return chargeDef;
+    public IChargeBlock.ChargeDef getChargeDef(Charge network) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @Override

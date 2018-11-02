@@ -143,6 +143,6 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
     @Override
     public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileCharge.class, ITileCharge::getChargeDef).orElse(null);
+                .retrieve(ITileCharge.class, t -> t.getChargeDef(network)).orElse(null);
     }
 }
