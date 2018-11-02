@@ -33,6 +33,15 @@ public interface IChargeBlock {
     @Nullable
     ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos);
 
+    /**
+     * The Charge Meter calls this to get a node for meter readings.
+     *
+     * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
+     */
+    default ChargeNetwork.ChargeNode getMeterAccess(IBlockState state, World world, BlockPos pos) {
+        return Charge.distribution.network(world).access(pos);
+    }
+
     default void registerNode(IBlockState state, World world, BlockPos pos) {
         ChargeDef chargeDef = getChargeDef(state, world, pos);
         if (chargeDef != null)

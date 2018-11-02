@@ -13,14 +13,16 @@ import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.api.items.IActivationBlockingItem;
-import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -103,21 +105,24 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
         if (Game.isClient(world))
             return EnumActionResult.PASS;
         EnumActionResult returnValue = EnumActionResult.PASS;
-        ChargeNetwork.ChargeNode node = Charge.distribution.network(world).access(pos);
-        if (node.isValid() && !node.isGraphNull()) {
-            sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
-            node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
-                ChargeNetwork.ChargeGraph graph = node.getGrid();
-                sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getAvailableCharge(), graph.getLosses(), graph.getEfficiency() * 100.0);
-                if (node.getBattery() == null)
-                    sendChat(player, "gui.railcraft.charge.meter.node", avg, node.getChargeDef().getLosses());
-                else {
-                    // TODO: Handle all battery states better
-                    boolean infiniteBat = node.getBattery().getState() == IBatteryBlock.State.INFINITE;
-                    sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeDef().getLosses(), node.getBattery().getEfficiency() * 100.0);
-                }
-            });
-            returnValue = EnumActionResult.SUCCESS;
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() instanceof IChargeBlock) {
+            ChargeNetwork.ChargeNode node = ((IChargeBlock) state.getBlock()).getMeterAccess(state, world, pos);
+            if (node.isValid() && !node.isGraphNull()) {
+                sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
+                node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
+                    ChargeNetwork.ChargeGraph graph = node.getGrid();
+                    sendChat(player, "gui.railcraft.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getAvailableCharge(), graph.getLosses(), graph.getEfficiency() * 100.0);
+                    if (node.getBattery() == null)
+                        sendChat(player, "gui.railcraft.charge.meter.node", avg, node.getChargeDef().getLosses());
+                    else {
+                        // TODO: Handle all battery states better
+                        boolean infiniteBat = node.getBattery().getState() == IBatteryBlock.State.INFINITE;
+                        sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeDef().getLosses(), node.getBattery().getEfficiency() * 100.0);
+                    }
+                });
+                returnValue = EnumActionResult.SUCCESS;
+            }
         }
 //        } catch (Throwable er) {
 //            Game.logErrorAPI(Railcraft.MOD_ID, er, ChargeNetwork.class);

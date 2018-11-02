@@ -32,7 +32,7 @@ import java.util.Random;
 /**
  *
  */
-public final class BlockFluxTransformer extends BlockMultiBlock implements IChargeBlock {
+public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
     public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 0.65));

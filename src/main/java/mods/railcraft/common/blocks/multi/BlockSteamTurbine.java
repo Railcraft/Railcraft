@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -36,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  *
  */
-public final class BlockSteamTurbine extends BlockMultiBlock implements IChargeBlock {
+public final class BlockSteamTurbine extends BlockMultiBlockCharge {
 
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
