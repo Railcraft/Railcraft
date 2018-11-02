@@ -27,12 +27,11 @@ import java.util.List;
 
 /**
  * Created by CovertJaguar on 8/1/2016 for Railcraft.
- *
- * @author CovertJaguar <http://www.railcraft.info>
  */
+// TODO This thing needs to be network aware or something. Otherwise we might see collisions between networks.
 public final class BatterySaveData extends WorldSavedData {
     private static final String NAME = "railcraft.batteries";
-    private Long2DoubleMap chargeLevels = new Long2DoubleLinkedOpenHashMap();
+    private final Long2DoubleMap chargeLevels = new Long2DoubleLinkedOpenHashMap();
 
     public static BatterySaveData forWorld(World world) {
         MapStorage storage = world.getPerWorldStorage();

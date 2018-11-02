@@ -96,7 +96,12 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return getVariant(state).chargeDef;
+    public @Nullable ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return getVariant(state).getChargeDef();
+            default:
+                return null;
+        }
     }
 }

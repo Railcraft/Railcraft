@@ -14,6 +14,7 @@ import com.google.common.collect.MapMaker;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Map;
@@ -23,11 +24,14 @@ import java.util.Map;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum ChargeManager implements Charge.IManager {
-    DISTRIBUTION, TRANSMISSION;
+public enum ChargeManager implements IChargeManager {
+    DISTRIBUTION(Charge.distribution);
 
-    static {
-        Charge.distribution = DISTRIBUTION;
+    private final Charge type;
+
+    ChargeManager(Charge type) {
+        this.type = type;
+        ReflectionHelper.setPrivateValue(Charge.class, type, this, "manager");
     }
 
     private final Map<World, ChargeNetwork> networks = new MapMaker().weakKeys().makeMap();
@@ -41,6 +45,6 @@ public enum ChargeManager implements Charge.IManager {
 
     @Override
     public IChargeNetwork network(World world) {
-        return networks.computeIfAbsent(world, ChargeNetwork::new);
+        return networks.computeIfAbsent(world, (w) -> new ChargeNetwork(type, w));
     }
 }

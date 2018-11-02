@@ -14,7 +14,6 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +21,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -53,7 +51,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        TrackTools.throwSparks(stateIn, worldIn, pos, rand);
+        Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 75);
     }
 
     @Override
@@ -75,7 +73,12 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return CHARGE_DEF;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 }

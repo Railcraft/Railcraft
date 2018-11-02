@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemDust;
@@ -37,7 +38,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChargeBlock, ColorPlugin.IColoredBlock {
 
@@ -77,8 +77,13 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return CHARGE_DEF;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @Override

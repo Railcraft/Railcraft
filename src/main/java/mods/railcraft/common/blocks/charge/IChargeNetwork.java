@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,11 +23,13 @@ import net.minecraft.world.World;
 public interface IChargeNetwork {
 
     /**
-     * Queues the node to be added to the network
+     * Queues the node to be added to the network.
+     *
+     * If you pass a null chargeDef, nothing will happen.
      *
      * @return return true if the network changed.
      */
-    default boolean addNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
+    default boolean addNode(IBlockState state, World world, BlockPos pos) {
         return false;
     }
 

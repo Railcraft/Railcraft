@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -41,8 +40,8 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
 
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (isSparking(stateIn) && rand.nextInt(50) == 25)
-            EffectManager.instance.zapEffectSurface(stateIn, worldIn, pos);
+        if (isSparking(stateIn))
+            Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 50);
     }
 
     @Override
@@ -60,6 +59,6 @@ public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        Charge.distribution.network(worldIn).removeNode(pos);
+        deregisterNode(worldIn, pos);
     }
 }

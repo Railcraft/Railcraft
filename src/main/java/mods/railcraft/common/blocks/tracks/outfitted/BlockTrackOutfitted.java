@@ -145,7 +145,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[] {getShapeProperty(), TICKING}, new IUnlistedProperty[] {TRACK_TYPE, TRACK_KIT, STATE});
+        return new ExtendedBlockState(this, new IProperty[]{getShapeProperty(), TICKING}, new IUnlistedProperty[]{TRACK_TYPE, TRACK_KIT, STATE});
     }
 
     @Override
@@ -507,7 +507,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (getTrackType(worldIn, pos).isElectric())
-            TrackTools.throwSparks(stateIn, worldIn, pos, rand);
+            Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 75);
     }
 
     @Override
@@ -525,9 +525,12 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if (getTrackType(world, pos).isElectric())
-            return CHARGE_DEF;
-        return null;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return getTrackType(world, pos).isElectric() ? CHARGE_DEF : null;
+            default:
+                return null;
+        }
     }
 }

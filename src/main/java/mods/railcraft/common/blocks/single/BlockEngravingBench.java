@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,7 +29,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.util.EnumFacing.Axis.X;
 import static net.minecraft.util.EnumFacing.Axis.Z;
@@ -36,7 +36,7 @@ import static net.minecraft.util.EnumFacing.Axis.Z;
 @SuppressWarnings("unused")
 public class BlockEngravingBench extends BlockEntityDelegate implements IChargeBlock {
 
-    private static final ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, 0.1);
+    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.1);
     public static final PropertyEnum<Axis> AXIS = PropertyEnum.create("axis", Axis.class, X, Z);
 
     public BlockEngravingBench() {
@@ -51,8 +51,13 @@ public class BlockEngravingBench extends BlockEntityDelegate implements IChargeB
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return chargeDef;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @Override

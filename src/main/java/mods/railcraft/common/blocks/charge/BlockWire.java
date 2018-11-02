@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.EnumTools;
@@ -68,8 +67,8 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public static final PropertyEnum<Connection> EAST = PropertyEnum.create("east", Connection.class);
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
-    private static EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE, 0.02);
+    private static final EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
+    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.WIRE, 0.02);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -120,10 +119,14 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                 'L', "ingotElectricalSteel");
     }
 
-    @Nullable
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return chargeDef;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -131,13 +134,12 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (rand.nextInt(50) == 25) {
             IBlockState state = getActualState(stateIn, worldIn, pos);
-            int numConnection = 0;
-            for (PropertyEnum<Connection> connection : connectionProperties) {
-                if (state.getValue(connection) != Connection.NONE)
-                    numConnection++;
-            }
+            int numConnection = (int) Arrays.stream(connectionProperties)
+                    .map(state::getValue)
+                    .filter(c -> c != Connection.NONE)
+                    .count();
             if (numConnection > 2)
-                EffectManager.instance.zapEffectPoint(worldIn, pos);
+                Charge.effects().zapEffectPoint(worldIn, pos);
         }
     }
 
@@ -150,6 +152,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
         return state;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
@@ -160,7 +163,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
             IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IChargeBlock) {
-                IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(neighborState, worldIn, neighborPos);
+                IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(Charge.distribution, neighborState, worldIn, neighborPos);
                 if (chargeDef != null) {
                     IChargeBlock.ConnectType connectType = chargeDef.getConnectType();
                     if (connectionMatcher.get(side).contains(connectType)) {
@@ -180,6 +183,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(ADDON, EnumTools.fromOrdinal(meta, Addon.VALUES));
@@ -208,21 +212,20 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
         return existing != addon && WorldPlugin.setBlockState(worldIn, pos, state.withProperty(ADDON, addon));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         Addon addon = getAddon(state);
         return addon.boundingBox;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
         Addon addon = getAddon(state);
-        if (addon.addonObject != null) {
-            ItemStack addonItem = addon.addonObject.getStack();
-            if (addonItem != null)
-                drops.add(addonItem);
-        }
+        if (addon.addonObject != null)
+            drops.add(addon.addonObject.getStack());
         return drops;
     }
 
@@ -243,16 +246,19 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
         return BlockRenderLayer.CUTOUT;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return getAddon(base_state) == Addon.FRAME && side == EnumFacing.UP;
@@ -265,13 +271,14 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
         return IPostConnection.ConnectStyle.NONE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         return getAddon(blockState).hardness;
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
         return getAddon(blockState).resistance * 0.6F;
     }
@@ -297,7 +304,8 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public enum Addon implements IStringSerializable {
 
         NONE(1, 1, null, AABBFactory.start().box().grow(-0.25).build()),
-        FRAME(5, 10, RailcraftBlocks.FRAME, FULL_BLOCK_AABB),;
+        FRAME(5, 10, RailcraftBlocks.FRAME, FULL_BLOCK_AABB),
+        ;
         //        PYLON(null, FULL_BLOCK_AABB);
         public static final Addon[] VALUES = values();
         private final IRailcraftObjectContainer addonObject;

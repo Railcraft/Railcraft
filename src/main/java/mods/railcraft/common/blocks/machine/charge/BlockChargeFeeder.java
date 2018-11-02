@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -33,7 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -70,8 +70,13 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return getVariant(state).getChargeDef();
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return getVariant(state).getChargeDef();
+            default:
+                return null;
+        }
     }
 
     /**

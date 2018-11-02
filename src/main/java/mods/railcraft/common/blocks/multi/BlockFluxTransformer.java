@@ -17,7 +17,6 @@ import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +33,7 @@ import java.util.Random;
  */
 public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
-    public static final IChargeBlock.ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.5,
+    public static final IChargeBlock.ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.5,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 0.65));
 
     public BlockFluxTransformer() {
@@ -46,13 +45,17 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
     @Override
     public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
-        if (rand.nextInt(50) == 25)
-            EffectManager.instance.zapEffectSurface(state, worldIn, pos);
+        Charge.effects().throwSparks(state, worldIn, pos, rand, 50);
     }
 
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return DEFINITION;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @Override

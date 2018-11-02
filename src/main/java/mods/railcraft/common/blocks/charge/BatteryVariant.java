@@ -28,10 +28,10 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
     NICKEL_ZINC(ModuleCharge.class, "nickel_zinc", 150_000, 16.0, 0.2, 0.7),
     ;
 
-    private static final List<BatteryVariant> creativeList = new ArrayList<BatteryVariant>();
+    private static final List<BatteryVariant> creativeList = new ArrayList<>();
     public static final BatteryVariant[] VALUES = values();
     public final double loss;
-    public final IChargeBlock.ChargeDef chargeDef;
+    private final IChargeBlock.ChargeDef chargeDef;
 
     static {
         creativeList.add(NICKEL_IRON);
@@ -60,6 +60,10 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
     @Override
     public Definition getDef() {
         return def;
+    }
+
+    public IChargeBlock.ChargeDef getChargeDef() {
+        return chargeDef;
     }
 
     @Override

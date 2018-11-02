@@ -18,7 +18,6 @@ import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.Game;
@@ -46,6 +45,7 @@ import java.util.stream.Collectors;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ChargeNetwork implements IChargeNetwork {
+    public static final double CHARGE_PER_DAMAGE = 1000.0;
     private final ChargeGraph NULL_GRAPH = new NullGraph();
     private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
     private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
@@ -53,10 +53,12 @@ public class ChargeNetwork implements IChargeNetwork {
     private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
     private final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
+    private final Charge network;
     private final WeakReference<World> world;
     private final BatterySaveData batterySaveData;
 
-    public ChargeNetwork(World world) {
+    public ChargeNetwork(Charge network, World world) {
+        this.network = network;
         this.world = new WeakReference<>(world);
         this.batterySaveData = BatterySaveData.forWorld(world);
     }
@@ -92,8 +94,8 @@ public class ChargeNetwork implements IChargeNetwork {
         // helps fill out the graph faster and more reliably
         Set<BlockPos> newNodes = new HashSet<>();
         for (Map.Entry<BlockPos, ChargeNode> addedNode : added.entrySet()) {
-            forConnections(worldObj, addedNode.getKey(), (conPos, conDef) -> {
-                if (addNode(worldObj, conPos, conDef))
+            forConnections(worldObj, addedNode.getKey(), (conPos, conState) -> {
+                if (addNode(conState, worldObj, conPos))
                     newNodes.add(conPos);
             });
             if (addedNode.getValue().isGraphNull())
@@ -108,19 +110,18 @@ public class ChargeNetwork implements IChargeNetwork {
             printDebug("Nodes queued: {0}", newNodes.size());
     }
 
-    private void forConnections(World world, BlockPos pos, BiConsumer<BlockPos, IChargeBlock.ChargeDef> action) {
+    private void forConnections(World world, BlockPos pos, BiConsumer<BlockPos, IBlockState> action) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (state.getBlock() instanceof IChargeBlock) {
-            IChargeBlock block = (IChargeBlock) state.getBlock();
-            IChargeBlock.ChargeDef chargeDef = block.getChargeDef(state, world, pos);
+            IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
             if (chargeDef != null) {
                 Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
                 for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
                     IBlockState otherState = WorldPlugin.getBlockState(world, connection.getKey());
                     if (otherState.getBlock() instanceof IChargeBlock) {
-                        IChargeBlock.ChargeDef other = ((IChargeBlock) otherState.getBlock()).getChargeDef(WorldPlugin.getBlockState(world, connection.getKey()), world, connection.getKey());
+                        IChargeBlock.ChargeDef other = getChargeDef(otherState, world, connection.getKey());
                         if (other != null && other.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
-                            action.accept(connection.getKey(), other);
+                            action.accept(connection.getKey(), otherState);
                         }
                     }
                 }
@@ -161,13 +162,21 @@ public class ChargeNetwork implements IChargeNetwork {
     }
 
     @Override
-    public boolean addNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
-        if (!nodeMatches(pos, chargeDef)) {
+    public boolean addNode(IBlockState state, World world, BlockPos pos) {
+        IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
+        if (chargeDef != null && needsNode(pos, chargeDef)) {
             printDebug("Registering Node: {0}->{1}", pos, chargeDef);
             chargeQueue.put(pos, new ChargeNode(pos, chargeDef));
             return true;
         }
         return false;
+    }
+
+    private @Nullable IChargeBlock.ChargeDef getChargeDef(IBlockState state, World world, BlockPos pos) {
+        if (state.getBlock() instanceof IChargeBlock) {
+            return ((IChargeBlock) state.getBlock()).getChargeDef(network, state, world, pos);
+        }
+        return null;
     }
 
     @Override
@@ -191,23 +200,21 @@ public class ChargeNetwork implements IChargeNetwork {
             World worldObj = world.get();
             if (worldObj != null) {
                 IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-                if (state.getBlock() instanceof IChargeBlock) {
-                    IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) state.getBlock()).getChargeDef(state, worldObj, pos);
-                    if (chargeDef != null) {
-                        node = new ChargeNode(pos, chargeDef);
-                        addNodeImpl(pos, node);
-                        if (node.isGraphNull())
-                            node.constructGraph();
-                    }
+                IChargeBlock.ChargeDef chargeDef = getChargeDef(state, worldObj, pos);
+                if (chargeDef != null) {
+                    node = new ChargeNode(pos, chargeDef);
+                    addNodeImpl(pos, node);
+                    if (node.isGraphNull())
+                        node.constructGraph();
                 }
             }
         }
         return node == null ? NULL_NODE : node;
     }
 
-    public boolean nodeMatches(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
+    private boolean needsNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
         ChargeNode node = chargeNodes.get(pos);
-        return node != null && node.isValid() && node.chargeDef == chargeDef;
+        return node == null || !node.isValid() || node.chargeDef != chargeDef;
     }
 
     @Override
@@ -218,10 +225,10 @@ public class ChargeNetwork implements IChargeNetwork {
         if (!RCEntitySelectors.KILLABLE.test(entity))
             return;
 
-        double chargeCost = damage * Charge.CHARGE_PER_DAMAGE;
+        double chargeCost = damage * CHARGE_PER_DAMAGE;
 
         ChargeNode node = access(pos);
-        if (node.getGrid().hasCapacity(chargeCost)) {
+        if (node.hasCapacity(chargeCost)) {
             float remainingDamage = damage;
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase livingEntity = (EntityLivingBase) entity;
@@ -242,7 +249,7 @@ public class ChargeNetwork implements IChargeNetwork {
             }
             if (remainingDamage > 0.1 && entity.attackEntityFrom(origin == DamageOrigin.BLOCK ? RailcraftDamageSource.ELECTRIC : RailcraftDamageSource.TRACK_ELECTRIC, remainingDamage)) {
                 node.removeCharge(chargeCost);
-                EffectManager.instance.zapEffectDeath(entity.world, entity);
+                Charge.effects().zapEffectDeath(entity.world, entity);
             }
         }
     }

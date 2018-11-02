@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -37,7 +38,7 @@ import java.util.Random;
 public final class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
-    private static final ChargeDef DEFINITION = new ChargeDef(ConnectType.BLOCK, 0.025D);
+    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
         super(Material.IRON);
@@ -47,8 +48,13 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return DEFINITION;
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+        switch (network) {
+            case distribution:
+                return CHARGE_DEF;
+            default:
+                return null;
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.interfaces;
 
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITileCharge {
-    default @Nullable IChargeBlock.ChargeDef getChargeDef() {
+    default @Nullable IChargeBlock.ChargeDef getChargeDef(Charge network) {
         return null;
     }
 }

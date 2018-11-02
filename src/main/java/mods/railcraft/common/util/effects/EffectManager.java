@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -136,6 +136,6 @@ public class EffectManager {
         } else if (source instanceof Vec3d) {
             return new EffectSourceVec3d((Vec3d) source);
         }
-        throw new RuntimeException("Invalid Effect Source");
+        throw new IllegalArgumentException("Invalid Effect Source");
     }
 }

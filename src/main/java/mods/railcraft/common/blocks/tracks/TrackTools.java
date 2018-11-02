@@ -18,7 +18,6 @@ import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -38,7 +37,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -68,7 +70,7 @@ public final class TrackTools {
     }
 
     public static boolean isRailBlock(ItemStack stack) {
-        Block block = InvTools.getBlockFromStack(stack);
+        Block block = InvTools.getBlockStateFromStack(stack).getBlock();
         return block instanceof BlockRailBase;
     }
 
@@ -255,14 +257,6 @@ public final class TrackTools {
 //        //noinspection ConstantConditions
 //        return Optional.ofNullable(tile);
 //    }
-
-    public static void throwSparks(IBlockState state, World world, BlockPos pos, Random rand) {
-        int chance = 200;
-        if (world.isRainingAt(pos))
-            chance = 75;
-        if (rand.nextInt(chance) == 50)
-            EffectManager.instance.zapEffectSurface(state, world, pos);
-    }
 
     public static EnumRailDirection getAxisAlignedDirection(Axis axis) {
         switch (axis) {

@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.TileManager;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.machine.BlockMachine;
@@ -140,7 +141,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
                 .retrieve(ITileCharge.class, ITileCharge::getChargeDef).orElse(null);
     }

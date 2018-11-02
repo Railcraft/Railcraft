@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -40,10 +41,12 @@ public class ItemChargeBattery extends ItemBlockRailcraftSubtyped {
         if (variant != null) {
             if (tips == null)
                 tips = new ToolTip();
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.capacity", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getCapacity())));
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.maxdraw", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getMaxDraw())));
+            IBatteryBlock.Spec batterySpec = variant.getChargeDef().getBatterySpec();
+            assert batterySpec != null;
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.capacity", HumanReadableNumberFormatter.format(batterySpec.getCapacity())));
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.maxdraw", HumanReadableNumberFormatter.format(batterySpec.getMaxDraw())));
             tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.loss", HumanReadableNumberFormatter.format(variant.loss)));
-            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.efficiency", HumanReadableNumberFormatter.format(variant.chargeDef.getBatterySpec().getEfficiency())));
+            tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.efficiency", HumanReadableNumberFormatter.format(batterySpec.getEfficiency())));
         }
         return tips;
     }

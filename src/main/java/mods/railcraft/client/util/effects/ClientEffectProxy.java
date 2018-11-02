@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
 import mods.railcraft.client.render.tesr.TESRSignals;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
@@ -41,6 +42,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,16 +54,16 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-// TODO: Where you stupid when you decided to use a Proxy? Just no, no... liach comment: say were instead of where
+// TODO: Were you stupid when you decided to use a Proxy? Just no, no...
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
 
-
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
+        ReflectionHelper.setPrivateValue(Charge.class, null, this, "effects");
     }
 
     private void doTeleport(RailcraftInputStream data) throws IOException {
@@ -343,6 +345,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
                     (rand.nextGaussian() - 0.5) * 0.2,
                     (rand.nextGaussian() - 0.5) * 0.2);
             Vec3d vel = normal.add(variance);
+            // TODO This should probably use the bounding box or something. Its got to be wrong for tracks atm.
             Vec3d start = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).add(normal.scale(0.5));
             switch (side.getAxis()) {
                 case X:

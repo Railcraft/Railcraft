@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
+import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -22,12 +23,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEffectManager extends IPairEffectRenderer {
+public interface IEffectManager extends IPairEffectRenderer, Charge.IZapEffectRenderer {
     void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks);
 
     boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura);
@@ -44,12 +46,6 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void locomotiveEffect(World world, double x, double y, double z);
 
-    void zapEffectPoint(World world, Object source);
-
-    void zapEffectDeath(World world, Object source);
-
-    void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos);
-
     void teleportEffect(Entity entity, Vec3d destination);
 
     void trailEffect(BlockPos start, TileEntity dest, long colorSeed);
@@ -57,4 +53,12 @@ public interface IEffectManager extends IPairEffectRenderer {
     void fireSparkEffect(World world, Vec3d start, Vec3d end);
 
     void forceTrackSpawnEffect(World world, BlockPos pos, int color);
+
+    @Override
+    default void throwSparks(IBlockState state, World world, BlockPos pos, Random rand, int chance) {
+        if (world.isRainingAt(pos))
+            chance *= 3;
+        if (rand.nextInt(chance) == 0)
+            zapEffectSurface(state, world, pos);
+    }
 }

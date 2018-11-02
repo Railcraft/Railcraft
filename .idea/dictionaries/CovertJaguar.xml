@@ -3,6 +3,7 @@
     <words>
       <w>AABB</w>
       <w>Mozilla</w>
+      <w>aabb</w>
       <w>addon</w>
       <w>aint</w>
       <w>alumentum</w>
@@ -20,6 +21,8 @@
       <w>boxable</w>
       <w>buildcraft</w>
       <w>bukkit</w>
+      <w>catenaries</w>
+      <w>catenary</w>
       <w>cesu</w>
       <w>chestplate</w>
       <w>coef</w>
@@ -57,6 +60,7 @@
       <w>lapotron</w>
       <w>lockdown</w>
       <w>macerator</w>
+      <w>maxdraw</w>
       <w>mfsu</w>
       <w>mineable</w>
       <w>minecart</w>
