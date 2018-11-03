@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -69,7 +70,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
     private static final EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.WIRE, 0.02);
+    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.WIRE, 0.02);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -121,7 +122,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;
@@ -164,9 +165,9 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
             IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IChargeBlock) {
-                IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(Charge.distribution, neighborState, worldIn, neighborPos);
-                if (chargeDef != null) {
-                    IChargeBlock.ConnectType connectType = chargeDef.getConnectType();
+                ChargeSpec chargeSpec = ((IChargeBlock) neighborBlock).getChargeDef(Charge.distribution, neighborState, worldIn, neighborPos);
+                if (chargeSpec != null) {
+                    IChargeBlock.ConnectType connectType = chargeSpec.getConnectType();
                     if (connectionMatcher.get(side).contains(connectType)) {
                         connections[side.ordinal()] = connectType == IChargeBlock.ConnectType.WIRE ? Connection.WIRE : Connection.PLUG;
                     }

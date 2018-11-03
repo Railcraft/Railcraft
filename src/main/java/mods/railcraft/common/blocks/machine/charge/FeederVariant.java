@@ -10,10 +10,10 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.modules.ModuleCharge;
@@ -34,7 +34,7 @@ public enum FeederVariant implements IEnumMachine<FeederVariant> {
 
     private static final List<FeederVariant> creativeList = new ArrayList<FeederVariant>();
     public static final FeederVariant[] VALUES = values();
-    private final IChargeBlock.ChargeDef chargeDef;
+    private final IChargeBlock.ChargeSpec chargeSpec;
 
     static {
         creativeList.add(IC2);
@@ -45,11 +45,11 @@ public enum FeederVariant implements IEnumMachine<FeederVariant> {
 
     FeederVariant(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, IBatteryBlock.Spec batterySpec) {
         this.def = new Definition(tag, tile, module);
-        this.chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.5, batterySpec);
+        this.chargeSpec = new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.5, batterySpec);
     }
 
-    public IChargeBlock.ChargeDef getChargeDef() {
-        return chargeDef;
+    public IChargeBlock.ChargeSpec getChargeSpec() {
+        return chargeSpec;
     }
 
     public static FeederVariant fromId(int id) {

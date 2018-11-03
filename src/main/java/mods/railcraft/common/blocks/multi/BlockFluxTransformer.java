@@ -10,9 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -33,7 +32,7 @@ import java.util.Random;
  */
 public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
-    public static final IChargeBlock.ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.5,
+    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.5,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 0.65));
 
     public BlockFluxTransformer() {
@@ -49,7 +48,7 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge {
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

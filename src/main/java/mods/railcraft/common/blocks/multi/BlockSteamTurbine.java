@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 /**
  *
  */
@@ -40,7 +42,7 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
     public static final IProperty<Texture> TEXTURE = PropertyEnum.create("texture", Texture.class);
-    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.0,
+    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.0,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, TileSteamTurbine.IC2_OUTPUT, TileSteamTurbine.IC2_OUTPUT, 1.0));
 
     public BlockSteamTurbine() {
@@ -48,10 +50,11 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
         setSoundType(SoundType.METAL);
         setDefaultState(getDefaultState().withProperty(WINDOW, false).withProperty(LONG_AXIS, Axis.X).withProperty(TEXTURE, Texture.NONE));
         setHarvestLevel("pickaxe", 1);
+        setTickRandomly(true);
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;
@@ -78,6 +81,12 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     @Override
     public Class<TileSteamTurbine> getTileClass(IBlockState state) {
         return TileSteamTurbine.class;
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
     }
 
     @Override

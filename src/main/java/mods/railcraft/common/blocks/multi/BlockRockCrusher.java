@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -38,17 +38,18 @@ import java.util.Random;
 public final class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
-    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.025D);
+    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.025D);
 
     public BlockRockCrusher() {
         super(Material.IRON);
         setSoundType(SoundType.METAL);
         setDefaultState(getDefaultState().withProperty(ICON, 'O'));
         setHarvestLevel("pickaxe", 1);
+        setTickRandomly(true);
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

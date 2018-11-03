@@ -9,13 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted;
 
+import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
-import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -68,7 +68,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -525,7 +525,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return getTrackType(world, pos).isElectric() ? CHARGE_DEF : null;

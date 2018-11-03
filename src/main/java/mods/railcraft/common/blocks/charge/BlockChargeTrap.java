@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -50,7 +51,7 @@ import java.util.Random;
 public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.025);
+    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.025);
 
     public BlockChargeTrap() {
         super(Material.IRON);
@@ -82,7 +83,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.gui.EnumGui;
@@ -49,7 +49,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, ITileInventory, IHasWork, ITileCharge {
-    private static final IChargeBlock.ChargeDef CHARGE_DEF = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static final IChargeBlock.ChargeSpec CHARGE_DEF = new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.1);
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
@@ -60,7 +60,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public IChargeBlock.ChargeDef getChargeDef(Charge network) {
+    public IChargeBlock.ChargeSpec getChargeDef(Charge network) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

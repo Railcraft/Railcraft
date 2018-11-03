@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -97,10 +98,10 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     }
 
     @Override
-    public @Nullable ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @Nullable IChargeBlock.ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
-                return getVariant(state).getChargeDef();
+                return getVariant(state).getChargeSpec();
             default:
                 return null;
         }

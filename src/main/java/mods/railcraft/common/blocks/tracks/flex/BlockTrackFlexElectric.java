@@ -10,9 +10,9 @@
 
 package mods.railcraft.common.blocks.tracks.flex;
 
-import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.state.IBlockState;
@@ -30,7 +30,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlock {
-    public static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.TRACK, 0.01);
+    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.TRACK, 0.01);
 
     public BlockTrackFlexElectric(TrackType trackType) {
         super(trackType);
@@ -73,7 +73,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

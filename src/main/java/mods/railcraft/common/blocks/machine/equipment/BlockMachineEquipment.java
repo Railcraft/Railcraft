@@ -10,9 +10,9 @@
 
 package mods.railcraft.common.blocks.machine.equipment;
 
-import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
@@ -48,6 +48,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
     public BlockMachineEquipment() {
         super(Material.ROCK);
         setDefaultState(getDefaultState());
+        setTickRandomly(true);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
                 .retrieve(ITileCharge.class, t -> t.getChargeDef(network)).orElse(null);
     }

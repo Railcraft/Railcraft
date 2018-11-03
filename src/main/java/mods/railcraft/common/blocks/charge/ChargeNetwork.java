@@ -16,6 +16,7 @@ import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
@@ -74,9 +75,6 @@ public class ChargeNetwork implements Charge.INetwork {
     }
 
     public void tick() {
-        World worldObj = world.get();
-        if (worldObj == null)
-            return;
         tickingNodes.removeIf(ChargeNode::checkUsageRecordingCompletion);
 
         // Process the queue of nodes waiting to be added/removed from the network
@@ -99,8 +97,8 @@ public class ChargeNetwork implements Charge.INetwork {
         // helps fill out the graph faster and more reliably
         Set<BlockPos> newNodes = new HashSet<>();
         for (Map.Entry<BlockPos, ChargeNode> addedNode : added.entrySet()) {
-            forConnections(worldObj, addedNode.getKey(), (conPos, conState) -> {
-                if (addNode(conState, worldObj, conPos))
+            forConnections(addedNode.getKey(), (conPos, conState) -> {
+                if (addNode(conPos, conState))
                     newNodes.add(conPos);
             });
             if (addedNode.getValue().isGridNull())
@@ -115,17 +113,20 @@ public class ChargeNetwork implements Charge.INetwork {
             printDebug("Nodes queued: {0}", newNodes.size());
     }
 
-    private void forConnections(World world, BlockPos pos, BiConsumer<BlockPos, IBlockState> action) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
+    private void forConnections(BlockPos pos, BiConsumer<BlockPos, IBlockState> action) {
+        World worldObj = world.get();
+        if (worldObj == null)
+            return;
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
         if (state.getBlock() instanceof IChargeBlock) {
-            IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
-            if (chargeDef != null) {
-                CONNECTION_MAPS.get(chargeDef.getConnectType()).forEach((k, v) -> {
+            IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
+            if (chargeSpec != null) {
+                CONNECTION_MAPS.get(chargeSpec.getConnectType()).forEach((k, v) -> {
                     BlockPos otherPos = pos.add(k);
-                    IBlockState otherState = WorldPlugin.getBlockState(world, otherPos);
+                    IBlockState otherState = WorldPlugin.getBlockState(worldObj, otherPos);
                     if (otherState.getBlock() instanceof IChargeBlock) {
-                        IChargeBlock.ChargeDef other = getChargeDef(otherState, world, otherPos);
-                        if (other != null && CONNECTION_MAPS.get(other.getConnectType()).get(pos.subtract(otherPos)).contains(chargeDef.getConnectType())) {
+                        IChargeBlock.ChargeSpec other = getChargeDef(otherState, otherPos);
+                        if (other != null && CONNECTION_MAPS.get(other.getConnectType()).get(pos.subtract(otherPos)).contains(chargeSpec.getConnectType())) {
                             action.accept(otherPos, otherState);
                         }
                     }
@@ -167,19 +168,22 @@ public class ChargeNetwork implements Charge.INetwork {
     }
 
     @Override
-    public boolean addNode(IBlockState state, World world, BlockPos pos) {
-        IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
-        if (chargeDef != null && needsNode(pos, chargeDef)) {
-            printDebug("Registering Node: {0}->{1}", pos, chargeDef);
-            queue.put(pos, new ChargeNode(pos, chargeDef));
+    public boolean addNode(BlockPos pos, IBlockState state) {
+        IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
+        if (chargeSpec != null && needsNode(pos, chargeSpec)) {
+            printDebug("Registering Node: {0}->{1}", pos, chargeSpec);
+            queue.put(pos, new ChargeNode(pos, chargeSpec));
             return true;
         }
         return false;
     }
 
-    private @Nullable IChargeBlock.ChargeDef getChargeDef(IBlockState state, World world, BlockPos pos) {
+    private @Nullable IChargeBlock.ChargeSpec getChargeDef(IBlockState state, BlockPos pos) {
+        World worldObj = world.get();
+        if (worldObj == null)
+            return null;
         if (state.getBlock() instanceof IChargeBlock) {
-            return ((IChargeBlock) state.getBlock()).getChargeDef(network, state, world, pos);
+            return ((IChargeBlock) state.getBlock()).getChargeDef(network, state, worldObj, pos);
         }
         return null;
     }
@@ -204,9 +208,9 @@ public class ChargeNetwork implements Charge.INetwork {
             World worldObj = world.get();
             if (worldObj != null) {
                 IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-                IChargeBlock.ChargeDef chargeDef = getChargeDef(state, worldObj, pos);
-                if (chargeDef != null) {
-                    node = new ChargeNode(pos, chargeDef);
+                IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
+                if (chargeSpec != null) {
+                    node = new ChargeNode(pos, chargeSpec);
                     addNodeImpl(pos, node);
                     if (node.isGridNull())
                         node.constructGrid();
@@ -216,9 +220,9 @@ public class ChargeNetwork implements Charge.INetwork {
         return node == null ? NULL_NODE : node;
     }
 
-    private boolean needsNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
+    private boolean needsNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
         ChargeNode node = nodes.get(pos);
-        return node == null || !node.isValid() || node.chargeDef != chargeDef;
+        return node == null || !node.isValid() || node.chargeSpec != chargeSpec;
     }
 
     public class ChargeGrid extends ForwardingSet<ChargeNode> {
@@ -238,7 +242,7 @@ public class ChargeNetwork implements Charge.INetwork {
         public boolean add(ChargeNode chargeNode) {
             boolean added = super.add(chargeNode);
             if (added)
-                totalLosses += chargeNode.chargeDef.getLosses();
+                totalLosses += chargeNode.chargeSpec.getLosses();
             chargeNode.chargeGrid = this;
             batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
             if (chargeNode.chargeBattery != null) {
@@ -499,28 +503,28 @@ public class ChargeNetwork implements Charge.INetwork {
     public class ChargeNode implements Charge.IAccess {
         protected final @Nullable BatteryBlock chargeBattery;
         private final BlockPos pos;
-        private final IChargeBlock.ChargeDef chargeDef;
+        private final IChargeBlock.ChargeSpec chargeSpec;
         private ChargeGrid chargeGrid = NULL_GRID;
         private boolean invalid;
         private Optional<UsageRecorder> usageRecorder = Optional.empty();
         private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
-        private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
+        private ChargeNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
             this.pos = pos;
-            this.chargeDef = chargeDef;
-            this.chargeBattery = chargeDef.getBatterySpec() == null ? null : new BatteryBlock(pos, chargeDef.getBatterySpec());
+            this.chargeSpec = chargeSpec;
+            this.chargeBattery = chargeSpec.getBatterySpec() == null ? null : new BatteryBlock(pos, chargeSpec.getBatterySpec());
         }
 
-        public IChargeBlock.ChargeDef getChargeDef() {
-            return chargeDef;
+        public IChargeBlock.ChargeSpec getChargeSpec() {
+            return chargeSpec;
         }
 
         private void forConnections(Consumer<ChargeNode> action) {
-            CONNECTION_MAPS.get(chargeDef.getConnectType()).forEach((k, v) -> {
+            CONNECTION_MAPS.get(chargeSpec.getConnectType()).forEach((k, v) -> {
                 BlockPos otherPos = pos.add(k);
                 ChargeNode other = nodes.get(otherPos);
-                if (other != null && v.contains(other.chargeDef.getConnectType())
-                        && CONNECTION_MAPS.get(other.chargeDef.getConnectType()).get(pos.subtract(otherPos)).contains(chargeDef.getConnectType())) {
+                if (other != null && v.contains(other.chargeSpec.getConnectType())
+                        && CONNECTION_MAPS.get(other.chargeSpec.getConnectType()).get(pos.subtract(otherPos)).contains(chargeSpec.getConnectType())) {
                     action.accept(other);
                 }
             });
@@ -696,7 +700,7 @@ public class ChargeNetwork implements Charge.INetwork {
 
         @Override
         public String toString() {
-            String string = String.format("ChargeNode{%s}|%s", pos, chargeDef.toString());
+            String string = String.format("ChargeNode{%s}|%s", pos, chargeSpec.toString());
             if (chargeBattery != null)
                 string += "|State: " + chargeBattery.getState();
             return string;
@@ -705,7 +709,7 @@ public class ChargeNetwork implements Charge.INetwork {
 
     public class NullNode extends ChargeNode {
         public NullNode() {
-            super(new BlockPos(0, 0, 0), new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.0));
+            super(new BlockPos(0, 0, 0), new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.0));
         }
 
         @Override
@@ -749,17 +753,17 @@ public class ChargeNetwork implements Charge.INetwork {
     }
 
     static {
-        EnumSet<IChargeBlock.ConnectType> all = EnumSet.allOf(IChargeBlock.ConnectType.class);
+        EnumSet<IChargeBlock.ConnectType> any = EnumSet.allOf(IChargeBlock.ConnectType.class);
         EnumSet<IChargeBlock.ConnectType> notWire = EnumSet.complementOf(EnumSet.of(IChargeBlock.ConnectType.WIRE));
         EnumSet<IChargeBlock.ConnectType> track = EnumSet.of(IChargeBlock.ConnectType.TRACK);
-        EnumSet<IChargeBlock.ConnectType> notTrack = EnumSet.complementOf(EnumSet.of(IChargeBlock.ConnectType.TRACK));
+        EnumSet<IChargeBlock.ConnectType> notFlat = EnumSet.complementOf(EnumSet.of(IChargeBlock.ConnectType.TRACK, IChargeBlock.ConnectType.SLAB));
         ConnectionMap positions;
 
         // BLOCK
 
         positions = new ConnectionMap();
         for (EnumFacing facing : EnumFacing.VALUES) {
-            positions.put(facing.getDirectionVec(), all);
+            positions.put(facing.getDirectionVec(), any);
         }
         CONNECTION_MAPS.put(IChargeBlock.ConnectType.BLOCK, positions);
 
@@ -769,7 +773,7 @@ public class ChargeNetwork implements Charge.INetwork {
         positions.put(new BlockPos(+1, 0, 0), notWire);
         positions.put(new BlockPos(-1, 0, 0), notWire);
 
-        positions.put(new BlockPos(0, -1, 0), all);
+        positions.put(new BlockPos(0, -1, 0), any);
 
         positions.put(new BlockPos(0, 0, +1), notWire);
         positions.put(new BlockPos(0, 0, -1), notWire);
@@ -788,7 +792,7 @@ public class ChargeNetwork implements Charge.INetwork {
         positions.put(new BlockPos(-1, +1, 0), track);
         positions.put(new BlockPos(-1, -1, 0), track);
 
-        positions.put(new BlockPos(0, -1, 0), all);
+        positions.put(new BlockPos(0, -1, 0), any);
 
         positions.put(new BlockPos(0, 0, +1), notWire);
         positions.put(new BlockPos(0, 0, -1), notWire);
@@ -804,12 +808,12 @@ public class ChargeNetwork implements Charge.INetwork {
         // WIRE
         positions = new ConnectionMap();
 
-        positions.put(new BlockPos(+1, 0, 0), notTrack);
-        positions.put(new BlockPos(-1, 0, 0), notTrack);
-        positions.put(new BlockPos(0, +1, 0), all);
-        positions.put(new BlockPos(0, -1, 0), notTrack);
-        positions.put(new BlockPos(0, 0, +1), notTrack);
-        positions.put(new BlockPos(0, 0, -1), notTrack);
+        positions.put(new BlockPos(+1, 0, 0), notFlat);
+        positions.put(new BlockPos(-1, 0, 0), notFlat);
+        positions.put(new BlockPos(0, +1, 0), any);
+        positions.put(new BlockPos(0, -1, 0), notFlat);
+        positions.put(new BlockPos(0, 0, +1), notFlat);
+        positions.put(new BlockPos(0, 0, -1), notFlat);
 
         CONNECTION_MAPS.put(IChargeBlock.ConnectType.WIRE, positions);
     }

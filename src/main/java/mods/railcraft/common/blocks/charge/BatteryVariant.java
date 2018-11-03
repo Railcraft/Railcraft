@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
@@ -31,7 +32,7 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
     private static final List<BatteryVariant> creativeList = new ArrayList<>();
     public static final BatteryVariant[] VALUES = values();
     public final double loss;
-    private final IChargeBlock.ChargeDef chargeDef;
+    private final IChargeBlock.ChargeSpec chargeSpec;
 
     static {
         creativeList.add(NICKEL_IRON);
@@ -43,7 +44,7 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
         this.def = new Definition(tag, module);
         this.loss = loss;
 
-        this.chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, loss,
+        this.chargeSpec = new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, loss,
                 new IBatteryBlock.Spec(IBatteryBlock.State.RECHARGEABLE, capacity, maxDraw, efficiency));
     }
 
@@ -62,8 +63,8 @@ public enum BatteryVariant implements IVariantEnumBlock<BatteryVariant> {
         return def;
     }
 
-    public IChargeBlock.ChargeDef getChargeDef() {
-        return chargeDef;
+    public IChargeBlock.ChargeSpec getChargeSpec() {
+        return chargeSpec;
     }
 
     @Override

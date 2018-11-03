@@ -10,9 +10,9 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
+import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -36,13 +36,14 @@ import static net.minecraft.util.EnumFacing.Axis.Z;
 @SuppressWarnings("unused")
 public class BlockEngravingBench extends BlockEntityDelegate implements IChargeBlock {
 
-    private static final ChargeDef CHARGE_DEF = new ChargeDef(ConnectType.BLOCK, 0.1);
+    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.1);
     public static final PropertyEnum<Axis> AXIS = PropertyEnum.create("axis", Axis.class, X, Z);
 
     public BlockEngravingBench() {
         super(Material.IRON);
         setSoundType(SoundType.METAL);
         setDefaultState(getDefaultState().withProperty(AXIS, Z));
+        setTickRandomly(true);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class BlockEngravingBench extends BlockEntityDelegate implements IChargeB
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

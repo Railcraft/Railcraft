@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
@@ -70,10 +70,10 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public ChargeDef getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
-                return getVariant(state).getChargeDef();
+                return getVariant(state).getChargeSpec();
             default:
                 return null;
         }

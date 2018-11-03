@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
-import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
@@ -58,7 +58,7 @@ public class TileEngravingBench extends TileSmartItemTicking implements ISidedIn
     private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
-    private static IChargeBlock.ChargeDef chargeDef = new IChargeBlock.ChargeDef(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static IChargeBlock.ChargeSpec chargeSpec = new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.1);
     //    public final FEEnergyIndicator rfIndicator;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;

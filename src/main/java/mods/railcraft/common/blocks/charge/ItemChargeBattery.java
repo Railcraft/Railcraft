@@ -41,7 +41,7 @@ public class ItemChargeBattery extends ItemBlockRailcraftSubtyped {
         if (variant != null) {
             if (tips == null)
                 tips = new ToolTip();
-            IBatteryBlock.Spec batterySpec = variant.getChargeDef().getBatterySpec();
+            IBatteryBlock.Spec batterySpec = variant.getChargeSpec().getBatterySpec();
             assert batterySpec != null;
             tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.capacity", HumanReadableNumberFormatter.format(batterySpec.getCapacity())));
             tips.add(LocalizationPlugin.translate("tile.railcraft.charge.battery.tips.maxdraw", HumanReadableNumberFormatter.format(batterySpec.getMaxDraw())));
