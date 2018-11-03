@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.ForwardingCollection;
+import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
 import mods.railcraft.api.charge.Charge;
@@ -28,7 +29,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +50,7 @@ import java.util.stream.Collectors;
  */
 public class ChargeNetwork implements Charge.INetwork {
     public static final double CHARGE_PER_DAMAGE = 1000.0;
+    public static final EnumMap<IChargeBlock.ConnectType, ConnectionMap> CONNECTION_MAPS = new EnumMap<>(IChargeBlock.ConnectType.class);
     private final ChargeGrid NULL_GRID = new NullGrid();
     private final Map<BlockPos, ChargeNode> nodes = new HashMap<>();
     private final Map<BlockPos, ChargeNode> queue = new LinkedHashMap<>();
@@ -116,16 +120,16 @@ public class ChargeNetwork implements Charge.INetwork {
         if (state.getBlock() instanceof IChargeBlock) {
             IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
             if (chargeDef != null) {
-                Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
-                for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
-                    IBlockState otherState = WorldPlugin.getBlockState(world, connection.getKey());
+                CONNECTION_MAPS.get(chargeDef.getConnectType()).forEach((k, v) -> {
+                    BlockPos otherPos = pos.add(k);
+                    IBlockState otherState = WorldPlugin.getBlockState(world, otherPos);
                     if (otherState.getBlock() instanceof IChargeBlock) {
-                        IChargeBlock.ChargeDef other = getChargeDef(otherState, world, connection.getKey());
-                        if (other != null && other.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
-                            action.accept(connection.getKey(), otherState);
+                        IChargeBlock.ChargeDef other = getChargeDef(otherState, world, otherPos);
+                        if (other != null && CONNECTION_MAPS.get(other.getConnectType()).get(pos.subtract(otherPos)).contains(chargeDef.getConnectType())) {
+                            action.accept(otherPos, otherState);
                         }
                     }
-                }
+                });
             }
         }
     }
@@ -512,14 +516,14 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         private void forConnections(Consumer<ChargeNode> action) {
-            Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
-            for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
-                ChargeNode other = nodes.get(connection.getKey());
-                if (other != null && connection.getValue().contains(other.chargeDef.getConnectType())
-                        && other.chargeDef.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
+            CONNECTION_MAPS.get(chargeDef.getConnectType()).forEach((k, v) -> {
+                BlockPos otherPos = pos.add(k);
+                ChargeNode other = nodes.get(otherPos);
+                if (other != null && v.contains(other.chargeDef.getConnectType())
+                        && CONNECTION_MAPS.get(other.chargeDef.getConnectType()).get(pos.subtract(otherPos)).contains(chargeDef.getConnectType())) {
                     action.accept(other);
                 }
-            }
+            });
         }
 
         public ChargeGrid getGrid() {
@@ -741,6 +745,92 @@ public class ChargeNetwork implements Charge.INetwork {
         @Override
         public String toString() {
             return "ChargeNode{NullNode}";
+        }
+    }
+
+    static {
+        EnumSet<IChargeBlock.ConnectType> all = EnumSet.allOf(IChargeBlock.ConnectType.class);
+        EnumSet<IChargeBlock.ConnectType> notWire = EnumSet.complementOf(EnumSet.of(IChargeBlock.ConnectType.WIRE));
+        EnumSet<IChargeBlock.ConnectType> track = EnumSet.of(IChargeBlock.ConnectType.TRACK);
+        EnumSet<IChargeBlock.ConnectType> notTrack = EnumSet.complementOf(EnumSet.of(IChargeBlock.ConnectType.TRACK));
+        ConnectionMap positions;
+
+        // BLOCK
+
+        positions = new ConnectionMap();
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            positions.put(facing.getDirectionVec(), all);
+        }
+        CONNECTION_MAPS.put(IChargeBlock.ConnectType.BLOCK, positions);
+
+        // SLAB
+        positions = new ConnectionMap();
+
+        positions.put(new BlockPos(+1, 0, 0), notWire);
+        positions.put(new BlockPos(-1, 0, 0), notWire);
+
+        positions.put(new BlockPos(0, -1, 0), all);
+
+        positions.put(new BlockPos(0, 0, +1), notWire);
+        positions.put(new BlockPos(0, 0, -1), notWire);
+
+        CONNECTION_MAPS.put(IChargeBlock.ConnectType.SLAB, positions);
+
+        //TRACK
+        positions = new ConnectionMap();
+
+        positions.put(new BlockPos(+1, 0, 0), notWire);
+        positions.put(new BlockPos(-1, 0, 0), notWire);
+
+        positions.put(new BlockPos(+1, +1, 0), track);
+        positions.put(new BlockPos(+1, -1, 0), track);
+
+        positions.put(new BlockPos(-1, +1, 0), track);
+        positions.put(new BlockPos(-1, -1, 0), track);
+
+        positions.put(new BlockPos(0, -1, 0), all);
+
+        positions.put(new BlockPos(0, 0, +1), notWire);
+        positions.put(new BlockPos(0, 0, -1), notWire);
+
+        positions.put(new BlockPos(0, +1, +1), track);
+        positions.put(new BlockPos(0, -1, +1), track);
+
+        positions.put(new BlockPos(0, +1, -1), track);
+        positions.put(new BlockPos(0, -1, -1), track);
+
+        CONNECTION_MAPS.put(IChargeBlock.ConnectType.TRACK, positions);
+
+        // WIRE
+        positions = new ConnectionMap();
+
+        positions.put(new BlockPos(+1, 0, 0), notTrack);
+        positions.put(new BlockPos(-1, 0, 0), notTrack);
+        positions.put(new BlockPos(0, +1, 0), all);
+        positions.put(new BlockPos(0, -1, 0), notTrack);
+        positions.put(new BlockPos(0, 0, +1), notTrack);
+        positions.put(new BlockPos(0, 0, -1), notTrack);
+
+        CONNECTION_MAPS.put(IChargeBlock.ConnectType.WIRE, positions);
+    }
+
+    private static class ConnectionMap extends ForwardingMap<Vec3i, EnumSet<IChargeBlock.ConnectType>> {
+
+        private final Map<Vec3i, EnumSet<IChargeBlock.ConnectType>> delegate;
+
+        public ConnectionMap() {
+            delegate = new HashMap<>();
+        }
+
+        @Override
+        protected Map<Vec3i, EnumSet<IChargeBlock.ConnectType>> delegate() {
+            return delegate;
+        }
+
+        @Override
+        public EnumSet<IChargeBlock.ConnectType> get(@Nullable Object key) {
+            EnumSet<IChargeBlock.ConnectType> ret = super.get(key);
+            return ret == null ? EnumSet.noneOf(IChargeBlock.ConnectType.class) : ret;
         }
     }
 }
