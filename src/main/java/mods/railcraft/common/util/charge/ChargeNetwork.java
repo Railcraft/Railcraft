@@ -248,11 +248,15 @@ public class ChargeNetwork implements Charge.INetwork {
             if (chargeNode.chargeBattery != null) {
                 batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
                 batteries.add(chargeNode.chargeBattery);
-                batteries.sort(Comparator.comparing(BatteryBlock::getState));
+                sortBatteries();
             } else {
                 batterySaveData.removeBattery(chargeNode.pos);
             }
             return added;
+        }
+
+        private void sortBatteries() {
+            batteries.sort(Comparator.comparing(BatteryBlock::getState));
         }
 
         @Override
@@ -305,6 +309,8 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         private void tick() {
+            sortBatteries();
+
             removeCharge(totalLosses * RailcraftConfig.chargeLossMultiplier());
 
             // balance the charge in all the rechargeable batteries in the grid

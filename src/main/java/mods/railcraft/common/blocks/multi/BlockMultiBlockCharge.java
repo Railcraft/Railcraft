@@ -31,8 +31,8 @@ public abstract class BlockMultiBlockCharge extends BlockMultiBlock implements I
     }
 
     @Override
-    public Charge.IAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
+    public Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
         Optional<TileMultiBlock> tile = WorldPlugin.getTileEntity(world, pos, TileMultiBlock.class);
-        return Charge.distribution.network(world).access(tile.map(TileMultiBlock::getMasterPos).orElse(pos));
+        return network.network(world).access(tile.map(TileMultiBlock::getMasterPos).orElse(pos));
     }
 }

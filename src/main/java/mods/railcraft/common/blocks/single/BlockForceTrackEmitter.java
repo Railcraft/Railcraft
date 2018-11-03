@@ -44,7 +44,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public static final int DEFAULT_SHADE = EnumColor.LIGHT_BLUE.getHexColor();
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.025);
+    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.1);
 
     public BlockForceTrackEmitter() {
         super(Material.IRON);
