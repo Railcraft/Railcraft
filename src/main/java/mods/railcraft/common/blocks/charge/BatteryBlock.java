@@ -26,15 +26,13 @@ public class BatteryBlock implements IBatteryBlock {
     private StateImpl stateImpl = StateImpl.RECHARGEABLE;
     private State state = State.RECHARGEABLE;
     private double chargeDrawnThisTick;
+    private double charge;
 
     public BatteryBlock(BlockPos pos, Spec batterySpec) {
         this.pos = pos;
         this.batterySpec = batterySpec;
         setState(batterySpec.getInitialState());
     }
-
-    private boolean initialized;
-    private double charge;
 
     public BlockPos getPos() {
         return pos;
@@ -55,10 +53,6 @@ public class BatteryBlock implements IBatteryBlock {
         return batterySpec;
     }
 
-    public final boolean isInitialized() {
-        return initialized;
-    }
-
     @Override
     public double getCharge() {
         return stateImpl.getCharge(this);
@@ -77,11 +71,6 @@ public class BatteryBlock implements IBatteryBlock {
 
     public void tick() {
         chargeDrawnThisTick = 0.0;
-    }
-
-    public void initCharge(double charge) {
-        initialized = true;
-        setCharge(charge);
     }
 
     @Override
@@ -125,7 +114,7 @@ public class BatteryBlock implements IBatteryBlock {
 
     @Override
     public String toString() {
-        return String.format("%s@%s { i:%s; c:%.2f; }", getClass().getSimpleName(), Integer.toHexString(hashCode()), initialized, charge);
+        return String.format("%s@%s { c:%.2f }", getClass().getSimpleName(), Integer.toHexString(hashCode()), charge);
     }
 
     private enum StateImpl {

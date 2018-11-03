@@ -53,7 +53,7 @@ public interface IChargeBlock {
      *
      * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
      */
-    default ChargeNetwork.ChargeNode getMeterAccess(IBlockState state, World world, BlockPos pos) {
+    default IChargeAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
         return Charge.distribution.network(world).access(pos);
     }
 

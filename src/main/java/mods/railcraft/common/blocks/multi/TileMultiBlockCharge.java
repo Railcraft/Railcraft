@@ -25,8 +25,23 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
         super(patterns);
     }
 
-    protected IBatteryBlock getBattery() {
-        return Charge.distribution.network(world).access(pos).getBattery();
+    public IBatteryBlock getBattery() {
+        IBatteryBlock battery = Charge.distribution.network(world).access(pos).getBattery();
+        assert battery != null;
+        return battery;
+    }
+
+    private int prevComparatorOutput;
+
+    @Override
+    public void update() {
+        super.update();
+        if (clock % 16 == 0) {
+            int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
+            if (prevComparatorOutput != newComparatorOutput)
+                world.updateComparatorOutputLevel(pos, getBlockType());
+            prevComparatorOutput = newComparatorOutput;
+        }
     }
 
     @Override

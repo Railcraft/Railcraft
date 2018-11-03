@@ -15,7 +15,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeAccess;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -221,10 +221,10 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
             if (isStructureValid()) {
                 BlockPos target = pos.up();
-                ChargeNetwork.ChargeNode gridAccess = Charge.distribution.network(world).access(getMasterPos());
+                IChargeAccess node = Charge.distribution.network(world).access(getMasterPos());
 
                 EntitySearcher.find(EntityItem.class).around(target).at(world).forEach(item -> {
-                    if (gridAccess.useCharge(SUCKING_POWER_COST)) {
+                    if (node.useCharge(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
                         item.setDead();

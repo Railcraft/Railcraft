@@ -10,6 +10,7 @@
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,7 +46,7 @@ public class ChargeNetworkIndicator extends IndicatorController {
 
     @Override
     public double getServerValue() {
-        return Charge.distribution.network(world).grid(pos).getUsageRatio();
+        return ((ChargeNetwork) Charge.distribution.network(world)).grid(pos).getUtilization();
     }
 
     @Override

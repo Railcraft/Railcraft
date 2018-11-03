@@ -40,23 +40,13 @@ public interface IChargeNetwork {
     }
 
     /**
-     * Get the grid for the position.
-     *
-     * @return A grid, may be a dummy object if there is no valid grid at the location.
-     */
-    default ChargeNetwork.ChargeGraph grid(BlockPos pos) {
-        // TODO: Add dummy object
-        return null;
-    }
-
-    /**
      * Get a grid access point for the position.
      *
      * @return A grid access point, may be a dummy object if there is no valid grid at the location.
      */
-    default ChargeNetwork.ChargeNode access(BlockPos pos) {
-        // TODO: Add dummy object
-        return null;
+    default IChargeAccess access(BlockPos pos) {
+        return new IChargeAccess() {
+        };
     }
 
     /**

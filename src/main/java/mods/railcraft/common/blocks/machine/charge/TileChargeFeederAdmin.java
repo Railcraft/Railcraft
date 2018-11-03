@@ -57,6 +57,6 @@ public class TileChargeFeederAdmin extends TileCharge {
     }
 
     private void updateBatteryState(IBlockState state) {
-        getChargeBattery().setState(state.getValue(BlockChargeFeeder.REDSTONE) ? BatteryBlock.State.INFINITE : BatteryBlock.State.DISABLED);
+        getBattery().setState(state.getValue(BlockChargeFeeder.REDSTONE) ? BatteryBlock.State.INFINITE : BatteryBlock.State.DISABLED);
     }
 }

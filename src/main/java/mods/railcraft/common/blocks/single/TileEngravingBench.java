@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.single;
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
-import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
@@ -44,7 +43,7 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public class TileEngravingBench extends TileSmartItemTicking implements ITileCharge, ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
+public class TileEngravingBench extends TileSmartItemTicking implements ISidedInventory, IHasWork, IGuiReturnHandler, ITileRotate {
     //TODO: Finish conversion to RCUs
     public enum GuiPacketType {
 

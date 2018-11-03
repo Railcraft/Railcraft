@@ -85,7 +85,7 @@ public final class BatterySaveData extends WorldSavedData {
         double charge = chargeLevels.get(battery.getPos().toLong());
         if (Double.isNaN(charge))
             charge = 0.0;
-        battery.initCharge(charge);
+        battery.setCharge(charge);
     }
 
     public void updateBatteryRecord(BatteryBlock battery) {

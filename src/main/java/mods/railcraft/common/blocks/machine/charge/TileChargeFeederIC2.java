@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -64,8 +65,9 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     @Override
     public double getDemandedEnergy() {
         IBlockState state = getBlockState();
-        if (state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE) && getChargeBattery().isInitialized()) {
-            double chargeDifference = getChargeBattery().getCapacity() - getChargeBattery().getCharge();
+        IBatteryBlock battery = getBattery();
+        if (state.getBlock() instanceof BlockChargeFeeder && state.getValue(BlockChargeFeeder.REDSTONE)) {
+            double chargeDifference = battery.getCapacity() - battery.getCharge();
             return chargeDifference > 0.0 ? chargeDifference : 0.0;
         }
         return 0.0;
@@ -78,7 +80,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-        getChargeBattery().addCharge(amount);
+        getBattery().addCharge(amount);
         return 0.0;
     }
 

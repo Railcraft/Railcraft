@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeAccess;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.Material;
@@ -32,7 +32,7 @@ public abstract class BlockMultiBlockCharge extends BlockMultiBlock implements I
     }
 
     @Override
-    public ChargeNetwork.ChargeNode getMeterAccess(IBlockState state, World world, BlockPos pos) {
+    public IChargeAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
         Optional<TileMultiBlock> tile = WorldPlugin.getTileEntity(world, pos, TileMultiBlock.class);
         return Charge.distribution.network(world).access(tile.map(TileMultiBlock::getMasterPos).orElse(pos));
     }

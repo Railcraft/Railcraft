@@ -184,7 +184,6 @@ public class ChargeNetwork implements IChargeNetwork {
         chargeQueue.put(pos, null);
     }
 
-    @Override
     public ChargeGraph grid(BlockPos pos) {
         return access(pos).getGrid();
     }
@@ -416,7 +415,7 @@ public class ChargeNetwork implements IChargeNetwork {
             return averageUsagePerTick;
         }
 
-        public double getUsageRatio() {
+        public double getUtilization() {
             if (isInfinite())
                 return 0.0;
             double potentialDraw = getPotentialDraw();
@@ -543,7 +542,7 @@ public class ChargeNetwork implements IChargeNetwork {
         }
     }
 
-    public class ChargeNode {
+    public class ChargeNode implements IChargeAccess {
         protected final @Nullable BatteryBlock chargeBattery;
         private final BlockPos pos;
         private final IChargeBlock.ChargeDef chargeDef;
@@ -598,16 +597,12 @@ public class ChargeNetwork implements IChargeNetwork {
             return !usageRecorder.isPresent();
         }
 
+        @Override
         public boolean hasCapacity(double amount) {
             return chargeGraph.hasCapacity(amount);
         }
 
-        /**
-         * Remove the requested amount of charge if possible and
-         * return whether sufficient charge was available to perform the operation.
-         *
-         * @return true if charge could be removed in full
-         */
+        @Override
         public boolean useCharge(double amount) {
             boolean removed = chargeGraph.useCharge(amount);
             if (removed) {
@@ -617,9 +612,7 @@ public class ChargeNetwork implements IChargeNetwork {
             return removed;
         }
 
-        /**
-         * @return amount removed, may be less than desiredAmount
-         */
+        @Override
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
             listeners.forEach(c -> c.accept(this, removed));
@@ -687,8 +680,14 @@ public class ChargeNetwork implements IChargeNetwork {
             return pos.hashCode();
         }
 
+        @Override
         public @Nullable BatteryBlock getBattery() {
             return chargeBattery;
+        }
+
+        @Override
+        public int getComparatorOutput() {
+            return getGrid().getComparatorOutput();
         }
 
         @Override

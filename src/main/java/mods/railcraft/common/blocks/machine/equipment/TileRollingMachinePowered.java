@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.interfaces.ITileInventory;
@@ -81,8 +80,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
 
     @Override
     protected void progress() {
-        ChargeNetwork.ChargeNode node = Charge.distribution.network(world).access(pos);
-        if (node.useCharge(CHARGE_PER_TICK)) {
+        if (Charge.distribution.network(world).access(pos).useCharge(CHARGE_PER_TICK)) {
             super.progress();
         }
     }

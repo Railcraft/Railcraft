@@ -91,7 +91,7 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
     @Override
     public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return Charge.distribution.network(worldIn).grid(pos).getComparatorOutput();
+        return Charge.distribution.network(worldIn).access(pos).getComparatorOutput();
     }
 
     @Override

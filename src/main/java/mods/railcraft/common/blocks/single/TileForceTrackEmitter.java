@@ -14,7 +14,7 @@ import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
+import mods.railcraft.common.blocks.charge.IChargeAccess;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
@@ -217,7 +217,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             state = previous.whenNoCharge(this);
         } else {
             double draw = getMaintenanceCost(numTracks);
-            ChargeNetwork.ChargeNode node = Charge.distribution.network(world).access(pos);
+            IChargeAccess node = Charge.distribution.network(world).access(pos);
             if (node.hasCapacity(draw)) {
                 node.useCharge(draw);
                 state = previous.afterUseCharge(this);

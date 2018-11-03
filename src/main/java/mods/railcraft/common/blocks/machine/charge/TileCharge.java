@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.BatteryBlock;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.charge.Charge;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import net.minecraft.block.Block;
@@ -17,15 +17,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileCharge extends TileMachineBase {
 
-    public BatteryBlock getChargeBattery() {
-        return Charge.distribution.network(world).access(pos).getBattery();
+    public IBatteryBlock getBattery() {
+        IBatteryBlock battery = Charge.distribution.network(world).access(pos).getBattery();
+        assert battery != null;
+        return battery;
     }
 
     private int prevComparatorOutput;
@@ -37,19 +37,11 @@ public abstract class TileCharge extends TileMachineBase {
     public void update() {
         super.update();
         if (clock % 16 == 0) {
-            int newComparatorOutput = Charge.distribution.network(world).grid(pos).getComparatorOutput();
+            int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
                 world.updateComparatorOutputLevel(pos, getBlockType());
             prevComparatorOutput = newComparatorOutput;
         }
-    }
-
-    @Override
-    public List<String> getDebugOutput() {
-        List<String> lines = super.getDebugOutput();
-        lines.add("Our Bat: " + getChargeBattery());
-        lines.add("Graph Bat: " + Charge.distribution.network(world).access(pos).getBattery());
-        return lines;
     }
 
     @Override
