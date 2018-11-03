@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.interfaces;
 
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import org.jetbrains.annotations.Nullable;
 

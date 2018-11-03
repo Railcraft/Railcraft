@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.charge;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.charge.CapabilitiesCharge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryCart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;

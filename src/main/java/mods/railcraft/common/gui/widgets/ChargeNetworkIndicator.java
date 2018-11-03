@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.util.math.BlockPos;

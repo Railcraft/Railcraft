@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.machine.BlockMachine;

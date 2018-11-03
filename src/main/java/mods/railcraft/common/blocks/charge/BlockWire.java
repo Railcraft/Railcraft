@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;

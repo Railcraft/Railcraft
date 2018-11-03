@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeNetwork;
+import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeNetwork;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

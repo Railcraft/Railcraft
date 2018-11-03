@@ -10,7 +10,7 @@
 package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.network.RailcraftInputStream;

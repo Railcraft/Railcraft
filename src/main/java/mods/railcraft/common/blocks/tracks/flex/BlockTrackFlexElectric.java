@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.flex;
 
 import mods.railcraft.api.tracks.TrackType;
-import mods.railcraft.common.blocks.charge.Charge;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.blocks.tracks.TrackIngredients;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;

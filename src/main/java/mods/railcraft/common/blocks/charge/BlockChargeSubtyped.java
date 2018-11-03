@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import net.minecraft.block.SoundType;

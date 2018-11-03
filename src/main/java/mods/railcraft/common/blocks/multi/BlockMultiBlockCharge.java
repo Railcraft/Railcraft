@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.charge.Charge;
-import mods.railcraft.common.blocks.charge.IChargeAccess;
+import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeAccess;
 import mods.railcraft.common.blocks.charge.IChargeBlock;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.Material;

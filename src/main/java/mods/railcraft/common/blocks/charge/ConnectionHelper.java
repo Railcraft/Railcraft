@@ -10,18 +10,10 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import net.minecraft.world.World;
-
 /**
- * This is how you get access to the meat of the charge network.
+ * Created by CovertJaguar on 11/2/2018 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IChargeManager {
-
-    /**
-     * The network is the primary means of interfacing with charge.
-     */
-    default IChargeNetwork network(World world) {
-        return new IChargeNetwork() {
-        };
-    }
+public class ConnectionHelper {
 }

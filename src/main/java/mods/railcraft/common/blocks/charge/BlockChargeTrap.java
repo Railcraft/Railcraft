@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IChargeNetwork;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;

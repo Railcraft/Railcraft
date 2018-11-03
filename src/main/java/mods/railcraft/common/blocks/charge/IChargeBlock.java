@@ -11,7 +11,9 @@
 package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.ForwardingMap;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.api.charge.IChargeAccess;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
