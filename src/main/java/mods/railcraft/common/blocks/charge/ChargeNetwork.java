@@ -45,12 +45,12 @@ import java.util.stream.Collectors;
  */
 public class ChargeNetwork implements IChargeNetwork {
     public static final double CHARGE_PER_DAMAGE = 1000.0;
-    private final ChargeGraph NULL_GRAPH = new NullGraph();
-    private final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
-    private final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
+    private final ChargeGrid NULL_GRID = new NullGrid();
+    private final Map<BlockPos, ChargeNode> nodes = new HashMap<>();
+    private final Map<BlockPos, ChargeNode> queue = new LinkedHashMap<>();
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
-    private final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Set<ChargeGrid> grids = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
     private final Charge network;
     private final WeakReference<World> world;
@@ -75,7 +75,7 @@ public class ChargeNetwork implements IChargeNetwork {
 
         // Process the queue of nodes waiting to be added/removed from the network
         Map<BlockPos, ChargeNode> added = new LinkedHashMap<>();
-        Iterator<Map.Entry<BlockPos, ChargeNode>> iterator = chargeQueue.entrySet().iterator();
+        Iterator<Map.Entry<BlockPos, ChargeNode>> iterator = queue.entrySet().iterator();
         int count = 0;
         while (iterator.hasNext() && count < 500) {
             count++;
@@ -97,13 +97,13 @@ public class ChargeNetwork implements IChargeNetwork {
                 if (addNode(conState, worldObj, conPos))
                     newNodes.add(conPos);
             });
-            if (addedNode.getValue().isGraphNull())
-                addedNode.getValue().constructGraph();
+            if (addedNode.getValue().isGridNull())
+                addedNode.getValue().constructGrid();
         }
 
         // Remove discarded grids and tick what's left
-        chargeGraphs.removeIf(g -> g.invalid);
-        chargeGraphs.forEach(ChargeGraph::tick);
+        grids.removeIf(g -> g.invalid);
+        grids.forEach(ChargeGrid::tick);
 
         if (!newNodes.isEmpty())
             printDebug("Nodes queued: {0}", newNodes.size());
@@ -132,7 +132,7 @@ public class ChargeNetwork implements IChargeNetwork {
      * Add the node to the network and clean up any node that used to exist there
      */
     private void addNodeImpl(BlockPos pos, ChargeNode node) {
-        ChargeNode oldNode = chargeNodes.put(pos, node);
+        ChargeNode oldNode = nodes.put(pos, node);
 
         // update the battery in the save data tracker
         if (node.chargeBattery != null)
@@ -143,19 +143,19 @@ public class ChargeNetwork implements IChargeNetwork {
         // clean up any preexisting node
         if (oldNode != null) {
             oldNode.invalid = true;
-            if (oldNode.chargeGraph.isActive()) {
-                node.chargeGraph = oldNode.chargeGraph;
-                node.chargeGraph.add(node);
+            if (oldNode.chargeGrid.isActive()) {
+                node.chargeGrid = oldNode.chargeGrid;
+                node.chargeGrid.add(node);
             }
-            oldNode.chargeGraph = NULL_GRAPH;
+            oldNode.chargeGrid = NULL_GRID;
         }
     }
 
     private void removeNodeImpl(BlockPos pos) {
-        ChargeNode chargeNode = chargeNodes.remove(pos);
+        ChargeNode chargeNode = nodes.remove(pos);
         if (chargeNode != null) {
             chargeNode.invalid = true;
-            chargeNode.chargeGraph.destroy(true);
+            chargeNode.chargeGrid.destroy(true);
         }
         batterySaveData.removeBattery(pos);
     }
@@ -165,7 +165,7 @@ public class ChargeNetwork implements IChargeNetwork {
         IChargeBlock.ChargeDef chargeDef = getChargeDef(state, world, pos);
         if (chargeDef != null && needsNode(pos, chargeDef)) {
             printDebug("Registering Node: {0}->{1}", pos, chargeDef);
-            chargeQueue.put(pos, new ChargeNode(pos, chargeDef));
+            queue.put(pos, new ChargeNode(pos, chargeDef));
             return true;
         }
         return false;
@@ -180,16 +180,16 @@ public class ChargeNetwork implements IChargeNetwork {
 
     @Override
     public void removeNode(BlockPos pos) {
-        chargeQueue.put(pos, null);
+        queue.put(pos, null);
     }
 
-    public ChargeGraph grid(BlockPos pos) {
+    public ChargeGrid grid(BlockPos pos) {
         return access(pos).getGrid();
     }
 
     @Override
     public ChargeNode access(BlockPos pos) {
-        ChargeNode node = chargeNodes.get(pos);
+        ChargeNode node = nodes.get(pos);
         if (node != null && !node.isValid()) {
             removeNodeImpl(pos);
             node = null;
@@ -202,8 +202,8 @@ public class ChargeNetwork implements IChargeNetwork {
                 if (chargeDef != null) {
                     node = new ChargeNode(pos, chargeDef);
                     addNodeImpl(pos, node);
-                    if (node.isGraphNull())
-                        node.constructGraph();
+                    if (node.isGridNull())
+                        node.constructGrid();
                 }
             }
         }
@@ -211,7 +211,7 @@ public class ChargeNetwork implements IChargeNetwork {
     }
 
     private boolean needsNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
-        ChargeNode node = chargeNodes.get(pos);
+        ChargeNode node = nodes.get(pos);
         return node == null || !node.isValid() || node.chargeDef != chargeDef;
     }
 
@@ -266,7 +266,7 @@ public class ChargeNetwork implements IChargeNetwork {
         return null;
     }
 
-    public class ChargeGraph extends ForwardingSet<ChargeNode> {
+    public class ChargeGrid extends ForwardingSet<ChargeNode> {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
         private final List<BatteryBlock> batteries = new ArrayList<>();
         private boolean invalid;
@@ -284,7 +284,7 @@ public class ChargeNetwork implements IChargeNetwork {
             boolean added = super.add(chargeNode);
             if (added)
                 totalLosses += chargeNode.chargeDef.getLosses();
-            chargeNode.chargeGraph = this;
+            chargeNode.chargeGrid = this;
             batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
             if (chargeNode.chargeBattery != null) {
                 batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
@@ -328,15 +328,15 @@ public class ChargeNetwork implements IChargeNetwork {
 
         private void destroy(boolean touchNodes) {
             if (isActive()) {
-                printDebug("Destroying graph: {0}", this);
+                printDebug("Destroying grid: {0}", this);
                 invalid = true;
                 totalLosses = 0.0;
                 if (touchNodes) {
-                    forEach(n -> n.chargeGraph = NULL_GRAPH);
+                    forEach(n -> n.chargeGrid = NULL_GRID);
                 }
                 batteries.clear();
                 super.clear();
-                chargeGraphs.remove(this);
+                grids.remove(this);
             }
         }
 
@@ -348,7 +348,7 @@ public class ChargeNetwork implements IChargeNetwork {
         private void tick() {
             removeCharge(totalLosses * RailcraftConfig.chargeLossMultiplier());
 
-            // balance the charge in all the rechargeable batteries in the graph
+            // balance the charge in all the rechargeable batteries in the grid
             Set<BatteryBlock> rechargeable = batteries.stream()
                     .unordered()
                     .filter(b -> {
@@ -494,11 +494,11 @@ public class ChargeNetwork implements IChargeNetwork {
 
         @Override
         public String toString() {
-            return String.format("ChargeGraph{s=%d,b=%d}", size(), batteries.size());
+            return String.format("ChargeGrid{s=%d,b=%d}", size(), batteries.size());
         }
     }
 
-    private class NullGraph extends ChargeGraph {
+    private class NullGrid extends ChargeGrid {
         @Override
         protected Set<ChargeNode> delegate() {
             return Collections.emptySet();
@@ -511,7 +511,7 @@ public class ChargeNetwork implements IChargeNetwork {
 
         @Override
         public String toString() {
-            return "ChargeGraph{NullGraph}";
+            return "ChargeGrid{NullGrid}";
         }
     }
 
@@ -545,7 +545,7 @@ public class ChargeNetwork implements IChargeNetwork {
         protected final @Nullable BatteryBlock chargeBattery;
         private final BlockPos pos;
         private final IChargeBlock.ChargeDef chargeDef;
-        private ChargeGraph chargeGraph = NULL_GRAPH;
+        private ChargeGrid chargeGrid = NULL_GRID;
         private boolean invalid;
         private Optional<UsageRecorder> usageRecorder = Optional.empty();
         private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
@@ -563,7 +563,7 @@ public class ChargeNetwork implements IChargeNetwork {
         private void forConnections(Consumer<ChargeNode> action) {
             Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
             for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
-                ChargeNode other = chargeNodes.get(connection.getKey());
+                ChargeNode other = nodes.get(connection.getKey());
                 if (other != null && connection.getValue().contains(other.chargeDef.getConnectType())
                         && other.chargeDef.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
                     action.accept(other);
@@ -571,11 +571,11 @@ public class ChargeNetwork implements IChargeNetwork {
             }
         }
 
-        public ChargeGraph getGrid() {
-            if (chargeGraph.isActive())
-                return chargeGraph;
-            constructGraph();
-            return chargeGraph;
+        public ChargeGrid getGrid() {
+            if (chargeGrid.isActive())
+                return chargeGrid;
+            constructGrid();
+            return chargeGrid;
         }
 
         public void addListener(BiConsumer<ChargeNode, Double> listener) {
@@ -598,12 +598,12 @@ public class ChargeNetwork implements IChargeNetwork {
 
         @Override
         public boolean hasCapacity(double amount) {
-            return chargeGraph.hasCapacity(amount);
+            return chargeGrid.hasCapacity(amount);
         }
 
         @Override
         public boolean useCharge(double amount) {
-            boolean removed = chargeGraph.useCharge(amount);
+            boolean removed = chargeGrid.useCharge(amount);
             if (removed) {
                 listeners.forEach(c -> c.accept(this, amount));
                 usageRecorder.ifPresent(r -> r.useCharge(amount));
@@ -613,7 +613,7 @@ public class ChargeNetwork implements IChargeNetwork {
 
         @Override
         public double removeCharge(double desiredAmount) {
-            double removed = chargeGraph.removeCharge(desiredAmount);
+            double removed = chargeGrid.removeCharge(desiredAmount);
             listeners.forEach(c -> c.accept(this, removed));
             usageRecorder.ifPresent(r -> r.useCharge(removed));
             return removed;
@@ -623,44 +623,44 @@ public class ChargeNetwork implements IChargeNetwork {
             return !invalid;
         }
 
-        public boolean isGraphNull() {
-            return chargeGraph.isNull();
+        public boolean isGridNull() {
+            return chargeGrid.isNull();
         }
 
-        protected void constructGraph() {
+        protected void constructGrid() {
             Set<ChargeNode> visitedNodes = new HashSet<>();
             visitedNodes.add(this);
             Set<ChargeNode> nullNodes = new HashSet<>();
             nullNodes.add(this);
             Deque<ChargeNode> nodeQueue = new ArrayDeque<>();
             nodeQueue.add(this);
-            TreeSet<ChargeGraph> graphs = new TreeSet<>(Comparator.comparingInt(ForwardingCollection::size));
-            graphs.add(chargeGraph);
+            TreeSet<ChargeGrid> grids = new TreeSet<>(Comparator.comparingInt(ForwardingCollection::size));
+            grids.add(chargeGrid);
             ChargeNode nextNode;
             while ((nextNode = nodeQueue.poll()) != null) {
                 nextNode.forConnections(n -> {
-                    if (!visitedNodes.contains(n) && (n.isGraphNull() || !graphs.contains(n.chargeGraph))) {
-                        if (n.isGraphNull())
+                    if (!visitedNodes.contains(n) && (n.isGridNull() || !grids.contains(n.chargeGrid))) {
+                        if (n.isGridNull())
                             nullNodes.add(n);
-                        graphs.add(n.chargeGraph);
+                        grids.add(n.chargeGrid);
                         visitedNodes.add(n);
                         nodeQueue.addLast(n);
                     }
                 });
             }
-            chargeGraph = Objects.requireNonNull(graphs.pollLast());
-            if (chargeGraph.isNull() && nullNodes.size() > 1) {
-                chargeGraph = new ChargeGraph();
-                chargeGraphs.add(chargeGraph);
+            chargeGrid = Objects.requireNonNull(grids.pollLast());
+            if (chargeGrid.isNull() && nullNodes.size() > 1) {
+                chargeGrid = new ChargeGrid();
+                ChargeNetwork.this.grids.add(chargeGrid);
             }
-            if (chargeGraph.isActive()) {
-                int originalSize = chargeGraph.size();
-                chargeGraph.addAll(nullNodes);
-                for (ChargeGraph graph : graphs) {
-                    chargeGraph.addAll(graph);
+            if (chargeGrid.isActive()) {
+                int originalSize = chargeGrid.size();
+                chargeGrid.addAll(nullNodes);
+                for (ChargeGrid grid : grids) {
+                    chargeGrid.addAll(grid);
                 }
-                graphs.forEach(g -> g.destroy(false));
-                printDebug("Constructing Graph: {0}->{1} Added {2} nodes", pos, chargeGraph, chargeGraph.size() - originalSize);
+                grids.forEach(g -> g.destroy(false));
+                printDebug("Constructing Grid: {0}->{1} Added {2} nodes", pos, chargeGrid, chargeGrid.size() - originalSize);
             }
         }
 
@@ -714,8 +714,8 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         @Override
-        public ChargeGraph getGrid() {
-            return NULL_GRAPH;
+        public ChargeGrid getGrid() {
+            return NULL_GRID;
         }
 
         @Override
@@ -734,7 +734,7 @@ public class ChargeNetwork implements IChargeNetwork {
         }
 
         @Override
-        protected void constructGraph() {
+        protected void constructGrid() {
         }
 
         @Override
