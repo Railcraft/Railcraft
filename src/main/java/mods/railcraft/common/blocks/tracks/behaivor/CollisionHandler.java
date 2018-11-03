@@ -11,7 +11,6 @@
 package mods.railcraft.common.blocks.tracks.behaivor;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeNetwork;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +26,7 @@ public enum CollisionHandler {
     ELECTRIC {
         @Override
         public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-            Charge.distribution.network(world).zap(pos, entity, IChargeNetwork.DamageOrigin.TRACK, 2F);
+            Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.TRACK, 2F);
         }
     };
 

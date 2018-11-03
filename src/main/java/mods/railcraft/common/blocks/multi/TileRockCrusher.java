@@ -12,10 +12,9 @@ package mods.railcraft.common.blocks.multi;
 import buildcraft.api.statements.IActionExternal;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeAccess;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -221,7 +220,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
             if (isStructureValid()) {
                 BlockPos target = pos.up();
-                IChargeAccess node = Charge.distribution.network(world).access(getMasterPos());
+                Charge.IAccess node = Charge.distribution.network(world).access(getMasterPos());
 
                 EntitySearcher.find(EntityItem.class).around(target).at(world).forEach(item -> {
                     if (node.useCharge(SUCKING_POWER_COST)) {

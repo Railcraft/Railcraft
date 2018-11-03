@@ -13,7 +13,6 @@ package mods.railcraft.common.blocks.charge;
 import com.google.common.collect.ForwardingMap;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.api.charge.IChargeAccess;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -55,7 +54,7 @@ public interface IChargeBlock {
      *
      * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
      */
-    default IChargeAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
+    default Charge.IAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
         return Charge.distribution.network(world).access(pos);
     }
 

@@ -11,7 +11,6 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeNetwork;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -88,7 +87,7 @@ public class BlockChargeBattery extends BlockChargeSubtyped<BatteryVariant> {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.distribution.network(world).zap(pos, entity, IChargeNetwork.DamageOrigin.BLOCK, 1F);
+        Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 1F);
     }
 
     @Override
