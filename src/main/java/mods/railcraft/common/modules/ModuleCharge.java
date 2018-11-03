@@ -11,9 +11,9 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.charge.ChargeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 

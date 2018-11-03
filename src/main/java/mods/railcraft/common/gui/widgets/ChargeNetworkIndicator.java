@@ -10,8 +10,8 @@
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.charge.ChargeNetwork;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

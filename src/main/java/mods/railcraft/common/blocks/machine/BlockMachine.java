@@ -39,6 +39,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+/**
+ * A Block designed for blocks with variants defined by tile entities.
+ */
 public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEntityDelegate implements ISubtypedBlock<V> {
     private VariantData<V> variantData;
 

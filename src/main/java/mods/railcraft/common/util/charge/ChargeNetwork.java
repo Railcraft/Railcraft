@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.charge;
+package mods.railcraft.common.util.charge;
 
 import com.google.common.collect.ForwardingCollection;
 import com.google.common.collect.ForwardingMap;

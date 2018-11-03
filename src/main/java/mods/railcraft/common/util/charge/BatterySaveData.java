@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.charge;
+package mods.railcraft.common.util.charge;
 
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;

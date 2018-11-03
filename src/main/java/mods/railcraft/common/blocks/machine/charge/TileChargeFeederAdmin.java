@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.charge;
 
-import mods.railcraft.common.blocks.charge.BatteryBlock;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.util.charge.BatteryBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
