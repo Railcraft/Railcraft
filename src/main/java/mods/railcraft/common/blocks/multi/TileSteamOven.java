@@ -159,6 +159,9 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     public void update() {
         super.update();
 
+        if (!isStructureValid())
+            return;
+
         if (Game.isClient(getWorld())) {
             if (isCooking())
                 EffectManager.instance.steamEffect(world, this, +0.25);
