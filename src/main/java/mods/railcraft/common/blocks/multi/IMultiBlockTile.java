@@ -22,6 +22,11 @@ public interface IMultiBlockTile extends IOwnable, ITile {
 
     boolean isStructureValid();
 
+    /**
+     * Note: Must call {@link #isStructureValid()} before doing master functions for edge cases!
+     *
+     * @return True if this block entity is the master block
+     */
     boolean isMaster();
 
     @Nullable

@@ -23,13 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackKitCoupler extends TrackKitPowered {
-    private EntityMinecart taggedCart;
+    private @Nullable EntityMinecart taggedCart;
     private Mode mode = Mode.COUPLER;
 
     @Override
@@ -134,7 +135,8 @@ public class TrackKitCoupler extends TrackKitPowered {
         COUPLER("coupler", 8) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
+                if (track.taggedCart != null)
+                    CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
