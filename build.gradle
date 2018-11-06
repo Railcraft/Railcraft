@@ -158,6 +158,7 @@ compileJava {
 }
 
 tasks.withType(Jar) {
+    from sourceSets.api.output
     from {
         configurations.api.collect {
             it.isDirectory() ? it : zipTree(it).matching {
