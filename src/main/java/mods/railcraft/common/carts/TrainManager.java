@@ -12,11 +12,13 @@ package mods.railcraft.common.carts;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
+import org.apache.logging.log4j.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,10 +72,12 @@ final class TrainManager {
                 if (train != null)
                     trains.put(train.getUUID(), train);
             }
+            Game.log(Level.INFO, "Loaded {0} Trains...", trains.size());
         }
 
         @Override
         public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+            Game.log(Level.INFO, "Saving Train data...");
             NBTTagList listTag = new NBTTagList();
             for (Train train : trains.values()) {
                 NBTTagCompound tag = new NBTTagCompound();
