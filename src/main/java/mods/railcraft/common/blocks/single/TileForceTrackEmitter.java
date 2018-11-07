@@ -78,7 +78,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             }
 
             @Override
-            void onTransition(State previous, TileForceTrackEmitter emitter) {
+            void onTransition(TileForceTrackEmitter emitter) {
                 //TODO: just emit redstone?
                 TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
                 if (tile instanceof IOutfittedTrackTile) {
@@ -169,7 +169,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             return RETRACTING;
         }
 
-        void onTransition(State previous, TileForceTrackEmitter emitter) {
+        void onTransition(TileForceTrackEmitter emitter) {
         }
     }
 
@@ -217,8 +217,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         } else {
             double draw = getMaintenanceCost(numTracks);
             Charge.IAccess node = Charge.distribution.network(world).access(pos);
-            if (node.hasCapacity(draw)) {
-                node.useCharge(draw);
+            if (node.useCharge(draw)) {
                 state = previous.afterUseCharge(this);
             } else {
                 state = previous.whenNoCharge(this);
@@ -226,7 +225,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         }
 
         if (state != previous) {
-            state.onTransition(previous, this);
+            state.onTransition(this);
         }
     }
 

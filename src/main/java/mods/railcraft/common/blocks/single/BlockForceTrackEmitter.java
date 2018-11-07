@@ -38,6 +38,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChargeBlock, ColorPlugin.IColoredBlock {
 
@@ -49,6 +53,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public BlockForceTrackEmitter() {
         super(Material.IRON);
         setSoundType(SoundType.METAL);
+        setTickRandomly(true);
     }
 
     @Override
@@ -144,5 +149,30 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     @Override
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         drops.add(getItem(world, pos));
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (stateIn.getValue(POWERED))
+            Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 10);
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        deregisterNode(worldIn, pos);
     }
 }
