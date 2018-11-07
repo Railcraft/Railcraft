@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,14 +22,11 @@ import java.util.Locale;
 public class HumanReadableNumberFormatter {
     private static final DecimalFormat smallNumberFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
     private static final DecimalFormat largeNumberFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-    private static String[] suffix = {"", "K", "M", "B", "T"};
-//    private static double[] test = {1400.3, 54983.6768, -34.56, -50_000, -100_000, 140_500};
+    private static String[] suffix = {"", "K", "M", "B", "T", "Q"};
 
     static {
         smallNumberFormatter.applyPattern("#,##0.###");
         largeNumberFormatter.applyPattern("#,##0.#");
-//        for (double n : test)
-//            Game.log(Level.INFO, "Formatter Test: {0}->{1}", n, format(n));
     }
 
     public static String format(double number) {
@@ -39,7 +36,7 @@ public class HumanReadableNumberFormatter {
     private static String format(double number, int iteration) {
         boolean negative = number < 0.0;
         number = Math.abs(number);
-        if (number < 10_000.0) {
+        if (number < 10_000.0 || iteration == suffix.length - 1) {
             DecimalFormat formatter = iteration > 0 ? largeNumberFormatter : smallNumberFormatter;
             return (negative ? "-" : "") + formatter.format(number) + suffix[iteration];
         }

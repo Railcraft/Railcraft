@@ -36,3 +36,4 @@ classes/
 *.launch
 /libs/
 **/Thumbs.db
+/logs/
