@@ -96,6 +96,10 @@ public final class FluidTools {
         return stack == null;
     }
 
+    public static @Nullable IFluidHandler getFluidHandler(ICapabilityProvider object) {
+        return getFluidHandler(null, object);
+    }
+
     public static @Nullable IFluidHandler getFluidHandler(@Nullable EnumFacing side, ICapabilityProvider object) {
         return object.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
@@ -461,7 +465,7 @@ public final class FluidTools {
 
         @Override
         public IFluidTankProperties[] getTankProperties() {
-            return new FluidTankProperties[] {new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
+            return new FluidTankProperties[]{new FluidTankProperties(getFluid(), WaterBottleEventHandler.INSTANCE.amount)};
         }
     }
 }
