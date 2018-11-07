@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.events.CartLockdownEvent;
 import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
@@ -27,6 +26,7 @@ import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
@@ -55,20 +55,17 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     public static double BOOST_FACTOR = 0.06;
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
     protected LockingProfile profileInstance = profile.create(this);
-    @Nullable
-    protected EntityMinecart currentCart;
-    @Nullable
-    protected EntityMinecart prevCart;
-    @Nullable
-    protected Train currentTrain;
-    protected UUID uuid;
+    protected @Nullable EntityMinecart currentCart;
+    protected @Nullable EntityMinecart prevCart;
+    protected @Nullable Train currentTrain;
+    protected @Nullable UUID uuid;
     protected boolean trainLeaving;
     protected boolean redstone;
     protected boolean locked;
     private int trainDelay;
     // Temporary variables to hold loaded data while we restore from NBT
-    private UUID prevCartUUID;
-    private UUID currentCartUUID;
+    private @Nullable UUID prevCartUUID;
+    private @Nullable UUID currentCartUUID;
     boolean justLoaded = true;
 
     @Override
@@ -235,7 +232,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     /**
      * Determines if the current train is the same train or cart (depending on track type)
-     * as the train or cart in previous ticks. The <code>trainDelay</code> is needed because there are
+     * as the train or cart in previous ticks. The {@code trainDelay} is needed because there are
      * gaps between carts in a train where onMinecartPass() doesn't get called even though
      * the train is still passing over us.
      *
@@ -249,12 +246,9 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
             } else if (trainLeaving) {
-                List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(theWorldAsserted(), getPos(), 0.0f);
-                for (EntityMinecart cart : carts) {
-                    if (Train.areInSameTrain(cart, prevCart)) {
-                        trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
-                        break;
-                    }
+                List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(getPos()).in(theWorldAsserted());
+                if (carts.stream().anyMatch(cart -> Train.areInSameTrain(cart, prevCart))) {
+                    trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
                 }
             }
 
@@ -282,8 +276,8 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
      * then we want the track to be "locked" when the redstone is off, regardless of whether a
      * new or old cart starts moving onto the track. In the end, what we're really after is
      * having 2 truth tables and a way to decide which of the 2 tables to use. To do this, we
-     * use the boolean <code>trainLeaving</code> to indicate which table to use. As the name
-     * implies, <code>trainLeaving</code> indicates whether the train or cart is in the process
+     * use the boolean {@code trainLeaving} to indicate which table to use. As the name
+     * implies, {@code trainLeaving} indicates whether the train or cart is in the process
      * of leaving the track.
      */
     void calculateLocked() {
@@ -315,7 +309,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
 
     @Override
     public void setPowered(boolean powered) {
-        if (this.redstone != powered) {
+        if (redstone != powered) {
             this.redstone = powered;
         }
     }

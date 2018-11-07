@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
@@ -18,6 +17,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
@@ -31,13 +31,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -46,13 +47,13 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     private static final int SPRING_DURATION = 30;
     protected boolean mirrored;
     protected boolean shouldSwitch;
-    protected Set<UUID> lockingCarts = new HashSet<UUID>();
-    protected Set<UUID> springingCarts = new HashSet<UUID>();
-    protected Set<UUID> decidingCarts = new HashSet<UUID>();
+    protected Set<UUID> lockingCarts = new HashSet<>();
+    protected Set<UUID> springingCarts = new HashSet<>();
+    protected Set<UUID> decidingCarts = new HashSet<>();
     private byte sprung;
     private byte locked;
-    private UUID currentCart;
-    private ISwitchActuator switchDevice;
+    private @Nullable UUID currentCart;
+    private @Nullable ISwitchActuator switchDevice;
     private boolean clientSwitched;
 
     @Override
@@ -79,7 +80,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
      * Note: This method should not modify any variables except the cache, we leave
      * that to update().
      */
-    protected boolean shouldSwitchForCart(EntityMinecart cart) {
+    protected boolean shouldSwitchForCart(@Nullable EntityMinecart cart) {
         if (cart == null || Game.isClient(theWorldAsserted()))
             return isVisuallySwitched();
 
@@ -130,7 +131,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         determineRailDirection();
         determineMirror();
 
@@ -184,7 +185,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block block) {
         if (Game.isHost(theWorldAsserted())) {
             determineRailDirection();
             determineMirror();
@@ -200,15 +201,14 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     }
 
     private Set<UUID> readCartsFromNBT(String key, NBTTagCompound data) {
-        Set<UUID> cartUUIDs = new HashSet<UUID>();
+        Set<UUID> cartUUIDs = new HashSet<>();
         String sizeKey = key + "Size";
         if (data.hasKey(sizeKey)) {
             byte size = data.getByte(sizeKey);
-            for (int i = 0; i < size; i++) {
-                UUID id = NBTPlugin.readUUID(data, key + i);
-                if (id != null)
-                    cartUUIDs.add(id);
-            }
+            cartUUIDs = IntStream.range(0, size)
+                    .mapToObj(i -> NBTPlugin.readUUID(data, key + i))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
         }
         return cartUUIDs;
     }
@@ -304,7 +304,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirectionRaw()
         // determines which direction the carts actually take.
-        List<EntityMinecart> cartsOnTrack = CartToolsAPI.getMinecartsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
+        List<EntityMinecart> cartsOnTrack = EntitySearcher.findMinecarts().around(getPos()).outTo(-0.3f).in(theWorldAsserted());
         Set<UUID> uuidOnTrack = cartsOnTrack.stream().map(Entity::getUniqueID).collect(Collectors.toSet());
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
@@ -336,20 +336,19 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
     private double crudeDistance(EntityMinecart cart) {
         double cx = getPos().getX() + .5; // Why not calc this outside and cache it?
-        double cz = getPos().getZ() + .5; // b/c this is a rare occurance that we need to calc this
+        double cz = getPos().getZ() + .5; // b/c this is a rare occurrence that we need to calc this
         return Math.abs(cart.posX - cx) + Math.abs(cart.posZ - cz); // not the real distance function but enough for us
     }
 
     // To render the state of the track most accurately, we choose the "best" cart from our set of
     // carts based on distance.
-    @Nullable
-    private EntityMinecart getBestCartForVisualState(List<EntityMinecart> cartsOnTrack) {
+    private @Nullable EntityMinecart getBestCartForVisualState(List<EntityMinecart> cartsOnTrack) {
         World world = theWorldAsserted();
         if (!cartsOnTrack.isEmpty()) {
             return cartsOnTrack.get(0);
         } else {
             EntityMinecart closestCart = null;
-            ArrayList<UUID> allCarts = new ArrayList<UUID>();
+            ArrayList<UUID> allCarts = new ArrayList<>();
             allCarts.addAll(lockingCarts);
             allCarts.addAll(springingCarts);
             allCarts.addAll(decidingCarts);
@@ -383,8 +382,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
 
     public abstract ArrowDirection getWhiteSignDirection();
 
-    @Nullable
-    public ISwitchActuator getSwitchDevice() {
+    public @Nullable ISwitchActuator getSwitchDevice() {
         TileEntity entity = ((RailcraftTileEntity) getTile()).getTileCache().getTileOnSide(getActuatorLocation());
         if (entity instanceof ISwitchActuator) {
             return (ISwitchActuator) entity;

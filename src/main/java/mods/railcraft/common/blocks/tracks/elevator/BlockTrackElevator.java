@@ -347,7 +347,7 @@ public class BlockTrackElevator extends BlockRailcraft {
             factory.raiseCeiling(-0.2);
             factory.raiseFloor(-0.5);
         }
-        return EntitySearcher.findMinecarts().around(factory.build()).except(cart).at(cart.world).isEmpty();
+        return EntitySearcher.findMinecarts().around(factory.build()).except(cart).in(cart.world).isEmpty();
     }
 
     /**

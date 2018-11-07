@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
@@ -74,7 +75,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
     }
 
     public @Nullable EntityMinecart getCart() {
-        return CartToolsAPI.getMinecartOnSide(world, getPos(), 0.1f, getFacing());
+        return EntitySearcher.findMinecarts().around(getPos().offset(facing)).outTo(-0.1F).in(world).any();
     }
 
     public boolean canHandleCart(EntityMinecart cart) {

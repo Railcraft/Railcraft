@@ -17,6 +17,7 @@ import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -78,7 +79,7 @@ public final class CartTools {
     public static @Nullable EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
-            if (!CartToolsAPI.isMinecartAt(world, pos, 0)) {
+            if (EntitySearcher.findMinecarts().around(pos).in(world).isEmpty()) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
                 double h = 0.0D;
                 if (trackShape.isAscending())
@@ -230,7 +231,9 @@ public final class CartTools {
      * @param id Cart's persistent UUID
      * @return EntityMinecart
      */
-    public static @Nullable EntityMinecart getCartFromUUID(World world, UUID id) {
+    public static @Nullable EntityMinecart getCartFromUUID(World world, @Nullable UUID id) {
+        if (id == null)
+            return null;
         if (world instanceof WorldServer) {
             Entity entity = ((WorldServer) world).getEntityFromUuid(id);
             if (entity instanceof EntityMinecart && entity.isEntityAlive()) {

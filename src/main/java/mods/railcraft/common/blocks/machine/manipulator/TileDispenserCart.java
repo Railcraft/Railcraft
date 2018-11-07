@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,13 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.misc.Game;
@@ -57,7 +57,7 @@ public class TileDispenserCart extends TileManipulator {
     }
 
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing);
+        EntityMinecart cart = EntitySearcher.findMinecarts().around(getPos().offset(facing)).in(world).any();
         if (cart == null) {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {

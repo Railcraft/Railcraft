@@ -113,7 +113,7 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
         float y = getPos().getY();
         float z = getPos().getZ();
         AxisAlignedBB area = AABBFactory.start().setBounds(x, y - 1, z, x + 1, y + 3, z + 1).expandHorizontally(range).build();
-        return EntitySearcher.find(EntityVillager.class).around(area).at(world);
+        return EntitySearcher.find(EntityVillager.class).around(area).in(world);
     }
 
     private void attemptTrade(List<EntityVillager> villagers, int tradeSet) {

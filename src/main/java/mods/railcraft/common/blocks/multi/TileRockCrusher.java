@@ -222,7 +222,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 BlockPos target = pos.up();
                 Charge.IAccess node = Charge.distribution.network(world).access(getMasterPos());
 
-                EntitySearcher.find(EntityItem.class).around(target).at(world).forEach(item -> {
+                EntitySearcher.find(EntityItem.class).around(target).in(world).forEach(item -> {
                     if (node.useCharge(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
                         InventoryManipulator.get((IInventory) invInput).addStack(stack);
@@ -230,7 +230,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                     }
                 });
 
-                EntitySearcher.findLiving().around(target).and(RCEntitySelectors.KILLABLE).at(world).forEach(e -> {
+                EntitySearcher.findLiving().around(target).and(RCEntitySelectors.KILLABLE).in(world).forEach(e -> {
                     if (gridHasCapacity(KILLING_POWER_COST)
                             && e.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useCharge(KILLING_POWER_COST);

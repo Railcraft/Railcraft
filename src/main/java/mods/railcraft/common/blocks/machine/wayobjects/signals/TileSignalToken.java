@@ -61,7 +61,7 @@ public class TileSignalToken extends TileSignalBase implements IControllerTile, 
         if (trackLocator.getTrackStatus() == TrackLocator.Status.VALID) {
             BlockPos trackPos = trackLocator.getTrackLocation();
             if (trackPos != null) {
-                List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(trackPos).at(world);
+                List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(trackPos).in(world);
                 carts.stream().filter(c -> !cartTimers.contains(c.getUniqueID())).forEach(tokenRing::markCart);
                 carts.forEach(c -> cartTimers.add(c.getUniqueID()));
             }

@@ -10,11 +10,11 @@
 
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -70,7 +70,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
             tracksRemoved.add(track);
         else if (WorldPlugin.isBlockAt(world, track, RailcraftBlocks.TRACK_FORCE.block()))
             tracksRemoved.add(track);
-        else if (!CartToolsAPI.isMinecartAt(world, track, -0.2f)) {
+        else if (EntitySearcher.findMinecarts().around(track).outTo(0.2f).in(world).isEmpty()) {
             Block block = WorldPlugin.getBlock(world, track);
             removeOldTrack(track, block);
             blink();

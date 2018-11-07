@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.entity;
 
+import com.google.common.collect.ForwardingList;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -55,10 +57,10 @@ public class EntitySearcher {
             this.entityClass = entityClass;
         }
 
-        public List<T> at(World world) {
+        public SearchResult<T> in(World world) {
             if (box.isUndefined())
                 throw new NullPointerException("Improperly defined EntitySearcher without a search box");
-            return world.getEntitiesWithinAABB(entityClass, box.build(), filter::test);
+            return new SearchResult<>(world.getEntitiesWithinAABB(entityClass, box.build(), filter::test));
         }
 
         public SearchParameters<T> except(Entity entity) {
@@ -106,6 +108,23 @@ public class EntitySearcher {
             if (!ArrayUtils.isEmpty(filters))
                 filter.and(Predicates.and(filters));
             return this;
+        }
+    }
+
+    public static class SearchResult<T extends Entity> extends ForwardingList<T> {
+        private final List<T> entities;
+
+        private SearchResult(List<T> entities) {
+            this.entities = entities;
+        }
+
+        @Override
+        protected List<T> delegate() {
+            return entities;
+        }
+
+        public @Nullable T any() {
+            return entities.stream().findAny().orElse(null);
         }
     }
 }

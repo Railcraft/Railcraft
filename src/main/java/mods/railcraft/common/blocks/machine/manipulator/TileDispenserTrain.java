@@ -17,6 +17,7 @@ import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryManifest;
 import mods.railcraft.common.util.inventory.PhantomInventory;
@@ -81,7 +82,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
         BlockPos offset = getPos().offset(facing);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
-                && CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing) == null) {
+                && EntitySearcher.findMinecarts().around(getPos().offset(facing)).in(world).isEmpty()) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
@@ -115,7 +116,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public void onPulse() {
-        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(world, getPos(), 0, facing);
+        EntityMinecart cart = EntitySearcher.findMinecarts().around(getPos().offset(facing)).in(world).any();
         if (cart == null)
             if (!spawningTrain && canBuildTrain())
                 if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
-import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
@@ -21,6 +20,7 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
@@ -115,13 +115,12 @@ public class TileFluidLoader extends TileFluidManipulator {
         tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }
 
-    @Nullable
     @Override
-    public EntityMinecart getCart() {
+    public @Nullable EntityMinecart getCart() {
         needsPipe = false;
         EntityMinecart cart = super.getCart();
         if (cart == null) {
-            cart = CartToolsAPI.getMinecartOnSide(world, getPos().down(), 0.2f, EnumFacing.DOWN);
+            cart = EntitySearcher.findMinecarts().around(getPos().down(2)).outTo(-0.2f).in(world).any();
             needsPipe = true;
         }
         return cart;

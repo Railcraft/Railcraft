@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockRailBase;
@@ -56,7 +57,7 @@ public class ItemTunnelBore extends ItemCart {
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState existingState = WorldPlugin.getBlockState(world, pos);
         if (TrackTools.isRailBlock(existingState)) {
-            if (Game.isHost(world) && !CartToolsAPI.isMinecartAt(world, pos, 0)) {
+            if (Game.isHost(world) && EntitySearcher.findMinecarts().around(pos).in(world).isEmpty()) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, existingState);
                 if (TrackShapeHelper.isLevelStraight(trackShape)) {
                     EnumFacing playerFacing = MiscTools.getHorizontalSideFacingPlayer(player).getOpposite();
@@ -92,9 +93,8 @@ public class ItemTunnelBore extends ItemCart {
         return false;
     }
 
-    @Nullable
     @Override
-    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+    public @Nullable EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         return null;
     }
 }

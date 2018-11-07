@@ -86,7 +86,7 @@ public class TokenRing implements ITokenRing {
                 aabbFactory.expandToCoordinate(pos);
             }
             aabbFactory.grow(16).clampToWorld();
-            List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(aabbFactory.build()).at(world);
+            List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(aabbFactory.build()).in(world);
             trackedCarts.retainAll(carts.stream().map(Entity::getUniqueID).collect(Collectors.toSet()));
         }
     }

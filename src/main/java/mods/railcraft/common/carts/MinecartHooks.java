@@ -361,7 +361,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         // TODO Config entry? ( Go for it -CJ )
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
             List<EntityMinecart> carts = EntitySearcher.findMinecarts().around(cart)
-                    .and(EntitySelectors.IS_ALIVE, RCEntitySelectors.NON_MECHANICAL).at(cart.world);
+                    .and(EntitySelectors.IS_ALIVE, RCEntitySelectors.NON_MECHANICAL).in(cart.world);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }
