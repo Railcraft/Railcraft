@@ -110,15 +110,10 @@ public class EntitySearcher {
             return this;
         }
 
-        public SearchParameters<T> and(Predicate<? super T> filter) {
-            this.filter.and(filter);
-            return this;
-        }
-
         @SafeVarargs
         public final SearchParameters<T> and(Predicate<? super T>... filters) {
             if (!ArrayUtils.isEmpty(filters))
-                filter.and(Predicates.and(filters));
+                this.filter = Predicates.and(filter, filters);
             return this;
         }
     }
