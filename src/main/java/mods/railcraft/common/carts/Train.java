@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,6 +29,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -86,15 +87,13 @@ public final class Train implements Iterable<EntityMinecart> {
         return train;
     }
 
-    @Nullable
-    private static Train getTrainUnsafe(@Nullable EntityMinecart cart) {
+    private static @Nullable Train getTrainUnsafe(@Nullable EntityMinecart cart) {
         if (cart == null)
             return null;
         return getTrainMap(cart.world).get(getTrainUUID(cart));
     }
 
-    @Nullable
-    public static UUID getTrainUUID(EntityMinecart cart) {
+    public static @Nullable UUID getTrainUUID(EntityMinecart cart) {
         NBTTagCompound nbt = cart.getEntityData();
         return NBTPlugin.readUUID(nbt, TRAIN_NBT);
     }
@@ -122,8 +121,7 @@ public final class Train implements Iterable<EntityMinecart> {
         return train2;
     }
 
-    @Nullable
-    private static Train getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
+    private static @Nullable Train getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
         Train train1 = getTrainUnsafe(cart1);
         Train train2 = getTrainUnsafe(cart2);
 
@@ -164,14 +162,11 @@ public final class Train implements Iterable<EntityMinecart> {
 
     @Override
     public Iterator<EntityMinecart> iterator() {
-        LinkageManager lm = LinkageManager.instance();
-        List<EntityMinecart> entities = new ArrayList<>(carts.size());
-        for (UUID cart : carts) {
-            EntityMinecart entity = CartTools.getCartFromUUID(world, cart);
-            if (entity != null)
-                entities.add(entity);
-        }
-        return entities.iterator();
+        LinkageManager lm = LinkageManager.INSTANCE;
+        return carts.stream()
+                .map(cart -> CartTools.getCartFromUUID(world, cart))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()).iterator();
     }
 
     private void buildTrain(EntityMinecart first) {
@@ -182,7 +177,7 @@ public final class Train implements Iterable<EntityMinecart> {
     private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
         addLinkInternal(prev, next);
 
-        LinkageManager lm = LinkageManager.instance();
+        LinkageManager lm = LinkageManager.INSTANCE;
         EntityMinecart linkA = lm.getLinkedCartA(next);
         EntityMinecart linkB = lm.getLinkedCartB(next);
 
@@ -221,7 +216,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     protected void resetTrain() {
-        LinkageManager lm = LinkageManager.instance();
+        LinkageManager lm = LinkageManager.INSTANCE;
         for (UUID id : carts) {
             EntityMinecart cart = CartTools.getCartFromUUID(world, id);
             if (cart != null) {
@@ -291,15 +286,12 @@ public final class Train implements Iterable<EntityMinecart> {
         return ends;
     }
 
-    @Nullable
-    public EntityLocomotive getLocomotive() {
-        LinkageManager lm = LinkageManager.instance();
-        for (UUID id : getEnds()) {
-            EntityMinecart cart = CartTools.getCartFromUUID(world, id);
-            if (cart instanceof EntityLocomotive)
-                return (EntityLocomotive) cart;
-        }
-        return null;
+    public @Nullable EntityLocomotive getLocomotive() {
+        LinkageManager lm = LinkageManager.INSTANCE;
+        return (EntityLocomotive) getEnds().stream()
+                .map(id -> CartTools.getCartFromUUID(world, id))
+                .filter(cart -> cart instanceof EntityLocomotive)
+                .findFirst().orElse(null);
     }
 
     public <T extends EntityMinecart> Collection<T> getCarts(Class<T> cartClass) {
@@ -315,8 +307,7 @@ public final class Train implements Iterable<EntityMinecart> {
         return safeCarts;
     }
 
-    @Nullable
-    public IItemHandler getItemHandler() {
+    public @Nullable IItemHandler getItemHandler() {
         List<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
             IItemHandler itemHandler = InvTools.getItemHandler(cart);
@@ -328,8 +319,7 @@ public final class Train implements Iterable<EntityMinecart> {
         return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[0]));
     }
 
-    @Nullable
-    public IFluidHandler getFluidHandler() {
+    public @Nullable IFluidHandler getFluidHandler() {
         List<IFluidHandler> cartHandlers = new ArrayList<>();
         for (EntityMinecart cart : this) {
             IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
@@ -406,7 +396,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public void setTrainState(TrainState state) {
-        this.info.state = state;
+        info.state = state;
     }
 
     public enum TrainState {

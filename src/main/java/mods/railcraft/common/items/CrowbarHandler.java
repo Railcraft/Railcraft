@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -91,7 +91,7 @@ public class CrowbarHandler {
         if (!linkable || ((ILinkableCart) cart).isLinkable()) {
             EntityMinecart last = linkMap.remove(player);
             if (last != null && last.isEntityAlive()) {
-                LinkageManager lm = LinkageManager.instance();
+                LinkageManager lm = LinkageManager.INSTANCE;
                 if (lm.areLinked(cart, last, false)) {
                     lm.breakLink(cart, last);
                     used = true;

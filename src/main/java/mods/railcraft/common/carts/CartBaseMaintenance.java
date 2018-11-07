@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -114,10 +114,11 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
 
     protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
         IBlockState state = WorldPlugin.getBlockState(getEntityWorld(), pos);
+        //noinspection deprecation
         List<ItemStack> drops = block.getDrops(world, pos, state, 0);
 
         for (ItemStack stack : drops) {
-            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
+            CartToolsAPI.transferHelper().offerOrDropItem(this, stack);
         }
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
         getEntityWorld().setBlockToAir(pos);

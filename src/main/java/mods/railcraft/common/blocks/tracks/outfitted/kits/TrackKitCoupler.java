@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -136,29 +136,29 @@ public class TrackKitCoupler extends TrackKitPowered {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
                 if (track.taggedCart != null)
-                    CartToolsAPI.getLinkageManager().createLink(track.taggedCart, cart);
+                    CartToolsAPI.linkageManager().createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
         DECOUPLER("decoupler", 0) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                CartToolsAPI.getLinkageManager().breakLinks(cart);
+                CartToolsAPI.linkageManager().breakLinks(cart);
                 LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
             }
         },
         AUTO_COUPLER("auto.coupler", 0) {
             @Override
             public void onMinecartPass(TrackKitCoupler track, EntityMinecart cart) {
-                LinkageManager.instance().setAutoLink(cart, true);
+                LinkageManager.INSTANCE.setAutoLink(cart, true);
             }
 
             @Override
             public void onMinecartPassUnpowered(TrackKitCoupler track, EntityMinecart cart) {
-                LinkageManager.instance().setAutoLink(cart, false);
+                LinkageManager.INSTANCE.setAutoLink(cart, false);
             }
         };
-        public static Mode[] VALUES = values();
+        public static final Mode[] VALUES = values();
         private final int powerPropagation;
         private final String name;
 

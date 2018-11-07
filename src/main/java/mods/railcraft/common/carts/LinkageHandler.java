@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -89,7 +89,7 @@ public final class LinkageHandler {
             short count = cart1.getEntityData().getShort(timer);
             count++;
             if (count > 200) {
-                LinkageManager.instance().breakLink(cart1, cart2);
+                LinkageManager.INSTANCE.breakLink(cart1, cart2);
                 LinkageManager.printDebug("Reason For Broken Link: Carts in different dimensions.");
             }
             cart1.getEntityData().setShort(timer, count);
@@ -99,7 +99,7 @@ public final class LinkageHandler {
 
         double dist = cart1.getDistance(cart2);
         if (dist > MAX_DISTANCE) {
-            LinkageManager.instance().breakLink(cart1, cart2);
+            LinkageManager.INSTANCE.breakLink(cart1, cart2);
             LinkageManager.printDebug("Reason For Broken Link: Max distance exceeded.");
             return;
         }
@@ -219,7 +219,7 @@ public final class LinkageHandler {
 
     private boolean adjustLinkedCart(EntityMinecart cart, LinkageManager.LinkType linkType) {
         boolean linked = false;
-        LinkageManager lm = LinkageManager.instance();
+        LinkageManager lm = LinkageManager.INSTANCE;
         EntityMinecart link = lm.getLinkedCart(cart, linkType);
         if (link != null) {
             // sanity check to ensure links are consistent
@@ -332,11 +332,8 @@ public final class LinkageHandler {
         if (event.getEntity() instanceof EntityMinecart) {
             EntityMinecart cart = (EntityMinecart) event.getEntity();
             Train train = Train.getTrain(cart);
-            for (EntityCartWorldspike worldspike : train.getCarts(EntityCartWorldspike.class)) {
-                if (worldspike.hasActiveTicket()) {
-                    event.setCanUpdate(true);
-                    return;
-                }
+            if (train.getCarts(EntityCartWorldspike.class).stream().anyMatch(EntityCartWorldspike::hasActiveTicket)) {
+                event.setCanUpdate(true);
             }
         }
     }

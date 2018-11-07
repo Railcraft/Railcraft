@@ -161,17 +161,20 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
         if (safeToReplace(pos)) {
             Block stockBlock = InvTools.getBlockFromStack(stock);
+            //noinspection deprecation
             List<ItemStack> drops = oldState.getBlock().getDrops(world, pos, oldState, 0);
             ItemBlock item = (ItemBlock) stock.getItem();
             int newMeta = 0;
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
             IBlockState newState;
+            //noinspection deprecation
             if (stockBlock != null && WorldPlugin.setBlockState(world, pos, (newState = stockBlock.getStateFromMeta(newMeta)))) {
+                //noinspection deprecation
                 SoundHelper.playBlockSound(world, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
-                    CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
+                    CartToolsAPI.transferHelper().offerOrDropItem(this, stack);
                 }
                 blink();
             }

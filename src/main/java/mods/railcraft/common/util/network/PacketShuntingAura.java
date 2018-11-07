@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class PacketShuntingAura extends RailcraftPacket {
         for (EntityMinecart cart : carts) {
             data.writeUUID(cart.getPersistentID());
             data.writeUUID(Train.getTrainUUID(cart));
-            LinkageManager lm = LinkageManager.instance();
+            LinkageManager lm = LinkageManager.INSTANCE;
             data.writeUUID(lm.getLinkA(cart));
             data.writeUUID(lm.getLinkB(cart));
         }

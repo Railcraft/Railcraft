@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,13 +37,10 @@ import java.util.function.Predicate;
  *
  * Created by CovertJaguar on 5/9/2015.
  */
-public final class TrainTransferHelper implements ITrainTransferHelper {
-    public static final TrainTransferHelper INSTANCE = new TrainTransferHelper();
+public enum TrainTransferHelper implements ITrainTransferHelper {
+    INSTANCE;
     private static final int NUM_SLOTS = 8;
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
-
-    private TrainTransferHelper() {
-    }
 
     /**
      * Offers an item stack to linked carts or drops it if no one wants it.
@@ -61,12 +58,12 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
     // ***************************************************************************************************************************
     @Override
     public ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_A);
         stack = _pushStack(requester, carts, stack);
         if (InvTools.isEmpty(stack))
             return InvTools.emptyStack();
-        if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
-            carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
+        if (LinkageManager.INSTANCE.hasLink(requester, LinkageManager.LinkType.LINK_B)) {
+            carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_B);
             stack = _pushStack(requester, carts, stack);
         }
         return stack;
@@ -85,11 +82,11 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
 
     @Override
     public ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_A);
         ItemStack stack = _pullStack(requester, carts, filter);
         if (!InvTools.isEmpty(stack))
             return stack;
-        carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
+        carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_B);
         return _pullStack(requester, carts, filter);
     }
 
@@ -151,9 +148,8 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
         return inv != null && inv.getNumSlots() >= NUM_SLOTS;
     }
 
-    @Nullable
     @Override
-    public IItemHandler getTrainItemHandler(EntityMinecart cart) {
+    public @Nullable IItemHandler getTrainItemHandler(EntityMinecart cart) {
         Train train = Train.getTrain(cart);
         return train.getItemHandler();
     }
@@ -163,19 +159,18 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
     // ***************************************************************************************************************************
     @Override
     public FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_A);
         fluidStack = _pushFluid(requester, carts, fluidStack);
         if (fluidStack == null)
             return null;
-        if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
-            carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
+        if (LinkageManager.INSTANCE.hasLink(requester, LinkageManager.LinkType.LINK_B)) {
+            carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_B);
             fluidStack = _pushFluid(requester, carts, fluidStack);
         }
         return fluidStack;
     }
 
-    @Nullable
-    private FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
+    private @Nullable FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedFluid(requester, cart, fluidStack)) {
                 IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.UP, cart);
@@ -195,16 +190,15 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
         if (fluidStack == null) {
             return null;
         }
-        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_A);
         FluidStack pulled = _pullFluid(requester, carts, fluidStack);
         if (pulled != null)
             return pulled;
-        carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
+        carts = LinkageManager.INSTANCE.linkIterator(requester, LinkageManager.LinkType.LINK_B);
         return _pullFluid(requester, carts, fluidStack);
     }
 
-    @Nullable
-    private FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
+    private @Nullable FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canProvidePulledFluid(requester, cart, fluidStack)) {
                 IFluidHandler fluidHandler = FluidTools.getFluidHandler(EnumFacing.DOWN, cart);
@@ -254,9 +248,8 @@ public final class TrainTransferHelper implements ITrainTransferHelper {
         return FluidTools.testProperties(false, handler, p -> p.getCapacity() >= TANK_CAPACITY && (Fluids.isEmpty(p.getContents()) || FluidTools.matches(fluid, p.getContents())));
     }
 
-    @Nullable
     @Override
-    public IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
+    public @Nullable IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
         Train train = Train.getTrain(cart);
         return train.getFluidHandler();
     }

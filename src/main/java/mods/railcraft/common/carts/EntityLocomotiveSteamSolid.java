@@ -100,12 +100,12 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             Predicate<ItemStack> filler = InvTools.getFillingChecker(invStock);
             if (filler != Predicates.<ItemStack>alwaysFalse()) {
                 // This comparison looks funky, but the identity is real
-                ItemStack stack = CartToolsAPI.getTransferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
+                ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
                 if (!InvTools.isEmpty(stack))
                     InvTools.moveItemStack(stack, invStock);
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
-                FluidStack pulled = CartToolsAPI.getTransferHelper().pullFluid(this, Fluids.WATER.getB(1));
+                FluidStack pulled = CartToolsAPI.transferHelper().pullFluid(this, Fluids.WATER.getB(1));
                 if (pulled != null) {
                     tankWater.fill(pulled, true);
                 }

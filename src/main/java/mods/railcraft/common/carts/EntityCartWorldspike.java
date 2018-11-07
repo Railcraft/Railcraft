@@ -146,13 +146,13 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     private void stockFuel() {
         ItemStack stack = getStackInSlot(0);
         if (!InvTools.isEmpty(stack) && !getFuelMap().containsKey(stack)) {
-            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stack);
+            CartToolsAPI.transferHelper().offerOrDropItem(this, stack);
             setInventorySlotContents(0, InvTools.emptyStack());
             return;
         }
         stack = getStackInSlot(0);
         if (InvTools.isEmpty(stack)) {
-            ItemStack found = CartToolsAPI.getTransferHelper().pullStack(this, getFuelMap().getStackFilter());
+            ItemStack found = CartToolsAPI.transferHelper().pullStack(this, getFuelMap().getStackFilter());
             if (!InvTools.isEmpty(found))
                 InvTools.moveItemStack(found, this);
         }

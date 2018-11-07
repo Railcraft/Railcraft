@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -86,7 +86,7 @@ public class TileDispenserTrain extends TileDispenserCart {
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
-                    CartToolsAPI.getLinkageManager().createLink(cartPlaced, lastCart);
+                    CartToolsAPI.linkageManager().createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())

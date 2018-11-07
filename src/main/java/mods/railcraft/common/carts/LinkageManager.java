@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartsApiAccess;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.events.CartLinkEvent;
@@ -21,10 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The LinkageManager contains all the functions needed to link and interacted
@@ -44,30 +40,14 @@ import java.util.UUID;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class LinkageManager implements ILinkageManager {
-    @Deprecated // replaced by two auto links
-    public static final String AUTO_LINK = "rcAutoLink";
+public enum LinkageManager implements ILinkageManager {
+    INSTANCE;
     public static final String AUTO_LINK_A = "rcAutoLinkA";
     public static final String AUTO_LINK_B = "rcAutoLinkB";
     public static final String LINK_A_HIGH = "rcLinkAHigh";
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
     public static final String LINK_B_LOW = "rcLinkBLow";
-
-    private static final LinkageManager INSTANCE = new LinkageManager();
-
-    private LinkageManager() {
-        CartsApiAccess.setLinkageManager(this);
-    }
-
-    /**
-     * Return an instance of the LinkageManager
-     *
-     * @return LinkageManager
-     */
-    public static LinkageManager instance() {
-        return INSTANCE;
-    }
 
     public static void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printLinkingDebug())
@@ -207,12 +187,7 @@ public final class LinkageManager implements ILinkageManager {
 
     @Override
     public boolean hasFreeLink(EntityMinecart cart) {
-        for (LinkType link : LinkType.VALUES) {
-            if (hasFreeLink(cart, link)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(LinkType.VALUES).anyMatch(link -> hasFreeLink(cart, link));
     }
 
     public boolean hasFreeLink(EntityMinecart cart, LinkType type) {
@@ -270,9 +245,8 @@ public final class LinkageManager implements ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    @Nullable
     @Override
-    public EntityMinecart getLinkedCartA(EntityMinecart cart) {
+    public @Nullable EntityMinecart getLinkedCartA(EntityMinecart cart) {
         return getLinkedCart(cart, LinkType.LINK_A);
     }
 
@@ -283,14 +257,12 @@ public final class LinkageManager implements ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    @Nullable
     @Override
-    public EntityMinecart getLinkedCartB(EntityMinecart cart) {
+    public @Nullable EntityMinecart getLinkedCartB(EntityMinecart cart) {
         return getLinkedCart(cart, LinkType.LINK_B);
     }
 
-    @Nullable
-    public EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
+    public @Nullable EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
         return CartTools.getCartFromUUID(cart.world, getLink(cart, type));
     }
 
@@ -366,13 +338,18 @@ public final class LinkageManager implements ILinkageManager {
         breakLinkInternal(one, two, linkOne, linkTwo);
     }
 
+    @Override
+    public void breakLinks(EntityMinecart cart) {
+        breakLinkA(cart);
+        breakLinkB(cart);
+    }
+
     /**
      * Break only link A.
      *
      * @param cart Cart
      */
-    @Override
-    public void breakLinkA(EntityMinecart cart) {
+    private void breakLinkA(EntityMinecart cart) {
         EntityMinecart other = getLinkedCartA(cart);
         if (other == null) {
             return;
@@ -387,8 +364,7 @@ public final class LinkageManager implements ILinkageManager {
      *
      * @param cart Cart
      */
-    @Override
-    public void breakLinkB(EntityMinecart cart) {
+    private void breakLinkB(EntityMinecart cart) {
         EntityMinecart other = getLinkedCartB(cart);
         if (other == null) {
             return;
@@ -425,15 +401,11 @@ public final class LinkageManager implements ILinkageManager {
         MinecraftForge.EVENT_BUS.post(new CartLinkEvent.Unlink(one, two));
     }
 
-    @Nullable
-    private LinkType getLinkType(EntityMinecart from, EntityMinecart to) {
+    private @Nullable LinkType getLinkType(EntityMinecart from, EntityMinecart to) {
         UUID linkTo = getLinkageId(to);
-        for (LinkType link : LinkType.VALUES) {
-            if (linkTo.equals(getLink(from, link))) {
-                return link;
-            }
-        }
-        return null;
+        return Arrays.stream(LinkType.VALUES)
+                .filter(link -> linkTo.equals(getLink(from, link)))
+                .findFirst().orElse(null);
     }
 
     private void breakLinkUnidirectional(EntityMinecart cart, EntityMinecart other, LinkType linkType) {
@@ -470,11 +442,9 @@ public final class LinkageManager implements ILinkageManager {
             return Collections.emptyList();
         }
         return () -> new Iterator<EntityMinecart>() {
-            private final LinkageManager lm = LinkageManager.instance();
-            @Nullable
-            private EntityMinecart last;
-            @Nullable
-            private EntityMinecart next;
+            private final LinkageManager lm = INSTANCE;
+            private @Nullable EntityMinecart last;
+            private @Nullable EntityMinecart next;
             private EntityMinecart current = start;
 
             /**
@@ -482,8 +452,7 @@ public final class LinkageManager implements ILinkageManager {
              *
              * @return The next minecart to be returned by the iterator, or null
              */
-            @Nullable
-            private EntityMinecart calculateNext() {
+            private @Nullable EntityMinecart calculateNext() {
                 if (last == null) {
                     return lm.getLinkedCart(current, type);
                 }

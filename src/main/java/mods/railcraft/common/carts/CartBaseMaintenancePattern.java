@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -59,7 +59,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
         ItemStack stackStock = getStackInSlot(slotStock);
 
         if (!stackStock.isEmpty() && !InvTools.isItemEqual(stackReplace, stackStock)) {
-            CartToolsAPI.getTransferHelper().offerOrDropItem(this, stackStock);
+            CartToolsAPI.transferHelper().offerOrDropItem(this, stackStock);
             setInventorySlotContents(slotStock, InvTools.emptyStack());
             stackStock = null;
         }
@@ -68,7 +68,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
             return;
 
         if (stackStock == null)
-            setInventorySlotContents(slotStock, CartToolsAPI.getTransferHelper().pullStack(this, StackFilters.of(stackReplace)));
+            setInventorySlotContents(slotStock, CartToolsAPI.transferHelper().pullStack(this, StackFilters.of(stackReplace)));
     }
 
     @Override

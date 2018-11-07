@@ -213,7 +213,7 @@ public final class CartTools {
         debug.add("Object: " + cartInfo);
         debug.add("UUID: " + cart.getPersistentID());
         debug.add("Owner: " + CartToolsAPI.getCartOwner(cart).getName());
-        LinkageManager lm = LinkageManager.instance();
+        LinkageManager lm = LinkageManager.INSTANCE;
         debug.add("LinkA: " + lm.getLinkA(cart));
         debug.add("LinkB: " + lm.getLinkB(cart));
         debug.add("Train: " + Train.getTrain(cart).getUUID());

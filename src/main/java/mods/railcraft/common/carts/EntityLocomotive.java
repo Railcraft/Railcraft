@@ -696,7 +696,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (isExemptFromLinkLimits(cart))
             return true;
 
-        LinkageManager lm = LinkageManager.instance();
+        LinkageManager lm = LinkageManager.INSTANCE;
 
         if (StreamSupport.stream(lm.linkIterator(this, LinkType.LINK_A).spliterator(), false)
                 .anyMatch(linked -> !isExemptFromLinkLimits(linked))) {

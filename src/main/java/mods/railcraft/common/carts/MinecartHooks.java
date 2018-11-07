@@ -111,7 +111,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         if (Game.isClient(cart.world) || cart.isPassenger(other) || !other.isEntityAlive() || !cart.isEntityAlive())
             return;
 
-        ILinkageManager lm = LinkageManager.instance();
+        ILinkageManager lm = LinkageManager.INSTANCE;
         EntityMinecart link = lm.getLinkedCartA(cart);
         if (link != null && (link == other || link.isPassenger(other)))
             return;
@@ -346,7 +346,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
             return;
 
         if (other instanceof EntityMinecart)
-            LinkageManager.instance().tryAutoLink(cart, (EntityMinecart) other);
+            LinkageManager.INSTANCE.tryAutoLink(cart, (EntityMinecart) other);
 
         testHighSpeedCollision(cart, other);
 
@@ -444,7 +444,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         // Fix links for killed carts
         // Unloaded entities are not "isDead"
         if (entityIn.isDead && entityIn instanceof EntityMinecart) {
-            LinkageManager.instance().breakLinks((EntityMinecart) entityIn);
+            LinkageManager.INSTANCE.breakLinks((EntityMinecart) entityIn);
         }
     }
 
