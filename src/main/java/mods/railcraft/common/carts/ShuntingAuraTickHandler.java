@@ -29,17 +29,12 @@ import java.util.List;
  */
 public class ShuntingAuraTickHandler {
 
-    private int clock;
-
     @SubscribeEvent
     public void tick(PlayerEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (Game.isClient(entity.world))
-            return;
-        clock++;
-        if (clock % 16 != 0)
-            return;
-        if (entity instanceof EntityPlayerMP) {
+        if (Game.isHost(entity.world)
+                && entity instanceof EntityPlayerMP
+                && entity.ticksExisted % 16 == 0) {
             EntityPlayerMP player = (EntityPlayerMP) entity;
             if (ItemGoggles.isPlayerWearing(player)) {
                 ItemStack goggles = ItemGoggles.getGoggles(player);
